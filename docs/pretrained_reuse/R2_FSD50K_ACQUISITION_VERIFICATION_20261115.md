@@ -42,17 +42,31 @@ validation remains part of the media verification.
 |---|---|---|
 | `...media-...-attempt-01` | FAIL before saving any WAV | Windows Python lacks `os.statvfs`; the archive index also revealed a selected member larger than the original 5 MiB guard. Only the directory index was read. |
 | `...media-...-attempt-02` | FAIL before saving any WAV | ZIP local filename length and extra-field length were read in reverse order. The new output contains an empty receipt and the failure record. |
-| `...media-...-attempt-03` | RUNNING at 2026-11-15 02:22 JST | 238 WAVs / 209,034,254 bytes visible, 218 receipt rows. PID 47840 remains alive. `result.json` is not present, so this is not complete. |
+| `...media-...-attempt-03` | FAIL at 2026-11-15 02:38 JST | 445 WAVs / receipt rows; terminal `result.json` records `ValueError('range length mismatch')`. Official eval access flags remain false. |
+| `...media-...-attempt-04` | RUNNING at 2026-11-15 02:59 JST | Fresh output; 445 prior files copied only after SHA/CRC/manifest verification. Receipt checkpoint 450; 472 WAVs visible, so 22 files are beyond the last durable receipt. |
 
-At 02:26 JST, the same PID was still alive; the output contained 288 WAVs and
-250 receipt rows. The receipt and progress timestamps remained 02:24 JST while
-process CPU time had increased. This may indicate a long single-member transfer
-or decode, so it is being observed rather than treated as terminal.
+The old reader raised a generic `range length mismatch` after its retry limit;
+it did not preserve the failing response body length or member ID. A read-only
+probe of the next member after the last durable receipt (`119193.wav`, volume 2,
+offset 700,301,253, compressed size 337,333 bytes) succeeded on a fresh request.
+This supports a transient or inconsistent range response as the likely cause,
+but the exact failed response remains UNKNOWN. The failed attempt was not
+restarted in place. All 445 committed receipt rows were validated against
+manifest identity, WAV bytes, SHA-256 and ZIP CRC, and the exact partial WAV set
+matched.
 
-At 02:31 JST, PID 47840 remained alive and the 50-row checkpoint advanced to
-350 receipt rows (357 WAV files were present while the next batch was in
-progress). This confirms the previous apparent pause was the bounded receipt
-flush interval, not a terminal state.
+The new reader retries short bodies from the same offset up to six total
+attempts, uses `Accept-Encoding: identity`, validates `Content-Range`, and
+charges each retry against the frozen total budget. The resume path accepts
+only the identified attempt-03 failure, revalidates every partial row, copies
+into a distinct output directory, confirms the same central-directory hash,
+and resumes after the exact verified receipt prefix. Unit tests exercise
+short-body retry and reject corrupted partial media.
+
+Attempt-04 was observed alive at 02:59 JST after copying the 445 verified WAVs
+to its new output and fetching the pinned archive index. Its durable progress
+checkpoint reached 450 rows; 472 WAV files were visible during the next batch.
+It remains incomplete until a terminal PASS result and the full verifier.
 
 ## Pinned Path A audio encoder recheck
 
@@ -71,6 +85,22 @@ The active Python runtime was rechecked as Python 3.11.9, PyTorch
 reported available; no checkpoint forward was run in this audit. These checks
 establish artifact identity and a licensed candidate, not an FSD runtime
 forward or audio-task accuracy result.
+
+## Frozen-feature Decision implementation
+
+`scripts/train_fsd50k_annotation_decision.py` now implements the predeclared
+384-D frozen feature route using four typed binary questions and the shared
+`NativeFeatureDecisionScorer(384, 6, 64)` (25,089 readout parameters; 1,986,328
+encoder-plus-readout parameters). It fits on train only for a fixed 20 epochs,
+fits one scalar temperature on calibration only, selects the epoch by
+calibrated validation macro NLL, records per-label Accuracy/NLL/Brier/ECE and
+train-validation metrics, and saves separate best and final checkpoints plus
+selected validation predictions. The loader verifies the frozen manifest,
+complete acquisition report, feature hashes/order, encoder revision/weight
+hash, temporal policy, and disjoint source/group identities. Five focused CPU
+tests, including a 20-epoch synthetic save/reload smoke, pass. This is pipeline
+plumbing only; no real-media feature extraction, FSD fit, or quality metric has
+been performed yet.
 
 Attempt-03 uses a distinct output path and a 64 MiB per-member safety cap, above
 the observed 48,532,044-byte maximum. Its range-transfer budget remains bounded
@@ -97,8 +127,10 @@ occurred.
 
 ## Next gates
 
-1. Wait for attempt-03 to terminate; never infer completion from a timeout.
-2. Run the full receipt/media verifier and exact cross-split content checks.
+1. Continue monitoring attempt-04's live PID/session; never infer completion
+   from an observation timeout.
+2. On terminal PASS, run the full receipt/media verifier and exact cross-split
+   content checks.
 3. Extract the pinned EfficientAT features over the entire clip, including all
    39 duration outliers; abort on decoder, memory, non-finite, or repeatability
    failures.

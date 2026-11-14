@@ -1,4 +1,5 @@
 import hashlib
+import json
 import struct
 import zlib
 from types import SimpleNamespace
@@ -6,6 +7,12 @@ from types import SimpleNamespace
 import pytest
 
 from scripts import acquire_fsd50k_annotation_manifest as acquisition
+from scripts.build_fsd50k_annotation_decision_manifest import (
+    DATASET_REVISION,
+    TARGET_LABELS,
+    canonical_sha256,
+    summarize_split,
+)
 
 
 def test_free_space_gate_uses_windows_compatible_disk_usage(monkeypatch, tmp_path):
@@ -106,3 +113,134 @@ def test_extract_member_uses_zip_name_length_before_extra_length(monkeypatch, tm
     assert destination.read_bytes() == payload
     assert size == len(payload)
     assert digest == hashlib.sha256(payload).hexdigest()
+
+
+def test_range_reader_retries_short_http_body_without_advancing_position(monkeypatch):
+    class Response:
+        status = 206
+
+        def __init__(self, payload, content_range):
+            self.payload = payload
+            self.headers = {"Content-Range": content_range}
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return False
+
+        def read(self, _size):
+            return self.payload
+
+    payload = b"abcdefgh"
+    calls = 0
+
+    def fake_urlopen(request, timeout):
+        nonlocal calls
+        calls += 1
+        assert timeout == 90
+        assert request.get_header("Accept-encoding") == "identity"
+        assert request.get_header("Range") == "bytes=0-7"
+        content_range = "bytes 0-7/16"
+        return Response(payload[:3] if calls == 1 else payload, content_range)
+
+    monkeypatch.setattr(acquisition.urllib.request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(acquisition.time, "sleep", lambda _seconds: None)
+    budget = acquisition.SharedBudget(100)
+    reader = acquisition.BudgetedRangeReader("https://example.invalid/archive", 16, budget)
+
+    assert reader.read(8) == payload
+    assert calls == 2
+    assert reader.position == 8
+    assert reader.transferred == 11
+    assert budget.requested == 16
+
+
+def test_failed_partial_is_verified_before_fresh_attempt_resume(tmp_path):
+    preflight = tmp_path / "preflight"
+    partial = tmp_path / "attempt-03"
+    preflight.mkdir()
+    partial.mkdir()
+    splits = {}
+    for split, offset in (("train", 0), ("calibration", 2), ("validation", 4)):
+        rows = []
+        for sample_id in range(offset, offset + 2):
+            rows.append(
+                {
+                    "sample_id": f"{sample_id:06d}",
+                    "source_id": f"fsd:{sample_id}",
+                    "group_id": f"uploader-{sample_id}",
+                    "split": split,
+                    "license": "http://creativecommons.org/licenses/by/3.0/",
+                    "targets": {
+                        label: bool((sample_id + i) % 2)
+                        for i, label in enumerate(TARGET_LABELS)
+                    },
+                }
+            )
+        splits[split] = rows
+        (preflight / f"{split}.jsonl").write_text(
+            "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows),
+            encoding="utf-8",
+        )
+    summaries = {split: summarize_split(rows) for split, rows in splits.items()}
+    source_sha = {"fixture": "a" * 64}
+    manifest_sha = canonical_sha256({"splits": summaries, "source_sha256": source_sha})
+    (preflight / "preflight.json").write_text(
+        json.dumps(
+            {
+                "status": "PREFLIGHT_PASS",
+                "dataset_revision": DATASET_REVISION,
+                "manifest_sha256": manifest_sha,
+                "source_sha256": source_sha,
+                "splits": summaries,
+                "official_eval_labels_read": False,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    row = splits["train"][0]
+    payload = b"verified wav payload"
+    media = partial / "train" / f"{row['sample_id']}.wav"
+    media.parent.mkdir()
+    media.write_bytes(payload)
+    receipt = {
+        **{key: row[key] for key in ("sample_id", "source_id", "group_id", "split", "license")},
+        "bytes": len(payload),
+        "sha256": hashlib.sha256(payload).hexdigest(),
+        "zip_crc32": zlib.crc32(payload),
+    }
+    receipt_path = partial / "files.jsonl"
+    receipt_path.write_text(json.dumps(receipt, sort_keys=True) + "\n", encoding="utf-8")
+    (partial / "result.json").write_text(
+        json.dumps(
+            {
+                "status": "FAIL",
+                "error": "ValueError('range length mismatch')",
+                "runner_sha256": (
+                    "784687424d0720626e89a284a4a9546e585b75e977d5321664d5c022dbe7a71d"
+                ),
+                "dataset_revision": DATASET_REVISION,
+                "preflight_manifest_sha256": manifest_sha,
+                "archive_directory_sha256": (
+                    "a52c8e77acf8c01e5108a3872461a65f2a583b2ddc3e0bb6554e51dc7ae12c5f"
+                ),
+                "official_eval_labels_read": False,
+                "official_eval_media_acquired": False,
+                "expected_files": 6,
+                "downloaded_files": 1,
+                "files_jsonl_sha256": hashlib.sha256(receipt_path.read_bytes()).hexdigest(),
+                "range_bytes": 100,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    prior, records = acquisition.validate_failed_partial(preflight, partial)
+    assert prior["downloaded_files"] == 1
+    assert records == [receipt]
+
+    media.write_bytes(b"corrupt")
+    with pytest.raises(ValueError, match="failed integrity check"):
+        acquisition.validate_failed_partial(preflight, partial)
