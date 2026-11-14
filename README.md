@@ -1,5 +1,7 @@
 # Tiny Omni Decision
 
+**2026-11-14 R2 MiniWoB fresh-seed screen check:** The frozen 22.13M-parameter DINOv2-small + readout reached 96.97% Accuracy / 0.1223 NLL on 1,024 new four-choice synthetic UI episodes; shuffled-screen accuracy fell to 24.90%, with the paired difference excluding zero. This supports screen dependence for this narrow task only. It is not general image/video or Omni quality and does not close M-2. [Protocol, results, and limits](docs/pretrained_reuse/R2_MINIWOB_FROZEN_GENERALIZATION_RESULTS_20261114.md).
+
 **2026-10-25 CoGenT-B one-time audit:** A frozen image+question decision
 probe reached 57.90% Accuracy on 15,000 held-out CLEVR-CoGenT-B images and
 responded measurably to image content versus gray/shuffled controls. Results

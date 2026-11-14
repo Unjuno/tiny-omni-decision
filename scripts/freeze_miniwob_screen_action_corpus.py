@@ -51,6 +51,21 @@ def _pixel_at(image: np.ndarray, rect: list[float]) -> tuple[int, int, int]:
     return tuple(int(value) for value in image[center_y, center_x])
 
 
+def _save_or_verify_screenshot(
+    image: np.ndarray, image_path: Path, *, reuse_existing: bool = False
+) -> str:
+    if reuse_existing:
+        if not image_path.is_file():
+            raise FileNotFoundError(f"recovery screenshot is missing: {image_path}")
+        with Image.open(image_path) as saved:
+            saved_pixels = np.asarray(saved.convert("RGB"))
+        if saved_pixels.shape != image.shape or not np.array_equal(saved_pixels, image):
+            raise ValueError(f"replayed screenshot differs from preserved media: {image_path}")
+    else:
+        Image.fromarray(image).save(image_path, format="PNG", optimize=False)
+    return _sha256(image_path)
+
+
 def _configure_edge(args: argparse.Namespace) -> None:
     if not args.edge_compat:
         return
@@ -96,13 +111,14 @@ def _collect_split(
     seed_range: tuple[int, int],
     count: int,
     seen_screen_hashes: set[str],
+    reuse_existing_screenshots: bool = False,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[int]]:
     start_seed, stop_seed = seed_range
     rows: list[dict[str, Any]] = []
     audit: list[dict[str, Any]] = []
     used_seeds: list[int] = []
     split_dir = output_dir / split
-    split_dir.mkdir(parents=True, exist_ok=False)
+    split_dir.mkdir(parents=True, exist_ok=reuse_existing_screenshots)
 
     for seed in range(start_seed, stop_seed):
         observation, _ = env.reset(seed=seed)
@@ -155,14 +171,16 @@ def _collect_split(
 
         sample_id = f"{split}-seed-{seed}"
         image_path = split_dir / f"{sample_id}.png"
-        Image.fromarray(image).save(image_path, format="PNG", optimize=False)
+        screenshot_sha256 = _save_or_verify_screenshot(
+            image, image_path, reuse_existing=reuse_existing_screenshots
+        )
         row = {
             "sample_id": sample_id,
             "episode_group_id": sample_id,
             "task_template": TASK_ID,
             "seed": seed,
             "screenshot_path": f"{split}/{image_path.name}",
-            "screenshot_sha256": _sha256(image_path),
+            "screenshot_sha256": screenshot_sha256,
             "screenshot_shape": list(image.shape),
             "option_order_seed": order_seed,
             "options": options,
