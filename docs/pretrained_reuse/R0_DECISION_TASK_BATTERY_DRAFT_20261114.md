@@ -110,6 +110,12 @@ until a rights-cleared source and independent groups support it.
   therefore does not establish broad audio Decision quality.
 - TartanAviation has 126 aircraft-linked video components (6 under
   day-plus-aircraft grouping); it fails the provisional 200-group gate.
+- MEV has 8,016 original-video UUIDs and 25,262 event clips, but its pinned
+  Hub tree does not include item-level source-rights data needed to apply each
+  video's source terms; the available video metadata has no per-video rights
+  fields.
+  Keep it `REVIEW_NOT_ADMITTED` and do not fit or evaluate from it. See the
+  [metadata-only source screen](R2_MEV_VIDEO_SOURCE_SCREEN_20261114.md).
 - Localized Narratives and RoboMIND2 remain unadmitted under their current
   rights/group/task evidence.
 
