@@ -89,11 +89,12 @@ persistent short body, still charged to the frozen shared transfer budget. A
 deterministic test reproduces the short large response and verifies recovery
 via exact subranges; the actual source prefixes remain unchanged. Attempt-06
 uses a distinct output, resumes attempt-04's verified 888 rows, and has passed
-the previous failure boundary: 1,400 rows are durable with 1,401 WAV files at
-04:35 JST. It has used 819,180,903 cumulative requested range bytes and written
-1,053,367,300 durable media bytes. From attempt-06 start to 1,400 rows, the
-observed pace is approximately 0.20 clips/second; extrapolating the remaining
-17,479 rows is roughly 24 hours, an uncertain network-only estimate. It remains
+the previous failure boundary. At 05:10 JST it remains RUNNING under PID 5452,
+with 1,850 durable receipt rows, 1,866 visible WAV files, and 1,023,235,326
+requested range bytes in the current attempt. `progress.json` is checkpointed
+every 50 rows; visible WAVs beyond its count are not treated as durable. The
+process has shown recent file updates and established HTTPS connections, but
+the observed pace varies enough that no completion time is promised. It remains
 incomplete pending terminal PASS plus the full acquisition verifier.
 
 ## Pinned Path A audio encoder recheck
@@ -172,15 +173,18 @@ fixture tests cover success, corrupted media, exact cross-split duplicates,
 and eval/unlisted-file rejection. This verifier must pass before any
 features are generated.
 
-The acquisition process does not use the GPU. At the latest live snapshot the
-RTX 3080 showed 54% utilization and 8,270 MiB allocated by another workload;
-that process was left untouched. No FSD50K features, model predictions,
-training, calibration, validation scoring, or official eval access has yet
-occurred.
+The acquisition process does not use the GPU. PID 5452 was active at the
+2026-11-15 05:10 JST process snapshot. The most recent recorded RTX 3080
+snapshot is earlier (04:35 JST): 54% utilization and 8,270 MiB allocated by
+another workload, which was left untouched; current GPU utilization is UNKNOWN.
+No corpus-scale FSD50K features, model predictions, training,
+calibration, validation scoring, or official eval access has yet occurred. The
+focused CPU tests for acquisition, complete-media validation, extraction, and
+Decision fitting pass (22 tests).
 
 ## Next gates
 
-1. Continue monitoring attempt-04's live PID/session; never infer completion
+1. Continue monitoring attempt-06's live PID/session; never infer completion
    from an observation timeout.
 2. On terminal PASS, run the full receipt/media verifier and exact cross-split
    content checks.
