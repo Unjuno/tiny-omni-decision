@@ -89,9 +89,10 @@ persistent short body, still charged to the frozen shared transfer budget. A
 deterministic test reproduces the short large response and verifies recovery
 via exact subranges; the actual source prefixes remain unchanged. Attempt-06
 uses a distinct output, resumes attempt-04's verified 888 rows, and has passed
-the previous failure boundary. At 05:15 JST it remains RUNNING under PID 5452,
-with 1,900 durable receipt rows, 1,925 visible WAV files, and 1,049,265,332
-requested range bytes in the current attempt. `progress.json` is checkpointed
+the previous failure boundary. At 06:51 JST it remains RUNNING under PID 5452,
+with 3,000 durable receipt rows, 3,021 visible WAV files, 2,149,175,898 durable
+media bytes, and 1,655,317,968 requested range bytes in the current attempt.
+`progress.json` is checkpointed
 every 50 rows; visible WAVs beyond its count are not treated as durable. The
 process has shown recent file updates and established HTTPS connections, but
 the observed pace varies enough that no completion time is promised. It remains
@@ -174,7 +175,7 @@ and eval/unlisted-file rejection. This verifier must pass before any
 features are generated.
 
 The acquisition process does not use the GPU. PID 5452 was active at the
-2026-11-15 05:15 JST process snapshot. At that time the RTX 3080 showed 95%
+2026-11-15 06:51 JST process snapshot. At that time the RTX 3080 showed 46%
 utilization and 8,270 MiB allocated by another workload, which was left
 untouched.
 No corpus-scale FSD50K features, model predictions, training,
