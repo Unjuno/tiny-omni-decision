@@ -57,4 +57,3 @@ rights gate. Reconsider only if the source owner provides a clear applicable
 commercial-use grant and an option-based task with source-grouped IDs and
 predeclared unimodal/missing/shuffled controls. This screen provides no quality
 evidence and does not authorize R2 fitting.
-
