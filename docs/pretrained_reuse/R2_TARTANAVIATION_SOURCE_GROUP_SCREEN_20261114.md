@@ -2,7 +2,7 @@
 
 ## Decision
 
-`REVIEW_NOT_ADMITTED` for model training or quality evaluation. The pinned source is permissively licensed for the dataset, but conservative grouping leaves only 126 independent video components, below the project's provisional 200-group floor and far below a useful four-way train/validation/audit allocation. No task-quality claim is made. Do not train on this screen or treat it as evidence that the multimodal Decision objective has been met.
+The **vision video-to-ADS-B candidate** is `REVIEW_NOT_ADMITTED` for training or quality evaluation: conservative aircraft grouping leaves only 126 connected video components, below the project's provisional 200-group floor. This screen does **not** reject the entire TartanAviation release. Its separate ATC speech plus ADS-B corpus (677 daily archives; the README reports 3,374 hours of speech and 661 days of trajectories) was outside this audit and remains `UNSCREENED` for task labels, independent groups, and a supplied-option Decision task. No task-quality claim is made. Do not treat the video result as evidence that the multimodal Decision objective has been met.
 
 ## Objective context
 
@@ -28,7 +28,7 @@ The external `group_screen.json` is 591,486 bytes and contains per-video hashes 
 
 Across all 550 videos, the audit found 239 distinct aircraft identities; 72 occur in multiple videos and one appears in 64. Unioning videos that share any aircraft yields **126 connected components**: 108 singleton-video components, 11 two-video components, 5 three-video components, one six-video component, and one 399-video component. A more conservative day-plus-aircraft grouping yields only 6 components, including one 542-video component.
 
-This dependency structure prevents a credible split with the current provisional group floor. The 126 count is an upper bound for independent groups under the tested identity relation, not a claim that all 126 are otherwise independent. A possible image-to-ADS-B matching task is only a hypothesis: labels, synchronized inputs, split-safe examples, and both-input necessity were not validated. The dataset's speech/weather modalities were not assessed for task utility here.
+This dependency structure prevents the vision subset from meeting a credible split with the current provisional group floor. The 126 count is an upper bound for independent groups under the tested identity relation, not a claim that all 126 are otherwise independent. A possible image-to-ADS-B matching task is only a hypothesis: labels, synchronized inputs, split-safe examples, and both-input necessity were not validated. The separate speech/ADS-B task utility and group structure were not assessed here. Weather was inspected only as per-video metadata for the 550 vision objects.
 
 ## Reproducibility and limits
 
@@ -40,4 +40,4 @@ This dependency structure prevents a credible split with the current provisional
 - Derived full screen SHA-256: `11d696377bfc361d81b2e27ade6bbd8fc13b5c47bee70d7f7565c74df274a673`.
 - No training, feature extraction, inference, validation, sealed-audit access, or GPU use occurred.
 
-The source may be reconsidered only with a task and split design that addresses aircraft-level dependence and yields enough genuinely independent groups. This result does not authorize downloading or fitting the media.
+The vision subset may be reconsidered only with a task and split design that addresses aircraft-level dependence and yields enough genuinely independent groups. A separate audio+ADS-B screen may proceed from pinned text metadata and label schemas, without opening audio payloads. Neither result authorizes media acquisition or fitting by itself.

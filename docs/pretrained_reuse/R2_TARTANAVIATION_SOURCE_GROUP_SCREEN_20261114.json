@@ -1,7 +1,8 @@
 {
   "schema_version": 1,
-  "status": "REVIEW_NOT_ADMITTED",
-  "decision": "Do not train or evaluate; 126 video-aircraft connected components fall below the provisional 200 independent-group floor.",
+  "status": "VISION_VIDEO_CANDIDATE_REVIEW_NOT_ADMITTED",
+  "screen_scope": "550-video KAGC vision subset only; the separate speech plus ADS-B corpus was not screened.",
+  "decision": "Do not train or evaluate the vision video-to-ADS-B candidate: 126 video-aircraft connected components fall below the provisional 200 independent-group floor. Speech plus ADS-B remains UNSCREENED.",
   "source": "castacks/TartanAviation",
   "repository_commit": "077a04abac1e50953c45b72524edd79e3a21d9bd",
   "data_tag": "1.1",
@@ -42,6 +43,7 @@
     "No task labels or synchronized input sufficiency were validated.",
     "Both-input necessity for a candidate Decision task is untested.",
     "The 126 connected components are only an upper bound on independent groups.",
-    "Speech and weather task utility were outside this screen."
+    "Speech plus ADS-B task labels, group identity, and supplied-option task feasibility are unassessed.",
+    "Weather task utility was outside this screen."
   ]
 }
