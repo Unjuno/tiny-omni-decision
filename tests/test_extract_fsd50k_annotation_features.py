@@ -6,9 +6,10 @@ import wave
 
 import numpy as np
 import pytest
-import torch
 
-from scripts.extract_fsd50k_annotation_features import (
+torch = pytest.importorskip("torch")
+
+from scripts.extract_fsd50k_annotation_features import (  # noqa: E402
     _load_resume,
     atomic_json,
     canonical_sha256,

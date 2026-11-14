@@ -4,15 +4,16 @@ import json
 
 import numpy as np
 import pytest
-import torch
 
-from scripts.build_fsd50k_annotation_decision_manifest import (
+torch = pytest.importorskip("torch")
+
+from scripts.build_fsd50k_annotation_decision_manifest import (  # noqa: E402
     DATASET_REVISION,
     TARGET_LABELS,
     canonical_sha256,
     summarize_split,
 )
-from scripts.train_fsd50k_annotation_decision import (
+from scripts.train_fsd50k_annotation_decision import (  # noqa: E402
     EXPECTED_READOUT_PARAMETERS,
     FEATURE_WIDTH,
     expand_clip_batch,
@@ -23,7 +24,7 @@ from scripts.train_fsd50k_annotation_decision import (
     sha256_file,
     typed_binary_options,
 )
-from tiny_omni_decision.native_feature_decision import NativeFeatureDecisionScorer
+from tiny_omni_decision.native_feature_decision import NativeFeatureDecisionScorer  # noqa: E402
 
 
 def test_typed_binary_options_are_fixed_and_candidate_order_equivariant():
