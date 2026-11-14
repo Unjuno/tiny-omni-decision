@@ -43,7 +43,7 @@ validation remains part of the media verification.
 | `...media-...-attempt-01` | FAIL before saving any WAV | Windows Python lacks `os.statvfs`; the archive index also revealed a selected member larger than the original 5 MiB guard. Only the directory index was read. |
 | `...media-...-attempt-02` | FAIL before saving any WAV | ZIP local filename length and extra-field length were read in reverse order. The new output contains an empty receipt and the failure record. |
 | `...media-...-attempt-03` | FAIL at 2026-11-15 02:38 JST | 445 WAVs / receipt rows; terminal `result.json` records `ValueError('range length mismatch')`. Official eval access flags remain false. |
-| `...media-...-attempt-04` | RUNNING at 2026-11-15 02:59 JST | Fresh output; 445 prior files copied only after SHA/CRC/manifest verification. Receipt checkpoint 450; 472 WAVs visible, so 22 files are beyond the last durable receipt. |
+| `...media-...-attempt-04` | RUNNING at 2026-11-15 03:09 JST | Fresh output; 445 prior files copied only after SHA/CRC/manifest verification. Receipt checkpoint 600; 628 WAVs visible, so 28 files are beyond the last durable receipt. |
 
 The old reader raised a generic `range length mismatch` after its retry limit;
 it did not preserve the failing response body length or member ID. A read-only
@@ -63,10 +63,13 @@ into a distinct output directory, confirms the same central-directory hash,
 and resumes after the exact verified receipt prefix. Unit tests exercise
 short-body retry and reject corrupted partial media.
 
-Attempt-04 was observed alive at 02:59 JST after copying the 445 verified WAVs
+Attempt-04 was observed alive at 03:09 JST after copying the 445 verified WAVs
 to its new output and fetching the pinned archive index. Its durable progress
-checkpoint reached 450 rows; 472 WAV files were visible during the next batch.
-It remains incomplete until a terminal PASS result and the full verifier.
+checkpoint reached 600 rows; 628 WAV files were visible during the next batch.
+The same PID (21948) and acquisition command were confirmed alive at a later
+read-only check. Treat the extra 28 files as in-flight beyond the last receipt,
+not as verified progress. The run remains incomplete until a terminal PASS
+result and the full verifier.
 
 ## Pinned Path A audio encoder recheck
 
@@ -81,10 +84,8 @@ admits this as an ALLOW research candidate; task quality remains open. The
 reusable extractor pins the same source and checkpoint, requires the measured
 PyTorch/torchaudio `2.6.0+cu124` pair, and records 1,961,239 model parameters.
 The active Python runtime was rechecked as Python 3.11.9, PyTorch
-`2.6.0+cu124`, torchaudio `2.6.0+cu124`, and CUDA runtime 12.4. CUDA was
-reported available; no checkpoint forward was run in this audit. These checks
-establish artifact identity and a licensed candidate, not an FSD runtime
-forward or audio-task accuracy result.
+`2.6.0+cu124`, torchaudio `2.6.0+cu124`, and CUDA runtime 12.4. These checks
+establish artifact identity and a licensed candidate, not audio-task accuracy.
 
 ## Frozen-feature Decision implementation
 
@@ -99,8 +100,27 @@ selected validation predictions. The loader verifies the frozen manifest,
 complete acquisition report, feature hashes/order, encoder revision/weight
 hash, temporal policy, and disjoint source/group identities. Five focused CPU
 tests, including a 20-epoch synthetic save/reload smoke, pass. This is pipeline
-plumbing only; no real-media feature extraction, FSD fit, or quality metric has
-been performed yet.
+plumbing only; no corpus-scale feature extraction, FSD fit, or task-quality
+metric has been performed yet.
+
+`scripts/extract_fsd50k_annotation_features.py` implements the pinned
+whole-clip extraction path with hash-bound identity, 32-clip atomic shards,
+strict resume checks, final feature/row receipts, and CUDA peak-memory
+recording. Its synthetic CPU tests cover PCM decoding, whole-clip resampling
+and shape validation, and receipt resume checks. The focused suite for media
+acquisition, verification, Decision fitting, and feature extraction passes 24
+tests; Ruff and `git diff --check` pass. These checks do not replace
+corpus-scale extraction or real task metrics.
+
+One receipt-verified FSD training clip (`119192`, 4.9067 seconds, 44.1 kHz
+mono) was decoded, resampled with the pinned torchaudio runtime to 32 kHz, and
+passed through the exact EfficientAT DyMN-0.4 checkpoint on CPU. The complete
+clip yielded finite `[1,384]` features in 0.1484 seconds; no crop or window
+selection was applied. This verifies the real input-to-feature path for one
+clip, not feature repeatability over the corpus or task performance. An initial
+attempt relying on an empty `CUDA_VISIBLE_DEVICES` did not hide CUDA on this
+Windows runtime and stopped before forward; the successful rerun explicitly
+pinned the encoder to CPU and did not perform GPU inference.
 
 Attempt-03 uses a distinct output path and a 64 MiB per-member safety cap, above
 the observed 48,532,044-byte maximum. Its range-transfer budget remains bounded
