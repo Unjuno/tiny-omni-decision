@@ -1,5 +1,7 @@
 import pytest
 
+from scripts.finalize_miniwob_dino_path_a import finalized_results_equal
+
 torch = pytest.importorskip("torch")
 
 from tiny_omni_decision.miniwob_dino_readout import (  # noqa: E402
@@ -47,6 +49,18 @@ def test_scorer_rejects_wrong_shapes_and_nonfinite_inputs():
 def test_metric_validation_rejects_non_normalized_probabilities():
     with pytest.raises(ValueError):
         classification_metrics(torch.tensor([[0.5, 0.2, 0.2, 0.2]]), torch.tensor([0]))
+
+
+def test_finalized_result_comparison_normalizes_path_aliases(tmp_path):
+    corpus = tmp_path / "corpus"
+    corpus.mkdir()
+    existing = {"corpus": {"root": str(corpus)}, "accuracy": 0.96}
+    computed = {"corpus": {"root": corpus.as_posix()}, "accuracy": 0.96}
+
+    assert finalized_results_equal(existing, computed)
+    assert not finalized_results_equal(
+        existing, {"corpus": {"root": corpus.as_posix()}, "accuracy": 0.95}
+    )
 
 
 def test_screen_derangement_is_deterministic_complete_and_has_no_fixed_points():
