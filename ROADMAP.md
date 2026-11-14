@@ -1,3 +1,11 @@
+**2026-11-14 R2 MiniWoB fresh-seed screen check:** A frozen 22.13M-parameter
+DINOv2-small plus 76.3K readout reached 96.97% Accuracy / 0.1223 NLL on 1,024
+fresh-seed four-choice synthetic UI episodes. Shuffled-screen Accuracy fell to
+24.90% and its paired Accuracy difference interval excluded zero. This is
+task-specific screen-use evidence only; it does not establish broad image,
+video, audio, or text quality and does not close R2 M-2. The observed cohort is
+closed to tuning. [Protocol and results](docs/pretrained_reuse/R2_MINIWOB_FROZEN_GENERALIZATION_RESULTS_20261114.md).
+
 **2026-11-14 R1/R2 MiniWoB CUDA runtime recheck:** The pinned DINOv2-small + selected screen-only readout loaded on the RTX 3080 Laptop GPU and reproduced one saved TRAIN decision with `2.76e-7` maximum probability delta using 104,218,112 bytes peak CUDA allocation. This is runtime parity only, not a new quality result or multimodal evidence. See [CUDA runtime recheck](docs/pretrained_reuse/R1_MINIWOB_DINO_CUDA_RUNTIME_RECHECK_20261114.md).
 
 **2026-11-13 R2 Localized Narratives source screen:** A metadata-only screen found a plausible synchronized audio+image region-grounding task, but the available COCO image metadata lacks creator attribution, the 100 official validation annotators all overlap train shard 0, and voice-recording rights / consent scope remain unverified. Keep the candidate `REVIEW_NOT_ADMITTED`; no media, model, or evaluation data were loaded. See [source screen](docs/pretrained_reuse/R2_LOCALIZED_NARRATIVES_SOURCE_SCREEN_20261113.md).

@@ -1,0 +1,68 @@
+{
+  "experiment_id": "r2-miniwob-dino-frozen-generalization-v1-seed17-attempt02",
+  "purpose": "single inference-only prospective synthetic screen-task generalization check",
+  "seed": 17,
+  "device": "cpu",
+  "source": {
+    "repository": "https://github.com/Farama-Foundation/miniwob-plusplus",
+    "commit": "33c3b4ddef8c6eb67c57a29663d844b1eda7e614",
+    "license": "MIT",
+    "license_sha256": "24c56d96c8a2e4e20c20867b14d177b801027b603c45622218b34c841ad4972a",
+    "root": "D:/CodexArtifacts/miniwob-runtime-smoke-20261112-01/source"
+  },
+  "task": "miniwob/click-color-v1:screen-only",
+  "prospective_corpus": {
+    "seed_window_half_open": [1008192, 1016384],
+    "accepted_episode_count": 1024,
+    "task_variant": "visible target-color swatch; screenshot RGB and opaque action IDs/coordinates only",
+    "output": "D:/CodexArtifacts/pretrained-reuse-r2/miniwob-frozen-generalization-20261114-attempt-02/corpus"
+  },
+  "historical_artifacts": [
+    "D:/CodexArtifacts/pretrained-reuse-r2/miniwob-screen-only-corpus-20261112-attempt-01",
+    "D:/CodexArtifacts/pretrained-reuse-r2/miniwob-screen-only-corpus-20261112-attempt-02",
+    "D:/CodexArtifacts/miniwob-runtime-smoke-20261112-01/click-color-smoke-seed910000-910031",
+    "D:/CodexArtifacts/miniwob-runtime-smoke-20261112-01/click-color-text-only-smoke-seed920000",
+    "D:/CodexArtifacts/miniwob-runtime-smoke-20261112-01/click-color-screen-only-smoke-seed930000",
+    "D:/CodexArtifacts/pretrained-reuse-r2/miniwob-frozen-generalization-20261114-attempt-01/corpus"
+  ],
+  "historical_seeds_without_saved_corpus": [900000],
+  "legacy_training_corpus": {
+    "root": "D:/CodexArtifacts/pretrained-reuse-r2/miniwob-screen-only-corpus-20261112-attempt-02",
+    "manifest_sha256": "dc9c7b5c3d7c7b044e319ef108da1a84ab24eedd7a10439942f8f5d05f17eecc",
+    "train_jsonl_sha256": "be296443c53e29b77873856c710f48ef98ef21091e113a47108dbe04e60f54b9"
+  },
+  "encoder": {
+    "repo": "facebook/dinov2-small",
+    "revision": "ed25f3a31f01632728cabb09d1542f84ab7b0056",
+    "directory": "C:/CodexArtifacts/pretrained-reuse-r1/dinov2-small-audit-01/model",
+    "weight_sha256": "ae1e99fcefd534ed978cdeb8326f08030c96e28b7a81ffcbc98a857c84d14be1",
+    "processor_config_sha256": "14e780d86fa1861f8751f868d7f45425b5feb55c38ca26f152ca5097ab30f828",
+    "parameters": 22056576,
+    "dtype": "float32",
+    "frozen": true,
+    "preprocessing": "RGB whole-screen resize to 224x224 bicubic, ImageNet mean/std; no crop"
+  },
+  "readout": {
+    "path": "D:/CodexArtifacts/pretrained-reuse-r2/miniwob-dino-path-a-v1-attempt-01/matched_screen/checkpoint-best.safetensors",
+    "sha256": "983366413dc2afd9f21a5411dd8793525f68342c44936d3bb2ccffe123f5c3fb",
+    "selected_epoch": 99,
+    "training_or_calibration": false,
+    "temperature": 1.0
+  },
+  "controls": {
+    "candidate_position_prior": "frequency from pinned legacy train rows only",
+    "black_screen": true,
+    "sattolo_shuffled_screen_seed": 1701,
+    "option_order_permutation": [2, 0, 3, 1],
+    "option_order_max_probability_abs_tolerance": 0.000002
+  },
+  "metrics": {
+    "ece_bins": 15,
+    "episode_bootstrap_repetitions": 10000,
+    "episode_bootstrap_seed": 17,
+    "paired_bootstrap_seed": 1701,
+    "paired_bootstrap_repetitions": 10000,
+    "strata": "target color from collector-only audit; never a model input"
+  },
+  "output": "D:/CodexArtifacts/pretrained-reuse-r2/miniwob-frozen-generalization-20261114-attempt-02/evaluation"
+}
