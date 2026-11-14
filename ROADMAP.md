@@ -1,3 +1,4 @@
+**2026-11-14 R5 Path A temporal session JSONL:** Exposed bounded process-local `observe`, `record_missing`, causal `snapshot`, and `close_session` operations for caller-supplied, identity-keyed float32 features. CPU tests cover payload reuse, stale/missing/future handling, clock mismatch, session limits and eviction. This is runtime plumbing only: no scorer integration, model quality, or temporal/fusion benefit is established. See [protocol and evidence](docs/pretrained_reuse/R5_PATH_A_TEMPORAL_SESSION_JSONL_20261114.md).
 **2026-11-14 R1/R2 MiniWoB CUDA runtime recheck:** The pinned DINOv2-small + selected screen-only readout loaded on the RTX 3080 Laptop GPU and reproduced one saved TRAIN decision with `2.76e-7` maximum probability delta using 104,218,112 bytes peak CUDA allocation. This is runtime parity only, not a new quality result or multimodal evidence. See [CUDA runtime recheck](docs/pretrained_reuse/R1_MINIWOB_DINO_CUDA_RUNTIME_RECHECK_20261114.md).
 
 **2026-11-13 R2 Localized Narratives source screen:** A metadata-only screen found a plausible synchronized audio+image region-grounding task, but the available COCO image metadata lacks creator attribution, the 100 official validation annotators all overlap train shard 0, and voice-recording rights / consent scope remain unverified. Keep the candidate `REVIEW_NOT_ADMITTED`; no media, model, or evaluation data were loaded. See [source screen](docs/pretrained_reuse/R2_LOCALIZED_NARRATIVES_SOURCE_SCREEN_20261113.md).
@@ -3986,3 +3987,14 @@ readout. See [full protocol and outputs](docs/pretrained_reuse/R2_PHYSICALAI_FRE
 **2026-11-13 R2 MiniWoB DINO Path A JSON runtime:** Added a local pixel-to-probability-JSON inference API over the already selected frozen DINOv2/readout artifacts. Seven focused tests pass; a one-row TRAIN replay matched the saved selected option with maximum probability delta `1.252e-6`. No training or validation scoring occurred. This closes a task-specific runtime handoff only; it does not generalize the synthetic result or close R2 M-2. See [runtime record](docs/pretrained_reuse/R2_MINIWOB_DINO_JSON_RUNTIME_20261113.md).
 
 **2026-11-14 R5 shared MiniLM integration:** The current Path A Torch worker now creates one hash-verified MiniLM encoder/tokenizer and injects the same frozen objects into its Audio, Text and Video routes. This carries the PR #66 optimization into the newer runtime stack. The CPU/GPU startup measurements in the prior report belong to PR #66's earlier stack and were not repeated. A current-stack CPU synthetic route smoke reported one load and finite JSON probabilities for all three routes; this is interface evidence, not a quality or fusion result. See [integration verification](docs/pretrained_reuse/R5_SHARED_MINILM_INTEGRATION_20261114.md) and [prior startup measurements](docs/pretrained_reuse/R5_SHARED_MINILM_STARTUP_20261111.md).
+
+**2026-11-14 R5 canonical Path A JSONL runtime:** Added an executable JSONL
+Decision interface over the existing frozen Text, Audio, raw Image and raw
+Video routes. A fresh CUDA-worker/CPU-VideoPrism invocation returned typed JSON
+for all four routes and matched the fixed saved probabilities within `1e-5`;
+the manifest verifies 170,499,716 unique parameters with one shared MiniLM
+instance. This is runtime/serialization parity only: tasks remain narrow,
+joint AV quality remains unproved, and the 687,254,772-byte package exceeds the
+provisional 200 MB target. The unlisted root README in the source assembly is
+kept outside a manifest-only hard-linked view rather than weakening strict
+bundle verification. See [the runtime record](docs/pretrained_reuse/R5_PATH_A_CANONICAL_JSONL_RUNTIME_20261114.md).
