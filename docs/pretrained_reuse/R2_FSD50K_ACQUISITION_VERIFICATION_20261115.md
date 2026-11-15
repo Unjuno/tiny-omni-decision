@@ -277,6 +277,13 @@ and 4,038,544,900 durable output bytes. The checkpoint was written at
 `result.json` was present. This remains partial acquisition, not verified
 media.
 
+At 2026-11-15 10:45:26 JST, PID 5452 remained active at 5,900/18,879 durable
+files with a matching flushed receipt, 3,136,642,734 cumulative range bytes,
+and 4,093,635,256 durable output bytes. The checkpoint was written at
+10:44:32, 100 files after 5,800 at 10:36:12 (8m20s). No terminal
+`result.json` was present. This remains partial acquisition, not verified
+media.
+
 ## Next gates
 
 1. Continue monitoring attempt-06's live PID/session; never infer completion
