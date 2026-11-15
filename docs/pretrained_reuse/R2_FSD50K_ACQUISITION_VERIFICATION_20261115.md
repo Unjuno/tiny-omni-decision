@@ -270,6 +270,13 @@ was written at 10:28:14, 200 files after 5,500 at 10:11:31 (16m43s). No
 terminal `result.json` was present. This is acquisition progress only; the
 full media verifier has not run.
 
+At 2026-11-15 10:36:36 JST, PID 5452 remained active at 5,800/18,879 durable
+files with a matching flushed receipt, 3,095,281,865 cumulative range bytes,
+and 4,038,544,900 durable output bytes. The checkpoint was written at
+10:36:12, 100 files after 5,700 at 10:28:14 (7m58s). No terminal
+`result.json` was present. This remains partial acquisition, not verified
+media.
+
 ## Next gates
 
 1. Continue monitoring attempt-06's live PID/session; never infer completion
