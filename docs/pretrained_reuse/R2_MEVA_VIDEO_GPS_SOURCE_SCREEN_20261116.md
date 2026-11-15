@@ -65,6 +65,16 @@ validation would need a defensible mapping from annotation track IDs to those
 logger IDs and appears below the roadmap's provisional 200 independent
 scene/clip validation floor if logger identity is the group.
 
+Collapsing activity-annotation filenames by date/start/end (so cameras in the
+same time slot are one scene window) yields 463 training-tier and 305
+evaluation-tier unique five-minute windows. **187 windows occur in both tiers;
+302 of 305 evaluation windows overlap at least one training-tier window on the
+same date**, for 2,162 overlapping train/evaluation window pairs. These counts
+use filename metadata only; interval overlap is `same date && train_start <
+eval_end && train_end > eval_start`. This establishes cross-camera/time-scene
+exposure in the published evaluation tier, even though clip IDs themselves are
+disjoint. Do not use that tier as independent validation or final evaluation.
+
 One training-level annotation example contains activity labels and local
 `id1`/`id2` track references. The public material inspected so far does not
 prove a direct, machine-readable mapping from those per-clip references to GPS
@@ -104,6 +114,7 @@ authorize model fitting or quality claims.
 - Repository source commit: `421841a75577b697c314e952e585aecbb1b99e17`.
 - Source inventory command: `git ls-tree -r --name-only HEAD`; filename counts
   were computed after canonicalizing `.activities.yml`, `.geom.yml`,
-  `.types.yml`, and `.json` suffixes to clip IDs.
+  `.types.yml`, and `.json` suffixes to clip IDs. Scene-window counts collapse
+  each clip to date/start/end and compare half-open filename time intervals.
 - Local metadata-only clone: `C:\CodexArtifacts\pretrained-reuse-r2\meva-source-screen-20261116\upstream-metadata`.
 - No model/GPU work, media retrieval, or evaluation was performed.
