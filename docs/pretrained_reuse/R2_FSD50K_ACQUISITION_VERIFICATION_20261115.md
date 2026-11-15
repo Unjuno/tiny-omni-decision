@@ -909,3 +909,5 @@ durable progress. No terminal `result.json` exists; the media remains partial
 and unverified.
 
 At 2026-11-15 18:57:10 JST, PID 5452 remained active and attempt-06 reached 11,500/18,879 durable files with progress.json updated to 7,662,469,190 output bytes and 5,871,765,471 cumulative range bytes. This was 50 files after the 11,450 checkpoint at 18:54:38 (2m32s). No terminal result.json exists; this remains partial and unverified.
+
+At 2026-11-15 19:00:43 JST, PID 5452 remained active and attempt-06 reached 11,550/18,879 durable files with 7,680,957,196 output bytes and 5,887,702,582 cumulative range bytes. This was 50 files after 11,500 at 18:57:10 (3m33s). The filesystem showed 11,553 WAVs, three ahead of durable progress; they are not counted as complete. No terminal result.json exists, so the acquisition remains partial and unverified.
