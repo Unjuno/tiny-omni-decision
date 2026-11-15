@@ -288,6 +288,29 @@ def test_failed_partial_is_verified_before_fresh_attempt_resume(tmp_path):
     assert prior["downloaded_files"] == 1
     assert records == [receipt]
 
+    (partial / "progress.json").write_text(
+        json.dumps(
+            {
+                "status": "RUNNING",
+                "runner_sha256": acquisition.INTERRUPTED_ATTEMPT_RUNNER_SHA256,
+                "dataset_revision": DATASET_REVISION,
+                "preflight_manifest_sha256": manifest_sha,
+                "archive_directory_sha256": (
+                    "a52c8e77acf8c01e5108a3872461a65f2a583b2ddc3e0bb6554e51dc7ae12c5f"
+                ),
+                "official_eval_labels_read": False,
+                "official_eval_media_acquired": False,
+                "expected_files": 6,
+                "downloaded_files": 1,
+                "resumed_files": 0,
+                "resumed_range_bytes": 0,
+                "range_bytes": 100,
+                "range_transfer_budget_bytes": 1000,
+                "output_bytes": len(payload),
+            }
+        ),
+        encoding="utf-8",
+    )
     attempt_04_result = json.loads((partial / "result.json").read_text(encoding="utf-8"))
     attempt_04_result.update(
         runner_sha256=(
@@ -304,6 +327,19 @@ def test_failed_partial_is_verified_before_fresh_attempt_resume(tmp_path):
     assert prior["downloaded_files"] == 1
     assert records == [receipt]
 
+    orphan = partial / "train" / "000001.wav"
+    orphan.write_bytes(b"valid-looking but uncommitted")
+    interrupted, committed_records = acquisition.validate_interrupted_partial(
+        preflight, partial
+    )
+    assert interrupted["status"] == "INTERRUPTED_PREFIX_VERIFIED"
+    assert interrupted["downloaded_files"] == 1
+    assert interrupted["range_bytes"] == 100
+    assert committed_records == [receipt]
+    assert orphan.exists()
+
     media.write_bytes(b"corrupt")
     with pytest.raises(ValueError, match="failed integrity check"):
         acquisition.validate_failed_partial(preflight, partial)
+    with pytest.raises(ValueError, match="failed integrity check"):
+        acquisition.validate_interrupted_partial(preflight, partial)

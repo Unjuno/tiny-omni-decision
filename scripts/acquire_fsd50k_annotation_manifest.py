@@ -32,6 +32,9 @@ ARCHIVE_SIZES = (3_221_225_472,) * 5 + (2_306_663_327,)
 ARCHIVE_NAMES = tuple(f"FSD50K.dev_audio.z{i:02d}" for i in range(1, 6)) + (
     "FSD50K.dev_audio.zip",
 )
+INTERRUPTED_ATTEMPT_RUNNER_SHA256 = (
+    "6e31924875c2f643f4f70a140573475513a5e0dcf79e416f9edcca87a86230ac"
+)
 EXPECTED_DIRECTORY_END = (
     b"PK\x05\x06",
     5,
@@ -321,23 +324,136 @@ def validate_failed_partial(
     return prior, records
 
 
+def validate_interrupted_partial(
+    preflight_dir: Path, partial_dir: Path
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    """Validate a killed RUNNING attempt using only its last durable prefix."""
+    report, splits = load_frozen_manifest(preflight_dir)
+    progress_path = partial_dir / "progress.json"
+    receipt_path = partial_dir / "files.jsonl"
+    progress = json.loads(progress_path.read_text(encoding="utf-8"))
+    if (
+        progress.get("status") != "RUNNING"
+        or progress.get("runner_sha256") != INTERRUPTED_ATTEMPT_RUNNER_SHA256
+        or progress.get("dataset_revision") != DATASET_REVISION
+        or progress.get("preflight_manifest_sha256") != report["manifest_sha256"]
+        or progress.get("archive_directory_sha256")
+        != "a52c8e77acf8c01e5108a3872461a65f2a583b2ddc3e0bb6554e51dc7ae12c5f"
+        or progress.get("official_eval_labels_read") is not False
+        or progress.get("official_eval_media_acquired") is not False
+    ):
+        raise ValueError("interrupted acquisition progress is not a recognized safe run")
+
+    raw_receipt = receipt_path.read_bytes()
+    if raw_receipt and not raw_receipt.endswith(b"\n"):
+        raise ValueError("interrupted acquisition receipt has an incomplete final row")
+    records = [json.loads(line) for line in raw_receipt.decode("utf-8").splitlines()]
+    ordered = [row for split in ("train", "calibration", "validation") for row in splits[split]]
+    durable_count = progress.get("downloaded_files")
+    if (
+        not isinstance(durable_count, int)
+        or durable_count <= 0
+        or durable_count >= len(ordered)
+        or progress.get("expected_files") != len(ordered)
+        or len(records) < durable_count
+        or len(records) > len(ordered)
+    ):
+        raise ValueError("interrupted acquisition durable prefix count is invalid")
+    record_ids = [record.get("sample_id") for record in records]
+    expected_record_ids = [row["sample_id"] for row in ordered[: len(records)]]
+    if record_ids != expected_record_ids:
+        raise ValueError("interrupted acquisition receipt is not a manifest prefix")
+
+    durable_rows = ordered[:durable_count]
+    durable_records = records[:durable_count]
+    total_bytes = 0
+    for row, record in zip(durable_rows, durable_records, strict=True):
+        if any(
+            record.get(field) != row.get(field)
+            for field in ("sample_id", "source_id", "group_id", "license", "split")
+        ):
+            raise ValueError("interrupted acquisition receipt differs from frozen manifest")
+        media_path = partial_dir / row["split"] / f"{row['sample_id']}.wav"
+        size, digest, crc = sha256_and_crc32(media_path)
+        if (
+            size != record.get("bytes")
+            or digest != record.get("sha256")
+            or crc != record.get("zip_crc32")
+        ):
+            raise ValueError(
+                "interrupted acquisition media failed integrity check: "
+                f"{row['sample_id']}"
+            )
+        total_bytes += size
+    if total_bytes != progress.get("output_bytes"):
+        raise ValueError("interrupted acquisition durable byte count mismatch")
+
+    prior_range_bytes = progress.get("range_bytes")
+    if (
+        not isinstance(prior_range_bytes, int)
+        or prior_range_bytes < progress.get("resumed_range_bytes", 0)
+        or prior_range_bytes > progress.get("range_transfer_budget_bytes", 0)
+    ):
+        raise ValueError("interrupted acquisition range budget state is invalid")
+    state_digest = hashlib.sha256(
+        b"fsd50k-interrupted-prefix-v1\0"
+        + progress_path.read_bytes()
+        + b"\0"
+        + raw_receipt
+    ).hexdigest()
+    prior = {
+        **progress,
+        "status": "INTERRUPTED_PREFIX_VERIFIED",
+        "downloaded_files": durable_count,
+        "output_bytes": total_bytes,
+        "range_bytes": prior_range_bytes,
+        "files_jsonl_sha256": hashlib.sha256(raw_receipt).hexdigest(),
+        "resume_state_sha256": state_digest,
+    }
+    # Rows/files after the last durable count may be in flight. They are left
+    # untouched in the source attempt and deliberately excluded from the copy.
+    return prior, durable_records
+
+
 def acquire(
     preflight_dir: Path,
     output_dir: Path,
     artifact_root: Path,
     *,
     resume_from: Path | None = None,
+    resume_interrupted: bool = False,
+    additional_prior_range_bytes: int = 0,
 ) -> dict[str, Any]:
     if output_dir.exists():
         raise FileExistsError(f"refusing to overwrite FSD50K acquisition: {output_dir}")
+    if additional_prior_range_bytes < 0:
+        raise ValueError("additional prior range bytes cannot be negative")
+    if additional_prior_range_bytes and resume_from is None:
+        raise ValueError("additional prior range bytes require a verified resume source")
     report, splits = load_frozen_manifest(preflight_dir)
     expected_ids = {row["sample_id"] for rows in splits.values() for row in rows}
     if len(expected_ids) != sum(len(rows) for rows in splits.values()):
         raise ValueError("duplicate IDs across frozen FSD50K splits")
     prior_result = None
     prior_records: list[dict[str, Any]] = []
+    if resume_interrupted and resume_from is None:
+        raise ValueError("interrupted resume requires a source attempt")
     if resume_from is not None:
-        prior_result, prior_records = validate_failed_partial(preflight_dir, resume_from)
+        if resume_interrupted:
+            prior_result, prior_records = validate_interrupted_partial(
+                preflight_dir, resume_from
+            )
+        else:
+            prior_result, prior_records = validate_failed_partial(preflight_dir, resume_from)
+    prior_range_bytes = (
+        int(prior_result.get("range_bytes", 0)) + additional_prior_range_bytes
+        if prior_result is not None
+        else 0
+    )
+    if prior_result is not None and prior_range_bytes > int(
+        prior_result.get("range_transfer_budget_bytes", 0)
+    ):
+        raise ValueError("all previous FSD50K range requests exceed the frozen transfer budget")
     output_dir.mkdir(parents=True, exist_ok=False)
     for record in prior_records:
         split_dir = output_dir / record["split"]
@@ -362,11 +478,18 @@ def acquire(
         "downloaded_files": 0,
         "resumed_files": len(prior_records),
         "resumed_from_result_sha256": sha256_file(resume_from / "result.json")
+        if resume_from is not None and not resume_interrupted
+        else None,
+        "resume_source_kind": "interrupted_progress"
+        if resume_interrupted
+        else "failed_result"
         if resume_from is not None
         else None,
-        "resumed_range_bytes": prior_result.get("range_bytes", 0)
-        if prior_result is not None
-        else 0,
+        "resumed_from_state_sha256": prior_result.get("resume_state_sha256")
+        if resume_interrupted and prior_result is not None
+        else None,
+        "resumed_range_bytes": prior_range_bytes,
+        "additional_prior_range_bytes": additional_prior_range_bytes,
         "official_eval_labels_read": False,
         "official_eval_media_acquired": False,
         "archive_directory_sha256": None,
@@ -510,18 +633,37 @@ def main() -> None:
     parser.add_argument("--artifact-root", type=Path, default=default_root)
     parser.add_argument("--resume-from", type=Path)
     parser.add_argument(
+        "--resume-interrupted",
+        type=Path,
+        help="resume only the last durable prefix of a recognized interrupted RUNNING attempt",
+    )
+    parser.add_argument(
+        "--additional-prior-range-bytes",
+        type=int,
+        default=0,
+        help="account for range requests from preserved attempts outside the resume chain",
+    )
+    parser.add_argument(
         "--output",
         type=Path,
         default=default_root / "fsd50k-annotation-presence-v1-media-20261115-attempt-01",
     )
     args = parser.parse_args()
+    if args.resume_from is not None and args.resume_interrupted is not None:
+        parser.error("choose either --resume-from or --resume-interrupted")
+    if args.additional_prior_range_bytes < 0:
+        parser.error("--additional-prior-range-bytes must be nonnegative")
+    if args.additional_prior_range_bytes and not (args.resume_from or args.resume_interrupted):
+        parser.error("--additional-prior-range-bytes requires a verified resume source")
     print(
         json.dumps(
             acquire(
                 args.preflight,
                 args.output,
                 args.artifact_root,
-                resume_from=args.resume_from,
+                resume_from=args.resume_from or args.resume_interrupted,
+                resume_interrupted=args.resume_interrupted is not None,
+                additional_prior_range_bytes=args.additional_prior_range_bytes,
             ),
             ensure_ascii=False,
         )
