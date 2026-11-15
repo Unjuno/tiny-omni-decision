@@ -319,6 +319,14 @@ and 4,436,244,092 durable output bytes. The checkpoint was written at
 `result.json` was present. This remains partial acquisition, not verified
 media.
 
+At 2026-11-15 11:49:58 JST, PID 5452 remained active at 6,600/18,879 durable
+files with a matching flushed receipt, 3,514,292,367 cumulative range bytes,
+and 4,586,941,486 durable output bytes. The checkpoint was written at
+11:49:56, 200 files after 6,400 at 11:30:52 (19m04s). The RTX 3080 snapshot
+was 8,270/16,384 MiB used at 53% utilization; C: had 259.62 GiB free. No
+terminal `result.json` was present. This remains partial acquisition, not
+verified media.
+
 ## Next gates
 
 1. Continue monitoring attempt-06's live PID/session; never infer completion
