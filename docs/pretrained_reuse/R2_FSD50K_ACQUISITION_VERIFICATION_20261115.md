@@ -232,6 +232,13 @@ files with a matching receipt, 2,463,477,615 cumulative range bytes, and
 300 files after the 4,450 checkpoint at 08:41:04 (23m21s). No terminal
 `result.json` was present.
 
+At 2026-11-15 09:15:03 JST, PID 5452 remained active at 4,850/18,879 durable
+files with a matching receipt, 2,551,005,470 cumulative range bytes, and
+3,314,349,076 durable output bytes. The checkpoint was written at 09:14:30,
+100 files after 4,750 at 09:04:25 (10m05s). No terminal `result.json` was
+present. C: had 259.49 GiB free at 09:11; no disk-space intervention is
+needed at this checkpoint.
+
 ## Next gates
 
 1. Continue monitoring attempt-06's live PID/session; never infer completion
