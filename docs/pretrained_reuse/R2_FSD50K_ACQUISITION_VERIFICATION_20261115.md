@@ -471,3 +471,9 @@ cumulative range bytes, and 5,616,577,008 durable output bytes. This was 100
 files after the 8,300 checkpoint at 14:10:10 (8m56s). 8,409 WAV files were
 visible at the following observation, but the durable count remains 8,400. No
 terminal `result.json` exists. Acquisition is still partial and unverified.
+
+At 2026-11-15 14:32:03 JST, PID 5452 remained active and attempt-06 reached
+8,500/18,879 durable files with matching progress/receipt state, 4,401,810,340
+cumulative range bytes, and 5,733,632,434 durable output bytes. This was 100
+files after the 8,400 checkpoint at 14:19:06 (7m12s). No terminal
+`result.json` exists; the media remains partial and unverified.
