@@ -1025,3 +1025,5 @@ At 2026-11-16 02:37 JST, the same PID remained active and attempt-08 reached 16,
 At 2026-11-16 02:39 JST, PID 2860 reached 16,200 durable rows. `progress.json` reported 10,808,960,272 media bytes and 8,211,353,672 cumulative range bytes, leaving 655,923,960 bytes under the frozen limit. The attempt remained `RUNNING`; final result and full integrity verification were not yet available.
 
 At 2026-11-16 02:44 JST, PID 2860 reached 16,250 durable rows. `progress.json` reported 10,855,820,190 media bytes and 8,244,446,675 cumulative range bytes, leaving 622,830,957 bytes under the frozen limit. The attempt remained `RUNNING`, with recent validation WAV writes and an established HTTPS connection; no terminal result or full-media verification was present.
+
+At 2026-11-16 02:48 JST, PID 2860 reached 16,300 durable rows. `progress.json` reported 10,881,754,358 media bytes and 8,265,171,679 cumulative range bytes, leaving 602,105,953 bytes under the frozen transfer limit. The attempt remained `RUNNING`; validation media writes and a Zenodo HTTPS connection were observed, and no terminal result or full-media verification was present.
