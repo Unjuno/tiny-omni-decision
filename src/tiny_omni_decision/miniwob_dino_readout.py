@@ -8,6 +8,8 @@ import random
 import torch
 from torch import nn
 
+from tiny_omni_decision.classification_json import classification_json
+
 
 class MiniWoBOptionScorer(nn.Module):
     """Score each candidate from shared screen context, local visual tokens and xy."""
@@ -33,6 +35,41 @@ class MiniWoBOptionScorer(nn.Module):
         ):
             raise ValueError("finite [batch, options>=2, configured feature_width] required")
         return self.network(option_features).squeeze(-1)
+
+    def decide_json(
+        self,
+        option_features: torch.Tensor,
+        option_ids: list[str],
+        *,
+        temperature: float = 1.0,
+    ) -> dict:
+        """Return option probabilities as schema-versioned JSON.
+
+        Temperature is fixed by the caller; this method does not fit calibration.
+        """
+        if not math.isfinite(temperature) or temperature <= 0:
+            raise ValueError("temperature must be finite and positive")
+        if (
+            option_features.ndim != 3
+            or option_features.shape[0] != 1
+            or len(option_ids) != option_features.shape[1]
+            or any(
+                not isinstance(option_id, str) or not option_id.strip()
+                for option_id in option_ids
+            )
+        ):
+            raise ValueError("one example and unique nonempty option IDs are required")
+        if len(set(option_ids)) != len(option_ids):
+            raise ValueError("one example and unique nonempty option IDs are required")
+        self.eval()
+        with torch.inference_mode():
+            probabilities = torch.softmax(self(option_features)[0] / temperature, dim=-1)
+        classes = list(option_ids)
+        options = [
+            {"option_id": option_id, "class_id": class_id}
+            for option_id, class_id in zip(option_ids, classes, strict=True)
+        ]
+        return classification_json(probabilities.tolist(), classes, options)
 
 
 def classification_metrics(probabilities: torch.Tensor, targets: torch.Tensor) -> dict[str, float]:

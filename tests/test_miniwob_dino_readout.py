@@ -56,3 +56,36 @@ def test_screen_derangement_is_deterministic_complete_and_has_no_fixed_points():
     assert all(index != donor for index, donor in enumerate(first))
     with pytest.raises(ValueError):
         deranged_indices(1, seed=17)
+
+
+def test_decide_json_preserves_option_identity_order_and_permutation():
+    torch.manual_seed(17)
+    model = MiniWoBOptionScorer().eval()
+    features = torch.randn(1, 4, 1154)
+    option_ids = ["red", "blue", "green", "yellow"]
+    result = model.decide_json(features, option_ids)
+    reversed_result = model.decide_json(features.flip(1), option_ids[::-1])
+    assert result["schema_version"] == "1.0"
+    assert [item["option_id"] for item in result["options"]] == option_ids
+    assert result["selected_option_id"] == reversed_result["selected_option_id"]
+    assert {
+        item["option_id"]: item["probability"] for item in result["options"]
+    } == {
+        item["option_id"]: item["probability"] for item in reversed_result["options"]
+    }
+
+
+@pytest.mark.parametrize(
+    ("option_ids", "temperature"),
+    [(["same", "same"], 1.0), (["a", "b"], 0.0), (["a", "b"], float("nan"))],
+)
+def test_decide_json_rejects_invalid_ids_and_temperature(option_ids, temperature):
+    with pytest.raises(ValueError):
+        MiniWoBOptionScorer().decide_json(
+            torch.zeros(1, 2, 1154), option_ids, temperature=temperature
+        )
+
+
+def test_decide_json_rejects_non_string_option_ids():
+    with pytest.raises(ValueError):
+        MiniWoBOptionScorer().decide_json(torch.zeros(1, 2, 1154), [{}, "valid"])
