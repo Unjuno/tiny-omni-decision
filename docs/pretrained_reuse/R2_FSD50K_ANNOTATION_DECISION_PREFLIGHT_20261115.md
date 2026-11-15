@@ -86,3 +86,7 @@ labels remain reserved until that candidate is frozen.
 This is one audio annotation-prediction component of Path A. It does not close
 R2-M joint-input necessity, text/image/video quality, or the overall product
 gate.
+
+## Independent local freeze revalidation (2026-11-15)
+
+Re-read the frozen train/calibration/validation JSONL and independently recomputed the canonical ordered sample-ID and full ordered-row SHA-256 values against `preflight.json`. Counts and both hashes matched for all three splits (12,845 / 2,053 / 3,981). A pairwise audit found zero sample-ID, source-ID, or uploader-group overlap. This read-only check used only the frozen development manifests; no media, official eval labels, features, or model were loaded.
