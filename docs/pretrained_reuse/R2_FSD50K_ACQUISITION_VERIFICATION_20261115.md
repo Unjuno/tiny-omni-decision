@@ -327,6 +327,13 @@ was 8,270/16,384 MiB used at 53% utilization; C: had 259.62 GiB free. No
 terminal `result.json` was present. This remains partial acquisition, not
 verified media.
 
+At 2026-11-15 12:00:42 JST, PID 5452 remained active at 6,700/18,879 durable
+files with a matching flushed receipt, 3,575,000,630 cumulative range bytes,
+and 4,659,238,090 durable output bytes. The checkpoint was written at
+11:59:56, 100 files after 6,600 at 11:49:56 (10m00s). No terminal
+`result.json` was present. This remains partial acquisition, not verified
+media.
+
 ## Next gates
 
 1. Continue monitoring attempt-06's live PID/session; never infer completion
