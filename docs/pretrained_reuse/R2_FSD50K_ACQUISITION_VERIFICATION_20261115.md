@@ -675,3 +675,11 @@ files after the 9,950 checkpoint at 16:38:41 (6m23s). The filesystem showed
 10,002 media files at that observation; the two-file lead is not counted as
 durable progress. No terminal `result.json` exists; the media remains partial
 and unverified.
+
+At 2026-11-15 16:48:54 JST, PID 5452 remained active and attempt-06 reached
+10,050/18,879 durable files with matching progress/receipt state, 5,148,798,061
+cumulative range bytes, and 6,722,842,666 durable output bytes. This was 50
+files after the 10,000 checkpoint at 16:45:04 (3m50s). The filesystem showed
+10,053 media files at that observation; the three-file lead is not counted as
+durable progress. No terminal `result.json` exists; the media remains partial
+and unverified.
