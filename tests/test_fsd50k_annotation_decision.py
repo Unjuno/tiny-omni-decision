@@ -65,15 +65,34 @@ def test_binary_metrics_and_macro_are_finite_and_equal_weighted():
     assert result["nll"] < 1e-5
     assert result["brier"] < 1e-10
     assert 0.0 <= result["ece_15"] <= 1.0
+    assert result["positive_precision"] == 1.0
+    assert result["positive_recall"] == 1.0
+    assert result["balanced_accuracy"] == 1.0
+    assert result["positive_support"] == 1
 
     values = {
         label: {"accuracy": float(index), "nll": 4.0 - index, "brier": 0.2, "ece_15": 0.1,
-                "mean_confidence": 0.7}
+                "mean_confidence": 0.7, "positive_precision": 0.5,
+                "positive_recall": 0.25, "balanced_accuracy": 0.375}
         for index, label in enumerate(TARGET_LABELS)
     }
     macro = macro_metrics(values)
     assert macro["accuracy"] == pytest.approx(1.5)
     assert macro["nll"] == pytest.approx(2.5)
+    assert macro["positive_recall"] == pytest.approx(0.25)
+    assert macro["balanced_accuracy"] == pytest.approx(0.375)
+
+
+def test_positive_metrics_expose_majority_class_accuracy_hiding_missed_labels():
+    logits = torch.tensor([[8.0, -8.0]] * 9)
+    targets = torch.tensor([0] * 8 + [1])
+
+    result = metric_summary(logits, targets)
+
+    assert result["accuracy"] == pytest.approx(8 / 9)
+    assert result["positive_recall"] == 0.0
+    assert result["balanced_accuracy"] == pytest.approx(0.5)
+    assert result["positive_support"] == 1
 
 
 def _write_feature_fixture(root):

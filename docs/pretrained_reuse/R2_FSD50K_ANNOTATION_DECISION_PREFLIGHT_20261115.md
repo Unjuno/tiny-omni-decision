@@ -90,3 +90,7 @@ gate.
 ## Independent local freeze revalidation (2026-11-15)
 
 Re-read the frozen train/calibration/validation JSONL and independently recomputed the canonical ordered sample-ID and full ordered-row SHA-256 values against `preflight.json`. Counts and both hashes matched for all three splits (12,845 / 2,053 / 3,981). A pairwise audit found zero sample-ID, source-ID, or uploader-group overlap. This read-only check used only the frozen development manifests; no media, official eval labels, features, or model were loaded.
+
+## Train-prevalence validation baseline and class-imbalance guard
+
+Before fitting the readout, a non-fitted baseline was computed by predicting each label's train prevalence as the `annotated` probability on the frozen validation split. Because every train prevalence is below 0.5, this is equivalent to always selecting `no_annotation`. It obtains macro Accuracy **0.893306** (per-label: Animal 0.930922, Human_voice 0.843507, Vehicle 0.938960, Music 0.859834), macro NLL **0.342078**, macro Brier **0.096179**, and macro 15-bin ECE **0.044908**. This shows why Accuracy alone cannot establish useful audio decisions for this imbalanced task. Candidate reporting now also includes per-label positive precision/recall, balanced accuracy, and positive support; the predeclared validation macro-NLL selector is unchanged. The baseline is descriptive, not a fitted or selected model.

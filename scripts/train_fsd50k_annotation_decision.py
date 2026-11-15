@@ -182,6 +182,13 @@ def metric_summary(logits: Tensor, targets: Tensor) -> dict[str, float]:
     predictions = probabilities.argmax(dim=-1)
     confidence = probabilities.max(dim=-1).values
     correct = predictions.eq(targets)
+    true_positive = (predictions.eq(1) & targets.eq(1)).sum().to(torch.float64)
+    false_positive = (predictions.eq(1) & targets.eq(0)).sum().to(torch.float64)
+    true_negative = (predictions.eq(0) & targets.eq(0)).sum().to(torch.float64)
+    false_negative = (predictions.eq(0) & targets.eq(1)).sum().to(torch.float64)
+    positive_precision = true_positive / (true_positive + false_positive).clamp_min(1.0)
+    positive_recall = true_positive / (true_positive + false_negative).clamp_min(1.0)
+    specificity = true_negative / (true_negative + false_positive).clamp_min(1.0)
     onehot = F.one_hot(targets, num_classes=2).to(torch.float64)
     edges = torch.linspace(0.0, 1.0, 16, dtype=torch.float64)
     ece = torch.zeros((), dtype=torch.float64)
@@ -198,6 +205,10 @@ def metric_summary(logits: Tensor, targets: Tensor) -> dict[str, float]:
         "brier": float((probabilities - onehot).square().sum(-1).mean()),
         "ece_15": float(ece),
         "mean_confidence": float(confidence.mean()),
+        "positive_precision": float(positive_precision),
+        "positive_recall": float(positive_recall),
+        "balanced_accuracy": float((positive_recall + specificity) / 2.0),
+        "positive_support": int(targets.eq(1).sum()),
     }
 
 
@@ -206,7 +217,16 @@ def macro_metrics(per_label: dict[str, dict[str, float]]) -> dict[str, float]:
         raise ValueError("macro metrics require all four frozen labels")
     return {
         key: float(np.mean([per_label[label][key] for label in TARGET_LABELS]))
-        for key in ("accuracy", "nll", "brier", "ece_15", "mean_confidence")
+        for key in (
+            "accuracy",
+            "nll",
+            "brier",
+            "ece_15",
+            "mean_confidence",
+            "positive_precision",
+            "positive_recall",
+            "balanced_accuracy",
+        )
     }
 
 
