@@ -60,6 +60,36 @@ label was downloaded or opened.
   closed-loop success metric, not a comparable option Accuracy threshold:
   <https://arxiv.org/abs/2610.26765>.
 
+## Pinned task-specific follow-up: t27 remains unadmitted
+
+A bounded code-only trace was made for
+t27_place_largest_fitting_ball; it did not access any trajectory payload,
+evaluation labels, media, simulator, or model.
+
+- The pinned [t27 multi-task config](https://github.com/TsinghuaC3I/HandsOn/blob/c9598b53fc2a01355e74837de397bd7b2b1ab602/configs/multi_task/t27_place_largest_fitting_ball.yaml)
+  asks the policy to select among YCB cup and ball objects.
+- Its pinned
+  [arena XML](https://github.com/TsinghuaC3I/HandsOn/blob/c9598b53fc2a01355e74837de397bd7b2b1ab602/handson/handson/sim/envs/xmls/arena_arm_hand_t27_place_largest_fitting_ball_rokae_wuji1.xml)
+  includes ycb02_objects.xml; that object file includes
+  ycb02_ycb_assets.xml, whose visual/collision references point into
+  lightwheel_ycb/ for cups, golf ball, marble, tennis ball and baseball.
+- The pinned
+  [Lightwheel-YCB README at commit 03312c5d12b75e70c692fa341d683f5aabab1d99](https://github.com/LightwheelAI/Lightwheel-YCB/blob/03312c5d12b75e70c692fa341d683f5aabab1d99/README.md)
+  declares CC BY-NC 4.0. HandsOn's pinned
+  [ycb11_visuals/SOURCE.json](https://github.com/TsinghuaC3I/HandsOn/blob/c9598b53fc2a01355e74837de397bd7b2b1ab602/handson/handson/sim/envs/xmls/assets/ycb11_visuals/SOURCE.json)
+  also explicitly records a Lightwheel-YCB-derived mesh/UV with CC BY-NC 4.0.
+- This evidence leaves the t27 asset family behind an unresolved rights gate for the
+  product-directed path; keep it excluded until exact per-file lineage and compatible rights are
+  established. It does not prove every HandsOn object uses that license; do
+  not generalize this finding to the whole dataset.
+- The t27 task is not frozen as a Decision target: no predeclared next-action
+  option construction has demonstrated both video and robot-state necessity.
+  Thus neither the dataset-level MIT statement nor the task's apparent
+  multimodal structure is sufficient for admission.
+
+Disposition remains REVIEW_NOT_ADMITTED. No files were downloaded and no
+training or quality evaluation was performed.
+
 ## R2-M assessment
 
 | Gate | Finding | Disposition |
