@@ -78,6 +78,11 @@ def test_explicit_retry_buffer_bounds_the_resumed_transfer_budget():
     assert total == 1250
     assert remaining == 450
 
+    # Retry allowance may put already-consumed bytes above the new plan.
+    total, remaining = acquisition.effective_range_transfer_budget(1000, 500, 1250)
+    assert total == 1500
+    assert remaining == 250
+
     with pytest.raises(ValueError, match="1.5 GB safety cap"):
         acquisition.effective_range_transfer_budget(
             1000, acquisition.MAX_RANGE_RETRY_BUFFER_BYTES + 1, 0

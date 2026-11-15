@@ -567,8 +567,6 @@ def acquire(
                 raise ValueError("planned FSD50K transfer exceeds source archive size")
             require_free_space(output_dir, output_bytes + DISK_RESERVE_BYTES)
             resumed_range_bytes = int(result["resumed_range_bytes"])
-            if resumed_range_bytes > transfer_budget:
-                raise ValueError("partial attempt transfer already exceeds the frozen budget")
             total_transfer_budget, remaining_transfer_budget = (
                 effective_range_transfer_budget(
                     transfer_budget, range_retry_buffer_bytes, resumed_range_bytes
