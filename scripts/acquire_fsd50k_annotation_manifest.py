@@ -48,6 +48,11 @@ EXPECTED_DIRECTORY_END = (
 MAX_MEMBER_BYTES = 64 * 1024 * 1024
 DISK_RESERVE_BYTES = 2 * 1024**3
 SHORT_RESPONSE_FALLBACK_CHUNK_BYTES = 128 * 1024
+MAX_RANGE_RETRY_BUFFER_BYTES = 1_500_000_000
+ATTEMPT_08_RUNNER_SHA256 = (
+    "5428a21132b3a5dcad7a9551d6211eec80e237bbf6a330217a5b16236cfbb9c6"
+)
+FROZEN_PLANNED_RANGE_TRANSFER_BYTES = 8_867_277_632
 
 
 class SharedBudget:
@@ -176,6 +181,24 @@ def planned_budget(
     return output_bytes, transfer_budget
 
 
+def effective_range_transfer_budget(
+    planned_bytes: int,
+    retry_buffer_bytes: int,
+    prior_range_bytes: int,
+) -> tuple[int, int]:
+    """Return the total cap and remaining allowance for this explicit attempt."""
+    if planned_bytes <= 0 or retry_buffer_bytes < 0 or prior_range_bytes < 0:
+        raise ValueError("range-transfer budget values must be nonnegative")
+    if retry_buffer_bytes > MAX_RANGE_RETRY_BUFFER_BYTES:
+        raise ValueError("range retry buffer exceeds the 1.5 GB safety cap")
+    total_limit = planned_bytes + retry_buffer_bytes
+    if total_limit > sum(ARCHIVE_SIZES):
+        raise ValueError("range-transfer budget exceeds the pinned source archive size")
+    if prior_range_bytes > total_limit:
+        raise ValueError("preserved prior requests exceed the explicit total transfer budget")
+    return total_limit, total_limit - prior_range_bytes
+
+
 def require_free_space(path: Path, required_bytes: int) -> None:
     if required_bytes > shutil.disk_usage(path).free:
         raise ValueError("insufficient disk space for FSD50K media plus 2 GiB reserve")
@@ -255,7 +278,18 @@ def validate_failed_partial(
         == "8b7f5b08aecb109db6072f5bcc035e42defff57defa875239c1d62568ef0ad4b"
         and attempt_04_match is not None
     )
-    if prior.get("status") != "FAIL" or not (known_attempt_03 or known_attempt_04):
+    known_attempt_08 = (
+        prior.get("runner_sha256") == ATTEMPT_08_RUNNER_SHA256
+        and prior.get("error")
+        == "ValueError('total FSD50K range-transfer budget exceeded')"
+        and prior.get("range_transfer_budget_bytes")
+        == FROZEN_PLANNED_RANGE_TRANSFER_BYTES
+        and isinstance(prior.get("range_bytes"), int)
+        and 0 <= prior["range_bytes"] <= FROZEN_PLANNED_RANGE_TRANSFER_BYTES
+    )
+    if prior.get("status") != "FAIL" or not (
+        known_attempt_03 or known_attempt_04 or known_attempt_08
+    ):
         raise ValueError("resume source is not an identified preserved range-read failure")
     if attempt_04_match is not None:
         range_start, range_end, got, expected_bytes, inner_start, inner_end = map(
@@ -423,13 +457,18 @@ def acquire(
     resume_from: Path | None = None,
     resume_interrupted: bool = False,
     additional_prior_range_bytes: int = 0,
+    range_retry_buffer_bytes: int = 0,
 ) -> dict[str, Any]:
     if output_dir.exists():
         raise FileExistsError(f"refusing to overwrite FSD50K acquisition: {output_dir}")
     if additional_prior_range_bytes < 0:
         raise ValueError("additional prior range bytes cannot be negative")
+    if range_retry_buffer_bytes < 0:
+        raise ValueError("range retry buffer cannot be negative")
     if additional_prior_range_bytes and resume_from is None:
         raise ValueError("additional prior range bytes require a verified resume source")
+    if range_retry_buffer_bytes and resume_from is None:
+        raise ValueError("range retry buffer requires a verified resume source")
     report, splits = load_frozen_manifest(preflight_dir)
     expected_ids = {row["sample_id"] for rows in splits.values() for row in rows}
     if len(expected_ids) != sum(len(rows) for rows in splits.values()):
@@ -450,10 +489,12 @@ def acquire(
         if prior_result is not None
         else 0
     )
-    if prior_result is not None and prior_range_bytes > int(
-        prior_result.get("range_transfer_budget_bytes", 0)
-    ):
-        raise ValueError("all previous FSD50K range requests exceed the frozen transfer budget")
+    if prior_result is not None:
+        previous_budget = int(prior_result.get("range_transfer_budget_bytes", 0))
+        if prior_range_bytes > previous_budget + range_retry_buffer_bytes:
+            raise ValueError(
+                "preserved FSD50K requests exceed the prior budget plus explicit retry buffer"
+            )
     output_dir.mkdir(parents=True, exist_ok=False)
     for record in prior_records:
         split_dir = output_dir / record["split"]
@@ -490,6 +531,7 @@ def acquire(
         else None,
         "resumed_range_bytes": prior_range_bytes,
         "additional_prior_range_bytes": additional_prior_range_bytes,
+        "range_retry_buffer_bytes": range_retry_buffer_bytes,
         "official_eval_labels_read": False,
         "official_eval_media_acquired": False,
         "archive_directory_sha256": None,
@@ -527,9 +569,15 @@ def acquire(
             resumed_range_bytes = int(result["resumed_range_bytes"])
             if resumed_range_bytes > transfer_budget:
                 raise ValueError("partial attempt transfer already exceeds the frozen budget")
-            shared.limit = transfer_budget - resumed_range_bytes
+            total_transfer_budget, remaining_transfer_budget = (
+                effective_range_transfer_budget(
+                    transfer_budget, range_retry_buffer_bytes, resumed_range_bytes
+                )
+            )
+            shared.limit = remaining_transfer_budget
             result["planned_output_bytes"] = output_bytes
-            result["range_transfer_budget_bytes"] = transfer_budget
+            result["planned_range_transfer_budget_bytes"] = transfer_budget
+            result["range_transfer_budget_bytes"] = total_transfer_budget
 
             count = len(prior_records)
             resume_ids = {record["sample_id"] for record in prior_records}
@@ -644,6 +692,14 @@ def main() -> None:
         help="account for range requests from preserved attempts outside the resume chain",
     )
     parser.add_argument(
+        "--range-retry-buffer-bytes",
+        type=int,
+        default=0,
+        help=(
+            "explicitly raise this resumed attempt's planned range cap; capped at 1.5 GB"
+        ),
+    )
+    parser.add_argument(
         "--output",
         type=Path,
         default=default_root / "fsd50k-annotation-presence-v1-media-20261115-attempt-01",
@@ -653,8 +709,14 @@ def main() -> None:
         parser.error("choose either --resume-from or --resume-interrupted")
     if args.additional_prior_range_bytes < 0:
         parser.error("--additional-prior-range-bytes must be nonnegative")
+    if not 0 <= args.range_retry_buffer_bytes <= MAX_RANGE_RETRY_BUFFER_BYTES:
+        parser.error("--range-retry-buffer-bytes must be between 0 and 1500000000")
     if args.additional_prior_range_bytes and not (args.resume_from or args.resume_interrupted):
         parser.error("--additional-prior-range-bytes requires a verified resume source")
+    if args.range_retry_buffer_bytes and not (
+        args.resume_from or args.resume_interrupted
+    ):
+        parser.error("--range-retry-buffer-bytes requires a verified resume source")
     print(
         json.dumps(
             acquire(
@@ -664,6 +726,7 @@ def main() -> None:
                 resume_from=args.resume_from or args.resume_interrupted,
                 resume_interrupted=args.resume_interrupted is not None,
                 additional_prior_range_bytes=args.additional_prior_range_bytes,
+                range_retry_buffer_bytes=args.range_retry_buffer_bytes,
             ),
             ensure_ascii=False,
         )
