@@ -3,15 +3,17 @@
 ## Scope
 
 This change exposes the already selected MiniWoB screen readout through the
-repository's `classification_json` contract and replays the existing frozen
-development predictions through it. This is a serialization/runtime integrity
-check, not a new quality evaluation, checkpoint selection, calibration fit, or
-training run. The old Path A results remain the quality record.
+repository's `classification_json` contract and adds an end-to-end local image
+runtime. It replays the existing frozen development predictions as an
+integrity check, not a new quality evaluation, checkpoint selection,
+calibration fit, or training run. The old Path A results remain the quality
+record. Probabilities use temperature 1.0; no calibration was fitted.
 
-The scorer consumes cached option features shaped `[1, 4, 1154]`; it does not
-itself load DINOv2 or decode screenshots. End-to-end image encoding remains a
-separate runtime integration task. Probabilities use temperature 1.0. No
-calibration was fitted.
+`MiniWoBDinoRuntime` strictly loads the pinned local DINOv2-small files and
+readout checkpoint, preprocesses a screenshot with the original whole-screen
+224x224 resize, extracts the same global/local patch and candidate-coordinate
+features, and returns option-ID JSON. A batch API supports efficient local
+inference with a consistent number of options per image.
 
 ## Immutable inputs and execution
 
@@ -39,6 +41,16 @@ validation sample order and targets, feature-cache shape/finiteness, and strict
 checkpoint state loading. Frozen inputs were read only. Replay output is outside
 the original run directory.
 
+The end-to-end command was:
+
+`python scripts/verify_miniwob_dino_image_runtime.py --run-dir D:\CodexArtifacts\pretrained-reuse-r2\miniwob-dino-path-a-v1-attempt-01 --encoder-dir C:\CodexArtifacts\pretrained-reuse-r1\dinov2-small-audit-01\model --output-dir C:\CodexLocalArtifacts\pretrained-reuse-r2\miniwob-image-runtime-20261116-attempt-01`
+
+The wrapper checked all four pinned encoder-file hashes, loaded DINOv2-small
+offline with `trust_remote_code=False`, and verified 22,056,576 frozen encoder
+parameters. The saved 76,293-parameter readout loaded with strict state-dict
+matching. It processed validation screenshots in batches of eight on CPU in
+about 27 seconds, including model and corpus integrity checks.
+
 ## Result
 
 | Check | Result |
@@ -50,29 +62,48 @@ the original run directory.
 | Declared CPU replay tolerance | `5e-6` |
 | Status | PASS, within tolerance |
 
+The end-to-end screenshot path was also run over all 512 validation examples:
+
+| Check | Result |
+|---|---:|
+| Screens decoded and serialized | 512 / 512 |
+| Selected option IDs matching saved predictions | 512 / 512 |
+| Selected-ID mismatches | 0 |
+| Maximum feature difference from the frozen cache | `6.914138793945312e-5` |
+| Maximum option probability difference from saved batched predictions | `2.2470951080322266e-5` |
+| Status | PASS_SELECTED_ID_REPLAY |
+
 The replay scores one example at a time while the saved predictions were
 produced in batches. CPU floating-point kernels therefore do not produce
 bit-identical probabilities across these execution shapes. The observed delta
-is below the fixed tolerance; all selected IDs match. This result does not
-recompute or amend Accuracy, NLL, Brier, or ECE, and does not upgrade the
-previous 96.09% development result into general image, video, multimodal, or
-product evidence.
+is small and all selected IDs match. The cached-feature-only comparison uses a
+fixed `5e-6` probability tolerance; the end-to-end comparison is reported with
+its measured feature/probability deltas and does not claim bitwise equality.
+Neither replay recomputes or amends Accuracy, NLL, Brier, or ECE, and neither
+upgrades the previous 96.09% development result into general image, video,
+multimodal, or product evidence.
 
 ## Output artifacts
 
-External local output directory:
-`C:\CodexLocalArtifacts\pretrained-reuse-r2\miniwob-json-runtime-20261116-attempt-01`.
+External local outputs:
+`C:\CodexLocalArtifacts\pretrained-reuse-r2\miniwob-json-runtime-20261116-attempt-01`
+and
+`C:\CodexLocalArtifacts\pretrained-reuse-r2\miniwob-image-runtime-20261116-attempt-01`.
 
 - `validation-decisions.jsonl` SHA-256:
   `46fe5c09a1ec2b6edaa2e75e94276b0bc85a49ca9bf9e65d1b0c723009c0fa8d`.
 - `parity-report.json` records all source hashes, count, tolerance, and status.
+- End-to-end decisions SHA-256:
+  `574c046b78217389badee9b7a7220f685d86e99679157d9ec41063e779c1671e`.
+- End-to-end verification script SHA-256:
+  `b80e37e06e4f977b1640de1b46071f88540fd68ef52f8cbf37f77835ea49d4da`.
+- End-to-end report records model/checkpoint/corpus/cache hashes and measured
+  feature/probability differences.
 - Frozen checkpoint, corpus, feature cache, and previous run outputs were not
   modified.
 
 ## Remaining work
 
-The next R2 step is an end-to-end wrapper that accepts an image and option
-coordinates, runs the pinned frozen DINOv2 encoder, and then emits this JSON
-contract. The current API verifies the readout and output mapping over saved
-features only. R2's text/audio/video/sensor and both-input-required gates remain
-open; this narrow synthetic screen task does not satisfy them.
+The next R2 step is to admit and validate suitable text/audio/video/sensor tasks
+and demonstrate both-input-required fusion. This MiniWoB result is a single
+synthetic image-screen task and does not satisfy those multimodal gates.
