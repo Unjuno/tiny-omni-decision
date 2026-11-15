@@ -501,3 +501,9 @@ At 2026-11-15 14:51:42 JST, PID 5452 remained active and attempt-06 reached
 cumulative range bytes, and 5,877,856,480 durable output bytes. This was 50
 files after the 8,650 checkpoint at 14:45:51 (5m51s). No terminal
 `result.json` exists; the media remains partial and unverified.
+
+At 2026-11-15 14:57:21 JST, PID 5452 remained active and attempt-06 reached
+8,750/18,879 durable files with matching progress/receipt state, 4,555,156,750
+cumulative range bytes, and 5,938,176,212 durable output bytes. This was 50
+files after the 8,700 checkpoint at 14:51:42 (5m39s). No terminal
+`result.json` exists; the media remains partial and unverified.
