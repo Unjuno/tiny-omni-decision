@@ -464,3 +464,10 @@ verified media.
 This remains one audio annotation-prediction component. It does not close
 image, text, video, multimodal necessity, package-size, or release-quality
 gates.
+
+At 2026-11-15 14:19:06 JST, PID 5452 remained active and attempt-06 reached
+8,400/18,879 durable files with a matching flushed receipt, 4,306,707,124
+cumulative range bytes, and 5,616,577,008 durable output bytes. This was 100
+files after the 8,300 checkpoint at 14:10:10 (8m56s). 8,409 WAV files were
+visible at the following observation, but the durable count remains 8,400. No
+terminal `result.json` exists. Acquisition is still partial and unverified.
