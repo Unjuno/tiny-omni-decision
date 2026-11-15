@@ -341,6 +341,13 @@ were written at 12:08:43, 100 files after 6,700 at 11:59:56 (8m47s). The
 latest WAV was updated at 12:09:32. No terminal `result.json` was present.
 This remains partial acquisition, not verified media.
 
+At 2026-11-15 12:16:07 JST, PID 5452 remained active at 6,900/18,879 durable
+files with a matching flushed receipt, 3,655,250,382 cumulative range bytes,
+and 4,761,723,128 durable output bytes. The progress and receipt checkpoint
+were written together at 12:16:07, 100 files after 6,800 at 12:08:43 (7m24s).
+No terminal `result.json` was present. This remains partial acquisition, not
+verified media.
+
 ## Next gates
 
 1. Continue monitoring attempt-06's live PID/session; never infer completion
