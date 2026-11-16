@@ -7,18 +7,6 @@ import json
 import time
 from pathlib import Path
 
-import numpy as np
-import torch
-from safetensors.torch import load_file
-
-from scripts.miniwob_screen_action_data import output_option_ids
-from scripts.train_miniwob_dino_path_a import read_corpus, targets_for
-from tiny_omni_decision.miniwob_dino_readout import (
-    MiniWoBOptionScorer,
-    classification_metrics,
-    permute_candidate_axis,
-)
-
 OUTPUT = Path("D:/CodexArtifacts/pretrained-reuse-r2/miniwob-dino-path-a-v1-attempt-01")
 OPTION_ORDER_TOLERANCE = 2e-6
 
@@ -46,6 +34,19 @@ def finalized_results_equal(existing: dict, computed: dict) -> bool:
 
 
 def main() -> None:
+    # Keep receipt comparison importable in the lightweight CPU-only test install.
+    import numpy as np
+    import torch
+    from safetensors.torch import load_file
+
+    from scripts.miniwob_screen_action_data import output_option_ids
+    from scripts.train_miniwob_dino_path_a import read_corpus, targets_for
+    from tiny_omni_decision.miniwob_dino_readout import (
+        MiniWoBOptionScorer,
+        classification_metrics,
+        permute_candidate_axis,
+    )
+
     torch.set_num_threads(2)
     config = json.loads((OUTPUT / "effective-config.json").read_text(encoding="utf-8"))
     if config.get("cuda_used") is not False or config["device"] != "cpu":
