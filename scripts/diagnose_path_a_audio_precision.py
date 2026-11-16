@@ -264,7 +264,7 @@ def main() -> None:
             specs = [
                 TypedDecisionSpec(
                     request_id=f"precision-query-{index}",
-                    decision_type="multiple_choice",
+                    decision_type="choice",
                     option_ids=tuple(
                         f"option-{option_index}" for option_index in range(len(query.options))
                     ),
