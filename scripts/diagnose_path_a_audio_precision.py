@@ -43,6 +43,16 @@ def _capture_mode(
     media: Path,
     queries: list[DecisionQuery],
 ) -> tuple[dict[str, Any], dict[str, np.ndarray]]:
+    original_cudnn_tf32 = torch.backends.cudnn.allow_tf32
+    if mode == "cuda_fp32_cudnn_no_tf32":
+        torch.backends.cudnn.allow_tf32 = False
+    backend_settings = {
+        "cuda_matmul_allow_tf32": torch.backends.cuda.matmul.allow_tf32,
+        "cudnn_allow_tf32": torch.backends.cudnn.allow_tf32,
+        "cudnn_benchmark": torch.backends.cudnn.benchmark,
+        "float32_matmul_precision": torch.get_float32_matmul_precision(),
+        "deterministic_algorithms": torch.are_deterministic_algorithms_enabled(),
+    }
     if device == "cuda":
         torch.cuda.reset_peak_memory_stats()
     runtime = SpeechCommandsMultiQueryRuntime(
@@ -120,6 +130,7 @@ def _capture_mode(
         "device": device,
         "requested_precision": precision,
         "effective_precision": runtime.audio_encoder_precision,
+        "backend_settings": backend_settings,
         "seconds_after_model_load": seconds,
         "peak_cuda_allocated_bytes": (
             torch.cuda.max_memory_allocated() if device == "cuda" else None
@@ -140,6 +151,7 @@ def _capture_mode(
     del runtime
     if device == "cuda":
         torch.cuda.empty_cache()
+    torch.backends.cudnn.allow_tf32 = original_cudnn_tf32
     return summary, tensors
 
 
@@ -199,7 +211,12 @@ def main() -> None:
     output_dir.mkdir(parents=True)
     modes = [("cpu_fp32", "cpu", "fp32")]
     if torch.cuda.is_available():
-        modes.extend([("cuda_bf16", "cuda", "bf16"), ("cuda_fp32", "cuda", "fp32")])
+        modes.extend(
+            [
+                ("cuda_fp32", "cuda", "fp32"),
+                ("cuda_fp32_cudnn_no_tf32", "cuda", "fp32"),
+            ]
+        )
     summaries: dict[str, dict[str, Any]] = {}
     captures: dict[str, dict[str, np.ndarray]] = {}
     for mode, device, precision in modes:
