@@ -73,9 +73,11 @@ replay is not a speed benchmark or an additional accuracy estimate.
 ## Verification and limits
 
 - Targeted CPU tests: 36 passed before final source-commit rebuild.
-- Ruff and `git diff --check`: passed before commit.
-- Full repository tests and remote CI are recorded after the final report/docs
-  commit.
+- Full CPU suite: 2,921 passed, 11 skipped.
+- Ruff: passed; training catalog validation: 6 sources; evaluation catalog
+  validation: 7 sources; `git diff --check`: passed.
+- GitHub Actions was triggered for the pushed PR head; its final result is
+  tracked on PR #111.
 - New code commit: `97b27eff790888d84573ee0b6a0e62da980a52ba`.
 - The Speech Commands scorer remains independently selected and unchanged.
   Existing task quality limitations remain: LibriSpeech only covers supplied

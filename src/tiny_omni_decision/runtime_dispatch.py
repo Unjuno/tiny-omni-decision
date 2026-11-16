@@ -312,9 +312,10 @@ class PathARuntimeDispatcher:
     ) -> dict[str, Any]:
         """Return the raw Path A response plus typed JSON records for its scores.
 
-        Audio accepts one spec per query; every other task returns one score and
-        therefore requires exactly one spec. This adapter preserves the original
-        dispatcher API and adds no model parameters or calibration.
+        Audio and LibriSpeech accept one spec per query; every other task
+        returns one score and therefore requires exactly one spec. This adapter
+        preserves the original dispatcher API and adds no model parameters or
+        calibration.
         """
 
         if not isinstance(decision_specs, list) or not all(
