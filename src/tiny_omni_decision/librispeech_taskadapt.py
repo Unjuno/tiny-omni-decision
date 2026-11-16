@@ -14,6 +14,8 @@ from tiny_omni_decision.audio_hard_negatives import (
     normalize_transcript,
 )
 
+HARD_SIMILARITY_CANDIDATE_LIMIT = 256
+
 
 def split_by_speaker(
     rows: Sequence[dict[str, Any]], *, seed: int = 17, validation_fraction: float = 0.2
@@ -130,13 +132,16 @@ def build_choice_examples(
             >= 0.65
             and bool(target_words.intersection(candidate.words))
         ]
-        hard = find_hard_distractors(target, eligible, count=3)
-        if len(hard) != 3:
-            no_hard += 1
-            continue
         stable_seed = int.from_bytes(
             hashlib.sha256(f"{seed}:{target.sample_id}".encode()).digest()[:8], "big"
         )
+        similarity_pool = random.Random(stable_seed ^ 0x5A17).sample(
+            eligible, min(len(eligible), HARD_SIMILARITY_CANDIDATE_LIMIT)
+        )
+        hard = find_hard_distractors(target, similarity_pool, count=3)
+        if len(hard) != 3:
+            no_hard += 1
+            continue
         rng = random.Random(stable_seed)
         hard_ids = {item.sample_id for item in hard}
         random_distractors = []
@@ -205,4 +210,5 @@ def build_choice_examples(
         "examples_with_paired_conditions": len(examples),
         "excluded_insufficient_hard_negatives": no_hard,
         "excluded_insufficient_random_negatives": no_random,
+        "max_phoneme_similarity_candidates_scored": HARD_SIMILARITY_CANDIDATE_LIMIT,
     }

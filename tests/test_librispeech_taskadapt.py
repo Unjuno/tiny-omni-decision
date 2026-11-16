@@ -90,6 +90,7 @@ def test_choice_examples_are_paired_deterministic_and_have_four_unique_options()
     assert first == second
     assert counts["examples_with_paired_conditions"] > 0
     assert counts["excluded_duplicate_normalized_content_targets"] == 1
+    assert counts["max_phoneme_similarity_candidates_scored"] == 256
     record_map = {record.sample_id: record for record in records}
     for example in first:
         assert len(example["options_by_condition"]["random_distractors"]) == 4

@@ -616,6 +616,11 @@ def main() -> None:
         "learning_rate": 0.001,
         "weight_decay": 0.0001,
         "selection_rule": "minimum mean of random/hard held-speaker validation NLL",
+        "hard_negative_policy": (
+            "filter by split, speaker, chapter, word count, character length, "
+            "and shared vocabulary; "
+            "rank a deterministic per-target shortlist of at most 256 by phoneme similarity"
+        ),
         "trainable_component": "344321-parameter FrozenFeatureCandidateScorer only",
         "frozen_components": ["Whisper Tiny encoder", "MiniLM L3 text encoder"],
         "question": QUESTION,
