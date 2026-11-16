@@ -73,6 +73,28 @@ def test_member_budget_accepts_observed_long_clip_and_rejects_over_limit():
         )
 
 
+def test_explicit_retry_buffer_bounds_the_resumed_transfer_budget():
+    total, remaining = acquisition.effective_range_transfer_budget(1000, 250, 800)
+    assert total == 1250
+    assert remaining == 450
+
+    # Retry allowance may put already-consumed bytes above the new plan.
+    total, remaining = acquisition.effective_range_transfer_budget(1000, 500, 1250)
+    assert total == 1500
+    assert remaining == 250
+
+    with pytest.raises(ValueError, match="1.5 GB safety cap"):
+        acquisition.effective_range_transfer_budget(
+            1000, acquisition.MAX_RANGE_RETRY_BUFFER_BYTES + 1, 0
+        )
+    with pytest.raises(ValueError, match="exceed the explicit total transfer budget"):
+        acquisition.effective_range_transfer_budget(1000, 250, 1251)
+    with pytest.raises(ValueError, match="pinned source archive size"):
+        acquisition.effective_range_transfer_budget(
+            sum(acquisition.ARCHIVE_SIZES), 1, 0
+        )
+
+
 def test_extract_member_uses_zip_name_length_before_extra_length(monkeypatch, tmp_path):
     member_name = "FSD50K.dev_audio/example.wav"
     payload = b"small wav payload"
@@ -325,6 +347,46 @@ def test_failed_partial_is_verified_before_fresh_attempt_resume(tmp_path):
     (partial / "result.json").write_text(json.dumps(attempt_04_result), encoding="utf-8")
     prior, records = acquisition.validate_failed_partial(preflight, partial)
     assert prior["downloaded_files"] == 1
+    assert records == [receipt]
+
+    budget_exhausted_result = dict(attempt_04_result)
+    budget_exhausted_result.update(
+        runner_sha256=acquisition.ATTEMPT_08_RUNNER_SHA256,
+        error="ValueError('total FSD50K range-transfer budget exceeded')",
+        range_bytes=900,
+        range_transfer_budget_bytes=acquisition.FROZEN_PLANNED_RANGE_TRANSFER_BYTES,
+    )
+    (partial / "result.json").write_text(
+        json.dumps(budget_exhausted_result), encoding="utf-8"
+    )
+    prior, records = acquisition.validate_failed_partial(preflight, partial)
+    assert prior["range_bytes"] == 900
+    assert records == [receipt]
+
+    budget_exhausted_result["runner_sha256"] = "0" * 64
+    (partial / "result.json").write_text(
+        json.dumps(budget_exhausted_result), encoding="utf-8"
+    )
+    with pytest.raises(ValueError, match="identified preserved range-read failure"):
+        acquisition.validate_failed_partial(preflight, partial)
+
+    budget_exhausted_result["range_bytes"] = (
+        acquisition.FROZEN_PLANNED_RANGE_TRANSFER_BYTES + 1
+    )
+    budget_exhausted_result["runner_sha256"] = acquisition.ATTEMPT_08_RUNNER_SHA256
+    (partial / "result.json").write_text(
+        json.dumps(budget_exhausted_result), encoding="utf-8"
+    )
+    with pytest.raises(ValueError, match="identified preserved range-read failure"):
+        acquisition.validate_failed_partial(preflight, partial)
+
+    budget_exhausted_result["range_bytes"] = 900
+    budget_exhausted_result["runner_sha256"] = acquisition.ATTEMPT_08_RUNNER_SHA256
+    (partial / "result.json").write_text(
+        json.dumps(budget_exhausted_result), encoding="utf-8"
+    )
+    prior, records = acquisition.validate_failed_partial(preflight, partial)
+    assert prior["range_bytes"] == 900
     assert records == [receipt]
 
     orphan = partial / "train" / "000001.wav"
