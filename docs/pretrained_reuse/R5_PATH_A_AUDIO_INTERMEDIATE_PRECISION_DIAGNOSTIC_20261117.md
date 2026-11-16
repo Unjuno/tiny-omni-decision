@@ -117,8 +117,11 @@ decision.
   Audio readout `4efa7939a686ad97b38f9eec0b8171e6e62d125ba4eb373e5d83e33ac4df42c7`).
 - Earlier attempts 01 and 02 and complete intermediate run 03 remain retained;
   attempt 06 is the complete package-dispatch follow-up. CPU tests after the
-  implementation change: 24 passed across `test_audio_runtime.py` and
-  `test_runtime_dispatch.py`; Ruff checks passed for changed Python files.
+  implementation change initially passed 24 across `test_audio_runtime.py`
+  and `test_runtime_dispatch.py`. Follow-up regression coverage now also
+  verifies TF32 flag restoration after successful and exceptional encoder
+  forwards; the current focused suite passes 26 tests. Ruff checks pass for
+  the changed Python files.
 - The separate Orbitune PID 28376 was observed before and after this short
   inference. It remained running; it was not stopped or modified.
 

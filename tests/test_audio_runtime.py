@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import wave
+from types import SimpleNamespace
 from unittest.mock import Mock
 
 import pytest
@@ -39,6 +40,50 @@ def test_audio_precision_resolution_rejects_unsupported_modes() -> None:
         audio_runtime.resolve_audio_encoder_precision("bf16", "cpu", bf16_supported=True)
     with pytest.raises(RuntimeError, match="does not support BF16"):
         audio_runtime.resolve_audio_encoder_precision("bf16", "cuda", bf16_supported=False)
+
+
+@pytest.mark.parametrize("encoder_raises", [False, True])
+def test_fp32_no_tf32_restores_backend_flags_after_forward(
+    tmp_path, monkeypatch, encoder_raises: bool
+) -> None:
+    runtime = object.__new__(audio_runtime.SpeechCommandsMultiQueryRuntime)
+    runtime.device = torch.device("cpu")
+    runtime.audio_encoder_precision = "fp32_no_tf32"
+
+    class FakeProcessor:
+        n_samples = 3000
+
+        def __call__(self, *_args, **_kwargs):
+            return SimpleNamespace(input_features=torch.zeros((1, 80, 3000)))
+
+    runtime.audio_processor = FakeProcessor()
+    monkeypatch.setattr(audio_runtime, "read_pcm_wav", lambda _path: np.zeros(320))
+
+    def encode(_features):
+        assert torch.backends.cuda.matmul.allow_tf32 is False
+        assert torch.backends.cudnn.allow_tf32 is False
+        if encoder_raises:
+            raise RuntimeError("encoder failure")
+        return SimpleNamespace(last_hidden_state=torch.ones((1, 2, 384)))
+
+    runtime.audio_encoder = encode
+    old_matmul_tf32 = torch.backends.cuda.matmul.allow_tf32
+    old_cudnn_tf32 = torch.backends.cudnn.allow_tf32
+    torch.backends.cuda.matmul.allow_tf32 = True
+    torch.backends.cudnn.allow_tf32 = True
+    try:
+        if encoder_raises:
+            with pytest.raises(RuntimeError, match="encoder failure"):
+                runtime._encode_audio_batch([tmp_path / "fake.wav"])
+        else:
+            features = runtime._encode_audio_batch([tmp_path / "fake.wav"])
+            assert features[0].shape == (384,)
+            torch.testing.assert_close(features[0], torch.ones(384))
+        assert torch.backends.cuda.matmul.allow_tf32 is True
+        assert torch.backends.cudnn.allow_tf32 is True
+    finally:
+        torch.backends.cuda.matmul.allow_tf32 = old_matmul_tf32
+        torch.backends.cudnn.allow_tf32 = old_cudnn_tf32
 
 
 def test_audio_cache_reuses_content_rejects_stale_hash_and_evicts(tmp_path) -> None:

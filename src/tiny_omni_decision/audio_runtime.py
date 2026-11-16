@@ -220,17 +220,20 @@ class SpeechCommandsMultiQueryRuntime:
             if self.audio_encoder_precision == "bf16"
             else nullcontext()
         )
-        original_matmul_tf32 = torch.backends.cuda.matmul.allow_tf32
-        original_cudnn_tf32 = torch.backends.cudnn.allow_tf32
         if self.audio_encoder_precision == "fp32_no_tf32":
+            original_matmul_tf32 = torch.backends.cuda.matmul.allow_tf32
+            original_cudnn_tf32 = torch.backends.cudnn.allow_tf32
             torch.backends.cuda.matmul.allow_tf32 = False
             torch.backends.cudnn.allow_tf32 = False
-        try:
+            try:
+                with torch.inference_mode(), autocast:
+                    hidden = self.audio_encoder(input_features).last_hidden_state
+            finally:
+                torch.backends.cuda.matmul.allow_tf32 = original_matmul_tf32
+                torch.backends.cudnn.allow_tf32 = original_cudnn_tf32
+        else:
             with torch.inference_mode(), autocast:
                 hidden = self.audio_encoder(input_features).last_hidden_state
-        finally:
-            torch.backends.cuda.matmul.allow_tf32 = original_matmul_tf32
-            torch.backends.cudnn.allow_tf32 = original_cudnn_tf32
         pooled_rows = []
         for index, waveform in enumerate(waveforms):
             valid_tokens = min(hidden.shape[1], max(1, math.ceil(len(waveform) / 320)))
