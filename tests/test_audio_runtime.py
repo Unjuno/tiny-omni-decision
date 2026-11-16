@@ -213,3 +213,17 @@ def test_read_pcm_wav_rejects_empty_or_wrong_format(tmp_path) -> None:
         stream.writeframes(np.zeros(4, dtype="<i2").tobytes())
     with pytest.raises(ValueError, match="mono 16-bit 16 kHz"):
         read_pcm_wav(stereo)
+
+
+def test_readout_artifact_requires_the_declared_hash(tmp_path) -> None:
+    checkpoint = tmp_path / "best-readout.pt"
+    checkpoint.write_bytes(b"fixed readout")
+    digest = audio_runtime._file_sha256(checkpoint)
+
+    audio_runtime.validate_readout_artifact(checkpoint, digest)
+    with pytest.raises(ValueError, match="hash mismatch"):
+        audio_runtime.validate_readout_artifact(checkpoint, "0" * 64)
+    with pytest.raises(ValueError, match="64 lowercase hex"):
+        audio_runtime.validate_readout_artifact(checkpoint, "not-a-hash")
+    with pytest.raises(FileNotFoundError):
+        audio_runtime.validate_readout_artifact(tmp_path / "missing.pt", digest)

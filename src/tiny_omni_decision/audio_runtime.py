@@ -71,6 +71,16 @@ def _file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def validate_readout_artifact(path: Path, expected_sha256: str) -> None:
+    """Require an exact local readout hash before loading checkpoint tensors."""
+    if not path.is_file():
+        raise FileNotFoundError(path)
+    if len(expected_sha256) != 64 or any(c not in "0123456789abcdef" for c in expected_sha256):
+        raise ValueError("expected readout SHA-256 must be 64 lowercase hex characters")
+    if _file_sha256(path) != expected_sha256:
+        raise ValueError("Path A readout hash mismatch")
+
+
 def read_pcm_wav(path: Path) -> np.ndarray:
     """Read the exact input format used by the pinned Speech Commands probe."""
     with wave.open(str(path), "rb") as stream:
@@ -134,6 +144,7 @@ class SpeechCommandsMultiQueryRuntime:
         device: str | torch.device = "cpu",
         audio_encoder_precision: str = "auto",
         audio_cache_entries: int = 64,
+        expected_readout_sha256: str = READOUT_SHA256,
     ) -> None:
         if audio_cache_entries < 0:
             raise ValueError("audio cache capacity must be nonnegative")
@@ -157,15 +168,14 @@ class SpeechCommandsMultiQueryRuntime:
         text_dir = model_dir / "text-minilm-en"
         audio_weights = audio_dir / "model.safetensors"
         text_weights = text_dir / "model.safetensors"
-        for path in (audio_weights, text_weights, readout_path):
+        for path in (audio_weights, text_weights):
             if not path.is_file():
                 raise FileNotFoundError(path)
         if _file_sha256(audio_weights) != AUDIO_WEIGHTS_SHA256:
             raise ValueError("Whisper Tiny weight hash mismatch")
         if _file_sha256(text_weights) != TEXT_WEIGHTS_SHA256:
             raise ValueError("MiniLM weight hash mismatch")
-        if _file_sha256(readout_path) != READOUT_SHA256:
-            raise ValueError("Path A readout hash mismatch")
+        validate_readout_artifact(readout_path, expected_readout_sha256)
 
         self.audio_model = WhisperModel.from_pretrained(
             audio_dir, local_files_only=True, dtype=torch.float32
