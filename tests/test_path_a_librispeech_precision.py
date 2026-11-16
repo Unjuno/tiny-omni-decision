@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from scripts.diagnose_path_a_librispeech_precision import _compare, _request_fields
+from tiny_omni_decision.audio_precision import _compare, _request_fields
 
 
 def test_request_projection_ignores_targets_and_labels() -> None:
