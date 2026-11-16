@@ -53,12 +53,15 @@ def _capture_mode(
     tensors: dict[str, np.ndarray] = {}
     processor = runtime.audio_processor
 
-    def capture_processor(*args: Any, **kwargs: Any) -> Any:
-        encoded = processor(*args, **kwargs)
-        tensors["audio_input_features"] = encoded.input_features.detach().cpu().numpy()
-        return encoded
+    class CapturingProcessor:
+        n_samples = processor.n_samples
 
-    runtime.audio_processor = capture_processor
+        def __call__(self, *args: Any, **kwargs: Any) -> Any:
+            encoded = processor(*args, **kwargs)
+            tensors["audio_input_features"] = encoded.input_features.detach().cpu().numpy()
+            return encoded
+
+    runtime.audio_processor = CapturingProcessor()
 
     def capture_audio_hidden(_module: Any, _inputs: Any, output: Any) -> None:
         tensors["audio_encoder_hidden"] = output.last_hidden_state.detach().float().cpu().numpy()
