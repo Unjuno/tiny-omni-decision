@@ -2842,6 +2842,7 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 - [x] 2026-11-15 metadata-only AVSD/Charades screen: AVSD is response generation rather than supplied-option Decision, its repository describes registration-gated data access, and Charades rights remain non-commercial/primary-page-redirect unresolved. No data or media was accessed; candidate stays `REVIEW_NOT_ADMITTED`. See [screen](docs/pretrained_reuse/R2_AVSD_SOURCE_TASK_SCREEN_20261115.md).
 - [x] 2026-11-15 independent CPU review of PR #94 JSONL/temporal-session contracts: 16 focused tests and Ruff pass; no inspected contract defect. This verifies runtime plumbing only. Existing Clotho-AQA joint evidence remains mixed/overfit and is not reopened. See [review](docs/pretrained_reuse/R2_PATH_A_PR94_INDEPENDENT_REVIEW_20261115.md).
+- [x] 2026-11-17 R2-M sensor stem implementation: added a causal, timestamp-aware LSTM stem for calibrated sensor windows. The 12-channel/64-hidden configuration contains 20,224 trainable parameters; CPU contract tests cover invalid padding, timeline validation, finite outputs and gradients. This advances M-1 architecture plumbing only: no task data or quality comparison was run. The rights-approved, source-grouped sensor task and deterministic-rule baseline remain open. See [implementation record](docs/pretrained_reuse/R2_SENSOR_TEMPORAL_STEM_20261117.md).
 
 **2026-10-29 R2-M OpenPack source screen:** The pinned official OpenPack
 release is a relevant video/wearable-sensor work-activity source, but its
