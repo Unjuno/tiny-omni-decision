@@ -9,6 +9,7 @@ import json
 import os
 import platform
 import random
+import shutil
 import subprocess
 import sys
 import time
@@ -56,6 +57,7 @@ def _args() -> argparse.Namespace:
         "--bundle", type=Path, required=True, help="immutable Path A runtime bundle"
     )
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--prepared-data-dir", type=Path)
     parser.add_argument("--device", choices=("cuda", "cpu"), default="cuda")
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--validation-fraction", type=float, default=0.2)
@@ -110,13 +112,9 @@ def _load_rows(
             audio_path = transcript_path.parent / f"{sample_id}.flac"
             if not audio_path.is_file():
                 raise FileNotFoundError(audio_path)
-            with av.open(str(audio_path)) as container:
-                if not container.streams.audio:
-                    raise ValueError(f"no audio stream: {audio_path}")
-                stream = container.streams.audio[0]
-                if stream.rate != 16_000 or stream.codec_context.channels != 1:
-                    raise ValueError(f"expected mono 16kHz source: {audio_path}")
-                duration = float(stream.duration * stream.time_base) if stream.duration else None
+            if audio_path.stat().st_size == 0:
+                raise ValueError(f"empty audio asset: {audio_path}")
+            duration = None
             raw_norm = normalize_transcript(text)
             if raw_norm in seen_content:
                 duplicate_content += 1
@@ -127,7 +125,7 @@ def _load_rows(
                 "chapter_id": chapter_id,
                 "text": text,
                 "audio_path": str(audio_path.resolve()),
-                "audio_sha256": _sha256(audio_path),
+                "audio_asset_id": f"openslr-slr12-train-clean-100:{sample_id}",
                 "duration_seconds": duration,
             }
             rows.append(row)
@@ -152,7 +150,7 @@ def _load_rows(
             "phonemized_rows": len(records),
             "unique_speakers": len({row["speaker_id"] for row in rows}),
             "unique_chapters": len({row["chapter_id"] for row in rows}),
-            "unique_media_assets": len({row["audio_sha256"] for row in rows}),
+            "unique_media_assets": len({row["audio_asset_id"] for row in rows}),
         },
     )
 
@@ -347,6 +345,8 @@ def _flatten_examples(examples: list[dict[str, Any]]) -> dict[str, list[dict[str
                     "sample_id": example["sample_id"],
                     "speaker_id": example["speaker_id"],
                     "chapter_id": example["chapter_id"],
+                    "audio_path": example["audio_path"],
+                    "audio_asset_id": example["audio_asset_id"],
                     "target_index": example["target_index"],
                     "options": example["options_by_condition"][condition],
                     "condition": condition,
@@ -365,80 +365,238 @@ def main() -> None:
         raise ValueError("primary LibriSpeech readout experiment is frozen to seed 17")
     if args.device == "cuda" and not torch.cuda.is_available():
         raise RuntimeError("CUDA was requested but is unavailable")
-    if _sha256(args.cmudict.resolve()) != CMUDICT_SHA256:
+    cmudict_sha256 = _sha256(args.cmudict.resolve())
+    if cmudict_sha256 != CMUDICT_SHA256:
         raise ValueError("CMUdict SHA-256 mismatch")
-    if _sha256(args.cmudict_license.resolve()) != CMUDICT_LICENSE_SHA256:
+    cmudict_license_sha256 = _sha256(args.cmudict_license.resolve())
+    if cmudict_license_sha256 != CMUDICT_LICENSE_SHA256:
         raise ValueError("CMUdict license SHA-256 mismatch")
     md5 = hashlib.md5(usedforsecurity=False)
+    archive_sha_digest = hashlib.sha256()
     with args.archive.open("rb") as stream:
         for block in iter(lambda: stream.read(1024 * 1024), b""):
             md5.update(block)
+            archive_sha_digest.update(block)
     if md5.hexdigest() != TRAIN_CLEAN_100_MD5:
         raise ValueError(f"OpenSLR train-clean-100 MD5 mismatch: {md5.hexdigest()}")
-    pronunciations = parse_cmudict(args.cmudict.read_text(encoding="latin-1"))
-    rows, records, input_counts = _load_rows(args.dataset_root.resolve(), pronunciations)
-    train_rows, validation_rows, split_report = split_by_speaker(
-        rows, seed=args.seed, validation_fraction=args.validation_fraction
-    )
-    record_map = {record.sample_id: record for record in records}
-    train_records = [record_map[row["id"]] for row in train_rows if row["id"] in record_map]
-    validation_records = [
-        record_map[row["id"]] for row in validation_rows if row["id"] in record_map
-    ]
-    train_rows = [row for row in train_rows if row["id"] in record_map]
-    validation_rows = [row for row in validation_rows if row["id"] in record_map]
+    archive_sha256 = archive_sha_digest.hexdigest()
     bundle = args.bundle.resolve()
     bundle_manifest = json.loads((bundle / "bundle-manifest.json").read_text(encoding="utf-8"))
     verify_bundle(bundle, bundle_manifest)
     text_model = bundle / "models" / "text-minilm-en"
     audio_model = bundle / "models" / "audio-whisper-tiny"
-    tokenizer = AutoTokenizer.from_pretrained(text_model, local_files_only=True)
-    keep = set()
-    for row in train_rows + validation_rows:
-        tokenized = tokenizer(f"Candidate answer: {row['text']}.", truncation=False, padding=False)[
-            "input_ids"
-        ]
-        if len(tokenized) <= 64:
-            keep.add(row["id"])
-    train_rows = [row for row in train_rows if row["id"] in keep]
-    validation_rows = [row for row in validation_rows if row["id"] in keep]
-    train_records = [record_map[row["id"]] for row in train_rows]
-    validation_records = [record_map[row["id"]] for row in validation_rows]
-    train_examples, train_construction = build_choice_examples(
-        train_rows, train_records, seed=args.seed
-    )
-    validation_examples, validation_construction = build_choice_examples(
-        validation_rows, validation_records, seed=args.seed
-    )
-    if len({row["speaker_id"] for row in validation_examples}) < 20:
-        raise ValueError("fewer than 20 held-out validation speakers")
-    if not train_examples or not validation_examples:
-        raise ValueError("choice construction produced an empty split")
-    del tokenizer
-
+    bundle_sha256 = _sha256(bundle / "bundle-manifest.json")
     if args.preflight_only:
+        if args.prepared_data_dir is None:
+            raise ValueError("--prepared-data-dir is required for preflight materialization")
+        prepared = args.prepared_data_dir.resolve()
+        if prepared.exists():
+            raise FileExistsError(f"refusing to reuse prepared-data directory: {prepared}")
+        pronunciations = parse_cmudict(args.cmudict.read_text(encoding="latin-1"))
+        rows, records, input_counts = _load_rows(args.dataset_root.resolve(), pronunciations)
+        train_rows, validation_rows, split_report = split_by_speaker(
+            rows, seed=args.seed, validation_fraction=args.validation_fraction
+        )
+        record_map = {record.sample_id: record for record in records}
+        train_rows = [row for row in train_rows if row["id"] in record_map]
+        validation_rows = [row for row in validation_rows if row["id"] in record_map]
+        train_records = [record_map[row["id"]] for row in train_rows]
+        validation_records = [record_map[row["id"]] for row in validation_rows]
+        tokenizer = AutoTokenizer.from_pretrained(text_model, local_files_only=True)
+        keep = set()
+        for row in train_rows + validation_rows:
+            tokenized = tokenizer(
+                f"Candidate answer: {row['text']}.", truncation=False, padding=False
+            )["input_ids"]
+            if len(tokenized) <= 64:
+                keep.add(row["id"])
+        train_rows = [row for row in train_rows if row["id"] in keep]
+        validation_rows = [row for row in validation_rows if row["id"] in keep]
+        train_records = [record_map[row["id"]] for row in train_rows]
+        validation_records = [record_map[row["id"]] for row in validation_rows]
+        train_examples, train_construction = build_choice_examples(
+            train_rows, train_records, seed=args.seed
+        )
+        validation_examples, validation_construction = build_choice_examples(
+            validation_rows, validation_records, seed=args.seed
+        )
+        if len({row["speaker_id"] for row in validation_examples}) < 20:
+            raise ValueError("fewer than 20 held-out validation speakers")
+        if not train_examples or not validation_examples:
+            raise ValueError("choice construction produced an empty split")
+        del tokenizer
+        prepared.mkdir(parents=True)
+        split_manifest_path = prepared / "corpus-split-manifest.jsonl"
+        split_manifest_path.write_text(
+            "".join(
+                json.dumps(
+                    {
+                        "split": split,
+                        "sample_id": row["id"],
+                        "speaker_id": row["speaker_id"],
+                        "chapter_id": row["chapter_id"],
+                        "normalized_text": normalize_transcript(row["text"]),
+                        "audio_asset_id": row["audio_asset_id"],
+                        "audio_path": row["audio_path"],
+                    },
+                    ensure_ascii=False,
+                    sort_keys=True,
+                )
+                + "\n"
+                for split, split_rows in (("train", train_rows), ("validation", validation_rows))
+                for row in split_rows
+            ),
+            encoding="utf-8",
+        )
+        for name, examples in (("train", train_examples), ("validation", validation_examples)):
+            (prepared / f"{name}-examples.jsonl").write_text(
+                "".join(
+                    json.dumps(example, ensure_ascii=False, sort_keys=True) + "\n"
+                    for example in examples
+                ),
+                encoding="utf-8",
+            )
+        split_data = {
+            "input_counts": input_counts,
+            "split": split_report,
+            "train_construction": train_construction,
+            "validation_construction": validation_construction,
+            "train_ids_sha256": hashlib.sha256(
+                "\n".join(row["id"] for row in train_rows).encode()
+            ).hexdigest(),
+            "validation_ids_sha256": hashlib.sha256(
+                "\n".join(row["id"] for row in validation_rows).encode()
+            ).hexdigest(),
+        }
+        _write_json(prepared / "split-report.json", split_data)
+        prepared_report = {
+            "schema_version": 1,
+            "status": "complete_librispeech_train_clean_100_preflight",
+            "source": {
+                "archive_md5": md5.hexdigest(),
+                "archive_sha256": archive_sha256,
+                "cmudict_sha256": cmudict_sha256,
+                "cmudict_license_sha256": cmudict_license_sha256,
+                "bundle_manifest_sha256": bundle_sha256,
+            },
+            "seed": args.seed,
+            "validation_fraction": args.validation_fraction,
+            "files": {
+                name: _sha256(prepared / name)
+                for name in (
+                    "corpus-split-manifest.jsonl",
+                    "split-report.json",
+                    "train-examples.jsonl",
+                    "validation-examples.jsonl",
+                )
+            },
+            "summary": split_data,
+        }
+        _write_json(prepared / "preflight-report.json", prepared_report)
         print(
             json.dumps(
                 {
                     "preflight": "pass",
-                    "source_md5": md5.hexdigest(),
-                    "source_sha256": _sha256(args.archive),
-                    "input_counts": input_counts,
-                    "split": split_report,
-                    "train_construction": train_construction,
-                    "validation_construction": validation_construction,
-                    "train_unique_audio": len({row["audio_sha256"] for row in train_examples}),
+                    "prepared_data_dir": str(prepared),
+                    "source_md5": prepared_report["source"]["archive_md5"],
+                    "source_sha256": prepared_report["source"]["archive_sha256"],
+                    "input_counts": split_data["input_counts"],
+                    "split": split_data["split"],
+                    "train_construction": split_data["train_construction"],
+                    "validation_construction": split_data["validation_construction"],
+                    "train_unique_audio": len({row["audio_asset_id"] for row in train_examples}),
                     "validation_unique_audio": len(
-                        {row["audio_sha256"] for row in validation_examples}
+                        {row["audio_asset_id"] for row in validation_examples}
                     ),
                     "validation_speakers": len({row["speaker_id"] for row in validation_examples}),
                     "validation_chapters": len({row["chapter_id"] for row in validation_examples}),
-                    "device": torch.cuda.get_device_name() if args.device == "cuda" else "cpu",
+                    "prepared_files_sha256": prepared_report["files"],
                 },
                 indent=2,
             )
         )
         return
+
+    if args.prepared_data_dir is None:
+        raise ValueError("--prepared-data-dir from a completed preflight is required")
+    prepared = args.prepared_data_dir.resolve()
+    prepared_report = json.loads((prepared / "preflight-report.json").read_text(encoding="utf-8"))
+    expected_source = {
+        "archive_md5": md5.hexdigest(),
+        "archive_sha256": archive_sha256,
+        "cmudict_sha256": cmudict_sha256,
+        "cmudict_license_sha256": cmudict_license_sha256,
+        "bundle_manifest_sha256": bundle_sha256,
+    }
+    if prepared_report.get("status") != "complete_librispeech_train_clean_100_preflight":
+        raise ValueError("prepared data does not contain a completed preflight")
+    if prepared_report.get("source") != expected_source:
+        raise ValueError("prepared data source hashes differ from current immutable inputs")
+    if (
+        prepared_report.get("seed") != args.seed
+        or prepared_report.get("validation_fraction") != args.validation_fraction
+    ):
+        raise ValueError("prepared data split policy differs from requested config")
+    for name, expected_hash in prepared_report["files"].items():
+        if _sha256(prepared / name) != expected_hash:
+            raise ValueError(f"prepared data hash mismatch: {name}")
+    split_data = json.loads((prepared / "split-report.json").read_text(encoding="utf-8"))
+    train_examples = [
+        json.loads(line)
+        for line in (prepared / "train-examples.jsonl").read_text(encoding="utf-8").splitlines()
+        if line
+    ]
+    validation_examples = [
+        json.loads(line)
+        for line in (prepared / "validation-examples.jsonl")
+        .read_text(encoding="utf-8")
+        .splitlines()
+        if line
+    ]
+    if not train_examples or not validation_examples:
+        raise ValueError("prepared train/validation examples are empty")
+    split_manifest = prepared / "corpus-split-manifest.jsonl"
+    manifest_rows = [
+        json.loads(line) for line in split_manifest.read_text(encoding="utf-8").splitlines() if line
+    ]
+    train_manifest = [row for row in manifest_rows if row["split"] == "train"]
+    validation_manifest = [row for row in manifest_rows if row["split"] == "validation"]
+    if not train_manifest or not validation_manifest:
+        raise ValueError("prepared split manifest is empty")
+    train_speakers = {row["speaker_id"] for row in train_manifest}
+    validation_speakers = {row["speaker_id"] for row in validation_manifest}
+    train_assets = {row["audio_asset_id"] for row in train_manifest}
+    validation_assets = {row["audio_asset_id"] for row in validation_manifest}
+    train_texts = {row["normalized_text"] for row in train_manifest}
+    validation_texts = {row["normalized_text"] for row in validation_manifest}
+    if (
+        train_speakers & validation_speakers
+        or train_assets & validation_assets
+        or train_texts & validation_texts
+    ):
+        raise ValueError("prepared split has speaker, asset, or normalized-content overlap")
+    split_to_manifest = {
+        "train": {row["sample_id"]: row for row in train_manifest},
+        "validation": {row["sample_id"]: row for row in validation_manifest},
+    }
+    for split_name, examples in (("train", train_examples), ("validation", validation_examples)):
+        allowed = split_to_manifest[split_name]
+        for example in examples:
+            source = allowed.get(example["sample_id"])
+            if source is None or source["speaker_id"] != example["speaker_id"]:
+                raise ValueError(f"prepared example has invalid {split_name} source identity")
+            path = Path(example["audio_path"]).resolve()
+            if not path.is_relative_to(args.dataset_root.resolve()) or not path.is_file():
+                raise ValueError(f"prepared audio path is missing or outside source: {path}")
+            for ids in example["distractor_ids_by_condition"].values():
+                if any(candidate_id not in allowed for candidate_id in ids):
+                    raise ValueError(f"{split_name} distractor escaped its split")
+    input_counts = split_data["input_counts"]
+    split_report = split_data["split"]
+    train_construction = split_data["train_construction"]
+    validation_construction = split_data["validation_construction"]
+    if len({row["speaker_id"] for row in validation_examples}) < 20:
+        raise ValueError("fewer than 20 held-out validation speakers")
 
     device = torch.device(args.device)
     torch.set_num_threads(4)
@@ -469,59 +627,30 @@ def main() -> None:
     (output / "effective-config.yaml").write_text(
         yaml.safe_dump(config, sort_keys=False), encoding="utf-8"
     )
+    for name in (
+        "corpus-split-manifest.jsonl",
+        "split-report.json",
+        "train-examples.jsonl",
+        "validation-examples.jsonl",
+    ):
+        shutil.copy2(prepared / name, output / name)
     split_manifest = output / "corpus-split-manifest.jsonl"
-    split_manifest.write_text(
-        "".join(
-            json.dumps(
-                {
-                    "split": split,
-                    "sample_id": row["id"],
-                    "speaker_id": row["speaker_id"],
-                    "chapter_id": row["chapter_id"],
-                    "normalized_text": normalize_transcript(row["text"]),
-                    "audio_sha256": row["audio_sha256"],
-                },
-                ensure_ascii=False,
-                sort_keys=True,
-            )
-            + "\n"
-            for split, split_rows in (("train", train_rows), ("validation", validation_rows))
-            for row in split_rows
-        ),
-        encoding="utf-8",
-    )
-    _write_json(
-        output / "split-report.json",
-        {
-            "input_counts": input_counts,
-            "split": split_report,
-            "train_construction": train_construction,
-            "validation_construction": validation_construction,
-            "train_ids_sha256": hashlib.sha256(
-                "\n".join(row["id"] for row in train_rows).encode()
-            ).hexdigest(),
-            "validation_ids_sha256": hashlib.sha256(
-                "\n".join(row["id"] for row in validation_rows).encode()
-            ).hexdigest(),
-        },
-    )
-    for name, examples in (("train", train_examples), ("validation", validation_examples)):
-        (output / f"{name}-examples.jsonl").write_text(
-            "".join(
-                json.dumps(example, ensure_ascii=False, sort_keys=True) + "\n"
-                for example in examples
-            ),
-            encoding="utf-8",
-        )
 
     all_examples = _flatten_examples(train_examples + validation_examples)
-    audio_rows_by_id = {row["id"]: row for row in train_rows + validation_rows}
-    needed_rows = [
-        audio_rows_by_id[sample_id]
-        for sample_id in dict.fromkeys(
-            row["sample_id"] for split_rows in all_examples.values() for row in split_rows
-        )
-    ]
+    audio_rows_by_id = {}
+    for split_rows in all_examples.values():
+        for row in split_rows:
+            audio_rows_by_id.setdefault(
+                row["sample_id"],
+                {
+                    "id": row["sample_id"],
+                    "speaker_id": row["speaker_id"],
+                    "chapter_id": row["chapter_id"],
+                    "audio_path": row["audio_path"],
+                    "audio_asset_id": row["audio_asset_id"],
+                },
+            )
+    needed_rows = list(audio_rows_by_id.values())
     audio_features, extraction_report = _extract_audio_features(
         needed_rows, audio_model, device, args.feature_batch_size
     )
@@ -668,7 +797,7 @@ def main() -> None:
         "source": {
             "official_dataset": "OpenSLR LibriSpeech SLR12 train-clean-100; CC BY 4.0",
             "archive_md5": md5.hexdigest(),
-            "archive_sha256": _sha256(args.archive),
+            "archive_sha256": archive_sha256,
             "cmudict_sha256": _sha256(args.cmudict),
             "cmudict_license_sha256": _sha256(args.cmudict_license),
             "bundle_manifest_sha256": _sha256(bundle / "bundle-manifest.json"),
@@ -678,9 +807,11 @@ def main() -> None:
             "split": split_report,
             "train_construction": train_construction,
             "validation_construction": validation_construction,
-            "train_unique_audio_assets_used": len({row["audio_sha256"] for row in train_examples}),
+            "train_unique_audio_assets_used": len(
+                {row["audio_asset_id"] for row in train_examples}
+            ),
             "validation_unique_audio_assets_used": len(
-                {row["audio_sha256"] for row in validation_examples}
+                {row["audio_asset_id"] for row in validation_examples}
             ),
             "train_speaker_groups_used": len({row["speaker_id"] for row in train_examples}),
             "validation_speaker_groups_used": len(

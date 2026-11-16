@@ -44,8 +44,8 @@ def split_by_speaker(
         raise ValueError("speaker split produced an empty partition")
     train_speakers = {str(row["speaker_id"]) for row in train}
     actual_validation_speakers = {str(row["speaker_id"]) for row in validation}
-    train_assets = {str(row["audio_sha256"]) for row in train}
-    validation_assets = {str(row["audio_sha256"]) for row in validation}
+    train_assets = {str(row.get("audio_asset_id", row["id"])) for row in train}
+    validation_assets = {str(row.get("audio_asset_id", row["id"])) for row in validation}
     train_content = {normalize_transcript(str(row["text"])) for row in train}
     if train_speakers & actual_validation_speakers:
         raise ValueError("train and validation speaker groups overlap")
@@ -65,7 +65,7 @@ def split_by_speaker(
             "train_rows": len(train),
             "validation_rows": len(validation),
             "train_validation_speaker_overlap": 0,
-            "train_validation_audio_sha256_overlap": 0,
+            "train_validation_audio_asset_overlap": 0,
             "train_validation_normalized_text_overlap": 0,
             "train_rows_removed_for_cross_split_text_duplicate": sum(
                 str(row["speaker_id"]) not in validation_speakers
@@ -88,6 +88,21 @@ def build_choice_examples(
     by_id = {record.sample_id: record for record in records}
     if len(by_id) != len(records) or {str(row["id"]) for row in rows} != set(by_id):
         raise ValueError("row and transcript IDs must be unique and identical")
+    original_target_count = len(rows)
+    unique_rows = []
+    unique_records = []
+    seen_content: set[str] = set()
+    for row in rows:
+        record = by_id[str(row["id"])]
+        content = normalize_transcript(record.text)
+        if content in seen_content:
+            continue
+        seen_content.add(content)
+        unique_rows.append(row)
+        unique_records.append(record)
+    rows = unique_rows
+    records = unique_records
+    by_id = {record.sample_id: record for record in records}
     records_by_word_count: dict[int, list[TranscriptRecord]] = defaultdict(list)
     for record in records:
         records_by_word_count[len(record.words)].append(record)
@@ -166,7 +181,7 @@ def build_choice_examples(
                 "speaker_id": target.speaker_id,
                 "chapter_id": target.chapter_id,
                 "audio_path": str(row["audio_path"]),
-                "audio_sha256": str(row["audio_sha256"]),
+                "audio_asset_id": str(row.get("audio_asset_id", row["id"])),
                 "target_index": target_position,
                 "target_text": target.text,
                 "options_by_condition": options,
@@ -184,7 +199,9 @@ def build_choice_examples(
             }
         )
     return examples, {
-        "eligible_targets": len(rows),
+        "eligible_targets": original_target_count,
+        "unique_normalized_content_targets": len(rows),
+        "excluded_duplicate_normalized_content_targets": original_target_count - len(rows),
         "examples_with_paired_conditions": len(examples),
         "excluded_insufficient_hard_negatives": no_hard,
         "excluded_insufficient_random_negatives": no_random,

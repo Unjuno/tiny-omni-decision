@@ -81,6 +81,7 @@ def test_choice_examples_are_paired_deterministic_and_have_four_unique_options()
         "ANCIENT CITIES REST BESIDE RIVERS",
         "YOUNG MUSICIANS PRACTICE BEFORE DAWN",
         "WINTER EVENINGS FEEL QUIET AND LONG",
+        "THE CAT SAT ON MAT",
     ]
     rows = [_row(f"id-{i}", f"speaker-{i}", text, f"asset-{i}") for i, text in enumerate(texts)]
     records = [_record(row) for row in rows]
@@ -88,6 +89,7 @@ def test_choice_examples_are_paired_deterministic_and_have_four_unique_options()
     second, _ = build_choice_examples(rows, records, seed=17)
     assert first == second
     assert counts["examples_with_paired_conditions"] > 0
+    assert counts["excluded_duplicate_normalized_content_targets"] == 1
     record_map = {record.sample_id: record for record in records}
     for example in first:
         assert len(example["options_by_condition"]["random_distractors"]) == 4
