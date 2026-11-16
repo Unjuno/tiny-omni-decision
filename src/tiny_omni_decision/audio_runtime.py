@@ -53,7 +53,8 @@ def resolve_audio_encoder_precision(
     if device_type not in {"cpu", "cuda"}:
         raise ValueError("audio encoder supports CPU or CUDA")
     if requested == "auto":
-        return "bf16" if device_type == "cuda" and bf16_supported else "fp32"
+        # Preserve the pre-option runtime path, which always enabled CUDA BF16 autocast.
+        return "bf16" if device_type == "cuda" else "fp32"
     if requested == "bf16":
         if device_type != "cuda":
             raise ValueError("bf16 audio encoder precision requires CUDA")

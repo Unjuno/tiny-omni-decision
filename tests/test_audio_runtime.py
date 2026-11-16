@@ -17,7 +17,7 @@ read_pcm_wav = audio_runtime.read_pcm_wav
     [
         ("auto", "cpu", False, "fp32"),
         ("auto", "cuda", True, "bf16"),
-        ("auto", "cuda", False, "fp32"),
+        ("auto", "cuda", False, "bf16"),
         ("fp32", "cuda", True, "fp32"),
         ("bf16", "cuda", True, "bf16"),
     ],
