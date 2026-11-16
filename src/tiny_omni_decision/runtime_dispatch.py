@@ -191,8 +191,8 @@ class PathARuntimeDispatcher:
         if device not in {"cpu", "cuda"}:
             raise ValueError("device must be cpu or cuda")
         self.device = device
-        if audio_encoder_precision not in {"auto", "fp32", "bf16"}:
-            raise ValueError("audio_encoder_precision must be auto, fp32, or bf16")
+        if audio_encoder_precision not in {"auto", "fp32", "bf16", "fp32_no_tf32"}:
+            raise ValueError("audio_encoder_precision must be auto, bf16, fp32, or fp32_no_tf32")
         self.audio_encoder_precision = audio_encoder_precision
         self._torch_worker: JsonLineWorker | None = None
         self._videoprism_worker: JsonLineWorker | None = None

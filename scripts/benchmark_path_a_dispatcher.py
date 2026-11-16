@@ -484,7 +484,9 @@ def main() -> None:
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--device", choices=("cpu", "cuda"), default="cuda")
     parser.add_argument(
-        "--audio-encoder-precision", choices=("auto", "fp32", "bf16"), default="auto"
+        "--audio-encoder-precision",
+        choices=("auto", "bf16", "fp32", "fp32_no_tf32"),
+        default="auto",
     )
     args = parser.parse_args()
 

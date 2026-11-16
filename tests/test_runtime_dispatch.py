@@ -33,14 +33,14 @@ def test_dispatcher_passes_explicit_audio_encoder_precision_to_torch_worker(
     dispatcher._project_root = tmp_path
     dispatcher._worker_env = {}
     dispatcher.device = "cuda"
-    dispatcher.audio_encoder_precision = "fp32"
+    dispatcher.audio_encoder_precision = "fp32_no_tf32"
 
     dispatcher._ensure_torch()
 
     command = captured["command"]
     assert isinstance(command, list)
     precision_index = command.index("--audio-encoder-precision")
-    assert command[precision_index + 1] == "fp32"
+    assert command[precision_index + 1] == "fp32_no_tf32"
 
 
 def test_json_line_worker_keeps_process_resident_for_multiple_requests(tmp_path: Path) -> None:

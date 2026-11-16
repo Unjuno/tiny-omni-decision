@@ -19,6 +19,8 @@ read_pcm_wav = audio_runtime.read_pcm_wav
         ("auto", "cuda", True, "bf16"),
         ("auto", "cuda", False, "bf16"),
         ("fp32", "cuda", True, "fp32"),
+        ("fp32_no_tf32", "cuda", True, "fp32_no_tf32"),
+        ("fp32_no_tf32", "cpu", False, "fp32_no_tf32"),
         ("bf16", "cuda", True, "bf16"),
     ],
 )
@@ -31,7 +33,7 @@ def test_audio_precision_resolution_preserves_auto_default_and_allows_fp32(
 
 
 def test_audio_precision_resolution_rejects_unsupported_modes() -> None:
-    with pytest.raises(ValueError, match="must be auto, fp32, or bf16"):
+    with pytest.raises(ValueError, match="must be auto, bf16, fp32, or fp32_no_tf32"):
         audio_runtime.resolve_audio_encoder_precision("fp16", "cuda", bf16_supported=True)
     with pytest.raises(ValueError, match="requires CUDA"):
         audio_runtime.resolve_audio_encoder_precision("bf16", "cpu", bf16_supported=True)

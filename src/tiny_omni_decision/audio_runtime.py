@@ -35,7 +35,7 @@ AUDIO_FEATURE_SIZE = 384
 TEXT_FEATURE_SIZE = 384
 PAIR_FEATURE_SIZE = 7 * AUDIO_FEATURE_SIZE
 READOUT_HIDDEN_SIZE = 128
-AUDIO_ENCODER_PRECISIONS = frozenset({"auto", "fp32", "bf16"})
+AUDIO_ENCODER_PRECISIONS = frozenset({"auto", "bf16", "fp32", "fp32_no_tf32"})
 
 
 @dataclass(frozen=True)
@@ -49,7 +49,7 @@ def resolve_audio_encoder_precision(
 ) -> str:
     """Resolve the audio encoder's compute dtype without changing model weights."""
     if requested not in AUDIO_ENCODER_PRECISIONS:
-        raise ValueError("audio_encoder_precision must be auto, fp32, or bf16")
+        raise ValueError("audio_encoder_precision must be auto, bf16, fp32, or fp32_no_tf32")
     if device_type not in {"cpu", "cuda"}:
         raise ValueError("audio encoder supports CPU or CUDA")
     if requested == "auto":
@@ -220,8 +220,17 @@ class SpeechCommandsMultiQueryRuntime:
             if self.audio_encoder_precision == "bf16"
             else nullcontext()
         )
-        with torch.inference_mode(), autocast:
-            hidden = self.audio_encoder(input_features).last_hidden_state
+        original_matmul_tf32 = torch.backends.cuda.matmul.allow_tf32
+        original_cudnn_tf32 = torch.backends.cudnn.allow_tf32
+        if self.audio_encoder_precision == "fp32_no_tf32":
+            torch.backends.cuda.matmul.allow_tf32 = False
+            torch.backends.cudnn.allow_tf32 = False
+        try:
+            with torch.inference_mode(), autocast:
+                hidden = self.audio_encoder(input_features).last_hidden_state
+        finally:
+            torch.backends.cuda.matmul.allow_tf32 = original_matmul_tf32
+            torch.backends.cudnn.allow_tf32 = original_cudnn_tf32
         pooled_rows = []
         for index, waveform in enumerate(waveforms):
             valid_tokens = min(hidden.shape[1], max(1, math.ceil(len(waveform) / 320)))
@@ -361,4 +370,3 @@ class SpeechCommandsMultiQueryRuntime:
             self._score_queries(audio, queries, text_vectors)
             for audio, queries in zip(audio_vectors, queries_by_audio, strict=True)
         ]
-

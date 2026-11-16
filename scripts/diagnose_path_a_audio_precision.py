@@ -24,6 +24,7 @@ from tiny_omni_decision.audio_runtime import (
     _file_sha256,
     pair_candidate_features,
 )
+from tiny_omni_decision.runtime_dispatch import PathARuntimeDispatcher, TypedDecisionSpec
 
 FIXED_AUDIO_SHA256 = "77ad54371520bd5381b7758694bc6d98193e8f8864750ea56ea7f8085f2daaa1"
 
@@ -43,9 +44,6 @@ def _capture_mode(
     media: Path,
     queries: list[DecisionQuery],
 ) -> tuple[dict[str, Any], dict[str, np.ndarray]]:
-    original_cudnn_tf32 = torch.backends.cudnn.allow_tf32
-    if mode == "cuda_fp32_cudnn_no_tf32":
-        torch.backends.cudnn.allow_tf32 = False
     backend_settings = {
         "cuda_matmul_allow_tf32": torch.backends.cuda.matmul.allow_tf32,
         "cudnn_allow_tf32": torch.backends.cudnn.allow_tf32,
@@ -79,6 +77,17 @@ def _capture_mode(
         tensors["audio_encoder_hidden"] = output.last_hidden_state.detach().float().cpu().numpy()
 
     audio_hook = runtime.audio_encoder.register_forward_hook(capture_audio_hidden)
+    encoder_backend_settings: dict[str, Any] = {}
+
+    def capture_audio_backend(_module: Any, _inputs: Any) -> None:
+        encoder_backend_settings.update(
+            {
+                "cuda_matmul_allow_tf32": torch.backends.cuda.matmul.allow_tf32,
+                "cudnn_allow_tf32": torch.backends.cudnn.allow_tf32,
+            }
+        )
+
+    audio_backend_hook = runtime.audio_encoder.register_forward_pre_hook(capture_audio_backend)
 
     tokenizer = runtime.text_tokenizer
 
@@ -121,6 +130,7 @@ def _capture_mode(
         tensors["probabilities"] = np.concatenate(probability_rows)
     finally:
         audio_hook.remove()
+        audio_backend_hook.remove()
         text_hook.remove()
     if device == "cuda":
         torch.cuda.synchronize()
@@ -131,6 +141,7 @@ def _capture_mode(
         "requested_precision": precision,
         "effective_precision": runtime.audio_encoder_precision,
         "backend_settings": backend_settings,
+        "encoder_backend_settings": encoder_backend_settings,
         "seconds_after_model_load": seconds,
         "peak_cuda_allocated_bytes": (
             torch.cuda.max_memory_allocated() if device == "cuda" else None
@@ -151,7 +162,6 @@ def _capture_mode(
     del runtime
     if device == "cuda":
         torch.cuda.empty_cache()
-    torch.backends.cudnn.allow_tf32 = original_cudnn_tf32
     return summary, tensors
 
 
@@ -175,6 +185,8 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run-dir", type=Path, required=True)
     parser.add_argument("--assembly", type=Path, required=True)
+    parser.add_argument("--videoprism-python", type=Path, required=True)
+    parser.add_argument("--videoprism-source", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
     run_dir = args.run_dir.resolve(strict=True)
@@ -214,7 +226,7 @@ def main() -> None:
         modes.extend(
             [
                 ("cuda_fp32", "cuda", "fp32"),
-                ("cuda_fp32_cudnn_no_tf32", "cuda", "fp32"),
+                ("cuda_fp32_no_tf32", "cuda", "fp32_no_tf32"),
             ]
         )
     summaries: dict[str, dict[str, Any]] = {}
@@ -235,6 +247,67 @@ def main() -> None:
         summary["intermediate_archive_sha256"] = _file_sha256(archive)
         summaries[mode] = summary
         captures[mode] = tensors
+
+    dispatcher_result = None
+    if torch.cuda.is_available():
+        dispatcher = PathARuntimeDispatcher(
+            assembly,
+            videoprism_python=args.videoprism_python.resolve(strict=True),
+            videoprism_source=args.videoprism_source.resolve(strict=True),
+            worker_log_dir=output_dir / "dispatcher-worker-logs",
+            device="cuda",
+            audio_encoder_precision="fp32_no_tf32",
+        )
+        dispatch_started = time.perf_counter()
+        try:
+            specs = [
+                TypedDecisionSpec(
+                    request_id=f"precision-query-{index}",
+                    decision_type="multiple_choice",
+                    option_ids=tuple(
+                        f"option-{option_index}" for option_index in range(len(query.options))
+                    ),
+                    option_texts=query.options,
+                )
+                for index, query in enumerate(queries)
+            ]
+            response = dispatcher.dispatch_typed(
+                "audio",
+                {
+                    "audio_path": str(media),
+                    "queries": [
+                        {"question": query.question, "options": list(query.options)}
+                        for query in queries
+                    ],
+                    "expected_media_sha256": expected_media_hash,
+                },
+                decision_specs=specs,
+            )
+            torch.cuda.synchronize()
+            worker = dispatcher.worker_metadata["torch"]
+            probabilities = [
+                probability
+                for decision in response["decisions"]
+                for probability in decision["probabilities"]
+            ]
+            cpu_probabilities = captures["cpu_fp32"]["probabilities"].astype(np.float64)
+            probability_delta = np.abs(np.asarray(probabilities) - cpu_probabilities)
+            typed_json = response["decision_json"]
+            dispatcher_result = {
+                "effective_audio_encoder_precision": worker.get("audio_encoder_precision"),
+                "dispatch_wall_seconds_including_worker_startup": time.perf_counter()
+                - dispatch_started,
+                "worker_startup_wall_seconds": response["worker_startup_wall_seconds"],
+                "probability_count": len(probabilities),
+                "max_abs_probability_delta_vs_cpu_fp32": float(probability_delta.max(initial=0.0)),
+                "parity_threshold": 1e-5,
+                "parity_passed_for_fixed_request": bool(probability_delta.max(initial=0.0) <= 1e-5),
+                "typed_decision_count": len(typed_json),
+                "typed_json_passed": len(typed_json) == len(queries),
+                "worker_metadata": worker,
+            }
+        finally:
+            dispatcher.close()
 
     baseline = captures["cpu_fp32"]
     comparisons = {}
@@ -269,6 +342,7 @@ def main() -> None:
         "training_performed": False,
         "modes": summaries,
         "comparisons_vs_cpu_fp32": comparisons,
+        "dispatcher_fp32_no_tf32": dispatcher_result,
     }
     report_path = output_dir / "precision-diagnostic.json"
     report_path.write_text(
