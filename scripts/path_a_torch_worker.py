@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import contextlib
 import gc
+import hashlib
 import json
 import os
 import sys
@@ -18,6 +19,8 @@ import torch
 from tiny_omni_decision.audio_runtime import (
     AUDIO_MODEL_REVISION,
     AUDIO_WEIGHTS_SHA256,
+    PAIR_FEATURE_SIZE,
+    READOUT_HIDDEN_SIZE,
     TEXT_MODEL_REVISION,
     TEXT_WEIGHTS_SHA256,
     DecisionQuery,
@@ -26,6 +29,7 @@ from tiny_omni_decision.audio_runtime import (
 from tiny_omni_decision.audio_runtime import (
     READOUT_SHA256 as AUDIO_READOUT_SHA256,
 )
+from tiny_omni_decision.decision import FrozenFeatureCandidateScorer
 from tiny_omni_decision.text_runtime import (
     MODEL_REVISION as TEXT_PROBE_MODEL_REVISION,
 )
@@ -106,6 +110,36 @@ def main() -> None:
             video_root / "readout/best-readout.pt",
             device=args.device,
         )
+        libri_task_root = components / "librispeech"
+        libri_scorer = None
+        libri_readout_sha256 = None
+        task_manifest_path = libri_task_root / "task-manifest.json"
+        if task_manifest_path.is_file():
+            task_manifest = json.loads(task_manifest_path.read_text(encoding="utf-8"))
+            if task_manifest.get("task_id") != "librispeech-transcript-choice-v1":
+                raise ValueError("unsupported LibriSpeech task identity")
+            readout_entry = next(
+                (
+                    item
+                    for item in task_manifest.get("parameters", [])
+                    if item.get("name") == "librispeech-readout"
+                ),
+                None,
+            )
+            if readout_entry is None or int(readout_entry.get("parameters", -1)) != 344_321:
+                raise ValueError("LibriSpeech readout metadata is missing or unexpected")
+            libri_readout_sha256 = str(readout_entry["identity"])
+            readout_path = libri_task_root / "readout/best-readout.pt"
+            if hashlib.sha256(readout_path.read_bytes()).hexdigest() != libri_readout_sha256:
+                raise ValueError("LibriSpeech readout hash differs from task manifest")
+            libri_scorer = FrozenFeatureCandidateScorer(
+                feature_size=PAIR_FEATURE_SIZE, hidden_size=READOUT_HIDDEN_SIZE
+            ).to(args.device)
+            state = torch.load(readout_path, map_location="cpu", weights_only=True)
+            libri_scorer.load_state_dict(state, strict=True)
+            libri_scorer.eval()
+            for parameter in libri_scorer.parameters():
+                parameter.requires_grad_(False)
     startup_peak_allocated = (
         torch.cuda.max_memory_allocated() if args.device == "cuda" else None
     )
@@ -125,7 +159,15 @@ def main() -> None:
         torch.cuda.reset_peak_memory_stats()
 
     parameter_count = _unique_parameters(
-        [audio.audio_model, audio.text_model, audio.scorer, text.encoder, text.scorer, video.scorer]
+        [
+            audio.audio_model,
+            audio.text_model,
+            audio.scorer,
+            text.encoder,
+            text.scorer,
+            video.scorer,
+            *([libri_scorer] if libri_scorer is not None else []),
+        ]
     )
     ready = {
         "ready": True,
@@ -142,6 +184,8 @@ def main() -> None:
         "audio_encoder_revision": AUDIO_MODEL_REVISION,
         "audio_encoder_weights_sha256": AUDIO_WEIGHTS_SHA256,
         "audio_readout_sha256": AUDIO_READOUT_SHA256,
+        "librispeech_readout_sha256": libri_readout_sha256,
+        "librispeech_readout_loaded": libri_scorer is not None,
         "text_encoder_revision": TEXT_MODEL_REVISION,
         "text_encoder_weights_sha256": TEXT_WEIGHTS_SHA256,
         "text_probe_model_revision": TEXT_PROBE_MODEL_REVISION,
@@ -200,6 +244,27 @@ def main() -> None:
                     result = {
                         "decisions": [_serialize_decision(item) for item in decisions],
                         "encoder_metrics": dict(audio.audio_cache_metrics),
+                    }
+                elif task == "librispeech":
+                    if libri_scorer is None:
+                        raise ValueError("this assembly has no LibriSpeech task readout")
+                    queries = [
+                        DecisionQuery(
+                            question=str(item["question"]),
+                            options=tuple(str(option) for option in item["options"]),
+                        )
+                        for item in payload["queries"]
+                    ]
+                    decisions = audio.decide_many_with_readout(
+                        Path(payload["audio_path"]),
+                        queries,
+                        libri_scorer,
+                        expected_media_sha256=payload.get("expected_media_sha256"),
+                    )
+                    result = {
+                        "decisions": [_serialize_decision(item) for item in decisions],
+                        "encoder_metrics": dict(audio.audio_cache_metrics),
+                        "readout_sha256": libri_readout_sha256,
                     }
                 elif task == "video_score":
                     feature = torch.tensor(payload["video_feature"], dtype=torch.float32)

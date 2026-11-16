@@ -295,7 +295,9 @@ class SpeechCommandsMultiQueryRuntime:
         audio: Tensor,
         queries: Sequence[DecisionQuery],
         text_vectors: dict[str, Tensor],
+        scorer: FrozenFeatureCandidateScorer | None = None,
     ) -> list[DecisionOutput]:
+        scorer = self.scorer if scorer is None else scorer
         outputs = []
         with torch.inference_mode():
             for query in queries:
@@ -304,7 +306,7 @@ class SpeechCommandsMultiQueryRuntime:
                     [text_vectors[f"Candidate answer: {option}."] for option in query.options]
                 )
                 features = pair_candidate_features(audio, question_vector, candidate_vectors)
-                logits = self.scorer(features.to(self.device)).squeeze(-1).float()
+                logits = scorer(features.to(self.device)).squeeze(-1).float()
                 if not torch.isfinite(logits).all():
                     raise ValueError("readout produced non-finite candidate scores")
                 probabilities = torch.softmax(logits, dim=-1).cpu()
@@ -361,6 +363,40 @@ class SpeechCommandsMultiQueryRuntime:
         }
         text_vectors = self._encode_texts(self._texts_for_queries([queries]))
         return self._score_queries(audio, queries, text_vectors)
+
+    def decide_many_with_readout(
+        self,
+        audio_path: Path,
+        queries: Sequence[DecisionQuery],
+        scorer: FrozenFeatureCandidateScorer,
+        *,
+        expected_media_sha256: str | None = None,
+    ) -> list[DecisionOutput]:
+        """Score a task-specific head while reusing the pinned encoders/features."""
+        self._validate_queries(queries)
+        digest = _file_sha256(audio_path)
+        if expected_media_sha256 is not None and digest != expected_media_sha256:
+            raise ValueError("audio hash differs from the supplied frozen identity")
+        cached = self.audio_cache.get(digest) if self.audio_cache is not None else None
+        if cached is None:
+            audio = self._encode_audio(audio_path)
+            self.audio_encoder_calls += 1
+            if _file_sha256(audio_path) != digest:
+                raise ValueError("audio content changed while encoding")
+            feature_hash = hashlib.sha256(audio.numpy().tobytes()).hexdigest()
+            if self.audio_cache is not None:
+                self.audio_cache.put(digest, audio, feature_hash)
+        else:
+            audio, feature_hash = cached
+        self.audio_cache_metrics = {
+            "cache_hit": cached is not None,
+            "media_sha256": digest,
+            "feature_sha256": feature_hash,
+            "cache_entries": len(self.audio_cache) if self.audio_cache is not None else 0,
+            "single_event_encoder_calls": self.audio_encoder_calls,
+        }
+        text_vectors = self._encode_texts(self._texts_for_queries([queries]))
+        return self._score_queries(audio, queries, text_vectors, scorer=scorer)
 
     def decide_batch(
         self,

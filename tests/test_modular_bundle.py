@@ -207,3 +207,55 @@ def test_shared_task_can_reference_a_pinned_file_asset(tmp_path: Path) -> None:
         item["path"] for item in manifest["files"]
     }
     assert verify_modular_bundle(output)["component_count"] == 2
+
+
+def test_extend_modular_bundle_preserves_base_and_adds_readout_only(tmp_path: Path) -> None:
+    from tiny_omni_decision.modular_bundle import extend_modular_bundle
+
+    audio = tmp_path / "audio-source"
+    _write_component(audio, "audio-v0", "models/audio/model.safetensors", b"audio")
+    base = tmp_path / "base"
+    assemble_modular_bundle({"audio": audio}, base, source_commit="base-commit")
+    base_manifest_hash = hashlib.sha256((base / "package-manifest.json").read_bytes()).hexdigest()
+    readout = tmp_path / "libri.pt"
+    readout.write_bytes(b"libri-readout")
+    output = tmp_path / "extended"
+
+    manifest = extend_modular_bundle(
+        base,
+        {
+            "librispeech": {
+                "task_id": "librispeech-transcript-choice-v1",
+                "scope": "supplied transcript choice",
+                "source_report_sha256": "c" * 64,
+                "shared_assets": [
+                    {
+                        "name": "whisper",
+                        "path": "components/audio/models/audio",
+                        "weights_sha256": hashlib.sha256(b"audio").hexdigest(),
+                        "parameters": 10,
+                    },
+                ],
+                "parameters": [
+                    {
+                        "name": "librispeech-readout",
+                        "identity": hashlib.sha256(b"libri-readout").hexdigest(),
+                        "parameters": 3,
+                        "path": "readout/best-readout.pt",
+                    }
+                ],
+                "files": {"readout/best-readout.pt": readout},
+            }
+        },
+        output,
+        source_commit="new-commit",
+    )
+
+    assert (
+        hashlib.sha256((base / "package-manifest.json").read_bytes()).hexdigest()
+        == base_manifest_hash
+    )
+    assert manifest["has_librispeech_audio_choice_task"] is True
+    assert manifest["unique_runtime_parameters"] == 13
+    assert len(list(output.rglob("model.safetensors"))) == 1
+    assert verify_modular_bundle(output)["source_commit"] == "new-commit"

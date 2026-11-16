@@ -284,7 +284,7 @@ class PathARuntimeDispatcher:
                 }
             )
             response = {**scored, "video_encoder": encoded["encoder_metrics"]}
-        elif task in {"text", "audio"}:
+        elif task in {"text", "audio", "librispeech"}:
             response = self._ensure_torch().request(
                 {"request_id": request_id, "task": task, "payload": payload}
             )
@@ -321,16 +321,18 @@ class PathARuntimeDispatcher:
             isinstance(item, TypedDecisionSpec) for item in decision_specs
         ):
             raise ValueError("decision_specs must be a list of TypedDecisionSpec")
-        if task == "audio":
+        if task in {"audio", "librispeech"}:
             queries = payload.get("queries")
             if not isinstance(queries, list) or len(decision_specs) != len(queries):
-                raise ValueError("audio requires one decision spec per audio query")
+                if task == "audio":
+                    raise ValueError("audio requires one decision spec per audio query")
+                raise ValueError("librispeech requires one decision spec per query")
             for query, spec in zip(queries, decision_specs, strict=True):
                 query_options = query.get("options") if isinstance(query, dict) else None
                 if not isinstance(query_options, (list, tuple)) or tuple(
                     query_options
                 ) != spec.option_texts:
-                    raise ValueError("audio decision option texts must match query order")
+                    raise ValueError(f"{task} decision option texts must match query order")
         else:
             if len(decision_specs) != 1:
                 raise ValueError("non-audio Path A tasks require exactly one decision spec")
@@ -362,7 +364,7 @@ class PathARuntimeDispatcher:
             )
 
         response = self.dispatch(task, payload)
-        if task == "audio":
+        if task in {"audio", "librispeech"}:
             scored = response.get("decisions")
             if not isinstance(scored, list) or len(scored) != len(decision_specs):
                 raise RuntimeError("audio worker score count did not match its query count")

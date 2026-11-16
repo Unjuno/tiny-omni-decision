@@ -238,7 +238,8 @@ def test_dispatch_typed_video_binds_correct_probability_to_caller_id() -> None:
     ]
 
 
-def test_dispatch_typed_wraps_each_audio_query_with_its_own_contract() -> None:
+@pytest.mark.parametrize("task", ["audio", "librispeech"])
+def test_dispatch_typed_wraps_each_audio_query_with_its_own_contract(task: str) -> None:
     class RecordingWorker:
         def request(self, payload: dict[str, object]) -> dict[str, object]:
             return {
@@ -267,7 +268,7 @@ def test_dispatch_typed_wraps_each_audio_query_with_its_own_contract() -> None:
     ]
 
     result = dispatcher.dispatch_typed(
-        "audio",
+        task,
         {
             "audio_path": "audio.wav",
             "queries": [

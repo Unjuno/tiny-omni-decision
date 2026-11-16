@@ -153,6 +153,36 @@ def test_batch_audio_never_reuses_single_event_cache(tmp_path) -> None:
     runtime._encode_audio_batch.assert_called_once_with([path])
 
 
+def test_audio_runtime_can_score_with_an_independent_task_readout() -> None:
+    runtime = object.__new__(audio_runtime.SpeechCommandsMultiQueryRuntime)
+    runtime.device = torch.device("cpu")
+    class FirstOption(torch.nn.Module):
+        def forward(self, features):
+            return torch.arange(len(features), 0, -1, dtype=features.dtype).unsqueeze(-1)
+
+    class LastOption(torch.nn.Module):
+        def forward(self, features):
+            return torch.arange(len(features), dtype=features.dtype).unsqueeze(-1)
+
+    runtime.scorer = FirstOption()
+
+    audio = torch.zeros(384)
+    query = audio_runtime.DecisionQuery("Which transcript matches?", ("first", "second", "third"))
+    vectors = {
+        "Question: Which transcript matches?": torch.zeros(384),
+        "Candidate answer: first.": torch.zeros(384),
+        "Candidate answer: second.": torch.ones(384),
+        "Candidate answer: third.": torch.full((384,), 2.0),
+    }
+    original = runtime._score_queries(audio, [query], vectors)[0]
+    alternate = runtime._score_queries(audio, [query], vectors, scorer=LastOption())[0]
+
+    assert original.predicted_index == 0
+    assert alternate.predicted_index == 2
+    assert alternate.option_logits.tolist() == [0.0, 1.0, 2.0]
+    assert alternate.probabilities.tolist() != original.probabilities.tolist()
+
+
 def test_pair_candidate_features_matches_path_a_layout_and_preserves_option_order() -> None:
     audio = torch.full((384,), 1.0)
     question = torch.full((384,), 2.0)
