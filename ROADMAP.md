@@ -4014,3 +4014,15 @@ used and no product artifact was promoted. See [run report and limitations](docs
 **2026-11-17 Path A LibriSpeech 100-epoch learning curve:** A fresh seed-17 CPU run on the same exposed speaker-held-out split completed all 100 epochs (86,900 optimizer updates). Equal-condition validation NLL selected epoch 40: random/hard accuracy 96.02%/92.90%, with hard NLL 0.2834; by epoch 100 hard NLL worsened to 0.4779. This supports further useful optimization beyond the old four-epoch endpoint for this narrow audiobook transcript-choice task, while showing validation overfit after the selected epoch. It is development-only, not general audio quality or product evidence. [Run protocol, curve, hashes and limits](docs/pretrained_reuse/R5_LIBRISPEECH_100_EPOCH_LEARNING_CURVE_20261117.md).
 
 **2026-11-17 Path A LibriSpeech runtime integration:** A separate bundle built from commit 2e138969 loaded the pinned Whisper Tiny/MiniLM snapshots and selected epoch-40 readout, imported its runtime code from the bundle itself, returned typed choice JSON, and matched the saved development prediction within 8.76e-12; save/reload probability delta was zero. CPU single-item inference was 0.183–0.278 s, not a benchmark. The 227,115,067-byte package exceeds the provisional 200 MB target; no quantization was attempted. This is a narrow development runtime smoke, not an Omni/product result. [Bundle protocol, hashes, preserved failed attempts and limits](docs/pretrained_reuse/R5_LIBRISPEECH_RUNTIME_BUNDLE_20261117.md).
+
+**2026-11-17 Path A LibriSpeech shared runtime route:** Added a separate typed
+`librispeech` route to the existing dispatcher. It reuses the pinned Audio
+route's single Whisper Tiny and MiniLM instances and adds only the
+344,321-parameter LibriSpeech readout. A new immutable five-component assembly
+has 170,844,037 unique pre-quantization parameters and is 688,661,995 bytes;
+the provisional 200 MB package target remains unmet. One already observed
+held-speaker validation sample reproduced its saved probabilities within
+8.76e-12 on CPU. This checks routing and packaging only, not quality or a new
+validation result. Original artifacts containing extra unmanifested bytecode
+were preserved; manifest-only copies passed strict verification. [Implementation,
+artifacts and source-integrity details](docs/pretrained_reuse/R5_PATH_A_LIBRISPEECH_SHARED_RUNTIME_20261117.md).
