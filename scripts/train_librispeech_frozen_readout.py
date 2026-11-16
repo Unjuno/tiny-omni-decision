@@ -35,7 +35,12 @@ from tiny_omni_decision.audio_hard_negatives import (
 )
 from tiny_omni_decision.bundle_validation import verify_bundle
 from tiny_omni_decision.decision import FrozenFeatureCandidateScorer
-from tiny_omni_decision.librispeech_taskadapt import build_choice_examples, split_by_speaker
+from tiny_omni_decision.librispeech_taskadapt import (
+    build_choice_examples,
+    equal_condition_validation_nll,
+    split_by_speaker,
+    validate_audio_feature_cache_metadata,
+)
 
 QUESTION = "Which exact transcript matches the spoken audio?"
 CONDITIONS = ("random_distractors", "hard_distractors")
@@ -58,7 +63,13 @@ def _args() -> argparse.Namespace:
     )
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--prepared-data-dir", type=Path)
+    parser.add_argument("--audio-feature-cache", type=Path,
+                        help="reuse a hash-checked frozen audio feature cache")
     parser.add_argument("--device", choices=("cuda", "cpu"), default="cuda")
+    parser.add_argument(
+        "--experiment-id",
+        default="path-a-audio-librispeech-train-clean-100-readout-v1",
+    )
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--validation-fraction", type=float, default=0.2)
     parser.add_argument("--epochs", type=int, default=4)
@@ -74,6 +85,34 @@ def _sha256(path: Path) -> str:
         for block in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def _load_audio_feature_cache(
+    path: Path, expected_ids: list[str]
+) -> tuple[dict[str, Tensor], dict[str, Any]]:
+    """Load an immutable cache only when IDs, order, shape, and values match."""
+    cache_path = path.resolve(strict=True)
+    payload = torch.load(cache_path, map_location="cpu", weights_only=True)
+    if not isinstance(payload, dict) or set(payload) != {"ids", "features"}:
+        raise ValueError("audio feature cache must contain only ids and features")
+    ids, values = payload["ids"], payload["features"]
+    if not isinstance(values, Tensor):
+        raise ValueError("audio feature cache must be a tensor")
+    validate_audio_feature_cache_metadata(
+        ids,
+        expected_ids,
+        values.shape,
+        floating=values.is_floating_point(),
+        finite=bool(torch.isfinite(values).all()),
+    )
+    features = {sample_id: row.float().clone() for sample_id, row in zip(ids, values, strict=True)}
+    return features, {
+        "audio_feature_count": len(features),
+        "audio_feature_extraction_seconds": 0.0,
+        "audio_encoder_compute_dtype": "reused_frozen_cache",
+        "audio_feature_cache_path": str(cache_path),
+        "audio_feature_cache_sha256": _sha256(cache_path),
+    }
 
 
 def _write_json(path: Path, value: Any) -> None:
@@ -624,7 +663,7 @@ def main() -> None:
         torch.cuda.reset_peak_memory_stats(device)
     output.mkdir(parents=True, exist_ok=False)
     config = {
-        "experiment_id": "path-a-audio-librispeech-train-clean-100-readout-v1",
+        "experiment_id": args.experiment_id,
         "seed": args.seed,
         "validation_fraction": args.validation_fraction,
         "epochs": args.epochs,
@@ -643,6 +682,10 @@ def main() -> None:
         "question": QUESTION,
         "candidate_count": 4,
         "conditions": list(CONDITIONS),
+        "audio_feature_cache_sha256": (
+            _sha256(args.audio_feature_cache.resolve(strict=True))
+            if args.audio_feature_cache is not None else None
+        ),
         "sealed_audit_loaded": False,
         "test_split_loaded": False,
     }
@@ -673,9 +716,15 @@ def main() -> None:
                 },
             )
     needed_rows = list(audio_rows_by_id.values())
-    audio_features, extraction_report = _extract_audio_features(
-        needed_rows, audio_model, device, args.feature_batch_size
-    )
+    expected_audio_ids = [row["id"] for row in needed_rows]
+    if args.audio_feature_cache is None:
+        audio_features, extraction_report = _extract_audio_features(
+            needed_rows, audio_model, device, args.feature_batch_size
+        )
+    else:
+        audio_features, extraction_report = _load_audio_feature_cache(
+            args.audio_feature_cache, expected_audio_ids
+        )
     cache_path = output / "audio-features.pt"
     torch.save(
         {"ids": list(audio_features), "features": torch.stack(list(audio_features.values()))},
@@ -754,7 +803,7 @@ def main() -> None:
         for condition in CONDITIONS:
             epoch_metrics[condition], _ = _evaluate(
                 scorer,
-                validation_queries,
+                validation_queries_by_condition[condition],
                 audio_features,
                 text_features,
                 device,
@@ -764,7 +813,7 @@ def main() -> None:
         epoch_metrics["all"], _ = _evaluate(
             scorer, validation_queries, audio_features, text_features, device, args.query_batch_size
         )
-        val_nll = epoch_metrics["all"]["nll"]
+        val_nll = equal_condition_validation_nll(epoch_metrics, CONDITIONS)
         history.append(
             {
                 "epoch": epoch,

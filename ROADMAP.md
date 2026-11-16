@@ -4010,3 +4010,5 @@ first run exposed a condition-aggregation/selector defect; intermediate epoch
 weights were not saved, so the only surviving final checkpoint was scored
 post hoc and is not a recoverable historical best. No sealed/test data was
 used and no product artifact was promoted. See [run report and limitations](docs/pretrained_reuse/R5_LIBRISPEECH_TRAIN_CLEAN_100_READOUT_20261117.md).
+
+**2026-11-17 Path A LibriSpeech 100-epoch learning curve:** A fresh seed-17 CPU run on the same exposed speaker-held-out split completed all 100 epochs (86,900 optimizer updates). Equal-condition validation NLL selected epoch 40: random/hard accuracy 96.02%/92.90%, with hard NLL 0.2834; by epoch 100 hard NLL worsened to 0.4779. This supports further useful optimization beyond the old four-epoch endpoint for this narrow audiobook transcript-choice task, while showing validation overfit after the selected epoch. It is development-only, not general audio quality or product evidence. [Run protocol, curve, hashes and limits](docs/pretrained_reuse/R5_LIBRISPEECH_100_EPOCH_LEARNING_CURVE_20261117.md).

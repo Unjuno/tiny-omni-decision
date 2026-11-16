@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import hashlib
+import math
 import random
 from collections import defaultdict
 from collections.abc import Sequence
@@ -15,6 +16,41 @@ from tiny_omni_decision.audio_hard_negatives import (
 )
 
 HARD_SIMILARITY_CANDIDATE_LIMIT = 256
+
+
+def validate_audio_feature_cache_metadata(
+    ids: object,
+    expected_ids: Sequence[str],
+    feature_shape: Sequence[int],
+    *,
+    floating: bool,
+    finite: bool,
+) -> None:
+    """Fail closed when a cached feature matrix does not match the prepared rows."""
+    if (not isinstance(ids, list) or any(not isinstance(value, str) for value in ids)
+            or len(set(ids)) != len(ids) or ids != list(expected_ids)):
+        raise ValueError("audio feature cache IDs/order differ from the prepared corpus")
+    if tuple(feature_shape) != (len(expected_ids), 384) or not floating or not finite:
+        raise ValueError("audio feature cache must be finite floating [N,384]")
+
+
+def equal_condition_validation_nll(
+    metrics_by_condition: dict[str, dict[str, Any]], conditions: Sequence[str]
+) -> float:
+    """Return the unweighted mean NLL across active, separately evaluated conditions."""
+    if not conditions or len(set(conditions)) != len(conditions):
+        raise ValueError("unique validation conditions are required")
+    values = []
+    for condition in conditions:
+        report = metrics_by_condition.get(condition)
+        result = report.get("all") if isinstance(report, dict) else None
+        if not isinstance(result, dict) or int(result.get("count", 0)) <= 0:
+            raise ValueError(f"validation condition {condition!r} has no examples")
+        nll = result.get("nll")
+        if not isinstance(nll, (int, float)) or not math.isfinite(nll):
+            raise ValueError(f"validation condition {condition!r} has invalid NLL")
+        values.append(float(nll))
+    return sum(values) / len(values)
 
 
 def split_by_speaker(
