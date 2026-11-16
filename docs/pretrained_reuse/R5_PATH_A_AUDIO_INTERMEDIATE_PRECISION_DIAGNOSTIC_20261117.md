@@ -2,14 +2,16 @@
 
 ## Result
 
-The existing CPU/CUDA Audio probability mismatch is introduced primarily by
-the Whisper encoder's numeric path. A fixed, already-observed development
+The initial CPU/CUDA Audio probability mismatch was localized to numerical
+differences in the Whisper encoder path. A fixed, already-observed development
 request was run with identical processor inputs under CPU FP32, CUDA BF16, and
 CUDA FP32. Input feature tensors, token IDs, and attention masks matched
-exactly across devices. Text encoder differences were small. Whisper hidden
-states and pooled Audio features changed with device/precision, and the final
-CUDA FP32 versus CPU FP32 probability difference remained just above the
-existing strict runtime gate.
+exactly across devices. Text encoder differences were small. The initial CUDA
+FP32 versus CPU FP32 probability difference was just above the existing strict
+runtime gate. A follow-up then disabled both CUDA matmul and cuDNN TF32 only
+around the Whisper forward; it brought the same fixed request within the gate,
+including through the packaged dispatcher. This is a four-query runtime
+diagnostic, not quality evidence or a broad cross-device parity claim.
 
 | Compared stage vs CPU FP32 | CUDA BF16 max / mean absolute delta | CUDA FP32 max / mean absolute delta |
 |---|---:|---:|
@@ -22,21 +24,37 @@ existing strict runtime gate.
 | Option logits | 0.06669 / 0.03107 | 0.001569 / 0.0007204 |
 | Probabilities | 6.177e-4 / 9.080e-5 | 2.098e-5 / 3.553e-6 |
 
-The fixed request contains four queries (10, 2, 2, and 2 choices). CUDA FP32
-is substantially closer to CPU FP32 than CUDA BF16 for these queries, but the
-maximum probability delta, `2.0981e-5`, still exceeds the unchanged `1e-5`
-parity requirement. This does not establish cross-device parity generally.
-No target labels were opened and no Accuracy, NLL, Brier, or ECE was computed.
+The fixed request contains four queries (10, 2, 2, and 2 choices). The initial
+CUDA FP32 maximum probability delta was `2.0981e-5`; the follow-up's direct
+CUDA FP32-no-TF32 path reduced it to `1.1921e-7`. The actual dispatcher worker
+then processed the same four queries with `fp32_no_tf32`, returned 16 option
+probabilities and four typed decisions, and measured maximum probability delta
+`1.1921e-7` against CPU FP32, below the unchanged `1e-5` threshold. This only
+passes for this fixed request on the recorded software/GPU stack. It does not
+establish general cross-device parity or Audio quality. No labels were opened
+and no Accuracy, NLL, Brier, or ECE was computed.
+
+| Follow-up dispatcher measurement | Result |
+|---|---:|
+| Worker inference (four queries) | 0.3619 s |
+| End-to-end dispatch including startup | 6.4394 s |
+| Worker startup | 6.0497 s |
+| Peak CUDA allocated since consolidation | 263,429,120 bytes |
+| RSS after request | 1,252,635,288 bytes |
+| Max probability delta vs CPU FP32 | 1.1921e-7 |
+| Probability gate / typed JSON | pass / pass |
 
 ## Implementation
 
-`SpeechCommandsMultiQueryRuntime` now accepts an `audio_encoder_precision`
-setting: `auto`, `bf16`, or `fp32`. The default `auto` preserves the existing
-behavior (BF16 autocast on CUDA, FP32 on CPU). The dispatcher and Torch worker
-pass the explicit choice through, and worker metadata records
-the effective Audio precision. No model weights, processor, readout, default
-precision, selector, or task data changed. This is a diagnostic/runtime
-control, not evidence that FP32 is the best product setting.
+`SpeechCommandsMultiQueryRuntime` accepts `audio_encoder_precision`: `auto`,
+`bf16`, `fp32`, or `fp32_no_tf32`. The default `auto` preserves the existing
+behavior (BF16 autocast on CUDA, FP32 on CPU). `fp32_no_tf32` saves and
+temporarily disables CUDA matmul and cuDNN TF32 flags around only the Whisper
+forward, then restores both flags in `finally`. The dispatcher and Torch worker
+pass the explicit choice through, and worker metadata records the effective
+precision. No model weights, processor, readout, default precision, selector,
+or task data changed. This opt-in runtime control is not a product precision
+decision.
 
 ## Reproduction
 
@@ -71,7 +89,7 @@ control, not evidence that FP32 is the best product setting.
   allocated / 283,115,520 reserved for BF16 and 261,176,320 / 295,698,432 for
   FP32. Inference after model load took 0.4925 s and 0.07085 s, respectively;
   this one-request timing is diagnostic and is not a latency comparison.
-- Final result JSON SHA-256:
+- Initial direct precision result JSON SHA-256:
   `ba74e29a0a363d95f609e8c636a3f55fd1ffcc62bba996d07eae4dbb77106dc0`.
 - Saved intermediate archives (processor tensors, encoder outputs, pooled
   features, pair features, logits, and probabilities):
@@ -82,12 +100,25 @@ control, not evidence that FP32 is the best product setting.
   `cuda_fp32-intermediates.npz` SHA-256
   `322217e5d5be86bff390b7e418ab214aac9ce4a474024640308d27f11d194733`.
 - Final artifacts are under
-  `D:\CodexArchiveRelocated\CodexArtifacts\pretrained-reuse-r2\path-a-audio-stage-precision-20261116-attempt-03\`.
-  Attempt 01 stopped at a diagnostic wrapper missing the processor's `n_samples`
-  attribute. Attempt 02 completed without recording CUDA peak memory. Both are
-  retained; attempt 03 is the complete result.
-- CPU tests: 22 passed across `test_audio_runtime.py` and
-  `test_runtime_dispatch.py`. Ruff checks passed for the changed Python files.
+  `D:\CodexArchiveRelocated\CodexArtifacts\pretrained-reuse-r2\path-a-audio-stage-precision-20261117-attempt-06\`.
+  Follow-up JSON SHA-256:
+  `36686afe5bcfbede918426032483df444f2316a5145a41bb183e70cdb7b2516f`;
+  `cuda_fp32_no_tf32-intermediates.npz` SHA-256
+  `ca670141ec14135e399840dc543893a1c37b1eb41b53fc1f81220bafbf18c4db`.
+- Follow-up source commit from run metadata: `e7ca13659cc2a190ce562d37f4bc4797c97e78f0`;
+  diagnostic script SHA-256 `c9dae6deb950e08331eab273a1a1df94efb109c894982e1ad2c94a0380df6a88`.
+  The command used the same fixed `--run-dir` and `--assembly` shown above, with
+  `--output-dir 'D:\CodexArchiveRelocated\CodexArtifacts\pretrained-reuse-r2\path-a-audio-stage-precision-20261117-attempt-06'`.
+- Follow-up runtime: Python 3.11.9, PyTorch 2.6.0+cu124, Transformers 5.6.2,
+  RTX 3080 Laptop GPU. The dispatcher reported 55,986,819 resident unique
+  parameters; Audio/Text weights and readout hashes are recorded in its
+  metadata (Whisper `7ebd0e69e78190ffe1438491fa05cc1f5c1aa3a4c4db3bc1723adbb551ea2395`,
+  MiniLM `cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433`,
+  Audio readout `4efa7939a686ad97b38f9eec0b8171e6e62d125ba4eb373e5d83e33ac4df42c7`).
+- Earlier attempts 01 and 02 and complete intermediate run 03 remain retained;
+  attempt 06 is the complete package-dispatch follow-up. CPU tests after the
+  implementation change: 24 passed across `test_audio_runtime.py` and
+  `test_runtime_dispatch.py`; Ruff checks passed for changed Python files.
 - The separate Orbitune PID 28376 was observed before and after this short
   inference. It remained running; it was not stopped or modified.
 
