@@ -4026,3 +4026,9 @@ held-speaker validation sample reproduced its saved probabilities within
 validation result. Original artifacts containing extra unmanifested bytecode
 were preserved; manifest-only copies passed strict verification. [Implementation,
 artifacts and source-integrity details](docs/pretrained_reuse/R5_PATH_A_LIBRISPEECH_SHARED_RUNTIME_20261117.md).
+**2026-11-17 Path A five-component runtime regression:** On the new assembly,
+the existing Video/Image/Text routes passed saved-probability parity and typed
+JSON checks. Audio typed JSON and argmaxes also matched, but CPU FP32
+probability parity failed the unchanged `1e-5` gate (`6.18e-4` max delta).
+The overall replay is recorded as failed parity; this does not implicate the
+added LibriSpeech head. [Exact route results and artifact hash](docs/pretrained_reuse/R5_PATH_A_LIBRISPEECH_SHARED_RUNTIME_20261117.md).

@@ -70,6 +70,32 @@ one shared MiniLM instance, loaded both audio readouts, and used CPU only.
 End-to-end load and request time was 9.51 seconds on this run. This single
 replay is not a speed benchmark or an additional accuracy estimate.
 
+## Existing-route regression replay
+
+The new five-component assembly was also used for the existing frozen
+Video/Image/Text/Audio dispatcher replay, entirely on CPU, with the
+pre-existing fixed development inputs. No labels were used for selection and
+no checkpoints were changed. Video, Image, and Text passed saved-probability
+parity and typed-JSON checks. Audio produced typed JSON and preserved all four
+argmaxes, but its maximum probability delta was `6.1774e-4`, above the
+unchanged `1e-5` parity gate. The run therefore correctly reports
+`failed_parity`; adding LibriSpeech did not resolve or mask the known CPU
+FP32-versus-saved Audio numeric discrepancy.
+
+| Existing route | Max probability delta (first / warm) | Argmax mismatch | Typed JSON | First / warm dispatch (s) |
+| --- | ---: | ---: | --- | ---: |
+| Video | 0 / 1.49e-7 | 0 / 0 | pass | 29.232 / 0.018 |
+| Image | 1.28e-8 / 1.19e-7 | 0 / 0 | pass | 1.396 / 0.005 |
+| Text | 5.66e-7 / 5.66e-7 | 0 / 0 | pass | 0.074 / 0.087 |
+| Audio | 6.18e-4 / 6.18e-4 | 0 / 0 | pass | 1.077 / 0.002 |
+
+The sequential replay took 35.286 seconds. Its report is
+`C:\CodexArtifacts\pretrained-reuse-r2-cdrive-20261117\path-a-librispeech-integration-four-route-replay-20261117-attempt-01\dispatcher-benchmark.json`, SHA-256
+`53c1189eb01e5da12d7c6a8c596df7412236633073b9fbe17e2d49b2783d98ae`. It
+used assembly manifest
+`7238cf34fdbe5fe907364398bee45e3afe66676c11be6b5270dd98eb1243c8d7` and
+source commit `9d807df88c9e9161fe955f964bfabf978ff07be6`.
+
 ## Verification and limits
 
 - Targeted CPU tests: 36 passed before final source-commit rebuild.
@@ -78,6 +104,9 @@ replay is not a speed benchmark or an additional accuracy estimate.
   validation: 7 sources; `git diff --check`: passed.
 - GitHub Actions was triggered for the pushed PR head; its final result is
   tracked on PR #111.
+- Existing-route regression replay: Video/Image/Text parity passed; Audio
+  probability parity failed the unchanged gate as documented above. All four
+  routes returned typed JSON with no argmax mismatch.
 - New code commit: `97b27eff790888d84573ee0b6a0e62da980a52ba`.
 - The Speech Commands scorer remains independently selected and unchanged.
   Existing task quality limitations remain: LibriSpeech only covers supplied
