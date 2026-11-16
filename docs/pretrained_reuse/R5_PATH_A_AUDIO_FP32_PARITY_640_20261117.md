@@ -62,7 +62,7 @@ python scripts/diagnose_path_a_audio_validation_precision.py `
 
 - Input sample-order SHA-256: `20dca814ebf78e19ce0d81d77a2f87fec615d9496c20b7567347347ec9073b70`
 - Reference JSONL SHA-256: `e203cb22ba5e18d75b0a4a78afcd475993f556edefedc7cf12aeb5210a5b3932`
-- Bundle manifest SHA-256: `574640d8` (prefix only; full hash remains in the run output)
+- Bundle manifest SHA-256: `574640d88d6ddbbdb2d12f2466a248ce13c8d9eb3ac542d099b2f08981b690f4`
 - `parity-diagnostic.json` SHA-256: `ad0d4d4beb2cd5ecb040420ceca9c6dbf33194cd78dfdbde657ef829c7555bfd`
 - CPU predictions SHA-256: `b12129647bb12765df07a87418ba890671fc7a27e8142413bda0e05fe130c8fa`
 - CUDA predictions SHA-256: `14a7886502fea538bbbe7a08f6f28da9b5b54c9874e3c40d0562df25fdf1641f`
