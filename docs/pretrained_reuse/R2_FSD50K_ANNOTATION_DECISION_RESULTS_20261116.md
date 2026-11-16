@@ -46,6 +46,23 @@ The actual preflight schema correction was tested before fitting. Focused tests:
 
 The 95.32% macro accuracy is not a balanced quality result: positives are sparse, and balanced accuracy is 85.19%. An always-negative baseline reaches 89.33% macro accuracy (per-label: Animal 93.09%, Human voice 84.35%, Music 85.98%, Vehicle 93.90%) while its balanced accuracy is 50%. Thus the model adds about 5.99 percentage points of macro accuracy over that baseline, but still misses 39.51% of annotated Vehicle positives. Accuracy alone would overstate usefulness. Calibration ECE is low, but calibration does not repair the recall gap.
 
+### Uploader-cluster uncertainty (post-selection validation)
+
+To quantify sampling uncertainty without rerunning or tuning the model, saved selected-checkpoint predictions were resampled by uploader group (`group_id`): 10,000 paired nonparametric cluster-bootstrap replicates, seed 17, percentile 95% intervals. The 572 uploaders, rather than individual clip questions, are the resampling units.
+
+| Macro metric | Point estimate | 95% cluster-bootstrap interval |
+|---|---:|---:|
+| Accuracy | 95.32% | 94.46–96.18% |
+| Balanced accuracy | 85.19% | 82.71–87.53% |
+| NLL | 0.1300 | 0.1112–0.1493 |
+| Brier | 0.0714 | 0.0594–0.0838 |
+| ECE (15 bins) | 0.0108 | 0.0105–0.0193 |
+| Positive recall | 72.54% | 67.63–77.17% |
+
+Per-label 95% intervals are also saved in the bootstrap artifact. Accuracy / balanced-accuracy intervals are: Animal 94.87–97.24% / 83.03–90.95%; Human voice 90.43–96.79% / 82.43–90.20%; Music 92.11–96.95% / 83.09–91.98%; Vehicle 94.60–97.75% / 72.37–86.50%.
+
+These intervals are descriptive only. The same validation set selected epoch 12, so the intervals are post-selection and are not independent confirmation or sealed-audit evidence.
+
 ### Learning curve
 
 | Epoch | Mean train CE | Validation macro NLL | Validation macro accuracy | Validation macro balanced accuracy | Selected |
@@ -68,6 +85,8 @@ Training CE continued to fall. Validation improvement slowed after roughly epoch
 - Best checkpoint SHA-256: `f159ab05b34cff3ed39f000de97d9ed08ea3fc97f4a83f50130cd45291a16d2c`
 - Final checkpoint SHA-256: `46a8573cf8cb556c85dd3aac69c7913e791bdacf2c9a6c507e8d193a4dcb0921`
 - Result JSON SHA-256: `49e53467e7ac51b265564eb0b4ecc49fa6141ffd3f2295450c83f236832b4c6d`
+- Bootstrap analysis code SHA-256: `0451cdb6a44417718c811db1cf2f72684fdfc949147b3eff1b8bec1412b76d3a`
+- Bootstrap artifact: `C:\CodexArtifacts\pretrained-reuse-r2-c-local\fsd50k-annotation-presence-v1-decision-20261116-attempt-01\validation-group-bootstrap.json`; SHA-256 `bd7db0b9450086fa97d1a3786cfbc561ea82ca51b24c030a39538f21d9a39230`.
 
 ## Interpretation and next gate
 

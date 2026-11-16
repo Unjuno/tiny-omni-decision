@@ -7,6 +7,9 @@ import pytest
 
 torch = pytest.importorskip("torch")
 
+from scripts.bootstrap_fsd50k_annotation_decision import (  # noqa: E402
+    bootstrap_intervals,
+)
 from scripts.build_fsd50k_annotation_decision_manifest import (  # noqa: E402
     DATASET_REVISION,
     TARGET_LABELS,
@@ -93,6 +96,54 @@ def test_positive_metrics_expose_majority_class_accuracy_hiding_missed_labels():
     assert result["positive_recall"] == 0.0
     assert result["balanced_accuracy"] == pytest.approx(0.5)
     assert result["positive_support"] == 1
+
+
+def test_uploader_bootstrap_is_deterministic_and_reports_selected_validation_scope():
+    rows = []
+    for group_id, targets in (
+        ("uploader-a", (0, 0, 1, 0)),
+        ("uploader-b", (1, 0, 0, 1)),
+        ("uploader-c", (0, 1, 1, 0)),
+    ):
+        for label, target in zip(TARGET_LABELS, targets, strict=True):
+            rows.append(
+                {
+                    "group_id": group_id,
+                    "label": label,
+                    "option_probabilities": {
+                        "annotated": 0.8 if target else 0.2,
+                        "no_annotation": 0.2 if target else 0.8,
+                    },
+                    "sample_id": group_id,
+                    "target": target,
+                }
+            )
+
+    first = bootstrap_intervals(rows, replicates=100, seed=17)
+    second = bootstrap_intervals(rows, replicates=100, seed=17)
+
+    assert first == second
+    assert first["independent_groups"] == 3
+    assert first["validation_decisions"] == 12
+    assert first["interpretation"].startswith("post-selection validation")
+    assert first["macro_point_estimates"]["accuracy"] == 1.0
+    assert first["macro_percentile_95_ci"]["accuracy"]["valid_replicates"] == 100
+
+
+def test_uploader_bootstrap_rejects_missing_task_label():
+    rows = [
+        {
+            "group_id": "uploader-a",
+            "label": label,
+            "option_probabilities": {"annotated": 0.25, "no_annotation": 0.75},
+            "sample_id": "clip-1",
+            "target": 0,
+        }
+        for label in TARGET_LABELS[:-1]
+    ]
+
+    with pytest.raises(ValueError, match="exactly all four labels"):
+        bootstrap_intervals(rows, replicates=10, seed=17)
 
 
 def _write_feature_fixture(root):
