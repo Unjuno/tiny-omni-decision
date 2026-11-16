@@ -35,12 +35,31 @@ AUDIO_FEATURE_SIZE = 384
 TEXT_FEATURE_SIZE = 384
 PAIR_FEATURE_SIZE = 7 * AUDIO_FEATURE_SIZE
 READOUT_HIDDEN_SIZE = 128
+AUDIO_ENCODER_PRECISIONS = frozenset({"auto", "fp32", "bf16"})
 
 
 @dataclass(frozen=True)
 class DecisionQuery:
     question: str
     options: tuple[str, ...]
+
+
+def resolve_audio_encoder_precision(
+    requested: str, device_type: str, *, bf16_supported: bool
+) -> str:
+    """Resolve the audio encoder's compute dtype without changing model weights."""
+    if requested not in AUDIO_ENCODER_PRECISIONS:
+        raise ValueError("audio_encoder_precision must be auto, fp32, or bf16")
+    if device_type not in {"cpu", "cuda"}:
+        raise ValueError("audio encoder supports CPU or CUDA")
+    if requested == "auto":
+        return "bf16" if device_type == "cuda" and bf16_supported else "fp32"
+    if requested == "bf16":
+        if device_type != "cuda":
+            raise ValueError("bf16 audio encoder precision requires CUDA")
+        if not bf16_supported:
+            raise RuntimeError("CUDA device does not support BF16 autocast")
+    return requested
 
 
 def _file_sha256(path: Path) -> str:
@@ -112,6 +131,7 @@ class SpeechCommandsMultiQueryRuntime:
         readout_path: Path,
         *,
         device: str | torch.device = "cpu",
+        audio_encoder_precision: str = "auto",
         audio_cache_entries: int = 64,
     ) -> None:
         if audio_cache_entries < 0:
@@ -124,6 +144,13 @@ class SpeechCommandsMultiQueryRuntime:
             raise RuntimeError("CUDA was requested but is unavailable")
         if self.device.type not in {"cpu", "cuda"}:
             raise ValueError("runtime supports CPU or CUDA")
+        self.audio_encoder_precision = resolve_audio_encoder_precision(
+            audio_encoder_precision,
+            self.device.type,
+            bf16_supported=(
+                torch.cuda.is_bf16_supported() if self.device.type == "cuda" else False
+            ),
+        )
 
         audio_dir = model_dir / "audio-whisper-tiny"
         text_dir = model_dir / "text-minilm-en"
@@ -189,7 +216,7 @@ class SpeechCommandsMultiQueryRuntime:
         input_features = encoded.input_features.to(self.device)
         autocast = (
             torch.autocast(device_type="cuda", dtype=torch.bfloat16)
-            if self.device.type == "cuda"
+            if self.audio_encoder_precision == "bf16"
             else nullcontext()
         )
         with torch.inference_mode(), autocast:

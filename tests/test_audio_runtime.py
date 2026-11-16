@@ -12,6 +12,33 @@ pair_candidate_features = audio_runtime.pair_candidate_features
 read_pcm_wav = audio_runtime.read_pcm_wav
 
 
+@pytest.mark.parametrize(
+    ("requested", "device_type", "bf16_supported", "expected"),
+    [
+        ("auto", "cpu", False, "fp32"),
+        ("auto", "cuda", True, "bf16"),
+        ("auto", "cuda", False, "fp32"),
+        ("fp32", "cuda", True, "fp32"),
+        ("bf16", "cuda", True, "bf16"),
+    ],
+)
+def test_audio_precision_resolution_preserves_auto_default_and_allows_fp32(
+    requested: str, device_type: str, bf16_supported: bool, expected: str
+) -> None:
+    assert audio_runtime.resolve_audio_encoder_precision(
+        requested, device_type, bf16_supported=bf16_supported
+    ) == expected
+
+
+def test_audio_precision_resolution_rejects_unsupported_modes() -> None:
+    with pytest.raises(ValueError, match="must be auto, fp32, or bf16"):
+        audio_runtime.resolve_audio_encoder_precision("fp16", "cuda", bf16_supported=True)
+    with pytest.raises(ValueError, match="requires CUDA"):
+        audio_runtime.resolve_audio_encoder_precision("bf16", "cpu", bf16_supported=True)
+    with pytest.raises(RuntimeError, match="does not support BF16"):
+        audio_runtime.resolve_audio_encoder_precision("bf16", "cuda", bf16_supported=False)
+
+
 def test_audio_cache_reuses_content_rejects_stale_hash_and_evicts(tmp_path) -> None:
     from tiny_omni_decision.feature_cache import BoundedFeatureCache
 

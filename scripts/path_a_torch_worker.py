@@ -67,6 +67,9 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--assembly", type=Path, required=True)
     parser.add_argument("--device", choices=("cpu", "cuda"), required=True)
+    parser.add_argument(
+        "--audio-encoder-precision", choices=("auto", "fp32", "bf16"), default="auto"
+    )
     parser.add_argument("--audio-cache-entries", type=int, default=64)
     args = parser.parse_args()
     assembly = args.assembly.resolve(strict=True)
@@ -88,6 +91,7 @@ def main() -> None:
             model_root,
             audio_root / "readout/best-readout.pt",
             device=args.device,
+            audio_encoder_precision=args.audio_encoder_precision,
             audio_cache_entries=args.audio_cache_entries,
         )
         text = TypedTextDecisionRuntime(
@@ -131,6 +135,7 @@ def main() -> None:
         "device": torch.cuda.get_device_name() if args.device == "cuda" else "cpu",
         "resident_unique_parameters": parameter_count,
         "audio_cache_max_entries": args.audio_cache_entries,
+        "audio_encoder_precision": audio.audio_encoder_precision,
         "shared_minilm_instances_after_consolidation": 1,
         "audio_encoder_revision": AUDIO_MODEL_REVISION,
         "audio_encoder_weights_sha256": AUDIO_WEIGHTS_SHA256,

@@ -177,6 +177,7 @@ class PathARuntimeDispatcher:
         videoprism_source: Path,
         worker_log_dir: Path,
         device: str = "cuda",
+        audio_encoder_precision: str = "auto",
     ) -> None:
         self.assembly_dir = assembly_dir.resolve(strict=True)
         verify_started = time.perf_counter()
@@ -190,6 +191,9 @@ class PathARuntimeDispatcher:
         if device not in {"cpu", "cuda"}:
             raise ValueError("device must be cpu or cuda")
         self.device = device
+        if audio_encoder_precision not in {"auto", "fp32", "bf16"}:
+            raise ValueError("audio_encoder_precision must be auto, fp32, or bf16")
+        self.audio_encoder_precision = audio_encoder_precision
         self._torch_worker: JsonLineWorker | None = None
         self._videoprism_worker: JsonLineWorker | None = None
         self._request_id = 0
@@ -227,6 +231,8 @@ class PathARuntimeDispatcher:
                     str(self.assembly_dir),
                     "--device",
                     self.device,
+                    "--audio-encoder-precision",
+                    self.audio_encoder_precision,
                 ],
                 cwd=self._project_root,
                 env=self._worker_env,

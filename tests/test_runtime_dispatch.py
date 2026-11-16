@@ -13,6 +13,36 @@ from tiny_omni_decision.runtime_dispatch import (
 )
 
 
+def test_dispatcher_passes_explicit_audio_encoder_precision_to_torch_worker(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    import tiny_omni_decision.runtime_dispatch as runtime_dispatch
+
+    captured: dict[str, object] = {}
+
+    class StubWorker:
+        def __init__(self, command, **kwargs) -> None:
+            captured["command"] = command
+            captured.update(kwargs)
+
+    monkeypatch.setattr(runtime_dispatch, "JsonLineWorker", StubWorker)
+    dispatcher = object.__new__(PathARuntimeDispatcher)
+    dispatcher._torch_worker = None
+    dispatcher.assembly_dir = tmp_path / "assembly"
+    dispatcher.worker_log_dir = tmp_path / "logs"
+    dispatcher._project_root = tmp_path
+    dispatcher._worker_env = {}
+    dispatcher.device = "cuda"
+    dispatcher.audio_encoder_precision = "fp32"
+
+    dispatcher._ensure_torch()
+
+    command = captured["command"]
+    assert isinstance(command, list)
+    precision_index = command.index("--audio-encoder-precision")
+    assert command[precision_index + 1] == "fp32"
+
+
 def test_json_line_worker_keeps_process_resident_for_multiple_requests(tmp_path: Path) -> None:
     worker_source = tmp_path / "worker.py"
     worker_source.write_text(
