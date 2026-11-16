@@ -185,6 +185,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run-dir", type=Path, required=True)
     parser.add_argument("--assembly", type=Path, required=True)
+    parser.add_argument("--dispatcher-assembly", type=Path, required=True)
     parser.add_argument("--videoprism-python", type=Path, required=True)
     parser.add_argument("--videoprism-source", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
@@ -251,7 +252,7 @@ def main() -> None:
     dispatcher_result = None
     if torch.cuda.is_available():
         dispatcher = PathARuntimeDispatcher(
-            assembly,
+            args.dispatcher_assembly.resolve(strict=True),
             videoprism_python=args.videoprism_python.resolve(strict=True),
             videoprism_source=args.videoprism_source.resolve(strict=True),
             worker_log_dir=output_dir / "dispatcher-worker-logs",
