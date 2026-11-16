@@ -25,11 +25,37 @@ devices.
 
 - Source: `codex/pretrained-reuse-next-20261115` at
   `bc137e7a592ad8bbdab1a29104caf71c5b9ca42e`; source worktree was clean.
-- Command: `python scripts/benchmark_path_a_dispatcher.py --assembly <v4> --videoprism-python <pinned-videoprism-venv-python> --videoprism-source <pinned-videoprism-source> --artifact-root <R2-artifacts> --output-dir <new-attempt-02> --device cpu`.
+- The PowerShell process set `PYTHONPATH=<repo>\src`, `CUDA_VISIBLE_DEVICES=""`,
+  `JAX_PLATFORMS=cpu`, and `OMP_NUM_THREADS`, `MKL_NUM_THREADS`,
+  `OPENBLAS_NUM_THREADS`, `TF_NUM_INTRAOP_THREADS`, and
+  `TF_NUM_INTEROP_THREADS` to `2`. Runtime `--device cpu` was also explicit.
+  The full PowerShell setup and benchmark command were:
+
+  ```powershell
+  $env:PYTHONPATH = (Join-Path (Get-Location) 'src')
+  $env:CUDA_VISIBLE_DEVICES = ''
+  $env:JAX_PLATFORMS = 'cpu'
+  $env:OMP_NUM_THREADS = '2'
+  $env:MKL_NUM_THREADS = '2'
+  $env:OPENBLAS_NUM_THREADS = '2'
+  $env:TF_NUM_INTRAOP_THREADS = '2'
+  $env:TF_NUM_INTEROP_THREADS = '2'
+  & 'C:\Users\junny\AppData\Local\Programs\Python\Python311\python.exe' `
+    scripts/benchmark_path_a_dispatcher.py `
+    --assembly 'C:\CodexArtifacts\pretrained-reuse-r2\path-a-modular-runtime-assembly-v4' `
+    --videoprism-python 'C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-r1\venv\Scripts\python.exe' `
+    --videoprism-source 'C:\CodexArtifacts\pretrained-reuse-r1\videoprism-base-r1\source' `
+    --artifact-root 'C:\CodexArtifacts\pretrained-reuse-r2' `
+    --output-dir 'C:\CodexArtifacts\pretrained-reuse-r2\path-a-cpu-four-route-runtime-20261116-attempt-02' `
+    --device cpu
+  ```
 - The main process used Python 3.11.9, PyTorch 2.6.0+cu124, and Transformers
   5.6.2. The VideoPrism worker used the existing pinned venv with Python 3.11.16,
   JAX 0.6.2, TensorFlow 2.18.1, and NumPy 1.26.4; it selected `TFRT_CPU_0`.
   No CUDA allocations were reported. No package was installed or upgraded.
+- Total sequential benchmark time, including cold worker startup, was 35.0698
+  seconds. Combined resident-set size after model load was about 1.37 GB; no
+  cloud or paid compute was used.
 - Audio encoder revision `169d4a4341b33bc18d8881c4b69c2e104e1cc0af`; text
   encoder revision `4ca70771034acceecb2e72475f72050fcdde4ddc`; VideoPrism
   revision `be719a406d563b66f0ac969e7c94bab8e997c81a`. The runtime has
