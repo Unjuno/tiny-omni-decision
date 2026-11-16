@@ -43,6 +43,8 @@ def _capture_mode(
     media: Path,
     queries: list[DecisionQuery],
 ) -> tuple[dict[str, Any], dict[str, np.ndarray]]:
+    if device == "cuda":
+        torch.cuda.reset_peak_memory_stats()
     runtime = SpeechCommandsMultiQueryRuntime(
         model_dir,
         readout,
@@ -119,6 +121,12 @@ def _capture_mode(
         "requested_precision": precision,
         "effective_precision": runtime.audio_encoder_precision,
         "seconds_after_model_load": seconds,
+        "peak_cuda_allocated_bytes": (
+            torch.cuda.max_memory_allocated() if device == "cuda" else None
+        ),
+        "peak_cuda_reserved_bytes": (
+            torch.cuda.max_memory_reserved() if device == "cuda" else None
+        ),
         "stages": {
             key: {
                 "shape": list(value.shape),
