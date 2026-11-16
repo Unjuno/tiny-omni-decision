@@ -299,6 +299,11 @@ def main() -> None:
                 "dispatch_wall_seconds_including_worker_startup": time.perf_counter()
                 - dispatch_started,
                 "worker_startup_wall_seconds": response["worker_startup_wall_seconds"],
+                "worker_inference_seconds": response.get("worker_inference_seconds"),
+                "cuda_peak_allocated_bytes_since_consolidation": response.get(
+                    "cuda_peak_allocated_bytes_since_consolidation"
+                ),
+                "rss_after_request_bytes": response.get("rss_after_request_bytes"),
                 "probability_count": len(probabilities),
                 "max_abs_probability_delta_vs_cpu_fp32": float(probability_delta.max(initial=0.0)),
                 "parity_threshold": 1e-5,
