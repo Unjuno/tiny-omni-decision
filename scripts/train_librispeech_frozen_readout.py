@@ -326,14 +326,31 @@ def _evaluate(
                     }
                 )
     by_condition = {
-        condition: _metrics(group_logits[condition], group_targets[condition])
+        condition: (
+            _metrics(group_logits[condition], group_targets[condition])
+            if group_targets[condition]
+            else {"count": 0, "accuracy": None, "nll": None, "brier": None, "ece_15_bins": None}
+        )
         for condition in CONDITIONS
     }
+    if any(group_targets[condition] for condition in CONDITIONS):
+        by_condition["all"] = _metrics(
+            [logit for condition in CONDITIONS for logit in group_logits[condition]],
+            [target for condition in CONDITIONS for target in group_targets[condition]],
+        )
+    active_conditions = [condition for condition in CONDITIONS if group_targets[condition]]
+    if not active_conditions:
+        raise ValueError("cannot evaluate an empty set of decision examples")
     macro = {
-        key: sum(float(by_condition[condition][key]) for condition in CONDITIONS) / len(CONDITIONS)
+        key: sum(float(by_condition[condition][key]) for condition in active_conditions)
+        / len(active_conditions)
         for key in ("accuracy", "nll", "brier", "ece_15_bins")
     }
-    return {"by_condition": by_condition, "macro_condition": macro}, predictions
+    return {
+        "by_condition": by_condition,
+        "macro_condition": macro,
+        "all": by_condition.get("all"),
+    }, predictions
 
 
 def _flatten_examples(examples: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
@@ -705,6 +722,9 @@ def main() -> None:
 
     best_nll = float("inf")
     best_epoch = 0
+    best_state_path = output / "best-readout.pt"
+    if best_state_path.is_file():
+        best_state_path.unlink()
     history = []
     epoch_validation_seconds = []
     started_training = time.perf_counter()
@@ -734,16 +754,17 @@ def main() -> None:
         for condition in CONDITIONS:
             epoch_metrics[condition], _ = _evaluate(
                 scorer,
-                validation_queries_by_condition[condition],
+                validation_queries,
                 audio_features,
                 text_features,
                 device,
                 args.query_batch_size,
             )
         epoch_validation_seconds.append(time.perf_counter() - validation_started)
-        val_nll = sum(
-            epoch_metrics[condition]["macro_condition"]["nll"] for condition in CONDITIONS
-        ) / len(CONDITIONS)
+        epoch_metrics["all"], _ = _evaluate(
+            scorer, validation_queries, audio_features, text_features, device, args.query_batch_size
+        )
+        val_nll = epoch_metrics["all"]["nll"]
         history.append(
             {
                 "epoch": epoch,
@@ -756,7 +777,7 @@ def main() -> None:
         if val_nll < best_nll:
             best_nll = val_nll
             best_epoch = epoch
-            torch.save(scorer.state_dict(), output / "best-readout.pt")
+            torch.save(scorer.state_dict(), best_state_path)
     train_seconds = time.perf_counter() - started_training
     torch.save(scorer.state_dict(), output / "final-readout.pt")
     best_state = torch.load(output / "best-readout.pt", map_location="cpu", weights_only=True)

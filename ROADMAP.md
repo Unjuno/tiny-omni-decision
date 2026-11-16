@@ -3997,3 +3997,16 @@ readout. See [full protocol and outputs](docs/pretrained_reuse/R2_PHYSICALAI_FRE
 **2026-11-17 Path A Audio precision parity:** A fixed, previously observed 640-asset / 2,560-query development input comparison found CUDA FP32-no-TF32 vs CPU FP32 maximum probability delta 1.8239e-5; 2 decisions exceed the unchanged 1e-5 gate, though no argmax changed. This does not establish a quality regression or general parity (all clips were <=1 s). No labels or sealed audit were used by the run; one target field appeared in a single preparatory schema row inspection, recorded as limited development-label exposure. Keep `auto` default and the precision contract open. [Protocol, hashes and limitations](docs/pretrained_reuse/R5_PATH_A_AUDIO_FP32_PARITY_640_20261117.md).
 
 **2026-11-17 Path A LibriSpeech numeric precision follow-up:** On the existing fixed dev-clean request set (1,938 unique assets, 1.56–24.695 s), CPU FP32 vs CUDA FP32-no-TF32 had four decisions above the unchanged 1e-5 max probability delta (3 random-distractor, 1 hard-distractor) and zero argmax changes. This is label-free numeric parity only, not another task-quality score; no training or checkpoint selection. Keep the precision contract open. [Protocol, hashes, resource use and limitations](docs/pretrained_reuse/R5_PATH_A_AUDIO_LIBRISPEECH_PRECISION_20261117.md).
+
+**2026-11-17 Path A LibriSpeech hard-negative task adaptation:** A new
+speaker-disjoint split from OpenSLR train-clean-100 was fixed (13,902 train /
+3,467 validation targets; no speaker, asset, or normalized-text overlap).
+With frozen Whisper Tiny + MiniLM features and a 344,321-parameter readout,
+the selected final-epoch checkpoint reached 93.94% random-negative and 88.38%
+hard-negative accuracy on the same held-speaker validation; the existing
+Speech Commands readout scored 25.58% and 25.90%. This is narrow English
+audiobook transcript-choice evidence, not general audio understanding. The
+first run exposed a condition-aggregation/selector defect; intermediate epoch
+weights were not saved, so the only surviving final checkpoint was scored
+post hoc and is not a recoverable historical best. No sealed/test data was
+used and no product artifact was promoted. See [run report and limitations](docs/pretrained_reuse/R5_LIBRISPEECH_TRAIN_CLEAN_100_READOUT_20261117.md).
