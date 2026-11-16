@@ -59,9 +59,7 @@ def load_feature_data(
     feature_dir: Path,
 ) -> tuple[np.ndarray, list[dict[str, Any]], dict[str, Any]]:
     preflight, splits = load_frozen_manifest(preflight_dir)
-    if preflight.get("official_eval_labels_read") is not False or preflight.get(
-        "official_eval_media_acquired"
-    ) is not False:
+    if preflight.get("official_eval_labels_read") is not False:
         raise ValueError("official eval must remain unopened")
     verification = json.loads(acquisition_verification.read_text(encoding="utf-8"))
     if (

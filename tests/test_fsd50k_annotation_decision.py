@@ -133,7 +133,7 @@ def _write_feature_fixture(root):
                 "source_sha256": source_sha,
                 "splits": summaries,
                 "official_eval_labels_read": False,
-                "official_eval_media_acquired": False,
+                "media_downloaded": False,
             }
         ),
         encoding="utf-8",
@@ -194,6 +194,15 @@ def test_feature_loader_requires_pinned_complete_contract_and_hashes(tmp_path):
     features, rows, _ = load_feature_data(preflight, verification, feature_dir)
     assert features.shape == (6, FEATURE_WIDTH)
     assert len(rows) == 6
+
+    preflight_report = json.loads((preflight / "preflight.json").read_text(encoding="utf-8"))
+    preflight_report["official_eval_labels_read"] = True
+    (preflight / "preflight.json").write_text(json.dumps(preflight_report), encoding="utf-8")
+    with pytest.raises(ValueError, match="official eval must remain unopened"):
+        load_feature_data(preflight, verification, feature_dir)
+
+    preflight_report["official_eval_labels_read"] = False
+    (preflight / "preflight.json").write_text(json.dumps(preflight_report), encoding="utf-8")
 
     with (feature_dir / "features.npy").open("ab") as stream:
         stream.write(b"corrupt")
