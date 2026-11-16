@@ -124,9 +124,12 @@ decision.
 
 ## Decision and next step
 
-Keep `auto` as the default and keep the strict `1e-5` parity gate. The evidence
-does not justify hiding the remaining CUDA FP32 backend delta with a wider
-tolerance. If one canonical cross-device output is required, the remaining
-small mismatch must be resolved or the supported device/precision contract
-must be defined explicitly. Audio quality is not established by this runtime
-diagnostic; the broader multimodal quality and package-size gates remain open.
+Keep `auto` as the default and keep the strict `1e-5` parity gate. For this
+fixed request, the explicit `fp32_no_tf32` path passes the unchanged gate, so
+there is no remaining mismatch to explain for these four queries. Do not
+generalize that result to other recordings or claim general cross-device
+parity. Before making this precision mode the supported cross-device contract,
+compare saved per-example outputs on a predeclared, label-blind set of diverse
+audio durations/inputs, verify backend flags are restored after normal and
+exceptional forwards, and measure latency on the target device. Keep quality
+and package-size gates separate; this runtime diagnostic establishes neither.
