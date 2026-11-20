@@ -6,6 +6,13 @@ Accuracy; gated A/V reached 52.08%, and zero/permuted-video controls showed no
 video benefit. All three readouts overfit; sealed audit remains unopened.
 [Protocol, learning curves and limits](docs/pretrained_reuse/R2_SOUND_ACTIONS_TEMPORAL_RESULTS_20261121.md).
 
+**2026-11-21 SoundActions train-only nested CV:** Five recording-ID folds over
+the 246 fixed training recordings gave 68.29% audio-only, 40.65% video-only,
+and 67.07% gated A/V Accuracy. The paired audio-vs-fusion interval includes
+zero; video did not add a reliable gain. Original validation and sealed audit
+were excluded from fitting and scoring.
+[Protocol, fold metrics and hashes](docs/pretrained_reuse/R2_SOUND_ACTIONS_TRAIN_ONLY_GROUP_CV_20261121.md).
+
 **2026-11-21 R2-M parameter-matched sensor control:** A fresh 80-epoch
 same-topology control trained with sensor input masked had 180,387 parameters,
 matching the paired fusion model. On the same 762 development validation IDs,
