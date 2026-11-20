@@ -124,3 +124,66 @@ def train_sensor_normalization(
             or (standard_deviation <= 0).any()):
         raise ValueError("each sensor axis must have finite nonzero training variance")
     return mean.astype(np.float32), standard_deviation.astype(np.float32)
+
+
+def same_participant_different_activity_sensor_donors(
+    rows: Sequence[Mapping[str, object]], *, seed: int = 17,
+) -> list[Mapping[str, object]]:
+    """Create a deterministic sensor donor derangement within each participant.
+
+    Every donor remains from the recipient's participant but has a different
+    activity label. The donor mapping is a permutation, so each source sensor
+    is used exactly once. A half-cycle across label-sorted blocks guarantees
+    different labels when no label occupies more than half of a participant's
+    rows; otherwise the function fails closed.
+    """
+    if not rows:
+        raise ValueError("sensor donor derangement requires at least one row")
+    participant_indices: dict[int, list[int]] = {}
+    for index, row in enumerate(rows):
+        participant = int(row["participant_id"])
+        participant_indices.setdefault(participant, []).append(index)
+
+    donors: list[Mapping[str, object] | None] = [None] * len(rows)
+    rng = np.random.default_rng(seed)
+    for participant, indices in sorted(participant_indices.items()):
+        ordered = sorted(
+            indices,
+            key=lambda index: (str(rows[index]["activity"]), str(rows[index]["sample_id"])),
+        )
+        counts: dict[str, int] = {}
+        for index in ordered:
+            label = str(rows[index]["activity"])
+            counts[label] = counts.get(label, 0) + 1
+        if len(counts) < 2 or max(counts.values()) > len(ordered) // 2:
+            raise ValueError(
+                f"participant {participant} lacks a full different-activity sensor derangement"
+            )
+
+        by_activity: dict[str, list[int]] = {}
+        for index in ordered:
+            by_activity.setdefault(str(rows[index]["activity"]), []).append(index)
+        donor_order: list[int] = []
+        for activity in sorted(by_activity):
+            class_donors = by_activity[activity].copy()
+            rng.shuffle(class_donors)
+            donor_order.extend(class_donors)
+
+        offset = len(ordered) // 2
+        for position, recipient_index in enumerate(ordered):
+            donor_index = donor_order[(position + offset) % len(ordered)]
+            recipient = rows[recipient_index]
+            donor = rows[donor_index]
+            if (int(recipient["participant_id"]) != int(donor["participant_id"])
+                    or str(recipient["activity"]) == str(donor["activity"])):
+                raise ValueError("constructed sensor mapping violates its group constraints")
+            donors[recipient_index] = donor
+
+    if any(donor is None for donor in donors):
+        raise AssertionError("sensor derangement did not assign every validation row")
+    result = [donor for donor in donors if donor is not None]
+    if {str(row["sample_id"]) for row in result} != {
+        str(row["sample_id"]) for row in rows
+    }:
+        raise AssertionError("sensor donor mapping is not a permutation of the input rows")
+    return result

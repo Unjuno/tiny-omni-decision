@@ -4084,10 +4084,13 @@ attempts are preserved. Attempt 3 changed only AdamW weight decay from 0.01 to
 0.1 after train-only vibration normalization. The gated audio+vibration model
 improved over attempt 2 on the same 762 validation IDs (sample Accuracy
 71.92%→75.85%, macro Accuracy 64.80%→72.46%, macro NLL 0.9455→0.8908, macro
-Brier 0.4698→0.3870), while audio-only regressed. Sensor shuffling still
-changed fusion scores little, and there are only two validation participants;
-this is a promising development result, not evidence of robust sensor benefit
-or product quality. All three arms completed 80 epochs and late NLL showed
-strong overfitting. Keep attempts and checkpoints separate, do not promote the
-model, and retain the open 95–98% four-modality objective. No sealed audit or
-quantization. See [full report](docs/pretrained_reuse/R2M_SUPPLIED_ACTIVITY_DECISION_20261121.md).
+Brier 0.4698→0.3870), while audio-only regressed. The original one-row sensor
+rotation was ineffective because rows were activity-sorted. A corrected
+same-participant/different-activity sensor swap reduced selected fusion macro
+Accuracy by 9.56 pp on these two participants, showing content sensitivity but
+not new-person generalization. This remains a promising development result,
+not product quality evidence. All three arms completed 80 epochs and late NLL
+showed strong overfitting. Keep attempts and checkpoints separate, do not
+promote the model, and retain the open 95–98% four-modality objective. No
+sealed audit or quantization. See [full report](docs/pretrained_reuse/R2M_SUPPLIED_ACTIVITY_DECISION_20261121.md)
+and [sensor-dependence diagnostic](docs/pretrained_reuse/R2M_SENSOR_DEPENDENCE_DIAGNOSTIC_20261121.md).

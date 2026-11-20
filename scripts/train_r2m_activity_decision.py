@@ -19,6 +19,7 @@ from torch import nn
 
 from tiny_omni_decision.r2m_activity import (
     activity_metrics,
+    same_participant_different_activity_sensor_donors,
     supported_activity_vocabulary,
     train_sensor_normalization,
 )
@@ -815,20 +816,27 @@ def main() -> None:
                 }
             # Deterministic derangement checks whether the readout responds to the sensor stream.
             val_rows = rows_by_split["validation"]
-            shifted_sensor_rows = val_rows[1:] + val_rows[:1]
+            mismatched_sensor_rows = same_participant_different_activity_sensor_donors(
+                val_rows, seed=SEED
+            )
             metrics, probabilities, _ = evaluate(
                 fusion, scorer, val_rows, vocabulary, mode, device, args.batch_size,
-                sensor_replacement=shifted_sensor_rows,
+                sensor_replacement=mismatched_sensor_rows,
                 sensor_normalization=sensor_normalization,
             )
-            path = args.output_dir / "validation-control-shuffled-sensor.jsonl"
+            path = args.output_dir / "validation-control-cross-activity-sensor.jsonl"
             with path.open("w", encoding="utf-8", newline="\n") as stream:
                 for row in prediction_rows(val_rows, vocabulary, probabilities):
                     stream.write(json.dumps(row, sort_keys=True) + "\n")
-            summaries[-1].setdefault("validation_controls", {})["shuffled_sensor"] = {
+            summaries[-1].setdefault("validation_controls", {})[
+                "same_participant_different_activity_sensor"
+            ] = {
                 "metrics": metrics,
                 "predictions_sha256": sha256_file(path),
-                "replacement_derangement": "validation rows rotated by one after sample_id sort",
+                "replacement_derangement": (
+                    "same-participant sensor donor permutation with a different activity "
+                    "for every recipient; donors are shuffled within activity"
+                ),
             }
             # Candidate permutation is a metamorphic runtime check, not a learned metric.
             perm = np.random.default_rng(SEED).permutation(len(vocabulary))

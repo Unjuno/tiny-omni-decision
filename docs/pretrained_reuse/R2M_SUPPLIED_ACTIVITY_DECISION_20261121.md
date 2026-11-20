@@ -127,10 +127,12 @@ For the selected fused checkpoint, validation macro Accuracy / macro NLL were:
 | Sensor absent | 47.91% | 2.0326 | 0.7363 | 0.2241 |
 | Sensor shifted by one validation row | 64.14% | 0.9376 | 0.4661 | 0.0642 |
 
-Removing either modality damages the gated model, but one-row sensor shuffling
-barely changes its scores and slightly improves NLL. This does not show robust
-sensor-content dependence or a net sensor benefit over the audio-only model;
-audio-only validation macro Accuracy is 66.83%.
+Removing either modality damages the gated model. The historical one-row sensor
+rotation barely changed scores, but follow-up inspection found that validation
+rows were sorted by activity-prefixed sample ID; rotating by one therefore
+paired nearly every example with a sensor from the same activity. Treat that
+control as ineffective for measuring activity-signal dependence. A corrected
+post-hoc diagnostic on the selected attempt-3 checkpoint is reported below.
 
 Paired sample comparison, fused minus audio-only, used 10,000 percentile
 bootstrap replicates resampling unique trials within participant × target
@@ -186,14 +188,60 @@ or blind audit evidence. Checkpoint selection in each run used calibration,
 not this validation set.
 
 The paired result is an encouraging validation-only indication that stronger
-weight decay helped the gated architecture, not proof that the sensor content
-caused the gain. On attempt 3, shuffling sensor rows changed fused macro
-Accuracy only from 72.46% to 71.16% and macro NLL from 0.8908 to 0.9261; the
-audio-absent control scored 8.80% macro Accuracy, while the sensor-absent
-control scored 62.81%. The shuffle result still cautions that the learned
-fusion may use sensor structure weakly or as a regularizer. Audio-only also
-regressed in this attempt, so the modality trade-off is material. Do not
-promote this candidate as a general multimodal Decision model.
+weight decay helped the gated architecture. The earlier one-row rotation is
+not a meaningful sensor-content control because of the label-sorted row order.
+The attempt-3 audio-absent control scored 8.80% macro Accuracy; sensor-absent
+scored 62.81%. Audio-only also regressed in this attempt, so the modality
+trade-off is material. The corrected fixed-checkpoint diagnostic below tests
+whether replacing the sensor with a different activity from the same participant
+changes the decisions. Neither result qualifies this task as general Omni
+Decision quality.
+
+### Corrected sensor-dependence diagnostic (post hoc, no training)
+
+Reviewing `train_r2m_activity_decision.py` revealed that the prior
+`val_rows[1:] + val_rows[:1]` control ran after sorting validation IDs whose
+prefix is the activity label. Almost all shifted sensors therefore retained
+the correct activity class. The original metrics and prediction artifacts are
+preserved, but that control is superseded for interpreting sensor dependence.
+
+Using the same selected attempt-3 gated checkpoint (epoch 9; SHA-256
+`a9ee14679af167e1461d1758c7c7e69fbbf380fc6f98799d411588baa6637347`), a new
+deterministic permutation assigned every validation row a sensor from the
+**same participant but a different activity**, with each of the 762 donor
+sensors used exactly once. It preserved participant identity and the complete
+sensor marginal while mismatching the activity. No weights, training data,
+selector state or checkpoints were changed; the sealed audit was not loaded.
+The original reload reproduced saved probabilities exactly (max absolute
+delta `0.0`).
+
+| Condition | Sample Acc | Macro Acc | Macro NLL | Macro Brier | ECE-15 |
+|---|---:|---:|---:|---:|---:|
+| Paired audio + sensor | 75.85% | 72.46% | 0.8908 | 0.3870 | 0.1006 |
+| Same-participant, different-activity sensor | 68.64% | 62.88% | 1.5259 | 0.5141 | 0.1505 |
+
+The intervention changed the argmax for 140/762 examples. Paired bootstrap
+over validation trials stratified by participant × target activity (10,000
+replicates, seed 17) gave mismatched-minus-original macro Accuracy
+`−9.56 pp` (95% interval `−12.29 to −6.89`), macro NLL `+0.6344`
+(`+0.5303 to +0.7405`), and macro Brier `+0.1268` (`+0.0986 to +0.1563`).
+Sample Accuracy changed by `−7.21 pp` (`−9.32 to −5.12`). Both held-out
+participants individually declined: participant 9 macro Accuracy `72.79% →
+64.55%`; participant 15 `80.13% → 73.99%`. This is evidence the fitted
+readout responds to activity-inconsistent sensor content on these development
+participants. It is not an unbiased estimate of a sensor benefit on new people:
+only two participants are present, the validation set has already been
+observed, and the sensor intervention deliberately creates conflicting inputs.
+The attempt-3 fusion-vs-audio comparison also has different parameter counts.
+
+The frozen diagnostic output and per-example predictions are preserved at
+`D:\CodexArchiveRelocated\CodexArtifacts\pretrained-reuse-r2\zenodo-audio-vibration-v1\r2m-supplied-activity-decision-v1-attempt-03\sensor-dependence-corrected-replay`.
+The fixed-checkpoint runner is
+`scripts/evaluate_r2m_activity_sensor_dependence.py`; future training-run
+controls now use the same-participant/different-activity derangement and fail
+closed when the participant label distribution cannot support it. See the
+[standalone diagnostic](R2M_SENSOR_DEPENDENCE_DIAGNOSTIC_20261121.md) for the
+full paired metrics, participant results, hashes and limitations.
 
 The selected fused checkpoint has a rolling train macro Accuracy of 94.22%
 and validation macro Accuracy of 72.46%; this is not a fixed-example
@@ -259,18 +307,16 @@ The cross-attempt report is `attempt03-vs-attempt02-paired-analysis-corrected.js
 
 ## Current interpretation and next work
 
-Attempt 3 changes the previous conclusion: the `weight_decay=0.1` gated model
-is a promising *development-validation candidate* and should be retained for a
-fresh, separately admitted participant evaluation after its protocol is
-specified. Do not treat its observed validation gain as generalization proof:
-the evaluation has only two held-out participant clusters, calibration chose
-each checkpoint, sensor shuffling barely changed metrics, audio-only
-regressed, and the late learning curve overfits. Preserve all three attempts
-and keep attempt 2 as the fixed comparator. Before training another model,
-design an identity-grouped participant split with sufficient fresh
-participants and a sensor-reliance intervention that measures paired input
-dependence. Do not open sealed audit, reuse observed validation for selection,
-or promote any attempt as a product Teacher. The four-modality 95–98% objective
-remains unmet.
+Attempt 3's `weight_decay=0.1` gated model is a promising
+*development-validation candidate*. The corrected mismatch test shows the
+readout responds to activity-inconsistent sensor content, but cannot establish
+new-participant generalization or isolate sensor benefit from the larger fused
+head. The evaluation has only two held-out participant clusters, calibration
+selected each checkpoint, audio-only regressed, and the late learning curve
+overfits. Preserve all three attempts and keep attempt 2 as the fixed
+comparator. Before further fitting, define a fresh participant-grouped
+evaluation and compare the fusion against a parameter-matched audio-only head.
+Do not open sealed audit or reuse observed validation for checkpoint
+selection. The four-modality 95–98% objective remains unmet.
 
 \n
