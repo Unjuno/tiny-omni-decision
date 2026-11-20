@@ -1,0 +1,89 @@
+{
+  "format": "r2m_source_screen_v1",
+  "experiment_id": "r2m-hubego-video-imu-action-v1",
+  "recorded_at": "2026-11-21T02:06:15+09:00",
+  "status": "REVIEW_GATED_ACCESS_AND_TASK_VALIDATION_REQUIRED",
+  "source": {
+    "name": "HubEgo-100K v1.0",
+    "repository": "HubLabs/HubEgo-100K",
+    "revision": "fe33edfcc9bafea12b85d5d81544b7b121ac83d5",
+    "last_modified_utc": "2026-11-19T22:11:40Z",
+    "repository_access": "gated_auto",
+    "dataset_url": "https://huggingface.co/datasets/HubLabs/HubEgo-100K",
+    "paper_url": "https://arxiv.org/abs/2611.21938",
+    "license": "cc-by-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/legalcode",
+    "license_evidence": [
+      "Official dataset card declares CC BY 4.0 including commercial use with attribution",
+      "Paper datasheet states all recordings are first-party and reports no third-party rights restrictions"
+    ],
+    "access_requirement": "Login plus short form requesting name, organization, country, and intended use",
+    "access_form_submitted": false,
+    "payload_accessed": false,
+    "reported_episodes": 72754,
+    "reported_hours": 10124,
+    "reported_frames": 1093194072,
+    "reported_contributors": 12227,
+    "reported_environments": 15548,
+    "reported_action_families": 35,
+    "reported_task_types": 56,
+    "reported_modalities": [
+      "egocentric_rgb_video",
+      "accelerometer",
+      "gyroscope",
+      "additional_phone_sensor_streams"
+    ],
+    "reported_video": "1920x1080; 30 fps release cadence",
+    "reported_imu": "nominal 100 Hz; rate varies by device/OS",
+    "annotation_provenance": "machine-generated action, difficulty, and language labels",
+    "label_human_audit": false,
+    "recommended_group_keys": [
+      "contributor_id",
+      "recording_id",
+      "episode_index"
+    ],
+    "public_tree_snapshot": {
+      "observed_at_utc": "2026-11-20T17:06:15Z",
+      "path_records": 1000,
+      "file_records": 787,
+      "mono_data_parquet_files": 778,
+      "mono_data_parquet_bytes": 24708650753,
+      "scope_note": "Visible metadata listing only; not a complete media payload inventory",
+      "canonical_rows": "sorted type|path|size|oid, UTF-8, newline-delimited with final newline",
+      "canonical_sha256": "372acce28e7b1099876bdf2258118e3143fb003b3ae63de08e7426baecf117ba"
+    }
+  },
+  "scope": {
+    "modality_route": "video+sensor",
+    "proposed_task": "four-choice action-family decision from synchronized video and IMU windows",
+    "status": "candidate_not_admitted",
+    "split_group": [
+      "contributor_id",
+      "recording_id"
+    ],
+    "proposed_split": "contributor-disjoint train/validation/sealed-audit; stratify eligible action families using train-only group counts",
+    "proposed_controls": [
+      "video-only",
+      "imu-only",
+      "paired video+imu",
+      "shuffled imu",
+      "within-recording time-offset imu",
+      "missing stream",
+      "metadata/class-prior baseline",
+      "candidate-order permutation"
+    ],
+    "sealed_audit_accessed": false,
+    "source_rows_opened": false,
+    "training_started": false,
+    "outputs": "source screen only; no payload, features, or weights in Git",
+    "access_approval_required_before_payload": true
+  },
+  "constraints": [
+    "Hugging Face access is gated and requires account login plus an access form; do not submit personal details on the user's behalf",
+    "paper says action annotations are machine-generated and not human-audited",
+    "task-specific action-family support by contributor must be checked before split freeze",
+    "no source-held-out result or both-input benefit may be claimed until controls pass on unseen contributors",
+    "visible file-tree sizes do not represent total media payload size"
+  ],
+  "report": "docs/pretrained_reuse/R2_HUBEGO100K_VIDEO_IMU_SOURCE_SCREEN_20261121.md"
+}
