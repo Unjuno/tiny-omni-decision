@@ -38,6 +38,22 @@ def test_soundactions_manifest_hash_covers_split_payload():
     assert hashlib.sha256(canonical).hexdigest() == digest
 
 
+def test_checked_in_soundactions_split_manifest_matches_frozen_assignments():
+    path = (
+        Path(__file__).resolve().parents[1]
+        / "manifests/pretrained_reuse/365-sound-actions-split-v1-20261121.json"
+    )
+    checked = json.loads(path.read_text(encoding="utf-8"))
+    digest = checked.pop("manifest_sha256")
+    canonical = json.dumps(
+        checked, sort_keys=True, separators=(",", ":"), ensure_ascii=True
+    ).encode()
+    assert hashlib.sha256(canonical).hexdigest() == digest
+    assert checked["splits"] == build_manifest()["splits"]
+    assert checked["sealed_audit_accessed"] is False
+    assert checked["media_integrity"]["status"] == "PASS_EXACT_BYTES"
+
+
 def test_publisher_checksums_reject_cross_split_exact_media_overlap(tmp_path: Path):
     same = "a" * 64
     rows = []

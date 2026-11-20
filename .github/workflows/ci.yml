@@ -28,6 +28,8 @@ jobs:
         run: |
           python -m json.tool manifests/pretrained_reuse/closed-public-test-audits.json > /dev/null
           python -m json.tool manifests/pretrained_reuse/uci-har-sensor-v1.json > /dev/null
+          python -m json.tool manifests/pretrained_reuse/365-sound-actions-split-v1-20261121.json > /dev/null
+          python -m json.tool manifests/pretrained_reuse/soundactions-v2-source-20261121.json > /dev/null
           tiny-omni-decision validate-model-manifest manifests/base-model.example.yaml
           for manifest in manifests/dataset.example.yaml manifests/candidates/*.yaml; do
             tiny-omni-decision validate-dataset-manifest "$manifest"
