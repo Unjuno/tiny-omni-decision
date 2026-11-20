@@ -324,7 +324,7 @@ def evaluate(
 def train_arm(
     mode, train_rows, calibration_rows, validation_rows, vocabulary, class_weights,
     output_dir, *, epochs, batch_size, learning_rate, weight_decay, device,
-    sensor_normalization,
+    sensor_normalization, modality_condition="normal",
 ):
     seed = SEED
     random.seed(seed)
@@ -370,6 +370,7 @@ def train_arm(
                 class_order = permutation_rng.permutation(len(vocabulary))
                 packed = pack_batch(
                     batch_rows, vocabulary, mode, class_order=class_order,
+                    modality_condition=modality_condition,
                     sensor_normalization=sensor_normalization,
                 )
                 logits, labels = forward_batch(fusion, scorer, packed, device)
@@ -406,6 +407,7 @@ def train_arm(
             calibration_started = time.perf_counter()
             calibration, _, _ = evaluate(
                 fusion, scorer, calibration_rows, vocabulary, mode, device, batch_size,
+                modality_condition=modality_condition,
                 sensor_normalization=sensor_normalization,
             )
             calibration_seconds = time.perf_counter() - calibration_started
@@ -464,14 +466,17 @@ def train_arm(
     scorer.load_state_dict(selected["scorer"], strict=True)
     train_selected, _, _ = evaluate(
         fusion, scorer, train_rows, vocabulary, mode, device, batch_size,
+        modality_condition=modality_condition,
         sensor_normalization=sensor_normalization,
     )
     calibration_selected, _, _ = evaluate(
         fusion, scorer, calibration_rows, vocabulary, mode, device, batch_size,
+        modality_condition=modality_condition,
         sensor_normalization=sensor_normalization,
     )
     validation_selected, probabilities, labels = evaluate(
         fusion, scorer, validation_rows, vocabulary, mode, device, batch_size,
+        modality_condition=modality_condition,
         sensor_normalization=sensor_normalization,
     )
     if device.type == "cuda":
@@ -480,6 +485,7 @@ def train_arm(
         peak_memory = 0
     summary = {
         "mode": mode,
+        "modality_condition": modality_condition,
         "selected_epoch": best_epoch,
         "final_epoch": epochs,
         "optimizer_updates": updates,
@@ -505,15 +511,19 @@ def train_arm(
     return summary, (fusion, scorer, probabilities, labels)
 
 
-def run_smoke(rows, vocabulary, device, sensor_normalization):
+def run_smoke(
+    rows, vocabulary, device, sensor_normalization, *,
+    model_arms=CLASSIFIER_MODES, modality_condition="normal",
+):
     if len(rows) < 2:
         raise ValueError("smoke requires at least two supported examples")
     results = {}
-    for mode in CLASSIFIER_MODES:
+    for mode in model_arms:
         torch.manual_seed(SEED)
         fusion, scorer = make_model(mode, len(vocabulary), device)
         packed = pack_batch(
-            rows[:2], vocabulary, mode, sensor_normalization=sensor_normalization
+            rows[:2], vocabulary, mode, modality_condition=modality_condition,
+            sensor_normalization=sensor_normalization,
         )
         logits, labels = forward_batch(fusion, scorer, packed, device)
         loss = nn.functional.cross_entropy(logits, labels)
@@ -570,6 +580,11 @@ def main() -> None:
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--learning-rate", type=float, default=1e-3)
     parser.add_argument("--weight-decay", type=float, default=0.01)
+    parser.add_argument("--model-arms", nargs="+", choices=CLASSIFIER_MODES,
+                        default=list(CLASSIFIER_MODES))
+    parser.add_argument("--modality-condition",
+                        choices=("normal", "without_audio", "without_sensor"),
+                        default="normal")
     parser.add_argument("--device", choices=("auto", "cpu", "cuda"), default="auto")
     parser.add_argument("--preflight-only", action="store_true")
     parser.add_argument("--preflight-output", type=Path)
@@ -578,6 +593,12 @@ def main() -> None:
     if (args.epochs < 1 or args.batch_size < 1 or args.learning_rate <= 0
             or args.weight_decay < 0):
         raise SystemExit("epochs/batch size/LR must be positive; weight decay nonnegative")
+    if not args.model_arms:
+        raise SystemExit("at least one model arm is required")
+    if args.modality_condition != "normal" and any(
+        "audio" not in mode or "sensor" not in mode for mode in args.model_arms
+    ):
+        raise SystemExit("missing-modality conditions require the audio_sensor_gated arm")
     if args.output_dir.exists() and any(args.output_dir.iterdir()):
         raise SystemExit("refusing to overwrite a nonempty output directory")
 
@@ -667,7 +688,8 @@ def main() -> None:
             "mean": sensor_mean.tolist(),
             "standard_deviation": sensor_std.tolist(),
         },
-        "model_arms": list(CLASSIFIER_MODES),
+        "model_arms": list(args.model_arms),
+        "modality_condition": args.modality_condition,
         "fusion_width": 96,
         "fusion_heads": 4,
         "epochs": args.epochs,
@@ -727,7 +749,9 @@ def main() -> None:
         device_metadata = {"name": "CPU"}
     if args.smoke_only:
         smoke = run_smoke(
-            rows_by_split["train"], vocabulary, device, sensor_normalization
+            rows_by_split["train"], vocabulary, device, sensor_normalization,
+            model_arms=args.model_arms,
+            modality_condition=args.modality_condition,
         )
         print(json.dumps({
             "status": "PASS",
@@ -786,7 +810,7 @@ def main() -> None:
             prior_probabilities, validation_labels, vocabulary
         ),
     }
-    for mode in CLASSIFIER_MODES:
+    for mode in args.model_arms:
         summary, state = train_arm(
             mode, rows_by_split["train"], rows_by_split["calibration"],
             rows_by_split["validation"], vocabulary, class_weights,
@@ -794,10 +818,11 @@ def main() -> None:
             learning_rate=args.learning_rate, weight_decay=args.weight_decay,
             device=device,
             sensor_normalization=sensor_normalization,
+            modality_condition=args.modality_condition,
         )
         summaries.append(summary)
         fusion, scorer, normal_probabilities, val_labels = state
-        if mode == "audio_sensor_gated":
+        if mode == "audio_sensor_gated" and args.modality_condition == "normal":
             # Test both explicit missing-input paths with the exact selected weights.
             for condition in ("without_audio", "without_sensor"):
                 metrics, probabilities, _ = evaluate(

@@ -4094,3 +4094,18 @@ showed strong overfitting. Keep attempts and checkpoints separate, do not
 promote the model, and retain the open 95–98% four-modality objective. No
 sealed audit or quantization. See [full report](docs/pretrained_reuse/R2M_SUPPLIED_ACTIVITY_DECISION_20261121.md)
 and [sensor-dependence diagnostic](docs/pretrained_reuse/R2M_SENSOR_DEPENDENCE_DIAGNOSTIC_20261121.md).
+
+**2026-11-21 R2-M parameter-matched sensor-absent control:** A fresh 80-epoch
+run used the same two-stream, 180,387-parameter model and exact attempt-03
+training configuration/initial seed while masking sensor input throughout
+training and evaluation. On the identical 762 exposed validation IDs, paired
+fusion was +4.65 pp in macro Accuracy (participant×activity paired-bootstrap
+95% interval +1.66 to +7.55 pp), with better macro NLL/Brier; sample Accuracy
+was nearly tied (+0.13 pp, interval −2.36 to +2.62 pp). Effects opposed by
+participant: fusion improved participant 9 and regressed participant 15. The
+result weakens the parameter-count-only explanation for macro metrics on these
+subjects but does not establish new-person benefit. The control overfit late
+(train Accuracy 100%, calibration macro NLL 3.606 at epoch 80; calibration
+best epoch 4). No sealed audit or product promotion. Next require a fresh
+participant-grouped admitted source/task before generalizing sensor fusion.
+See [controlled protocol and results](docs/pretrained_reuse/R2M_CAPACITY_MATCHED_SENSOR_CONTROL_20261121.md).

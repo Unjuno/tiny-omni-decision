@@ -1,5 +1,15 @@
 # Tiny Omni Decision
 
+**2026-11-21 R2-M parameter-matched sensor control:** A fresh 80-epoch
+same-topology control trained with sensor input masked had 180,387 parameters,
+matching the paired fusion model. On the same 762 development validation IDs,
+fusion was +4.65 pp in macro Accuracy and improved macro NLL/Brier, while
+sample Accuracy was essentially tied. Participant effects conflicted: fusion
+helped participant 9 and hurt participant 15. This supports only a bounded
+sensor-content effect on observed development subjects, not unseen-person
+generalization or product use; the run overfit late. No sealed audit was read.
+[Protocol, curves, paired intervals and artifact hashes](docs/pretrained_reuse/R2M_CAPACITY_MATCHED_SENSOR_CONTROL_20261121.md).
+
 **2026-10-25 CoGenT-B one-time audit:** A frozen image+question decision
 probe reached 57.90% Accuracy on 15,000 held-out CLEVR-CoGenT-B images and
 responded measurably to image content versus gray/shuffled controls. Results
