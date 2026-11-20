@@ -55,6 +55,61 @@ def test_sensor_temporal_stem_propagates_training_gradients():
     assert all(torch.isfinite(parameter.grad).all() for parameter in stem.parameters())
 
 
+def test_sensor_temporal_decision_scorer_is_candidate_equivariant():
+    from tiny_omni_decision.sensor_temporal_stem import SensorTemporalDecisionScorer
+
+    torch.manual_seed(31)
+    model = SensorTemporalDecisionScorer(
+        input_channels=2, option_width=2, hidden_size=8, scorer_hidden_width=16
+    ).eval()
+    values = torch.randn(1, 5, 2)
+    timestamps = torch.arange(5, dtype=torch.float32)[None] * 10
+    valid = torch.ones(1, 5, dtype=torch.bool)
+    options = torch.tensor([[[1.0, 0.0], [0.0, 1.0], [1.0, 1.0]]])
+    option_valid = torch.ones(1, 3, dtype=torch.bool)
+    order = torch.tensor([2, 0, 1])
+
+    original = model(values, timestamps, valid, options, option_valid)
+    permuted = model(values, timestamps, valid, options[:, order], option_valid[:, order])
+
+    torch.testing.assert_close(permuted, original[:, order], rtol=0, atol=0)
+
+
+def test_sensor_temporal_decision_scorer_returns_candidate_id_json():
+    from tiny_omni_decision.sensor_temporal_stem import SensorTemporalDecisionScorer
+
+    torch.manual_seed(37)
+    model = SensorTemporalDecisionScorer(
+        input_channels=2, option_width=1, hidden_size=8, scorer_hidden_width=16
+    ).eval()
+
+    result = model.decide(
+        torch.randn(5, 2),
+        torch.arange(5, dtype=torch.float32) * 25,
+        torch.ones(5, dtype=torch.bool),
+        torch.tensor([[0.0], [1.0], [2.0]]),
+        ["caller-z", "caller-a", "caller-k"],
+        ["stop", "walk", "wait"],
+    )
+
+    assert result["status"] == "selected"
+    assert [item["option_id"] for item in result["options"]] == [
+        "caller-z", "caller-a", "caller-k"
+    ]
+    assert sum(item["probability"] for item in result["options"]) == pytest.approx(1.0)
+
+
+def test_sensor_temporal_decision_path_stays_below_one_million_parameters():
+    from tiny_omni_decision.sensor_temporal_stem import SensorTemporalDecisionScorer
+
+    model = SensorTemporalDecisionScorer(
+        input_channels=12, option_width=8, hidden_size=64, scorer_hidden_width=128
+    )
+
+    assert model.stem.parameter_count == 20_224
+    assert model.parameter_count == 29_697
+
+
 @pytest.mark.parametrize(
     "timestamps,valid",
     [
