@@ -107,6 +107,11 @@ def test_relative_timing_and_gate_ablations_change_the_candidate_state():
     fixed_gate, _, _, _, _ = fixture(use_gates=False)
     assert not torch.allclose(fixed_gate(streams, queries, option_valid), baseline,
                               atol=1e-7, rtol=0)
+    assert all(not parameter.requires_grad
+               for parameter in fixed_gate.gates.parameters())
+    no_time, _, _, _, _ = fixture(use_time=False)
+    assert all(not parameter.requires_grad
+               for parameter in no_time.time_encoder.parameters())
 
 
 def test_gradients_reach_both_streams_attention_and_gates():

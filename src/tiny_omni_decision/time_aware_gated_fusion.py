@@ -92,6 +92,10 @@ class TimeAwareGatedFusion(nn.Module):
             ) for name in names
         })
         self.norm = nn.LayerNorm(width)
+        if not use_time:
+            self.time_encoder.requires_grad_(False)
+        if not use_gates:
+            self.gates.requires_grad_(False)
 
     def get_extra_state(self) -> dict[str, object]:
         return {
