@@ -22,6 +22,12 @@ test values are excluded from all further selection and analysis choices.
   both models, with the same fixed learning rate. No early stop; preserve each
   epoch's metrics, the best validation-NLL checkpoint, and the terminal
   checkpoint.
+- With 6,028 train windows and batch size 128, the fixed sampler processes
+  6,028 examples / 48 optimizer updates per epoch, or 602,800 example
+  presentations / 4,800 updates per model across 100 epochs. Unique training
+  examples remain 6,028 per model. The first LSTM run measured 282.50 seconds
+  for 12 epochs; this projects roughly 40 minutes total for both 100-epoch
+  arms on CPU, before the long run's measured time is available.
 - This code path reads only the official train split. Do not invoke `--phase
   audit`; the UCI public test was already read once after the first candidate
   freeze and is permanently closed to this experiment.
