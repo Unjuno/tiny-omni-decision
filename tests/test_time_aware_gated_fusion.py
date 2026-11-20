@@ -53,6 +53,16 @@ def test_candidate_states_are_finite_masked_and_candidate_equivariant():
     torch.testing.assert_close(permuted, output[:, order], rtol=0, atol=1e-6)
 
 
+def test_default_audio_sensor_parameter_ledger_matches_report():
+    from tiny_omni_decision.time_aware_gated_fusion import TimeAwareGatedFusion
+
+    model = TimeAwareGatedFusion({"audio": 1, "sensor": 3}, 5)
+    assert model.parameter_ledger() == {
+        "total_parameters": 141_986,
+        "trainable_parameters": 141_986,
+    }
+
+
 def test_padding_is_ignored_and_missing_is_distinct_from_zero():
     model, stream_type, streams, queries, option_valid = fixture()
     baseline = model(streams, queries, option_valid)
