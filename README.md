@@ -23,6 +23,15 @@ sensor-content effect on observed development subjects, not unseen-person
 generalization or product use; the run overfit late. No sealed audit was read.
 [Protocol, curves, paired intervals and artifact hashes](docs/pretrained_reuse/R2M_CAPACITY_MATCHED_SENSOR_CONTROL_20261121.md).
 
+**2026-11-21 R2-M train-only participant CV:** Across seven held-out training
+participants, Audio-only reached 79.43% sample / 80.12% macro Accuracy versus
+72.29% / 73.27% for audio+vibration fusion; fusion also had worse macro NLL and
+Brier. Five of seven participants regressed. This exploratory grouped CV used
+5,449 OOF predictions, did not load sealed audit or previously exposed
+validation participants, and does not establish population-level quality.
+Do not promote this fusion head for the tested activity task.
+[Protocol, OOF metrics and hashes](docs/pretrained_reuse/R2M_TRAIN_ONLY_PARTICIPANT_CV_20261121.md).
+
 **2026-10-25 CoGenT-B one-time audit:** A frozen image+question decision
 probe reached 57.90% Accuracy on 15,000 held-out CLEVR-CoGenT-B images and
 responded measurably to image content versus gray/shuffled controls. Results

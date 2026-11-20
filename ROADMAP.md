@@ -4112,6 +4112,19 @@ subjects but does not establish new-person benefit. The control overfit late
 best epoch 4). No sealed audit or product promotion. Next require a fresh
 participant-grouped admitted source/task before generalizing sensor fusion.
 See [controlled protocol and results](docs/pretrained_reuse/R2M_CAPACITY_MATCHED_SENSOR_CONTROL_20261121.md).
+
+**2026-11-21 R2-M train-only participant-grouped CV:** Compared Audio-only
+against audio+vibration gated fusion across seven outer folds of the original
+training participants. On 5,449 paired OOF predictions and the same 24 choices,
+Audio-only reached 79.43% sample / 80.12% macro Accuracy (macro NLL 0.7044),
+while fusion reached 72.29% / 73.27% (macro NLL 1.2633). Fusion regressed on
+five of seven held-out participants. All 14 fits completed 80 epochs, showed
+late overfit, and selected checkpoints using only an inner participant's
+calibration rows. This is exploratory train-only CV with overlapping fit
+groups, not an independent final test or product-quality result. Sealed audit
+and previously exposed calibration/validation participants were not used. Do
+not promote this fusion candidate for this task; keep the broader sensor and
+four-modality objectives open. [Protocol, OOF metrics, histories and hashes](docs/pretrained_reuse/R2M_TRAIN_ONLY_PARTICIPANT_CV_20261121.md).
 **2026-11-21 R2 UCI HAR selected-validation error analysis:** Hash-verified the frozen static epoch-84 and LSTM epoch-15 prediction artifacts and analyzed the same 1,324 exposed validation windows. LSTM predicted `STANDING` for every `SITTING` sample (0% recall) and 220/230 `LAYING` samples (3.91% recall), consistently across four held-out participants; walking class behavior varied by participant. Static summary features remain stronger on this narrow prewindowed HAR task. This descriptive, selection-affected validation analysis loaded no signals, checkpoints, or official-test records and is not a blind or population-level estimate. See [protocol](docs/pretrained_reuse/R2_UCI_HAR_VALIDATION_ERROR_ANALYSIS_PROTOCOL_20261121.md) and [results](docs/pretrained_reuse/R2_UCI_HAR_VALIDATION_ERROR_ANALYSIS_20261121.md).
 **2026-11-21 R2-M HubEgo-100K source screen:** The pinned HF v1.0 card and paper report 72,754 episodes from 12,227 contributors with synchronized egocentric RGB/IMU and 35 machine-generated action families under CC BY 4.0. The official repository is access-gated and requires login plus a short form; no form or payload access was attempted. Its paper recommends contributor-disjoint evaluation and says a stratified split is available on request, but labels are not human-audited. This is a promising fresh video+sensor candidate, not yet admitted or evidence of both-input necessity. See [source screen](docs/pretrained_reuse/R2_HUBEGO100K_VIDEO_IMU_SOURCE_SCREEN_20261121.md) and [pinned metadata](manifests/pretrained_reuse/hubego100k-source-screen-20261121.json).
 **2026-11-21 R2 MiniWoB prospective evaluation record reconciled:** Verified the preserved 2026-11-14 CPU-only run over 1,024 accepted, previously unused seeds and screens. The frozen DINO screen-only scorer scored 96.97% on this synthetic click-color task; position-only, black-screen, and screen-shuffle controls were near four-choice chance. The checkpoint had earlier dev-validation selection history, so these episodes are now exposed development evidence and must not be tuned against. This does not establish general image/video quality or multimodal fusion. Do not repeat this cohort; prioritize rights-cleared, both-input-required R2 tasks. See [report](docs/pretrained_reuse/R2_MINIWOB_FROZEN_GENERALIZATION_20261114.md).

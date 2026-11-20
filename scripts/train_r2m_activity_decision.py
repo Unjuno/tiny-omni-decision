@@ -289,7 +289,7 @@ def prediction_rows(rows, vocabulary, probabilities):
 def evaluate(
     fusion, scorer, rows, vocabulary, mode, device, batch_size,
     *, modality_condition="normal", sensor_replacement=None, candidate_order=None,
-    sensor_normalization=None,
+    sensor_normalization=None, allow_missing_classes=False,
 ):
     fusion.eval()
     scorer.eval()
@@ -317,7 +317,10 @@ def evaluate(
         canonical_probabilities = np.empty_like(probabilities)
         canonical_probabilities[:, candidate_order] = probabilities
         probabilities = canonical_probabilities
-    metrics = activity_metrics(probabilities, labels_np, vocabulary)
+    metrics = activity_metrics(
+        probabilities, labels_np, vocabulary,
+        allow_missing_classes=allow_missing_classes,
+    )
     return metrics, probabilities, labels_np
 
 
@@ -325,6 +328,7 @@ def train_arm(
     mode, train_rows, calibration_rows, validation_rows, vocabulary, class_weights,
     output_dir, *, epochs, batch_size, learning_rate, weight_decay, device,
     sensor_normalization, modality_condition="normal",
+    validation_allow_missing_classes=False,
 ):
     seed = SEED
     random.seed(seed)
@@ -478,6 +482,7 @@ def train_arm(
         fusion, scorer, validation_rows, vocabulary, mode, device, batch_size,
         modality_condition=modality_condition,
         sensor_normalization=sensor_normalization,
+        allow_missing_classes=validation_allow_missing_classes,
     )
     if device.type == "cuda":
         peak_memory = int(torch.cuda.max_memory_allocated(device))

@@ -54,6 +54,20 @@ def test_activity_metrics_reject_missing_validation_class():
         )
 
 
+def test_activity_metrics_can_report_fold_missing_classes_explicitly():
+    metrics = activity_metrics(
+        np.array([[0.7, 0.2, 0.1], [0.2, 0.7, 0.1]]),
+        np.array([0, 1]),
+        ("a", "b", "c"),
+        allow_missing_classes=True,
+    )
+
+    assert metrics["choices"] == 3
+    assert metrics["macro_classes_evaluated"] == 2
+    assert set(metrics["per_activity"]) == {"a", "b"}
+    assert metrics["macro_accuracy"] == 1.0
+
+
 def test_sensor_normalization_is_per_axis_and_derived_from_training_values():
     mean, standard_deviation = train_sensor_normalization([
         np.array([[1.0, 9.0, -2.0], [3.0, 11.0, 2.0]]),

@@ -60,6 +60,8 @@ def activity_metrics(
     probabilities: np.ndarray,
     targets: np.ndarray,
     vocabulary: Sequence[str],
+    *,
+    allow_missing_classes: bool = False,
 ) -> dict[str, object]:
     """Compute standard and class-macro metrics for fixed supplied choices."""
     probabilities = np.asarray(probabilities, dtype=np.float64)
@@ -83,6 +85,8 @@ def activity_metrics(
     for index, label in enumerate(vocabulary):
         mask = targets == index
         if not mask.any():
+            if allow_missing_classes:
+                continue
             raise ValueError(f"activity {label!r} has no evaluation examples")
         per_activity[label] = {
             "examples": int(mask.sum()),
@@ -93,6 +97,7 @@ def activity_metrics(
     return {
         "examples": int(len(targets)),
         "choices": int(len(vocabulary)),
+        "macro_classes_evaluated": len(per_activity),
         "accuracy": float(correct.mean()),
         "macro_accuracy": float(np.mean([row["accuracy"] for row in per_activity.values()])),
         "nll": float(-np.log(chosen).mean()),
