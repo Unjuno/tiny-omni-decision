@@ -4054,3 +4054,27 @@ validation records found nonempty audio and equal-length vibration axes, with
 audio/vibration duration ratios from 0.99973 to 1.00040. This establishes
 format-level synchronization only; hard-negative feasibility and model
 quality remain untested. See [payload preflight and access correction](docs/pretrained_reuse/R2M_ZENODO_PAYLOAD_PREFLIGHT_20261120.md).
+
+**2026-11-20 R2-M frozen-feature and pair preflight follow-up:** One train-only
+record passed a strict frozen EfficientAT DyMN-0.4 load and yielded finite
+35x384 temporal audio features. A deterministic same-activity,
+duration-matched pair-index implementation passed focused CPU tests. The full
+allowed corpus yields 5,448 train, 759 calibration, and 761 validation anchors;
+validation has 395 cross-participant and 366 within-participant negatives.
+This supports a pilot but does not establish fusion quality. Feature caching
+and model fitting remain to be done; no sealed-audit signal was accessed and
+no model was fit. See
+[feature and pair preflight](docs/pretrained_reuse/R2M_EFFAT_FEATURE_AND_PAIR_PREFLIGHT_20261120.md).
+
+**2026-11-20 R2-M audio+vibration matching pilot complete:** Built and hash-
+verified frozen features for 6,971 allowed trial assets, then completed a
+seed-17, 80-epoch local RTX 3080 gated-readout run (54,480 updates; 178,563
+trainable parameters). Calibration selected epoch 16. Validation stayed at
+49.93% binary accuracy / 0.69315 NLL; paired two-candidate choice accuracy was
+45.34%, versus 50.59% for the fixed temporal-correlation baseline. Missing,
+wrong-trial and timing-shift controls showed no useful two-input dependence.
+This matching formulation is **not supported by the pilot** and does not
+measure the product target. No sealed audit, quantization or product promotion
+was performed. Preserve the checkpoints and exact prediction outputs outside
+Git; provenance caveats are recorded.
+See [full protocol and results](docs/pretrained_reuse/R2M_AUDIO_VIBRATION_MATCH_PILOT_20261120.md).
