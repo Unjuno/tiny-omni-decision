@@ -98,6 +98,33 @@ def test_fit_and_test_subject_overlap_fails_closed():
         require_disjoint_subjects([1, 2, 3], [3, 4])
 
 
+def test_effective_config_records_explicit_epoch_budget():
+    from scripts.uci_har_sensor_experiment import _training_config
+
+    config = _training_config(
+        "lstm",
+        "a" * 64,
+        [1, 2],
+        [3],
+        epochs=100,
+        source_commit="b" * 40,
+        script_sha256="c" * 64,
+    )
+
+    assert config["epochs"] == 100
+    assert config["seed"] == 17
+    assert config["compute_device"] == "cpu"
+
+
+def test_fit_rejects_nonpositive_budget_before_creating_output(tmp_path):
+    from scripts.uci_har_sensor_experiment import fit_phase
+
+    output = tmp_path / "must-not-be-created"
+    with pytest.raises(ValueError, match="epochs must be positive"):
+        fit_phase(tmp_path / "missing.zip", output, epochs=0)
+    assert not output.exists()
+
+
 @pytest.mark.parametrize("kind", ["static", "lstm"])
 def test_candidate_scorers_have_finite_forward_and_gradients(kind):
     import torch

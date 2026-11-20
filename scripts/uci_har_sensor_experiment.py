@@ -372,6 +372,7 @@ def _training_config(
     archive_sha256: str,
     train_subjects: list[int],
     validation_subjects: list[int],
+    epochs: int,
     source_commit: str,
     script_sha256: str,
 ) -> dict[str, object]:
@@ -393,7 +394,7 @@ def _training_config(
         "sample_period_ms": SAMPLE_PERIOD_MS,
         "normalization": "per-channel mean/std fit on training-subject windows only",
         "options": list(ACTIVITIES),
-        "epochs": EPOCHS,
+        "epochs": epochs,
         "batch_size": BATCH_SIZE,
         "optimizer": "AdamW",
         "learning_rate": LEARNING_RATE,
@@ -421,6 +422,7 @@ def _fit_model(
     option_features: Tensor,
     output: Path,
     normalization: tuple[np.ndarray, np.ndarray],
+    epochs: int,
 ) -> dict[str, object]:
     torch.manual_seed(SEED)
     np.random.seed(SEED)
@@ -437,7 +439,7 @@ def _fit_model(
     train_tensor = torch.from_numpy(train_x)
     target_tensor = torch.from_numpy(train_y.astype(np.int64) - 1)
 
-    for epoch in range(1, EPOCHS + 1):
+    for epoch in range(1, epochs + 1):
         epoch_start = time.perf_counter()
         model.train()
         generator = torch.Generator().manual_seed(SEED + epoch)
@@ -523,7 +525,9 @@ def _fit_model(
     }
 
 
-def fit_phase(archive_path: Path, output: Path) -> None:
+def fit_phase(archive_path: Path, output: Path, *, epochs: int = EPOCHS) -> None:
+    if epochs < 1:
+        raise ValueError("epochs must be positive")
     if output.exists():
         raise FileExistsError(f"refusing to overwrite existing experiment directory: {output}")
     output.mkdir(parents=True)
@@ -588,6 +592,7 @@ def fit_phase(archive_path: Path, output: Path) -> None:
             archive_hash,
             train_subjects,
             validation_subjects,
+            epochs,
             source_commit,
             script_sha256,
         )
@@ -608,6 +613,7 @@ def fit_phase(archive_path: Path, output: Path) -> None:
             option_features,
             output,
             (mean, scale),
+            epochs,
         )
     _write_json(
         output / "fit-summary.json",
@@ -623,7 +629,7 @@ def fit_phase(archive_path: Path, output: Path) -> None:
             "unique_train_subjects": len(train_subjects),
             "validation_example_count": len(validation_y),
             "unique_validation_subjects": len(validation_subjects),
-            "repeat_count_per_model": EPOCHS,
+            "repeat_count_per_model": epochs,
             "unique_train_samples_per_model": len(train_y),
             "static": results["static"],
             "lstm": results["lstm"],
@@ -800,11 +806,12 @@ def main() -> None:
     parser.add_argument("--phase", choices=("fit", "audit"), required=True)
     parser.add_argument("--archive", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--epochs", type=int, default=EPOCHS)
     args = parser.parse_args()
     if not args.archive.is_file():
         raise FileNotFoundError(args.archive)
     if args.phase == "fit":
-        fit_phase(args.archive, args.output_dir)
+        fit_phase(args.archive, args.output_dir, epochs=args.epochs)
         _write_json(args.output_dir / "environment.json", _environment())
     else:
         audit_phase(args.archive, args.output_dir)

@@ -38,5 +38,39 @@
     "official_test_policy": "parse once only after candidate configs and checkpoints are hash-frozen; public development reference, not blind audit",
     "output_path_policy": "local C:\\CodexArtifacts only; never add dataset or weights to Git"
   },
-  "protocol": "docs/pretrained_reuse/R2_UCI_HAR_SENSOR_TEMPORAL_PROTOCOL_20261120.md"
+  "protocol": "docs/pretrained_reuse/R2_UCI_HAR_SENSOR_TEMPORAL_PROTOCOL_20261120.md",
+  "observed_run": {
+    "run_id": "uci-har-sensor-v1-attempt-01",
+    "source_commit": "a80f567de7b328820c748289b0db5f506303cf68",
+    "runner_sha256": "c2db654a01811d088fed5a8564e9587a097341e4fb724cdde4588d21fba71899",
+    "fit_started_utc": "2026-11-20T07:22:34Z",
+    "fit_finished_utc": "2026-11-20T07:27:29Z",
+    "fit_split": {
+      "train_participants": 17,
+      "train_windows": 6028,
+      "validation_participants": 4,
+      "validation_windows": 1324,
+      "sampled_epochs_per_model": 12,
+      "selected_epoch_static": 12,
+      "selected_epoch_lstm": 12,
+      "split_manifest_sha256": "3e70b00bf16bd5eed7d3cfb04dfe66f7de78029f0c600d34c034584c5f45884c"
+    },
+    "one_time_public_test": {
+      "audit_started_utc": "2026-11-20T07:28:08Z",
+      "windows": 2947,
+      "participants": 9,
+      "fit_participant_overlap": 0,
+      "accuracy_static": 0.7044451985069562,
+      "accuracy_lstm": 0.5907702748557856,
+      "lstm_minus_static_accuracy_95_percent_ci": [
+        -0.15546167557039503,
+        -0.07096652342039284
+      ],
+      "test_reopened": false
+    },
+    "artifact_directory": "C:\\CodexArtifacts\\pretrained-reuse-r2\\uci-har-sensor-v1\\attempt-01\\fit",
+    "artifact_index_sha256": "D1EF37856D51819A18281398D246E20FC258BC4D1186778125FAA0BE70BD98E2",
+    "result_report": "docs/pretrained_reuse/R2_UCI_HAR_SENSOR_TEMPORAL_RESULTS_20261120.md",
+    "follow_up_protocol": "docs/pretrained_reuse/R2_UCI_HAR_SENSOR_LONG_BUDGET_PROTOCOL_20261120.md"
+  }
 }

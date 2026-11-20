@@ -39,10 +39,10 @@ channels, labels, and participant IDs. It does not use the companion video.
 - Arms: (1) static mean/std/min/max summaries with the shared typed scorer;
   (2) the causal 64-hidden-unit LSTM stem with the same option schema and
   128-hidden-unit readout. Both are initialized from scratch with seed 17.
-- Training: 12 epochs, batch size 128, AdamW, learning rate 0.001, weight decay
+- Initial training: 12 epochs, batch size 128, AdamW, learning rate 0.001, weight decay
   0.01, one CPU thread, deterministic Torch algorithms. Select the earliest
   epoch with minimum validation NLL. Preserve best and terminal weights and
-  all epoch metrics/predictions.
+  all epoch metrics plus predictions for the selected validation checkpoint.
 - Metrics: sample Accuracy, macro recall over represented activities, NLL,
   multiclass Brier, equal-width 10-bin ECE, mean confidence, and per-activity
   support/recall. The test comparison additionally uses a paired
@@ -52,6 +52,9 @@ channels, labels, and participant IDs. It does not use the companion video.
   once using the same preprocessing, then preserve every prediction. The
   official public test is a known development reference, not a blind global
   audit; it is not used for model selection, tuning, or retraining.
+- A separate, validation-only 100-epoch follow-up is registered in
+  [`R2_UCI_HAR_SENSOR_LONG_BUDGET_PROTOCOL_20261120.md`](R2_UCI_HAR_SENSOR_LONG_BUDGET_PROTOCOL_20261120.md).
+  It does not reopen the public test.
 - Compute and output: CPU only, local machine, no cloud. Dataset and model
   outputs remain outside Git under a new `C:\CodexArtifacts` directory. Existing
   corpora, checkpoints, branches, and artifacts are read-only.
