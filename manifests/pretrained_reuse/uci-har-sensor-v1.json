@@ -1,0 +1,42 @@
+{
+  "format": "pretrained_reuse_source_experiment_v1",
+  "experiment_id": "uci-har-sensor-temporal-v1",
+  "recorded_at": "2026-11-20T16:20:25+09:00",
+  "status": "ALLOW_BOUNDED_LOCAL_DEVELOPMENT_WITH_ATTRIBUTION",
+  "source": {
+    "dataset_id": 240,
+    "name": "Human Activity Recognition Using Smartphones",
+    "repository": "UCI Machine Learning Repository",
+    "url": "https://archive.ics.uci.edu/dataset/240/human+activity+recognition+using+smartphones",
+    "download_url": "https://archive.ics.uci.edu/static/public/240/human%2Bactivity%2Brecognition%2Busing%2Bsmartphones.zip",
+    "doi": "10.24432/C54S4K",
+    "license": "CC-BY-4.0",
+    "license_evidence": "Official UCI dataset page states CC BY 4.0 and permits sharing and adaptation with attribution.",
+    "license_evidence_url": "https://archive.ics.uci.edu/dataset/240/human+activity+recognition+using+smartphones",
+    "archive_sha256": "C00B803081A5C797CD5E4B83700A9810B38D53D9D84E01917E090E1FDBC81031",
+    "archive_bytes": 61005872,
+    "nested_dataset_archive": {
+      "name": "UCI HAR Dataset.zip",
+      "sha256": "2045E435C955214B38145FB5FA00776C72814F01B203FEC405152DAC7D5BFEB0",
+      "bytes": 60999314
+    }
+  },
+  "scope": {
+    "modality": "sensor",
+    "source_fields": [
+      "body_acc_x",
+      "body_acc_y",
+      "body_acc_z",
+      "body_gyro_x",
+      "body_gyro_y",
+      "body_gyro_z"
+    ],
+    "uses_companion_video": false,
+    "uses_pretrained_encoder": false,
+    "task": "six-option activity classification over one 128-sample sensor window",
+    "fit_split": "official train split only, with deterministic participant-disjoint train/validation partition",
+    "official_test_policy": "parse once only after candidate configs and checkpoints are hash-frozen; public development reference, not blind audit",
+    "output_path_policy": "local C:\\CodexArtifacts only; never add dataset or weights to Git"
+  },
+  "protocol": "docs/pretrained_reuse/R2_UCI_HAR_SENSOR_TEMPORAL_PROTOCOL_20261120.md"
+}
