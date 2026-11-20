@@ -27,6 +27,8 @@ This is a candidate design, not yet established as feasible. A source-format aud
 
 Before fitting, enumerate only the participant and trial identifiers needed to build a deterministic seed-17 participant split. Canonicalize participant IDs as decimal strings, compute SHA-256 of `r2m-zenodo-audio-vibration-match-v1|seed=17|participant=<id>`, sort by digest then numeric ID, and assign the first 8 participants to train, next 2 to calibration, next 2 to validation, and last 2 to sealed audit. Exclude the publisher's `participant=999` no-activity sentinel from participant counts. Freeze and hash the exact mapping before extracting signal features. Every `(participant, trial)` and all five device recordings / all derived crops remain in that participant's split. If the inventory is not exactly 14 real participants, or a split cannot support the predeclared pairing task, stop and revise the protocol before fitting; do not repair it by splitting trials from a participant across partitions.
 
+The pure identifier-only implementation is `freeze_audio_vibration_participant_split()` in `src/tiny_omni_decision/r2m_split.py`. Its CPU tests prove order independence, exact split sizes, sentinel handling, fail-closed inventory checks, per-group digest and manifest hash. It does not read any data payload.
+
 Sealed-audit rows and signals stay outside the iterative pipeline. Candidate choice, pairing rules, checkpoint selection, and architecture are frozen on train/calibration/validation only. Run the sealed audit once after selection. The dataset's existing activity labels are not themselves sealed evaluation labels; the new grouped split and pairing protocol must be frozen before any model fit.
 
 ## Resource and artifact boundaries
