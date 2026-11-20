@@ -8,7 +8,8 @@ import pytest
 torch = pytest.importorskip("torch")
 
 
-def request(tmp_path, *, clock_sensor="shared", sensor_valid=(True, True, False, True)):
+def request(tmp_path, *, clock_sensor="shared", sensor_valid=(True, True, False, True),
+            criterion_kind="typed", criterion_value="activity"):
     from tiny_omni_decision.observations import ObservationBatch
 
     video_path = tmp_path / "video.npz"
@@ -45,7 +46,7 @@ def request(tmp_path, *, clock_sensor="shared", sensor_valid=(True, True, False,
             {"option_id": "choice-2", "attributes": {"action": "walk"}},
             {"option_id": "choice-1", "attributes": {"action": "run"}},
         ],
-        "criterion": {"kind": "typed", "value": "activity"},
+        "criterion": {"kind": criterion_kind, "value": criterion_value},
     })
     return batch, video_path, sensor_path, video_values, sensor_values
 
@@ -139,6 +140,55 @@ def test_stale_optional_sensor_is_masked_while_fresh_video_can_decide(tmp_path):
     result = invoke(model, batch, max_age_ms=50.0, required=("video",))
     assert result["status"] == "selected"
     assert seen["sensor_valid"].tolist() == [False, False, False, False]
+
+
+def test_text_criterion_uses_content_addressed_frozen_question_cache(tmp_path):
+    from tiny_omni_decision.cache import ObservationFeatureCache
+    from tiny_omni_decision.observation_identity import text_observation_feature_key
+    from tiny_omni_decision.temporal_video_sensor_runtime import (
+        decide_cached_video_sensor_temporal,
+    )
+
+    question = "Which action best matches the observed motion?"
+    batch, *_ = request(tmp_path, criterion_kind="text", criterion_value=question)
+    key = text_observation_feature_key(
+        source_id="approved-question-encoder", source_revision="revision-1",
+        observation_text=question, encoder_id="approved-text-encoder",
+        encoder_revision="revision-1", encoder_weights_sha256="a" * 64,
+        tokenizer_sha256="b" * 64, preprocessing_sha256="c" * 64,
+        feature_role="question", hidden_size=2,
+    )
+    cache = ObservationFeatureCache(tmp_path / "text-cache")
+    cache.put(key, np.array([0.25, -0.5], dtype=np.float32).tobytes())
+    model = make_model()
+    observed = {}
+    original = model.decide
+
+    def track_decide(*args, **kwargs):
+        observed["context"] = kwargs["context_features"].clone()
+        return original(*args, **kwargs)
+
+    model.decide = track_decide
+    result = decide_cached_video_sensor_temporal(
+        model, batch, source_by_modality={"video": "cam", "sensor": "imu"},
+        query_time_ms=300.0, max_age_ms=250.0, required_modalities=("video", "sensor"),
+        option_features=torch.eye(2), context_cache=cache, context_key=key,
+        sensor_mean=torch.zeros(3), sensor_scale=torch.ones(3),
+    )
+    assert result["status"] == "selected"
+    torch.testing.assert_close(observed["context"], torch.tensor([0.25, -0.5]))
+    altered_dir = tmp_path / "altered"
+    altered_dir.mkdir()
+    altered, *_ = request(
+        altered_dir, criterion_kind="text", criterion_value=question + " Now choose."
+    )
+    with pytest.raises(ValueError, match="exact supplied question"):
+        decide_cached_video_sensor_temporal(
+            model, altered, source_by_modality={"video": "cam", "sensor": "imu"},
+            query_time_ms=300.0, max_age_ms=250.0, required_modalities=("video", "sensor"),
+            option_features=torch.eye(2), context_cache=cache, context_key=key,
+            sensor_mean=torch.zeros(3), sensor_scale=torch.ones(3),
+        )
 
 
 @pytest.mark.parametrize("case", ["payload_hash", "clock_mismatch", "future_context"])

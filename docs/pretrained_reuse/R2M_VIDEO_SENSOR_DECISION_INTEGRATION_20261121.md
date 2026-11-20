@@ -29,10 +29,15 @@ The hash-checked runtime adapter is implemented in
 NPZ payload hashes and exact timestamps/masks, applies declared sensor-channel
 calibration followed by supplied train-derived normalization, masks future or
 stale rows, abstains on required stale streams, and then calls the temporal
-scorer. Six additional focused tests cover JSON order, calibration, stale
-required/optional streams, future evidence, clock mismatch and hash corruption.
-The entire CPU suite after this addition: **3,003 passed / 11 skipped**; Ruff
-passed.
+scorer. Text criteria can provide a question vector only through the persistent
+observation feature cache: its key must identify the exact criterion text, the
+frozen encoder/preprocessor revisions and the expected vector width. The cache
+payload digest is rechecked before use. Spoken criteria and text parameters that
+are not represented by that vector fail closed. Seven focused runtime tests
+cover JSON order, calibration, stale required/optional streams, future evidence,
+clock mismatch, hash corruption and mismatched text-question cache keys. The
+entire CPU suite after text-cache support: **3,004 passed / 11 skipped**; Ruff
+and `git diff --check` pass.
 
 Tests exercise distinct decision contexts on the same observation, candidate
 permutation, option masking, video-only/sensor-only and

@@ -12,6 +12,7 @@ import numpy as np
 import torch
 from torch import Tensor
 
+from .cache import ObservationFeatureCache, ObservationFeatureKey
 from .native_feature_decision import TypedOptionSchema
 from .observations import ObservationBatch
 from .video_sensor_temporal_decision import VideoSensorTemporalDecisionScorer
@@ -69,6 +70,8 @@ def decide_cached_video_sensor_temporal(
     option_features: Tensor | None = None,
     option_schema: TypedOptionSchema | None = None,
     context_features: Tensor | None = None,
+    context_cache: ObservationFeatureCache | None = None,
+    context_key: ObservationFeatureKey | None = None,
     class_ids: list[str] | None = None,
     temperature: float = 1.0,
 ) -> dict[str, object]:
@@ -100,10 +103,36 @@ def decide_cached_video_sensor_temporal(
             or not math.isfinite(max_age_ms) or max_age_ms < 0
             or not math.isfinite(temperature) or temperature <= 0):
         raise ValueError("finite query time, nonnegative age and positive temperature required")
-    if batch.criterion is not None and batch.criterion.kind != "typed":
-        raise ValueError("temporal video-sensor runtime accepts typed criteria only")
+    if batch.criterion is not None and batch.criterion.kind == "spoken":
+        raise ValueError("spoken criteria need a separately admitted audio-context route")
+    if (context_cache is None) != (context_key is None):
+        raise ValueError("text context cache and exact feature key must be supplied together")
+    if batch.criterion is not None and batch.criterion.kind == "text":
+        if batch.criterion.parameters:
+            raise ValueError(
+                "text criteria with extra parameters need an explicit combined context encoder"
+            )
+        if context_features is not None or context_cache is None or context_key is None:
+            raise ValueError("text criterion requires its content-addressed frozen feature cache")
+        expected_text_hash = hashlib.sha256(batch.criterion.value.encode("utf-8")).hexdigest()
+        if (context_key.modality != "text"
+                or context_key.observation_sha256 != expected_text_hash
+                or context_key.feature_shape != (model.context_width,)
+                or context_key.feature_dtype != "float32"
+                or context_key.feature_name != "masked_mean_question"):
+            raise ValueError("text context cache key does not match the exact supplied question")
+        cached_context = context_cache.get(context_key)
+        if len(cached_context.payload) != model.context_width * 4:
+            raise ValueError("cached text context payload has the wrong byte length")
+        context_features = torch.frombuffer(
+            bytearray(cached_context.payload), dtype=torch.float32
+        ).clone()
+        if not torch.isfinite(context_features).all():
+            raise ValueError("cached text context features must be finite")
+    elif context_cache is not None:
+        raise ValueError("content-addressed text cache is only valid for a text criterion")
     if batch.criterion is not None and context_features is None:
-        raise ValueError("typed criterion requires precomputed context features")
+        raise ValueError("criterion requires precomputed context features")
     batch.require_shared_clock()
 
     observations = {observation.source_id: observation for observation in batch.observations}
