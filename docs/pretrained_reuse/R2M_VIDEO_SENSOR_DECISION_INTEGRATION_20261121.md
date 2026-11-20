@@ -24,6 +24,16 @@ load raw media or include encoder parameters in its parameter count.
 `uv run ruff check src/tiny_omni_decision/video_sensor_temporal_decision.py
 tests/test_video_sensor_temporal_decision.py`: **passed**.
 
+The hash-checked runtime adapter is implemented in
+`src/tiny_omni_decision/temporal_video_sensor_runtime.py`. It verifies complete
+NPZ payload hashes and exact timestamps/masks, applies declared sensor-channel
+calibration followed by supplied train-derived normalization, masks future or
+stale rows, abstains on required stale streams, and then calls the temporal
+scorer. Six additional focused tests cover JSON order, calibration, stale
+required/optional streams, future evidence, clock mismatch and hash corruption.
+The entire CPU suite after this addition: **3,003 passed / 11 skipped**; Ruff
+passed.
+
 Tests exercise distinct decision contexts on the same observation, candidate
 permutation, option masking, video-only/sensor-only and
 both-missing behavior, present-zero versus missing sensor, trainable paths through
@@ -48,6 +58,15 @@ The output was finite `[1,21]`; 20 warmed-up model-only forwards averaged
 PyTorch 2.6.0+cu124, CUDA 12.4. This excludes video/audio feature extraction,
 preprocessing, host/device transfer and application overhead; it is not an
 end-to-end latency or quality measurement.
+
+The full hash-check/load/normalize/Decision JSON path was also smoke-tested
+with a temporary synthetic cache on the RTX 3080: 8 × 768 video features,
+250 × 6 sensor rows, 128 context features and 21 choices. Ten runs averaged
+17.17 ms including file reads, SHA-256 checks, calibration, CPU→GPU transfer
+and inference; peak PyTorch allocation was 18.57 MB. The probability sum was
+1.00000002 and status was `selected`. The temporary cache was removed at process
+exit. This validates execution plumbing only; the features and model weights
+were synthetic/random, so it provides no task-quality evidence.
 
 ## Next evidence gate
 
