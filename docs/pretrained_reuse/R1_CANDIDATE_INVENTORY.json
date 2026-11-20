@@ -760,6 +760,12 @@
       "date": "2026-11-02",
       "scope": "append pinned DINOv2-base Apache-2.0 weights and CPU exact-reload smoke; prior candidate records preserved",
       "report": "docs/pretrained_reuse/R2_PHYSICALAI_SINGLEARM_SOURCE_SCREEN_20261102.md"
+    },
+    {
+      "date": "2026-11-21",
+      "scope": "reverify the existing VideoPrism-B checkpoint hash and reproduce its deterministic eight-frame CPU feature output in a new non-overwriting attempt",
+      "report": "docs/pretrained_reuse/R1_VIDEOPRISM_RUNTIME_RECHECK_20261121.md",
+      "result_sha256": "4bb8e29dd41e56515bba86be85516001b7ef87b6212f5159b32250dc53e77ba4"
     }
   ]
 }
