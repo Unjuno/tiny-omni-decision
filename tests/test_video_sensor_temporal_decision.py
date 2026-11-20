@@ -143,3 +143,14 @@ def test_video_sensor_checkpoint_roundtrip_preserves_logits_and_config_gate():
     )
     with pytest.raises(ValueError, match="configuration"):
         mismatched.load_state_dict(state, strict=False)
+
+
+def test_parameter_ledger_counts_only_this_candidate_readout():
+    (model, *_rest) = build_fixture()
+    assert model.parameter_ledger() == {
+        "sensor_temporal_stem": 220,
+        "temporal_fusion": 1338,
+        "candidate_scorer": 113,
+        "total_readout_parameters": 1671,
+        "trainable_readout_parameters": 1671,
+    }

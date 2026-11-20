@@ -20,7 +20,7 @@ load raw media or include encoder parameters in its parameter count.
 
 ## Verification
 
-`uv run pytest tests/test_video_sensor_temporal_decision.py -q`: **4 passed**.
+`uv run pytest tests/test_video_sensor_temporal_decision.py -q`: **6 passed**.
 `uv run ruff check src/tiny_omni_decision/video_sensor_temporal_decision.py
 tests/test_video_sensor_temporal_decision.py`: **passed**.
 
@@ -30,8 +30,24 @@ both-missing behavior, present-zero versus missing sensor, trainable paths throu
 the sensor LSTM/fusion/readout, JSON option ordering, and strict configuration
 checkpoint round-trip. These are CPU mechanics tests only. The model is randomly
 initialized and untrained; no dataset, quality improvement, multimodal benefit,
-calibration, hardware performance, or product admission is established. No GPU,
-training data, checkpoint, or sealed evaluation was used.
+calibration, or product admission is established. No training data, checkpoint,
+or sealed evaluation was used.
+
+For an explicit size example, a configuration with 768-wide video tokens,
+6 sensor channels, 128 context features, 64 option features, 64-wide sensor
+state, and 96-wide fusion totals **295,235 trainable readout parameters**:
+18,688 sensor LSTM, 239,426 fusion, and 37,121 candidate scorer. Adding the
+already measured 114,365,184-parameter frozen VideoPrism-B gives 114,660,419
+parameters for that visual-plus-sensor path only. This excludes audio/text
+encoders and is not a complete Omni parameter or package-size claim.
+
+A CUDA mechanics smoke on the local RTX 3080 Laptop used synthetic supplied
+features with batch 1, 8 video tokens, a 250-step sensor window, and 21 choices.
+The output was finite `[1,21]`; 20 warmed-up model-only forwards averaged
+17.79 ms. Peak PyTorch allocation/reservation was 18.57/25.17 MB. Environment:
+PyTorch 2.6.0+cu124, CUDA 12.4. This excludes video/audio feature extraction,
+preprocessing, host/device transfer and application overhead; it is not an
+end-to-end latency or quality measurement.
 
 ## Next evidence gate
 

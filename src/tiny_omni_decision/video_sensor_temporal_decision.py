@@ -95,6 +95,23 @@ class VideoSensorTemporalDecisionScorer(nn.Module):
     def parameter_count(self) -> int:
         return sum(parameter.numel() for parameter in self.parameters())
 
+    def parameter_ledger(self) -> dict[str, int]:
+        """Count trainable readout components; upstream encoders are excluded."""
+        components = {
+            "sensor_temporal_stem": self.sensor_stem,
+            "temporal_fusion": self.fusion,
+            "candidate_scorer": self.scorer,
+        }
+        ledger = {
+            name: sum(parameter.numel() for parameter in module.parameters())
+            for name, module in components.items()
+        }
+        ledger["total_readout_parameters"] = sum(ledger.values())
+        ledger["trainable_readout_parameters"] = sum(
+            parameter.numel() for parameter in self.parameters() if parameter.requires_grad
+        )
+        return ledger
+
     def forward(
         self,
         video_values: Tensor,
