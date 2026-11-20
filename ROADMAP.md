@@ -4078,3 +4078,16 @@ measure the product target. No sealed audit, quantization or product promotion
 was performed. Preserve the checkpoints and exact prediction outputs outside
 Git; provenance caveats are recorded.
 See [full protocol and results](docs/pretrained_reuse/R2M_AUDIO_VIBRATION_MATCH_PILOT_20261120.md).
+
+**2026-11-21 R2-M supplied-activity Decision comparison:** Three fixed-budget
+attempts are preserved. Attempt 3 changed only AdamW weight decay from 0.01 to
+0.1 after train-only vibration normalization. The gated audio+vibration model
+improved over attempt 2 on the same 762 validation IDs (sample Accuracy
+71.92%→75.85%, macro Accuracy 64.80%→72.46%, macro NLL 0.9455→0.8908, macro
+Brier 0.4698→0.3870), while audio-only regressed. Sensor shuffling still
+changed fusion scores little, and there are only two validation participants;
+this is a promising development result, not evidence of robust sensor benefit
+or product quality. All three arms completed 80 epochs and late NLL showed
+strong overfitting. Keep attempts and checkpoints separate, do not promote the
+model, and retain the open 95–98% four-modality objective. No sealed audit or
+quantization. See [full report](docs/pretrained_reuse/R2M_SUPPLIED_ACTIVITY_DECISION_20261121.md).

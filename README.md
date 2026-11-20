@@ -1174,3 +1174,14 @@ NLL.4133→.3983; random Accuracy and Brier worsen, so the combined prospective
 gate fails. Keep equal weights and close this coefficient comparison; no new
 runtime/Teacher promotion. The four-modality95–98% objective remains unmet.
 [Curves, paired intervals, all attempts and hashes](docs/pretrained_reuse/R2_AV_SLOT_WEIGHTS_RESULTS_20261015.md).
+
+**2026-11-21 R2-M supplied-activity Decision comparison:** On the frozen
+participant split, an 80-epoch weight-decay comparison (`0.01`→`0.1`) improved
+the gated audio+vibration candidate from 71.92% to 75.85% sample Accuracy and
+from 64.80% to 72.46% macro Accuracy, but regressed audio-only performance and
+shuffled-sensor control still changed little. This is a promising
+validation-only candidate with two held-out participants and strong late
+overfitting, not product quality evidence. The task has 21 supplied activity
+choices, not arbitrary text-choice or four-modality coverage. No sealed audit
+or promotion. [Protocol, all three attempts, paired uncertainty and
+limits](docs/pretrained_reuse/R2M_SUPPLIED_ACTIVITY_DECISION_20261121.md).
