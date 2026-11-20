@@ -13,7 +13,7 @@ def build_fixture():
     torch.manual_seed(1701)
     model = VideoSensorTemporalDecisionScorer(
         video_feature_width=6, sensor_channels=3, option_width=4,
-        sensor_hidden_size=5, width=8, heads=2, scorer_hidden_width=7,
+        context_width=2, sensor_hidden_size=5, width=8, heads=2, scorer_hidden_width=7,
     )
     video = torch.randn(2, 3, 6)
     video_times = torch.tensor([[0., 20., 40.], [10., 30., 50.]])
@@ -49,6 +49,25 @@ def test_video_sensor_logits_are_masked_candidate_equivariant_and_trainable():
     assert model.sensor_stem.lstm.weight_ih_l0.grad is not None
     assert model.fusion.attention.in_proj_weight.grad is not None
     assert model.scorer.network[0].weight.grad is not None
+
+
+def test_same_video_and_options_accept_distinct_typed_decision_contexts():
+    (model, video, video_times, video_valid, video_present,
+     sensor, sensor_times, sensor_valid, sensor_present, options, option_valid) = build_fixture()
+    context = torch.tensor([[0.0, 1.0], [1.0, 0.0]])
+    first = model(
+        video, video_times, video_valid, video_present,
+        sensor, sensor_times, sensor_valid, sensor_present,
+        options, option_valid, context_features=context,
+    )
+    changed_context = context.clone()
+    changed_context[0] = torch.tensor([1.0, 0.0])
+    second = model(
+        video, video_times, video_valid, video_present,
+        sensor, sensor_times, sensor_valid, sensor_present,
+        options, option_valid, context_features=changed_context,
+    )
+    assert not torch.allclose(first[0, :2], second[0, :2], rtol=0, atol=1e-7)
 
 
 def test_missing_sensor_is_distinct_from_present_zero_and_json_keeps_option_ids():
@@ -120,7 +139,7 @@ def test_video_sensor_checkpoint_roundtrip_preserves_logits_and_config_gate():
 
     mismatched = type(model)(
         video_feature_width=6, sensor_channels=3, option_width=4,
-        sensor_hidden_size=6, width=8, heads=2, scorer_hidden_width=7,
+        context_width=2, sensor_hidden_size=6, width=8, heads=2, scorer_hidden_width=7,
     )
     with pytest.raises(ValueError, match="configuration"):
         mismatched.load_state_dict(state, strict=False)

@@ -27,6 +27,7 @@ class VideoSensorTemporalDecisionScorer(nn.Module):
         sensor_channels: int,
         option_width: int,
         *,
+        context_width: int = 0,
         sensor_hidden_size: int = 64,
         width: int = 96,
         heads: int = 4,
@@ -37,11 +38,14 @@ class VideoSensorTemporalDecisionScorer(nn.Module):
         if min(video_feature_width, sensor_channels, option_width,
                sensor_hidden_size, scorer_hidden_width) < 1:
             raise ValueError("feature and hidden widths must be positive")
+        if type(context_width) is not int or context_width < 0:
+            raise ValueError("context_width must be a nonnegative integer")
         if not math.isfinite(time_unit_ms) or time_unit_ms <= 0:
             raise ValueError("time_unit_ms must be finite and positive")
         self.video_feature_width = video_feature_width
         self.sensor_channels = sensor_channels
         self.option_width = option_width
+        self.context_width = context_width
         self.sensor_hidden_size = sensor_hidden_size
         self.width = width
         self.heads = heads
@@ -52,13 +56,13 @@ class VideoSensorTemporalDecisionScorer(nn.Module):
         )
         self.fusion = TimeAwareGatedFusion(
             {"video": video_feature_width, "sensor": sensor_hidden_size},
-            option_width,
+            option_width + context_width,
             width=width,
             heads=heads,
             time_unit_ms=time_unit_ms,
         )
         self.scorer = FrozenFeatureCandidateScorer(
-            width + option_width, hidden_size=scorer_hidden_width
+            width + context_width + option_width, hidden_size=scorer_hidden_width
         )
 
     def _configuration(self) -> dict[str, object]:
@@ -67,6 +71,7 @@ class VideoSensorTemporalDecisionScorer(nn.Module):
             "video_feature_width": self.video_feature_width,
             "sensor_channels": self.sensor_channels,
             "option_width": self.option_width,
+            "context_width": self.context_width,
             "sensor_hidden_size": self.sensor_hidden_size,
             "width": self.width,
             "heads": self.heads,
@@ -102,6 +107,8 @@ class VideoSensorTemporalDecisionScorer(nn.Module):
         sensor_present: Tensor,
         option_features: Tensor,
         option_valid: Tensor,
+        *,
+        context_features: Tensor | None = None,
     ) -> Tensor:
         reference = self.fusion.modality.weight
         if (video_values.ndim != 3 or video_values.shape[-1] != self.video_feature_width
@@ -115,10 +122,17 @@ class VideoSensorTemporalDecisionScorer(nn.Module):
             raise ValueError("video and sensor features must match model dtype")
         if option_features.dtype != reference.dtype:
             raise ValueError("option features must match model dtype")
+        if context_features is None:
+            context_features = option_features.new_zeros((batch, self.context_width))
+        if (not isinstance(context_features, Tensor)
+                or context_features.shape != (batch, self.context_width)
+                or context_features.dtype != reference.dtype):
+            raise ValueError("context features must match [batch, configured_context_width]")
         if any(value.device != reference.device for value in (
             video_values, video_timestamps_ms, video_valid, video_present,
             sensor_values, sensor_timestamps_ms, sensor_valid, sensor_present,
             option_features, option_valid,
+            context_features,
         )):
             raise ValueError("all features, timestamps and masks must share model device")
         if sensor_timestamps_ms.dtype != sensor_values.dtype:
@@ -156,11 +170,15 @@ class VideoSensorTemporalDecisionScorer(nn.Module):
                 sensor_present[:, None], sensor_present,
             ),
         }
-        fused = self.fusion(streams, option_features, option_valid)
+        context_by_option = context_features[:, None, :].expand(
+            -1, option_features.shape[1], -1
+        )
+        queries = torch.cat((context_by_option, option_features), dim=-1)
+        fused = self.fusion(streams, queries, option_valid)
         clean_options = torch.where(
             option_valid[..., None], option_features, torch.zeros_like(option_features)
         )
-        candidate_features = torch.cat((fused, clean_options), dim=-1)
+        candidate_features = torch.cat((fused, context_by_option, clean_options), dim=-1)
         logits = self.scorer(candidate_features)
         if not torch.isfinite(logits[option_valid]).all():
             raise ValueError("video-sensor decision produced non-finite logits")
@@ -179,6 +197,7 @@ class VideoSensorTemporalDecisionScorer(nn.Module):
         option_ids: list[str],
         class_ids: list[str],
         *,
+        context_features: Tensor | None = None,
         temperature: float = 1.0,
     ) -> dict[str, object]:
         """Return probabilities in the supplied option order for one example."""
@@ -197,6 +216,13 @@ class VideoSensorTemporalDecisionScorer(nn.Module):
         device, dtype = parameter.device, parameter.dtype
         video_values = video_values.to(device=device, dtype=dtype)
         option_features = option_features.to(device=device, dtype=dtype)
+        if context_features is None:
+            context_features = option_features.new_zeros(self.context_width)
+        elif (not isinstance(context_features, Tensor)
+                or context_features.shape != (self.context_width,)):
+            raise ValueError("context_features must have configured context width")
+        else:
+            context_features = context_features.to(device=device, dtype=dtype)
         sensor_values = sensor_values.to(device=device, dtype=dtype)
         video_timestamps_ms = video_timestamps_ms.to(device=device)
         sensor_timestamps_ms = sensor_timestamps_ms.to(device=device, dtype=dtype)
@@ -211,6 +237,7 @@ class VideoSensorTemporalDecisionScorer(nn.Module):
             sensor_valid.unsqueeze(0), sensor_present,
             option_features.unsqueeze(0),
             torch.ones((1, len(option_features)), dtype=torch.bool, device=device),
+            context_features=context_features.unsqueeze(0),
         )[0].float() / temperature
         probabilities = torch.softmax(logits, dim=-1).cpu().tolist()
         options = [

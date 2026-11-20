@@ -5,8 +5,10 @@
 Added `VideoSensorTemporalDecisionScorer`, a small trainable readout that joins
 caller-supplied frozen per-frame video features with a causal `SensorTemporalLSTMStem`.
 The sensor window is encoded into one state token timestamped at its final valid
-sample. `TimeAwareGatedFusion` conditions on the caller's typed candidate vectors,
-and `FrozenFeatureCandidateScorer` returns one masked logit per supplied choice.
+sample. `TimeAwareGatedFusion` conditions on caller-supplied context and typed
+candidate vectors, so the same observation can be queried under multiple
+decision conditions. `FrozenFeatureCandidateScorer` returns one masked logit
+per supplied choice.
 The inference adapter emits the repository's fixed-taxonomy probability JSON and
 preserves caller option IDs and order.
 
@@ -22,7 +24,8 @@ load raw media or include encoder parameters in its parameter count.
 `uv run ruff check src/tiny_omni_decision/video_sensor_temporal_decision.py
 tests/test_video_sensor_temporal_decision.py`: **passed**.
 
-Tests exercise candidate permutation, option masking, video-only/sensor-only and
+Tests exercise distinct decision contexts on the same observation, candidate
+permutation, option masking, video-only/sensor-only and
 both-missing behavior, present-zero versus missing sensor, trainable paths through
 the sensor LSTM/fusion/readout, JSON option ordering, and strict configuration
 checkpoint round-trip. These are CPU mechanics tests only. The model is randomly
