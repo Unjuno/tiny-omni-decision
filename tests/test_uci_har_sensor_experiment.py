@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import io
+import json
 import zipfile
 
 import numpy as np
@@ -159,5 +160,62 @@ def test_public_test_audit_requires_freeze_before_reading_test(tmp_path):
     output = tmp_path / "attempt"
     output.mkdir()
     with pytest.raises(FileNotFoundError, match="frozen candidate"):
-        audit_phase(archive_path, output)
+        audit_phase(archive_path, output, receipt_dir=tmp_path / "receipts")
     assert not (output / "official-test-audit-started.json").exists()
+    assert not (tmp_path / "receipts").exists()
+
+
+def test_public_test_source_hash_cannot_be_reopened_in_another_output(tmp_path, monkeypatch):
+    import scripts.uci_har_sensor_experiment as experiment
+
+    archive_path = tmp_path / "same-source.zip"
+    archive_path.write_bytes(b"archive bytes are not opened by this regression")
+    output = tmp_path / "new-output"
+    output.mkdir()
+    monkeypatch.setattr(
+        experiment,
+        "_sha256",
+        lambda path: (
+            "c00b803081a5c797cd5e4b83700a9810b38d53d9d84e01917e090e1fdbc81031"
+            if path == archive_path
+            else "f" * 64
+        ),
+    )
+
+    with pytest.raises(FileExistsError, match="permanently closed"):
+        experiment.audit_phase(archive_path, output, receipt_dir=tmp_path / "receipts")
+
+    assert not (output / "official-test-audit-started.json").exists()
+    assert not (tmp_path / "receipts").exists()
+
+
+def test_public_test_audit_receipt_is_global_to_source_hash(tmp_path):
+    from scripts.uci_har_sensor_experiment import (
+        _claim_audit_source,
+        _mark_audit_source_loaded,
+    )
+
+    freeze_path = tmp_path / "candidate-freeze.json"
+    freeze_path.write_text('{"frozen_before_test_read": true}\n', encoding="utf-8")
+    output = tmp_path / "attempt-one"
+    output.mkdir()
+    receipt_dir = tmp_path / "receipts"
+
+    receipt = _claim_audit_source(
+        "d" * 64,
+        output=output,
+        freeze_path=freeze_path,
+        receipt_dir=receipt_dir,
+    )
+    assert receipt.is_file()
+    _mark_audit_source_loaded(receipt)
+    assert json.loads(receipt.read_text(encoding="utf-8"))["state"].startswith(
+        "test_split_loaded"
+    )
+    with pytest.raises(FileExistsError, match="already claimed"):
+        _claim_audit_source(
+            "d" * 64,
+            output=tmp_path / "attempt-two",
+            freeze_path=freeze_path,
+            receipt_dir=receipt_dir,
+        )

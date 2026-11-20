@@ -74,6 +74,65 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _closed_audit_source_hashes() -> set[str]:
+    registry_path = (
+        Path(__file__).resolve().parents[1]
+        / "manifests"
+        / "pretrained_reuse"
+        / "closed-public-test-audits.json"
+    )
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    return {
+        str(record["source_archive_sha256"]).lower()
+        for record in registry["closed_sources"]
+        if record.get("official_test_loaded") is True or record.get("reopen_allowed") is False
+    }
+
+
+def _default_audit_receipt_dir() -> Path:
+    local_app_data = os.environ.get("LOCALAPPDATA")
+    root = Path(local_app_data) if local_app_data else Path.home() / ".cache"
+    return root / "tiny-omni-decision" / "closed-public-test-audits"
+
+
+def _claim_audit_source(
+    archive_sha256: str,
+    *,
+    output: Path,
+    freeze_path: Path,
+    receipt_dir: Path | None = None,
+) -> Path:
+    archive_sha256 = archive_sha256.lower()
+    if archive_sha256 in _closed_audit_source_hashes():
+        raise FileExistsError("official test for this source archive is permanently closed")
+    registry_dir = receipt_dir or _default_audit_receipt_dir()
+    registry_dir.mkdir(parents=True, exist_ok=True)
+    receipt_path = registry_dir / f"{archive_sha256}.json"
+    receipt = {
+        "archive_sha256": archive_sha256,
+        "claimed_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "output_directory": str(output.resolve()),
+        "candidate_freeze_sha256": _sha256(freeze_path),
+        "state": "reserved_before_test_read; never retry this source hash",
+    }
+    try:
+        with receipt_path.open("x", encoding="utf-8") as stream:
+            json.dump(receipt, stream, indent=2)
+            stream.write("\n")
+    except FileExistsError as exc:
+        raise FileExistsError(
+            "official test audit was already claimed for this source archive"
+        ) from exc
+    return receipt_path
+
+
+def _mark_audit_source_loaded(receipt_path: Path) -> None:
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    receipt["state"] = "test_split_loaded; never retry this source hash"
+    receipt["test_loaded_utc"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    receipt_path.write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf-8")
+
+
 def _member(archive: zipfile.ZipFile, suffix: str) -> str:
     matches = [name for name in archive.namelist() if name.endswith(suffix)]
     if len(matches) != 1:
@@ -696,17 +755,26 @@ def _subject_bootstrap(
     }
 
 
-def audit_phase(archive_path: Path, output: Path) -> None:
+def audit_phase(
+    archive_path: Path,
+    output: Path,
+    *,
+    receipt_dir: Path | None = None,
+) -> None:
     freeze_path = output / "candidate-freeze.json"
     attempt_path = output / "official-test-audit-started.json"
     result_path = output / "official-test-audit.json"
+    archive_sha256 = _sha256(archive_path)
+    if archive_sha256 in _closed_audit_source_hashes():
+        raise FileExistsError("official test for this source archive is permanently closed")
     if not freeze_path.is_file():
         raise FileNotFoundError("frozen candidate record is required before test evaluation")
     if attempt_path.exists() or result_path.exists():
         raise FileExistsError("official test audit is at-most-once; refusing to reopen it")
     freeze = json.loads(freeze_path.read_text(encoding="utf-8"))
-    if not freeze.get("frozen_before_test_read") or freeze["source_archive_sha256"] != _sha256(
-        archive_path
+    if (
+        not freeze.get("frozen_before_test_read")
+        or freeze["source_archive_sha256"] != archive_sha256
     ):
         raise ValueError("candidate freeze or source archive identity mismatch")
     for kind, record in freeze["candidates"].items():
@@ -717,11 +785,17 @@ def audit_phase(archive_path: Path, output: Path) -> None:
             or _sha256(config_path) != record["effective_config_sha256"]
         ):
             raise ValueError(f"frozen {kind} candidate files changed")
+    audit_receipt_path = _claim_audit_source(
+        archive_sha256,
+        output=output,
+        freeze_path=freeze_path,
+        receipt_dir=receipt_dir,
+    )
     attempt_path.write_text(
         json.dumps(
             {
                 "attempt_started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                "archive_sha256": _sha256(archive_path),
+                "archive_sha256": archive_sha256,
                 "candidate_freeze_sha256": _sha256(freeze_path),
             },
             indent=2,
@@ -732,6 +806,7 @@ def audit_phase(archive_path: Path, output: Path) -> None:
 
     with _open_uci_har_data(archive_path) as archive:
         test_values, test_labels, test_subjects = load_uci_har_split(archive, "test")
+    _mark_audit_source_loaded(audit_receipt_path)
     fit_summary = json.loads((output / "fit-summary.json").read_text(encoding="utf-8"))
     split_manifest = json.loads((output / "split-manifest.json").read_text(encoding="utf-8"))
     subjects_seen_during_fit = sorted(

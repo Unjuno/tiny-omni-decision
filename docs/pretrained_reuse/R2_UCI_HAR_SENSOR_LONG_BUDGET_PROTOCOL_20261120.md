@@ -40,3 +40,12 @@ This is a validation-only budget follow-up for one narrow sensor activity
 task. It does not qualify a product model, close the sensor deterministic-rule
 baseline, establish a four-modality result, or justify any inference about a
 general architecture ceiling.
+
+## Recorded outcome
+
+The frozen run completed both 100-epoch arms on 2026-11-20. Static selected
+epoch 84 (validation Accuracy 76.06%, NLL 0.6270); LSTM selected epoch 15
+(62.01%, NLL 0.7278). The first 12 epochs exactly matched the prior run's
+metrics. The full validation curve and interpretation are recorded in
+[`R2_UCI_HAR_SENSOR_LONG_BUDGET_RESULTS_20261120.md`](R2_UCI_HAR_SENSOR_LONG_BUDGET_RESULTS_20261120.md).
+The official public test was not reopened.
