@@ -72,7 +72,8 @@ def test_sensor_temporal_decision_scorer_is_candidate_equivariant():
     original = model(values, timestamps, valid, options, option_valid)
     permuted = model(values, timestamps, valid, options[:, order], option_valid[:, order])
 
-    torch.testing.assert_close(permuted, original[:, order], rtol=0, atol=0)
+    # Candidate batching may change FP32 reduction order by a few ULPs.
+    torch.testing.assert_close(permuted, original[:, order], rtol=0, atol=1e-7)
 
 
 def test_sensor_temporal_decision_scorer_returns_candidate_id_json():
