@@ -173,7 +173,9 @@
     "sealed_audit_accessed": false,
     "payload_downloaded": false,
     "source_rows_opened": false,
-    "outputs": "C:\\CodexArtifacts\\pretrained-reuse-r2 only; no source payload or weights in Git"
+    "outputs": "C:\\CodexArtifacts\\pretrained-reuse-r2 only; no source payload or weights in Git",
+    "split_algorithm": "sort participant IDs by SHA256(r2m-zenodo-audio-vibration-match-v1|seed=17|participant=<decimal_id>), tie-break numeric ID; allocate 8/2/2/2 to train/calibration/validation/sealed_audit; exclude participant 999 no-activity sentinel",
+    "participant_inventory_requirement": 14
   },
   "constraints": [
     "14 participant groups limit independent generalization and uncertainty precision",
