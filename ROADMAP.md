@@ -4042,3 +4042,15 @@ added LibriSpeech head. [Exact route results and artifact hash](docs/pretrained_
 **2026-11-20 R2-M audio+sensor source gate:** Zenodo record `10.5281/zenodo.7937591` is cleared for bounded local development under CC BY 4.0; its metadata reports per-activity archives with publisher checksums, while the paper documents 14 participants, 8,615 activity trials and synchronized audio/vibration. No data payload or labels were opened. The proposed M2 task is same-trial audio/vibration matching with same-activity hard negatives and participant-grouped splits; source-format feasibility and the split are still pending. This does not establish fusion quality. See [source gate](docs/pretrained_reuse/R2M_ZENODO_AUDIO_VIBRATION_ADMISSION_20261120.md) and [manifest](manifests/pretrained_reuse/r2m-zenodo-audio-vibration-20261120.json).
 **2026-11-20 R2-M temporal fusion primitive:** Added an untrained 141,986-parameter default audio+sensor time-aware gated feature fusion block with explicit presence/valid masks and candidate-conditioned residual gates. Fourteen focused CPU tests and Ruff pass. This is wiring/mechanics only; no corpus fit, quality gain or product admission is claimed. The real paired-source task gate remains pending. See [implementation record](docs/pretrained_reuse/R2M_TIME_AWARE_GATED_FUSION_20261120.md).
 **2026-11-20 R2-M split freezer:** Added an identifier-only SHA-256 participant splitter for the new audio/vibration source. It fails closed unless exactly 14 real participants remain after removing the no-activity sentinel and deterministically assigns 8/2/2/2 groups. Nine focused split tests pass; no source IDs or labels were read while implementing it. See [source gate](docs/pretrained_reuse/R2M_ZENODO_AUDIO_VIBRATION_ADMISSION_20261120.md).
+
+**2026-11-20 R2-M payload and synchronization preflight:** All 25 approved
+Zenodo archives passed publisher MD5 and local SHA-256 checks. Identifier
+inventory found 14 real participants and 8,615 trials in one selected
+`multisensor-1` member per activity. A schema probe inadvertently loaded one
+audio/vibration trial from sealed participant 0 before any fit; that
+participant is quarantined and a replacement 7/2/2/2 split is frozen, leaving
+participants 1 and 16 sealed. A bounded preflight of 364 train/calibration/
+validation records found nonempty audio and equal-length vibration axes, with
+audio/vibration duration ratios from 0.99973 to 1.00040. This establishes
+format-level synchronization only; hard-negative feasibility and model
+quality remain untested. See [payload preflight and access correction](docs/pretrained_reuse/R2M_ZENODO_PAYLOAD_PREFLIGHT_20261120.md).

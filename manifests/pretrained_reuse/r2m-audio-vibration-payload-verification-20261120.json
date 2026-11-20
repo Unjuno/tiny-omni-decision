@@ -1,0 +1,188 @@
+{
+  "archive_count": 25,
+  "download_index_sha256": "715dd57fdf1967767f28f2b2246c57232dfba3e74ea548d46c83e68b882402d4",
+  "files": [
+    {
+      "bytes": 127871317,
+      "file": "21_close-dishwasher.zip",
+      "publisher_md5": "c9ca48978340416a5337e4a42be535be",
+      "sha256": "7c105297818bd9a1c36cdcbe7dfcbdd0c300bde3165000be2a22fb3f5d27d429",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 211369573,
+      "file": "24_wipe-stove.zip",
+      "publisher_md5": "e3898ffa2daa8878964c986e1f991387",
+      "sha256": "b868b1fc8965c0056484fb0c780166e680f285b3513ebfa757760628628364c8",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 69152997,
+      "file": "23_take-from-stove.zip",
+      "publisher_md5": "10834b9e0813ee9441abe2c3f5c2233a",
+      "sha256": "04bf32f55c93f54c49525d2b0581cb51f14c1ec302afb56b70a995fa4aa8f706",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 78399122,
+      "file": "22_place-on-stove.zip",
+      "publisher_md5": "5bcb6c7167d5cb977100c9e57cc7f9b6",
+      "sha256": "e80cc1d62bde06ec1e0f62fc02e2b3b827e00442ec4d2b54546d8049e61fadda",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 119416292,
+      "file": "20_open-dishwasher.zip",
+      "publisher_md5": "1f5a0a94b9a24d00e5496fec68661e21",
+      "sha256": "3f5e0db83a99761c048d44f866c54ecf102f0a4d80f6b7b894e69210095dc81d",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 113040265,
+      "file": "19_close-fridge.zip",
+      "publisher_md5": "29910db0bc56cfef8c913c3f095fe6f9",
+      "sha256": "51a81b032f2b28ba5626c9e0f01d21e8c7fa9a8759f3c53f886437a3c2032320",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 95354213,
+      "file": "18_open-fridge.zip",
+      "publisher_md5": "9e4f26e916c864aca919a574876e66f8",
+      "sha256": "c771a0a5b8e597c6f6e24104f05d7f8e69029d141c86e86c7bb55ea58b840034",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 72770695,
+      "file": "17_stop-toaster.zip",
+      "publisher_md5": "46b56be5a1f861df7274480f0e0c43a0",
+      "sha256": "be38112cd4ea51d8e81a1a2a6ba18bf4fb11424c8524b06025510515b2dddb2c",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 77765408,
+      "file": "16_start-toaster.zip",
+      "publisher_md5": "4dd99127d96ed12af798b0069757f935",
+      "sha256": "d093302bd31c3eecf803cc4dbbfc8b72e2efa76279105e831d54f96832684d1a",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 351401282,
+      "file": "15_vacuum-cleaning.zip",
+      "publisher_md5": "d052af77a2fa80f53db0bb33d1cd815e",
+      "sha256": "ed2a22c17ca23ba1eec8f84c61935e28f7c39f85c863b0b9c2541dd32008c878",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 127029813,
+      "file": "14_sweep.zip",
+      "publisher_md5": "6d2a7fb7dc1f2077c85744ee78d1f18f",
+      "sha256": "89eedd1cb62f6117f0a6cb9e01f0f7863d1997dbdf0118b78817c85ac6811fe0",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 85317441,
+      "file": "13_place-plate.zip",
+      "publisher_md5": "0282a3b556dd8bede697e5071ed07e88",
+      "sha256": "394eceb8615ac5949ffa1df7a04ebb9c8e5b548fe1fe18e64d5d1c266b1236e7",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 191125863,
+      "file": "12_make-coffee.zip",
+      "publisher_md5": "d21236a967ec81756af983b7ba7990d8",
+      "sha256": "b30d270c91b4c64197e356603dcba8d7295779000fee2cddc447f4ac1339b614",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 188096739,
+      "file": "11_typing.zip",
+      "publisher_md5": "59bd5da2d33f2c9efb3299c0609dd387",
+      "sha256": "4cc9351235e08d74ceb728bbf8f206020dca4a7a017fa569f0970be401a9de95",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 69650916,
+      "file": "10_light-off.zip",
+      "publisher_md5": "c554e01e9136100a623791fda4be0b0d",
+      "sha256": "3664af53b9b4fccc9abf06d9922f66d24ee81967022d9036bd355a01462ec8e0",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 91486810,
+      "file": "09_light-on.zip",
+      "publisher_md5": "32f32464334fbb11b5b680bd5a26d38f",
+      "sha256": "b2a03b0bdf93265e9888f4d102749574ea8fd21bfd7ef691ef3f8cebcf1fef9f",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 242933197,
+      "file": "08_stand-up.zip",
+      "publisher_md5": "2df37a1578abb5c4bc2c56d62fbc3f88",
+      "sha256": "535b375e4d740f6697c4a3c1877d7b4b0b25ff1763a22f5c24ecf92537e51c45",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 794471071,
+      "file": "00_no-activity.zip",
+      "publisher_md5": "346553bbb3c67ef32613646a7776227a",
+      "sha256": "031e8486df70f36bb4d6d293704d46bef5deca9591003060d95b1296e78a8dd2",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 307054238,
+      "file": "01_walk.zip",
+      "publisher_md5": "4de9c773ca20c6da072d744ab65a553e",
+      "sha256": "667eccd871abadee6bc8d8ebe348d422567300b056cb817165ac7971537b875b",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 278113412,
+      "file": "02_walk-to-room.zip",
+      "publisher_md5": "9ed1f500bff7d9f7edb80f2a3f7b64f0",
+      "sha256": "db60f2f36b16d009fb65d17f183a66265dfe8a0e76f0c9eaeab9d66e5c2ed286",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 154614674,
+      "file": "03_open-door.zip",
+      "publisher_md5": "8ed9f298a8cc5f21d62953f8865a204f",
+      "sha256": "831c924c54e49a0db91a98efde2a4d8872784cada70b16fae906334b83bb680f",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 182401481,
+      "file": "04_close-door.zip",
+      "publisher_md5": "05a9ed2281c3570c81ba053c0118d552",
+      "sha256": "1451b0738514a77652c076c5a3cfddf3bc23c815a101488e468c38cbb2ffae26",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 219691455,
+      "file": "07_sit-down.zip",
+      "publisher_md5": "0fdb8f074f85ffd88cd8fda7808e0b15",
+      "sha256": "6e434db5191bfffd53403bec8ab19821dbaf82364c2706bcbb5e12062572cd6b",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 160671825,
+      "file": "06_close-window.zip",
+      "publisher_md5": "87e1e4957ba985cf1b469d9dc88c0b85",
+      "sha256": "2e6b9af680c4ffb47d8ada63c52df808c7a650d49feaa7116e3a5208c5a8f702",
+      "verification": "PASS"
+    },
+    {
+      "bytes": 163116725,
+      "file": "05_open-window.zip",
+      "publisher_md5": "17ede0c3a5d4de25b99dd85e4cc2b0d0",
+      "sha256": "72f2e3f9b870abfe099527b132ef8652c58d36b9171da6534bfb85a95faa1a2b",
+      "verification": "PASS"
+    }
+  ],
+  "local_artifact_root": "D:\\CodexArchiveRelocated\\CodexArtifacts\\pretrained-reuse-r2\\zenodo-audio-vibration-v1",
+  "payload_stored_in_repository": false,
+  "schema": "r2m_payload_verification_receipt_v1",
+  "source_doi": "10.5281/zenodo.7937591",
+  "total_bytes": 4572316824,
+  "verification": "all publisher MD5 and local SHA-256 checks passed",
+  "verified_at": "2026-11-20T12:15:51Z"
+}
