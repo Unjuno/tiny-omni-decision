@@ -1,0 +1,111 @@
+{
+  "format": "pretrained_reuse_source_experiment_v1",
+  "experiment_id": "uci-har-sensor-temporal-v1",
+  "recorded_at": "2026-11-20T16:20:25+09:00",
+  "status": "ALLOW_BOUNDED_LOCAL_DEVELOPMENT_WITH_ATTRIBUTION",
+  "source": {
+    "dataset_id": 240,
+    "name": "Human Activity Recognition Using Smartphones",
+    "repository": "UCI Machine Learning Repository",
+    "url": "https://archive.ics.uci.edu/dataset/240/human+activity+recognition+using+smartphones",
+    "download_url": "https://archive.ics.uci.edu/static/public/240/human%2Bactivity%2Brecognition%2Busing%2Bsmartphones.zip",
+    "doi": "10.24432/C54S4K",
+    "license": "CC-BY-4.0",
+    "license_evidence": "Official UCI dataset page states CC BY 4.0 and permits sharing and adaptation with attribution.",
+    "license_evidence_url": "https://archive.ics.uci.edu/dataset/240/human+activity+recognition+using+smartphones",
+    "archive_sha256": "C00B803081A5C797CD5E4B83700A9810B38D53D9D84E01917E090E1FDBC81031",
+    "archive_bytes": 61005872,
+    "nested_dataset_archive": {
+      "name": "UCI HAR Dataset.zip",
+      "sha256": "2045E435C955214B38145FB5FA00776C72814F01B203FEC405152DAC7D5BFEB0",
+      "bytes": 60999314
+    }
+  },
+  "scope": {
+    "modality": "sensor",
+    "source_fields": [
+      "body_acc_x",
+      "body_acc_y",
+      "body_acc_z",
+      "body_gyro_x",
+      "body_gyro_y",
+      "body_gyro_z"
+    ],
+    "uses_companion_video": false,
+    "uses_pretrained_encoder": false,
+    "task": "six-option activity classification over one 128-sample sensor window",
+    "fit_split": "official train split only, with deterministic participant-disjoint train/validation partition",
+    "official_test_policy": "Official UCI HAR public test was read once after attempt-01 candidate freeze on 2026-11-20; source archive SHA-256 is permanently closed and any re-audit must fail before test split access.",
+    "output_path_policy": "local C:\\CodexArtifacts only; never add dataset or weights to Git"
+  },
+  "protocol": "docs/pretrained_reuse/R2_UCI_HAR_SENSOR_TEMPORAL_PROTOCOL_20261120.md",
+  "observed_run": {
+    "run_id": "uci-har-sensor-v1-attempt-01",
+    "source_commit": "a80f567de7b328820c748289b0db5f506303cf68",
+    "runner_sha256": "c2db654a01811d088fed5a8564e9587a097341e4fb724cdde4588d21fba71899",
+    "fit_started_utc": "2026-11-20T07:22:34Z",
+    "fit_finished_utc": "2026-11-20T07:27:29Z",
+    "fit_split": {
+      "train_participants": 17,
+      "train_windows": 6028,
+      "validation_participants": 4,
+      "validation_windows": 1324,
+      "sampled_epochs_per_model": 12,
+      "selected_epoch_static": 12,
+      "selected_epoch_lstm": 12,
+      "split_manifest_sha256": "3e70b00bf16bd5eed7d3cfb04dfe66f7de78029f0c600d34c034584c5f45884c"
+    },
+    "one_time_public_test": {
+      "audit_started_utc": "2026-11-20T07:28:08Z",
+      "windows": 2947,
+      "participants": 9,
+      "fit_participant_overlap": 0,
+      "accuracy_static": 0.7044451985069562,
+      "accuracy_lstm": 0.5907702748557856,
+      "lstm_minus_static_accuracy_95_percent_ci": [
+        -0.15546167557039503,
+        -0.07096652342039284
+      ],
+      "test_reopened": false
+    },
+    "artifact_directory": "C:\\CodexArtifacts\\pretrained-reuse-r2\\uci-har-sensor-v1\\attempt-01\\fit",
+    "artifact_index_sha256": "D1EF37856D51819A18281398D246E20FC258BC4D1186778125FAA0BE70BD98E2",
+    "result_report": "docs/pretrained_reuse/R2_UCI_HAR_SENSOR_TEMPORAL_RESULTS_20261120.md",
+    "follow_up_protocol": "docs/pretrained_reuse/R2_UCI_HAR_SENSOR_LONG_BUDGET_PROTOCOL_20261120.md"
+  },
+  "long_budget_follow_up": {
+    "run_id": "uci-har-sensor-v1-attempt-02-long100",
+    "status": "completed_validation_only",
+    "output_directory": "C:\\CodexArtifacts\\pretrained-reuse-r2\\uci-har-sensor-v1\\attempt-02-long100",
+    "protocol": "docs/pretrained_reuse/R2_UCI_HAR_SENSOR_LONG_BUDGET_PROTOCOL_20261120.md",
+    "result_report": "docs/pretrained_reuse/R2_UCI_HAR_SENSOR_LONG_BUDGET_RESULTS_20261120.md",
+    "source_commit": "a43662b0af0d685d02aa4460ad259664d401bc2f",
+    "runner_sha256": "7d5bd694feedd7cb1928d59aae3cced13e02df4426d9f277275cca199d18d6a1",
+    "started_utc": "2026-11-20T07:38:05Z",
+    "finished_utc": "2026-11-20T08:22:12Z",
+    "epochs_per_model": 100,
+    "train_examples_per_epoch": 6028,
+    "optimizer_updates_per_epoch": 48,
+    "example_presentations_per_model": 602800,
+    "optimizer_updates_per_model": 4800,
+    "first_12_epochs_exact_metric_match": true,
+    "official_test_loaded": false,
+    "static": {
+      "parameters": 4097,
+      "best_epoch": 84,
+      "validation_accuracy": 0.7605740181268882,
+      "validation_nll": 0.6269764727262835,
+      "best_checkpoint_sha256": "bbe3dc24c6a4d88384683c2acccb492d4b13a4ea16b9f66b054e05fa343de480"
+    },
+    "lstm": {
+      "parameters": 27905,
+      "best_epoch": 15,
+      "validation_accuracy": 0.6200906344410876,
+      "validation_nll": 0.7278425017656189,
+      "best_checkpoint_sha256": "88214f5c4f3d01a7c099abbf5226c3fa3b9ef0899f38ca1e667db326a9d6d36e"
+    },
+    "artifact_index_sha256": "ec3cf7e471989e48af498644592ec4b3315257a5495721038c5e6c98ae787caa",
+    "artifact_count": 17,
+    "artifact_bytes": 2430373
+  }
+}

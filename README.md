@@ -1,5 +1,73 @@
 # Tiny Omni Decision
 
+**2026-11-21 R2 frozen input-use diagnosis:** The selected native Image path
+uses visual content (zero/shuffle controls lower accuracy by 9.0/9.7 points),
+while Text candidate queries matter more than same-task state features. The
+fixed 2,048-update sampler consumed all 512 Video questions and repeated them
+1,536 times; 93,924 unique TRAIN questions remain unused across the corpus.
+Validation was already exposed; there was no fitting or sealed-audit access.
+[Protocol, input interventions, coverage and limits](docs/pretrained_reuse/R2_NATIVE_WEAK_INPUT_USE_DIAGNOSTIC_20261121.md).
+
+**2026-11-21 R2 Text state-group holdout:** A fresh seed-17 frozen-feature
+readout trained for 2,048 updates on 7,152 TRAIN rows and was evaluated once on
+1,040 rows from 65 state groups not seen by the previous sampler. Macro
+Accuracy was 13.04% over 40 choices. Zeroing state modestly reduced Accuracy,
+but counterfactual same-task state swaps had uncertain effects; robust
+state-to-candidate binding was not demonstrated. No official validation or
+sealed audit was opened. This narrow result does not qualify a model; the next
+step is a distinct unused TRAIN decision source, not another fit to this
+holdout. [Protocol, results and hashes](docs/pretrained_reuse/R2_NATIVE_TEXT_STATE_GROUP_HOLDOUT_20261121.md).
+
+**2026-11-21 R2 programmatic decision state-group holdout:** A separate
+seed-17, 2,048-update readout fit used 6,144 TRAIN rows and held out 2,048
+rows from 256 previously untouched programmatic state groups. Accuracy was
+22.71% versus a task-balanced 23.75% uniform-choice reference. Zeroing the
+state changed 6.84% of selected options but produced no reliable metric change
+under a paired group bootstrap. This generated task did not show useful state
+binding; official validation and sealed audit stayed closed. Do not tune this
+holdout or increase capacity from this result alone.
+[Protocol, per-task metrics and hashes](docs/pretrained_reuse/R2_NATIVE_PROGRAMMATIC_DECISION_GROUP_HOLDOUT_20261121.md).
+
+**2026-11-21 R2 native temporal capacity control:** A parameter-matched,
+nonrecurrent tokenwise MLP completed the same 2,048-update Path A fit as the
+baseline/LSTM arms. Fresh-process replay matched exactly. Its final Video
+NLL/Brier were close to LSTM and paired scene-bootstrap intervals included
+zero; this does not establish a recurrence-specific gain. The exposed
+development validation remains non-blind, and no model was promoted.
+[Protocol and results](docs/pretrained_reuse/R2_NATIVE_TEMPORAL_CAPACITY_CONTROL_RESULTS_20261121.md).
+
+**2026-11-21 R2 SoundActions frozen A/V pilot:** 294 train/validation
+recordings passed source media hashes. Audio-only reached 64.58% validation
+Accuracy; gated A/V reached 52.08%, and zero/permuted-video controls showed no
+video benefit. All three readouts overfit; sealed audit remains unopened.
+[Protocol, learning curves and limits](docs/pretrained_reuse/R2_SOUND_ACTIONS_TEMPORAL_RESULTS_20261121.md).
+
+**2026-11-21 SoundActions train-only nested CV:** Five recording-ID folds over
+the 246 fixed training recordings gave 68.29% audio-only, 40.65% video-only,
+and 67.07% gated A/V Accuracy. The paired audio-vs-fusion interval includes
+zero; video did not add a reliable gain. Original validation and sealed audit
+were excluded from fitting and scoring.
+[Protocol, fold metrics and hashes](docs/pretrained_reuse/R2_SOUND_ACTIONS_TRAIN_ONLY_GROUP_CV_20261121.md).
+
+**2026-11-21 R2-M parameter-matched sensor control:** A fresh 80-epoch
+same-topology control trained with sensor input masked had 180,387 parameters,
+matching the paired fusion model. On the same 762 development validation IDs,
+fusion was +4.65 pp in macro Accuracy and improved macro NLL/Brier, while
+sample Accuracy was essentially tied. Participant effects conflicted: fusion
+helped participant 9 and hurt participant 15. This supports only a bounded
+sensor-content effect on observed development subjects, not unseen-person
+generalization or product use; the run overfit late. No sealed audit was read.
+[Protocol, curves, paired intervals and artifact hashes](docs/pretrained_reuse/R2M_CAPACITY_MATCHED_SENSOR_CONTROL_20261121.md).
+
+**2026-11-21 R2-M train-only participant CV:** Across seven held-out training
+participants, Audio-only reached 79.43% sample / 80.12% macro Accuracy versus
+72.29% / 73.27% for audio+vibration fusion; fusion also had worse macro NLL and
+Brier. Five of seven participants regressed. This exploratory grouped CV used
+5,449 OOF predictions, did not load sealed audit or previously exposed
+validation participants, and does not establish population-level quality.
+Do not promote this fusion head for the tested activity task.
+[Protocol, OOF metrics and hashes](docs/pretrained_reuse/R2M_TRAIN_ONLY_PARTICIPANT_CV_20261121.md).
+
 **2026-10-25 CoGenT-B one-time audit:** A frozen image+question decision
 probe reached 57.90% Accuracy on 15,000 held-out CLEVR-CoGenT-B images and
 responded measurably to image content versus gray/shuffled controls. Results
@@ -1174,3 +1242,16 @@ NLL.4133→.3983; random Accuracy and Brier worsen, so the combined prospective
 gate fails. Keep equal weights and close this coefficient comparison; no new
 runtime/Teacher promotion. The four-modality95–98% objective remains unmet.
 [Curves, paired intervals, all attempts and hashes](docs/pretrained_reuse/R2_AV_SLOT_WEIGHTS_RESULTS_20261015.md).
+
+**2026-11-21 R2-M supplied-activity Decision comparison:** On the frozen
+participant split, an 80-epoch weight-decay comparison (`0.01`→`0.1`) improved
+the gated audio+vibration candidate from 71.92% to 75.85% sample Accuracy and
+from 64.80% to 72.46% macro Accuracy, but regressed audio-only performance. A
+corrected same-participant, different-activity sensor swap lowered the selected
+fusion's macro Accuracy by 9.56 pp, showing sensor-content sensitivity on the
+two observed participants. This is a promising
+validation-only candidate with two held-out participants and strong late
+overfitting, not product quality evidence. The task has 21 supplied activity
+choices, not arbitrary text-choice or four-modality coverage. No sealed audit
+or promotion. [Protocol and all attempts](docs/pretrained_reuse/R2M_SUPPLIED_ACTIVITY_DECISION_20261121.md);
+[corrected sensor-dependence diagnostic](docs/pretrained_reuse/R2M_SENSOR_DEPENDENCE_DIAGNOSTIC_20261121.md).

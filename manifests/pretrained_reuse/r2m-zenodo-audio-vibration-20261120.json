@@ -1,0 +1,188 @@
+{
+  "format": "r2m_source_screen_v1",
+  "experiment_id": "r2m-zenodo-audio-vibration-match-v1",
+  "recorded_at": "2026-11-20T17:51:00+09:00",
+  "status": "ALLOW_BOUNDED_LOCAL_DEVELOPMENT_PENDING_PAYLOAD_GATES",
+  "source": {
+    "name": "Multi-modal Dataset of Human Activities of Daily Living with Ambient Audio, Vibration and Environmental Data",
+    "doi": "10.5281/zenodo.7937591",
+    "record_id": 7937591,
+    "version": "1.0",
+    "record_created": "2023-08-21T17:06:50.419627+09:00",
+    "record_modified": "2023-08-30T16:22:43.835352+09:00",
+    "record_url": "https://zenodo.org/records/7937591",
+    "api_url": "https://zenodo.org/api/records/7937591",
+    "license": "cc-by-4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/legalcode",
+    "license_evidence": [
+      "Zenodo API metadata license=cc-by-4.0",
+      "peer-reviewed data descriptor states CC-BY 4.0"
+    ],
+    "paper_url": "https://www.mdpi.com/2306-5729/9/12/144",
+    "dataset_readme_url": "https://zenodo.org/records/7937591/preview/README.md?include_deleted=0",
+    "participants_reported": 14,
+    "activity_instances_reported": 8615,
+    "modalities": [
+      "ambient_audio",
+      "vibration_sensor",
+      "environmental_sensor"
+    ],
+    "camera_video_published": false,
+    "audio_sample_rate_hz": 16000,
+    "vibration_nominal_sample_rate_hz": 1085,
+    "publisher_files": [
+      {
+        "key": "21_close-dishwasher.zip",
+        "bytes": 127871317,
+        "publisher_checksum": "md5:c9ca48978340416a5337e4a42be535be"
+      },
+      {
+        "key": "24_wipe-stove.zip",
+        "bytes": 211369573,
+        "publisher_checksum": "md5:e3898ffa2daa8878964c986e1f991387"
+      },
+      {
+        "key": "23_take-from-stove.zip",
+        "bytes": 69152997,
+        "publisher_checksum": "md5:10834b9e0813ee9441abe2c3f5c2233a"
+      },
+      {
+        "key": "22_place-on-stove.zip",
+        "bytes": 78399122,
+        "publisher_checksum": "md5:5bcb6c7167d5cb977100c9e57cc7f9b6"
+      },
+      {
+        "key": "20_open-dishwasher.zip",
+        "bytes": 119416292,
+        "publisher_checksum": "md5:1f5a0a94b9a24d00e5496fec68661e21"
+      },
+      {
+        "key": "19_close-fridge.zip",
+        "bytes": 113040265,
+        "publisher_checksum": "md5:29910db0bc56cfef8c913c3f095fe6f9"
+      },
+      {
+        "key": "18_open-fridge.zip",
+        "bytes": 95354213,
+        "publisher_checksum": "md5:9e4f26e916c864aca919a574876e66f8"
+      },
+      {
+        "key": "17_stop-toaster.zip",
+        "bytes": 72770695,
+        "publisher_checksum": "md5:46b56be5a1f861df7274480f0e0c43a0"
+      },
+      {
+        "key": "16_start-toaster.zip",
+        "bytes": 77765408,
+        "publisher_checksum": "md5:4dd99127d96ed12af798b0069757f935"
+      },
+      {
+        "key": "15_vacuum-cleaning.zip",
+        "bytes": 351401282,
+        "publisher_checksum": "md5:d052af77a2fa80f53db0bb33d1cd815e"
+      },
+      {
+        "key": "14_sweep.zip",
+        "bytes": 127029813,
+        "publisher_checksum": "md5:6d2a7fb7dc1f2077c85744ee78d1f18f"
+      },
+      {
+        "key": "13_place-plate.zip",
+        "bytes": 85317441,
+        "publisher_checksum": "md5:0282a3b556dd8bede697e5071ed07e88"
+      },
+      {
+        "key": "12_make-coffee.zip",
+        "bytes": 191125863,
+        "publisher_checksum": "md5:d21236a967ec81756af983b7ba7990d8"
+      },
+      {
+        "key": "11_typing.zip",
+        "bytes": 188096739,
+        "publisher_checksum": "md5:59bd5da2d33f2c9efb3299c0609dd387"
+      },
+      {
+        "key": "10_light-off.zip",
+        "bytes": 69650916,
+        "publisher_checksum": "md5:c554e01e9136100a623791fda4be0b0d"
+      },
+      {
+        "key": "09_light-on.zip",
+        "bytes": 91486810,
+        "publisher_checksum": "md5:32f32464334fbb11b5b680bd5a26d38f"
+      },
+      {
+        "key": "08_stand-up.zip",
+        "bytes": 242933197,
+        "publisher_checksum": "md5:2df37a1578abb5c4bc2c56d62fbc3f88"
+      },
+      {
+        "key": "00_no-activity.zip",
+        "bytes": 794471071,
+        "publisher_checksum": "md5:346553bbb3c67ef32613646a7776227a"
+      },
+      {
+        "key": "01_walk.zip",
+        "bytes": 307054238,
+        "publisher_checksum": "md5:4de9c773ca20c6da072d744ab65a553e"
+      },
+      {
+        "key": "02_walk-to-room.zip",
+        "bytes": 278113412,
+        "publisher_checksum": "md5:9ed1f500bff7d9f7edb80f2a3f7b64f0"
+      },
+      {
+        "key": "03_open-door.zip",
+        "bytes": 154614674,
+        "publisher_checksum": "md5:8ed9f298a8cc5f21d62953f8865a204f"
+      },
+      {
+        "key": "04_close-door.zip",
+        "bytes": 182401481,
+        "publisher_checksum": "md5:05a9ed2281c3570c81ba053c0118d552"
+      },
+      {
+        "key": "07_sit-down.zip",
+        "bytes": 219691455,
+        "publisher_checksum": "md5:0fdb8f074f85ffd88cd8fda7808e0b15"
+      },
+      {
+        "key": "06_close-window.zip",
+        "bytes": 160671825,
+        "publisher_checksum": "md5:87e1e4957ba985cf1b469d9dc88c0b85"
+      },
+      {
+        "key": "05_open-window.zip",
+        "bytes": 163116725,
+        "publisher_checksum": "md5:17ede0c3a5d4de25b99dd85e4cc2b0d0"
+      }
+    ]
+  },
+  "scope": {
+    "modality_route": "audio+sensor",
+    "proposed_task": "binary cross-modal same-trial match",
+    "status": "candidate_not_yet_validated",
+    "split_group": "participant, with trial indivisible within participant",
+    "seed": 17,
+    "intended_split_counts": {
+      "train": 8,
+      "calibration": 2,
+      "validation": 2,
+      "sealed_audit": 2
+    },
+    "sealed_audit_accessed": false,
+    "payload_downloaded": false,
+    "source_rows_opened": false,
+    "outputs": "C:\\CodexArtifacts\\pretrained-reuse-r2 only; no source payload or weights in Git",
+    "split_algorithm": "sort participant IDs by SHA256(r2m-zenodo-audio-vibration-match-v1|seed=17|participant=<decimal_id>), tie-break numeric ID; allocate 8/2/2/2 to train/calibration/validation/sealed_audit; exclude participant 999 no-activity sentinel",
+    "participant_inventory_requirement": 14
+  },
+  "constraints": [
+    "14 participant groups limit independent generalization and uncertainty precision",
+    "activity recognition is not considered proof of a task requiring both modalities",
+    "verify synchronized within-trial boundaries before pairing",
+    "hard negatives must be different trials of the same activity and different participants where possible",
+    "if group coverage is inadequate, stop before fitting rather than split participants"
+  ],
+  "report": "docs/pretrained_reuse/R2M_ZENODO_AUDIO_VIBRATION_ADMISSION_20261120.md"
+}

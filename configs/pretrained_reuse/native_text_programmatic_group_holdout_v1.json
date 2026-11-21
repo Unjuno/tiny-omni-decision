@@ -1,0 +1,55 @@
+{
+  "id": "native-text-programmatic-decision-group-holdout-v1",
+  "corpus_root": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-common-corpus-02",
+  "query_cache_root": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-language-cache-02",
+  "output_root": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\runs\\programmatic-v1",
+  "text_state_bank_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-language-cache-02\\train-states.npy",
+  "text_query_bank_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-language-cache-02\\queries.npy",
+  "staging_receipt_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\staging-receipt.json",
+  "staging_receipt_sha256": "c409025b3df07f2f012bccc60ae50a4296f149fbc86125fe80f32526ed0f5109",
+  "text_state_bank_sha256": "88a010df86f21ffaa94a40f6e6dedab75e73be0bebe54e17dfa01fb5138f6e99",
+  "text_query_bank_sha256": "e123c9c7fdc2af85fa4fa50eb3be9e2de1ce013144561ee6e35c1c95e6185be3",
+  "input_pins": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-common-corpus-02\\result.json": "47a6d2f3495810bac58f57dec1a962f8b490fa409c75671b46bb2999fde87d49",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-common-corpus-02\\train.jsonl": "d279ca44c6ff8e619529805be21675a8b4088fdcc476c7bb04649abdb5e60ebb",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-common-corpus-02\\observations.json": "e82febae93455cc06a2fb31f3dcc83ebcb79328552aff2ec4da507d660186afb",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-common-corpus-02\\banks.json": "44ef5f26ffb01bd264c7283f82e6a6f37f1a4d3c34f522515ddfc7fc2acb6520",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-common-corpus-02\\query-map.json": "6d7d0ed1dfe6ec50d1c9b0801c689f3584f2050c6237180b0303f758fe6e1e15",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-language-cache-02\\train-states.npy": "88a010df86f21ffaa94a40f6e6dedab75e73be0bebe54e17dfa01fb5138f6e99",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-language-cache-02\\queries.npy": "e123c9c7fdc2af85fa4fa50eb3be9e2de1ce013144561ee6e35c1c95e6185be3",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\staging-receipt.json": "c409025b3df07f2f012bccc60ae50a4296f149fbc86125fe80f32526ed0f5109"
+  },
+  "split": {
+    "seed": 17,
+    "eligible_groups_not_seen_by_prior_2048_step_sampler": 513,
+    "holdout_fraction_of_eligible_groups": 0.5,
+    "heldout_group_count": 256,
+    "holdout_group_selection": "ascending SHA256(seed:split-id:group-id) among programmatic-decision TRAIN groups absent from the prior fixed TRAIN sampler"
+  },
+  "training": {
+    "seed": 17,
+    "updates": 2048,
+    "microbatches_per_update": 4,
+    "optimizer": "AdamW",
+    "learning_rate_peak": 0.001,
+    "warmup_updates": 62,
+    "scheduler": "cosine to zero at update 2048",
+    "weight_decay": 0.01,
+    "gradient_clip_norm": 1.0,
+    "checkpoint_interval": 256,
+    "checkpoint_policy": "fixed terminal checkpoint; no holdout checkpoint selection"
+  },
+  "evaluation": {
+    "official_validation_loaded": false,
+    "sealed_audit_loaded": false,
+    "holdout_is_train_only_group_generalization": true,
+    "prompt_templates_and_candidate_vocabulary_are_shared_by_design": true,
+    "primary_interventions": [
+      "same input",
+      "zero text state"
+    ],
+    "source_specific_note": "Eight programmatic decision tasks share each state group; candidate counts vary by task. Counterfactual answer remapping is omitted because compatible question/option donors are sparse for filter_min_cost."
+  },
+  "source": "text:programmatic_decision_v1",
+  "split_id": "native-text-programmatic-group-holdout-v1"
+}

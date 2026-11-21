@@ -57,7 +57,8 @@ def test_text_free_native_scorer_is_candidate_permutation_equivariant():
     logits = model(state, candidates, valid)
     order = torch.tensor([2, 0, 1])
     shuffled = model(state, candidates[:, order], valid[:, order])
-    torch.testing.assert_close(shuffled, logits[:, order], rtol=0, atol=0)
+    # Candidate batching may change FP32 reduction order by a few ULPs.
+    torch.testing.assert_close(shuffled, logits[:, order], rtol=0, atol=1e-7)
 
 
 def test_decide_preserves_supplied_option_order_and_returns_typed_json():

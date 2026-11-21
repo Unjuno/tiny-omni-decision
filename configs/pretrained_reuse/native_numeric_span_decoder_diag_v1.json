@@ -1,0 +1,26 @@
+{
+  "id": "native-numeric-span-decoder-diagnostic-v1",
+  "seed": 17,
+  "folds": 5,
+  "ridge_alpha": 1.0,
+  "bootstrap_draws": 5000,
+  "split_manifest_sha256": "2a595eee6f442560c83a2f18a22011c68125169058bf70251538dc08d4fde6b2",
+  "corpus_root": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-common-corpus-02",
+  "corpus_input_pins": {
+    "result.json": "47a6d2f3495810bac58f57dec1a962f8b490fa409c75671b46bb2999fde87d49",
+    "train.jsonl": "d279ca44c6ff8e619529805be21675a8b4088fdcc476c7bb04649abdb5e60ebb",
+    "observations.json": "e82febae93455cc06a2fb31f3dcc83ebcb79328552aff2ec4da507d660186afb",
+    "banks.json": "44ef5f26ffb01bd264c7283f82e6a6f37f1a4d3c34f522515ddfc7fc2acb6520",
+    "query-map.json": "6d7d0ed1dfe6ec50d1c9b0801c689f3584f2050c6237180b0303f758fe6e1e15"
+  },
+  "text_state_bank_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-language-cache-02\\train-states.npy",
+  "text_state_bank_sha256": "88a010df86f21ffaa94a40f6e6dedab75e73be0bebe54e17dfa01fb5138f6e99",
+  "tokenizer_file_sha256": {
+    "added_tokens.json": "dc046d04c9b0ada7ae6f1dc89c465801799acdf0c9a6aab8c15a1b2d5ca4e91f",
+    "special_tokens_map.json": "311de3f4eed9d76a43bf0d71f10e62e086ca65ccce9f15d5da0d2098bf519ecc",
+    "spm.model": "c679fbf93643d19aab7ee10c0b99e460bdbc02fedf34b92b05af343b4af586fd",
+    "tokenizer.json": "05402ffae6dd382a8491b1d29bfc139bec5d332662e86a026f433ce54c25c202",
+    "tokenizer_config.json": "d8d3bb123b99317634d5ee3d1d2d8b2ddb01510a0654687fc2639a5347a7291f"
+  },
+  "scope": "fixed prior FIT IDs only; no official validation, old holdout, or sealed audit"
+}

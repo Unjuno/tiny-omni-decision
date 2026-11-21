@@ -1,0 +1,145 @@
+import numpy as np
+import pytest
+
+from tiny_omni_decision.r2m_activity import (
+    activity_metrics,
+    same_participant_different_activity_sensor_donors,
+    standardize_sensor_feature_cache_from_train,
+    supported_activity_vocabulary,
+    train_sensor_normalization,
+)
+
+
+def test_vocabulary_requires_presence_in_every_declared_split():
+    counts = {
+        "train": {"walk": 10, "open": 4, "typing": 2},
+        "calibration": {"walk": 2, "open": 1, "typing": 0},
+        "validation": {"walk": 3, "open": 2, "typing": 0},
+    }
+
+    assert supported_activity_vocabulary(counts) == ("open", "walk")
+
+
+def test_vocabulary_fails_when_fewer_than_two_classes_are_shared():
+    counts = {
+        "train": {"walk": 10, "open": 4},
+        "calibration": {"walk": 2, "open": 0},
+        "validation": {"walk": 3, "open": 2},
+    }
+
+    with pytest.raises(ValueError, match="at least two activities"):
+        supported_activity_vocabulary(counts)
+
+
+def test_activity_metrics_include_macro_scores_and_per_class_counts():
+    vocabulary = ("close", "open", "walk")
+    targets = np.array([0, 1, 2], dtype=np.int64)
+    probabilities = np.eye(3, dtype=np.float64) * 0.8 + 0.2 / 3
+
+    metrics = activity_metrics(probabilities, targets, vocabulary)
+
+    assert metrics["examples"] == 3
+    assert metrics["choices"] == 3
+    assert metrics["accuracy"] == 1.0
+    assert metrics["macro_accuracy"] == 1.0
+    assert set(metrics["per_activity"]) == set(vocabulary)
+    assert all(row["examples"] == 1 for row in metrics["per_activity"].values())
+
+
+def test_activity_metrics_reject_missing_validation_class():
+    with pytest.raises(ValueError, match="has no evaluation examples"):
+        activity_metrics(
+            np.array([[0.7, 0.2, 0.1], [0.2, 0.7, 0.1]]),
+            np.array([0, 1]),
+            ("a", "b", "c"),
+        )
+
+
+def test_activity_metrics_can_report_fold_missing_classes_explicitly():
+    metrics = activity_metrics(
+        np.array([[0.7, 0.2, 0.1], [0.2, 0.7, 0.1]]),
+        np.array([0, 1]),
+        ("a", "b", "c"),
+        allow_missing_classes=True,
+    )
+
+    assert metrics["choices"] == 3
+    assert metrics["macro_classes_evaluated"] == 2
+    assert set(metrics["per_activity"]) == {"a", "b"}
+    assert metrics["macro_accuracy"] == 1.0
+
+
+def test_sensor_normalization_is_per_axis_and_derived_from_training_values():
+    mean, standard_deviation = train_sensor_normalization([
+        np.array([[1.0, 9.0, -2.0], [3.0, 11.0, 2.0]]),
+    ])
+
+    np.testing.assert_allclose(mean, [2.0, 10.0, 0.0])
+    np.testing.assert_allclose(standard_deviation, [1.0, 1.0, 2.0])
+
+
+def test_feature_cache_standardization_uses_train_only_and_copies_values():
+    train_values = np.array([[1.0, 9.0, -2.0], [3.0, 11.0, 2.0]], dtype=np.float32)
+    calibration_values = np.array(
+        [[100.0, 100.0, 100.0], [100.0, 100.0, 100.0]], dtype=np.float32
+    )
+    features = {
+        "train-a": {"split": "train", "sensor": train_values},
+        "cal-a": {"split": "calibration", "sensor": calibration_values},
+        "val-a": {"split": "validation", "sensor": train_values.copy()},
+    }
+
+    normalized, statistics = standardize_sensor_feature_cache_from_train(features)
+
+    np.testing.assert_allclose(statistics["mean"], [2.0, 10.0, 0.0])
+    np.testing.assert_allclose(statistics["standard_deviation"], [1.0, 1.0, 2.0])
+    np.testing.assert_allclose(normalized["train-a"]["sensor"].mean(axis=0), 0.0)
+    np.testing.assert_allclose(
+        normalized["cal-a"]["sensor"], [[98.0, 90.0, 50.0], [98.0, 90.0, 50.0]]
+    )
+    assert statistics["train_feature_count"] == 1
+    assert statistics["train_token_count"] == 2
+    assert features["train-a"]["sensor"] is train_values
+    np.testing.assert_array_equal(features["train-a"]["sensor"], train_values)
+
+
+def test_feature_cache_standardization_rejects_sealed_split():
+    features = {
+        "train-a": {"split": "train", "sensor": np.array([[1.0, 2.0, 3.0]])},
+        "sealed-a": {"split": "sealed_audit", "sensor": np.array([[4.0, 5.0, 6.0]])},
+    }
+
+    with pytest.raises(ValueError, match="non-iterative split"):
+        standardize_sensor_feature_cache_from_train(features)
+
+
+def test_sensor_donors_are_deterministic_same_participant_and_wrong_activity():
+    rows = [
+        {"sample_id": f"p{person}-{label}-{index}", "participant_id": person,
+         "activity": label}
+        for person in (9, 15)
+        for label, count in (("a", 3), ("b", 2), ("c", 1))
+        for index in range(count)
+    ]
+
+    donors = same_participant_different_activity_sensor_donors(rows, seed=17)
+    repeated = same_participant_different_activity_sensor_donors(rows, seed=17)
+
+    assert [row["sample_id"] for row in donors] == [
+        row["sample_id"] for row in repeated
+    ]
+    assert {row["sample_id"] for row in donors} == {row["sample_id"] for row in rows}
+    for recipient, donor in zip(rows, donors, strict=True):
+        assert donor["participant_id"] == recipient["participant_id"]
+        assert donor["activity"] != recipient["activity"]
+
+
+def test_sensor_donor_derangement_fails_when_activity_dominates_group():
+    rows = [
+        {"sample_id": f"{label}-{index}", "participant_id": 9, "activity": label}
+        for label, count in (("common", 3), ("rare", 1))
+        for index in range(count)
+    ]
+
+    with pytest.raises(ValueError, match="lacks a full different-activity"):
+        same_participant_different_activity_sensor_donors(rows)

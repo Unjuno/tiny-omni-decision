@@ -1,0 +1,164 @@
+# HABIT target-mapping and VideoPrism smoke — 2026-11-21
+
+This is a CPU-only plumbing check on one seed-fixed train episode (0) and one
+derived development-validation episode (1802). It is not a quality result; no
+model was fitted, and the sealed audit was not opened.
+
+## Inputs and integrity
+
+- HABIT revision: `bae97d251907743f8fb6db7e70c61d361df4dc1e`
+- Video: `front_view/episode_000000.mp4`, 5,125,669 bytes, SHA-256
+  `5ed917a199048b458d0d12d2a955ae397b273dfecc76d5b94d3d815069b12bd2`.
+- Video: `front_view/episode_001802.mp4`, 4,143,516 bytes, SHA-256
+  `5f2c242d63965b059bec78804acd3126da8f0a28d14d73a42aad937d27e681ba`.
+- Full Parquet train episode 0: 1,877,629 bytes, SHA-256
+  `5103ad7b6425a26687f6bfa0824830615793ae4617c5762dec0b83523eccff41`.
+- Full Parquet validation episode 1802: 1,363,098 bytes, SHA-256
+  `72b127129ed8d11edd2fa2cdf4b56485d259bb5dcb1cb3f691d06a65e19bc6ab`.
+- Total downloaded video bytes: 9,269,185. Total downloaded full-Parquet bytes:
+  3,240,727. Both video IDs belong to the non-audit train/validation splits.
+
+## Video path
+
+PyAV 18.1.0 decoded 653/653 frames for train episode 0 and 469/469 for
+validation episode 1802. Both streams are H.264, 640×480, 10 fps, have
+monotonic timestamps and no audio stream. Decode times were 0.7183 s and
+0.5469 s in this run.
+
+The existing pinned VideoPrism-B model was run from the preserved R1
+environment and checkpoint without modification:
+
+- Model revision: `google/videoprism-base-f16r288@be719a406d563b66f0ac969e7c94bab8e997c81a`
+- Upstream source commit: `c6eba0ece3dd49a24ffc44582966997a4a59f1d8`
+- Checkpoint SHA-256:
+  `61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29`
+- Runtime: Python 3.11.16, JAX 0.6.2, TensorFlow 2.18.1, PyAV 18.1.0,
+  `TFRT_CPU_0`; GPU disabled.
+- Eight endpoint-inclusive uniform frames were resized short-side to 288,
+  center-cropped to 288×288, and normalized to RGB float32 `[0,1]`.
+- Both forwards returned finite `[1, 2048, 768]` token arrays and finite pooled
+  768-D features. First compile+forward was 10.8575 s; the second forward was
+  2.0739 s. Combined process wall time was 15.822 s and peak working set was
+  4,157,022,208 bytes.
+- Pooled feature hashes: train
+  `ec15f448ce26b9f3fcc9936da549b98b5132a4ada3c23b033d5c7f2faf73284c`;
+  validation
+  `6392dba6bb093c690134ef7c2fad3fa26f1eceab92ba76a23ad6f2698fa7b2a1`.
+- Exact one-off smoke script SHA-256:
+  `70e082b10b2d8343b9104740494855a97d3357200db52f383cb392be02e46be8`.
+
+## Label/option mapping
+
+Both full Parquet episodes had monotonic 10 Hz timestamps and 14-D
+`observation.state`. For episode 0, three candidate subtask strings mapped to
+target indices 0, 1 and 2 (223, 63 and 367 frames). For episode 1802, four
+candidate strings mapped to target indices 21–24 (94, 145, 79 and 151 frames).
+No target index fell outside its episode's `low_level_tasks` list. These frame
+counts are annotation support, not independent Decision examples. The
+`action` field exists but was read only to inspect its dimensionality; it is
+excluded from the intended input.
+
+## Unique semantic choice mapping
+
+The metadata audit across the frozen train and development-validation IDs
+found repeated candidate wording in 5,273 of 9,113 episodes (11,333 repeated
+entries). These repeats occur when the same action text appears at multiple
+workflow positions. The Parquet target is a global `low_level_task_index`, so
+the adapter resolves its catalog text, deduplicates exact NFKC/case/whitespace
+normalized option text while preserving first-seen order, and maps the target
+to that unique semantic option. It fails closed if the target text is absent
+or fewer than two unique options remain. The schema and behavior are in
+`src/tiny_omni_decision/habit_decision.py`; CPU tests cover duplicate collapse,
+global-ID mapping and malformed targets.
+
+After deduplication, option counts across the non-audit train/validation IDs
+are: 2,421 episodes with one unique action, 2,532 with two, 2,334 with three,
+1,707 with four, and 119 with six. Single-action episodes cannot form a
+choice task and must be excluded from a multi-option Decision pilot; this is a
+data-coverage limitation, not permission to invent distractors. On the two
+already acquired Parquets, all 653 train and 469 validation frame labels map
+to a unique semantic option (3 and 4 distinct options respectively). This is
+still only a two-episode schema check, not evidence for the rest of the split.
+The fixed mapping receipt is saved outside Git at
+`C:\CodexArtifacts\pretrained-reuse-r2\habit-label-schema-20261121-attempt-02\habit-choice-mapping.json`
+(SHA-256 `ae5e47d388224c26740c9001a4641d89950a6c35750e61c0d93f03c7bf4963ce`).
+
+For a causal “what robot subtask starts next?” example, the source label
+timeline can be segmented at subtask changes. `habit_transition_points` drops
+the initial segment and sets the latest input time to 100 ms before each later
+segment onset. The two sample episodes yield two train and three validation
+transition points. Their index receipt is outside Git at
+`C:\CodexArtifacts\pretrained-reuse-r2\habit-label-schema-20261121-attempt-02\habit-transition-cutoff.json`
+(SHA-256 `5b4fd2f7bd9e53b2086045a8f62ebcb62fa9765dfe4485823009abd77fa32ee3`).
+This validates label timing only; causal video/state extraction and alignment
+at these cutoffs were subsequently checked on both existing sample clips. All
+1,122 Parquet timestamps align to a decoded front-view video PTS within 0.004
+ms. The selected 14-D state uses only robot0 cartesian position, joint
+positions and gripper position. All five transition windows have eight video
+frames no later than their cutoff, and the selected state row is no later than
+the cutoff (0–100 ms state age). No action columns were read. The alignment
+receipt is outside Git at
+`C:\CodexArtifacts\pretrained-reuse-r2\habit-label-schema-20261121-attempt-02\habit-causal-sync.json`
+(SHA-256 `a094cb882599bd3253e1ba1f940cf645cb661dce118680e0970e1f466431369c`).
+This is still a two-episode smoke, not evidence that alignment holds across
+the selected split.
+
+## Bounded payload pilot data audit
+
+A seed-17 hash-ranked metadata-only subset selects two usable episodes from
+each train group (33 groups, 66 episodes) and four from each usable validation
+group (6 groups, 24 episodes). Three of the nine validation task groups have
+no episode with at least two unique action options; this limits task coverage
+and must be reported in any later result. Train/validation group IDs are
+disjoint. The subset IDs are frozen in
+`C:\CodexArtifacts\pretrained-reuse-r2\habit-pilot-selection-20261121-attempt-01\habit-pilot-selection.json`.
+
+Before downloading, pinned Hub LFS metadata was checked for all 90 `front_view`
+MP4s and 90 matching Parquets. Expected total payload is 626,112,093 bytes:
+461,636,344 video and 164,475,749 Parquet. No payload had been downloaded at
+that inventory stage; path, size and SHA-256 are recorded in
+`C:\CodexArtifacts\pretrained-reuse-r2\habit-pilot-inventory-20261121-attempt-01\habit-pilot-inventory.json`
+(SHA-256 `f7b8dc3f90933268337358d03383de59fcd7894fe80972bf979269714990d5f7`).
+`scripts/download_habit_pilot.py` consumes only this pinned train/validation
+inventory, verifies publisher hashes, writes to a new output directory, and
+rejects exact video byte duplicates crossing the split. The 180 files were
+downloaded to
+`C:\CodexArtifacts\pretrained-reuse-r2\habit-pilot-data-20261121-attempt-01`
+in 157.8 seconds (626,112,093 bytes total); all publisher size/SHA checks
+passed. The 90 videos have 90 distinct byte hashes, with no train/validation
+duplicate.
+
+`scripts/audit_habit_pilot_payload.py` then checked all selected payloads. It
+parsed only the 90 selected train/validation episode metadata rows; the source
+JSONL was scanned for episode IDs to filter records, and the subtask catalog
+was filtered to target IDs present in selected Parquets. No sealed-audit video,
+Parquet, or metrics were accessed. All 90 MP4s decoded fully as 640x480, 10 Hz
+video with no audio; frame counts match their Parquets. The maximum nearest-PTS
+to-Parquet timestamp difference is 0.0031 ms. All selected 14-D robot0 states
+are finite. Every label maps to a unique semantic option. The cutoff audit
+produces 202 train and 76 validation transitions over 33 train and 6 usable
+validation task groups. For each transition, the eight input frames end at
+least 100 ms before onset; the chosen state is at or before cutoff and no more
+than 100.01 ms old. Only timestamp, label, and state columns were projected;
+no action columns were read. The complete receipt is outside Git at
+`C:\CodexArtifacts\pretrained-reuse-r2\habit-pilot-data-20261121-attempt-01\audit-receipt-04.json`
+(SHA-256 `9b7a9d6c0efbc0be055df55277ea107d9be0cd6a45dcbcb5e0571d0257796672`).
+
+This is a data/runtime gate, not a quality result. The 76 validation transitions
+from six task groups are too few to establish broad generalization or the
+95–98% objective. No model training, task scoring, CUDA use, or cloud compute
+occurred.
+
+## Interpretation
+
+The pinned video encoder, decoder, feature shape, robot-state field, and
+candidate/target mapping are executable. This does not prove the proposed task
+is learnable, the modalities are complementary, or a calibrated readout works.
+Before a quality run, produce frozen features for these causal transition
+points, then compare options/text-only, state-only, video-only, and paired
+readouts using the same split and task-group metrics.
+
+Artifacts are in
+`C:\CodexArtifacts\pretrained-reuse-r2\habit-media-runtime-smoke-20261121-attempt-01`
+and
+`C:\CodexArtifacts\pretrained-reuse-r2\habit-label-schema-20261121-attempt-01`.

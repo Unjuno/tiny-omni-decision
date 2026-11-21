@@ -1,0 +1,38 @@
+schema_version: 1
+dataset_id: eve-esa/mcqa-single-answer
+revision: f99c5779ca51e6d3407eeebe8297d5081af8a66b
+subset: default
+split: train
+modalities: [text]
+upstream_url: https://huggingface.co/datasets/eve-esa/mcqa-single-answer
+license: CC-BY-4.0
+commercial_use: true
+derivative_model_training_allowed: true
+redistribution_allowed: true
+media_redistribution_allowed: null
+attribution: >
+  EVE-ESA MCQA single-answer benchmark; cite Àlex R. Atrio et al., EVE: A
+  Domain-Specific LLM Framework for Earth Intelligence (2026), and attribute
+  source materials as specified by the dataset card.
+source_citation: https://arxiv.org/abs/2604.13071
+usage: training
+trust_status: trusted
+schema:
+  state: empty
+  question: Question
+  options: Choices
+  target: Answer as the A/B/C/D option label
+notes:
+  data_card_claims: "CC BY 4.0; candidate questions are human/LLM-created and reviewed by 25 EO/Earth Science experts."
+  source_file: data/train-00000-of-00001.parquet
+  source_file_sha256: 9f711235b688491f27a0b484f6fc31bd3fba1ede261ffc2d500a73f896833509
+  source_file_bytes: 1082818
+  row_count: 1261
+  structurally_valid_train_rows: 1257
+  structurally_invalid_rows: 4
+  invalid_row_policy: "Exclude only rows whose labeled target candidate is null/empty; preserve row fingerprints and counts in external preflight receipt."
+  split_scope: "The source exposes only a train split; validation below is nested content-group CV over this TRAIN split."
+  grouping: "Connected by identical normalized question or identical normalized question plus unordered option text; no source document or annotator IDs are published in this shard."
+  model_inputs: [Question, Choices]
+  excluded_fields: [Answer label position as an explicit input]
+  limitation: "Narrow text-only EO MCQA; not broad text, image, or multimodal evidence."

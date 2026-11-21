@@ -7,18 +7,6 @@ import json
 import time
 from pathlib import Path
 
-import numpy as np
-import torch
-from safetensors.torch import load_file
-
-from scripts.miniwob_screen_action_data import output_option_ids
-from scripts.train_miniwob_dino_path_a import read_corpus, targets_for
-from tiny_omni_decision.miniwob_dino_readout import (
-    MiniWoBOptionScorer,
-    classification_metrics,
-    permute_candidate_axis,
-)
-
 OUTPUT = Path("D:/CodexArtifacts/pretrained-reuse-r2/miniwob-dino-path-a-v1-attempt-01")
 OPTION_ORDER_TOLERANCE = 2e-6
 
@@ -31,7 +19,34 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _canonical_result(result: dict) -> dict:
+    """Normalize filesystem aliases before comparing an existing run receipt."""
+    canonical = json.loads(json.dumps(result))
+    corpus = canonical.get("corpus")
+    if isinstance(corpus, dict) and isinstance(corpus.get("root"), str):
+        corpus["root"] = str(Path(corpus["root"]).resolve(strict=True))
+    return canonical
+
+
+def finalized_results_equal(existing: dict, computed: dict) -> bool:
+    """Compare result content while treating resolved aliases as the same path."""
+    return _canonical_result(existing) == _canonical_result(computed)
+
+
 def main() -> None:
+    # Keep receipt comparison importable in the lightweight CPU-only test install.
+    import numpy as np
+    import torch
+    from safetensors.torch import load_file
+
+    from scripts.miniwob_screen_action_data import output_option_ids
+    from scripts.train_miniwob_dino_path_a import read_corpus, targets_for
+    from tiny_omni_decision.miniwob_dino_readout import (
+        MiniWoBOptionScorer,
+        classification_metrics,
+        permute_candidate_axis,
+    )
+
     torch.set_num_threads(2)
     config = json.loads((OUTPUT / "effective-config.json").read_text(encoding="utf-8"))
     if config.get("cuda_used") is not False or config["device"] != "cpu":
@@ -177,8 +192,14 @@ def main() -> None:
     if output_path.exists():
         existing = json.loads(output_path.read_text(encoding="utf-8"))
         result["finalized_at_local"] = existing.get("finalized_at_local")
-        if existing != result:
-            differing_keys = [key for key in result if existing.get(key) != result[key]]
+        if not finalized_results_equal(existing, result):
+            canonical_existing = _canonical_result(existing)
+            canonical_result = _canonical_result(result)
+            differing_keys = [
+                key
+                for key in canonical_result
+                if canonical_existing.get(key) != canonical_result.get(key)
+            ]
             raise ValueError(
                 "saved finalized result differs from deterministic recheck: "
                 + ", ".join(differing_keys)

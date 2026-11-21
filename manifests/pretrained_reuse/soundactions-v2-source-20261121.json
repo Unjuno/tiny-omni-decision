@@ -1,0 +1,89 @@
+{
+  "format": "r2m_source_screen_v1",
+  "experiment_id": "r2-soundactions-v2-av-perception-decision-v1",
+  "recorded_at": "2026-11-21",
+  "status": "ADMITTED_BOUNDED_LOCAL_DEVELOPMENT",
+  "source": {
+    "name": "365 Sound Actions",
+    "record_id": "23971067",
+    "doi": "10.5281/zenodo.23971067",
+    "version": 2,
+    "published_at": "2026-11-05",
+    "repository": "https://zenodo.org/records/23971067",
+    "release_api": "https://zenodo.org/api/records/23971067",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/legalcode",
+    "license_evidence": "Exact v2 LICENSE.txt explicitly permits share/adaptation for any purpose, including commercial, with attribution, license link and change notice.",
+    "creator_recordings": true,
+    "recordists": 1,
+    "anonymous_raters": 3,
+    "reported_items": 365,
+    "reported_modalities": ["audio", "video", "still_image"],
+    "reported_label_counts": {
+      "impulsive": 126,
+      "iterative": 125,
+      "sustained": 83,
+      "unknown_no_majority": 31
+    },
+    "reported_perception_type_free_marginal_kappa": 0.46,
+    "archive_bytes": {
+      "sound-actions-audio.zip": 325905634,
+      "sound-actions-video.zip": 1877548445,
+      "sound-actions-stills.zip": 84413179,
+      "sound-actions-labels.zip": 58315
+    },
+    "publisher_file_checksums": {
+      "overview.csv": {
+        "md5": "fed6e4f1812670e5fdc9210134203742",
+        "sha256": "6e1307f24b696ef8079374db1f4102dbf1b1028a1024d0b714316dbc919a2de5"
+      },
+      "LICENSE.txt": {
+        "md5": "106cd200a98097687f0bb834bf3ad1d0",
+        "sha256": "c517ddfa462d4ee86c5f5ddc13ebfd3476c8e881f83558e7b1d4bf19ea99ae63"
+      },
+      "SHA256SUMS.txt": {
+        "md5": "e2b91979b1bdcbdba9dbf8a06a53d1ca",
+        "sha256": "9648b000cfff5e9295ec59ae39346486e68362733d9fe89cfbd68e1d94bffec0"
+      }
+    },
+    "metadata_output": "C:\\CodexArtifacts\\pretrained-reuse-r2\\soundactions-v2-20261121-attempt-01",
+    "metadata_downloaded": true,
+    "media_payload_downloaded": false,
+    "labels_archive_extracted": false,
+    "overview_label_rows_exposed_before_split_freeze": [1, 35]
+  },
+  "task": {
+    "route": "audio+video",
+    "question": "Which description best fits the sound's temporal shape?",
+    "options": ["impulsive", "sustained", "iterative"],
+    "target_field": "perception_type majority label",
+    "unknown_policy": "Exclude only the source's explicit no-majority unknown target; never use model output to remove examples.",
+    "feature_allowlist": ["audio waveform", "video frames"],
+    "feature_denylist": ["title", "action", "object", "material", "environment", "source URL", "label metadata"],
+    "group_key": "recording_id",
+    "task_status": "split_frozen_preflight_and_experiment_pending",
+    "person_generalization_claim": false
+  },
+  "split": {
+    "manifest_path": "manifests/pretrained_reuse/365-sound-actions-split-v1-20261121.json",
+    "manifest_sha256": "66afbe4d1709546a8d0953a1af774156d2ceda5fa31b4ea45ee7ddf2914eb2e6",
+    "counts_by_recording_id": {"train": 266, "validation": 53, "sealed_audit": 46},
+    "sealed_audit_accessed": false,
+    "exact_media_byte_overlap": 0,
+    "normalized_or_near_duplicate_audit": "not checked"
+  },
+  "published_baseline": {
+    "paper_doi": "10.5334/tismir.223",
+    "split": "five-fold cross-validation; the paper does not document recording-grouped folds",
+    "all_adapter_accuracy": {"audio_only": 0.66, "audio_video": 0.60, "video_only": 0.48},
+    "interpretation": "Prior same-task results favor audio-only; no assumption that paired input will improve.",
+    "paper_url": "https://doi.org/10.5334/tismir.223"
+  },
+  "models": {
+    "audio": "fschmid56/EfficientAT DyMN-0.4 at R1-pinned revision a425fdce92572e602a1d5634799bd9f1f2efa806",
+    "video": "google/videoprism-base-f16r288 at R1-pinned revision be719a406d563b66f0ac969e7c94bab8e997c81a",
+    "pretraining_overlap_with_source": "unknown"
+  },
+  "sealed_audit": {"features_created": false, "metrics_read": false, "normal_iteration_enabled": false},
+  "cost": {"cloud_usd": 0, "media_downloaded": false, "training_started": false}
+}

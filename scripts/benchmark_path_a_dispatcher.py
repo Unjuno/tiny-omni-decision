@@ -483,6 +483,11 @@ def main() -> None:
     parser.add_argument("--artifact-root", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--device", choices=("cpu", "cuda"), default="cuda")
+    parser.add_argument(
+        "--audio-encoder-precision",
+        choices=("auto", "bf16", "fp32", "fp32_no_tf32"),
+        default="auto",
+    )
     args = parser.parse_args()
 
     repo = Path(__file__).resolve().parents[1]
@@ -515,6 +520,7 @@ def main() -> None:
             videoprism_source=videoprism_source,
             worker_log_dir=output_dir / "worker-logs",
             device=args.device,
+            audio_encoder_precision=args.audio_encoder_precision,
         )
         bundle_verification_seconds = dispatcher.bundle_verification_seconds
         for index, spec in enumerate(specs):

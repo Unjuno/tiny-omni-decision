@@ -1,0 +1,111 @@
+{
+  "algorithm": "same SHA256 seed-17 ordering; after signal-access quarantine participant 0, allocate remaining 13 participants as 7/2/2/2 to train/calibration/validation/sealed_audit",
+  "assignments": [
+    {
+      "group_hash": "c25bca85ac81b09dcc15ea458b77f9969c829a9a55259b411f168a2916ded7ad",
+      "participant_id": 1,
+      "split": "sealed_audit"
+    },
+    {
+      "group_hash": "40a77aa72137a9d9a95a997bceb364653ae85ee4b6bcfcf7843d5efd2685959b",
+      "participant_id": 2,
+      "split": "train"
+    },
+    {
+      "group_hash": "1d5fb2cd677e63ac0e3c93193bfdd5e223672527fb963f276eb51da5fd22c5b3",
+      "participant_id": 4,
+      "split": "train"
+    },
+    {
+      "group_hash": "2656503ae744d211ea76b073dc98647858221a552e61bc2ddc78db31cd2f4868",
+      "participant_id": 7,
+      "split": "train"
+    },
+    {
+      "group_hash": "2dceab6614f1c2d0fde9032832f9291ff7b0ee60114dafc85a6070b08f8b40c4",
+      "participant_id": 8,
+      "split": "train"
+    },
+    {
+      "group_hash": "b117d4cfaec082271610e31ddc91d5186248de2c75622c022130b553d13a5522",
+      "participant_id": 9,
+      "split": "validation"
+    },
+    {
+      "group_hash": "675483497e8223055d25f9ce831fe7fe943a0acea6cf231d67c3ac6b283a290e",
+      "participant_id": 10,
+      "split": "train"
+    },
+    {
+      "group_hash": "7b69fe37c25f5712e03f3a00d05646545376a056c5ce1a50cc83bd400e51ec0d",
+      "participant_id": 12,
+      "split": "calibration"
+    },
+    {
+      "group_hash": "36dcc8922242017eee5528195b29b251c3a89091b5d293bbb263caa081bdeba4",
+      "participant_id": 13,
+      "split": "train"
+    },
+    {
+      "group_hash": "739ee0b991d6bce06b8c340b1c600fec22299bde06065239503b8f654935a1c5",
+      "participant_id": 14,
+      "split": "train"
+    },
+    {
+      "group_hash": "8c50163293220e7fa2877f876ddcc008599b79c7d49152887ee4a7e8e0936fa3",
+      "participant_id": 15,
+      "split": "validation"
+    },
+    {
+      "group_hash": "df5b6b2c4192485085ec28bde184fb25aba22abcdb9a1ef48ec55fc9ed85e65a",
+      "participant_id": 16,
+      "split": "sealed_audit"
+    },
+    {
+      "group_hash": "7e0d25e9f1594c47bfd92e335154cf1e191921190d5c415007d6e5886ec14629",
+      "participant_id": 17,
+      "split": "calibration"
+    }
+  ],
+  "download_index_sha256": "715dd57fdf1967767f28f2b2246c57232dfba3e74ea548d46c83e68b882402d4",
+  "group_unit": "participant; every participant/trial/device/crop/pair remains together",
+  "manifest_sha256": "0f1539f3ca4fa59fb854f62def1c538e1f5851576444b678af4aa050a393a6f0",
+  "note": "Replaces predecessor split before fitting. Participant 0 remains quarantined; do not restore it.",
+  "participant_count": 13,
+  "predecessor_manifest_sha256": "4467ce657dafddfbd9a470a90257fb275b05f1e85a27a0cd24d47527a83b344d",
+  "quarantined_participants": [
+    {
+      "participant_id": 0,
+      "reason": "one audio/vibration trial was loaded during schema inspection; excluded from all fitting and evaluation"
+    }
+  ],
+  "schema": "r2m_audio_vibration_participant_split_v2",
+  "sealed_audit_accessed": false,
+  "seed": 17,
+  "signal_or_label_contents_read": false,
+  "source_doi": "10.5281/zenodo.7937591",
+  "source_inventory_sha256": "eb22c4f91149c03c580cd0b91bb85f371798dc3a31aba9ad69f3d09328e0fec0",
+  "splits": {
+    "calibration": [
+      12,
+      17
+    ],
+    "sealed_audit": [
+      1,
+      16
+    ],
+    "train": [
+      2,
+      4,
+      7,
+      8,
+      10,
+      13,
+      14
+    ],
+    "validation": [
+      9,
+      15
+    ]
+  }
+}
