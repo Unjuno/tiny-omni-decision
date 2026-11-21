@@ -172,13 +172,19 @@ product-quality pass.
 The deterministic contact-window/episode-split helper is implemented in
 `scripts/pretrained_reuse/dextraverse_contact.py`; 12 CPU tests cover synthetic
 crossings, simultaneity, causal cutoffs, gaps, missing values and grouped split
-determinism. These tests establish code behavior only. No real source rows,
-feature cache, model fit, or quality metrics exist yet. A synthetic Zarr v2
-`ZipStore` smoke passed end-to-end through the read-only source preflight and
-returned 26 valid fixture queries; it does not verify the downloaded archive.
-The real-data preflight script will write stable episode/fold/sample IDs,
-target labels, causal frame indices and sensor index ranges to the external
-attempt report, alongside per-class and duplicate-media gates.
+determinism. `scripts/pretrained_reuse/extract_dextraverse_contact_features.py`
+now provides a separate hash-gated, read-only ZIP64 `ZipStore` path that writes
+temporal VideoPrism features and query-relative tactile sequences to an
+external, non-overwriting output directory. It preserves the exact preflight
+sample order and causal timestamps and records individual array hashes. Four
+additional CPU tests cover temporal token pooling, left/right sensor ordering,
+and causal sensor timestamps. These tests establish code behavior only. No
+real source rows, feature cache, model fit, or quality metrics exist yet. A
+synthetic Zarr v2 `ZipStore` smoke passed end-to-end through the read-only
+source preflight and returned 26 valid fixture queries; it does not verify the
+downloaded archive. The real-data preflight script writes stable episode/fold/
+sample IDs, target labels, causal frame indices and sensor index ranges to the
+external attempt report, alongside per-class and duplicate-media gates.
 
 ## Evidence links
 

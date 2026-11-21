@@ -4409,3 +4409,14 @@ Do not treat this as admitted or as product-quality evidence. See the
 [fixed protocol](docs/pretrained_reuse/R2M_DEXTRAVERSE_CONTACT_DECISION_PROTOCOL_20261122.md)
 and [source receipt](manifests/pretrained_reuse/dextraverse-contact-decision-source-preflight-20261122.json).
 
+**2026-11-22 R2-M DextraVerse feature-extraction plumbing:** Added a separate
+read-only, archive-hash-gated frozen-feature worker for the pinned public
+DextraVerse candidate. It streams selected windows from ZIP64 `ZipStore`
+without full extraction, retains all eight VideoPrism temporal positions, and
+stores query-relative two-hand tactile histories and per-array hashes in a new
+external output directory. Four new CPU tests bring candidate-specific tests
+to 16; Ruff, compile and diff checks pass. The 44.2 GB payload is still
+downloading (about 18 GB written at this snapshot); the real archive checksum,
+class support, VideoPrism runtime, feature extraction and any model evaluation
+remain unverified. See [protocol](docs/pretrained_reuse/R2M_DEXTRAVERSE_CONTACT_DECISION_PROTOCOL_20261122.md).
+
