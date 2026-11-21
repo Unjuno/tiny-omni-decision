@@ -39,8 +39,9 @@
     "hf_blob_oid": "7456e5175751abb6fd833e242c412ea62412def4",
     "publisher_sha256": "9f9d8d0e6a6eebac12f1bf63fae59bea46e9531db2b9921440aa553289d07aa4",
     "download_status_at_record": "DOWNLOADING",
-    "downloaded_bytes_at_record": 7442358272,
-    "download_observed_at": "2026-11-22T04:03:29+09:00",
+    "downloaded_bytes_at_record": 34563870720,
+    "download_observed_at": "2026-11-22T05:21:32+09:00",
+    "download_process_status_at_record": "running; PID 120404; started 2026-11-22T04:06:34+09:00",
     "transport_attempts": [
       {
         "transport": "curl single stream",
