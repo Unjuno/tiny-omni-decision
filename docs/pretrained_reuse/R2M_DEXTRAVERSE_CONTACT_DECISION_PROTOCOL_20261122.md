@@ -51,36 +51,39 @@ operator, object, task, or embodiment generalization.
 
 ## Proposed fixed task
 
-Question: **Which fingertip outcome will occur next?** Given recent video and
-the active hand's past contact-force series, choose among seven fixed options:
-`thumb`, `index`, `middle`, `ring`, `little`, `simultaneous`, or
-`no_new_contact_within_1s`.
+Question: **Which fingertip contact outcome will occur next?** Given recent
+head-camera video and the past force series from both hands, choose among 12
+fixed options: `left_thumb`, `left_index`, `left_middle`, `left_ring`,
+`left_little`, `right_thumb`, `right_index`, `right_middle`, `right_ring`,
+`right_little`, `simultaneous`, or `no_new_contact_within_1s`.
 
 Proposed deterministic target transform, to be applied identically in all
 folds:
 
-1. Use only an active-side value explicitly encoded in the episode instruction
-   or episode metadata. If it is absent or ambiguous, stop this task; do not
-   infer the side from future force/target events. Exclude the three episodes
-   documented as bimanual. Retain the two no-grasp episodes as valid
-   no-contact examples.
+1. Concatenate left then right fingertip forces at every timestamp; do not
+   infer an active side. Use the head/egocentric camera for every episode, so
+   side-specific camera selection is not required. Retain single-hand,
+   bimanual, and never-grasp episodes. A bimanual target event can produce the
+   `simultaneous` class.
 2. Form intended query times on an episode-relative 0.5-second grid, beginning
    1.0 second after start and ending 1.0 second before end. Use the nearest
    tactile timestamp only when it is within 25 ms; that matched timestamp is
    the actual query time.
 3. Compute per-fingertip force magnitude as the Euclidean norm of the three
-   calibrated force components (newtons). At query time, mark each fingertip
+   calibrated force components (newtons), separately for all ten fingertips.
+   At query time, mark each fingertip
    in-contact at magnitude >= 0.5 N. A target event is a below-to-at-least
    0.5 N rising crossing in `(query_time, query_time + 1.0 s]`, found from the
    full episode force series. Already-contacting fingertips are not new events.
    The causal input remains only the past 1.0 s of force history. Crossings on
-   distinct fingertips within one tactile sample interval of the earliest
-   crossing are `simultaneous`; no crossing is
+   distinct fingertips on either hand within one tactile sample interval of
+   the earliest crossing are `simultaneous`; otherwise the label identifies
+   the hand and fingertip. No crossing is
    `no_new_contact_within_1s`. Queries with invalid force at query time or no
-   valid active-hand wrist stream are ineligible, not silently assigned a
-   negative label. Any non-finite force value or timestamp gap above 200 ms in
+   valid head-camera frame are ineligible, not silently assigned a negative
+   label. Any non-finite force value or timestamp gap above 200 ms in
    the past-input or future-target window makes that query ineligible.
-4. Use only the active-hand wrist camera. Sample eight frames nearest to
+4. Use only the head camera. Sample eight frames nearest to
    equally spaced target times in the 1.0-second interval ending 0.25 seconds
    before query time; require each selected frame timestamp to be within 50 ms
    of its target. Use only causal sensor samples at or before query time.
@@ -90,9 +93,9 @@ folds:
 These rules were frozen before payload retrieval. Verify the 0.5 N threshold,
 camera timestamp semantics, label support, and resulting class balance from
 the pinned arrays before any fit. If fewer than 1,000 valid queries or 200
-episode groups remain, or any of the seven classes has fewer than 50 queries
-from at least 15 distinct episodes, stop and report insufficient support
-rather than collapsing classes or relaxing the rules.
+episode groups remain, or any of the 12 classes has fewer than 50 queries from
+at least 15 distinct episodes, stop and report insufficient support rather
+than collapsing classes or relaxing the rules.
 
 ## Split, arms, and evaluation
 
@@ -113,14 +116,14 @@ rather than collapsing classes or relaxing the rules.
   (earliest epoch on ties); fit one scalar temperature on calibration episodes
   only. Score the outer-fold predictions once with these frozen choices.
 - Compare frozen-video-only, causal-tactile-only, and paired video+tactile
-  readouts on identical query IDs and seven options. The existing causal
+  readouts on identical query IDs and 12 options. The existing causal
   `SensorTemporalLSTMStem` and `VideoSensorTemporalDecisionScorer` are the
   starting integration; no encoder is unfrozen.
-- Use the existing scorer defaults with 768 video features, 15 force channels,
-  seven one-hot options, 64-wide sensor LSTM, 96-wide/four-head fusion, and a
-  128-wide candidate scorer: CPU instantiation measures 256,099 trainable
+- Use the existing scorer defaults with 768 video features, 30 force channels,
+  12 one-hot options, 64-wide sensor LSTM, 96-wide/four-head fusion, and a
+  128-wide candidate scorer: CPU instantiation measures 261,059 trainable
   readout parameters. No encoder parameters are included in that count.
-- Encode the seven fixed outcome types as a fixed one-hot typed option schema;
+- Encode the 12 fixed outcome types as a fixed one-hot typed option schema;
   keep option IDs and their order in the result JSON. Do not vary option count
   or labels after inspecting model scores.
 - Before fitting, measure a train-fold class-prior/option-only baseline and an
@@ -130,7 +133,7 @@ rather than collapsing classes or relaxing the rules.
   tactile offset, no video, and option-order permutation. Add a
   parameter-matched null-tactile arm by replacing every tactile window with an
   identical all-zero 1-second sequence on a fixed 50-ms time grid, retaining
-  the sensor branch. This lets its full 256,099 readout parameters train while
+  the sensor branch. This lets its full 261,059 readout parameters train while
   withholding tactile information; report it separately from the strict
   missing-tactile arm.
 - Report all-example and macro-class Accuracy, equal-episode macro Accuracy
@@ -167,10 +170,12 @@ positive result would be a narrow sensor-fusion mechanism result, not a
 product-quality pass.
 
 The deterministic contact-window/episode-split helper is implemented in
-`scripts/pretrained_reuse/dextraverse_contact.py`; 11 CPU tests cover synthetic
+`scripts/pretrained_reuse/dextraverse_contact.py`; 12 CPU tests cover synthetic
 crossings, simultaneity, causal cutoffs, gaps, missing values and grouped split
 determinism. These tests establish code behavior only. No real source rows,
-feature cache, model fit, or quality metrics exist yet.
+feature cache, model fit, or quality metrics exist yet. A synthetic Zarr v2
+`ZipStore` smoke passed end-to-end through the read-only source preflight and
+returned 26 valid fixture queries; it does not verify the downloaded archive.
 
 ## Evidence links
 

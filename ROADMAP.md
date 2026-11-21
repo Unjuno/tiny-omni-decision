@@ -4395,11 +4395,14 @@ four-modality objectives open. [Protocol, OOF metrics, histories and hashes](doc
 
 **2026-11-22 R2-M DextraVerse video+tactile candidate preflight:** Pinned the
 public CC BY 4.0 `pick_cube_place_box` task and its real-robot schema. The
-publisher documents 261 episodes, wrist RGB, and calibrated per-fingertip
-3-axis force in N. A causal next-contact task has been fixed prospectively;
-the archive is downloading to an external C: attempt directory. Active-hand
-provenance, array/timestamp integrity, class support, and grouped evaluation
-remain unverified. The pure CPU target/split helper has 11 passing synthetic
+publisher documents 261 episodes, head RGB, and calibrated per-fingertip
+3-axis force in N. A causal next-contact task has been fixed prospectively:
+both hands' 10 fingertips feed the sensor path, head video feeds the visual
+path, and the 12 labels include hand-specific contact outcomes. This avoids
+inferring the active hand from future measurements; all three bimanual
+episodes remain included. The archive is downloading to an external C: attempt
+directory. Array/timestamp integrity, class support, and grouped evaluation
+remain unverified. The pure CPU target/split helper has 12 passing synthetic
 tests; no real examples or model fit/evaluation exist yet, and sealed audit
 remains unopened.
 Do not treat this as admitted or as product-quality evidence. See the

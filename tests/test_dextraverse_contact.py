@@ -13,7 +13,7 @@ from scripts.pretrained_reuse.dextraverse_contact import (
 
 def _episode(seconds: int = 6) -> tuple[np.ndarray, np.ndarray]:
     timestamps = np.arange(seconds * 20 + 1, dtype=np.float64) / 20
-    forces = np.zeros((timestamps.size, 5, 3), dtype=np.float32)
+    forces = np.zeros((timestamps.size, 10, 3), dtype=np.float32)
     return timestamps, forces
 
 
@@ -28,17 +28,26 @@ def test_first_future_fingertip_crossing_is_labelled_and_inputs_are_causal():
     windows = build_contact_windows(timestamps, forces)
     window = _window_at(windows, 1.5)
 
-    assert LABELS[window.target] == "index"
+    assert LABELS[window.target] == "left_index"
     assert max(window.sensor_indices) == window.query_index
     assert max(window.video_indices) < window.query_index
     assert timestamps[max(window.video_indices)] <= window.query_time_s - 0.25
     assert min(window.video_indices) >= 0
 
 
+def test_right_hand_fingertip_label_uses_fixed_left_then_right_order():
+    timestamps, forces = _episode()
+    forces[timestamps >= 1.8, 6, 1] = 0.6
+
+    window = _window_at(build_contact_windows(timestamps, forces), 1.5)
+
+    assert LABELS[window.target] == "right_index"
+
+
 def test_two_fingertips_crossing_within_one_sample_are_simultaneous():
     timestamps, forces = _episode()
     forces[timestamps >= 1.8, 0, 0] = 0.6
-    forces[timestamps >= 1.85, 4, 0] = 0.7
+    forces[timestamps >= 1.85, 9, 0] = 0.7
 
     window = _window_at(build_contact_windows(timestamps, forces), 1.5)
 
@@ -107,7 +116,7 @@ def test_invalid_shapes_and_nonmonotonic_time_fail_closed():
     timestamps, forces = _episode()
 
     with pytest.raises(ValueError, match="shape"):
-        build_contact_windows(timestamps, forces[:, :4])
+        build_contact_windows(timestamps, forces[:, :9])
     timestamps[10] = timestamps[9]
     with pytest.raises(ValueError, match="strictly increasing"):
         build_contact_windows(timestamps, forces)

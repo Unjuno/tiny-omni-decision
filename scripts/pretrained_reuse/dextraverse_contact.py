@@ -9,16 +9,14 @@ from dataclasses import dataclass
 import numpy as np
 from numpy.typing import NDArray
 
+FINGER_NAMES = ("thumb", "index", "middle", "ring", "little")
 LABELS = (
-    "thumb",
-    "index",
-    "middle",
-    "ring",
-    "little",
+    *(f"left_{name}" for name in FINGER_NAMES),
+    *(f"right_{name}" for name in FINGER_NAMES),
     "simultaneous",
     "no_new_contact_within_1s",
 )
-FINGER_COUNT = 5
+FINGER_COUNT = 10
 FORCE_AXES = 3
 SPLIT_PREFIX = "dextraverse-contact-decision-v1|17"
 
@@ -124,7 +122,8 @@ def build_contact_windows(
 ) -> list[ContactWindow]:
     """Create fixed-grid next-contact examples from one episode.
 
-    Force has shape ``[time, 5 fingertips, 3 axes]`` in calibrated newtons.
+    Force has shape ``[time, 10 left-then-right fingertips, 3 axes]`` in
+    calibrated newtons.
     Invalid windows are skipped. Contact labels are first rising crossings of
     the force-vector magnitude; no label or input uses data after the query
     time. The returned sensor indices lie in ``[query-history, query]`` and
@@ -135,7 +134,7 @@ def build_contact_windows(
     if timestamps.ndim != 1 or timestamps.size < 2:
         raise ValueError("timestamps_s must contain at least two episode samples")
     if force.shape != (timestamps.size, FINGER_COUNT, FORCE_AXES):
-        raise ValueError("force must have shape [time, 5 fingertips, 3 axes]")
+        raise ValueError("force must have shape [time, 10 left-then-right fingertips, 3 axes]")
     if not np.isfinite(timestamps).all() or np.any(np.diff(timestamps) <= 0):
         raise ValueError("episode timestamps must be finite and strictly increasing")
     numeric_settings = (

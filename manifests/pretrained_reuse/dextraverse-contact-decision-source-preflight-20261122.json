@@ -25,13 +25,13 @@
     "reported_episode_types": {
       "left_hand": 140,
       "right_hand": 116,
-      "bimanual_excluded_by_protocol": 3,
+      "bimanual_retained_by_protocol": 3,
       "never_grasp_retained": 2
     },
-    "tactile_schema": "5 fingertips x 3 calibrated force components in N; per-finger force components are in that sensor's own frame",
-    "video_schema": "RGB 320x240 head and left/right wrist streams",
+    "tactile_schema": "10 left-then-right fingertips x 3 calibrated force components in N; per-finger force components are in that sensor's own frame",
+    "video_schema": "RGB 320x240 head/egocentric camera for every episode",
     "episode_identity": "meta/episode_ends in the Zarr v2 replay buffer",
-    "active_hand_source": "UNKNOWN pending inspection of per-episode instruction/metadata; do not infer from future contact labels"
+    "target_schema": "12 fixed options: side-specific finger, simultaneous, or no new contact"
   },
   "payload": {
     "path": "DextraVerse/pick_cube_place_box.zarr.zip",
@@ -59,12 +59,13 @@
   "gates": {
     "source_is_public_and_ungated": true,
     "license_allows_research_use_with_attribution": true,
+    "synthetic_zipstore_preflight_smoke_passed": true,
     "archive_sha256_verified": false,
-    "episode_arrays_and_active_hand_verified": false,
+    "both_force_arrays_and_head_video_verified": false,
     "target_support_verified": false,
     "grouped_evaluation_started": false,
     "model_training_or_evaluation_started": false,
     "sealed_audit_accessed": false
   },
-  "decision": "Continue pinned payload preflight only. No fit or quality claim until payload hash, active-hand provenance, temporal alignment, and target support pass the fixed protocol."
+  "decision": "Continue pinned payload preflight only. No fit or quality claim until payload hash, both-hand/head array integrity, temporal alignment, and target support pass the fixed protocol."
 }
