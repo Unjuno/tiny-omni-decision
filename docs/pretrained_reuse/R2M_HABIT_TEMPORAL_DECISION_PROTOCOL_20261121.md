@@ -148,3 +148,32 @@ or four-modality quality. It instead flags overfitting and insufficient
 validation-group coverage. Do not promote or quantize this readout. A next
 quality experiment needs more independent, rights-cleared task groups before
 architecture tuning.
+
+## Train-only text identifiability audit
+
+After the pilot, a separate diagnostic examined only the frozen package's 202
+training transitions. It grouped examples by normalized instruction plus the
+order-independent set of normalized candidate actions, mapping the target to
+its semantic candidate text. Normalization uses Unicode NFKC, casefolding and
+whitespace collapse while preserving punctuation. The audit did not compute
+validation metrics, train a model, select a checkpoint, or access sealed data.
+
+The 202 rows contained 36 distinct model-visible text keys. Thirty-three keys
+recurred (199 rows); 27 keys had conflicting correct actions (187 rows), with
+96 target assignments beyond each key's majority label. Twenty-four conflict
+keys crossed episodes and videos, covering 178 rows. The majority-label
+diagnostic was 103/199 (51.76%) on repeated keys and 91/187 (48.66%) on
+conflict-key rows. These are **in-sample alias/consistency diagnostics**, not
+generalization scores or model ceilings. They show that text and candidate
+actions alone do not identify the next action for many records; video/state
+context may be necessary, but this audit does not show that the readout can
+extract or use that context. This finding is consistent with the pilot's weak
+shuffle/missing-stream effects and motivates improving group coverage and
+checking context-sensitive labels before another architecture comparison.
+
+The machine-readable summary and hashes are in
+[`habit-train-text-identifiability-20261121.json`](../../manifests/pretrained_reuse/habit-train-text-identifiability-20261121.json).
+Full per-key details remain in the external report at
+`C:\CodexArtifacts\pretrained-reuse-r2\habit-train-text-identifiability-20261121-attempt-02\report.json`;
+its artifact SHA-256 is recorded in the manifest. No model weights or source
+media were copied into Git.

@@ -11,6 +11,16 @@ validation-group matching failure. Exact run duration is unknown. See [protocol
 and results](docs/pretrained_reuse/R2M_HABIT_TEMPORAL_DECISION_PROTOCOL_20261121.md)
 and [run manifest](manifests/pretrained_reuse/habit-temporal-decision-20261121.json).
 
+**2026-11-21 R2-M HABIT train-only text identifiability audit:** In the frozen
+202-row train package, 27/36 normalized instruction+candidate-set keys had
+conflicting target actions (187 rows); 24 conflict keys spanned episodes and
+videos. Repeated-key majority was 51.76% (103/199), a diagnostic of text-only
+ambiguity, not generalization or a model ceiling. Validation metrics,
+checkpoint selection, training and sealed-audit access were not performed.
+This supports checking state/video label context and expanding independent
+task-group coverage before further architecture tuning. See [protocol](docs/pretrained_reuse/R2M_HABIT_TEMPORAL_DECISION_PROTOCOL_20261121.md#train-only-text-identifiability-audit)
+and [audit manifest](manifests/pretrained_reuse/habit-train-text-identifiability-20261121.json).
+
 **2026-11-21 R2-M HABIT source preflight:** Pinned public revision
 `bae97d251907743f8fb6db7e70c61d361df4dc1e` declares CC BY 4.0 and includes
 synced video, robot state and subtask labels. A metadata preflight found a
