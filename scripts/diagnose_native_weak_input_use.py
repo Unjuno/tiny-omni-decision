@@ -334,8 +334,6 @@ def main() -> None:
     for modality in ("image", "text"):
         subset = [row for row in selected if row["modality"] == modality]
         donors = donor_by_modality[modality]
-        if len(donors) != len(subset):
-            raise ValueError("same-task, different-group donors not available for every row")
         conditions = {
             name: []
             for name in (
@@ -354,7 +352,8 @@ def main() -> None:
                     raise ValueError(
                         "pinned baseline checkpoint replay differs from saved validation"
                     )
-                donor_blocks, _ = store.get(donors[row["id"]])
+                donor = donors.get(row["id"], row)
+                donor_blocks, _ = store.get(donor)
                 variants = {
                     "baseline": (blocks, queries),
                     "observation_zero": (zero_blocks(blocks), queries),
@@ -394,9 +393,12 @@ def main() -> None:
         donor_manifest = [
             {
                 "row_id": row["id"],
-                "donor_id": donors[row["id"]]["id"],
-                "same_source_task": True,
-                "different_group": True,
+                "donor_id": donors.get(row["id"], row)["id"],
+                "same_source_task": (
+                    donors.get(row["id"], row)["source"] == row["source"]
+                    and donors.get(row["id"], row)["task"] == row["task"]
+                ),
+                "different_group": donors.get(row["id"], row)["group"] != row["group"],
             }
             for row in subset
         ]
@@ -408,6 +410,8 @@ def main() -> None:
                 {
                     "count": len(subset),
                     "groups": len({r["group"] for r in subset}),
+                    "observation_shuffle_donor_count": len(donors),
+                    "observation_shuffle_identity_fallback_count": len(subset) - len(donors),
                     "metrics": summaries,
                     "paired_group_bootstrap": intervals,
                 },
