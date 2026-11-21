@@ -251,10 +251,6 @@ def main() -> None:
     for name, digest in query_receipt["artifacts"].items():
         if sha256(args.queries / name) != digest:
             raise ValueError("pinned query artifact differs: " + name)
-    for receipt in (corpus_receipt, query_receipt):
-        for path, digest in receipt.get("validated_hashes", {}).items():
-            if sha256(Path(path)) != digest:
-                raise ValueError("pinned cached-feature input differs: " + path)
 
     validation = [
         json.loads(line)
@@ -278,6 +274,19 @@ def main() -> None:
     }
     observations = json.loads((args.corpus / "observations.json").read_text(encoding="utf-8"))
     query_map = json.loads((args.corpus / "query-map.json").read_text(encoding="utf-8"))
+    used_bank_names = {
+        feature["bank"]
+        for row in selected
+        for feature in observations[row["observation"]]["features"]
+    } | {"new/queries.npy"}
+    relevant_bank_hashes = {}
+    for name in sorted(used_bank_names):
+        metadata = banks[name]
+        path = Path(metadata["path"])
+        actual = sha256(path)
+        if actual != metadata["sha256"]:
+            raise ValueError("used validation feature bank hash differs: " + str(path))
+        relevant_bank_hashes[str(path)] = actual
     profiles = {
         ident: tuple((feature["kind"], feature["tokens"]) for feature in value["features"])
         for ident, value in observations.items()
@@ -425,6 +434,7 @@ def main() -> None:
         "corpus_receipt_sha256": sha256(args.corpus / "result.json"),
         "validation_sha256": corpus_receipt["artifacts"]["validation.jsonl"],
         "query_receipt_sha256": sha256(args.queries / "result.json"),
+        "used_validation_feature_bank_hashes": relevant_bank_hashes,
         "validation_rows_loaded": len(validation),
         "scored_counts": counts,
         "selected_validation_exposed": True,
