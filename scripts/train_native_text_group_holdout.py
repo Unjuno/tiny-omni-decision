@@ -97,6 +97,20 @@ def validate_config(config):
         or evaluation.get("sealed_audit_loaded") is not False
     ):
         raise ValueError("official validation and sealed audit must remain closed")
+    output_root = Path(config["output_root"]).resolve()
+    if output_root.drive.upper() != "C:":
+        raise ValueError("artifact output root must resolve to the local C: volume")
+    if config.get("staging_receipt_sha256") == "TO_BE_FILLED_AFTER_LOCAL_COPY":
+        raise ValueError("local frozen-input copy must be hashed and pinned first")
+    if config["input_pins"].get(config["staging_receipt_path"]) != config["staging_receipt_sha256"]:
+        raise ValueError("staging receipt must be included in the pinned input inventory")
+
+
+def validate_output_path(config, output):
+    root = Path(config["output_root"]).resolve()
+    destination = Path(output).resolve()
+    if destination.drive.upper() != "C:" or not destination.is_relative_to(root):
+        raise ValueError("output must be a new child of the configured local C: artifact root")
 
 
 def tracked_python_hashes():
@@ -202,6 +216,7 @@ def build_preflight(config_path, output):
     source_commit = require_clean_source()
     config = read_json(config_path)
     validate_config(config)
+    validate_output_path(config, output)
     verify_pins(config["input_pins"])
     root, corpus_receipt, rows = load_train_corpus(config)
     if (
@@ -227,9 +242,8 @@ def build_preflight(config_path, output):
     ):
         raise ValueError("observed group availability differs from preregistered split")
     feature_metadata = validate_train_text_metadata(config, split)
-    banks = read_json(root / "banks.json")
-    query_bank = Path(banks["language/queries.npy"]["path"])
-    state_bank = Path(banks["language/train-states.npy"]["path"])
+    query_bank = Path(config["text_query_bank_path"])
+    state_bank = Path(config["text_state_bank_path"])
     query_array = np.load(query_bank, mmap_mode="r", allow_pickle=False)
     state_array = np.load(state_bank, mmap_mode="r", allow_pickle=False)
     if query_array.shape != (22328, 384) or state_array.shape != (375078, 384):
@@ -281,10 +295,10 @@ class TrainTextFeatureStore:
         query_map = read_json(root / "query-map.json")
         self.device = device
         self.state_array = np.load(
-            self.banks["language/train-states.npy"]["path"], mmap_mode="r", allow_pickle=False
+            config["text_state_bank_path"], mmap_mode="r", allow_pickle=False
         )
         self.query_array = np.load(
-            self.banks["language/queries.npy"]["path"], mmap_mode="r", allow_pickle=False
+            config["text_query_bank_path"], mmap_mode="r", allow_pickle=False
         )
         required = {query_id for row in fit_rows + holdout_rows for query_id in row["queries"]}
         self.query_offsets = {}
@@ -416,6 +430,7 @@ def train(config_path, output, preflight_path, preflight_sha256):
     source_commit = require_clean_source()
     config = read_json(config_path)
     validate_config(config)
+    validate_output_path(config, output)
     if sha(Path(preflight_path) / "preflight.json") != preflight_sha256:
         raise ValueError("preflight receipt hash mismatch")
     preflight = read_json(Path(preflight_path) / "preflight.json")

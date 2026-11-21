@@ -1,17 +1,23 @@
 {
   "id": "native-text-state-group-holdout-v1",
-  "corpus_root": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02",
-  "query_cache_root": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-language-cache-02",
+  "corpus_root": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-common-corpus-02",
+  "query_cache_root": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-language-cache-02",
+  "output_root": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\runs",
+  "text_state_bank_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-language-cache-02\\train-states.npy",
+  "text_query_bank_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-language-cache-02\\queries.npy",
+  "staging_receipt_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\staging-receipt.json",
+  "staging_receipt_sha256": "c409025b3df07f2f012bccc60ae50a4296f149fbc86125fe80f32526ed0f5109",
   "text_state_bank_sha256": "88a010df86f21ffaa94a40f6e6dedab75e73be0bebe54e17dfa01fb5138f6e99",
   "text_query_bank_sha256": "e123c9c7fdc2af85fa4fa50eb3be9e2de1ce013144561ee6e35c1c95e6185be3",
   "input_pins": {
-    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02\\result.json": "47a6d2f3495810bac58f57dec1a962f8b490fa409c75671b46bb2999fde87d49",
-    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02\\train.jsonl": "d279ca44c6ff8e619529805be21675a8b4088fdcc476c7bb04649abdb5e60ebb",
-    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02\\observations.json": "e82febae93455cc06a2fb31f3dcc83ebcb79328552aff2ec4da507d660186afb",
-    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02\\banks.json": "44ef5f26ffb01bd264c7283f82e6a6f37f1a4d3c34f522515ddfc7fc2acb6520",
-    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02\\query-map.json": "6d7d0ed1dfe6ec50d1c9b0801c689f3584f2050c6237180b0303f758fe6e1e15",
-    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-language-cache-02\\train-states.npy": "88a010df86f21ffaa94a40f6e6dedab75e73be0bebe54e17dfa01fb5138f6e99",
-    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-language-cache-02\\queries.npy": "e123c9c7fdc2af85fa4fa50eb3be9e2de1ce013144561ee6e35c1c95e6185be3"
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-common-corpus-02\\result.json": "47a6d2f3495810bac58f57dec1a962f8b490fa409c75671b46bb2999fde87d49",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-common-corpus-02\\train.jsonl": "d279ca44c6ff8e619529805be21675a8b4088fdcc476c7bb04649abdb5e60ebb",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-common-corpus-02\\observations.json": "e82febae93455cc06a2fb31f3dcc83ebcb79328552aff2ec4da507d660186afb",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-common-corpus-02\\banks.json": "44ef5f26ffb01bd264c7283f82e6a6f37f1a4d3c34f522515ddfc7fc2acb6520",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-common-corpus-02\\query-map.json": "6d7d0ed1dfe6ec50d1c9b0801c689f3584f2050c6237180b0303f758fe6e1e15",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-language-cache-02\\train-states.npy": "88a010df86f21ffaa94a40f6e6dedab75e73be0bebe54e17dfa01fb5138f6e99",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\native-language-cache-02\\queries.npy": "e123c9c7fdc2af85fa4fa50eb3be9e2de1ce013144561ee6e35c1c95e6185be3",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\native-text-state-group-holdout\\inputs\\staging-receipt.json": "c409025b3df07f2f012bccc60ae50a4296f149fbc86125fe80f32526ed0f5109"
   },
   "split": {
     "seed": 17,

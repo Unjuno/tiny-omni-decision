@@ -46,8 +46,14 @@ starts from a fresh seed-17 initialization; no prior fit checkpoint is reused.
 The split and input preflight must finish before training. The runner is
 `scripts/train_native_text_group_holdout.py`; tests cover deterministic group
 assignment, identity isolation, balanced scheduling, and donor label mapping.
-Outputs and checkpoints go only to a new directory below
-`C:\CodexArtifacts\pretrained-reuse-r2`. They are never added to Git.
+The exact pinned TRAIN JSONL, observation/query metadata, text query bank, and
+TRAIN text-state bank are copied without modification from the removable D:
+artifact volume to a dedicated local-C input snapshot. The copy receipt records
+source and destination hashes; only those TRAIN-only files are copied, with no
+validation corpus or audit payload. Outputs and checkpoints go only to new
+directories below `C:\CodexArtifacts\pretrained-reuse-r2-local\native-text-state-group-holdout\runs`.
+The runner rejects an output path that resolves elsewhere. Outputs are never
+added to Git.
 
 ## Frozen-data inventory
 
@@ -61,8 +67,25 @@ four-modality mixed run.
 
 ## Results
 
-**Pending.** The final section will be updated only after the pinned preflight
-and the fixed terminal run. It will include the run receipt hash, runtime,
-checkpoint hash, per-task and macro metrics, counterfactual input-use results,
-bootstrap intervals, and remaining limitations. The official validation and
-sealed audit remain out of scope.
+The first preflight stopped before training because the config omitted the two
+expected feature-bank hash fields. The fields were added and the next preflight
+passed. The first fit then reached step 128, but its D:-mounted output directory
+became unavailable during the disk-reserve check (`WinError 3`). It had not yet
+reached the step-256 checkpoint; its history file is empty and no model or
+optimizer state was saved. Exact resume is therefore impossible. That attempt
+is retained as a failed partial run and will not be represented as 128-step
+quality evidence.
+
+To prevent another output-loss event, the seven pinned TRAIN-only corpus and
+feature files were copied unchanged to local C:. Their 856,979,629 bytes match
+the expected SHA-256 values; validation rows/features and sealed audit data were
+not copied. The original D: files were left untouched. The next preflight and
+fit use only this local copy and a new C: output path, with a fresh seed-17
+initialization. This remains the same preregistered training schedule and split
+protocol, but it is a restart, not a continuation.
+
+**Final metrics pending.** The report will be completed after the local-C
+preflight and fixed terminal run. It will include receipt/checkpoint hashes,
+runtime, per-task and macro metrics, counterfactual input-use results, group
+bootstrap intervals, and limitations. Official validation and sealed audit
+remain out of scope.
