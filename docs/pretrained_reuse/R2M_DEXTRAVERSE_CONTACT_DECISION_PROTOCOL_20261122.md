@@ -176,6 +176,9 @@ determinism. These tests establish code behavior only. No real source rows,
 feature cache, model fit, or quality metrics exist yet. A synthetic Zarr v2
 `ZipStore` smoke passed end-to-end through the read-only source preflight and
 returned 26 valid fixture queries; it does not verify the downloaded archive.
+The real-data preflight script will write stable episode/fold/sample IDs,
+target labels, causal frame indices and sensor index ranges to the external
+attempt report, alongside per-class and duplicate-media gates.
 
 ## Evidence links
 

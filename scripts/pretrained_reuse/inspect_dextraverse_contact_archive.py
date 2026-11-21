@@ -96,6 +96,7 @@ def inspect_archive(archive_path: Path) -> dict[str, Any]:
         media_hash_to_episodes: dict[str, list[int]] = {}
         episode_folds = outer_episode_folds(list(range(EXPECTED_EPISODES)))
         usable_episode_ids: list[int] = []
+        query_records: list[dict[str, Any]] = []
         for episode_id, (start, end) in enumerate(zip(boundaries, episode_ends, strict=True)):
             row = episode_rows[episode_id]
             if not row["timestamp_strictly_increasing"]:
@@ -128,6 +129,19 @@ def inspect_archive(archive_path: Path) -> dict[str, Any]:
                 label_counts[window.target] += 1
                 label_episode_sets[window.target].add(episode_id)
                 row["label_counts"][label] += 1
+                query_records.append({
+                    "sample_id": (
+                        f"episode-{episode_id:03d}-frame-"
+                        f"{start_i + window.query_index:06d}"
+                    ),
+                    "episode_id": episode_id,
+                    "outer_fold": episode_folds[episode_id],
+                    "query_index": start_i + window.query_index,
+                    "query_time_s": window.query_time_s,
+                    "video_frame_indices": [start_i + index for index in window.video_indices],
+                    "sensor_frame_indices": [start_i + index for index in window.sensor_indices],
+                    "target_id": label,
+                })
             if windows:
                 usable_episode_ids.append(episode_id)
                 row["status"] = "USABLE"
@@ -200,6 +214,8 @@ def inspect_archive(archive_path: Path) -> dict[str, Any]:
             "bimanual_episodes_reported_by_source": BIMANUAL_EPISODES,
             "usable_episode_count": usable,
             "valid_query_count": usable_query_count,
+            "query_records_count": len(query_records),
+            "query_records": query_records,
             "class_support": class_support,
             "insufficient_classes": insufficient_classes,
             "outer_fold_class_query_counts": fold_class_counts,
