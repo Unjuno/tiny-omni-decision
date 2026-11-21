@@ -1,3 +1,14 @@
+**2026-11-21 R2 frozen numeric-span diagnostic:** A CPU-only seed-17,
+five-fold group OOF probe over the existing 768 FIT state groups decoded raw
+numeric span values from frozen DeBERTa token states (macro Pearson r 0.972;
+MAE 10.54 on the generated value scale). With gold field/object alignment and
+min/max direction supplied, candidate Accuracy was 88.39%; a within-state
+feature derangement scored 3.65%. This is an oracle-assisted TRAIN diagnostic,
+not independent quality evidence or product accuracy. It suggests the frozen
+encoder retains numeric magnitude; field localization, question binding and
+decision readout remain unresolved. Do not tune on these FIT OOF results. See
+[protocol and results](docs/pretrained_reuse/R2_NATIVE_NUMERIC_SPAN_DECODER_DIAGNOSTIC_20261121.md).
+
 **2026-11-21 R2 EVE-ESA EO MCQA TRAIN-only grouped CV:** The frozen
 MiniLM-L3 + 196,865-parameter readout reached 65.39% OOF Accuracy (95% grouped
 bootstrap interval 62.77–68.02%), 0.9052 NLL, 0.4552 Brier and 4.73% ECE over
