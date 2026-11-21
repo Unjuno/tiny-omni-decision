@@ -91,7 +91,17 @@ transition points. Their index receipt is outside Git at
 `C:\CodexArtifacts\pretrained-reuse-r2\habit-label-schema-20261121-attempt-02\habit-transition-cutoff.json`
 (SHA-256 `5b4fd2f7bd9e53b2086045a8f62ebcb62fa9765dfe4485823009abd77fa32ee3`).
 This validates label timing only; causal video/state extraction and alignment
-at these cutoffs are not yet run.
+at these cutoffs were subsequently checked on both existing sample clips. All
+1,122 Parquet timestamps align to a decoded front-view video PTS within 0.004
+ms. The selected 14-D state uses only robot0 cartesian position, joint
+positions and gripper position. All five transition windows have eight video
+frames no later than their cutoff, and the selected state row is no later than
+the cutoff (0–100 ms state age). No action columns were read. The alignment
+receipt is outside Git at
+`C:\CodexArtifacts\pretrained-reuse-r2\habit-label-schema-20261121-attempt-02\habit-causal-sync.json`
+(SHA-256 `a094cb882599bd3253e1ba1f940cf645cb661dce118680e0970e1f466431369c`).
+This is still a two-episode smoke, not evidence that alignment holds across
+the selected split.
 
 ## Interpretation
 

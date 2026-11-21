@@ -12,9 +12,10 @@ The option audit found repeated action text in 5,273/9,113 eligible
 train/validation episodes; `habit_decision.py` collapses repeats to unique
 semantic choices and fails closed on one-choice or unmappable targets. The two
 existing Parquet samples pass all 1,122 frame-label mappings and yield five
-causal transition cutoffs (input ends 100 ms before target onset). Actual
-causal media/state extraction, broader data admission and quality evidence
-remain open.
+causal transition cutoffs (input ends 100 ms before target onset). On those
+samples, video PTS and Parquet timestamps align within 0.004 ms; all five
+pre-onset windows use only past video and 14-D robot0 state. Split-wide media
+integrity, broader data admission and quality evidence remain open.
 
 **2026-11-21 R2-M Zenodo audio+vibration follow-up:** The 25 source archives
 (4.57 GB) were hash-verified; only `multisensor-1` was used under a frozen
