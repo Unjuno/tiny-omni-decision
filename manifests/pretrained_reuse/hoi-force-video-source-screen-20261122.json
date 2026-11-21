@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "status": "REVIEW_NOT_ADMITTED",
+  "dataset_id": "Hoi! force-grounded cross-view articulated manipulation",
+  "persistent_id": "doi:10.60507/FK2/QODWTV",
+  "version": "1.0",
+  "dataset_license": "CC BY 4.0",
+  "official_dataset_url": "https://bonndata.uni-bonn.de/dataset.xhtml?persistentId=doi%3A10.60507%2FFK2%2FQODWTV&version=1.0",
+  "official_project_url": "https://timengelbracht.de/Hoi-Dataset-Website/",
+  "official_code_url": "https://github.com/timengelbracht/hoi-dataset-tools",
+  "paper_url": "https://arxiv.org/abs/2512.04884",
+  "metadata_claims": {
+    "interaction_sequences": 3048,
+    "articulated_objects": 381,
+    "environments": 38,
+    "embodiments": 4,
+    "streams": ["video", "force_torque", "tactile"],
+    "synchronized_force_tactile": true,
+    "explicit_multiple_choice_decision_labels_verified": false,
+    "subject_split_policy_verified": false,
+    "object_environment_split_policy_verified": false
+  },
+  "access_and_scope": {
+    "metadata_only": true,
+    "dataset_payload_downloaded": false,
+    "personal_information_submitted": false,
+    "access_request_submitted": false,
+    "guestbook_name_field_reported": true,
+    "project_policy": "REVIEW",
+    "admission_gates": [
+      "verify supplied-choice decision labels and avoid trivial action-label reconstruction",
+      "verify leakage-resistant interaction/object/environment/participant splits",
+      "estimate storage for a bounded subset before acquisition",
+      "inspect full readme without submitting personal information"
+    ]
+  },
+  "interpretation": "Promising sensor/video candidate only. Not admitted to training or evaluation. No performance claim."
+}
