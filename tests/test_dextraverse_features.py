@@ -2,12 +2,20 @@
 
 from __future__ import annotations
 
+import sys
+from io import BytesIO
+
 import numpy as np
 import pytest
 
+from scripts.pretrained_reuse import extract_dextraverse_contact_features
 from scripts.pretrained_reuse.dextraverse_features import (
     assemble_sensor_window,
     pool_videoprism_tokens,
+    read_video_batch,
+    read_video_features,
+    write_video_batch,
+    write_video_features,
 )
 
 
@@ -45,3 +53,56 @@ def test_video_pool_rejects_wrong_layout_and_nonfinite_tokens() -> None:
     tokens[0, 0, 0] = np.nan
     with pytest.raises(ValueError, match="finite"):
         pool_videoprism_tokens(tokens)
+
+
+def test_binary_encoder_pipe_round_trips_rgb_and_temporal_features() -> None:
+    frames = np.arange(2 * 8 * 240 * 320 * 3, dtype=np.uint8).reshape(
+        2, 8, 240, 320, 3
+    )
+    features = np.zeros((2, 8, 768), dtype=np.float32)
+    features[1, :, 0] = np.arange(8, dtype=np.float32)
+    source = BytesIO()
+    assert write_video_batch(source, frames) == 2
+    write_video_features(source, features)
+    source.write(b"\x00\x00\x00\x00")
+    source.seek(0)
+    np.testing.assert_array_equal(read_video_batch(source), frames)
+    np.testing.assert_array_equal(read_video_features(source, 2), features)
+    assert read_video_batch(source) is None
+
+
+def test_binary_encoder_pipe_rejects_bad_batch_and_truncated_feature_response() -> None:
+    with pytest.raises(ValueError, match="uint8"):
+        write_video_batch(BytesIO(), np.zeros((1, 8, 2, 2, 3), dtype=np.uint8))
+    with pytest.raises(EOFError, match="closed"):
+        read_video_features(BytesIO(b""), 1)
+
+
+def test_extractor_cli_forwards_required_videoprism_runtime(monkeypatch, tmp_path) -> None:
+    output = tmp_path / "new-cache"
+    arguments = [
+        "extract_dextraverse_contact_features.py",
+        "--archive", str(tmp_path / "source.zip"),
+        "--preflight", str(tmp_path / "preflight.json"),
+        "--checkpoint", str(tmp_path / "videoprism.npz"),
+        "--videoprism-source", str(tmp_path / "videoprism-source"),
+        "--videoprism-python", str(tmp_path / "videoprism-python.exe"),
+        "--output", str(output),
+        "--device", "cpu",
+        "--batch-size", "3",
+    ]
+    captured = {}
+
+    def fake_extract(*args, **kwargs):
+        captured["args"] = args
+        captured["kwargs"] = kwargs
+        return {"status": "smoke"}
+
+    monkeypatch.setattr(sys, "argv", arguments)
+    monkeypatch.setattr(
+        extract_dextraverse_contact_features, "extract_features", fake_extract
+    )
+    extract_dextraverse_contact_features.main()
+    assert captured["args"][4] == tmp_path / "videoprism-python.exe"
+    assert captured["args"][5] == output
+    assert captured["kwargs"] == {"device": "cpu", "batch_size": 3}

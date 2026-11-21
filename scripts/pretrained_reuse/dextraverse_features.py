@@ -2,8 +2,74 @@
 
 from __future__ import annotations
 
+import struct
+from typing import BinaryIO
+
 import numpy as np
 from numpy.typing import NDArray
+
+VIDEO_BATCH_SHAPE = (8, 240, 320, 3)
+VIDEO_FEATURE_SHAPE = (8, 768)
+
+
+def _read_exact(stream: BinaryIO, size: int) -> bytes:
+    chunks = bytearray()
+    while len(chunks) < size:
+        chunk = stream.read(size - len(chunks))
+        if not chunk:
+            raise EOFError(f"video feature pipe closed after {len(chunks)}/{size} bytes")
+        chunks.extend(chunk)
+    return bytes(chunks)
+
+
+def write_video_batch(stream: BinaryIO, frames: NDArray[np.uint8]) -> int:
+    """Send a little-endian count and raw RGB batch to the pinned encoder worker."""
+    values = np.asarray(frames)
+    if (values.dtype != np.uint8 or values.ndim != 5 or values.shape[0] < 1
+            or tuple(values.shape[1:]) != VIDEO_BATCH_SHAPE):
+        raise ValueError("encoder input must be uint8 [batch, 8, 240, 320, 3]")
+    stream.write(struct.pack("<I", values.shape[0]))
+    stream.write(np.ascontiguousarray(values).tobytes(order="C"))
+    stream.flush()
+    return values.shape[0]
+
+
+def read_video_batch(stream: BinaryIO) -> NDArray[np.uint8] | None:
+    """Read one encoder request; a zero count is the graceful-stop marker."""
+    header = stream.read(4)
+    if len(header) != 4:
+        raise EOFError("encoder input closed before a complete batch header")
+    count = struct.unpack("<I", header)[0]
+    if count == 0:
+        return None
+    size = count * int(np.prod(VIDEO_BATCH_SHAPE))
+    return np.frombuffer(_read_exact(stream, size), dtype=np.uint8).reshape(
+        count, *VIDEO_BATCH_SHAPE
+    )
+
+
+def write_video_features(stream: BinaryIO, features: NDArray[np.floating]) -> None:
+    """Write one `[batch, 8, 768]` float32 response to the parent process."""
+    values = np.asarray(features, dtype=np.float32)
+    if (values.ndim != 3 or values.shape[0] < 1
+            or tuple(values.shape[1:]) != VIDEO_FEATURE_SHAPE
+            or not np.isfinite(values).all()):
+        raise ValueError("encoder response must be finite [batch, 8, 768] float32")
+    stream.write(np.ascontiguousarray(values).tobytes(order="C"))
+    stream.flush()
+
+
+def read_video_features(stream: BinaryIO, count: int) -> NDArray[np.float32]:
+    """Read the fixed-size response for one previously submitted batch."""
+    if count < 1:
+        raise ValueError("response count must be positive")
+    size = count * int(np.prod(VIDEO_FEATURE_SHAPE)) * np.dtype(np.float32).itemsize
+    result = np.frombuffer(_read_exact(stream, size), dtype=np.float32).reshape(
+        count, *VIDEO_FEATURE_SHAPE
+    )
+    if not np.isfinite(result).all():
+        raise ValueError("encoder returned non-finite temporal features")
+    return result
 
 
 def pool_videoprism_tokens(

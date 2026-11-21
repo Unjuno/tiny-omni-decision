@@ -177,14 +177,43 @@ now provides a separate hash-gated, read-only ZIP64 `ZipStore` path that writes
 temporal VideoPrism features and query-relative tactile sequences to an
 external, non-overwriting output directory. It preserves the exact preflight
 sample order and causal timestamps and records individual array hashes. Four
-additional CPU tests cover temporal token pooling, left/right sensor ordering,
-and causal sensor timestamps. These tests establish code behavior only. No
-real source rows, feature cache, model fit, or quality metrics exist yet. A
-synthetic Zarr v2 `ZipStore` smoke passed end-to-end through the read-only
-source preflight and returned 26 valid fixture queries; it does not verify the
-downloaded archive. The real-data preflight script writes stable episode/fold/
-sample IDs, target labels, causal frame indices and sensor index ranges to the
-external attempt report, alongside per-class and duplicate-media gates.
+CPU tests cover temporal pooling, left/right sensor ordering and causal
+timestamps; two more verify binary framing between the isolated Zarr and
+VideoPrism environments. Existing packages are not upgraded. These tests
+establish code behavior only. No real source rows, feature cache, model fit, or
+quality metrics exist yet. A synthetic Zarr v2 `ZipStore` smoke passed
+end-to-end through the read-only source preflight and returned 26 valid fixture
+queries; it does not verify the downloaded archive. The real-data preflight
+script writes stable episode/fold/sample IDs, target labels, causal frame
+indices and sensor index ranges to the external attempt report, alongside
+per-class and duplicate-media gates.
+
+## Runtime preflight
+
+The existing native VideoPrism environment has Python 3.11.16, JAX 0.6.2 and
+TensorFlow 2.18.1. A GPU request failed with JAX `Unknown backend: gpu`; the
+environment enumerates only `TFRT_CPU_0`. The native RTX 3080 is visible to
+Windows and WSL2, but the inspected Ubuntu 24.04 has no installed JAX, PyTorch,
+TensorFlow, Zarr or Numcodecs runtime. No package was installed or upgraded.
+One cold one-example CPU pipe smoke passed in 17.09 seconds including model
+startup/first compilation; it produced finite `[1, 8, 768]` features. That cold
+time is not multiplied across the corpus. The prior pinned-model runtime study
+reports 1.178 seconds per item for warmed batch-8 inference and 4.15 GB peak
+RSS on the same VideoPrism revision and eight-frame model input; its separate
+rough estimate was 6.2 hours for 13,688 clips including media preprocessing.
+Treat this as planning evidence only: DextraVerse has not passed its array gate,
+and its exact query count and ZIP-read cost are unknown. The extractor defaults
+to batch 8 and reads each episode's RGB span once when it fits within a 1 GiB
+cache cap. A separate batch-parity smoke compared one synthetic clip alone and
+as the first item of a batch of eight: maximum absolute feature difference was
+`1.91e-6`, within the predeclared `atol=rtol=1e-5`; the batch-8 first-shape
+compile took 21.87 seconds. This validates batch invariance, not throughput. A
+regression test verifies that the required VideoPrism Python path is forwarded
+by the CLI. See the prior [runtime smoke](R2_AVATAR_ENCODER_RUNTIME_SMOKES_20261101.md).
+Local receipts are under
+`C:/CodexLocalArtifacts/pretrained-reuse-r2/dextraverse-contact-decision-attempt-01/`:
+`gpu-backend-probe-01/probe.json`, `gpu-worker-smoke-01/smoke-report.json`, and
+`cpu-batch8-parity-smoke-01/batch-parity-report.json`.
 
 ## Evidence links
 

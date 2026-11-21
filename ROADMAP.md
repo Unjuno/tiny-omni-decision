@@ -4414,9 +4414,19 @@ read-only, archive-hash-gated frozen-feature worker for the pinned public
 DextraVerse candidate. It streams selected windows from ZIP64 `ZipStore`
 without full extraction, retains all eight VideoPrism temporal positions, and
 stores query-relative two-hand tactile histories and per-array hashes in a new
-external output directory. Four new CPU tests bring candidate-specific tests
-to 16; Ruff, compile and diff checks pass. The 44.2 GB payload is still
-downloading (about 18 GB written at this snapshot); the real archive checksum,
-class support, VideoPrism runtime, feature extraction and any model evaluation
-remain unverified. See [protocol](docs/pretrained_reuse/R2M_DEXTRAVERSE_CONTACT_DECISION_PROTOCOL_20261122.md).
+external output directory. Zarr and VideoPrism run in their existing isolated
+environments through a tested local binary pipe; neither environment is
+upgraded. Seven new CPU tests bring candidate-specific tests to 19; Ruff,
+compile, both runtime CLI entry points and diff checks pass. Batch-8 inference
+matched a synthetic clip processed alone within `1.91e-6` maximum absolute
+error. The 44.2 GB payload is still downloading (about 27 GB written at this
+snapshot); the real
+archive checksum, class support, feature extraction and any model evaluation
+remain unverified. The native JAX runtime is CPU-only; its one-example cold
+pipe smoke passed, and prior pinned-model batch-8 measurements indicate
+roughly 1.18 s/item after warm-up (about 6.2 h for the earlier 13.7k-clip
+estimate). Actual DextraVerse query count and ZIP-read overhead are unknown.
+The extractor now uses batch 8 and caches each episode's RGB span under a 1 GiB
+cap; its CLI regression test verifies the separate worker-Python argument. See
+[protocol](docs/pretrained_reuse/R2M_DEXTRAVERSE_CONTACT_DECISION_PROTOCOL_20261122.md#runtime-preflight).
 
