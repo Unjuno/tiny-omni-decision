@@ -37,7 +37,7 @@ validation predictions, official test, or sealed audit.
 - Existing readout config SHA-256:
   `60857ddebb2ab0d741d46f9e08b077160069d536c80dbd862654ef5b1c481164`.
 - External run root (must not exist before preflight):
-  `C:\CodexArtifacts\pretrained-reuse-r2\tallyqa-vg-train-groupcv-v1-attempt-01`.
+  `C:\CodexArtifacts\pretrained-reuse-r2\tallyqa-vg-train-groupcv-v1-attempt-03`.
 
 The input-builder writes a separate manifest containing only the source TRAIN
 rows and the SHA-256 of its parent task manifest. The model runner requires
@@ -51,8 +51,10 @@ four fixed count candidates.
 
 - Seed 17; five outer folds over transitive connected components joining
   shared `image_id` or NFKC/casefold/alphanumeric-normalized question text.
-- Deterministic greedy component assignment balances correct-count answer
-  labels. Every row from a component stays in one outer fold.
+- Deterministic, label-blind greedy assignment sorts components by descending
+  row count and stable hash, then assigns each to the least-loaded fold. Every
+  row from a component stays in one outer fold; answer-position support is
+  reported but does not influence assignment.
 - For each outer fit, assign five folds over the remaining groups and use
   inner fold 0 (about 20%) only for checkpoint selection. The outer fold is
   scored once after the earliest minimum inner-stop NLL checkpoint is loaded.
@@ -84,6 +86,11 @@ benchmark. Keep official validation, official test and sealed audit closed.
 
 ## Run status
 
-Protocol frozen before fitting. The source commit, code and input hashes,
-preflight receipt, local environment, runtime, fold-level results and final
-decision will be appended after the one fixed run.
+Protocol frozen before fitting. Preflight attempts 01 and 02 stopped before
+model/text-feature inference: attempt 01 rejected repeated questions per image
+as duplicate image rows; attempt 02's label-stratified greedy split produced
+two outer folds with only 18 rows each. Both attempts are preserved outside
+Git; neither fitted or scored a model. The fixed label-blind component-size
+assignment and attempt 03 receipt are frozen before fitting. The source commit,
+code and input hashes, local environment, runtime, fold-level results and
+final decision will be appended after the one fixed run.

@@ -14,7 +14,7 @@ import json
 import os
 import subprocess
 import time
-from collections import Counter, defaultdict
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -83,61 +83,33 @@ def group_keys(rows: list[dict[str, Any]]) -> list[str]:
     return [union.find(key) for key in row_keys]
 
 
-def _group_label_counts(rows: list[dict[str, Any]], keys: list[str]) -> dict[str, Counter[str]]:
-    counts: dict[str, Counter[str]] = defaultdict(Counter)
-    for row, key in zip(rows, keys, strict=True):
-        target = int(row["target"])
-        options = row["options"]
-        if not 0 <= target < len(options):
-            raise ValueError("target index is outside the option list")
-        answer = str(options[target]["id"])
-        counts[key][answer] += 1
-    return dict(counts)
-
-
 def assign_group_folds(
     rows: list[dict[str, Any]], keys: list[str], *, n_folds: int = FOLDS, seed: int = SEED
 ) -> dict[str, int]:
-    """Assign connected groups to balanced folds using targets and stable hashes."""
+    """Assign connected groups label-blind by size and stable hash order."""
     if len(rows) != len(keys) or n_folds < 2:
         raise ValueError("invalid row/group counts or fold count")
-    group_counts = _group_label_counts(rows, keys)
-    groups = sorted(group_counts)
+    sizes = Counter(keys)
+    groups = sorted(sizes)
     if len(groups) < n_folds:
         raise ValueError("fewer connected groups than folds")
-    totals: Counter[str] = Counter()
-    for counts in group_counts.values():
-        totals.update(counts)
-    labels = sorted(totals)
-    target_per_fold = {label: totals[label] / n_folds for label in labels}
-    fold_counts = [Counter() for _ in range(n_folds)]
     fold_sizes = [0] * n_folds
     fold_group_counts = [0] * n_folds
     ordered = sorted(
         groups,
         key=lambda group: (
-            -sum(group_counts[group].values()),
+            -sizes[group],
             hashlib.sha256(f"tallyqa-train-group-cv-v1|{seed}|{group}".encode()).digest(),
         ),
     )
     assignments: dict[str, int] = {}
     for group in ordered:
-        group_vector = group_counts[group]
-        def cost(fold: int, counts: Counter[str] = group_vector) -> tuple[float, int, int]:
-            score = 0.0
-            for label in labels:
-                expected = target_per_fold[label]
-                delta = fold_counts[fold][label] + counts[label] - expected
-                score += (delta / max(expected, 1.0)) ** 2
-            return score, fold_sizes[fold], fold
-        empty_folds = [fold for fold, count in enumerate(fold_group_counts) if count == 0]
-        if empty_folds:
-            selected = min(empty_folds, key=lambda fold: (fold_sizes[fold], fold))
-        else:
-            selected = min(range(n_folds), key=cost)
+        selected = min(
+            range(n_folds),
+            key=lambda fold: (fold_sizes[fold], fold_group_counts[fold], fold),
+        )
         assignments[group] = selected
-        fold_counts[selected].update(group_vector)
-        fold_sizes[selected] += sum(group_vector.values())
+        fold_sizes[selected] += sizes[group]
         fold_group_counts[selected] += 1
     if set(assignments) != set(keys):
         raise ValueError("fold assignment did not cover all groups")
@@ -374,6 +346,7 @@ def build_preflight(args: argparse.Namespace) -> dict[str, Any]:
         "official_validation_rows_loaded": False,
         "official_test_rows_loaded": False,
         "sealed_audit_rows_loaded": False,
+        "fold_assignment": "label-blind largest connected group first, least loaded row count",
         "checkpoint_selector": "earliest minimum inner-stop NLL",
     }
 

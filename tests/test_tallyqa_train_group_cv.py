@@ -48,6 +48,8 @@ def test_outer_group_folds_are_deterministic_and_never_split_groups():
     assert first == second
     assert set(first.values()) == set(range(5))
     assert all(len({first[key] for key in keys if key == group}) == 1 for group in first)
+    relabeled = [dict(row, target=(row["target"] + 1) % 4) for row in rows]
+    assert assign_group_folds(relabeled, keys, n_folds=5, seed=17) == first
 
 
 def test_inner_stop_groups_are_disjoint_from_fit_groups():
