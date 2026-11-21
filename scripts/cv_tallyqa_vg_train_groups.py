@@ -162,9 +162,13 @@ def train_validation_indices(
 def _read_train_image_features(
     cache_path: Path, train_rows: list[dict[str, Any]]
 ) -> dict[str, torch.Tensor]:
-    expected = {str(row["image_id"]): str(row["media_sha256"]) for row in train_rows}
-    if len(expected) != len(train_rows):
-        raise ValueError("TRAIN task rows must have unique image IDs")
+    expected: dict[str, str] = {}
+    for row in train_rows:
+        image_id = str(row["image_id"])
+        media_hash = str(row["media_sha256"])
+        previous = expected.setdefault(image_id, media_hash)
+        if previous != media_hash:
+            raise ValueError("one TRAIN image ID has conflicting media hashes")
     with np.load(cache_path, allow_pickle=False) as cache:
         ids = cache["train_ids"].astype(str).tolist()
         media = cache["train_media_sha256"].astype(str).tolist()

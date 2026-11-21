@@ -1,4 +1,7 @@
+import numpy as np
+
 from scripts.cv_tallyqa_vg_train_groups import (
+    _read_train_image_features,
     assign_group_folds,
     group_keys,
     train_validation_indices,
@@ -75,3 +78,23 @@ def test_train_only_manifest_excludes_all_heldout_partitions(tmp_path):
     assert result["train"] == [{"question_id": "q1"}]
     assert "validation" not in result
     assert "test" not in result
+
+
+def test_train_image_cache_accepts_repeated_questions_for_same_image(tmp_path):
+    cache = tmp_path / "features.npz"
+    np.savez(
+        cache,
+        train_ids=np.asarray(["im1", "im2"]),
+        train_media_sha256=np.asarray(["hash1", "hash2"]),
+        train_features=np.zeros((2, 768), dtype=np.float32),
+    )
+    rows = [
+        {"image_id": "im1", "media_sha256": "hash1"},
+        {"image_id": "im1", "media_sha256": "hash1"},
+        {"image_id": "im2", "media_sha256": "hash2"},
+    ]
+
+    features = _read_train_image_features(cache, rows)
+
+    assert set(features) == {"im1", "im2"}
+    assert tuple(features["im1"].shape) == (768,)
