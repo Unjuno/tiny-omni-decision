@@ -2,7 +2,7 @@
   "format": "r2m_source_screen_v1",
   "experiment_id": "r2-muvs-video-sensor-camera-selection",
   "recorded_at": "2026-11-21",
-  "status": "REVIEW_NOT_ADMITTED_VIDEO_LICENSE_SCOPE_UNRESOLVED",
+  "status": "METADATA_TRAIN_PREFLIGHT_COMPLETE_VIDEO_NOT_ADMITTED",
   "source": {
     "name": "MUVS: Multi-View User-Generated Sports Video and Sensor Data",
     "record_id": "20708683",
@@ -27,10 +27,21 @@
       "test_partition_accessed": false
     },
     "metadata_archive_bytes": 9742259,
+    "metadata_archive_md5": "8fd1d426e0b4308655ea71884d1b0c8e",
+    "metadata_archive_sha256": "df25517793df22f9f57eef1f8f0ffba131d98b5958313110a5d9a7592820912b",
     "reported_video_payload_bytes_approx": 177100000000,
-    "payload_downloaded": false,
-    "annotations_opened": false,
-    "test_labels_opened": false
+    "zenodo_deposit_downloaded": true,
+    "train_fragment_and_annotation_members_opened": true,
+    "test_member_contents_decompressed": false,
+    "test_labels_or_sensor_values_parsed": false,
+    "external_gcs_video_accessed": false,
+    "versioned_audit_receipt": "docs/pretrained_reuse/MUVS_TRAIN_METADATA_PREFLIGHT_20261121.json",
+    "audit_output": "D:/CodexArchiveRelocated/CodexArtifacts/pretrained-reuse-r2/muvs-metadata-preflight-20261121-attempt-01/train-audit-02/train-metadata-preflight.json",
+    "archive_split_discrepancy": {
+      "readme_claims": {"train_events": 11, "test_events": 6},
+      "archive_fragment_filenames": {"train_events": 12, "test_events": 5},
+      "train_test_event_name_overlap": []
+    }
   },
   "task": {
     "candidate": "select the best camera for an aligned fragment",
@@ -39,13 +50,21 @@
     "both_input_necessity": "UNVERIFIED",
     "annotator_agreement": "UNKNOWN",
     "shortcut_risk": "camera/event identity and activity-specific recording patterns",
-    "task_admission": "NOT_ADMITTED_PENDING_VIDEO_AND_ANNOTATION_RIGHTS"
+    "train_rows": 3208,
+    "multi_option_decision_rows": 3181,
+    "single_option_rows_excluded": 27,
+    "choice_count_distribution": {"1": 27, "2": 1063, "3": 2118},
+    "leave_one_event_out_camera_id_prior_accuracy_multi_option": 0.5485696321911349,
+    "uniform_choice_expected_accuracy_multi_option": 0.3890286073561815,
+    "active_camera_count_mismatches": 57,
+    "sensor_missing_rows_per_axis": 58,
+    "task_admission": "METADATA_FEASIBILITY_ONLY; NO_MODEL_QUALITY_EVIDENCE"
   },
   "gates": {
     "zenodo_metadata_license": "PASS_CC_BY_4.0",
     "separately_hosted_video_license": "FAIL_CANNOT_INFER_FROM_METADATA_LICENSE",
     "participant_rights_scope": "UNKNOWN",
-    "source_split_grouping": "EVENT_LEVEL_REPORTED; must verify IDs from train metadata without opening test labels",
+    "source_split_grouping": "ARCHIVE_TRAIN_TEST_FILENAME_EVENT_NAMES_DISJOINT; archive counts conflict with README; test member payloads unopened",
     "payload_size_preflight": "PARTIAL; aggregate reported, selected-period sizes/hashes unknown",
     "model_fit": "NOT_STARTED",
     "sealed_audit": "NOT_ACCESSED"
@@ -56,6 +75,7 @@
     "https://zenodo.org/records/20708683/preview/README.md?include_deleted=0",
     "https://swperfi-project.github.io/Pages-dev/MuvsDataset-page/"
   ],
-  "source_commit": "4ba5313eda00fc2b4b7bb85b19fa9f7e4c0d94e2",
+  "candidate_screen_commit": "4ba5313eda00fc2b4b7bb85b19fa9f7e4c0d94e2",
+  "audit_code_base_commit": "d64a7a910f979730fa8c68d49e1a17a0caeb2777",
   "cloud_cost_usd": 0
 }

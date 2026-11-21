@@ -8,8 +8,12 @@ and [manifest](manifests/pretrained_reuse/eviora-har-video-imu-source-screen-202
 17-event camera-selection dataset is a plausible Decision task, and Zenodo
 metadata identifies its deposit as CC BY 4.0. The publisher README separately
 states the GCS-hosted video license is “TO BE ADDED,” while the project site
-reserves copyright. Do not acquire or use its labels/media until video rights
-are clarified. No payload or labels were opened. See [source screen](docs/pretrained_reuse/R2_MUVS_VIDEO_SENSOR_SOURCE_SCREEN_20261121.md)
+reserves copyright. A follow-up train-only metadata preflight acquired the
+CC BY deposit, found 3,181 multi-option annotations and a 54.86% leave-one-event-out
+camera-ID prior baseline, plus 57 `ActiveCameras` mismatches. The archive's
+12/5 event split filenames conflict with README's 11/6 claim. GCS video remains
+unaccessed and test members were not decompressed or parsed; this is not task
+quality evidence. See [source screen](docs/pretrained_reuse/R2_MUVS_VIDEO_SENSOR_SOURCE_SCREEN_20261121.md)
 and [machine-readable record](manifests/pretrained_reuse/muvs-video-sensor-source-screen-20261121.json).
 
 **2026-11-21 R2 frozen numeric-span diagnostic:** A CPU-only seed-17,
