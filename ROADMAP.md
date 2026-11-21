@@ -16,10 +16,12 @@ causal transition cutoffs (input ends 100 ms before target onset). On those
 samples, video PTS and Parquet timestamps align within 0.004 ms; all five
 pre-onset windows use only past video and 14-D robot0 state. Split-wide media
 integrity, broader data admission and quality evidence remain open. A
-metadata-only 66-train/24-validation front-view pilot is frozen; its publisher
-inventory totals 626 MB. It includes 33 train groups and 6 usable validation
-groups; three validation groups contain no multi-option example. See the HABIT
-mapping smoke record before acquiring media.
+66-train/24-validation front-view pilot is now fetched and fully decoded (626
+MB). It yields 202/76 causal train/validation transitions, 33/6 usable task
+groups, zero exact media hash overlap, and <0.004 ms max video/Parquet timing
+error. Three validation groups contain no multi-option examples. These are
+plumbing results only; model training and quality evaluation have not run.
+See the HABIT mapping smoke record.
 
 **2026-11-21 R2-M Zenodo audio+vibration follow-up:** The 25 source archives
 (4.57 GB) were hash-verified; only `multisensor-1` was used under a frozen

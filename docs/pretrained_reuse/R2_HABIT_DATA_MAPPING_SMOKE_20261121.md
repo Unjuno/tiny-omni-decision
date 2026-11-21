@@ -103,7 +103,7 @@ receipt is outside Git at
 This is still a two-episode smoke, not evidence that alignment holds across
 the selected split.
 
-## Bounded payload pilot preflight
+## Bounded payload pilot data audit
 
 A seed-17 hash-ranked metadata-only subset selects two usable episodes from
 each train group (33 groups, 66 episodes) and four from each usable validation
@@ -121,19 +121,42 @@ that inventory stage; path, size and SHA-256 are recorded in
 (SHA-256 `f7b8dc3f90933268337358d03383de59fcd7894fe80972bf979269714990d5f7`).
 `scripts/download_habit_pilot.py` consumes only this pinned train/validation
 inventory, verifies publisher hashes, writes to a new output directory, and
-rejects exact video byte duplicates crossing the split. The download has not
-yet been run.
+rejects exact video byte duplicates crossing the split. The 180 files were
+downloaded to
+`C:\CodexArtifacts\pretrained-reuse-r2\habit-pilot-data-20261121-attempt-01`
+in 157.8 seconds (626,112,093 bytes total); all publisher size/SHA checks
+passed. The 90 videos have 90 distinct byte hashes, with no train/validation
+duplicate.
+
+`scripts/audit_habit_pilot_payload.py` then checked all selected payloads. It
+parsed only the 90 selected train/validation episode metadata rows; the source
+JSONL was scanned for episode IDs to filter records, and the subtask catalog
+was filtered to target IDs present in selected Parquets. No sealed-audit video,
+Parquet, or metrics were accessed. All 90 MP4s decoded fully as 640x480, 10 Hz
+video with no audio; frame counts match their Parquets. The maximum nearest-PTS
+to-Parquet timestamp difference is 0.0031 ms. All selected 14-D robot0 states
+are finite. Every label maps to a unique semantic option. The cutoff audit
+produces 202 train and 76 validation transitions over 33 train and 6 usable
+validation task groups. For each transition, the eight input frames end at
+least 100 ms before onset; the chosen state is at or before cutoff and no more
+than 100.01 ms old. Only timestamp, label, and state columns were projected;
+no action columns were read. The complete receipt is outside Git at
+`C:\CodexArtifacts\pretrained-reuse-r2\habit-pilot-data-20261121-attempt-01\audit-receipt-04.json`
+(SHA-256 `9b7a9d6c0efbc0be055df55277ea107d9be0cd6a45dcbcb5e0571d0257796672`).
+
+This is a data/runtime gate, not a quality result. The 76 validation transitions
+from six task groups are too few to establish broad generalization or the
+95–98% objective. No model training, task scoring, CUDA use, or cloud compute
+occurred.
 
 ## Interpretation
 
 The pinned video encoder, decoder, feature shape, robot-state field, and
-candidate/target mapping are executable on two real clips. This does not prove
-the proposed task is learnable, the modalities are complementary, a calibrated
-readout works, or the current split has no duplicate media content. Before a
-quality run, audit the selected train/validation media hashes and task-group
-support, construct causal windows that exclude action/future fields, and
-compare options/text-only, state-only, video-only, and paired readouts. No
-model training, quality evaluation, CUDA use, or cloud work occurred.
+candidate/target mapping are executable. This does not prove the proposed task
+is learnable, the modalities are complementary, or a calibrated readout works.
+Before a quality run, produce frozen features for these causal transition
+points, then compare options/text-only, state-only, video-only, and paired
+readouts using the same split and task-group metrics.
 
 Artifacts are in
 `C:\CodexArtifacts\pretrained-reuse-r2\habit-media-runtime-smoke-20261121-attempt-01`
