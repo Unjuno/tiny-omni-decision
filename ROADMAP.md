@@ -19,10 +19,12 @@ and [manifest](manifests/pretrained_reuse/vistadata-bimanual-metadata-screen-202
 
 **2026-11-22 R2-M HapTile source screen:** A read-only ZIP index scan found
 1,700 `trajectory.h5` entries across the 38 pinned CC BY 4.0 archives using
-2.49 MB of HTTP Range metadata only. That accounts for the Voxel51 conversion's
-1,699 samples (its card says one empty trajectory was omitted); the paper's
-1,726 count remains 26 above the pinned source release. The paper reports nine
-operators, but no episode-level operator mapping or official split was found.
+2.49 MB of HTTP Range metadata only. A pinned comparison to the Voxel51 card
+shows the only per-task count difference is `move_plush_toy` (71 source entries
+vs. 70 conversion samples), consistent with the card's one-empty-trajectory
+omission; the omitted episode was not inspected. The paper's 1,726 count
+remains 26 above the pinned release. The paper reports nine operators, but no
+episode-level operator mapping or official split was found.
 The paper's tactile gains are task-dependent, and haptic labels derive from
 tactile marker motion. No media or model was loaded. Keep `REVIEW_NOT_ADMITTED`
 until the paper/release difference, group keys, and causal action-choice task

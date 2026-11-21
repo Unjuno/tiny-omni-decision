@@ -40,8 +40,22 @@
   },
   "conversion_reference": {
     "repository": "https://huggingface.co/datasets/Voxel51/HapTile",
+    "revision": "c8593da98d3facb7a9293842514f0ee4ad3f2318",
+    "card_sha256": "f0462ecc55d172e8a3c51ac5c874969e6f0482f093812482d28f730ba0558fbb",
+    "count_comparison_receipt": {
+      "path": "C:/CodexLocalArtifacts/pretrained-reuse-r2/haptile-source-metadata-screen-01/conversion-count-reconciliation.json",
+      "sha256": "6bdbe176adf3b76abfbebcce25a7c28c7a18a0131bcdbdf699a94c56893326c1"
+    },
     "reported_episodes": 1699,
     "reported_bytes": 6310000000,
+    "source_episode_count": 1700,
+    "per_task_count_difference": {
+      "task": "move_plush_toy",
+      "source_entries": 71,
+      "conversion_samples": 70,
+      "conversion_card_says_one_empty_trajectory_omitted": true,
+      "omitted_episode_identity_verified": false
+    },
     "official_split": "single train split",
     "operator_id_field_documented": false
   },
@@ -60,7 +74,8 @@
     "sealed_audit_accessed": false
   },
   "known_risks": [
-    "Paper reports 1,726 demonstrations while the Voxel51 conversion reports 1,699 episodes.",
+    "The pinned source has 1,700 trajectory entries and the Voxel51 conversion has 1,699; counts differ only at move_plush_toy, consistent with the card's one-empty-trajectory note, but the omitted episode was not opened to verify identity or emptiness.",
+    "The paper's 1,726 count remains 26 above the pinned source and unexplained.",
     "Collection used one laboratory scene; external-environment transfer is untested.",
     "Paper reports nine operators but screened metadata does not map episodes to operators.",
     "Haptic feedback levels are computed from tactile marker-motion signals and are not independent same-time labels.",
