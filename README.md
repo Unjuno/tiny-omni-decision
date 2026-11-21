@@ -8,6 +8,16 @@ fixed 2,048-update sampler consumed all 512 Video questions and repeated them
 Validation was already exposed; there was no fitting or sealed-audit access.
 [Protocol, input interventions, coverage and limits](docs/pretrained_reuse/R2_NATIVE_WEAK_INPUT_USE_DIAGNOSTIC_20261121.md).
 
+**2026-11-21 R2 Text state-group holdout:** A fresh seed-17 frozen-feature
+readout trained for 2,048 updates on 7,152 TRAIN rows and was evaluated once on
+1,040 rows from 65 state groups not seen by the previous sampler. Macro
+Accuracy was 13.04% over 40 choices. Zeroing state modestly reduced Accuracy,
+but counterfactual same-task state swaps had uncertain effects; robust
+state-to-candidate binding was not demonstrated. No official validation or
+sealed audit was opened. This narrow result does not qualify a model; the next
+step is a distinct unused TRAIN decision source, not another fit to this
+holdout. [Protocol, results and hashes](docs/pretrained_reuse/R2_NATIVE_TEXT_STATE_GROUP_HOLDOUT_20261121.md).
+
 **2026-11-21 R2 native temporal capacity control:** A parameter-matched,
 nonrecurrent tokenwise MLP completed the same 2,048-update Path A fit as the
 baseline/LSTM arms. Fresh-process replay matched exactly. Its final Video

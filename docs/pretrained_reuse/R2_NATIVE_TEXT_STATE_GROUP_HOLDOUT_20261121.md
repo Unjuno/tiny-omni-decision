@@ -84,8 +84,88 @@ fit use only this local copy and a new C: output path, with a fresh seed-17
 initialization. This remains the same preregistered training schedule and split
 protocol, but it is a restart, not a continuation.
 
-**Final metrics pending.** The report will be completed after the local-C
-preflight and fixed terminal run. It will include receipt/checkpoint hashes,
-runtime, per-task and macro metrics, counterfactual input-use results, group
-bootstrap intervals, and limitations. Official validation and sealed audit
-remain out of scope.
+## Attempt 02: fixed terminal result
+
+The local-C attempt completed all 2,048 updates and the fixed terminal
+checkpoint reloaded with exact logits (`reload_max_abs=0`). No checkpoint was
+selected using the holdout. The same preflight split hashes as attempt 01 were
+reproduced.
+
+| Arm | Macro accuracy | Macro NLL | Macro Brier | Macro ECE | Overall accuracy |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Original state | 13.04% | 2.3433 | 0.8996 | 0.0975 | 12.98% |
+| Text state zeroed | 11.19% | 2.3870 | 0.9070 | 0.0617 | 11.15% |
+| Same-task state swap, donor target | 14.45% | 2.3270 | 0.8973 | 0.1211 | 14.42% |
+
+The candidate set has 40 choices, so uniform choice accuracy is 2.5%; the
+13.04% result is above that reference, but remains poor decision quality and
+is not product evidence. The minimum task Accuracy was 4.55%. Original-state
+Accuracy by attribute (macro over the 12 corresponding question/format strata)
+was color 12.79%, count 12.25%, shape 11.94%, and texture 15.18%.
+
+| Paired group intervention (control minus original) | Difference | 95% group-bootstrap interval |
+| --- | ---: | ---: |
+| Zero-state Accuracy | −1.84 pp | [−3.03, −0.69] pp |
+| Zero-state NLL | +0.0437 | [+0.0265, +0.0621] |
+| Zero-state Brier | +0.00744 | [+0.00166, +0.01382] |
+| Swapped-state Accuracy, donor target | +1.42 pp | [−1.85, +4.88] pp |
+| Swapped-state NLL, donor target | −0.0163 | [−0.0653, +0.0340] |
+| Swapped-state Brier, donor target | −0.00233 | [−0.01347, +0.00916] |
+
+Removing the state modestly worsened ranking/calibration losses and reduced
+Accuracy; this supports a small state contribution. Replacing it with another
+same-task group's state and mapping the answer by option ID did not produce a
+reliable difference: all paired group-bootstrap intervals include zero. Thus
+the run does **not** demonstrate robust state-to-candidate binding. The
+counterfactual arm's point metrics are not evidence of improvement because the
+target changes with the donor state and its paired differences are uncertain.
+
+The 128-update rolling training CE decreased from 2.9253 to 2.3081; rolling
+training Accuracy rose from 7.42% to 15.63%. These are changing training
+windows, not a fixed generalization-gap estimate. No learning-curve checkpoint
+was selected on the held groups.
+
+### Run and artifact record
+
+- Execution: `PASS_TRAIN_ONLY_GROUP_HOLDOUT_COMPLETE`; fresh seed-17
+  initialization; 2,048 updates; 8,192 draws, 7,152 unique fit rows and 1,040
+  repeated draws; fixed terminal checkpoint at step 2,048.
+- Start/end: `2026-11-21T05:50:19.736851Z` to
+  `2026-11-21T05:51:26.846073Z`; 48.57 s training, 18.52 s evaluation, 67.12 s
+  total. Local RTX 3080 Laptop; peak allocated/reserved CUDA memory 106.3/110.0
+  MiB; cloud cost $0.
+- Trainable readout: 889,345 parameters. Counted prequantization union:
+  196,254,874 parameters, within the provisional 200M parameter ceiling. The
+  final checkpoint is 3,566,456 bytes; this is not a packaged or quantized
+  product model.
+- Configuration SHA-256:
+  `dfc93f6c1c3650e7fb7833b4e7da347e8c06c4a077466772c00bfdeff1dc0fdb`.
+- Source commit: `f5a80fcfac325983bdedb005a56df0a1a3f98b4f`.
+- Preflight SHA-256:
+  `06a6bf44a0be2a156a09b47f6661c22f9bab00878a94a3f7da7e03302f5aded5`;
+  split SHA-256:
+  `9744c76c610dc21f7cd5fc6031357ec6a007673c81cc0c8cf1ee3a39b6183b32`.
+- C: staging-receipt SHA-256:
+  `c409025b3df07f2f012bccc60ae50a4296f149fbc86125fe80f32526ed0f5109`;
+  856,979,629 bytes copied with all seven source/destination hashes matching.
+- Run result SHA-256:
+  `bb7ac685f53cfe8762561ee2a05fe1f7b3d3e3acd973cc157289c440d4e6daf0`;
+  checkpoint SHA-256:
+  `23d2423838ffddf12e2add846deaf7c412f51ab9c381e56e127d3eb3095eb902`.
+- Holdout metric SHA-256:
+  `78c9e9ed167cee5d144cebc59afd78f55737441458678d0467a60641d6d34d2b`;
+  prediction-array SHA-256:
+  `0716ff1ce1ede1628128dbdf30b339657e0807861232861a2b2392a49b14ce7d`.
+- Training-history SHA-256:
+  `28e7f450a2ec2b1684e2ce4d29183163ce6f49b1e3ebde2e70eb34d7bb124a0f`;
+  sampling-order SHA-256:
+  `bc2d58e1e2518bdc7779f09ae988b0e8bc0845e3322927e946a2cbcfb912e91e`.
+- Run directory:
+  `C:\CodexArtifacts\pretrained-reuse-r2-local\native-text-state-group-holdout\runs\attempt-02`.
+
+This is still only a group-heldout slice of the already frozen TRAIN corpus,
+with familiar prompt templates and candidate vocabulary. The official
+validation and sealed audit were not opened. The limited accuracy and uncertain
+counterfactual effect do not justify expanding this synthetic task or adding
+capacity; the next step should use a distinct, still-unused TRAIN decision
+source and keep this holdout retired from model selection.

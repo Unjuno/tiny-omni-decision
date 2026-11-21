@@ -1,3 +1,15 @@
+**2026-11-21 R2 Text state-group holdout:** The fixed terminal 2,048-update
+text-only fit used 7,152 TRAIN rows and 1,040 held rows from 65 state groups
+that the prior sampler never consumed. Macro Accuracy was 13.04% over 40
+choices. Zeroing state reduced Accuracy modestly, while a same-task
+counterfactual swap with the donor answer mapped by option ID had a paired
+group-bootstrap interval spanning zero. State contribution is small and
+robust state-to-candidate binding is unproven. The D:-mounted first attempt
+failed before a checkpoint at step 128; a fresh attempt completed entirely on
+local C: using seven hash-identical TRAIN-only copies. Official validation and
+sealed audit remain unopened. Do not retune this holdout; move to a distinct,
+unused TRAIN decision source. See [protocol and results](docs/pretrained_reuse/R2_NATIVE_TEXT_STATE_GROUP_HOLDOUT_20261121.md).
+
 **2026-11-21 R2 frozen input-use/coverage diagnostic:** On the selected native
 baseline and already exposed development validation, Image zeroing/shuffling
 reduced accuracy by 9.0/9.7 points; Text-state shuffling changed little while
