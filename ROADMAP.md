@@ -17,15 +17,16 @@ or model was used. Keep `REVIEW_NOT_ADMITTED`; at most this supports a small
 within-task pilot after task and grouping are frozen. See [screen](docs/pretrained_reuse/R2M_VISTADATA_BIMANUAL_METADATA_SCREEN_20261122.md)
 and [manifest](manifests/pretrained_reuse/vistadata-bimanual-metadata-screen-20261122.json).
 
-**2026-11-22 R2-M HapTile source screen:** The pinned CC BY 4.0 source lists
-38 task archives and the paper reports 1,726 demonstrations from nine
-operators with synchronized vision, tactile, state, action, and language. The
-separate Voxel51 conversion reports 1,699 episodes, so corpus identity still
-needs reconciliation. The paper's tactile gains are task-dependent, making
-this a promising task-held-out fusion study; its haptic level is derived from
-tactile marker motion and must not serve as an independent same-time target.
-No payload or model was loaded. Keep `REVIEW_NOT_ADMITTED` until the count,
-group keys, and causal action-choice task are frozen. See [source screen](docs/pretrained_reuse/R2M_HAPTILE_SOURCE_SCREEN_20261122.md)
+**2026-11-22 R2-M HapTile source screen:** A read-only ZIP index scan found
+1,700 `trajectory.h5` entries across the 38 pinned CC BY 4.0 archives using
+2.49 MB of HTTP Range metadata only. That accounts for the Voxel51 conversion's
+1,699 samples (its card says one empty trajectory was omitted); the paper's
+1,726 count remains 26 above the pinned source release. The paper reports nine
+operators, but no episode-level operator mapping or official split was found.
+The paper's tactile gains are task-dependent, and haptic labels derive from
+tactile marker motion. No media or model was loaded. Keep `REVIEW_NOT_ADMITTED`
+until the paper/release difference, group keys, and causal action-choice task
+are resolved. See [source screen](docs/pretrained_reuse/R2M_HAPTILE_SOURCE_SCREEN_20261122.md)
 and [manifest](manifests/pretrained_reuse/haptile-source-screen-20261122.json).
 
 **2026-11-22 R2-M HABIT data scale-up:** Expanded the same frozen train and

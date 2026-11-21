@@ -8,7 +8,16 @@
     "license": "CC BY 4.0",
     "gated": false,
     "task_archive_count": 38,
-    "total_archive_bytes": 16001480670,
+    "total_archive_bytes": 16001478139,
+    "total_repository_file_bytes": 16001480670,
+    "zip_index_range_scan": {
+      "receipt_path": "C:/CodexLocalArtifacts/pretrained-reuse-r2/haptile-source-metadata-screen-01/zip-index-range-scan.json",
+      "receipt_sha256": "24bfc28a4f477c7818c4199a90bd70ac891ba9237fd0c62e2914469b9428d281",
+      "archives_scanned": 38,
+      "trajectory_h5_total": 1700,
+      "range_bytes_read": 2490368,
+      "method": "Read only the final 65536 bytes of each pinned ZIP; parse EOCD and central-directory filenames. No media or archive contents downloaded."
+    },
     "metadata_response": {
       "path": "C:/CodexLocalArtifacts/pretrained-reuse-r2/haptile-source-metadata-screen-01/dataset-info.json",
       "bytes": 1961,
@@ -39,10 +48,11 @@
   "gates": {
     "license_and_public_access_pass": true,
     "multimodal_task_is_plausible": true,
-    "independent_task_groups_documented": true,
+    "task_group_keys_documented": true,
     "operator_identity_mappable": false,
     "official_train_validation_test_split": false,
-    "source_episode_count_reconciled": false,
+    "source_to_conversion_episode_count_reconciled": true,
+    "paper_to_source_episode_count_reconciled": false,
     "causal_supplied_option_task_frozen": false,
     "media_downloaded": false,
     "feature_extraction_started": false,
