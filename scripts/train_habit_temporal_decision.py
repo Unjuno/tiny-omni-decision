@@ -12,7 +12,7 @@ import shutil
 import subprocess
 import sys
 import time
-from collections import defaultdict
+from collections import Counter, defaultdict
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -521,18 +521,39 @@ def _video_derangement(
 ) -> list[int]:
     rng = random.Random(seed)
     groups = {index: examples[index]["sid"] for index in indices}
-    for _ in range(10_000):
+    group_counts = Counter(groups.values())
+    if max(group_counts.values()) > len(indices) // 2:
+        raise ValueError(
+            "cross-group derangement is impossible: one task group exceeds half "
+            f"of the rows ({max(group_counts.values())}/{len(indices)})"
+        )
+
+    # Random permutations almost never satisfy all 76 pair constraints when
+    # validation groups are imbalanced. Find a true bipartite matching instead.
+    recipients = indices.copy()
+    rng.shuffle(recipients)
+    recipients.sort(key=lambda index: group_counts[groups[index]], reverse=True)
+    donor_to_recipient: dict[int, int] = {}
+
+    def match(recipient: int, seen: set[int]) -> bool:
         donors = indices.copy()
         rng.shuffle(donors)
-        if all(
-            groups[index] != groups[donor]
-            for index, donor in zip(indices, donors, strict=True)
-        ):
-            mapping = list(range(len(examples)))
-            for recipient, donor in zip(indices, donors, strict=True):
-                mapping[recipient] = donor
-            return mapping
-    raise RuntimeError("could not derange validation videos across task groups")
+        for donor in donors:
+            if donor in seen or groups[recipient] == groups[donor]:
+                continue
+            seen.add(donor)
+            previous = donor_to_recipient.get(donor)
+            if previous is None or match(previous, seen):
+                donor_to_recipient[donor] = recipient
+                return True
+        return False
+
+    if not all(match(recipient, set()) for recipient in recipients):
+        raise RuntimeError("could not find a cross-task-group validation matching")
+    mapping = list(range(len(examples)))
+    for donor, recipient in donor_to_recipient.items():
+        mapping[recipient] = donor
+    return mapping
 
 
 def _group_bootstrap_deltas(arms: dict[str, dict[str, Any]], draws: int = 2000) -> dict[str, Any]:

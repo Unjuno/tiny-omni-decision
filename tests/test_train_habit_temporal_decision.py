@@ -12,6 +12,7 @@ from scripts.train_habit_temporal_decision import (  # noqa: E402
     _group_bootstrap_deltas,
     _metrics,
     _new_model,
+    _video_derangement,
 )
 
 
@@ -55,6 +56,35 @@ def test_group_bootstrap_is_paired_deterministic_and_labels_selection_effect() -
     assert result["comparisons"]["video_state_minus_text_only"]["accuracy"][
         "mean_group_delta"
     ] == pytest.approx(0.1)
+
+
+def test_video_derangement_matches_imbalanced_groups_deterministically() -> None:
+    examples = [
+        {"sid": group}
+        for group, count in (("large", 28), ("b", 12), ("c", 12),
+                             ("d", 8), ("e", 8), ("f", 8))
+    ]
+    indices = list(range(len(examples)))
+
+    mapping = _video_derangement(indices, examples, seed=17)
+    repeated = _video_derangement(indices, examples, seed=17)
+
+    donors = [mapping[index] for index in indices]
+    assert mapping == repeated
+    assert sorted(donors) == indices
+    assert all(examples[index]["sid"] != examples[mapping[index]]["sid"]
+               for index in indices)
+
+
+def test_video_derangement_rejects_impossible_group_skew() -> None:
+    examples = [
+        {"sid": group}
+        for group, count in (("large", 6), ("small", 2))
+        for _ in range(count)
+    ]
+
+    with pytest.raises(ValueError, match="derangement is impossible"):
+        _video_derangement(list(range(len(examples))), examples)
 
 
 def test_candidate_order_randomization_keeps_target_bound_to_candidate() -> None:
