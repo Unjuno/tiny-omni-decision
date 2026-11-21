@@ -203,3 +203,48 @@ def test_fully_masked_core_preserves_explicit_state():
     state = (torch.randn(1, 2, 8), torch.randn(1, 2, 8))
     values, final = model(x, torch.zeros(2, 3, dtype=torch.bool), state)
     assert values is x and final is state
+
+
+def test_capacity_control_matches_recurrent_parameter_budget_and_initial_function():
+    from tiny_omni_decision.native_candidate import NativeCandidateReadout
+    from tiny_omni_decision.native_temporal import (
+        CapacityMatchedNativeCandidate,
+        TemporalNativeCandidate,
+    )
+
+    torch.manual_seed(17)
+    base_a, base_b = NativeCandidateReadout(), NativeCandidateReadout()
+    base_b.load_state_dict(base_a.state_dict())
+    recurrent = TemporalNativeCandidate(base_a)
+    control = CapacityMatchedNativeCandidate(base_b)
+    recurrent_extra = sum(p.numel() for p in recurrent.parameters()) - sum(
+        p.numel() for p in recurrent.readout.parameters()
+    )
+    control_extra = sum(p.numel() for p in control.parameters()) - sum(
+        p.numel() for p in control.readout.parameters()
+    )
+    assert abs(control_extra - recurrent_extra) / recurrent_extra < 0.002
+    block, queries = video(), torch.randn(4, 384)
+    baseline_scores = base_a([block], queries)
+    torch.testing.assert_close(recurrent([block], queries), baseline_scores, rtol=0, atol=0)
+    torch.testing.assert_close(control([block], queries), baseline_scores, rtol=0, atol=0)
+
+
+def test_capacity_control_is_tokenwise_and_preserves_masked_tokens():
+    from tiny_omni_decision.native_temporal import TokenwiseResidual
+
+    torch.manual_seed(17)
+    model = TokenwiseResidual(12, hidden=8)
+    with torch.no_grad():
+        model.output.weight.normal_(std=0.02)
+    values = torch.randn(1, 5, 12)
+    valid = torch.tensor([[True, True, False, True, True]])
+    result = model(values, valid)
+    changed = values.clone()
+    changed[:, 1] += 5
+    changed[:, 2] += 1000
+    changed_result = model(changed, valid)
+    torch.testing.assert_close(result[:, 0], changed_result[:, 0], rtol=0, atol=0)
+    torch.testing.assert_close(result[:, 3:], changed_result[:, 3:], rtol=0, atol=0)
+    torch.testing.assert_close(result[:, 2], values[:, 2], rtol=0, atol=0)
+    assert not torch.equal(result[:, 1], changed_result[:, 1])

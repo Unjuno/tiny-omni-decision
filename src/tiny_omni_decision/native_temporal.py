@@ -68,6 +68,43 @@ class TemporalResidual(nn.Module):
         return result, final
 
 
+class TokenwiseResidual(nn.Module):
+    """Parameter-matched nonrecurrent control; each token is transformed alone."""
+
+    def __init__(self, width, hidden=192):
+        super().__init__()
+        if type(width) is not int or type(hidden) is not int or min(width, hidden) < 1:
+            raise ValueError("positive integer dimensions required")
+        self.width, self.hidden = width, hidden
+        self.input = nn.Sequential(nn.Linear(width, hidden), nn.LayerNorm(hidden))
+        self.feed_forward = nn.Sequential(
+            nn.Linear(hidden, 4 * hidden), nn.GELU(), nn.Linear(4 * hidden, hidden)
+        )
+        self.output = nn.Linear(hidden, width, bias=False)
+        nn.init.zeros_(self.output.weight)
+
+    def forward(self, values, valid):
+        reference = self.output.weight
+        if (not isinstance(values, torch.Tensor) or values.ndim != 3
+                or min(values.shape[:2]) < 1 or values.shape[2] != self.width
+                or not isinstance(valid, torch.Tensor) or valid.shape != values.shape[:2]
+                or values.dtype != reference.dtype or valid.dtype != torch.bool
+                or values.device != reference.device or valid.device != reference.device
+                or not torch.isfinite(values).all()):
+            raise ValueError("finite BxTxD values and bool validity on model dtype/device required")
+        flat_values = values.reshape(-1, self.width)
+        active = valid.reshape(-1).nonzero().flatten()
+        if not len(active):
+            return values
+        selected = flat_values.index_select(0, active)
+        hidden = self.feed_forward(self.input(selected))
+        delta = self.output(hidden)
+        result = flat_values.index_copy(0, active, selected + delta).view_as(values)
+        if not torch.isfinite(result).all():
+            raise ValueError("nonfinite tokenwise output")
+        return result
+
+
 def temporal_layout(block):
     """Indices [independent spatial cells, ordered time], never spatial-as-time."""
     if not isinstance(block, NativeTokenBlock) or block.kind not in {"speech", "video"}:
@@ -127,6 +164,40 @@ class TemporalNativeCandidate(nn.Module):
             restored = torch.empty_like(block.values).index_copy(
                 0, indices.flatten(), enhanced.reshape(-1, block.values.shape[1]))
             result.append(NativeTokenBlock(block.kind, restored, block.positions, block.valid))
+        return result
+
+    def forward(self, blocks, queries):
+        return self.readout(self.encode(blocks), queries)
+
+
+class CapacityMatchedNativeCandidate(nn.Module):
+    """Nonrecurrent residual control with a near-equal temporal-head parameter budget."""
+
+    def __init__(self, readout=None):
+        super().__init__()
+        self.readout = NativeCandidateReadout() if readout is None else readout
+        if not isinstance(self.readout, NativeCandidateReadout):
+            raise ValueError("native candidate readout required")
+        self.tokenwise = nn.ModuleDict({k: TokenwiseResidual(WIDTHS[k])
+                                        for k in ("video", "speech")})
+
+    def encode(self, blocks):
+        if (not isinstance(blocks, (list, tuple)) or not 1 <= len(blocks) <= 16
+                or any(not isinstance(b, NativeTokenBlock)
+                       or not isinstance(b.values, torch.Tensor) or b.values.ndim != 2
+                       for b in blocks)
+                or sum(len(b.values) for b in blocks) > 8192):
+            raise ValueError("1..16 native blocks and <=8192 tokens required")
+        result = []
+        for block in blocks:
+            if block.kind not in self.tokenwise:
+                result.append(block)
+                continue
+            temporal_layout(block)  # Same validity/layout gate as the recurrent arm.
+            enhanced = self.tokenwise[block.kind](
+                block.values.unsqueeze(0), block.valid.unsqueeze(0)
+            ).squeeze(0)
+            result.append(NativeTokenBlock(block.kind, enhanced, block.positions, block.valid))
         return result
 
     def forward(self, blocks, queries):
