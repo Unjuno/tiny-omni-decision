@@ -1,3 +1,9 @@
+**2026-11-21 R2-M EVIORA-HAR screen:** Official Zenodo metadata declares
+CC BY-NC 4.0 for a roughly 131 GB video/IMU corpus. It cannot enter this
+product-directed path. Metadata only; no labels, media or consent-form archive
+were opened. See [source screen](docs/pretrained_reuse/R2_EVIORA_HAR_SOURCE_SCREEN_20261121.md)
+and [manifest](manifests/pretrained_reuse/eviora-har-video-imu-source-screen-20261121.json).
+
 **2026-11-21 R2-M MUVS video+sensor source screen:** The new 5,039-fragment,
 17-event camera-selection dataset is a plausible Decision task, and Zenodo
 metadata identifies its deposit as CC BY 4.0. The publisher README separately
