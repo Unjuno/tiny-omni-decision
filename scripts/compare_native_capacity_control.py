@@ -22,7 +22,7 @@ EXPECTED_OLD_RECEIPTS = {
     "baseline": "aaa1fe96a4be85a71ce146981c6b2e8b58e1308d91fc110e1ece6804b4d8048c",
     "lstm": "47dde479c91ed82cdbf260686f0184ebdf95b53981b28248e0ad1ebf2c6b10c6",
 }
-STEPS = (512, 1024, 1536, 1920, 2048)
+REQUESTED_STEPS = (512, 1024, 1536, 1920, 2048)
 
 
 def sha(path):
@@ -126,11 +126,23 @@ def per_example(rows, scores):
     return {"accuracy": accuracy, "nll": nll, "brier": brier}
 
 
+def select_curve_points(curve_steps_by_arm):
+    if not curve_steps_by_arm:
+        raise ValueError("at least one arm is required")
+    common_steps = sorted(set.intersection(*curve_steps_by_arm.values()))
+    required_steps = {512, 1024, 1536, 2048}
+    if not required_steps.issubset(common_steps):
+        raise ValueError("a required common learning-curve checkpoint is missing")
+    reported_steps = [step for step in common_steps if 512 <= step <= 2048]
+    missing_requested_steps = [step for step in REQUESTED_STEPS if step not in common_steps]
+    return common_steps, reported_steps, missing_requested_steps
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--capacity-run", type=Path,
-        default=ROOT / "native-common-capacity-control-fit-01",
+        default=ROOT / "native-common-capacity-control-fit-02",
     )
     parser.add_argument(
         "--capacity-replay", type=Path,
@@ -138,7 +150,7 @@ def main():
     )
     parser.add_argument(
         "--output", type=Path,
-        default=ROOT / "native-common-capacity-control-comparison-01",
+        default=ROOT / "native-common-capacity-control-comparison-02",
     )
     args = parser.parse_args()
     if args.output.exists():
@@ -190,6 +202,7 @@ def main():
     arrays = {}
     metrics = {}
     curves = {}
+    curve_steps_by_arm = {}
     for name, folder in folders.items():
         receipt = receipts[name]
         for filename in ("validation-0000.npy", "validation-2048.npy"):
@@ -221,10 +234,12 @@ def main():
             "selected_step": receipt["best_step"],
         }
         learning_curve = load(folder / "learning-curve.json")
-        curves[name] = {
-            step: next(item for item in learning_curve if item["step"] == step)
-            for step in STEPS
-        }
+        curve_steps_by_arm[name] = {item["step"] for item in learning_curve}
+        curves[name] = {item["step"]: item for item in learning_curve}
+
+    common_steps, reported_steps, missing_requested_steps = select_curve_points(
+        curve_steps_by_arm
+    )
 
     comparisons = {}
     for phase in ("final",):
@@ -276,9 +291,21 @@ def main():
                     "video_nll": item["validation"]["modality_macro"]["video"]["nll"],
                     "warnings": item["warnings"],
                 }
-                for step, item in steps.items()
+                for step, item in steps.items() if step in reported_steps
             }
             for name, steps in curves.items()
+        },
+        "learning_curve_schedule": {
+            "requested_protocol_steps": list(REQUESTED_STEPS),
+            "observed_common_steps": reported_steps,
+            "requested_steps_not_observed": missing_requested_steps,
+            "note": (
+                "The frozen runs evaluate every 256 updates, so step 1920 was not "
+                "scheduled. Step 1792 is reported as the last common scheduled point "
+                "before 2048; no interpolation was used."
+                if 1920 in missing_requested_steps and 1792 in common_steps
+                else "Only saved common validation checkpoints are reported."
+            ),
         },
         "paired_video_uncertainty": comparisons,
         "replay": {
@@ -289,6 +316,19 @@ def main():
             "verified_artifact_count": verified_replay_artifacts,
         },
         "capacity_control_verified_artifact_count": verified_control_artifacts,
+        "analysis_source": {
+            "path": str(Path(__file__).resolve()),
+            "sha256": sha(Path(__file__)),
+            "capacity_fit_source_pin_sha256": receipts["capacity_mlp"][
+                "validated_hashes"
+            ].get(str(Path(__file__).resolve())),
+            "note": (
+                "This comparison-script fix was made after the fit and replay: the prior "
+                "script required step 1920 although the frozen 256-update schedule saves "
+                "step 1792 instead; the default run path now points to fit-02. "
+                "Fit/replay receipts and model artifacts were not edited."
+            ),
+        },
         "limits": [
             "The development validation and selector were observed in the earlier "
             "baseline/LSTM comparison.",

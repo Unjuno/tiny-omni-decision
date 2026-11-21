@@ -70,14 +70,14 @@ the fixed training command:
 ```powershell
 $smoke = 'C:\CodexArtifacts\pretrained-reuse-r2\native-common-capacity-control-smoke-01'
 $smokeHash = (Get-FileHash "$smoke\result.json" -Algorithm SHA256).Hash.ToLowerInvariant()
-python -u -m scripts.train_native_common --phase train --variant capacity_mlp --config configs/pretrained_reuse/native_common_capacity_control_v1.json --output C:\CodexArtifacts\pretrained-reuse-r2\native-common-capacity-control-fit-01 --reference $smoke --reference-sha256 $smokeHash
+python -u -m scripts.train_native_common --phase train --variant capacity_mlp --config configs/pretrained_reuse/native_common_capacity_control_v1.json --output C:\CodexArtifacts\pretrained-reuse-r2\native-common-capacity-control-fit-02 --reference $smoke --reference-sha256 $smokeHash
 ```
 
 Only after the 2,048-update fit passes and its selected/final checkpoint
 hashes verify, run the exact saved-prediction replay and comparison:
 
 ```powershell
-$fit = 'C:\CodexArtifacts\pretrained-reuse-r2\native-common-capacity-control-fit-01'
+$fit = 'C:\CodexArtifacts\pretrained-reuse-r2\native-common-capacity-control-fit-02'
 $fitHash = (Get-FileHash "$fit\result.json" -Algorithm SHA256).Hash.ToLowerInvariant()
 python -u -m scripts.train_native_common --phase replay --variant capacity_mlp --config configs/pretrained_reuse/native_common_capacity_control_v1.json --output C:\CodexArtifacts\pretrained-reuse-r2\native-common-capacity-control-replay-01 --reference $fit --reference-sha256 $fitHash
 python -u -m scripts.compare_native_capacity_control
@@ -86,3 +86,20 @@ python -u -m scripts.compare_native_capacity_control
 The committed runner prepends this worktree's `src` directory, records its
 resolved package path, verifies every corpus/cache/source pin, and refuses a
 busy GPU or an existing output directory. Do not bypass those checks.
+
+## Execution note (2026-11-21)
+
+The first fit attempt used `native-common-capacity-control-fit-01` and ended
+before any optimizer update. Windows reported `STATUS_IN_PAGE_ERROR`
+(`0xC0000006`, Application Error 1005) while reading the pinned
+`D:\CodexArchiveRelocated\CodexArtifacts\pretrained-reuse-r2\native-language-cache-02\train-states.npy`;
+the abruptly terminated process left a stale `RUNNING` receipt. No pinned input
+was changed. After the drive was available again, the same frozen config and
+smoke receipt were run into the new, non-overwriting `fit-02` directory. That
+fit completed all 2,048 updates and passed input-hash revalidation. `replay-01`
+then passed exact saved-prediction reload (`max_abs_delta=0`).
+
+The fixed evaluation interval is 256 updates, so step 1920 was not saved. The
+comparison reports common saved points through step 1792 and 2048; it does not
+interpolate step 1920. Detailed outcomes and immutable external artifact hashes
+are recorded in [the results report](R2_NATIVE_TEMPORAL_CAPACITY_CONTROL_RESULTS_20261121.md).

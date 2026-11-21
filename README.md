@@ -1,5 +1,13 @@
 # Tiny Omni Decision
 
+**2026-11-21 R2 native temporal capacity control:** A parameter-matched,
+nonrecurrent tokenwise MLP completed the same 2,048-update Path A fit as the
+baseline/LSTM arms. Fresh-process replay matched exactly. Its final Video
+NLL/Brier were close to LSTM and paired scene-bootstrap intervals included
+zero; this does not establish a recurrence-specific gain. The exposed
+development validation remains non-blind, and no model was promoted.
+[Protocol and results](docs/pretrained_reuse/R2_NATIVE_TEMPORAL_CAPACITY_CONTROL_RESULTS_20261121.md).
+
 **2026-11-21 R2 SoundActions frozen A/V pilot:** 294 train/validation
 recordings passed source media hashes. Audio-only reached 64.58% validation
 Accuracy; gated A/V reached 52.08%, and zero/permuted-video controls showed no
