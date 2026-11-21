@@ -1,0 +1,66 @@
+{
+  "format": "eidon_tracker_pov_metadata_screen_v1",
+  "dataset_id": "Eidon Tracker POV",
+  "status": "NOT_ADMITTED_FOR_PRODUCT_QUALITY",
+  "repositories": {
+    "video_metadata": {
+      "repo_id": "eidon-ai/tracker-pov",
+      "revision": "47c55ccc6d0308894ab482009c6fa91569057a08",
+      "license": "CC-BY-4.0"
+    },
+    "imu": {
+      "repo_id": "eidon-ai/tracker-pov-imu",
+      "revision": "97d4441a7e915d2ad4b5988a43ebddd79a542aea",
+      "license": "CC-BY-4.0"
+    }
+  },
+  "downloaded_artifact": {
+    "path": "C:/CodexLocalArtifacts/pretrained-reuse-r2/eidon-tracker-pov-metadata-audit-20261122/metadata.parquet",
+    "bytes": 1121123,
+    "sha256": "d450018059bf6696ad793bab40fcb19fc49dcded8700df09047b2d508a8741e1"
+  },
+  "scope": {
+    "metadata_rows": 13451,
+    "unique_recordings": 13451,
+    "contributors": 27,
+    "task_types": 9,
+    "raw_motion_recordings": 2841,
+    "full_rig_raw_motion_recordings": 2837,
+    "valid_recordings": 11841,
+    "flagged_recordings": 1138,
+    "invalid_recordings": 472,
+    "video_or_imu_payload_downloaded": false,
+    "training_or_model_evaluation": false,
+    "gpu_used": false,
+    "metadata_and_task_labels_screened": true,
+    "blind_audit_created": false
+  },
+  "task_recording_counts": {
+    "folding_laundry": 8747,
+    "cleaning": 2384,
+    "doing_the_dishes": 984,
+    "cooking": 795,
+    "drawing": 166,
+    "knitting": 159,
+    "making_the_bed": 130,
+    "watering_plants": 67,
+    "organizing": 19
+  },
+  "contributor_group_diagnostic": {
+    "method": "sort contributor_id by SHA256(seed17:eidon-tracker-pov-contributor-fold-v1:<id>), round-robin into 5 folds",
+    "fold_group_counts": [6, 6, 5, 5, 5],
+    "fold_recording_counts": [2088, 4768, 1209, 1182, 4204],
+    "fold_valid_full_rig_raw_motion_counts": [404, 695, 72, 48, 1116],
+    "fit_or_selection_performed": false
+  },
+  "limits": [
+    "Only 27 independent contributors",
+    "Highly unequal activity frequencies and contributor volumes",
+    "Raw accelerometer/gyroscope/magnetometer data in only 21.1 percent of recordings",
+    "Task label provenance and human verification are unspecified",
+    "Video-plus-sensor necessity has not been established",
+    "Raw private-home footage is unblurred and may include incidental bystanders or documents",
+    "Full video corpus is 9.05 TB"
+  ],
+  "recommendation": "Development-exposed candidate only; do not claim four-modality quality, a blind audit, or paired-input benefit. Re-entry only for a narrow pre-registered contributor-grouped pilot with all unimodal and misalignment controls."
+}

@@ -1,3 +1,14 @@
+**2026-11-22 R2-M Eidon Tracker POV metadata screen:** Pinned CC BY 4.0
+video/IMU repositories publish 13,451 recordings from 27 contributors with
+consented but unblurred private-home video. The 1.12 MB metadata index shows
+activity imbalance, only 2,841 recordings with raw motion, and uneven
+contributor-group support; a deterministic five-fold hash allocation leaves
+held folds with only 72 and 48 valid full-rig raw-motion examples. This is a
+narrow development candidate only: no video/sensor necessity is established,
+label provenance is unspecified, the full video set is 9.05 TB, and all
+metadata/task labels are now development-exposed. No video/IMU payload or model
+was accessed. See [source screen](docs/pretrained_reuse/R2_EIDON_TRACKER_POV_SOURCE_METADATA_SCREEN_20261122.md)
+and [receipt](manifests/pretrained_reuse/eidon-tracker-pov-source-screen-20261122.json).
 **2026-11-22 R2-M EgoViz-120 train-only MCAP sample audit:** The smallest indexed payload from already-frozen train group `g114` (150,184,348 bytes; SHA-256 pinned in the receipt) decoded all 449 head-left H.264 frames at 1920x1200 with zero corrupt frames. Video, wrist-camera, IMU and action-message timestamps are closely aligned; a single frame broadly matches the sink-cleaning label. One clip shows a possible one-message action-phase offset, with endpoint convention unresolved. This establishes decode/synchronization plumbing only: labels remain model-generated/unverified, participant independence and paired-input necessity remain unknown, and the source stays `REVIEW_NOT_ADMITTED`. No development/test payload, model, or sealed audit was used. See [sample audit](docs/pretrained_reuse/R2_EGOVIZ120_TRAIN_MCAP_SAMPLE_AUDIT_20261122.md) and [receipt](manifests/pretrained_reuse/egoviz120-train-mcap-sample-audit-20261122.json).
 **2026-11-21 R2-M HABIT temporal Decision pilot result:** The fixed CPU run
 completed 80 epochs for text-only, video-only, state-only and paired
