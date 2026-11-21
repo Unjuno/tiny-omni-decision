@@ -166,6 +166,12 @@ declared coarse 250 ms video guard and the timing-offset control. Even a
 positive result would be a narrow sensor-fusion mechanism result, not a
 product-quality pass.
 
+The deterministic contact-window/episode-split helper is implemented in
+`scripts/pretrained_reuse/dextraverse_contact.py`; 11 CPU tests cover synthetic
+crossings, simultaneity, causal cutoffs, gaps, missing values and grouped split
+determinism. These tests establish code behavior only. No real source rows,
+feature cache, model fit, or quality metrics exist yet.
+
 ## Evidence links
 
 - [Hugging Face dataset card and license](https://huggingface.co/datasets/ntumars/DextraVerse)

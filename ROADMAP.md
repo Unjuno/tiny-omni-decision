@@ -4399,7 +4399,9 @@ publisher documents 261 episodes, wrist RGB, and calibrated per-fingertip
 3-axis force in N. A causal next-contact task has been fixed prospectively;
 the archive is downloading to an external C: attempt directory. Active-hand
 provenance, array/timestamp integrity, class support, and grouped evaluation
-remain unverified. No model fit/evaluation or sealed-audit access has occurred.
+remain unverified. The pure CPU target/split helper has 11 passing synthetic
+tests; no real examples or model fit/evaluation exist yet, and sealed audit
+remains unopened.
 Do not treat this as admitted or as product-quality evidence. See the
 [fixed protocol](docs/pretrained_reuse/R2M_DEXTRAVERSE_CONTACT_DECISION_PROTOCOL_20261122.md)
 and [source receipt](manifests/pretrained_reuse/dextraverse-contact-decision-source-preflight-20261122.json).
