@@ -1,3 +1,14 @@
+**2026-11-21 R2-M HABIT source preflight:** Pinned public revision
+`bae97d251907743f8fb6db7e70c61d361df4dc1e` declares CC BY 4.0 and includes
+synced video, robot state and subtask labels. A metadata preflight found a
+63-vs-60 task-count mismatch, one undocumented scenario, and role-count
+discrepancies; 114 episodes are quarantined and ambiguous task groups remain
+train-only. Two non-audit clips decoded and produced finite pinned
+VideoPrism-B CPU features; two Parquets passed target/option mapping. This is
+runtime plumbing only, not quality evidence. See [source screen](docs/pretrained_reuse/R2_HABIT_SOURCE_SCREEN_20261121.md),
+[mapping smoke](docs/pretrained_reuse/R2_HABIT_DATA_MAPPING_SMOKE_20261121.md),
+and [manifest](manifests/pretrained_reuse/habit-source-screen-20261121.json).
+
 **2026-11-21 R2-M Zenodo audio+vibration follow-up:** The 25 source archives
 (4.57 GB) were hash-verified; only `multisensor-1` was used under a frozen
 participant split, with 7 train / 2 calibration / 2 development-validation /
