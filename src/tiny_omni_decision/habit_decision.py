@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import unicodedata
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
@@ -21,6 +22,53 @@ class HabitChoiceTarget:
     options: tuple[str, ...]
     target_index: int
     collapsed_duplicate_count: int
+
+
+@dataclass(frozen=True)
+class HabitTransitionPoint:
+    """A target subtask onset and the latest admissible pre-onset input time."""
+
+    target_subtask_id: int
+    onset_ms: float
+    context_end_ms: float
+
+
+def habit_transition_points(
+    timestamps_ms: Sequence[float],
+    subtask_ids: Sequence[int],
+    *,
+    pre_transition_guard_ms: float = 100.0,
+) -> tuple[HabitTransitionPoint, ...]:
+    """Return subtask onsets after the initial segment with a causal cutoff.
+
+    Each label is treated as the task active at its timestamp. The first run
+    has no prior task boundary and is omitted. Inputs must end at least the
+    guard interval before each target onset; future timestamps are never read
+    or returned as input times.
+    """
+    if len(timestamps_ms) != len(subtask_ids) or not timestamps_ms:
+        raise ValueError("timestamps and subtask IDs must be nonempty and aligned")
+    if (not math.isfinite(pre_transition_guard_ms) or pre_transition_guard_ms <= 0
+            or any(not math.isfinite(time) for time in timestamps_ms)
+            or any(later <= earlier for earlier, later in zip(
+                timestamps_ms, timestamps_ms[1:], strict=False
+            ))):
+        raise ValueError(
+            "timestamps must be finite and strictly increasing; guard must be positive"
+        )
+    if any(isinstance(label, bool) or not isinstance(label, int) or label < 0
+           for label in subtask_ids):
+        raise ValueError("subtask IDs must be nonnegative integers")
+
+    return tuple(
+        HabitTransitionPoint(
+            target_subtask_id=label,
+            onset_ms=float(timestamps_ms[index]),
+            context_end_ms=float(timestamps_ms[index]) - pre_transition_guard_ms,
+        )
+        for index, label in enumerate(subtask_ids)
+        if index > 0 and label != subtask_ids[index - 1]
+    )
 
 
 def map_habit_choice_target(

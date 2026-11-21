@@ -1,6 +1,9 @@
 import pytest
 
-from tiny_omni_decision.habit_decision import map_habit_choice_target
+from tiny_omni_decision.habit_decision import (
+    habit_transition_points,
+    map_habit_choice_target,
+)
 
 
 def test_repeated_action_text_collapses_and_maps_global_target_id():
@@ -42,6 +45,36 @@ def test_text_normalization_collapses_spacing_and_unicode_variants():
     assert result.options == ("Café   cup", "Close box")
     assert result.target_index == 0
     assert result.collapsed_duplicate_count == 1
+
+
+def test_transition_points_cut_inputs_before_target_onset():
+    points = habit_transition_points(
+        [0.0, 100.0, 200.0, 500.0, 900.0],
+        [3, 3, 4, 4, 3],
+        pre_transition_guard_ms=100.0,
+    )
+
+    assert [(p.target_subtask_id, p.onset_ms, p.context_end_ms) for p in points] == [
+        (4, 200.0, 100.0),
+        (3, 900.0, 800.0),
+    ]
+    assert all(point.context_end_ms < point.onset_ms for point in points)
+
+
+@pytest.mark.parametrize(
+    ("times", "labels", "guard"),
+    [
+        ([], [], 100.0),
+        ([0.0, 1.0], [1], 0.1),
+        ([0.0, 0.0], [1, 2], 0.1),
+        ([0.0, float("nan")], [1, 2], 0.1),
+        ([0.0, 1.0], [1, 2], 0.0),
+        ([0.0, 1.0], [1, True], 0.1),
+    ],
+)
+def test_invalid_transition_series_fail_closed(times, labels, guard):
+    with pytest.raises((TypeError, ValueError)):
+        habit_transition_points(times, labels, pre_transition_guard_ms=guard)
 
 
 @pytest.mark.parametrize(

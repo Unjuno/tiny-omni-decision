@@ -83,6 +83,16 @@ The fixed mapping receipt is saved outside Git at
 `C:\CodexArtifacts\pretrained-reuse-r2\habit-label-schema-20261121-attempt-02\habit-choice-mapping.json`
 (SHA-256 `ae5e47d388224c26740c9001a4641d89950a6c35750e61c0d93f03c7bf4963ce`).
 
+For a causal “what robot subtask starts next?” example, the source label
+timeline can be segmented at subtask changes. `habit_transition_points` drops
+the initial segment and sets the latest input time to 100 ms before each later
+segment onset. The two sample episodes yield two train and three validation
+transition points. Their index receipt is outside Git at
+`C:\CodexArtifacts\pretrained-reuse-r2\habit-label-schema-20261121-attempt-02\habit-transition-cutoff.json`
+(SHA-256 `5b4fd2f7bd9e53b2086045a8f62ebcb62fa9765dfe4485823009abd77fa32ee3`).
+This validates label timing only; causal video/state extraction and alignment
+at these cutoffs are not yet run.
+
 ## Interpretation
 
 The pinned video encoder, decoder, feature shape, robot-state field, and
