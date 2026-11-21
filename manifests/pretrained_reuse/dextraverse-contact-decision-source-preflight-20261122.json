@@ -87,6 +87,20 @@
     "feature_extraction_started": false,
     "model_fit_started": false
   },
+  "preflight_execution": {
+    "command": "python -m scripts.pretrained_reuse.inspect_dextraverse_contact_archive --archive <pinned archive> --output <real-data-preflight-02/report.json>",
+    "runtime": {
+      "python": "3.11.9",
+      "numpy": "2.4.6",
+      "zarr": "2.18.7",
+      "device": "CPU"
+    },
+    "repository_head_when_run": "7781da3381c00fb5aed17c8f24a6ef71c9b24f36",
+    "repository_worktree_dirty_for_root-wrapper-fix": true,
+    "preflight_script_sha256": "77f6a27f4d83d22444c05a096edd29ad2b2b79e83840b12fabf736cb4f00680d",
+    "same_script_content_committed_as": "faa1c541b22f2314d66bb8451de52e2e65985da7",
+    "sealed_audit_accessed": false
+  },
   "gates": {
     "source_is_public_and_ungated": true,
     "license_allows_research_use_with_attribution": true,
