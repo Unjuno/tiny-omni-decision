@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "status": "TRAIN_ONLY_GROUPED_OOF_COMPLETE",
+  "experiment_id": "habit-train-only-grouped-oof-seed17-v0",
+  "source_revision": "bae97d251907743f8fb6db7e70c61d361df4dc1e",
+  "source_package_report_sha256": "90b63ec050a0836c6f2f611b8edcbeb72bf7c64ded7b15b9f02e6a9e29b6b91d",
+  "transition_examples_sha256": "550c1725c547bef3784f8ef83f520aaf9baea4e23b19817cfe2cc631621d4292",
+  "feature_cache_sha256": "654cd9001fde2329719840889381a9ffa3d5763f65386ba0d5fdba7fc1039076",
+  "config": "configs/pretrained_reuse/habit_train_only_grouped_oof.yaml",
+  "config_sha256": "e525435a7176d656223f61ddf2512e06c4c5a009a09bec1baeb77eb44c76cc75",
+  "script": "scripts/run_habit_train_only_grouped_oof.py",
+  "script_sha256": "cf80e02be32a597d5ee9856b65973221cdc69f11be297e32a79793e105a508ca",
+  "external_output_directory": "C:\\CodexArtifacts\\pretrained-reuse-r2\\habit-train-only-grouped-oof-20261121-attempt-01",
+  "report_sha256": "fea93cc9013da2f6a739d72c8e140db3ef1a37ccc1e9ef89fdab67767bfc97e4",
+  "fold_membership_sha256": "cd92b359cc62dd23b51753e1c4dc14a5569e7f136a3e139ba564213483f075a4",
+  "paired_group_bootstrap_sha256": "1b71a737d2ff7c4e3e3b4b4f85a952fee9334c0e46f0243c5cab9985ec416f02",
+  "started_at_utc": "2026-11-21T15:00:48.714008+00:00",
+  "compute": {
+    "device": "CPU",
+    "training_seconds": 28.105598800000735,
+    "text_feature_extraction_seconds": 1.5824032999807969,
+    "optimizer_updates": 960,
+    "cloud_cost": 0
+  },
+  "protocol": {
+    "seed": 17,
+    "folds": 5,
+    "grouping": "connected components of task-group ID and video SHA-256",
+    "train_rows": 202,
+    "task_groups": 36,
+    "unique_videos": 66,
+    "epochs_per_fold_and_arm": 8,
+    "fixed_observation_epochs": [1, 2, 4, 8],
+    "readouts": ["text_only", "video_only", "state_only", "video_state"],
+    "checkpoint_selection": false,
+    "early_stopping": false,
+    "development_validation_metrics_computed": false,
+    "sealed_audit_accessed": false
+  },
+  "key_epoch4_macro_group_metrics": {
+    "text_only": {"accuracy": 0.5338, "nll": 0.9808},
+    "video_only": {"accuracy": 0.5615, "nll": 0.9797},
+    "state_only": {"accuracy": 0.5615, "nll": 0.9797},
+    "video_state": {"accuracy": 0.543, "nll": 0.9793}
+  },
+  "interpretation": "Fixed train-only OOF diagnosis. Single streams show weak signal; paired fusion is mixed and uncertainty intervals include zero. No product quality or generalization claim."
+}

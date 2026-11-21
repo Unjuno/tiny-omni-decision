@@ -21,6 +21,16 @@ This supports checking state/video label context and expanding independent
 task-group coverage before further architecture tuning. See [protocol](docs/pretrained_reuse/R2M_HABIT_TEMPORAL_DECISION_PROTOCOL_20261121.md#train-only-text-identifiability-audit)
 and [audit manifest](manifests/pretrained_reuse/habit-train-text-identifiability-20261121.json).
 
+**2026-11-22 R2-M HABIT train-only grouped OOF:** A fixed five-fold split held
+all task/video-connected groups together and compared the existing text-only,
+video-only, state-only and paired readouts at epochs 1/2/4/8 over the original
+202 train rows. Individual video/state arms were slightly better around epoch
+2–4; paired results were mixed, and 10,000-draw task-group bootstrap intervals
+for macro-group NLL included zero. No checkpoint was selected; original
+development validation and sealed audit were not used. This is weak single-seed
+development evidence, not quality proof. See [results](docs/pretrained_reuse/R2M_HABIT_TRAIN_ONLY_GROUPED_OOF_20261122.md)
+and [manifest](manifests/pretrained_reuse/habit-train-only-grouped-oof-20261122.json).
+
 **2026-11-21 R2-M HABIT source preflight:** Pinned public revision
 `bae97d251907743f8fb6db7e70c61d361df4dc1e` declares CC BY 4.0 and includes
 synced video, robot state and subtask labels. A metadata preflight found a
