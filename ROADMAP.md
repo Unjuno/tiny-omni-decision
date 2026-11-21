@@ -16,6 +16,13 @@ unaccessed and test members were not decompressed or parsed; this is not task
 quality evidence. See [source screen](docs/pretrained_reuse/R2_MUVS_VIDEO_SENSOR_SOURCE_SCREEN_20261121.md)
 and [machine-readable record](manifests/pretrained_reuse/muvs-video-sensor-source-screen-20261121.json).
 
+**2026-11-21 R2-M xPhi-Ego-100 source screen:** The official card declares
+Apache-2.0 and recorded participant consent, but access requires a logged-in
+request form. It reports 152 workers across eight sites, 195.5 GB, no audio,
+and model-generated action labels. This is below the provisional independent
+group screen and does not establish a task requiring both video and IMU. No
+form or payload was accessed; keep `REVIEW_NOT_ADMITTED`. See [source screen](docs/pretrained_reuse/R2_XPHI_EGO100_SOURCE_SCREEN_20261121.md).
+
 **2026-11-21 R2 frozen numeric-span diagnostic:** A CPU-only seed-17,
 five-fold group OOF probe over the existing 768 FIT state groups decoded raw
 numeric span values from frozen DeBERTa token states (macro Pearson r 0.972;
@@ -4256,3 +4263,4 @@ four-modality objectives open. [Protocol, OOF metrics, histories and hashes](doc
 **2026-11-21 R2 MiniWoB prospective evaluation record reconciled:** Verified the preserved 2026-11-14 CPU-only run over 1,024 accepted, previously unused seeds and screens. The frozen DINO screen-only scorer scored 96.97% on this synthetic click-color task; position-only, black-screen, and screen-shuffle controls were near four-choice chance. The checkpoint had earlier dev-validation selection history, so these episodes are now exposed development evidence and must not be tuned against. This does not establish general image/video quality or multimodal fusion. Do not repeat this cohort; prioritize rights-cleared, both-input-required R2 tasks. See [report](docs/pretrained_reuse/R2_MINIWOB_FROZEN_GENERALIZATION_20261114.md).
 **2026-11-21 R2 audio/video task admission:** Pinned SoundActions v2 under its explicit CC BY 4.0 license. Froze a 266/53/46 recording-ID train/validation/sealed split; IDs 1–35 were forced to train because their overview labels had appeared in the source preview. The publisher's SHA-256 inventory shows zero exact asset-byte collisions across 1,095 paired media files, but does not check near-duplicates. Prior paper results favor audio-only over its paired model, and labels have κfree 0.46; run a compact frozen audio/video comparison only if local media/runtime preflight passes. No media or model has been loaded and no training has started. See [source/task screen](docs/pretrained_reuse/R2_SOUND_ACTIONS_SOURCE_SCREEN_20261121.md).
 **2026-11-21 R2 SoundActions frozen temporal pilot:** The follow-up run extracted only the 294 majority-labeled train/validation recordings, verified all 588 media files against publisher SHA-256, and left all 46 sealed-audit recordings unopened. On the same 48 validation recordings, audio-only reached 64.58% Accuracy / 0.809 NLL, video-only 43.75% / 1.123, and the gated BiLSTM A/V readout 52.08% / 0.914. The paired model's Accuracy was below audio-only, and zero/permuted-video controls showed no video benefit; all three conditions overfit. No model promotion or quantization. See [protocol, curves, hashes and limitations](docs/pretrained_reuse/R2_SOUND_ACTIONS_TEMPORAL_RESULTS_20261121.md).
+
