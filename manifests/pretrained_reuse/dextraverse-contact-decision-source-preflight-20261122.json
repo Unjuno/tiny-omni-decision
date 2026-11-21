@@ -1,0 +1,70 @@
+{
+  "format": "dextraverse_contact_decision_source_preflight_v1",
+  "dataset_id": "DextraVerse pick_cube_place_box real-robot task",
+  "status": "CANDIDATE_PREFLIGHT_IN_PROGRESS",
+  "source": {
+    "repository": "https://huggingface.co/datasets/ntumars/DextraVerse",
+    "revision": "257731928e25cd068b02d80d18d8f3cb77075a14",
+    "license": "CC BY 4.0",
+    "metadata_response_sha256": "6cf0084a1f4d589a2e92ce7bb3e3d4af4bd4f4494626c8179f9c678e546a0e95",
+    "file_tree_response_sha256": "9a7b6e6b897ca089f22855a943e6fe17eddc5cfe587c116ff28fb81e1118c4d2",
+    "real_robot_readme": {
+      "path": "DextraVerse/README_real_robot.md",
+      "bytes": 3449,
+      "sha256": "8cb64a0519db1fa60f4963eaf99af98f3c098ffb8f90c24e14a3fa80923db20c"
+    },
+    "publisher_checksums_file": {
+      "path": "SHA256SUMS.txt",
+      "bytes": 509,
+      "sha256": "9f35f048b691eb0220c6cbecde11b94d38aed8b7d71cc9903e5c082075430968"
+    }
+  },
+  "task_metadata": {
+    "episodes_reported": 261,
+    "frames_reported": 138382,
+    "reported_episode_types": {
+      "left_hand": 140,
+      "right_hand": 116,
+      "bimanual_excluded_by_protocol": 3,
+      "never_grasp_retained": 2
+    },
+    "tactile_schema": "5 fingertips x 3 calibrated force components in N; per-finger force components are in that sensor's own frame",
+    "video_schema": "RGB 320x240 head and left/right wrist streams",
+    "episode_identity": "meta/episode_ends in the Zarr v2 replay buffer",
+    "active_hand_source": "UNKNOWN pending inspection of per-episode instruction/metadata; do not infer from future contact labels"
+  },
+  "payload": {
+    "path": "DextraVerse/pick_cube_place_box.zarr.zip",
+    "expected_bytes": 44197744857,
+    "hf_blob_oid": "7456e5175751abb6fd833e242c412ea62412def4",
+    "publisher_sha256": "9f9d8d0e6a6eebac12f1bf63fae59bea46e9531db2b9921440aa553289d07aa4",
+    "download_status_at_record": "DOWNLOADING",
+    "downloaded_bytes_at_record": 7442358272,
+    "download_observed_at": "2026-11-22T04:03:29+09:00",
+    "transport_attempts": [
+      {
+        "transport": "curl single stream",
+        "status": "resumed and continuing",
+        "observed_rate_mib_per_second": "about 5 to 6"
+      },
+      {
+        "transport": "huggingface_hub hf_xet",
+        "status": "stopped after 90 seconds without payload-byte progress",
+        "payload_bytes_written": 0
+      }
+    ],
+    "local_attempt_root": "C:/CodexLocalArtifacts/pretrained-reuse-r2/dextraverse-contact-decision-attempt-01",
+    "repository_media_committed": false
+  },
+  "gates": {
+    "source_is_public_and_ungated": true,
+    "license_allows_research_use_with_attribution": true,
+    "archive_sha256_verified": false,
+    "episode_arrays_and_active_hand_verified": false,
+    "target_support_verified": false,
+    "grouped_evaluation_started": false,
+    "model_training_or_evaluation_started": false,
+    "sealed_audit_accessed": false
+  },
+  "decision": "Continue pinned payload preflight only. No fit or quality claim until payload hash, active-hand provenance, temporal alignment, and target support pass the fixed protocol."
+}

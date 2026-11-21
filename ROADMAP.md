@@ -4393,3 +4393,14 @@ four-modality objectives open. [Protocol, OOF metrics, histories and hashes](doc
 **2026-11-21 R2-M HABIT causal feature pilot:** Extracted frozen VideoPrism-B `[278,8,768]` and aligned robot-state `[278,8,14]` inputs for 202 train transitions / 76 validation transitions, then aligned the pinned high-level task text, candidate options and target index. Train/validation remain disjoint by task group and video hash; sealed-audit records and action columns were not accessed. This is a CPU plumbing pass with no fitting or quality metrics; validation covers only six task groups. See [runtime, hashes and limits](docs/pretrained_reuse/R2M_HABIT_TRANSITION_FEATURES_20261121.md).
 **2026-11-21 R2-M HABIT temporal Decision protocol and result:** Fixed a one-seed CPU comparison of text-only, video-only, state-only and video+state readouts over the same frozen 202/76 transition package. MiniLM-L3 and VideoPrism-B stayed frozen; the temporal readout has 370,819 trainable parameters. All four arms completed 80 epochs without early stopping and selected epoch 4 by validation macro task-group NLL. Training NLL fell as validation NLL rose sharply after selection; paired missing/shuffled-stream controls barely changed Accuracy. The small six-group pilot overfit and did not establish useful paired-input necessity. Sealed audit remained unopened; no promotion or quantization. The run report was reconstructed from preserved best/last checkpoints after fixing a validation-group matching failure; exact runtime is unknown. See [protocol and results](docs/pretrained_reuse/R2M_HABIT_TEMPORAL_DECISION_PROTOCOL_20261121.md) and [run manifest](manifests/pretrained_reuse/habit-temporal-decision-20261121.json).
 
+**2026-11-22 R2-M DextraVerse video+tactile candidate preflight:** Pinned the
+public CC BY 4.0 `pick_cube_place_box` task and its real-robot schema. The
+publisher documents 261 episodes, wrist RGB, and calibrated per-fingertip
+3-axis force in N. A causal next-contact task has been fixed prospectively;
+the archive is downloading to an external C: attempt directory. Active-hand
+provenance, array/timestamp integrity, class support, and grouped evaluation
+remain unverified. No model fit/evaluation or sealed-audit access has occurred.
+Do not treat this as admitted or as product-quality evidence. See the
+[fixed protocol](docs/pretrained_reuse/R2M_DEXTRAVERSE_CONTACT_DECISION_PROTOCOL_20261122.md)
+and [source receipt](manifests/pretrained_reuse/dextraverse-contact-decision-source-preflight-20261122.json).
+
