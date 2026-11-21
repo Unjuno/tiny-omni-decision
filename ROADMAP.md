@@ -6,11 +6,17 @@ accelerometer. Median raw demeaned energy above the token-grid Nyquist was
 98.21%; this is a signal-bandwidth diagnostic, not a model-quality result or
 proof of causality. Next, compare fixed 128-bin per-axis RMS envelopes against
 the existing point-sampled features under the same seven-participant TRAIN-only
-CV before changing the readout or spending more model capacity. Validation and
-sealed audit remain unopened. See
+CV. The RMS run completed all 14 fits. RMS fusion improved over the legacy
+fusion result but failed the preregistered same-run Audio-only proper-score
+criterion: macro NLL and Brier worsened, with only +0.08 pp macro Accuracy.
+Retire this source/task fusion path; do not spend more capacity on it. A
+run-to-run Audio-only prediction mismatch (746/5,449 decisions) weakens direct
+causal interpretation of historical deltas, while the within-run comparison
+remains paired. Validation and sealed audit remain unopened. See
 [audit and preregistered follow-up](docs/pretrained_reuse/R2M_TEMPORAL_BANDWIDTH_AUDIT_20261121.md).
 The RMS-window CV itself is separately fixed in the
 [follow-up protocol](docs/pretrained_reuse/R2M_RMS_WINDOW_FOLLOWUP_PROTOCOL_20261121.md).
+See [RMS-window results](docs/pretrained_reuse/R2M_RMS_WINDOW_CV_RESULTS_20261121.md).
 
 **2026-11-21 R2 programmatic decision state-group holdout:** A separate
 2,048-update text readout used 6,144 TRAIN rows and evaluated 2,048 rows from
