@@ -576,8 +576,8 @@ def main() -> None:
         [1.0 / len(example.options)] * len(example.options) for example in examples
     ]
     uniform = _metric_arrays(uniform_probabilities, targets_int)
-    # Build position-prior probabilities in source row order from the fold-local training prior.
-    position_prior = [[0.0] * len(examples[i].options) for i in range(len(examples))]
+    # Hard-majority answer-position reference, retained separately from uniform probabilities.
+    position_majority = [[0.0] * len(examples[i].options) for i in range(len(examples))]
     for fold in range(FOLDS):
         outer_groups = {group for group in groups if int(fold_assignment[group]) == fold}
         train_indices = [i for i, group in enumerate(group_ids) if group not in outer_groups]
@@ -589,10 +589,10 @@ def main() -> None:
                 continue
             counts = by_width[len(example.options)]
             chosen = min(range(len(example.options)), key=lambda pos: (-counts[pos], pos))
-            position_prior[index] = [
+            position_majority[index] = [
                 1.0 if pos == chosen else 0.0 for pos in range(len(example.options))
             ]
-    position_metrics = _metric_arrays(position_prior, targets_int)
+    position_majority_metrics = _metric_arrays(position_majority, targets_int)
     bootstrap = _bootstrap(probabilities, targets_int, group_ids)
     prediction_path = output / "oof-predictions.jsonl"
     prediction_path.write_text(
@@ -637,7 +637,7 @@ def main() -> None:
         "folds": fold_reports,
         "pooled_oof_metrics": pooled,
         "uniform_reference_metrics": uniform,
-        "fold-local_answer-position_prior_metrics": position_metrics,
+        "fold-local_answer-position_majority_metrics": position_majority_metrics,
         "group_bootstrap": bootstrap,
         "oof_predictions_sha256": sha256_file(prediction_path),
         "frozen_features_sha256": sha256_file(feature_path),

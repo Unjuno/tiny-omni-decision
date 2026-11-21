@@ -76,7 +76,9 @@ grouped cross-validation over that TRAIN split.
 ## Reporting and decision rule
 
 Save per-fold and pooled out-of-fold Accuracy, NLL, multiclass Brier, ECE-15,
-answer-option count, and the uniform and train-position-prior references.
+answer-option count, the uniform reference, and a separately labeled
+fold-local hard-majority answer-position classifier. The latter emits a
+one-hot distribution and must not be described as a probabilistic prior.
 Report 10,000-replicate seed-17 bootstrap intervals resampling connected
 content groups. Preserve every OOF prediction and selected epoch outside Git.
 Do not tune on pooled OOF results. This single fixed evaluation either provides
