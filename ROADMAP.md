@@ -1,3 +1,11 @@
+**2026-11-21 R2-M MUVS video+sensor source screen:** The new 5,039-fragment,
+17-event camera-selection dataset is a plausible Decision task, and Zenodo
+metadata identifies its deposit as CC BY 4.0. The publisher README separately
+states the GCS-hosted video license is “TO BE ADDED,” while the project site
+reserves copyright. Do not acquire or use its labels/media until video rights
+are clarified. No payload or labels were opened. See [source screen](docs/pretrained_reuse/R2_MUVS_VIDEO_SENSOR_SOURCE_SCREEN_20261121.md)
+and [machine-readable record](manifests/pretrained_reuse/muvs-video-sensor-source-screen-20261121.json).
+
 **2026-11-21 R2 frozen numeric-span diagnostic:** A CPU-only seed-17,
 five-fold group OOF probe over the existing 768 FIT state groups decoded raw
 numeric span values from frozen DeBERTa token states (macro Pearson r 0.972;

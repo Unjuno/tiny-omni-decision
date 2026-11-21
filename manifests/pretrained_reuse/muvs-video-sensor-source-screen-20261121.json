@@ -1,0 +1,61 @@
+{
+  "format": "r2m_source_screen_v1",
+  "experiment_id": "r2-muvs-video-sensor-camera-selection",
+  "recorded_at": "2026-11-21",
+  "status": "REVIEW_NOT_ADMITTED_VIDEO_LICENSE_SCOPE_UNRESOLVED",
+  "source": {
+    "name": "MUVS: Multi-View User-Generated Sports Video and Sensor Data",
+    "record_id": "20708683",
+    "doi": "10.5281/zenodo.20708683",
+    "version": "1.0",
+    "published_at": "2026-06-15",
+    "repository": "https://zenodo.org/records/20708683",
+    "release_api": "https://zenodo.org/api/records/20708683",
+    "metadata_license": "CC BY 4.0",
+    "video_payload_license": "UNKNOWN; publisher README says TO BE ADDED",
+    "video_host": "Google Cloud Storage, separately hosted",
+    "official_site_copyright": "All Rights Reserved",
+    "event_count": 17,
+    "reported_fragments": 5039,
+    "fragment_seconds": 3,
+    "period_video_count": 258,
+    "simultaneous_camera_count": "2-3 per event",
+    "reported_sensor_channels": 18,
+    "publisher_split": {
+      "train_events": 11,
+      "test_events": 6,
+      "test_partition_accessed": false
+    },
+    "metadata_archive_bytes": 9742259,
+    "reported_video_payload_bytes_approx": 177100000000,
+    "payload_downloaded": false,
+    "annotations_opened": false,
+    "test_labels_opened": false
+  },
+  "task": {
+    "candidate": "select the best camera for an aligned fragment",
+    "input_modalities": ["video", "device_sensors"],
+    "output": "calibrated probabilities over stable camera IDs",
+    "both_input_necessity": "UNVERIFIED",
+    "annotator_agreement": "UNKNOWN",
+    "shortcut_risk": "camera/event identity and activity-specific recording patterns",
+    "task_admission": "NOT_ADMITTED_PENDING_VIDEO_AND_ANNOTATION_RIGHTS"
+  },
+  "gates": {
+    "zenodo_metadata_license": "PASS_CC_BY_4.0",
+    "separately_hosted_video_license": "FAIL_CANNOT_INFER_FROM_METADATA_LICENSE",
+    "participant_rights_scope": "UNKNOWN",
+    "source_split_grouping": "EVENT_LEVEL_REPORTED; must verify IDs from train metadata without opening test labels",
+    "payload_size_preflight": "PARTIAL; aggregate reported, selected-period sizes/hashes unknown",
+    "model_fit": "NOT_STARTED",
+    "sealed_audit": "NOT_ACCESSED"
+  },
+  "evidence_urls": [
+    "https://zenodo.org/records/20708683",
+    "https://zenodo.org/api/records/20708683",
+    "https://zenodo.org/records/20708683/preview/README.md?include_deleted=0",
+    "https://swperfi-project.github.io/Pages-dev/MuvsDataset-page/"
+  ],
+  "source_commit": "4ba5313eda00fc2b4b7bb85b19fa9f7e4c0d94e2",
+  "cloud_cost_usd": 0
+}
