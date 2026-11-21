@@ -1,3 +1,14 @@
+**2026-11-21 R2 frozen input-use/coverage diagnostic:** On the selected native
+baseline and already exposed development validation, Image zeroing/shuffling
+reduced accuracy by 9.0/9.7 points; Text-state shuffling changed little while
+candidate-query removal worsened NLL. The exact 2,048-update TRAIN sampler used
+6,656 of 100,580 unique question rows and repeated all 512 Video rows; there
+were no unused Video groups in this frozen corpus, while Text/Image/Audio have
+substantial unused coverage. No fitting or sealed-audit access. Next: address
+text state-to-candidate binding and weak Image tasks with train-only grouped
+diagnostics, and establish a split-safe Video source pool before extending the
+balanced sampler. [Protocol, all interventions, hashes and limits](docs/pretrained_reuse/R2_NATIVE_WEAK_INPUT_USE_DIAGNOSTIC_20261121.md).
+
 **2026-11-21 R2 native temporal capacity-matched control:** The 1.035M-parameter
 tokenwise MLP completed 2,048 updates and exact checkpoint replay against the
 frozen baseline/LSTM arms. Its final Video NLL/Brier were close to LSTM; paired

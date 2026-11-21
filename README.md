@@ -1,5 +1,13 @@
 # Tiny Omni Decision
 
+**2026-11-21 R2 frozen input-use diagnosis:** The selected native Image path
+uses visual content (zero/shuffle controls lower accuracy by 9.0/9.7 points),
+while Text candidate queries matter more than same-task state features. The
+fixed 2,048-update sampler consumed all 512 Video questions and repeated them
+1,536 times; 93,924 unique TRAIN questions remain unused across the corpus.
+Validation was already exposed; there was no fitting or sealed-audit access.
+[Protocol, input interventions, coverage and limits](docs/pretrained_reuse/R2_NATIVE_WEAK_INPUT_USE_DIAGNOSTIC_20261121.md).
+
 **2026-11-21 R2 native temporal capacity control:** A parameter-matched,
 nonrecurrent tokenwise MLP completed the same 2,048-update Path A fit as the
 baseline/LSTM arms. Fresh-process replay matched exactly. Its final Video
