@@ -1,0 +1,61 @@
+{
+  "format": "haptile_source_screen_v1",
+  "dataset_id": "HapTile vision-tactile-language-action",
+  "status": "REVIEW_NOT_ADMITTED",
+  "source": {
+    "repository": "https://huggingface.co/datasets/HapTile2026/HapTile",
+    "revision": "54887384f1fe9e93b799e104194a582f9d8840b8",
+    "license": "CC BY 4.0",
+    "gated": false,
+    "task_archive_count": 38,
+    "total_archive_bytes": 16001480670,
+    "metadata_response": {
+      "path": "C:/CodexLocalArtifacts/pretrained-reuse-r2/haptile-source-metadata-screen-01/dataset-info.json",
+      "bytes": 1961,
+      "sha256": "55d5763e7f9d7ca725f7a0d97b7157a8c592d73dfab43444115aa311a95e6e50"
+    },
+    "file_tree_response": {
+      "path": "C:/CodexLocalArtifacts/pretrained-reuse-r2/haptile-source-metadata-screen-01/file-tree-complete.json",
+      "bytes": 37644,
+      "sha256": "d8537e2e725f4715f62e48f821ff612669faf8c604f05c18d1815dbddf4d557f"
+    }
+  },
+  "paper": {
+    "url": "https://arxiv.org/abs/2606.04825",
+    "version": "v2",
+    "demonstrations": 1726,
+    "tasks": 38,
+    "operators": 9,
+    "collection_scene_count": 1,
+    "sampling_hz": 15
+  },
+  "conversion_reference": {
+    "repository": "https://huggingface.co/datasets/Voxel51/HapTile",
+    "reported_episodes": 1699,
+    "reported_bytes": 6310000000,
+    "official_split": "single train split",
+    "operator_id_field_documented": false
+  },
+  "gates": {
+    "license_and_public_access_pass": true,
+    "multimodal_task_is_plausible": true,
+    "independent_task_groups_documented": true,
+    "operator_identity_mappable": false,
+    "official_train_validation_test_split": false,
+    "source_episode_count_reconciled": false,
+    "causal_supplied_option_task_frozen": false,
+    "media_downloaded": false,
+    "feature_extraction_started": false,
+    "model_loaded_or_trained": false,
+    "sealed_audit_accessed": false
+  },
+  "known_risks": [
+    "Paper reports 1,726 demonstrations while the Voxel51 conversion reports 1,699 episodes.",
+    "Collection used one laboratory scene; external-environment transfer is untested.",
+    "Paper reports nine operators but screened metadata does not map episodes to operators.",
+    "Haptic feedback levels are computed from tactile marker-motion signals and are not independent same-time labels.",
+    "Published tactile ablations show task- and architecture-dependent gains and losses."
+  ],
+  "decision": "Promising for task-held-out multimodal action-choice development after exact release, episode counts, group keys and causal target are frozen. Do not use for unseen-operator claims without operator mapping.",
+  "report": "docs/pretrained_reuse/R2M_HAPTILE_SOURCE_SCREEN_20261122.md"
+}

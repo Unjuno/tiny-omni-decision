@@ -17,6 +17,17 @@ or model was used. Keep `REVIEW_NOT_ADMITTED`; at most this supports a small
 within-task pilot after task and grouping are frozen. See [screen](docs/pretrained_reuse/R2M_VISTADATA_BIMANUAL_METADATA_SCREEN_20261122.md)
 and [manifest](manifests/pretrained_reuse/vistadata-bimanual-metadata-screen-20261122.json).
 
+**2026-11-22 R2-M HapTile source screen:** The pinned CC BY 4.0 source lists
+38 task archives and the paper reports 1,726 demonstrations from nine
+operators with synchronized vision, tactile, state, action, and language. The
+separate Voxel51 conversion reports 1,699 episodes, so corpus identity still
+needs reconciliation. The paper's tactile gains are task-dependent, making
+this a promising task-held-out fusion study; its haptic level is derived from
+tactile marker motion and must not serve as an independent same-time target.
+No payload or model was loaded. Keep `REVIEW_NOT_ADMITTED` until the count,
+group keys, and causal action-choice task are frozen. See [source screen](docs/pretrained_reuse/R2M_HAPTILE_SOURCE_SCREEN_20261122.md)
+and [manifest](manifests/pretrained_reuse/haptile-source-screen-20261122.json).
+
 **2026-11-22 R2-M HABIT data scale-up:** Expanded the same frozen train and
 validation selection from 202/76 to 606/228 transitions and trained all four
 seed-17 readout arms for the fixed 80 epochs. Every arm selected epoch 2, then
