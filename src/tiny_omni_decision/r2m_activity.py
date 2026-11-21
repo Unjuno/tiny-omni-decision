@@ -131,6 +131,64 @@ def train_sensor_normalization(
     return mean.astype(np.float32), standard_deviation.astype(np.float32)
 
 
+def standardize_sensor_feature_cache_from_train(
+    features: Mapping[str, Mapping[str, object]],
+) -> tuple[dict[str, dict[str, object]], dict[str, object]]:
+    """Return copied features normalized with unique train-split sensor tokens only.
+
+    The cache is expected to contain the iterative train/calibration/validation
+    partitions only. Sealed, quarantined, unknown, and duplicate feature IDs
+    fail closed. The returned statistics include an ordered train-ID digest so
+    callers can persist the exact normalization provenance.
+    """
+    import hashlib
+
+    if not isinstance(features, Mapping) or not features:
+        raise ValueError("a nonempty feature mapping is required")
+    allowed_splits = {"train", "calibration", "validation"}
+    train_sequences: list[np.ndarray] = []
+    train_ids: list[str] = []
+    for identifier in sorted(features):
+        if not isinstance(identifier, str) or not identifier:
+            raise ValueError("feature IDs must be nonempty strings")
+        row = features[identifier]
+        if not isinstance(row, Mapping):
+            raise ValueError("each feature entry must be a mapping")
+        split = row.get("split")
+        if split not in allowed_splits:
+            raise ValueError(f"feature {identifier!r} has non-iterative split {split!r}")
+        values = np.asarray(row.get("sensor"), dtype=np.float32)
+        if (values.ndim != 2 or values.shape[1] != 3 or values.shape[0] < 2
+                or not np.isfinite(values).all()):
+            raise ValueError(f"feature {identifier!r} has invalid sensor tokens")
+        if split == "train":
+            train_ids.append(identifier)
+            train_sequences.append(values)
+    if not train_sequences:
+        raise ValueError("no unique train-split sensor features are available")
+
+    mean, standard_deviation = train_sensor_normalization(train_sequences)
+    train_id_bytes = "\n".join(train_ids).encode("utf-8")
+    normalized: dict[str, dict[str, object]] = {}
+    for identifier, row in features.items():
+        copied = dict(row)
+        sensor = np.asarray(row["sensor"], dtype=np.float32)
+        copied["sensor"] = ((sensor - mean) / standard_deviation).astype(
+            np.float32, copy=False
+        )
+        normalized[identifier] = copied
+    statistics: dict[str, object] = {
+        "method": "per-axis z-score using every token from each unique train feature once",
+        "train_feature_count": len(train_ids),
+        "train_token_count": int(sum(len(values) for values in train_sequences)),
+        "train_feature_ids_sha256": hashlib.sha256(train_id_bytes).hexdigest(),
+        "mean": mean.tolist(),
+        "standard_deviation": standard_deviation.tolist(),
+        "sealed_audit_loaded": False,
+    }
+    return normalized, statistics
+
+
 def same_participant_different_activity_sensor_donors(
     rows: Sequence[Mapping[str, object]], *, seed: int = 17,
 ) -> list[Mapping[str, object]]:

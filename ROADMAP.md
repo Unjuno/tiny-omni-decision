@@ -4082,6 +4082,8 @@ was performed. Preserve the checkpoints and exact prediction outputs outside
 Git; provenance caveats are recorded.
 See [full protocol and results](docs/pretrained_reuse/R2M_AUDIO_VIBRATION_MATCH_PILOT_20261120.md).
 
+**2026-11-21 R2-M raw sensor-scale follow-up:** A one-factor 80-epoch repeat used train-only per-axis z-scores on the same 5,449 train trials, pair index, split, seed and 761 exposed validation pairs as the raw-count pilot. Paired-choice Accuracy moved from 45.34% to 48.09%, but remains below chance; NLL/Brier shifts are tiny and no participant-generalization claim is justified. This does not support sensor scaling as a sufficient cause of the previous failure. Both runs, hashes and limitations are recorded in [the normalization follow-up](docs/pretrained_reuse/R2M_SENSOR_SCALE_NORMALIZATION_FOLLOWUP_20261121.md).
+
 **2026-11-21 R2-M supplied-activity Decision comparison:** Three fixed-budget
 attempts are preserved. Attempt 3 changed only AdamW weight decay from 0.01 to
 0.1 after train-only vibration normalization. The gated audio+vibration model

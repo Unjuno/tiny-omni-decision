@@ -17,6 +17,9 @@ import torch
 from torch import nn
 from torch.utils.data import DataLoader, Dataset
 
+from tiny_omni_decision.r2m_activity import (
+    standardize_sensor_feature_cache_from_train,
+)
 from tiny_omni_decision.time_aware_gated_fusion import (
     TemporalFeatureStream,
     TimeAwareGatedFusion,
@@ -47,6 +50,7 @@ def source_provenance() -> dict[str, object]:
     source_files = (
         Path(__file__),
         repository / "src/tiny_omni_decision/time_aware_gated_fusion.py",
+        repository / "src/tiny_omni_decision/r2m_activity.py",
         repository / "src/tiny_omni_decision/r2m_pairs.py",
         repository / "scripts/extract_r2m_frozen_features.py",
         repository / "scripts/build_r2m_audio_vibration_pair_index.py",
@@ -399,6 +403,10 @@ def main() -> None:
     parser.add_argument("--epochs", type=int, default=80)
     parser.add_argument("--batch-size", type=int, default=16)
     parser.add_argument("--learning-rate", type=float, default=0.001)
+    parser.add_argument(
+        "--sensor-normalization", choices=("none", "train-zscore"), default="none",
+        help="optional per-axis standardization from unique train-cache trials only",
+    )
     args = parser.parse_args()
     if args.epochs < 1 or args.batch_size < 1 or args.learning_rate <= 0:
         raise SystemExit("epochs, batch size, and learning rate must be positive")
@@ -415,6 +423,18 @@ def main() -> None:
     device = torch.device(args.device)
     features = load_features(args.cache_dir)
     pair_artifact = json.loads(args.pair_index.read_text(encoding="utf-8"))
+    if pair_artifact.get("sealed_audit_accessed") is not False:
+        raise SystemExit("pair index does not establish sealed-audit isolation")
+    if set(pair_artifact.get("split_scope", ())) != {"train", "calibration", "validation"}:
+        raise SystemExit("pair index contains a non-iterative split scope")
+    if any(row.get("split") not in {"train", "calibration", "validation"}
+           for row in features.values()):
+        raise SystemExit("feature cache contains a sealed, quarantined or unknown split")
+    sensor_normalization: dict[str, object] | None = None
+    if args.sensor_normalization == "train-zscore":
+        features, sensor_normalization = standardize_sensor_feature_cache_from_train(
+            features
+        )
     pair_rows = pair_artifact["pairs"]
     partitions = {
         split: PairExamples([pair for pair in pair_rows if pair["split"] == split],
@@ -461,6 +481,10 @@ def main() -> None:
         "fusion_heads": 4,
         "use_time": True,
         "use_gates": True,
+        "sensor_normalization": (
+            sensor_normalization if sensor_normalization is not None
+            else {"method": "none", "train_only": True}
+        ),
         "trainable_parameters": parameter_count,
         "pair_index_sha256": pair_artifact["manifest_sha256"],
         "feature_cache_index_sha256": cache_index_sha,
@@ -468,7 +492,8 @@ def main() -> None:
         "source_provenance": source_provenance(),
         "sealed_audit_accessed": False,
     }
-    (args.output_dir / "effective-config.json").write_text(
+    effective_config_path = args.output_dir / "effective-config.json"
+    effective_config_path.write_text(
         json.dumps(effective_config, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
@@ -615,6 +640,8 @@ def main() -> None:
         "batch_size": args.batch_size,
         "learning_rate": args.learning_rate,
         "scheduler": "CosineAnnealingLR over the full fixed epoch budget",
+        "sensor_normalization": effective_config["sensor_normalization"],
+        "effective_config_sha256": sha256_file(effective_config_path),
         "parameter_count_trainable": parameter_count,
         "selected_checkpoint_epoch_by_calibration_nll": best_epoch,
         "calibration_best_nll": best_nll,
