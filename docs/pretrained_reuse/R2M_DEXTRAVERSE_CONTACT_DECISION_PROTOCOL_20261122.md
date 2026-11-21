@@ -32,6 +32,15 @@ operator, object, task, or embodiment generalization.
   `9f9d8d0e6a6eebac12f1bf63fae59bea46e9531db2b9921440aa553289d07aa4` from
   the 509-byte `SHA256SUMS.txt` (SHA-256
   `9f35f048b691eb0220c6cbecde11b94d38aed8b7d71cc9903e5c082075430968`).
+- The locally retrieved pinned `README_real_robot.md` is 3,449 bytes and
+  SHA-256 `8cb64a0519db1fa60f4963eaf99af98f3c098ffb8f90c24e14a3fa80923db20c`,
+  matching the source manifest. It documents episode-relative seconds,
+  approximately 19.5 Hz sampling, Newton-valued fingertip forces in each
+  sensor's own frame, and a learned grasp policy triggered by operator
+  command. Since most episodes use one hand and the behavior is policy-driven,
+  task-phase or hand-side cues may predict contacts without genuine video/tactile
+  complementarity; unimodal and input-intervention controls are necessary.
+  This is metadata-only verification; archive arrays remain uninspected.
 - Planned frozen video encoder, only if the array preflight passes: Google
   VideoPrism-B, Hub revision
   `be719a406d563b66f0ac969e7c94bab8e997c81a`, upstream source commit
@@ -163,11 +172,13 @@ OOM, or storage below the reserve. Do not search thresholds or revise the
 query grid after seeing validation/OOF scores.
 
 The dataset uses one task, one fixed purple-cube/orange-box setup, few camera
-views, and no disclosed participant IDs. Exact camera exposure timing is not
-documented in the release notes, so temporal claims must remain limited to the
-declared coarse 250 ms video guard and the timing-offset control. Even a
-positive result would be a narrow sensor-fusion mechanism result, not a
-product-quality pass.
+views, and no disclosed participant IDs. Arm motion is teleoperated and hand
+closure uses a learned policy after an operator command, so apparent
+anticipation may reflect task phase or the policy's regularity rather than
+cross-modal evidence. Exact camera exposure timing is not documented in the
+release notes, so temporal claims must remain limited to the declared coarse
+250 ms video guard and timing-offset control. Even a positive result would be a
+narrow sensor-fusion mechanism result, not a product-quality pass.
 
 The deterministic contact-window/episode-split helper is implemented in
 `scripts/pretrained_reuse/dextraverse_contact.py`; 12 CPU tests cover synthetic
