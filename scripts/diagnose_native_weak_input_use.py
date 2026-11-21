@@ -73,19 +73,17 @@ def zero_blocks(blocks):
     ]
 
 
-def replace_block_values(blocks, donor_blocks):
-    """Use a donor's feature values while retaining the recipient coordinates."""
+def replace_observation(blocks, donor_blocks):
+    """Replace the observation with a same-kind donor, including its token length."""
     from tiny_omni_decision.native_candidate import NativeTokenBlock
 
     if len(blocks) != len(donor_blocks):
         raise ValueError("donor feature-block count differs")
     result = []
     for current, donor in zip(blocks, donor_blocks, strict=True):
-        if current.kind != donor.kind or current.values.shape != donor.values.shape:
+        if current.kind != donor.kind or current.values.shape[1] != donor.values.shape[1]:
             raise ValueError("donor feature profile differs")
-        result.append(
-            NativeTokenBlock(current.kind, donor.values, current.positions, current.valid)
-        )
+        result.append(NativeTokenBlock(donor.kind, donor.values, donor.positions, donor.valid))
     return result
 
 
@@ -289,7 +287,7 @@ def main() -> None:
             raise ValueError("used validation feature bank hash differs: " + str(path))
         relevant_bank_hashes[str(path)] = actual
     profiles = {
-        ident: tuple((feature["kind"], feature["tokens"]) for feature in value["features"])
+        ident: tuple(feature["kind"] for feature in value["features"])
         for ident, value in observations.items()
     }
 
@@ -360,7 +358,7 @@ def main() -> None:
                 variants = {
                     "baseline": (blocks, queries),
                     "observation_zero": (zero_blocks(blocks), queries),
-                    "observation_shuffle": (replace_block_values(blocks, donor_blocks), queries),
+                    "observation_shuffle": (replace_observation(blocks, donor_blocks), queries),
                     "candidate_query_zero": (blocks, torch.zeros_like(queries)),
                 }
                 for name, (features, query) in variants.items():
