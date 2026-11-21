@@ -205,6 +205,7 @@ def main() -> None:
     source_hashes = verify_pinned_source(args.source_root, baseline)
 
     # Import the exact inference implementation whose files the training receipt pinned.
+    os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
     sys.path.insert(0, str(args.source_root))
     sys.path.insert(0, str(args.source_root / "src"))
     import torch
