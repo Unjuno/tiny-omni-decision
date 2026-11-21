@@ -103,6 +103,27 @@ receipt is outside Git at
 This is still a two-episode smoke, not evidence that alignment holds across
 the selected split.
 
+## Bounded payload pilot preflight
+
+A seed-17 hash-ranked metadata-only subset selects two usable episodes from
+each train group (33 groups, 66 episodes) and four from each usable validation
+group (6 groups, 24 episodes). Three of the nine validation task groups have
+no episode with at least two unique action options; this limits task coverage
+and must be reported in any later result. Train/validation group IDs are
+disjoint. The subset IDs are frozen in
+`C:\CodexArtifacts\pretrained-reuse-r2\habit-pilot-selection-20261121-attempt-01\habit-pilot-selection.json`.
+
+Before downloading, pinned Hub LFS metadata was checked for all 90 `front_view`
+MP4s and 90 matching Parquets. Expected total payload is 626,112,093 bytes:
+461,636,344 video and 164,475,749 Parquet. No payload had been downloaded at
+that inventory stage; path, size and SHA-256 are recorded in
+`C:\CodexArtifacts\pretrained-reuse-r2\habit-pilot-inventory-20261121-attempt-01\habit-pilot-inventory.json`
+(SHA-256 `f7b8dc3f90933268337358d03383de59fcd7894fe80972bf979269714990d5f7`).
+`scripts/download_habit_pilot.py` consumes only this pinned train/validation
+inventory, verifies publisher hashes, writes to a new output directory, and
+rejects exact video byte duplicates crossing the split. The download has not
+yet been run.
+
 ## Interpretation
 
 The pinned video encoder, decoder, feature shape, robot-state field, and
