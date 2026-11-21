@@ -29,6 +29,25 @@ MIN_CLASS_QUERIES = 50
 MIN_CLASS_EPISODES = 15
 
 
+def open_archive_group(store: Any, zarr_module: Any) -> Any:
+    """Open the unique Zarr group, including archives with a wrapper directory."""
+    keys = set(store.keys())
+    if ".zgroup" in keys:
+        group_path = ""
+    else:
+        top_level_groups = sorted(
+            key[:-len("/.zgroup")]
+            for key in keys
+            if key.endswith("/.zgroup") and "/" not in key[:-len("/.zgroup")]
+        )
+        if len(top_level_groups) != 1:
+            raise ValueError(
+                "archive must contain one root Zarr group, optionally under one directory"
+            )
+        group_path = top_level_groups[0]
+    return zarr_module.open_group(store=store, path=group_path, mode="r")
+
+
 def _sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as stream:
@@ -50,7 +69,7 @@ def inspect_archive(archive_path: Path) -> dict[str, Any]:
 
     started = time.perf_counter()
     with ZipStore(str(archive_path), mode="r") as store:
-        root = zarr.open_group(store=store, mode="r")
+        root = open_archive_group(store, zarr)
         arrays: dict[str, Any] = {}
 
         def collect(name: str, item: Any) -> None:

@@ -1,3 +1,13 @@
+**2026-11-22 R2-M DextraVerse video+tactile contact gate:** The pinned
+44,197,744,857-byte archive passed its publisher SHA-256 and the read-only
+array checks found 261 episodes / 10,983 eligible windows, with no invalid
+timestamp sequences or duplicate head-video hashes. The frozen 12-option gate
+failed because `left_index` has only 38 queries from 18 episodes (minimum 50).
+Stop before feature extraction or fitting; do not collapse classes. A ZIP
+wrapper-directory assumption was fixed and covered by CPU tests. See the
+[protocol and full external report receipt](docs/pretrained_reuse/R2M_DEXTRAVERSE_CONTACT_DECISION_PROTOCOL_20261122.md)
+and [manifest](manifests/pretrained_reuse/dextraverse-contact-decision-source-preflight-20261122.json).
+
 **2026-11-22 R2-M HABIT data scale-up:** Expanded the same frozen train and
 validation selection from 202/76 to 606/228 transitions and trained all four
 seed-17 readout arms for the fixed 80 epochs. Every arm selected epoch 2, then

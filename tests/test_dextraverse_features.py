@@ -106,3 +106,49 @@ def test_extractor_cli_forwards_required_videoprism_runtime(monkeypatch, tmp_pat
     assert captured["args"][4] == tmp_path / "videoprism-python.exe"
     assert captured["args"][5] == output
     assert captured["kwargs"] == {"device": "cpu", "batch_size": 3}
+
+
+def test_archive_group_resolves_root_and_single_wrapper_directory() -> None:
+    from scripts.pretrained_reuse.inspect_dextraverse_contact_archive import (
+        open_archive_group,
+    )
+
+    class Store:
+        def __init__(self, keys):
+            self._keys = keys
+
+        def keys(self):
+            return self._keys
+
+    class Zarr:
+        @staticmethod
+        def open_group(*, store, path, mode):
+            return store, path, mode
+
+    root_store = Store([".zgroup", "data/.zgroup"])
+    assert open_archive_group(root_store, Zarr) == (root_store, "", "r")
+    wrapped_store = Store([
+        "pick_cube_place_box.zarr/.zgroup",
+        "pick_cube_place_box.zarr/data/.zgroup",
+    ])
+    assert open_archive_group(wrapped_store, Zarr) == (
+        wrapped_store, "pick_cube_place_box.zarr", "r"
+    )
+
+
+def test_archive_group_rejects_ambiguous_top_level_groups() -> None:
+    from scripts.pretrained_reuse.inspect_dextraverse_contact_archive import (
+        open_archive_group,
+    )
+
+    class Store:
+        def keys(self):
+            return ["first.zarr/.zgroup", "second.zarr/.zgroup"]
+
+    class Zarr:
+        @staticmethod
+        def open_group(**kwargs):
+            raise AssertionError("ambiguous archive must fail before opening a group")
+
+    with pytest.raises(ValueError, match="one root Zarr group"):
+        open_archive_group(Store(), Zarr)

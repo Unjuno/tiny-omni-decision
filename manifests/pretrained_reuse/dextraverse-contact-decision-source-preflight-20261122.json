@@ -1,7 +1,7 @@
 {
   "format": "dextraverse_contact_decision_source_preflight_v1",
   "dataset_id": "DextraVerse pick_cube_place_box real-robot task",
-  "status": "CANDIDATE_PREFLIGHT_IN_PROGRESS",
+  "status": "STOPPED_INSUFFICIENT_CLASS_SUPPORT",
   "source": {
     "repository": "https://huggingface.co/datasets/ntumars/DextraVerse",
     "revision": "257731928e25cd068b02d80d18d8f3cb77075a14",
@@ -38,10 +38,10 @@
     "expected_bytes": 44197744857,
     "hf_blob_oid": "7456e5175751abb6fd833e242c412ea62412def4",
     "publisher_sha256": "9f9d8d0e6a6eebac12f1bf63fae59bea46e9531db2b9921440aa553289d07aa4",
-    "download_status_at_record": "DOWNLOADING",
-    "downloaded_bytes_at_record": 34563870720,
-    "download_observed_at": "2026-11-22T05:21:32+09:00",
-    "download_process_status_at_record": "running; PID 120404; started 2026-11-22T04:06:34+09:00",
+    "download_status_at_record": "COMPLETE_HASH_VERIFIED",
+    "downloaded_bytes_at_record": 44197744857,
+    "download_observed_at": "2026-11-22T05:41:10+09:00",
+    "download_process_status_at_record": "download process exited after reaching the pinned byte count",
     "transport_attempts": [
       {
         "transport": "curl single stream",
@@ -57,16 +57,48 @@
     "local_attempt_root": "C:/CodexLocalArtifacts/pretrained-reuse-r2/dextraverse-contact-decision-attempt-01",
     "repository_media_committed": false
   },
+  "preflight_result": {
+    "status": "STOP_INSUFFICIENT_SUPPORT_OR_IDENTITY_OVERLAP",
+    "report_path": "C:/CodexLocalArtifacts/pretrained-reuse-r2/dextraverse-contact-decision-attempt-01/real-data-preflight-02/report.json",
+    "report_bytes": 8476768,
+    "report_sha256": "f7806087ef47405c3e270445842250770d589970a7b40f8971032d82fb24f014",
+    "array_scan_seconds_excluding_archive_hash": 106.311533599976,
+    "usable_episodes": 261,
+    "valid_queries": 10983,
+    "outer_fold_episode_counts": {"0": 53, "1": 52, "2": 52, "3": 52, "4": 52},
+    "invalid_timestamp_episodes": 0,
+    "duplicate_head_video_hash_groups": 0,
+    "cross_fold_duplicate_head_video_hash_groups": 0,
+    "insufficient_classes": ["left_index"],
+    "class_support": {
+      "left_thumb": {"queries": 148, "episodes": 51},
+      "left_index": {"queries": 38, "episodes": 18},
+      "left_middle": {"queries": 266, "episodes": 88},
+      "left_ring": {"queries": 125, "episodes": 40},
+      "left_little": {"queries": 718, "episodes": 114},
+      "right_thumb": {"queries": 52, "episodes": 24},
+      "right_index": {"queries": 307, "episodes": 40},
+      "right_middle": {"queries": 532, "episodes": 92},
+      "right_ring": {"queries": 70, "episodes": 22},
+      "right_little": {"queries": 2259, "episodes": 159},
+      "simultaneous": {"queries": 134, "episodes": 56},
+      "no_new_contact_within_1s": {"queries": 6334, "episodes": 244}
+    },
+    "feature_extraction_started": false,
+    "model_fit_started": false
+  },
   "gates": {
     "source_is_public_and_ungated": true,
     "license_allows_research_use_with_attribution": true,
     "synthetic_zipstore_preflight_smoke_passed": true,
-    "archive_sha256_verified": false,
-    "both_force_arrays_and_head_video_verified": false,
-    "target_support_verified": false,
+    "archive_sha256_verified": true,
+    "both_force_arrays_and_head_video_verified": true,
+    "target_support_measured": true,
+    "target_support_passed": false,
+    "media_identity_overlap_verified": true,
     "grouped_evaluation_started": false,
     "model_training_or_evaluation_started": false,
     "sealed_audit_accessed": false
   },
-  "decision": "Continue pinned payload preflight only. No fit or quality claim until payload hash, both-hand/head array integrity, temporal alignment, and target support pass the fixed protocol."
+  "decision": "Stop this candidate before feature extraction or fitting: left_index has 38 queries, below the fixed 50-query minimum. Do not merge classes or alter the frozen windows after inspecting the results. The media-identity gate passed; no model quality claim is available."
 }

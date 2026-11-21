@@ -30,6 +30,7 @@ from scripts.pretrained_reuse.dextraverse_features import (
 from scripts.pretrained_reuse.inspect_dextraverse_contact_archive import (
     EXPECTED_ARCHIVE_BYTES,
     EXPECTED_ARCHIVE_SHA256,
+    open_archive_group,
 )
 
 DATASET_REVISION = "257731928e25cd068b02d80d18d8f3cb77075a14"
@@ -211,7 +212,7 @@ def extract_features(
                 env=worker_environment,
             )
         with ZipStore(str(archive), mode="r") as store:
-            root = zarr.open_group(store=store, mode="r")
+            root = open_archive_group(store, zarr)
             timestamps = root["data/timestamps"]
             left_force = root["data/left_tactile_data_fingerforce"]
             right_force = root["data/right_tactile_data_fingerforce"]

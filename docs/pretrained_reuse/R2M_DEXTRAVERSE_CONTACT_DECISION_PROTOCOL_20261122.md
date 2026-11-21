@@ -6,9 +6,10 @@ This is a bounded R2-M candidate for testing whether a small Decision readout
 can reuse frozen video features and causal tactile history to choose a likely
 near-future fingertip-contact outcome. It is **not** a four-modality benchmark
 or evidence for the product accuracy target. The dataset release is public,
-ungated, and marked CC BY 4.0; attribution is required. The pinned archive is
-being fetched to an external attempt directory; no member data have yet been
-parsed, decompressed, or used for fitting.
+ungated, and marked CC BY 4.0; attribution is required. The pinned archive was
+downloaded outside Git and passed its exact byte-count and publisher SHA-256
+checks. A read-only array preflight completed but failed the frozen per-class
+support gate; no features were extracted and no model was fit.
 
 The candidate uses only the real-robot `pick_cube_place_box` task. Its 261
 episodes contain 138,382 frames from one fixed cube-and-box task, recorded on
@@ -40,7 +41,8 @@ operator, object, task, or embodiment generalization.
   command. Since most episodes use one hand and the behavior is policy-driven,
   task-phase or hand-side cues may predict contacts without genuine video/tactile
   complementarity; unimodal and input-intervention controls are necessary.
-  This is metadata-only verification; archive arrays remain uninspected.
+  These source conventions were subsequently checked against the pinned
+  archive arrays in the read-only preflight below.
 - Planned frozen video encoder, only if the array preflight passes: Google
   VideoPrism-B, Hub revision
   `be719a406d563b66f0ac969e7c94bab8e997c81a`, upstream source commit
@@ -57,6 +59,29 @@ operator, object, task, or embodiment generalization.
   plus full extraction would use about 82.3 GiB. C: had 201.8 GiB free at
   preflight; recheck before extraction or cache writes and preserve the fixed
   2 GiB reserve. Keep all payloads and caches outside Git.
+
+### Completed read-only archive preflight
+
+The archive reached the pinned 44,197,744,857 bytes and SHA-256
+`9f9d8d0e6a6eebac12f1bf63fae59bea46e9531db2b9921440aa553289d07aa4`. Its Zarr
+group is nested at `pick_cube_place_box.zarr/`; the initial root-only open
+failed with `GroupNotFoundError` before reading arrays. The preflight and
+feature extractor now resolve one unique top-level Zarr group, with tests for
+root, wrapped, and ambiguous archive layouts. The corrected reader reported
+261 episode boundaries, 138,382 timestamps, both `[138382, 5, 3]` force arrays,
+and head RGB `[138382, 240, 320, 3]`.
+
+The frozen target transform produced 10,983 eligible windows across all 261
+episodes. Every timestamp sequence was strictly increasing. No duplicate
+head-video hashes or cross-fold media identities were found. The one failing
+gate is `left_index`: 38 queries from 18 episodes, below the fixed minimum of
+50 queries (the episode minimum of 15 passes). The other 11 classes pass both
+support thresholds. The fold episode counts are 53/52/52/52/52. Per the
+predeclared no-class-collapse rule, stop this source candidate before feature
+extraction, Decision fitting, or quality evaluation. The full 8,476,768-byte
+preflight report is retained outside Git at
+`C:/CodexLocalArtifacts/pretrained-reuse-r2/dextraverse-contact-decision-attempt-01/real-data-preflight-02/report.json`
+(SHA-256 `f7806087ef47405c3e270445842250770d589970a7b40f8971032d82fb24f014`).
 
 ## Proposed fixed task
 
@@ -190,14 +215,14 @@ external, non-overwriting output directory. It preserves the exact preflight
 sample order and causal timestamps and records individual array hashes. Four
 CPU tests cover temporal pooling, left/right sensor ordering and causal
 timestamps; two more verify binary framing between the isolated Zarr and
-VideoPrism environments. Existing packages are not upgraded. These tests
-establish code behavior only. No real source rows, feature cache, model fit, or
-quality metrics exist yet. A synthetic Zarr v2 `ZipStore` smoke passed
-end-to-end through the read-only source preflight and returned 26 valid fixture
-queries; it does not verify the downloaded archive. The real-data preflight
-script writes stable episode/fold/sample IDs, target labels, causal frame
-indices and sensor index ranges to the external attempt report, alongside
-per-class and duplicate-media gates.
+VideoPrism environments; three cover CLI/runtime forwarding and archive-root
+resolution. All 21 targeted CPU tests passed. A synthetic Zarr v2 `ZipStore`
+smoke returned 26 fixture queries, and a metadata-only open of the real ZIP
+confirmed its wrapped root and array shapes. The full read-only preflight
+measured the real source and stopped on insufficient `left_index` support.
+No frozen-video feature cache, model fit, or quality metric was produced. The
+failed root-only attempt and corrected run are documented; the full report and
+all source data remain outside Git.
 
 ## Runtime preflight
 
@@ -212,8 +237,8 @@ time is not multiplied across the corpus. The prior pinned-model runtime study
 reports 1.178 seconds per item for warmed batch-8 inference and 4.15 GB peak
 RSS on the same VideoPrism revision and eight-frame model input; its separate
 rough estimate was 6.2 hours for 13,688 clips including media preprocessing.
-Treat this as planning evidence only: DextraVerse has not passed its array gate,
-and its exact query count and ZIP-read cost are unknown. The extractor defaults
+Treat this as planning evidence only: DextraVerse failed the fixed class-support
+gate, so no feature extraction was run. The extractor defaults
 to batch 8 and reads each episode's RGB span once when it fits within a 1 GiB
 cache cap. A separate batch-parity smoke compared one synthetic clip alone and
 as the first item of a batch of eight: maximum absolute feature difference was
