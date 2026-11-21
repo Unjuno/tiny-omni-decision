@@ -1,3 +1,15 @@
+**2026-11-22 R2-M HABIT data scale-up:** Expanded the same frozen train and
+validation selection from 202/76 to 606/228 transitions and trained all four
+seed-17 readout arms for the fixed 80 epochs. Every arm selected epoch 2, then
+showed falling train NLL with rising validation NLL. On the 76 IDs shared with
+the old pilot, the scaled run did not improve Accuracy, NLL, or Brier; paired
+video+state Accuracy was unchanged while NLL/Brier worsened slightly. The
+expanded validation still contains only six task groups, so this remains
+selection-affected development evidence, not an independent test. Keep the
+run as negative/limited data-scale evidence and seek new grouped data before
+further fitting. See [results](docs/pretrained_reuse/R2M_HABIT_DATA_SCALE_RESULTS_20261122.md)
+and [manifest](manifests/pretrained_reuse/habit-data-scale-results-20261122.json).
+
 **2026-11-22 R2-M AVSBench source screen:** The publisher documents an audio-video sound-source segmentation task with pixel-level masks, including multi-object scenes where only some visible objects are sounding. The dataset is CC BY-NC 4.0; its Apache-2.0 code license does not broaden data rights. The dense-mask target is also distinct from supplied-option JSON Decision. No annotations/media were downloaded, no access request sent, and no model was run. Keep it outside the product-training pool; reconsider only for a separately scoped noncommercial grounding study. See [source screen](docs/pretrained_reuse/R2_AVSBENCH_SOURCE_SCREEN_20261122.md) and [receipt](manifests/pretrained_reuse/avsbench-source-screen-20261122.json).
 **2026-11-22 R2-M Eidon Tracker POV metadata screen:** Pinned CC BY 4.0
 video/IMU repositories publish 13,451 recordings from 27 contributors with

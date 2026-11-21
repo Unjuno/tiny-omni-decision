@@ -1,0 +1,694 @@
+{
+  "format": "r2m_habit_data_scale_results_v1",
+  "recorded_at": "2026-11-22",
+  "status": "COMPLETED_DATA_SCALEUP_NO_MATCHED_QUALITY_GAIN",
+  "experiment_id": "habit-temporal-decision-cpu-seed17-data-scale-v1",
+  "source_commit": "3127c0d216d9304bc46ad17f00f422bb91f867d1",
+  "executed_script_sha256": "a57ea32d995d976fcae4b284f4a1368b133ad7c83ca1abb9632ff4ab58240d06",
+  "config": {
+    "path": "configs/pretrained_reuse/habit_temporal_decision_data_scale.yaml",
+    "sha256": "8bf3056cb4752da15fc5fbec9c90c9394298bc7cdffe59d209d7a5b27991fde9",
+    "seed": 17,
+    "epochs": 80,
+    "batch_size": 32,
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "loss": "cross_entropy",
+    "option_order_randomized_each_train_batch": true,
+    "checkpoint_selection": "minimum_validation_macro_task_group_nll",
+    "min_delta": 0.0001,
+    "early_stopping": false,
+    "updates_per_arm": 1520,
+    "train_presentations_per_arm": 48480,
+    "unique_train_examples_per_arm": 606,
+    "repeat_presentations_after_first_per_arm": 47874,
+    "total_updates_all_arms": 6080,
+    "total_train_presentations_all_arms": 193920
+  },
+  "dataset": {
+    "name": "HABIT",
+    "revision": "bae97d251907743f8fb6db7e70c61d361df4dc1e",
+    "license": "CC BY 4.0",
+    "selection_sha256": "2a644aff5c310c1607ac3c4f858351bf932b128af9eec79ec487cbaf5e3f46a9",
+    "inventory_sha256": "78695828206d318f26e84c19286cf47daceb4bddc420f613e6d745488a5e7ffe",
+    "payload_audit_sha256": "c0f4eb251efbda4419b8fc438a6786092e9895964ab90c3fad67899bd1ecbe38",
+    "payload_bytes": 1895998397,
+    "train_episodes": 198,
+    "validation_episodes": 72,
+    "train_examples": 606,
+    "validation_examples": 228,
+    "train_video_assets": 198,
+    "validation_video_assets": 72,
+    "train_task_groups": 37,
+    "validation_task_groups": 6,
+    "cross_split_video_overlap": false,
+    "sealed_audit_accessed": false,
+    "action_columns_read": false
+  },
+  "features": {
+    "video_encoder": "google/videoprism-base-f16r288",
+    "video_encoder_revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+    "upstream_source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+    "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "input_manifest_sha256": "f5db97718a8d6ad81396b28590e7b82554436d94b3c11f416018cc8ec107db8d",
+    "feature_cache_sha256": "5c494417aa0946041881f5a9305eb852d617769dc3261dda99c9772bb6301928",
+    "package_report_sha256": "062013df3edf0c63c84e4c43edeb454430cf896a0ed75d5500011d2f492d505e",
+    "transition_examples_sha256": "87b405ba343f4a251bd3450f306514e552a66b860b9cc558fd65880c09d2f8f5",
+    "cpu_only": true,
+    "training_performed_during_extraction": false,
+    "feature_extraction_wall_seconds": 1409.4457522999728,
+    "feature_extraction_started_local": "2026-11-22 01:50:14 Asia/Tokyo",
+    "feature_extraction_finished_local": "2026-11-22 02:13:50 Asia/Tokyo"
+  },
+  "training": {
+    "status": "completed_validation_selected_pilot",
+    "run_started_at_utc": "2026-11-21T17:16:32.825211+00:00",
+    "run_finished_at_utc": "2026-11-21T17:21:57.419672+00:00",
+    "wall_seconds": 324.0871012000134,
+    "environment": {
+      "python": "3.11.9",
+      "platform": "Windows-10-10.0.26300-SP0",
+      "cpu": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+      "torch": "2.6.0+cu124",
+      "transformers": "5.6.2",
+      "numpy": "2.4.6",
+      "torch_threads": 4,
+      "device": "cpu",
+      "cuda_initialized": false,
+      "working_set_bytes_at_exit": 762433536
+    },
+    "sealed_audit_accessed": false,
+    "quantization_performed": false,
+    "arms": {
+      "text_only": {
+        "best_epoch": 2,
+        "max_epochs_completed": 80,
+        "best_validation_macro_group_nll": 1.0044515628426793,
+        "validation": {
+          "count": 228,
+          "group_count": 6,
+          "accuracy": 0.47368421052631576,
+          "nll": 0.9973153568673552,
+          "brier": 0.597222201526165,
+          "ece_15_bins": 0.05631043592043086,
+          "macro_group_accuracy": 0.4285714285714286,
+          "macro_group_nll": 1.0044515628426793,
+          "macro_group_brier": 0.604577691722957
+        },
+        "trainable_parameters": 196865,
+        "total_unique_prequant_parameters": 131951873,
+        "best_checkpoint_sha256": "f818438eae0988fb7ef9fa745f7525e84fa50dea00e964602e612658e004da81",
+        "last_checkpoint_sha256": "3030befeccb86d8e4cd5bfdcc22c151d23b89eb19f23567917e7ae633d38eebd",
+        "wall_seconds": 24.370655299979262,
+        "history_sha256": "e858d54ce002792c7ea198d6e462ea00030dc43ac95497ffbb3942307241b20c",
+        "best_checkpoint_file_sha256": "f818438eae0988fb7ef9fa745f7525e84fa50dea00e964602e612658e004da81",
+        "last_checkpoint_file_sha256": "3030befeccb86d8e4cd5bfdcc22c151d23b89eb19f23567917e7ae633d38eebd"
+      },
+      "video_only": {
+        "best_epoch": 2,
+        "max_epochs_completed": 80,
+        "best_validation_macro_group_nll": 1.0021282916977292,
+        "validation": {
+          "count": 228,
+          "group_count": 6,
+          "accuracy": 0.47368421052631576,
+          "nll": 0.9971391924640589,
+          "brier": 0.5973399290651605,
+          "ece_15_bins": 0.06899886447609516,
+          "macro_group_accuracy": 0.4285714285714286,
+          "macro_group_nll": 1.0021282916977292,
+          "macro_group_brier": 0.6030593005516541
+        },
+        "trainable_parameters": 370819,
+        "total_unique_prequant_parameters": 132125827,
+        "best_checkpoint_sha256": "f23fc3c2dbca83e521af134ab902248cb54ad11712b585a399ccbaab95373dd6",
+        "last_checkpoint_sha256": "28386e4b24b3cd30264abd27afb961c11c048b8365578bfdd8f10d0d5e68567f",
+        "wall_seconds": 80.033458000049,
+        "history_sha256": "1e5d8c4fe7c7f9ebb88548d18e23779282ed0971f9be34b27841b24128de51cf",
+        "best_checkpoint_file_sha256": "f23fc3c2dbca83e521af134ab902248cb54ad11712b585a399ccbaab95373dd6",
+        "last_checkpoint_file_sha256": "28386e4b24b3cd30264abd27afb961c11c048b8365578bfdd8f10d0d5e68567f"
+      },
+      "state_only": {
+        "best_epoch": 2,
+        "max_epochs_completed": 80,
+        "best_validation_macro_group_nll": 1.0034960479963393,
+        "validation": {
+          "count": 228,
+          "group_count": 6,
+          "accuracy": 0.47368421052631576,
+          "nll": 0.9985035146799004,
+          "brier": 0.5981429101605165,
+          "ece_15_bins": 0.07361590260999241,
+          "macro_group_accuracy": 0.4285714285714286,
+          "macro_group_nll": 1.0034960479963393,
+          "macro_group_brier": 0.6039324837032134
+        },
+        "trainable_parameters": 370819,
+        "total_unique_prequant_parameters": 132125827,
+        "best_checkpoint_sha256": "f4d0a30d20eb07a8657ad973c0aa92c60c50460620ca23e9ff9d477db7700ddf",
+        "last_checkpoint_sha256": "6aaaa9cd34fdf62f1ca307ab41914571ba72e63fc794f46554ddf0fc8ccc304c",
+        "wall_seconds": 100.76862730004359,
+        "history_sha256": "368856f0e910e00684176d470ac183d0527e5102c0098e37cfd4c1dc9a848cb6",
+        "best_checkpoint_file_sha256": "f4d0a30d20eb07a8657ad973c0aa92c60c50460620ca23e9ff9d477db7700ddf",
+        "last_checkpoint_file_sha256": "6aaaa9cd34fdf62f1ca307ab41914571ba72e63fc794f46554ddf0fc8ccc304c"
+      },
+      "video_state": {
+        "best_epoch": 2,
+        "max_epochs_completed": 80,
+        "best_validation_macro_group_nll": 1.0006134063596763,
+        "validation": {
+          "count": 228,
+          "group_count": 6,
+          "accuracy": 0.47368421052631576,
+          "nll": 0.9954780283988568,
+          "brier": 0.5962431062208978,
+          "ece_15_bins": 0.06430813578660026,
+          "macro_group_accuracy": 0.4285714285714286,
+          "macro_group_nll": 1.0006134063596763,
+          "macro_group_brier": 0.6021137242476461
+        },
+        "trainable_parameters": 370819,
+        "total_unique_prequant_parameters": 132125827,
+        "best_checkpoint_sha256": "15322096ed4aea29a088ef618e84887a102d5e584f5651d8ffe0161040192d4b",
+        "last_checkpoint_sha256": "0710d7dabfdfb0eee39fa611db9be874177af50ee6fbbebf5ea1dddaedf3debf",
+        "wall_seconds": 110.2095431999769,
+        "history_sha256": "bc883f725760824270fc962bb5c2714e88a731808a6330fa8f09ac9d114826d2",
+        "best_checkpoint_file_sha256": "15322096ed4aea29a088ef618e84887a102d5e584f5651d8ffe0161040192d4b",
+        "last_checkpoint_file_sha256": "0710d7dabfdfb0eee39fa611db9be874177af50ee6fbbebf5ea1dddaedf3debf"
+      }
+    },
+    "experiment_report_sha256": "10f7b6b790e4a4e83b419f2c8b3d1b07e8abfc778816ec0a9b92a47c7033e421",
+    "predictions_sha256": "259b044d0aaeb53228d947ae6937bc5fd4bb2fe528bd8c0e64497304e43de7ab",
+    "effective_config_sha256": "8bf3056cb4752da15fc5fbec9c90c9394298bc7cdffe59d209d7a5b27991fde9",
+    "matched_comparison_sha256": "fba556006f1719af0d6d3c7deb3a6158f9823c4caa69650b9733bbf051ec4112"
+  },
+  "matched_old_validation": {
+    "status": "matched_exposed_development_validation_comparison",
+    "old_validation_ids": 76,
+    "scaled_validation_rows": 228,
+    "matched_rows": 76,
+    "group_count": 6,
+    "same_target_and_options_verified": true,
+    "checkpoint_selection_note": "Scaled run selected best checkpoint on the full 228-row validation set, which includes these matched 76 rows; comparison is selection-affected and not blind.",
+    "paired_group_bootstrap": {
+      "text_only": {
+        "accuracy": {
+          "draws": 2000,
+          "seed": 17,
+          "percentile_95": [
+            -0.25,
+            0.0
+          ]
+        },
+        "nll": {
+          "draws": 2000,
+          "seed": 17,
+          "percentile_95": [
+            -0.004016287602147117,
+            0.02924853596070448
+          ]
+        }
+      },
+      "video_only": {
+        "accuracy": {
+          "draws": 2000,
+          "seed": 17,
+          "percentile_95": [
+            -0.25,
+            0.0
+          ]
+        },
+        "nll": {
+          "draws": 2000,
+          "seed": 17,
+          "percentile_95": [
+            -0.0015328498826446824,
+            0.019897642246537228
+          ]
+        }
+      },
+      "state_only": {
+        "accuracy": {
+          "draws": 2000,
+          "seed": 17,
+          "percentile_95": [
+            -0.0625,
+            0.0
+          ]
+        },
+        "nll": {
+          "draws": 2000,
+          "seed": 17,
+          "percentile_95": [
+            -0.001712581402641929,
+            0.02287543014339653
+          ]
+        }
+      },
+      "video_state": {
+        "accuracy": {
+          "draws": 2000,
+          "seed": 17,
+          "percentile_95": [
+            0.0,
+            0.0
+          ]
+        },
+        "nll": {
+          "draws": 2000,
+          "seed": 17,
+          "percentile_95": [
+            0.0013425725976731935,
+            0.016202019722163157
+          ]
+        }
+      }
+    },
+    "by_mode": {
+      "text_only": {
+        "matched_count": 76,
+        "old_pilot": {
+          "accuracy": 0.5263157894736842,
+          "nll": 0.9931139146026812,
+          "brier": 0.5945985976018404,
+          "ece_15_bins": 0.057974023254294134,
+          "macro_group_accuracy": 0.511904761904762,
+          "macro_group_nll": 0.9958635394771894,
+          "macro_group_brier": 0.5989841620718677
+        },
+        "scaled_run_matched_76": {
+          "accuracy": 0.47368421052631576,
+          "nll": 0.9973153628801045,
+          "brier": 0.597222205839659,
+          "ece_15_bins": 0.056310435659006994,
+          "macro_group_accuracy": 0.4285714285714286,
+          "macro_group_nll": 1.0044515693471545,
+          "macro_group_brier": 0.6045776965126158
+        },
+        "new_minus_old": {
+          "accuracy": -0.05263157894736842,
+          "nll": 0.004201448277423303,
+          "brier": 0.0026236082378185976,
+          "ece_15_bins": -0.0016635875952871401,
+          "macro_group_accuracy": -0.08333333333333337,
+          "macro_group_nll": 0.008588029869965097,
+          "macro_group_brier": 0.005593534440748171
+        },
+        "per_group": {
+          "S10048": {
+            "old_pilot": {
+              "count": 8,
+              "accuracy": 0.5,
+              "nll": 0.93017358934545
+            },
+            "scaled_run_matched_76": {
+              "count": 8,
+              "accuracy": 0.5,
+              "nll": 0.9333151231780163
+            }
+          },
+          "S5334": {
+            "old_pilot": {
+              "count": 28,
+              "accuracy": 0.5714285714285714,
+              "nll": 0.9902859508625154
+            },
+            "scaled_run_matched_76": {
+              "count": 28,
+              "accuracy": 0.5714285714285714,
+              "nll": 0.985357453798718
+            }
+          },
+          "S6759": {
+            "old_pilot": {
+              "count": 8,
+              "accuracy": 0.5,
+              "nll": 1.1406344547860925
+            },
+            "scaled_run_matched_76": {
+              "count": 8,
+              "accuracy": 0.0,
+              "nll": 1.198680003173723
+            }
+          },
+          "S7414": {
+            "old_pilot": {
+              "count": 12,
+              "accuracy": 0.6666666666666666,
+              "nll": 0.6400786186603437
+            },
+            "scaled_run_matched_76": {
+              "count": 12,
+              "accuracy": 0.6666666666666666,
+              "nll": 0.6365184357890217
+            }
+          },
+          "S8355": {
+            "old_pilot": {
+              "count": 8,
+              "accuracy": 0.5,
+              "nll": 0.9467149597372241
+            },
+            "scaled_run_matched_76": {
+              "count": 8,
+              "accuracy": 0.5,
+              "nll": 0.9405710827455273
+            }
+          },
+          "S8455": {
+            "old_pilot": {
+              "count": 12,
+              "accuracy": 0.3333333333333333,
+              "nll": 1.327293644515413
+            },
+            "scaled_run_matched_76": {
+              "count": 12,
+              "accuracy": 0.3333333333333333,
+              "nll": 1.3322672111311498
+            }
+          }
+        }
+      },
+      "video_only": {
+        "matched_count": 76,
+        "old_pilot": {
+          "accuracy": 0.5263157894736842,
+          "nll": 0.9936063619036424,
+          "brier": 0.5956197130052667,
+          "ece_15_bins": 0.06774589027229105,
+          "macro_group_accuracy": 0.511904761904762,
+          "macro_group_nll": 0.9935829789629059,
+          "macro_group_brier": 0.5981048729921145
+        },
+        "scaled_run_matched_76": {
+          "accuracy": 0.47368421052631576,
+          "nll": 0.9971573737106825,
+          "brier": 0.5973516161504545,
+          "ece_15_bins": 0.06899728037809068,
+          "macro_group_accuracy": 0.4285714285714286,
+          "macro_group_nll": 1.0021341702058202,
+          "macro_group_brier": 0.6030621153139879
+        },
+        "new_minus_old": {
+          "accuracy": -0.05263157894736842,
+          "nll": 0.0035510118070400942,
+          "brier": 0.0017319031451877853,
+          "ece_15_bins": 0.001251390105799624,
+          "macro_group_accuracy": -0.08333333333333337,
+          "macro_group_nll": 0.008551191242914258,
+          "macro_group_brier": 0.004957242321873445
+        },
+        "per_group": {
+          "S10048": {
+            "old_pilot": {
+              "count": 8,
+              "accuracy": 0.5,
+              "nll": 0.9315629598411848
+            },
+            "scaled_run_matched_76": {
+              "count": 8,
+              "accuracy": 0.5,
+              "nll": 0.9358111756105023
+            }
+          },
+          "S5334": {
+            "old_pilot": {
+              "count": 28,
+              "accuracy": 0.5714285714285714,
+              "nll": 0.998664534067682
+            },
+            "scaled_run_matched_76": {
+              "count": 28,
+              "accuracy": 0.5714285714285714,
+              "nll": 0.9904343128093765
+            }
+          },
+          "S6759": {
+            "old_pilot": {
+              "count": 8,
+              "accuracy": 0.5,
+              "nll": 1.1406532468011312
+            },
+            "scaled_run_matched_76": {
+              "count": 8,
+              "accuracy": 0.0,
+              "nll": 1.1741175518475446
+            }
+          },
+          "S7414": {
+            "old_pilot": {
+              "count": 12,
+              "accuracy": 0.6666666666666666,
+              "nll": 0.6371821015982319
+            },
+            "scaled_run_matched_76": {
+              "count": 12,
+              "accuracy": 0.6666666666666666,
+              "nll": 0.6381871440820402
+            }
+          },
+          "S8355": {
+            "old_pilot": {
+              "count": 8,
+              "accuracy": 0.5,
+              "nll": 0.9284147190093961
+            },
+            "scaled_run_matched_76": {
+              "count": 8,
+              "accuracy": 0.5,
+              "nll": 0.9442334486270239
+            }
+          },
+          "S8455": {
+            "old_pilot": {
+              "count": 12,
+              "accuracy": 0.3333333333333333,
+              "nll": 1.3250203035368635
+            },
+            "scaled_run_matched_76": {
+              "count": 12,
+              "accuracy": 0.3333333333333333,
+              "nll": 1.3300213580703768
+            }
+          }
+        }
+      },
+      "state_only": {
+        "matched_count": 76,
+        "old_pilot": {
+          "accuracy": 0.4868421052631579,
+          "nll": 0.9940503110226832,
+          "brier": 0.5960042147259963,
+          "ece_15_bins": 0.07864983928830997,
+          "macro_group_accuracy": 0.4494047619047619,
+          "macro_group_nll": 0.9937866502811038,
+          "macro_group_brier": 0.5983061217481181
+        },
+        "scaled_run_matched_76": {
+          "accuracy": 0.47368421052631576,
+          "nll": 0.9987454963357825,
+          "brier": 0.5983171478698128,
+          "ece_15_bins": 0.07387727146085937,
+          "macro_group_accuracy": 0.4285714285714286,
+          "macro_group_nll": 1.0036398190709332,
+          "macro_group_brier": 0.6040333295980143
+        },
+        "new_minus_old": {
+          "accuracy": -0.013157894736842146,
+          "nll": 0.004695185313099315,
+          "brier": 0.0023129331438165313,
+          "ece_15_bins": -0.0047725678274505995,
+          "macro_group_accuracy": -0.020833333333333315,
+          "macro_group_nll": 0.009853168789829447,
+          "macro_group_brier": 0.00572720784989611
+        },
+        "per_group": {
+          "S10048": {
+            "old_pilot": {
+              "count": 8,
+              "accuracy": 0.5,
+              "nll": 0.9323125926642736
+            },
+            "scaled_run_matched_76": {
+              "count": 8,
+              "accuracy": 0.5,
+              "nll": 0.9328110699676022
+            }
+          },
+          "S5334": {
+            "old_pilot": {
+              "count": 28,
+              "accuracy": 0.5714285714285714,
+              "nll": 1.0000241844666693
+            },
+            "scaled_run_matched_76": {
+              "count": 28,
+              "accuracy": 0.5714285714285714,
+              "nll": 0.9913866578242061
+            }
+          },
+          "S6759": {
+            "old_pilot": {
+              "count": 8,
+              "accuracy": 0.125,
+              "nll": 1.140944745156516
+            },
+            "scaled_run_matched_76": {
+              "count": 8,
+              "accuracy": 0.0,
+              "nll": 1.1811769515485557
+            }
+          },
+          "S7414": {
+            "old_pilot": {
+              "count": 12,
+              "accuracy": 0.6666666666666666,
+              "nll": 0.6370740282032602
+            },
+            "scaled_run_matched_76": {
+              "count": 12,
+              "accuracy": 0.6666666666666666,
+              "nll": 0.6365920062779112
+            }
+          },
+          "S8355": {
+            "old_pilot": {
+              "count": 8,
+              "accuracy": 0.5,
+              "nll": 0.9280431342075133
+            },
+            "scaled_run_matched_76": {
+              "count": 8,
+              "accuracy": 0.5,
+              "nll": 0.9409108915691707
+            }
+          },
+          "S8455": {
+            "old_pilot": {
+              "count": 12,
+              "accuracy": 0.3333333333333333,
+              "nll": 1.3243212010760455
+            },
+            "scaled_run_matched_76": {
+              "count": 12,
+              "accuracy": 0.3333333333333333,
+              "nll": 1.3389613379809262
+            }
+          }
+        }
+      },
+      "video_state": {
+        "matched_count": 76,
+        "old_pilot": {
+          "accuracy": 0.47368421052631576,
+          "nll": 0.9906653863819022,
+          "brier": 0.5935614816844463,
+          "ece_15_bins": 0.08330796345284108,
+          "macro_group_accuracy": 0.4285714285714286,
+          "macro_group_nll": 0.9921140032155171,
+          "macro_group_brier": 0.5972288305619878
+        },
+        "scaled_run_matched_76": {
+          "accuracy": 0.47368421052631576,
+          "nll": 0.9954955236692178,
+          "brier": 0.5962533790029978,
+          "ece_15_bins": 0.06428796641136468,
+          "macro_group_accuracy": 0.4285714285714286,
+          "macro_group_nll": 1.0006339950930505,
+          "macro_group_brier": 0.6021266779492772
+        },
+        "new_minus_old": {
+          "accuracy": 0.0,
+          "nll": 0.004830137287315628,
+          "brier": 0.0026918973185514616,
+          "ece_15_bins": -0.019019997041476402,
+          "macro_group_accuracy": 0.0,
+          "macro_group_nll": 0.008519991877533384,
+          "macro_group_brier": 0.004897847387289378
+        },
+        "per_group": {
+          "S10048": {
+            "old_pilot": {
+              "count": 8,
+              "accuracy": 0.5,
+              "nll": 0.9291389195076889
+            },
+            "scaled_run_matched_76": {
+              "count": 8,
+              "accuracy": 0.5,
+              "nll": 0.9364279517354435
+            }
+          },
+          "S5334": {
+            "old_pilot": {
+              "count": 28,
+              "accuracy": 0.5714285714285714,
+              "nll": 0.9912513613660531
+            },
+            "scaled_run_matched_76": {
+              "count": 28,
+              "accuracy": 0.5714285714285714,
+              "nll": 0.9883485579670924
+            }
+          },
+          "S6759": {
+            "old_pilot": {
+              "count": 8,
+              "accuracy": 0.0,
+              "nll": 1.1460387915263985
+            },
+            "scaled_run_matched_76": {
+              "count": 8,
+              "accuracy": 0.0,
+              "nll": 1.1706022866719383
+            }
+          },
+          "S7414": {
+            "old_pilot": {
+              "count": 12,
+              "accuracy": 0.6666666666666666,
+              "nll": 0.6357316699314146
+            },
+            "scaled_run_matched_76": {
+              "count": 12,
+              "accuracy": 0.6666666666666666,
+              "nll": 0.637592611081195
+            }
+          },
+          "S8355": {
+            "old_pilot": {
+              "count": 8,
+              "accuracy": 0.5,
+              "nll": 0.9252375634830876
+            },
+            "scaled_run_matched_76": {
+              "count": 8,
+              "accuracy": 0.5,
+              "nll": 0.9433610136503637
+            }
+          },
+          "S8455": {
+            "old_pilot": {
+              "count": 12,
+              "accuracy": 0.3333333333333333,
+              "nll": 1.3252858026957528
+            },
+            "scaled_run_matched_76": {
+              "count": 12,
+              "accuracy": 0.3333333333333333,
+              "nll": 1.3274715840231648
+            }
+          }
+        }
+      }
+    }
+  },
+  "interpretation": {
+    "matched_quality_gain_observed": false,
+    "clear_overfitting": true,
+    "four_modality_quality_target_met": false,
+    "product_promotion": false,
+    "recommendation": "Do not add epochs or seeds to the same pilot. Seek new independent task groups or a better-grouped decision source before another fit."
+  },
+  "artifact_directory": "C:/CodexLocalArtifacts/pretrained-reuse-r2/habit-data-scaleup-seed17-attempt-01"
+}

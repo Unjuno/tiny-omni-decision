@@ -12,6 +12,7 @@ from scripts.train_habit_temporal_decision import (  # noqa: E402
     _group_bootstrap_deltas,
     _metrics,
     _new_model,
+    _validate_feature_shapes,
     _video_derangement,
 )
 
@@ -33,6 +34,22 @@ def test_metrics_require_aligned_nonempty_rows() -> None:
         _metrics([], [], [])
     with pytest.raises(ValueError, match="aligned nonempty"):
         _metrics([torch.tensor([1.0, 0.0])], [0], [])
+
+
+def test_feature_shape_validation_uses_actual_expanded_package_count() -> None:
+    examples = [{"id": f"row-{index}"} for index in range(4)]
+    arrays = {
+        "video_features": np.zeros((4, 8, 768), dtype=np.float32),
+        "sensor_sequence": np.zeros((4, 8, 14), dtype=np.float32),
+        "target_index": np.zeros(4, dtype=np.int64),
+        "option_count": np.full(4, 2, dtype=np.int64),
+    }
+
+    _validate_feature_shapes(examples, arrays)
+
+    arrays["video_features"] = arrays["video_features"][:3]
+    with pytest.raises(ValueError, match="shapes differ from the record count"):
+        _validate_feature_shapes(examples, arrays)
 
 
 def test_group_bootstrap_is_paired_deterministic_and_labels_selection_effect() -> None:

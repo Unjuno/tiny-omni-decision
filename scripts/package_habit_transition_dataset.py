@@ -65,7 +65,13 @@ def _read_selected_jsonl(path: Path, wanted: set[int], id_field: str) -> dict[in
     return result
 
 
-def package_feature_cache(input_dir: Path, metadata_dir: Path, output_dir: Path) -> dict[str, Any]:
+def package_feature_cache(
+    input_dir: Path,
+    metadata_dir: Path,
+    output_dir: Path,
+    *,
+    expected_audit_sha256: str = AUDIT_SHA256,
+) -> dict[str, Any]:
     import numpy as np
 
     if output_dir.exists():
@@ -80,7 +86,7 @@ def package_feature_cache(input_dir: Path, metadata_dir: Path, output_dir: Path)
         raise ValueError("pinned subtask metadata SHA-256 mismatch")
     inputs = json.loads(input_path.read_text(encoding="utf-8"))
     if (inputs.get("source_revision") != SOURCE_REVISION
-            or inputs.get("audit_receipt_sha256") != AUDIT_SHA256
+            or inputs.get("audit_receipt_sha256") != expected_audit_sha256
             or inputs.get("sealed_audit_accessed") is not False):
         raise ValueError("feature input manifest is not the frozen non-audit pilot")
     records = inputs["records"]
@@ -112,7 +118,7 @@ def package_feature_cache(input_dir: Path, metadata_dir: Path, output_dir: Path)
     (output_dir / "transition-examples.json").write_text(
         json.dumps({
             "source_revision": SOURCE_REVISION,
-            "audit_receipt_sha256": AUDIT_SHA256,
+            "audit_receipt_sha256": expected_audit_sha256,
             "episode_metadata_sha256": EPISODES_SHA256,
             "subtask_metadata_sha256": SUBTASKS_SHA256,
             "sealed_audit_accessed": False,
@@ -147,11 +153,13 @@ def main() -> None:
     parser.add_argument("--input-dir", type=Path, required=True)
     parser.add_argument("--metadata-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--expected-audit-sha256", default=AUDIT_SHA256)
     args = parser.parse_args()
     report = package_feature_cache(
         args.input_dir.resolve(strict=True),
         args.metadata_dir.resolve(strict=True),
         args.output_dir.resolve(),
+        expected_audit_sha256=args.expected_audit_sha256,
     )
     print(json.dumps(report, indent=2))
 

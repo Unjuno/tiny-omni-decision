@@ -1,8 +1,13 @@
 from __future__ import annotations
 
+import hashlib
+
 import pytest
 
-from scripts.extract_habit_transition_features import _selected_records
+from scripts.extract_habit_transition_features import (
+    _selected_records,
+    verify_expected_audit_digest,
+)
 
 
 def _episode(split: str, episode_id: int, sid: str, video_hash: str) -> dict:
@@ -55,3 +60,16 @@ def test_transition_records_reject_out_of_range_targets() -> None:
 
     with pytest.raises(ValueError, match="outside the recorded option count"):
         _selected_records({"episodes": [episode]})
+
+
+def test_scale_run_requires_the_exact_explicit_audit_hash() -> None:
+    payload = b'{"source_revision":"pinned"}'
+    digest = hashlib.sha256(payload).hexdigest()
+
+    verify_expected_audit_digest(payload, digest)
+
+    with pytest.raises(ValueError, match="explicitly pinned"):
+        verify_expected_audit_digest(payload, "0" * 64)
+
+    with pytest.raises(ValueError, match="explicitly pinned"):
+        verify_expected_audit_digest(payload, "not-a-sha256")

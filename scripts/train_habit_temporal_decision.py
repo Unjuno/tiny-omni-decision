@@ -130,10 +130,7 @@ def _validate_package(
     expected_ids = [row["id"] for row in examples]
     if arrays.get("ids", np.array([])).tolist() != expected_ids:
         raise ValueError("feature ID order differs from aligned text examples")
-    if len(examples) != 278 or arrays["video_features"].shape != (278, 8, 768):
-        raise ValueError("frozen feature cache has unexpected record/shape count")
-    if arrays["sensor_sequence"].shape != (278, 8, 14):
-        raise ValueError("sensor feature cache has unexpected shape")
+    _validate_feature_shapes(examples, arrays)
     if len({row["id"] for row in examples}) != len(examples):
         raise ValueError("example IDs are not unique")
     for index, row in enumerate(examples):
@@ -154,17 +151,25 @@ def _validate_package(
     return examples, arrays
 
 
+def _validate_feature_shapes(examples: list[dict], arrays: dict[str, np.ndarray]) -> None:
+    """Validate frozen feature shapes against the package's actual record count."""
+    count = len(examples)
+    if (count < 1 or arrays.get("video_features", np.empty(0)).shape != (count, 8, 768)
+            or arrays.get("sensor_sequence", np.empty(0)).shape != (count, 8, 14)
+            or arrays.get("target_index", np.empty(0)).shape != (count,)
+            or arrays.get("option_count", np.empty(0)).shape != (count,)):
+        raise ValueError("frozen feature cache shapes differ from the record count")
+
+
 def _validate_config(config_path: Path, package_dir: Path, text_model: Path) -> tuple[dict, str]:
     import yaml
 
     config_bytes = config_path.read_bytes()
     config = yaml.safe_load(config_bytes)
-    expected = {
-        "experiment_id": "habit-temporal-decision-cpu-seed17-v0",
-        "seed": SEED,
-    }
-    if any(config.get(key) != value for key, value in expected.items()):
-        raise ValueError("experiment config differs from the reviewed fixed schedule")
+    if (not isinstance(config.get("experiment_id"), str)
+            or not config["experiment_id"].startswith("habit-temporal-decision-")
+            or config.get("seed") != SEED):
+        raise ValueError("experiment ID or seed differs from the reviewed HABIT protocol")
     expected_training = {
         "epochs": MAX_EPOCHS,
         "batch_size": BATCH_SIZE,
@@ -198,10 +203,25 @@ def _validate_config(config_path: Path, package_dir: Path, text_model: Path) -> 
         text_model / "model.safetensors"
     ):
         raise ValueError("config references different MiniLM weights")
+    package_report = json.loads(
+        (package_dir / "package-report.json").read_text(encoding="utf-8")
+    )
     cache_path = package_dir / "habit-transition-features.npz"
     with np.load(cache_path, allow_pickle=False) as cache:
-        if list(cache["video_features"].shape) != [278, 8, 768]:
-            raise ValueError("feature cache shape differs from the fixed protocol")
+        feature_shape = list(cache["video_features"].shape)
+    expected_data_counts = {
+        "train_examples": package_report.get("train_records"),
+        "validation_examples": package_report.get("validation_records"),
+        "train_task_groups": package_report.get("train_task_groups"),
+        "validation_task_groups": package_report.get("validation_task_groups"),
+    }
+    if (any(isinstance(value, bool) or not isinstance(value, int) or value < 1
+            for value in expected_data_counts.values())
+            or any(config["data"].get(key) != value
+                   for key, value in expected_data_counts.items())
+            or feature_shape != [sum(expected_data_counts[key] for key in (
+                "train_examples", "validation_examples")), 8, 768]):
+        raise ValueError("config data counts differ from the frozen package")
     if (config["data"].get("revision") != "bae97d251907743f8fb6db7e70c61d361df4dc1e"
             or config["data"].get("feature_cache_sha256") != sha256_file(cache_path)
             or config["video_encoder"].get("revision") != VIDEO_REVISION
@@ -652,8 +672,10 @@ def run_experiment(
     split = [row["split"] for row in examples]
     train_indices = [i for i, value in enumerate(split) if value == "train"]
     validation_indices = [i for i, value in enumerate(split) if value == "validation"]
-    if (len(train_indices), len(validation_indices)) != (202, 76):
-        raise ValueError("unexpected frozen split example counts")
+    if (len(train_indices), len(validation_indices)) != (
+        config["data"]["train_examples"], config["data"]["validation_examples"]
+    ):
+        raise ValueError("input split counts differ from the frozen experiment config")
     train_sensor = torch.from_numpy(arrays["sensor_sequence"][train_indices]).float()
     sensor_mean = train_sensor.mean(dim=(0, 1))
     sensor_std = train_sensor.std(dim=(0, 1), unbiased=False).clamp_min(1e-5)
@@ -683,7 +705,7 @@ def run_experiment(
     }
     report = {
         "status": "completed_validation_selected_pilot",
-        "experiment_id": "habit-temporal-decision-cpu-seed17-v0",
+        "experiment_id": config["experiment_id"],
         "source_revision": "bae97d251907743f8fb6db7e70c61d361df4dc1e",
         "package_directory": str(package_dir),
         "package_report_sha256": sha256_file(package_dir / "package-report.json"),

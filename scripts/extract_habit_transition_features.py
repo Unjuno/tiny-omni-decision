@@ -35,6 +35,14 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def verify_expected_audit_digest(audit_bytes: bytes, expected_sha256: str) -> None:
+    """Require an explicit immutable audit receipt hash before feature extraction."""
+    if (len(expected_sha256) != 64
+            or any(value not in "0123456789abcdef" for value in expected_sha256)
+            or hashlib.sha256(audit_bytes).hexdigest() != expected_sha256):
+        raise ValueError("audit receipt hash differs from the explicitly pinned payload audit")
+
+
 def _selected_records(audit: dict[str, Any]) -> list[dict[str, Any]]:
     records = []
     for episode in audit["episodes"]:
@@ -71,13 +79,18 @@ def _selected_records(audit: dict[str, Any]) -> list[dict[str, Any]]:
     return records
 
 
-def _prepare_inputs(audit_path: Path, payload_root: Path, output_dir: Path) -> Path:
+def _prepare_inputs(
+    audit_path: Path,
+    payload_root: Path,
+    output_dir: Path,
+    *,
+    expected_audit_sha256: str = AUDIT_SHA256,
+) -> Path:
     import av
     import pyarrow.parquet as pq
 
     audit_bytes = audit_path.read_bytes()
-    if hashlib.sha256(audit_bytes).hexdigest() != AUDIT_SHA256:
-        raise ValueError("audit receipt hash differs from the pinned payload audit")
+    verify_expected_audit_digest(audit_bytes, expected_audit_sha256)
     audit = json.loads(audit_bytes)
     if (audit.get("source_revision") != SOURCE_REVISION
             or audit.get("sealed_audit_payload_accessed") is not False
@@ -143,7 +156,7 @@ def _prepare_inputs(audit_path: Path, payload_root: Path, output_dir: Path) -> P
 
     manifest = {
         "source_revision": SOURCE_REVISION,
-        "audit_receipt_sha256": AUDIT_SHA256,
+        "audit_receipt_sha256": expected_audit_sha256,
         "sealed_audit_accessed": False,
         "action_columns_read": False,
         "records": records,
@@ -153,7 +166,14 @@ def _prepare_inputs(audit_path: Path, payload_root: Path, output_dir: Path) -> P
     return path
 
 
-def _worker(input_path: Path, output_dir: Path, checkpoint: Path, source_root: Path) -> None:
+def _worker(
+    input_path: Path,
+    output_dir: Path,
+    checkpoint: Path,
+    source_root: Path,
+    *,
+    expected_audit_sha256: str = AUDIT_SHA256,
+) -> None:
     import av
     import jax
     import jax.numpy as jnp
@@ -180,7 +200,7 @@ def _worker(input_path: Path, output_dir: Path, checkpoint: Path, source_root: P
 
     inputs = json.loads(input_path.read_text(encoding="utf-8"))
     if (inputs.get("source_revision") != SOURCE_REVISION
-            or inputs.get("audit_receipt_sha256") != AUDIT_SHA256
+            or inputs.get("audit_receipt_sha256") != expected_audit_sha256
             or inputs.get("sealed_audit_accessed") is not False):
         raise ValueError("worker received unexpected input manifest")
     records = inputs["records"]
@@ -267,7 +287,7 @@ def _worker(input_path: Path, output_dir: Path, checkpoint: Path, source_root: P
         "video_feature_shape": list(features.shape),
         "sensor_sequence_shape": [len(records), 8, 14],
         "source_revision": SOURCE_REVISION,
-        "audit_receipt_sha256": AUDIT_SHA256,
+        "audit_receipt_sha256": expected_audit_sha256,
         "videoprism_revision": VIDEO_REVISION,
         "videoprism_source_commit": source_commit,
         "checkpoint_sha256": CHECKPOINT_SHA256,
@@ -291,13 +311,17 @@ def main() -> None:
     parser.add_argument("--source-root", type=Path)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--worker", action="store_true")
+    parser.add_argument("--expected-audit-sha256", default=AUDIT_SHA256)
     args = parser.parse_args()
     output_dir = args.output_dir.resolve()
     if args.worker:
         if args.checkpoint is None or args.source_root is None:
             parser.error("--worker requires --checkpoint and --source-root")
-        _worker(output_dir / "transition-inputs.json", output_dir,
-                args.checkpoint.resolve(strict=True), args.source_root.resolve(strict=True))
+        _worker(
+            output_dir / "transition-inputs.json", output_dir,
+            args.checkpoint.resolve(strict=True), args.source_root.resolve(strict=True),
+            expected_audit_sha256=args.expected_audit_sha256,
+        )
         return
     required = (args.audit_receipt, args.payload_root, args.worker_python,
                 args.checkpoint, args.source_root)
@@ -307,14 +331,16 @@ def main() -> None:
         raise FileExistsError(f"refusing to overwrite existing output: {output_dir}")
     output_dir.mkdir(parents=True)
     input_path = _prepare_inputs(
-        args.audit_receipt.resolve(strict=True), args.payload_root.resolve(strict=True), output_dir
+        args.audit_receipt.resolve(strict=True), args.payload_root.resolve(strict=True), output_dir,
+        expected_audit_sha256=args.expected_audit_sha256,
     )
     subprocess.run(
         [
             str(args.worker_python.resolve(strict=True)), str(Path(__file__).resolve()),
             "--worker", "--output-dir", str(output_dir), "--checkpoint",
             str(args.checkpoint.resolve(strict=True)), "--source-root",
-            str(args.source_root.resolve(strict=True)),
+            str(args.source_root.resolve(strict=True)), "--expected-audit-sha256",
+            args.expected_audit_sha256,
         ],
         check=True,
         env={**os.environ, "JAX_PLATFORMS": "cpu", "CUDA_VISIBLE_DEVICES": ""},
