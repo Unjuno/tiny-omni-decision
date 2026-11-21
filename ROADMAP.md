@@ -34,8 +34,10 @@ personal information was submitted and no payload was downloaded. Keep it
 and [receipt](manifests/pretrained_reuse/hoi-force-video-source-screen-20261122.json).
 The official file-list API exposes 4,769 metadata rows (~3.19 TB listed); all
 rows set `fileAccessRequest=true` despite `restricted=false`. It lists 20
-`manifest.csv` files versus the paper's 38 environments, an unresolved split
-coverage discrepancy. No file payload was requested.
+`manifest.csv` files, but pinned upstream code shows these are per-package
+artifact inventories, not split definitions; no split discrepancy is inferred.
+The paper's environment grouping remains unverified. No file payload was
+requested. See the source-screen correction for the pinned code evidence.
 
 **2026-11-22 R2-M AVSBench source screen:** The publisher documents an audio-video sound-source segmentation task with pixel-level masks, including multi-object scenes where only some visible objects are sounding. The dataset is CC BY-NC 4.0; its Apache-2.0 code license does not broaden data rights. The dense-mask target is also distinct from supplied-option JSON Decision. No annotations/media were downloaded, no access request sent, and no model was run. Keep it outside the product-training pool; reconsider only for a separately scoped noncommercial grounding study. See [source screen](docs/pretrained_reuse/R2_AVSBENCH_SOURCE_SCREEN_20261122.md) and [receipt](manifests/pretrained_reuse/avsbench-source-screen-20261122.json).
 **2026-11-22 R2-M Eidon Tracker POV metadata screen:** Pinned CC BY 4.0

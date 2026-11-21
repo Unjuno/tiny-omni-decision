@@ -30,11 +30,17 @@ submitting user information.
   this is not evidence that payload downloads are guestbook-free. No file
   payload endpoint was requested and no name was submitted.
 - The inventory contains 20 files named `manifest.csv`, while the paper
-  reports 38 environments. The meaning and coverage of those manifests are
-  not established, so they cannot yet be treated as the paper's environment
-  split. The `bathroom_1/gripper` directory subtree alone lists 1,421 files
-  totaling 1,274,184,763,539 bytes (~1.27 TB); this confirms that selective
-  acquisition must be planned before any download.
+  reports 38 environments. Inspection of the official processing code at
+  commit `f60ef1669859e2b3ac71743923292ccbedb0e1df` shows
+  `package_dataset_release.write_manifest()` writes a per-package artifact
+  inventory (`relative_path`, `artifact_type`, byte size, source path, note),
+  not a dataset split manifest. Thus the 20-versus-38 counts do not establish
+  a split discrepancy; the actual environment/split mapping remains unknown.
+  The inspected source file's SHA-256 is
+  `327f4c838d0cab819fffb4dbbd71283bdfeacd722b8416e054d23180d8004d02`.
+  The `bathroom_1/gripper` directory subtree alone lists 1,421 files totaling
+  1,274,184,763,539 bytes (~1.27 TB); selective acquisition must be planned
+  before any download.
 - Official Bonn repository identifies the dataset as version 1.0 and CC BY
   4.0; it describes 3,048 sequences, 381 objects, 38 environments, four
   manipulation embodiments, and synchronized force/tactile for the instrumented
@@ -72,10 +78,12 @@ submitting user information.
    membership.
 3. Confirm which instrumented embodiments have enough examples
    for both visual-only and force/tactile-plus-visual comparisons.
-4. Read the full dataset Readme and annotation payload only after the user has
+4. Establish the actual environment and interaction grouping/split from
+   annotations or publisher documentation; package inventories are not splits.
+5. Read the full dataset Readme and annotation payload only after the user has
    approved the access flow; the public file-list metadata is insufficient to
    establish the row schema or group splits.
-5. Estimate storage using selected train/validation files before any payload
+6. Estimate storage using selected train/validation files before any payload
    acquisition; never mirror the full repository by default.
 
 If admitted later, keep sealed-audit files isolated, group all views and

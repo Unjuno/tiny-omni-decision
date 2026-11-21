@@ -36,11 +36,22 @@
       "restricted_true_entries": 0,
       "file_access_request_true_entries": 4769,
       "manifest_csv_entries": 20,
+      "manifest_csv_directory_count": 20,
+      "manifest_csv_role": "Per-package artifact inventory, not a dataset split manifest; established from official packaging code.",
       "paper_environment_count": 38,
+      "environment_or_split_mapping_verified": false,
       "total_payload_bytes_listed": 3186202640224,
       "bathroom_1_gripper_subtree_file_entries": 1421,
       "bathroom_1_gripper_subtree_bytes_listed": 1274184763539,
       "payload_requested": false
+    },
+    "official_processing_code": {
+      "repository": "https://github.com/timengelbracht/hoi-dataset-tools",
+      "revision": "f60ef1669859e2b3ac71743923292ccbedb0e1df",
+      "inspected_file": "data_processing/src/hoi/data_tools/package_dataset_release.py",
+      "file_sha256": "327f4c838d0cab819fffb4dbbd71283bdfeacd722b8416e054d23180d8004d02",
+      "manifest_columns": ["relative_path", "artifact_type", "size_bytes", "size_human", "source_relative_path", "note"],
+      "manifest_is_split_definition": false
     },
     "dataset_payload_downloaded": false,
     "personal_information_submitted": false,
