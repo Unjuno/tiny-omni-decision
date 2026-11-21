@@ -22,6 +22,19 @@ submitting user information.
 
 ## Evidence reviewed
 
+- On 2026-11-21 18:12:18 UTC, the official Dataverse file-list API returned
+  4,769 metadata entries (4,258,029 response bytes; SHA-256
+  `ee1b129467d2b68ebc32aafef099ba351406c7ddc0bb8ff36418a8e7406e4d51`). The
+  metadata reports 3,186,202,640,224 total file bytes (~3.19 TB). Its entries
+  have `restricted=false`, but all 4,769 set `dataFile.fileAccessRequest=true`;
+  this is not evidence that payload downloads are guestbook-free. No file
+  payload endpoint was requested and no name was submitted.
+- The inventory contains 20 files named `manifest.csv`, while the paper
+  reports 38 environments. The meaning and coverage of those manifests are
+  not established, so they cannot yet be treated as the paper's environment
+  split. The `bathroom_1/gripper` directory subtree alone lists 1,421 files
+  totaling 1,274,184,763,539 bytes (~1.27 TB); this confirms that selective
+  acquisition must be planned before any download.
 - Official Bonn repository identifies the dataset as version 1.0 and CC BY
   4.0; it describes 3,048 sequences, 381 objects, 38 environments, four
   manipulation embodiments, and synchronized force/tactile for the instrumented
@@ -59,8 +72,9 @@ submitting user information.
    membership.
 3. Confirm which instrumented embodiments have enough examples
    for both visual-only and force/tactile-plus-visual comparisons.
-4. Read the full dataset Readme and file metadata through an access path that
-   does not submit personal information, or wait for the user's own download.
+4. Read the full dataset Readme and annotation payload only after the user has
+   approved the access flow; the public file-list metadata is insufficient to
+   establish the row schema or group splits.
 5. Estimate storage using selected train/validation files before any payload
    acquisition; never mirror the full repository by default.
 

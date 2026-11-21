@@ -28,10 +28,25 @@
   },
   "access_and_scope": {
     "metadata_only": true,
+    "official_dataverse_file_list_api": {
+      "retrieved_at_utc": "2026-11-21T18:12:18.6696575Z",
+      "response_bytes": 4258029,
+      "response_sha256": "ee1b129467d2b68ebc32aafef099ba351406c7ddc0bb8ff36418a8e7406e4d51",
+      "file_entries": 4769,
+      "restricted_true_entries": 0,
+      "file_access_request_true_entries": 4769,
+      "manifest_csv_entries": 20,
+      "paper_environment_count": 38,
+      "total_payload_bytes_listed": 3186202640224,
+      "bathroom_1_gripper_subtree_file_entries": 1421,
+      "bathroom_1_gripper_subtree_bytes_listed": 1274184763539,
+      "payload_requested": false
+    },
     "dataset_payload_downloaded": false,
     "personal_information_submitted": false,
     "access_request_submitted": false,
     "guestbook_name_field_reported": true,
+    "api_access_flags_require_reconciliation": "All listed entries report restricted=false and fileAccessRequest=true; no payload download was attempted, so per-file access behavior remains unverified.",
     "project_policy": "REVIEW",
     "admission_gates": [
       "verify supplied-choice decision labels and avoid trivial action-label reconstruction",
