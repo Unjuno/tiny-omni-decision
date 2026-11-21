@@ -1,3 +1,14 @@
+**2026-11-21 R2 programmatic decision state-group holdout:** A separate
+2,048-update text readout used 6,144 TRAIN rows and evaluated 2,048 rows from
+256 state groups unseen by the prior sampler. Accuracy was 22.71% against a
+task-balanced uniform-choice reference of 23.75%; zero-state ablation changed
+6.84% of choices but had no reliable effect on task-macro metrics. The source
+is a generated reasoning proxy, and this result does not demonstrate useful
+state binding or general text competence. Official validation and sealed audit
+remain unopened. Retire this holdout and investigate frozen representation /
+readout limits before spending more capacity or seeds. See
+[protocol and results](docs/pretrained_reuse/R2_NATIVE_PROGRAMMATIC_DECISION_GROUP_HOLDOUT_20261121.md).
+
 **2026-11-21 R2 Text state-group holdout:** The fixed terminal 2,048-update
 text-only fit used 7,152 TRAIN rows and 1,040 held rows from 65 state groups
 that the prior sampler never consumed. Macro Accuracy was 13.04% over 40

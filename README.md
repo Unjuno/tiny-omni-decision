@@ -18,6 +18,16 @@ sealed audit was opened. This narrow result does not qualify a model; the next
 step is a distinct unused TRAIN decision source, not another fit to this
 holdout. [Protocol, results and hashes](docs/pretrained_reuse/R2_NATIVE_TEXT_STATE_GROUP_HOLDOUT_20261121.md).
 
+**2026-11-21 R2 programmatic decision state-group holdout:** A separate
+seed-17, 2,048-update readout fit used 6,144 TRAIN rows and held out 2,048
+rows from 256 previously untouched programmatic state groups. Accuracy was
+22.71% versus a task-balanced 23.75% uniform-choice reference. Zeroing the
+state changed 6.84% of selected options but produced no reliable metric change
+under a paired group bootstrap. This generated task did not show useful state
+binding; official validation and sealed audit stayed closed. Do not tune this
+holdout or increase capacity from this result alone.
+[Protocol, per-task metrics and hashes](docs/pretrained_reuse/R2_NATIVE_PROGRAMMATIC_DECISION_GROUP_HOLDOUT_20261121.md).
+
 **2026-11-21 R2 native temporal capacity control:** A parameter-matched,
 nonrecurrent tokenwise MLP completed the same 2,048-update Path A fit as the
 baseline/LSTM arms. Fresh-process replay matched exactly. Its final Video
