@@ -172,6 +172,15 @@ def test_runner_accepts_legacy_and_programmatic_configs_without_mixing_profiles(
         validate_config(programmatic)
 
 
+def test_configured_artifact_root_uses_windows_c_volume_rules_on_any_ci_host():
+    from scripts.train_native_text_group_holdout import is_local_c_absolute_path
+
+    assert is_local_c_absolute_path(r"C:\CodexArtifacts\experiment")
+    assert not is_local_c_absolute_path(r"D:\CodexArtifacts\experiment")
+    assert not is_local_c_absolute_path(r"relative\experiment")
+    assert not is_local_c_absolute_path(r"\\server\share\experiment")
+
+
 def test_training_rechecks_group_and_observation_split_integrity():
     rows = make_rows(group_count=4)
     fit = [row for row in rows if row["group"] in {"group-0", "group-1"}]

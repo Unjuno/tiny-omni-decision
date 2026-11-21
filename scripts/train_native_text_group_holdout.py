@@ -17,7 +17,7 @@ import traceback
 from collections import OrderedDict
 from copy import copy
 from datetime import UTC, datetime
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO))
@@ -71,6 +71,18 @@ def configured_source_split(config):
     profile = SPLIT_PROFILES.get(source)
     split_id = config.get("split_id", profile["split_id"] if profile else None)
     return source, split_id
+
+
+def is_local_c_absolute_path(value):
+    """Validate the configured Windows artifact volume independent of host OS.
+
+    The experiment configs intentionally describe a Windows C: artifact root.
+    ``Path`` on POSIX treats that string as relative, so config-only CI checks
+    must parse it using Windows path rules. Actual writes still pass through
+    ``validate_output_path`` and the platform-native ``Path`` checks.
+    """
+    path = PureWindowsPath(value)
+    return path.is_absolute() and path.drive.upper() == "C:"
 
 
 def write_json(path, value):
@@ -147,8 +159,7 @@ def validate_config(config):
         raise ValueError("unsupported input intervention")
     if len(interventions) != len(set(interventions)):
         raise ValueError("duplicate input intervention")
-    output_root = Path(config["output_root"]).resolve()
-    if output_root.drive.upper() != "C:":
+    if not is_local_c_absolute_path(config["output_root"]):
         raise ValueError("artifact output root must resolve to the local C: volume")
     if config.get("staging_receipt_sha256") == "TO_BE_FILLED_AFTER_LOCAL_COPY":
         raise ValueError("local frozen-input copy must be hashed and pinned first")
