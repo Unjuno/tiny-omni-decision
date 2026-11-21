@@ -81,6 +81,20 @@ protocol, but it is not an independent replication.
 
 - CPU training: 77.54 seconds, 4 threads; text feature extraction: 4.32
   seconds; 2,560 optimizer updates. CUDA was not used; cloud cost was zero.
+- Run window recorded from the OOF report and output timestamp:
+  2026-11-21 17:45:55–17:47:19 UTC. Code source commit:
+  `3c3f35dbde06bb062cae62b1a8d274cb1ddac8ee`.
+- Exact invocation:
+  `python scripts/run_habit_train_only_grouped_oof.py --package-dir C:\CodexLocalArtifacts\pretrained-reuse-r2\habit-data-scaleup-seed17-attempt-01\decision-package --text-model C:\CodexArtifacts\pretrained-reuse-r2\models\text-minilm-en --config configs\pretrained_reuse\habit_train_only_grouped_oof_data_scale.yaml --output C:\CodexLocalArtifacts\pretrained-reuse-r2\habit-data-scaleup-seed17-attempt-01\train-only-grouped-oof`.
+- Environment: Python 3.11.9, Windows 10 build 26300, PyTorch 2.6.0+cu124,
+  Transformers 5.6.2, NumPy 2.4.6 and PyYAML 6.0.3. The run explicitly used
+  CPU and four PyTorch threads; CUDA availability in the installed build does
+  not mean the run used the GPU.
+- Text encoder: `sentence-transformers/paraphrase-MiniLM-L3-v2`, revision
+  `4ca70771034acceecb2e72475f72050fcdde4ddc`, 17,389,824 parameters;
+  `model.safetensors` SHA-256
+  `cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433`.
+  The file hash was checked before the run and rechecked after it.
 - Frozen package path:
   `C:\CodexLocalArtifacts\pretrained-reuse-r2\habit-data-scaleup-seed17-attempt-01\decision-package`.
 - External OOF output path:
