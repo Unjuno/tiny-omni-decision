@@ -1,3 +1,15 @@
+**2026-11-21 R2 TallyQA-VG TRAIN-only grouped CV:** The fixed five-fold
+nested group CV over 3,101 source TRAIN questions completed. Image+question
+scored 55.37% / 1.0711 NLL / 0.5820 Brier; question-only scored 56.56% /
+1.0753 / 0.5821. Paired component-bootstrap intervals include zero. Zeroing
+image on the selected joint readout reduced Accuracy by 2.00 pp and worsened
+proper scores, indicating input sensitivity but not demonstrated held-group
+benefit. Saved checkpoints reproduced all OOF probabilities exactly. This
+retrospective four-choice adaptation is not product-quality evidence; do not
+continue tuning this source. Official validation/test and sealed audit remain
+unopened. See [protocol](docs/pretrained_reuse/R2_TALLYQA_VG_TRAIN_GROUP_CV_PROTOCOL_20261121.md)
+and [results](docs/pretrained_reuse/R2_TALLYQA_VG_TRAIN_GROUP_CV_RESULTS_20261121.md).
+
 **2026-11-21 R2-M vibration temporal-bandwidth audit:** A fixed, hash-verified
 TRAIN-only sample of 133 activity × participant trials shows the current
 whole-record 128-point linear interpolation gives duration-dependent Nyquist

@@ -91,6 +91,12 @@ model/text-feature inference: attempt 01 rejected repeated questions per image
 as duplicate image rows; attempt 02's label-stratified greedy split produced
 two outer folds with only 18 rows each. Both attempts are preserved outside
 Git; neither fitted or scored a model. The fixed label-blind component-size
-assignment and attempt 03 receipt are frozen before fitting. The source commit,
-code and input hashes, local environment, runtime, fold-level results and
-final decision will be appended after the one fixed run.
+assignment and attempt 03 receipt were frozen before fitting. The source
+commit, code and input hashes, environment, runtime, fold-level results, and
+decision are recorded in [the results report](R2_TALLYQA_VG_TRAIN_GROUP_CV_RESULTS_20261121.md).
+The runner-reported elapsed time covers the fold-fit/scoring/bootstrap section
+only; it excludes initial input and feature preparation. Exact command history
+was not persisted, and peak VRAM was not recorded. Selected checkpoints and
+OOF predictions were hash-verified and replayed exactly. Official validation,
+official test, and sealed audit remain unopened. Do not retune this source or
+claim that image input improves held-group performance based on this result.
