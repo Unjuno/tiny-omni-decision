@@ -58,6 +58,31 @@ counts are annotation support, not independent Decision examples. The
 `action` field exists but was read only to inspect its dimensionality; it is
 excluded from the intended input.
 
+## Unique semantic choice mapping
+
+The metadata audit across the frozen train and development-validation IDs
+found repeated candidate wording in 5,273 of 9,113 episodes (11,333 repeated
+entries). These repeats occur when the same action text appears at multiple
+workflow positions. The Parquet target is a global `low_level_task_index`, so
+the adapter resolves its catalog text, deduplicates exact NFKC/case/whitespace
+normalized option text while preserving first-seen order, and maps the target
+to that unique semantic option. It fails closed if the target text is absent
+or fewer than two unique options remain. The schema and behavior are in
+`src/tiny_omni_decision/habit_decision.py`; CPU tests cover duplicate collapse,
+global-ID mapping and malformed targets.
+
+After deduplication, option counts across the non-audit train/validation IDs
+are: 2,421 episodes with one unique action, 2,532 with two, 2,334 with three,
+1,707 with four, and 119 with six. Single-action episodes cannot form a
+choice task and must be excluded from a multi-option Decision pilot; this is a
+data-coverage limitation, not permission to invent distractors. On the two
+already acquired Parquets, all 653 train and 469 validation frame labels map
+to a unique semantic option (3 and 4 distinct options respectively). This is
+still only a two-episode schema check, not evidence for the rest of the split.
+The fixed mapping receipt is saved outside Git at
+`C:\CodexArtifacts\pretrained-reuse-r2\habit-label-schema-20261121-attempt-02\habit-choice-mapping.json`
+(SHA-256 `ae5e47d388224c26740c9001a4641d89950a6c35750e61c0d93f03c7bf4963ce`).
+
 ## Interpretation
 
 The pinned video encoder, decoder, feature shape, robot-state field, and

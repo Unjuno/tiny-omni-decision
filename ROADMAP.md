@@ -8,6 +8,11 @@ VideoPrism-B CPU features; two Parquets passed target/option mapping. This is
 runtime plumbing only, not quality evidence. See [source screen](docs/pretrained_reuse/R2_HABIT_SOURCE_SCREEN_20261121.md),
 [mapping smoke](docs/pretrained_reuse/R2_HABIT_DATA_MAPPING_SMOKE_20261121.md),
 and [manifest](manifests/pretrained_reuse/habit-source-screen-20261121.json).
+The option audit found repeated action text in 5,273/9,113 eligible
+train/validation episodes; `habit_decision.py` collapses repeats to unique
+semantic choices and fails closed on one-choice or unmappable targets. The two
+existing Parquet samples pass all 1,122 frame-label mappings. Broader data and
+quality admission remain open.
 
 **2026-11-21 R2-M Zenodo audio+vibration follow-up:** The 25 source archives
 (4.57 GB) were hash-verified; only `multisensor-1` was used under a frozen
