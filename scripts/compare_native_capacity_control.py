@@ -45,6 +45,13 @@ def checked_receipt(folder, expected_status, expected_sha=None):
     return receipt, digest
 
 
+def verify_artifacts(folder, receipt):
+    for filename, expected in receipt["artifacts"].items():
+        if sha(folder / filename) != expected:
+            raise ValueError(f"artifact hash mismatch: {folder.name}/{filename}")
+    return len(receipt["artifacts"])
+
+
 def frozen_data_pins(receipt):
     prefixes = tuple(
         str(ROOT / name).replace("/", "\\").lower() + "\\"
@@ -149,6 +156,8 @@ def main():
             folder, "PASS_NATIVE_FIT_TRAIN", expected_sha
         )
     replay, replay_sha = checked_receipt(args.capacity_replay, "PASS_NATIVE_FIT_REPLAY")
+    verified_control_artifacts = verify_artifacts(args.capacity_run, receipts["capacity_mlp"])
+    verified_replay_artifacts = verify_artifacts(args.capacity_replay, replay)
     control = receipts["capacity_mlp"]
     if replay["reference_sha256"] != receipt_hashes["capacity_mlp"]:
         raise ValueError("capacity control replay does not match its training receipt")
@@ -277,7 +286,9 @@ def main():
             "reference_sha256": replay["reference_sha256"],
             "max_abs_prediction_delta": replay["replay_max_abs"],
             "exact_reload_verified": replay["replay_max_abs"] == 0,
+            "verified_artifact_count": verified_replay_artifacts,
         },
+        "capacity_control_verified_artifact_count": verified_control_artifacts,
         "limits": [
             "The development validation and selector were observed in the earlier "
             "baseline/LSTM comparison.",
