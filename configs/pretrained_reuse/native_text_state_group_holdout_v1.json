@@ -2,6 +2,8 @@
   "id": "native-text-state-group-holdout-v1",
   "corpus_root": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02",
   "query_cache_root": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-language-cache-02",
+  "text_state_bank_sha256": "88a010df86f21ffaa94a40f6e6dedab75e73be0bebe54e17dfa01fb5138f6e99",
+  "text_query_bank_sha256": "e123c9c7fdc2af85fa4fa50eb3be9e2de1ce013144561ee6e35c1c95e6185be3",
   "input_pins": {
     "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02\\result.json": "47a6d2f3495810bac58f57dec1a962f8b490fa409c75671b46bb2999fde87d49",
     "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02\\train.jsonl": "d279ca44c6ff8e619529805be21675a8b4088fdcc476c7bb04649abdb5e60ebb",
