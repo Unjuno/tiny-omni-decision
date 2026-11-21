@@ -282,7 +282,24 @@ def build_preflight(config_path, output):
         "sealed_audit_opened": False,
     }
     write_json(output / "preflight.json", receipt)
-    print(json.dumps(receipt, ensure_ascii=False, indent=2))
+    print(
+        json.dumps(
+            {
+                "status": receipt["status"],
+                "source_commit": source_commit,
+                "config_sha256": receipt["config_sha256"],
+                "split": description,
+                "feature_metadata": feature_metadata,
+                "training_draws_planned": receipt["training_draws_planned"],
+                "training_unique_rows": receipt["training_unique_rows"],
+                "training_repeated_draws_planned": receipt["training_repeated_draws_planned"],
+                "validation_jsonl_opened": False,
+                "sealed_audit_opened": False,
+            },
+            ensure_ascii=False,
+            indent=2,
+        )
+    )
 
 
 class TrainTextFeatureStore:
