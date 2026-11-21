@@ -8,6 +8,15 @@ wrapper-directory assumption was fixed and covered by CPU tests. See the
 [protocol and full external report receipt](docs/pretrained_reuse/R2M_DEXTRAVERSE_CONTACT_DECISION_PROTOCOL_20261122.md)
 and [manifest](manifests/pretrained_reuse/dextraverse-contact-decision-source-preflight-20261122.json).
 
+**2026-11-22 R2-M VistaData-Bimanual metadata screen:** The pinned CC BY 4.0
+release contains one unscrew-coffee-jar task and 30 Zarr episode groups, but no
+documented independent participant/session grouping, official split, or
+supplied-option Decision target requiring both video and touch. Only sparse
+ZIP metadata ranges were read; the 8.12 GB archive was not saved, and no media
+or model was used. Keep `REVIEW_NOT_ADMITTED`; at most this supports a small
+within-task pilot after task and grouping are frozen. See [screen](docs/pretrained_reuse/R2M_VISTADATA_BIMANUAL_METADATA_SCREEN_20261122.md)
+and [manifest](manifests/pretrained_reuse/vistadata-bimanual-metadata-screen-20261122.json).
+
 **2026-11-22 R2-M HABIT data scale-up:** Expanded the same frozen train and
 validation selection from 202/76 to 606/228 transitions and trained all four
 seed-17 readout arms for the fixed 80 epochs. Every arm selected epoch 2, then
