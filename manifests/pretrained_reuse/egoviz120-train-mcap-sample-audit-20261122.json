@@ -1,0 +1,115 @@
+{
+  "format": "egoviz120_train_mcap_sample_audit_v1",
+  "dataset_id": "EgoViz-120",
+  "status": "REVIEW_NOT_ADMITTED",
+  "source_index": {
+    "sha256": "c83126637cc24a7ac2b3600724b50cf9c53966b9b098acc57d5534e14ade1074",
+    "bytes": 870961
+  },
+  "sample": {
+    "group_id": "g114",
+    "chunk_id": "c59801fe4172cf9b430cd9232dda3909",
+    "category": "cleaning_restroom",
+    "title": "Wiping bathroom sinks and faucets",
+    "duration_seconds": 15,
+    "actions": 2,
+    "phases": 5,
+    "bytes": 150184348,
+    "sha256": "c86d1d69df71953b0b7fe1d61cfbc919743d1c108a2a0adc30b5c1a449e2e7d4",
+    "source_split": "existing frozen train group"
+  },
+  "local_artifacts": {
+    "actual_c_root": "C:/CodexLocalArtifacts/pretrained-reuse-r2/egoviz120-train-mcap-audit-20261122-attempt-01",
+    "mcap": "c59801fe4172cf9b430cd9232dda3909.mcap",
+    "preview": {
+      "path": "head-left-frame-225-640x400.png",
+      "sha256": "e8e3dc5ec4b3d9c816f00673f9f25f2ca8dcafdb58fb8a39ae2ca5c83fe0ec4b"
+    },
+    "venv_packages": {
+      "python": "3.11.9",
+      "mcap": "1.6.0",
+      "mcap_protobuf_support": "0.6.0",
+      "mcap_ros2_support": "0.6.0",
+      "av": "15.1.0",
+      "Pillow": "11.1.0"
+    },
+    "project_requirements_changed": false,
+    "repository_media_committed": false
+  },
+  "decode": {
+    "topic": "/ego/zed_head/left/image/compressed",
+    "format": "h264",
+    "messages": 449,
+    "decoded_frames": 449,
+    "dimensions": [
+      1920,
+      1200
+    ],
+    "corrupt_frames": 0,
+    "spot_check": {
+      "frame_index_zero_based": 224,
+      "preview_dimensions": [
+        640,
+        400
+      ],
+      "visual_observation": "first-person sink-cleaning view; broad label consistent"
+    },
+    "sampled_luma_sha256": [
+      {
+        "frame_count": 1,
+        "sha256": "526fc2ceadf22933ba7d3574eb78c895e0c7cb0f3019c9d0492c18da86c176ef"
+      },
+      {
+        "frame_count": 225,
+        "sha256": "1a427d9d322d3e29838ec6226e80669cb37957be9a98d67153c62f45f8375538"
+      },
+      {
+        "frame_count": 449,
+        "sha256": "f327d50800cd7f39d29673bc0ddeda46ba29c11ee449829304c8d19ee378952d"
+      }
+    ]
+  },
+  "channels": {
+    "head_left_video_frames": 449,
+    "head_right_video_frames": 449,
+    "wrist_left_video_frames": 450,
+    "wrist_right_video_frames": 450,
+    "head_imu_records": 2993,
+    "wrist_left_imu_records": 3001,
+    "wrist_right_imu_records": 2992,
+    "action_records": 449,
+    "audio_topic_listed": false
+  },
+  "timing": {
+    "head_left_and_head_right_exact_timestamp_matches": true,
+    "every_head_left_frame_has_wrist_frame_within_ms": 5.0,
+    "max_nearest_imu_distance_to_head_left_ms": 3.8,
+    "action_timestamps_match_head_left_video": true,
+    "phase_label_transition_indices_zero_based": [
+      0,
+      41,
+      71,
+      285,
+      330
+    ],
+    "declared_phase_start_frames": [
+      0,
+      40,
+      70,
+      284,
+      329
+    ],
+    "boundary_interpretation": "one-message offset after initial phase in one clip; frame-index/end-point convention unresolved; not corrected"
+  },
+  "gates": {
+    "train_payload_only": true,
+    "development_payload_read": false,
+    "test_payload_read": false,
+    "sealed_audit_created_or_accessed": false,
+    "model_training_or_evaluation": false,
+    "video_imu_necessity_established": false,
+    "participant_independence_established": false,
+    "human_label_verification_established": false
+  },
+  "decision": "Decodable synchronized sample; keep source unadmitted pending label provenance, participant identity, and task/input-necessity gates."
+}
