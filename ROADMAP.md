@@ -10,6 +10,17 @@ run as negative/limited data-scale evidence and seek new grouped data before
 further fitting. See [results](docs/pretrained_reuse/R2M_HABIT_DATA_SCALE_RESULTS_20261122.md)
 and [manifest](manifests/pretrained_reuse/habit-data-scale-results-20261122.json).
 
+**2026-11-22 R2-M HABIT expanded-train grouped OOF:** A fixed five-fold,
+train-only OOF run evaluated the same four readout arms at epochs 1/2/4/8 on
+606 rows, grouped into 37 connected task/video components. Train CE fell while
+OOF NLL generally worsened after epoch 1. At epoch 8, video+state was below
+state-only (38.1% vs 42.7% Accuracy; 1.141 vs 1.078 NLL); paired component
+bootstrap supports a negative difference on this development sample. The
+video-only contrast remains uncertain. No validation, sealed audit or
+checkpoint selection was used. Stop fitting this fixed pilot and seek a new
+independent task/source. See [diagnostics](docs/pretrained_reuse/R2M_HABIT_DATA_SCALE_TRAIN_ONLY_DIAGNOSTICS_20261122.md)
+and [manifest](manifests/pretrained_reuse/habit-data-scale-train-only-grouped-oof-20261122.json).
+
 **2026-11-22 R2-M AVSBench source screen:** The publisher documents an audio-video sound-source segmentation task with pixel-level masks, including multi-object scenes where only some visible objects are sounding. The dataset is CC BY-NC 4.0; its Apache-2.0 code license does not broaden data rights. The dense-mask target is also distinct from supplied-option JSON Decision. No annotations/media were downloaded, no access request sent, and no model was run. Keep it outside the product-training pool; reconsider only for a separately scoped noncommercial grounding study. See [source screen](docs/pretrained_reuse/R2_AVSBENCH_SOURCE_SCREEN_20261122.md) and [receipt](manifests/pretrained_reuse/avsbench-source-screen-20261122.json).
 **2026-11-22 R2-M Eidon Tracker POV metadata screen:** Pinned CC BY 4.0
 video/IMU repositories publish 13,451 recordings from 27 contributors with

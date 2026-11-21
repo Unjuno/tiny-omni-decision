@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "status": "TRAIN_ONLY_GROUPED_OOF_COMPLETE",
+  "experiment_id": "habit-train-only-grouped-oof-seed17-data-scale-v1",
+  "source_revision": "bae97d251907743f8fb6db7e70c61d361df4dc1e",
+  "source_package_report_sha256": "062013df3edf0c63c84e4c43edeb454430cf896a0ed75d5500011d2f492d505e",
+  "transition_examples_sha256": "87b405ba343f4a251bd3450f306514e552a66b860b9cc558fd65880c09d2f8f5",
+  "feature_cache_sha256": "5c494417aa0946041881f5a9305eb852d617769dc3261dda99c9772bb6301928",
+  "config": "configs/pretrained_reuse/habit_train_only_grouped_oof_data_scale.yaml",
+  "config_sha256": "ba26367e4aa5a36b77bc007d1062e7d705f8efe2b6a136131ebe330d382718c8",
+  "training_script_sha256": "ac31caf092ba477be36e23813f43015c426c7a60059ba5859b50f3ba139d9008",
+  "analysis_script_sha256": "6552f6a8a5d0b1122fbdfe8cbb81fe99cd4b0d72e4ca1c9a699064e902f1311c",
+  "training_script": "scripts/run_habit_train_only_grouped_oof.py",
+  "analysis_script": "scripts/analyze_habit_train_only_grouped_oof.py",
+  "external_output_directory": "C:\\CodexLocalArtifacts\\pretrained-reuse-r2\\habit-data-scaleup-seed17-attempt-01\\train-only-grouped-oof",
+  "report_sha256": "6b5032ce706ecae94b41374bc88f4431b8b5c6ca90d72aa8ad95e1dbdc75b947",
+  "fold_membership_sha256": "c5e698aa7acc80fc8de0a479d5a06b754309197bf530b3ea0aeec204a308bd79",
+  "paired_component_bootstrap_sha256": "716ea708e960d3e94632a5384fe53827ad32369ea99c3c0940c96ecbe964d86c",
+  "started_at_utc": "2026-11-21T17:45:55.541928+00:00",
+  "compute": {
+    "device": "CPU",
+    "cpu_threads": 4,
+    "training_seconds": 77.53997639997397,
+    "text_feature_extraction_seconds": 4.317726299981587,
+    "optimizer_updates": 2560,
+    "training_row_presentations": 77568,
+    "cloud_cost": 0
+  },
+  "protocol": {
+    "seed": 17,
+    "folds": 5,
+    "grouping": "connected components of task-group ID and video SHA-256",
+    "train_rows": 606,
+    "task_groups": 37,
+    "unique_videos": 198,
+    "connected_components": 37,
+    "epochs_per_fold_and_arm": 8,
+    "fixed_observation_epochs": [1, 2, 4, 8],
+    "readouts": ["text_only", "video_only", "state_only", "video_state"],
+    "checkpoint_selection": false,
+    "early_stopping": false,
+    "development_validation_metrics_computed": false,
+    "sealed_audit_accessed": false
+  },
+  "key_epoch8_metrics": {
+    "state_only": {
+      "accuracy": 0.4273927392739274,
+      "nll": 1.0775600903154205,
+      "brier": 0.6316919667637068,
+      "ece_15_bins": 0.101
+    },
+    "video_state": {
+      "accuracy": 0.3811881188118812,
+      "nll": 1.1413009615719516,
+      "brier": 0.6711589984369861,
+      "ece_15_bins": 0.164
+    }
+  },
+  "interpretation": "Train-only grouped OOF shows falling train CE and worsening heldout metrics after epoch 1; fusion is mixed versus video-only and worse than state-only by epoch 8. Development diagnosis only; no product quality or generalization claim."
+}

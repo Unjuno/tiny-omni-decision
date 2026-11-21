@@ -1,12 +1,16 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 import torch
+import yaml
 
 from scripts.run_habit_train_only_grouped_oof import (
     assign_folds,
     connected_components,
     evaluate_oof,
+    validate_oof_config,
 )
 
 
@@ -66,3 +70,13 @@ def test_oof_metric_aggregation_requires_exact_train_row_coverage() -> None:
     assert [row["sample_id"] for row in report["predictions"]] == ["train:0", "train:1"]
     with pytest.raises(ValueError, match="exactly once"):
         evaluate_oof({0: predictions[0]}, [0, 1], rows)
+
+
+def test_data_scale_oof_config_is_fixed_and_train_only() -> None:
+    config_path = Path("configs/pretrained_reuse/habit_train_only_grouped_oof_data_scale.yaml")
+    config = yaml.safe_load(config_path.read_text(encoding="utf-8"))
+
+    assert validate_oof_config(config) == "habit-train-only-grouped-oof-seed17-data-scale-v1"
+    config["data"]["included_split"] = "validation"
+    with pytest.raises(ValueError, match="fixed train-only"):
+        validate_oof_config(config)

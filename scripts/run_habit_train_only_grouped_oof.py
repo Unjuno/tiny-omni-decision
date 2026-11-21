@@ -14,6 +14,7 @@ from typing import Any
 
 import numpy as np
 import torch
+import yaml
 from torch import Tensor, nn
 from torch.nn import functional as F
 
@@ -141,16 +142,65 @@ def _fold_train_normalizer(
     return mean, std
 
 
-def run(package_dir: Path, text_model: Path, output: Path) -> dict[str, Any]:
+def validate_oof_config(config: dict[str, Any]) -> str:
+    """Reject any config that changes the reviewed train-only OOF protocol."""
+    training = config.get("training", {})
+    data = config.get("data", {})
+    evaluation = config.get("evaluation", {})
+    prohibitions = config.get("prohibitions", {})
+    expected = (
+        config.get("schema_version") == 1
+        and config.get("experiment_id") == "habit-train-only-grouped-oof-seed17-data-scale-v1"
+        and config.get("seed") == base.SEED
+        and config.get("device") == "cpu"
+        and training.get("epochs") == EPOCHS
+        and training.get("batch_size") == base.BATCH_SIZE
+        and training.get("learning_rate") == base.LEARNING_RATE
+        and training.get("weight_decay") == base.WEIGHT_DECAY
+        and training.get("checkpoint_selection") == "none"
+        and training.get("early_stopping") is False
+        and data.get("package_revision") == "bae97d251907743f8fb6db7e70c61d361df4dc1e"
+        and data.get("included_split") == "train"
+        and data.get("train_examples") == 606
+        and data.get("task_video_components") == 37
+        and data.get("folds") == FOLD_COUNT
+        and data.get("validation_split_used") is False
+        and evaluation.get("sealed_audit_accessed") is False
+        and evaluation.get("development_validation_metrics_computed") is False
+        and prohibitions.get("sealed_audit_accessed") is False
+        and prohibitions.get("hyperparameter_search") is False
+        and prohibitions.get("checkpoint_selection") is False
+    )
+    if not expected:
+        raise ValueError("OOF config differs from the fixed train-only protocol")
+    return str(config["experiment_id"])
+
+
+def run(package_dir: Path, text_model: Path, output: Path, config_path: Path) -> dict[str, Any]:
     if output.exists():
         raise FileExistsError(f"refusing to overwrite output: {output}")
     output.mkdir(parents=True)
     torch.manual_seed(base.SEED)
     torch.set_num_threads(4)
     started_at = datetime.now(UTC).isoformat()
+    config_bytes = config_path.read_bytes()
+    config = yaml.safe_load(config_bytes)
+    experiment_id = validate_oof_config(config)
     package_report_path = package_dir / "package-report.json"
     examples_path = package_dir / "transition-examples.json"
     feature_path = package_dir / "habit-transition-features.npz"
+    expected_hashes = {
+        "package_report_sha256": config["data"]["package_report_sha256"],
+        "transition_examples_sha256": config["data"]["transition_examples_sha256"],
+        "feature_cache_sha256": config["data"]["feature_cache_sha256"],
+    }
+    actual_hashes = {
+        "package_report_sha256": base.sha256_file(package_report_path),
+        "transition_examples_sha256": base.sha256_file(examples_path),
+        "feature_cache_sha256": base.sha256_file(feature_path),
+    }
+    if actual_hashes != expected_hashes:
+        raise ValueError("frozen train package hashes differ from the reviewed config")
     package_report = json.loads(package_report_path.read_text(encoding="utf-8"))
     if (package_report.get("status") != "complete_text_aligned_frozen_feature_package"
             or package_report.get("sealed_audit_accessed") is not False
@@ -173,8 +223,9 @@ def run(package_dir: Path, text_model: Path, output: Path) -> dict[str, Any]:
         if row.get("split") == "train"
     ]
     examples = [example_package["records"][position] for position in original_train_positions]
-    if len(examples) != 202 or any(row.get("split") != "train" for row in examples):
-        raise ValueError(f"expected 202 fixed train rows, got {len(examples)}")
+    if (not examples or any(row.get("split") != "train" for row in examples)
+            or len(examples) != config["data"].get("train_examples")):
+        raise ValueError(f"train rows do not match config, got {len(examples)}")
     with np.load(feature_path, allow_pickle=False) as cached:
         ids = cached["ids"].tolist()
         if ids != all_ids:
@@ -183,8 +234,9 @@ def run(package_dir: Path, text_model: Path, output: Path) -> dict[str, Any]:
             name: cached[name][original_train_positions].copy()
             for name in ("ids", "video_features", "sensor_sequence", "option_count", "target_index")
         }
-    if (arrays["video_features"].shape != (202, 8, 768)
-            or arrays["sensor_sequence"].shape != (202, 8, 14)):
+    row_count = len(examples)
+    if (arrays["video_features"].shape != (row_count, 8, 768)
+            or arrays["sensor_sequence"].shape != (row_count, 8, 14)):
         raise ValueError("train feature cache has unexpected shapes")
     for index, row in enumerate(examples):
         if (len(row["options"]) < 2 or len(row["options"]) != arrays["option_count"][index]
@@ -196,7 +248,8 @@ def run(package_dir: Path, text_model: Path, output: Path) -> dict[str, Any]:
     train_indices = list(range(len(examples)))
     folds = assign_folds(examples, train_indices)
     components = connected_components(examples, train_indices)
-    if len(components) != 36 or sum(map(len, folds)) != len(train_indices):
+    if (len(components) != config["data"].get("task_video_components")
+            or sum(map(len, folds)) != len(train_indices)):
         raise ValueError("unexpected component count or fold coverage")
 
     context, option_rows, text_seconds = base._encode_text(
@@ -288,15 +341,13 @@ def run(package_dir: Path, text_model: Path, output: Path) -> dict[str, Any]:
     }
     payload = {
         "status": "TRAIN_ONLY_GROUPED_OOF_COMPLETE",
-        "experiment_id": "habit-train-only-grouped-oof-seed17-v0",
+        "experiment_id": experiment_id,
         "started_at_utc": started_at,
         "source_revision": "bae97d251907743f8fb6db7e70c61d361df4dc1e",
         "package_report_sha256": base.sha256_file(package_report_path),
         "transition_examples_sha256": base.sha256_file(examples_path),
         "feature_cache_sha256": base.sha256_file(feature_path),
-        "config_sha256": base.sha256_file(
-            Path("configs/pretrained_reuse/habit_train_only_grouped_oof.yaml")
-        ),
+        "config_sha256": __import__("hashlib").sha256(config_bytes).hexdigest(),
         "script_sha256": base.sha256_file(Path(__file__)),
         "seed": base.SEED,
         "fold_count": len(folds),
@@ -338,8 +389,9 @@ def main() -> None:
     parser.add_argument("--package-dir", type=Path, required=True)
     parser.add_argument("--text-model", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--config", type=Path, required=True)
     args = parser.parse_args()
-    report = run(args.package_dir, args.text_model, args.output)
+    report = run(args.package_dir, args.text_model, args.output, args.config)
     print(json.dumps({
         "status": report["status"],
         "fold_count": report["fold_count"],
