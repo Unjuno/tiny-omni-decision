@@ -1,8 +1,8 @@
 # HABIT temporal Decision readout protocol — 2026-11-21
 
-## Status before fitting
+## Run status
 
-`CPU_READOUT_SMOKE_PASS; QUALITY_NOT_MEASURED`. A two-example smoke passed
+`CPU_80_EPOCHS_COMPLETE; VALIDATION_PILOT_RECORDED`. A two-example smoke passed
 for the text-only, video-only, state-only and paired readouts. Each returned
 finite masked logits in supplied option order. It used local frozen features
 and MiniLM; it did not update parameters. The smoke receipt is outside Git at
@@ -82,3 +82,69 @@ a larger rights-cleared grouped validation cohort is admitted.
 
 The effective settings are fixed in
 [`habit_temporal_decision.yaml`](../../configs/pretrained_reuse/habit_temporal_decision.yaml).
+
+## Observed outcome
+
+The CPU run completed all 80 epochs for all four arms (2,240 optimizer updates,
+64,640 train presentations). Best validation macro task-group NLL selected
+epoch 4 for every arm. At epochs 16–80, all arms show rising validation NLL
+while training NLL continues to fall; video-only and paired video+state reach
+near-zero training loss by epoch 80. This is clear overfitting on this pilot.
+
+| Arm | Epoch | Train NLL | Validation NLL | Validation macro group NLL |
+| --- | ---: | ---: | ---: | ---: |
+| Text/options | 4 | 0.9388 | 0.9931 | 0.9959 |
+| Text/options | 16 | 0.8758 | 1.0562 | 1.0995 |
+| Text/options | 80 | 0.8203 | 1.4224 | 1.5985 |
+| Video + text | 4 | 0.9450 | 0.9936 | 0.9936 |
+| Video + text | 16 | 0.5637 | 1.3664 | 1.4195 |
+| Video + text | 80 | 0.0001 | 6.4498 | 6.2325 |
+| State + text | 4 | 0.9455 | 0.9941 | 0.9938 |
+| State + text | 16 | 0.6832 | 1.2378 | 1.2880 |
+| State + text | 80 | 0.2634 | 4.7459 | 4.8717 |
+| Video + state + text | 4 | 0.9387 | 0.9907 | 0.9921 |
+| Video + state + text | 16 | 0.5810 | 1.4082 | 1.3307 |
+| Video + state + text | 80 | 0.0001 | 7.0662 | 5.9514 |
+
+Training NLL is evaluated over the fixed train rows after each epoch; the
+per-epoch mean batch cross-entropy is also retained in each history file.
+
+| Arm (best epoch) | Accuracy | NLL | Brier | ECE (15 bins) | Macro group Accuracy | Macro group NLL |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Text/options (4) | 0.5263 | 0.9931 | 0.5946 | 0.0580 | 0.5119 | 0.9959 |
+| Video + text (4) | 0.5263 | 0.9936 | 0.5956 | 0.0677 | 0.5119 | 0.9936 |
+| State + text (4) | 0.4868 | 0.9941 | 0.5960 | 0.0786 | 0.4494 | 0.9938 |
+| Video + state + text (4) | 0.4737 | 0.9907 | 0.5936 | 0.0833 | 0.4286 | 0.9921 |
+
+The paired arm has the lowest sample-weighted and macro-group NLL, but lower
+sample Accuracy than text-only/video-only and worse ECE than all three arms.
+Its 2,000-draw, seed-17 paired task-group bootstrap mean Accuracy difference
+was -0.0833 versus text-only and video-only; both 95% percentile intervals were
+[-0.25, 0.0]. The corresponding macro-group NLL differences were -0.00375
+[-0.01147, 0.00178] and -0.00147 [-0.00446, 0.00169], respectively. With six
+groups these intervals are coarse and selection-affected.
+
+On the selected paired checkpoint, removing video changed Accuracy by 0 and
+NLL from 0.9907 to 0.9976; removing state changed Accuracy by 0 and NLL to
+0.9988. Cross-group video and state shuffles also left Accuracy unchanged and
+changed NLL by only +0.00027 and +0.00054. This is weak input-dependence
+evidence, not a useful demonstration that both streams are needed. The small
+validation set and six groups preclude stronger conclusions.
+
+The training process wrote all four 80-epoch histories and separate best/last
+checkpoints, then exited before serializing its aggregate report: a random
+permutation search could not satisfy the cross-group video shuffle on the
+imbalanced validation groups. The search was replaced with deterministic
+bipartite matching and covered by CPU tests. Training was not resumed or
+repeated. The four saved best checkpoints were reloaded and checked against the
+fixed selector; controls, predictions and aggregate report were then generated
+from those saved weights. The report marks original run duration and finish
+time `UNKNOWN`, because the initial process did not save run metadata. Artifacts
+are in `C:\CodexArtifacts\pretrained-reuse-r2\habit-temporal-decision-20261121-attempt-01`;
+the report SHA-256 is `ddf80c86bf430ddec33e239a29b7b74538ed44044a96399de65cd8bb2bcbb602`.
+
+This result does not establish broad temporal fusion quality, 95–98% accuracy,
+or four-modality quality. It instead flags overfitting and insufficient
+validation-group coverage. Do not promote or quantize this readout. A next
+quality experiment needs more independent, rights-cleared task groups before
+architecture tuning.

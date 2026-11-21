@@ -1,0 +1,106 @@
+{
+  "format": "r2_habit_temporal_decision_experiment_v1",
+  "recorded_at": "2026-11-21",
+  "status": "CPU_80_EPOCHS_COMPLETE_REPORT_RECOVERED_OVERFIT_OBSERVED",
+  "experiment": {
+    "id": "habit-temporal-decision-cpu-seed17-v0",
+    "seed": 17,
+    "device": "cpu",
+    "training_source_commit": "91b70d611a8ffe24bfe049880fb0ac14677f5782",
+    "recovery_fix_commit": "b25c262f",
+    "config_sha256": "49dbf7ba46595f22f806da82a36d1ad9d593484dbaecbef4b9d4d0f49a3304d1",
+    "training_script_sha256": "f7963a5baccf494c828521e20a078a345c41e47bdadd3b5f5ca0cbf6cc210366",
+    "epochs_per_arm": 80,
+    "updates_per_arm": 560,
+    "train_presentations_per_arm": 16160,
+    "total_optimizer_updates": 2240,
+    "total_train_presentations": 64640,
+    "early_stopping": false,
+    "selected_epoch_by_arm": {
+      "text_only": 4,
+      "video_only": 4,
+      "state_only": 4,
+      "video_state": 4
+    },
+    "selection": "minimum_validation_macro_task_group_nll_min_delta_0.0001"
+  },
+  "dataset": {
+    "name": "HABIT",
+    "revision": "bae97d251907743f8fb6db7e70c61d361df4dc1e",
+    "license": "CC BY 4.0",
+    "package_report_sha256": "90b63ec050a0836c6f2f611b8edcbeb72bf7c64ded7b15b9f02e6a9e29b6b91d",
+    "transition_examples_sha256": "550c1725c547bef3784f8ef83f520aaf9baea4e23b19817cfe2cc631621d4292",
+    "feature_cache_sha256": "654cd9001fde2329719840889381a9ffa3d5763f65386ba0d5fdba7fc1039076",
+    "train_examples": 202,
+    "validation_examples": 76,
+    "train_task_groups": 36,
+    "validation_task_groups": 6,
+    "sealed_audit_accessed": false,
+    "test_split_loaded": false,
+    "action_columns_read": false
+  },
+  "encoders": {
+    "videoprism_b": {
+      "revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+      "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+      "parameters": 114365184,
+      "frozen": true
+    },
+    "minilm_l3": {
+      "revision": "4ca70771034acceecb2e72475f72050fcdde4ddc",
+      "weights_sha256": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433",
+      "parameters": 17389824,
+      "frozen": true
+    }
+  },
+  "validation_metrics": {
+    "metric_order": ["accuracy", "nll", "brier", "ece_15_bins", "macro_group_accuracy", "macro_group_nll"],
+    "text_only": [0.5263157895, 0.9931139130, 0.5945985858, 0.0579740205, 0.5119047619, 0.9958635337],
+    "video_only": [0.5263157895, 0.9936063603, 0.5956197136, 0.0677458926, 0.5119047619, 0.9935829790],
+    "state_only": [0.4868421053, 0.9940503138, 0.5960042167, 0.0786498393, 0.4494047619, 0.9937866505],
+    "video_state": [0.4736842105, 0.9906653966, 0.5935614742, 0.0833079678, 0.4285714286, 0.9921140177]
+  },
+  "interpretation": {
+    "overfitting_observed": true,
+    "paired_input_necessity_demonstrated": false,
+    "claim_scope": "one_seed_six_task_group_exposed_development_validation_pilot",
+    "product_promotion": false,
+    "quantization": false
+  },
+  "run_artifacts": {
+    "directory": "C:/CodexArtifacts/pretrained-reuse-r2/habit-temporal-decision-20261121-attempt-01",
+    "experiment_report_sha256": "ddf80c86bf430ddec33e239a29b7b74538ed44044a96399de65cd8bb2bcbb602",
+    "predictions_sha256": "2d01fc63d56d53ec618554e12ca1bc5f92e6ee2f6ab6260c2472948a22747ca0",
+    "effective_config_sha256": "49dbf7ba46595f22f806da82a36d1ad9d593484dbaecbef4b9d4d0f49a3304d1",
+    "executed_script_sha256": "f7963a5baccf494c828521e20a078a345c41e47bdadd3b5f5ca0cbf6cc210366",
+    "frozen_text_features_sha256": "1bb0974e2788bb41ef5d1282ee6bd36fb8b1f3bbe29921481c204665ebbd6b23",
+    "arm_artifacts": {
+      "text_only": {
+        "best_sha256": "fa79300acf63673cd9b22ff79b6e72df2fc8e123f51dd7283d678af08e3cf38e",
+        "last_sha256": "ae35153aab5ffd90e898de911f1f328e0ae0ec5de08df504d7116fd54ed42411",
+        "history_sha256": "fdad24799adb350c2ec7c5f2f3935fae41696b3466038678af5752a8e6deb3ca"
+      },
+      "video_only": {
+        "best_sha256": "5915279a7471449d3f1e48a6fa9d9b51785ae0b7068615ac90f91f2de5f3ca6e",
+        "last_sha256": "5ccc0333e8ffba3e39d41c680c0066cc68f9f85b74487c1398122b41f9e8b9df",
+        "history_sha256": "1e9fcfd4f81bb71d7b59274b732e1fb56ebad01abee63d8f36aa7bab06db0c70"
+      },
+      "state_only": {
+        "best_sha256": "5b8b52e3c577cc706b4dce6af4645da6d7687f392cf0986a2cbb2ed213e9303b",
+        "last_sha256": "8746b87771b4ea108800105b544cea6e693201f61740fa6af71e1de14598f352",
+        "history_sha256": "025764671c145a30b5afa32c6ab7bcaeac968cd92fdb98bc8d8650d63d38473f"
+      },
+      "video_state": {
+        "best_sha256": "13a96290255b684a638b3bc7fc84070687c7bec95f1203cc3338324c653527be",
+        "last_sha256": "afb6f67175057b3a6cf768372bb1733a8d64bc861d54af5c2e42f9df5dfae50d",
+        "history_sha256": "226a7e8635462dadcfd95a9930ee8f512ec0da74c42a5466fa732384c78f502d"
+      }
+    },
+    "execution_history_preserved": true,
+    "best_and_last_checkpoints_preserved": true,
+    "report_finalized_from_saved_checkpoints": true,
+    "training_runtime_seconds": null,
+    "run_finish_time": null,
+    "unknown_fields_reason": "Original process exited before run metadata serialization; exact runtime and finish timestamp were not captured."
+  }
+}
