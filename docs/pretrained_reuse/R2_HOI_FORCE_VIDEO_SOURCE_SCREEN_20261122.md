@@ -5,11 +5,14 @@
 Status: `REVIEW_NOT_ADMITTED`. Hoi! is a plausible source for the optional
 sensor part of R2-M: the publisher describes synchronized video, force/torque,
 and tactile streams across 3,048 interaction sequences, 381 articulated
-objects, and 38 environments. The publisher labels the dataset CC BY 4.0 and
-states commercial adaptation is allowed with attribution. This is promising
-for testing when contact sensing adds information to vision, but current public
-metadata does not establish that it has the supplied-choice JSON decision
-labels or unambiguous splits needed by this project.
+objects, and 38 environments. The paper also confirms sequence-level
+open/close state-change labels, articulation type/axis labels, and evaluation
+tasks for articulation and force estimation. These are not already packaged
+as supplied-option JSON decisions, but articulation type and state-change
+labels could support explicit two-option decisions after the mapping is
+audited. The publisher labels the dataset CC BY 4.0 and states commercial
+adaptation is allowed with attribution. The exact per-row label schema, group
+IDs and leakage-resistant split remain unverified.
 
 Do not download dataset payload or create training examples yet. The publisher
 dataset page indicates a guestbook asking for a name at download. No personal
@@ -28,10 +31,16 @@ submitting user information.
   sensing are available with the Hoi! gripper and that the streams are
   temporally aligned. It explicitly says the CC BY 4.0 release can be adapted
   commercially with attribution.
+- The official paper reports sequence-level open/close state-change labels,
+  annotated articulation type/axis, and benchmarks for articulation type,
+  tactile force estimation, and visual force estimation from RGB-D plus a
+  manipulation goal. It reports seven demonstrators and alternating open/close
+  interactions. This provides viable label concepts, but option sets and
+  target extraction must be audited before use.
 - The official code repository describes time alignment, interaction
   segmentation, and packaging steps, but this repository screen does not
-  confirm per-subject labels, held-out group definitions, or multiple-choice
-  decision targets.
+  confirm row-level label schema, stable participant identity fields, or
+  held-out group definitions.
 - The dataset is too large to download as a single package. The listing shows
   one bathroom/gripper stream's depth archive at 5.5 GB and RGB archive at
   1.4 GB, which makes indiscriminate mirroring unsuitable for this C-drive
@@ -39,12 +48,16 @@ submitting user information.
 
 ## Admission gates still open
 
-1. Verify available labels can support a nontrivial supplied-choice decision,
-   rather than simply reconstructing an action annotation.
+1. Inspect annotation schema and confirm a nontrivial option decision from
+   articulation/state-change labels, without leaking labels through the
+   selected video or force window. Prefer two-choice articulation or
+   state-change decisions; do not threshold continuous force targets without a
+   prespecified task rationale.
 2. Establish split units and leakage checks across interaction, object,
-   environment and any participant identity. The metadata screen does not
-   establish those identifiers.
-3. Confirm which instrumented embodiments have enough independent examples
+   environment and demonstrator. The paper reports seven demonstrators, but
+   accessible metadata has not confirmed stable identity fields or split
+   membership.
+3. Confirm which instrumented embodiments have enough examples
    for both visual-only and force/tactile-plus-visual comparisons.
 4. Read the full dataset Readme and file metadata through an access path that
    does not submit personal information, or wait for the user's own download.
