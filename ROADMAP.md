@@ -1,3 +1,18 @@
+**2026-11-21 R2-M Zenodo audio+vibration follow-up:** The 25 source archives
+(4.57 GB) were hash-verified; only `multisensor-1` was used under a frozen
+participant split, with 7 train / 2 calibration / 2 development-validation /
+2 sealed-audit participants and one quarantined participant. The hard same-trial
+matching model stayed at chance. On a separate 21-activity Decision, train-only
+participant-grouped OOF favored audio-only (79.43% vs 72.29% Accuracy; worse
+fusion NLL/Brier/ECE). A parameter-matched control on the already exposed
+two-person validation showed mixed participant effects; it cannot establish
+new-person fusion benefit. Sealed audit remains unopened. Stop tuning this
+source/task and find a fresh, sufficiently grouped task; HubEgo remains pending
+the user's account approval. See [matching](docs/pretrained_reuse/R2M_AUDIO_VIBRATION_MATCH_PILOT_20261120.md),
+[grouped CV](docs/pretrained_reuse/R2M_TRAIN_ONLY_PARTICIPANT_CV_20261121.md),
+[capacity control](docs/pretrained_reuse/R2M_CAPACITY_MATCHED_SENSOR_CONTROL_20261121.md),
+and [source preflight](docs/pretrained_reuse/R2M_ZENODO_PAYLOAD_PREFLIGHT_20261120.md).
+
 **2026-11-21 R2-M EVIORA-HAR screen:** Official Zenodo metadata declares
 CC BY-NC 4.0 for a roughly 131 GB video/IMU corpus. It cannot enter this
 product-directed path. Metadata only; no labels, media or consent-form archive
