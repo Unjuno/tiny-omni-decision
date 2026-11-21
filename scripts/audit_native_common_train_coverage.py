@@ -9,12 +9,16 @@ import argparse
 import hashlib
 import json
 import subprocess
+import sys
 import time
 from collections import Counter
 from datetime import UTC, datetime
 from pathlib import Path
 
-from scripts.native_fit import sample_order
+REPO = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO))
+
+from scripts.native_fit import sample_order  # noqa: E402
 
 DEFAULT_TRAIN = Path(r"C:\CodexArtifacts\pretrained-reuse-r2\native-common-corpus-02\train.jsonl")
 DEFAULT_SHA256 = "d279ca44c6ff8e619529805be21675a8b4088fdcc476c7bb04649abdb5e60ebb"
