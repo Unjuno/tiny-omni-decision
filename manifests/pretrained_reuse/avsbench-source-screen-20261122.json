@@ -1,0 +1,33 @@
+{
+  "format": "avsbench_source_screen_v1",
+  "dataset_id": "AVSBench",
+  "status": "NOT_ADMITTED_FOR_PRODUCT_QUALITY",
+  "publisher_project_url": "https://jasongief.github.io/AVSBench/",
+  "official_code_url": "https://github.com/OpenNLPLab/AVSBench",
+  "dataset_license": "CC-BY-NC-4.0",
+  "code_license": "Apache-2.0",
+  "source_screen": {
+    "method": "publisher project page and official code repository metadata only",
+    "data_or_annotation_downloaded": false,
+    "media_accessed": false,
+    "model_or_checkpoint_accessed": false,
+    "email_or_access_request_sent": false,
+    "split_created": false,
+    "training_or_evaluation_performed": false,
+    "gpu_used": false
+  },
+  "task_fit": {
+    "native_task": "pixel-level segmentation of sound-producing object(s) in video frames",
+    "settings": ["S4 single-source", "MS3 multi-source", "AVSS semantic extension"],
+    "potential_value": "direct audio-video correspondence and sound-source localization",
+    "product_decision_output_match": false,
+    "both_modalities_matter_claim": "publisher defines an audiovisual localization task; no project model evaluation was performed"
+  },
+  "limitations": [
+    "dataset is explicitly CC BY-NC 4.0 and is not admitted to the product-directed source pool",
+    "native output is a segmentation mask rather than probabilities over supplied options",
+    "underlying video media rights need separate consideration",
+    "processed video/audio access requires a publisher email request; none was sent"
+  ],
+  "recommendation": "Do not use for product training or product-quality claims. Reconsider only as a separately scoped noncommercial sound-source-grounding research benchmark."
+}

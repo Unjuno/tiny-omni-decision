@@ -1,3 +1,4 @@
+**2026-11-22 R2-M AVSBench source screen:** The publisher documents an audio-video sound-source segmentation task with pixel-level masks, including multi-object scenes where only some visible objects are sounding. The dataset is CC BY-NC 4.0; its Apache-2.0 code license does not broaden data rights. The dense-mask target is also distinct from supplied-option JSON Decision. No annotations/media were downloaded, no access request sent, and no model was run. Keep it outside the product-training pool; reconsider only for a separately scoped noncommercial grounding study. See [source screen](docs/pretrained_reuse/R2_AVSBENCH_SOURCE_SCREEN_20261122.md) and [receipt](manifests/pretrained_reuse/avsbench-source-screen-20261122.json).
 **2026-11-22 R2-M Eidon Tracker POV metadata screen:** Pinned CC BY 4.0
 video/IMU repositories publish 13,451 recordings from 27 contributors with
 consented but unblurred private-home video. The 1.12 MB metadata index shows
