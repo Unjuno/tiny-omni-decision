@@ -1,3 +1,14 @@
+**2026-11-21 R2 EVE-ESA EO MCQA TRAIN-only grouped CV:** The frozen
+MiniLM-L3 + 196,865-parameter readout reached 65.39% OOF Accuracy (95% grouped
+bootstrap interval 62.77–68.02%), 0.9052 NLL, 0.4552 Brier and 4.73% ECE over
+1,257 valid TRAIN rows. It exceeded uniform choice, but remained weak and
+variable on a narrow text-only EO task. Four malformed rows with a missing
+target option were excluded by a pre-fit integrity rule. Do not retune these
+OOF predictions or infer multimodal quality; retire this task candidate and
+prioritize a fresh admitted decision task. HubEgo payload access remains
+pending user account approval. See [protocol](docs/pretrained_reuse/R2_EVE_EO_MCQA_TRAIN_GROUP_CV_PROTOCOL_20261121.md)
+and [results](docs/pretrained_reuse/R2_EVE_EO_MCQA_TRAIN_GROUP_CV_RESULTS_20261121.md).
+
 **2026-11-21 R2 TallyQA-VG TRAIN-only grouped CV:** The fixed five-fold
 nested group CV over 3,101 source TRAIN questions completed. Image+question
 scored 55.37% / 1.0711 NLL / 0.5820 Brier; question-only scored 56.56% /
