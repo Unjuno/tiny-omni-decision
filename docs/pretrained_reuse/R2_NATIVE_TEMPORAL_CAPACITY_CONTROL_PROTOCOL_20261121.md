@@ -53,3 +53,36 @@ as a fixed-experiment comparison. Report all modalities, task-level measures,
 train-probe curves, uncertainty and resource cost. Because validation was
 previously observed and the comparison is one seed, no candidate is promoted
 from this result.
+
+## Exact local commands
+
+Run from the repository root, and use each output path only if it does not
+already exist. The smoke is TRAIN-only; the fit and replay use the identical
+capacity-control config.
+
+```powershell
+python -u -m scripts.train_native_common --phase smoke --variant capacity_mlp --config configs/pretrained_reuse/native_common_capacity_control_v1.json --output C:\CodexArtifacts\pretrained-reuse-r2\native-common-capacity-control-smoke-01
+```
+
+After smoke status is `PASS_NATIVE_FIT_SMOKE`, pass its exact receipt hash to
+the fixed training command:
+
+```powershell
+$smoke = 'C:\CodexArtifacts\pretrained-reuse-r2\native-common-capacity-control-smoke-01'
+$smokeHash = (Get-FileHash "$smoke\result.json" -Algorithm SHA256).Hash.ToLowerInvariant()
+python -u -m scripts.train_native_common --phase train --variant capacity_mlp --config configs/pretrained_reuse/native_common_capacity_control_v1.json --output C:\CodexArtifacts\pretrained-reuse-r2\native-common-capacity-control-fit-01 --reference $smoke --reference-sha256 $smokeHash
+```
+
+Only after the 2,048-update fit passes and its selected/final checkpoint
+hashes verify, run the exact saved-prediction replay and comparison:
+
+```powershell
+$fit = 'C:\CodexArtifacts\pretrained-reuse-r2\native-common-capacity-control-fit-01'
+$fitHash = (Get-FileHash "$fit\result.json" -Algorithm SHA256).Hash.ToLowerInvariant()
+python -u -m scripts.train_native_common --phase replay --variant capacity_mlp --config configs/pretrained_reuse/native_common_capacity_control_v1.json --output C:\CodexArtifacts\pretrained-reuse-r2\native-common-capacity-control-replay-01 --reference $fit --reference-sha256 $fitHash
+python -u -m scripts.compare_native_capacity_control
+```
+
+The committed runner prepends this worktree's `src` directory, records its
+resolved package path, verifies every corpus/cache/source pin, and refuses a
+busy GPU or an existing output directory. Do not bypass those checks.
