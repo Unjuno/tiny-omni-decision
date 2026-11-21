@@ -63,9 +63,11 @@ def test_video_derangement_matches_imbalanced_groups_deterministically() -> None
         {"sid": group}
         for group, count in (("large", 28), ("b", 12), ("c", 12),
                              ("d", 8), ("e", 8), ("f", 8))
+        for _ in range(count)
     ]
     indices = list(range(len(examples)))
 
+    assert len(examples) == 76
     mapping = _video_derangement(indices, examples, seed=17)
     repeated = _video_derangement(indices, examples, seed=17)
 

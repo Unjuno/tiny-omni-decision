@@ -8,7 +8,7 @@
     "device": "cpu",
     "training_source_commit": "91b70d611a8ffe24bfe049880fb0ac14677f5782",
     "recovery_fix_commit": "b25c262f",
-    "config_sha256": "49dbf7ba46595f22f806da82a36d1ad9d593484dbaecbef4b9d4d0f49a3304d1",
+    "config_sha256": "49dbf7ba46595f22f806da82a36d1ad9d593484dbaecbef4b9d4f0f49a3304d1",
     "training_script_sha256": "f7963a5baccf494c828521e20a078a345c41e47bdadd3b5f5ca0cbf6cc210366",
     "epochs_per_arm": 80,
     "updates_per_arm": 560,
@@ -71,7 +71,7 @@
     "directory": "C:/CodexArtifacts/pretrained-reuse-r2/habit-temporal-decision-20261121-attempt-01",
     "experiment_report_sha256": "ddf80c86bf430ddec33e239a29b7b74538ed44044a96399de65cd8bb2bcbb602",
     "predictions_sha256": "2d01fc63d56d53ec618554e12ca1bc5f92e6ee2f6ab6260c2472948a22747ca0",
-    "effective_config_sha256": "49dbf7ba46595f22f806da82a36d1ad9d593484dbaecbef4b9d4d0f49a3304d1",
+    "effective_config_sha256": "49dbf7ba46595f22f806da82a36d1ad9d593484dbaecbef4b9d4f0f49a3304d1",
     "executed_script_sha256": "f7963a5baccf494c828521e20a078a345c41e47bdadd3b5f5ca0cbf6cc210366",
     "frozen_text_features_sha256": "1bb0974e2788bb41ef5d1282ee6bd36fb8b1f3bbe29921481c204665ebbd6b23",
     "arm_artifacts": {
