@@ -72,7 +72,16 @@ def run(args: argparse.Namespace) -> dict[str, object]:
         raise SystemExit("pair index differs from the sealed-audit-safe frozen index")
 
     # The frozen loader verifies cache/index/media identities and rejects any sealed rows.
-    features, data_summary = trainer.load_frozen_examples(args.feature_cache, metadata_path)
+    expected_cache_hash = args.expected_feature_cache_index_sha256
+    if len(expected_cache_hash) != 64 or any(
+        character not in "0123456789abcdef" for character in expected_cache_hash
+    ):
+        raise SystemExit("expected feature-cache hash must be lowercase SHA-256")
+    features, data_summary = trainer.load_frozen_examples(
+        args.feature_cache,
+        metadata_path,
+        expected_index_sha256=expected_cache_hash,
+    )
     train_rows = sorted((row for row in features.values()
                          if row["split"] == "train"
                          and int(row["participant_id"]) in allowed_train_participants),
@@ -128,6 +137,8 @@ def run(args: argparse.Namespace) -> dict[str, object]:
         "unique_sample_count": len(rows_by_id),
         "unique_participant_count": len(observed_participants),
         "cache_integrity": data_summary,
+        "feature_cache_index_sha256": expected_cache_hash,
+        "sensor_tokenization": data_summary["sensor_tokenization"],
         "split_manifest_sha256": sha256_file(split_path),
         "pair_index_sha256": sha256_file(pair_index_path),
         "metadata_sha256": sha256_file(metadata_path),
@@ -310,6 +321,11 @@ def main() -> None:
     parser.add_argument("--feature-cache", type=Path, required=True)
     parser.add_argument("--pair-index-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument(
+        "--expected-feature-cache-index-sha256",
+        type=str,
+        default=trainer.FEATURE_INDEX_SHA256,
+    )
     parser.add_argument("--epochs", type=int, default=80)
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--learning-rate", type=float, default=1e-3)

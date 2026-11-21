@@ -5,6 +5,7 @@ from scripts.audit_r2m_temporal_bandwidth import select_train_rows
 from tiny_omni_decision.r2m_temporal_bandwidth import (
     effective_uniform_sample_rate,
     out_of_band_energy_fraction,
+    windowed_rms_tokens,
 )
 
 
@@ -28,6 +29,32 @@ def test_out_of_band_energy_reports_above_target_nyquist():
     signal = np.sin(2 * np.pi * 100 * time) + 0.1 * np.sin(2 * np.pi * 10 * time)
     assert out_of_band_energy_fraction(signal, source_rate, 50.0) > 0.98
     assert out_of_band_energy_fraction(signal, source_rate, 500.0) < 0.02
+
+
+def test_windowed_rms_preserves_high_frequency_energy_envelope():
+    source_rate = 1000.0
+    time = np.arange(1000) / source_rate
+    values = np.column_stack(
+        [
+            4.0 + np.sin(2 * np.pi * 100 * time),
+            -3.0 + 2 * np.sin(2 * np.pi * 100 * time),
+            0.2 * np.sin(2 * np.pi * 100 * time),
+        ]
+    )
+    tokens = windowed_rms_tokens(values, tokens=128)
+    assert tokens.shape == (128, 3)
+    assert tokens.dtype == np.float32
+    assert tokens[:, 0].mean() == pytest.approx(2**-0.5, abs=0.03)
+    assert tokens[:, 1].mean() == pytest.approx(2**0.5, abs=0.06)
+    assert tokens[:, 2].mean() == pytest.approx(0.2 / 2**0.5, abs=0.01)
+    assert np.isfinite(tokens).all()
+
+
+def test_windowed_rms_rejects_empty_bins_and_invalid_sensor_shape():
+    with pytest.raises(ValueError, match="time>=tokens"):
+        windowed_rms_tokens(np.zeros((127, 3)), tokens=128)
+    with pytest.raises(ValueError, match="time>=tokens"):
+        windowed_rms_tokens(np.zeros((128, 2)), tokens=128)
 
 
 def test_train_sample_selection_is_deterministic_and_split_safe():

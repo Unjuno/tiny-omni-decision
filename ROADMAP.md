@@ -9,6 +9,8 @@ the existing point-sampled features under the same seven-participant TRAIN-only
 CV before changing the readout or spending more model capacity. Validation and
 sealed audit remain unopened. See
 [audit and preregistered follow-up](docs/pretrained_reuse/R2M_TEMPORAL_BANDWIDTH_AUDIT_20261121.md).
+The RMS-window CV itself is separately fixed in the
+[follow-up protocol](docs/pretrained_reuse/R2M_RMS_WINDOW_FOLLOWUP_PROTOCOL_20261121.md).
 
 **2026-11-21 R2 programmatic decision state-group holdout:** A separate
 2,048-update text readout used 6,144 TRAIN rows and evaluated 2,048 rows from

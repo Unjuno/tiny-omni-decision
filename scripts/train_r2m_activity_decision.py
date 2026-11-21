@@ -50,11 +50,28 @@ def canonical_hash(value: dict[str, object]) -> str:
     return hashlib.sha256(encoded).hexdigest()
 
 
-def load_frozen_examples(cache_dir: Path, metadata_path: Path) -> tuple[
-    dict[str, dict[str, object]], dict[str, object]
-]:
+def declared_feature_signal_splits(index: dict[str, object]) -> list[str]:
+    splits = index.get("feature_signal_splits_loaded", ["train", "calibration", "validation"])
+    allowed = {"train", "calibration", "validation"}
+    if (
+        not isinstance(splits, list)
+        or not splits
+        or any(not isinstance(split, str) for split in splits)
+        or not set(splits) <= allowed
+        or len(splits) != len(set(splits))
+    ):
+        raise ValueError("feature cache declares invalid signal-split coverage")
+    return splits
+
+
+def load_frozen_examples(
+    cache_dir: Path,
+    metadata_path: Path,
+    *,
+    expected_index_sha256: str = FEATURE_INDEX_SHA256,
+) -> tuple[dict[str, dict[str, object]], dict[str, object]]:
     index_path = cache_dir / "feature-cache-index.json"
-    if sha256_file(index_path) != FEATURE_INDEX_SHA256:
+    if sha256_file(index_path) != expected_index_sha256:
         raise ValueError("feature-cache index differs from the frozen R2-M cache")
     metadata_bytes = metadata_path.read_bytes()
     if hashlib.sha256(metadata_bytes).hexdigest() != METADATA_SHA256:
@@ -68,6 +85,7 @@ def load_frozen_examples(cache_dir: Path, metadata_path: Path) -> tuple[
         raise ValueError("duplicate trial identity in allowed-trial metadata")
 
     index = json.loads(index_path.read_text(encoding="utf-8"))
+    declared_feature_splits = declared_feature_signal_splits(index)
     archive_entries = index.get("archives")
     if not isinstance(archive_entries, list) or len(archive_entries) != 24:
         raise ValueError("frozen feature index must contain all 24 activity archives")
@@ -112,8 +130,8 @@ def load_frozen_examples(cache_dir: Path, metadata_path: Path) -> tuple[
                 if metadata_row is None:
                     raise ValueError(f"feature is absent from allowlisted metadata: {identifier}")
                 split = str(splits[row_index])
-                if split not in {"train", "calibration", "validation"}:
-                    raise ValueError(f"forbidden split in feature cache: {split}")
+                if split not in declared_feature_splits:
+                    raise ValueError(f"feature signal split is outside cache scope: {split}")
                 if (split != metadata_row["split"]
                         or str(activities[row_index]) != metadata_row["activity"]
                         or int(participant_ids[row_index]) != int(metadata_row["participant_id"])
@@ -139,7 +157,7 @@ def load_frozen_examples(cache_dir: Path, metadata_path: Path) -> tuple[
     if len(features) != sum(int(row["samples"]) for row in archive_entries):
         raise ValueError("feature count differs from frozen feature index")
     return features, {
-        "feature_cache_index_sha256": FEATURE_INDEX_SHA256,
+        "feature_cache_index_sha256": expected_index_sha256,
         "feature_assets": len(features),
         "feature_split_counts": dict(Counter(
             str(row["split"]) for row in features.values()
@@ -148,6 +166,8 @@ def load_frozen_examples(cache_dir: Path, metadata_path: Path) -> tuple[
         "metadata_sha256": METADATA_SHA256,
         "unfeatured_allowed_trials": len(metadata_by_id.keys() - features.keys()),
         "pair_index_internal_sha256": PAIR_INDEX_SHA256,
+        "sensor_tokenization": index.get("sensor_tokenization", "legacy-linear-points-128"),
+        "feature_signal_splits_loaded": declared_feature_splits,
         "sealed_audit_loaded": False,
     }
 

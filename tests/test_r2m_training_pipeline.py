@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 import torch
 
 from scripts import train_r2m_activity_decision as trainer
@@ -53,6 +54,16 @@ def test_training_input_condition_masks_sensor_without_changing_architecture():
     parameter_count = sum(parameter.numel() for parameter in fusion.parameters())
     parameter_count += sum(parameter.numel() for parameter in scorer.parameters())
     assert parameter_count == 180_387
+
+
+def test_feature_signal_scope_accepts_train_only_and_rejects_invalid_splits():
+    assert trainer.declared_feature_signal_splits(
+        {"feature_signal_splits_loaded": ["train"]}
+    ) == ["train"]
+    assert trainer.declared_feature_signal_splits({}) == ["train", "calibration", "validation"]
+    for value in ([], ["sealed_audit"], ["train", "train"], [1]):
+        with pytest.raises(ValueError, match="invalid signal-split coverage"):
+            trainer.declared_feature_signal_splits({"feature_signal_splits_loaded": value})
 
 
 def test_train_arm_uses_sensor_absent_condition_for_fit_and_selection(
