@@ -6,6 +6,11 @@ from scripts.native_text_state_holdout import (
     build_split,
     counterfactual_donor_indices,
 )
+from scripts.train_native_text_group_holdout import (
+    configured_source_split,
+    validate_config,
+    validate_split_membership,
+)
 
 
 def make_rows(group_count=10):
@@ -90,3 +95,93 @@ def test_split_fails_closed_when_a_task_has_only_seen_groups():
     rows = [r for r in rows if r["task"] == "color"]
     with pytest.raises(ValueError, match="untouched"):
         build_split(rows, {r["id"] for r in rows})
+
+
+def test_split_supports_an_explicit_distinct_train_source_and_split_identity():
+    source = "text:programmatic_decision_v1"
+    split_id = "native-text-programmatic-group-holdout-v1"
+    rows = make_rows(group_count=20)
+    programmatic = []
+    for row in rows:
+        changed = dict(row)
+        changed["source"] = source
+        programmatic.append(changed)
+
+    first = build_split(
+        programmatic,
+        {"0:color", "1:shape"},
+        seed=17,
+        holdout_fraction=0.5,
+        source=source,
+        split_id=split_id,
+    )
+    second = build_split(
+        programmatic,
+        {"0:color", "1:shape"},
+        seed=17,
+        holdout_fraction=0.5,
+        source=source,
+        split_id=split_id,
+    )
+
+    assert first["source"] == source
+    assert first["split_id"] == split_id
+    assert first["holdout_groups"] == second["holdout_groups"]
+    assert {row["source"] for row in first["fit_rows"] + first["holdout_rows"]} == {source}
+    assert set(first["fit_groups"]).isdisjoint(first["holdout_groups"])
+    assert len(first["holdout_groups"]) == 9
+    assert balanced_order(first["fit_rows"], 7, split_id=split_id) == balanced_order(
+        first["fit_rows"], 7, split_id=split_id
+    )
+
+
+def test_split_identity_changes_deterministic_group_ranking():
+    rows = make_rows(group_count=20)
+    consumed = {"0:color", "1:shape"}
+    first = build_split(rows, consumed, split_id="split-a")
+    second = build_split(rows, consumed, split_id="split-b")
+    assert first["holdout_groups"] != second["holdout_groups"]
+
+
+def test_runner_accepts_legacy_and_programmatic_configs_without_mixing_profiles():
+    import json
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    legacy = json.loads(
+        (root / "configs/pretrained_reuse/native_text_state_group_holdout_v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    programmatic = json.loads(
+        (
+            root / "configs/pretrained_reuse/native_text_programmatic_group_holdout_v1.json"
+        ).read_text(encoding="utf-8")
+    )
+
+    assert configured_source_split(legacy) == (SOURCE, "native-text-state-group-holdout-v1")
+    assert configured_source_split(programmatic) == (
+        "text:programmatic_decision_v1",
+        "native-text-programmatic-group-holdout-v1",
+    )
+    validate_config(legacy)
+    validate_config(programmatic)
+
+    programmatic["split"]["heldout_group_count"] = 65
+    with pytest.raises(ValueError, match="preregistered"):
+        validate_config(programmatic)
+
+
+def test_training_rechecks_group_and_observation_split_integrity():
+    rows = make_rows(group_count=4)
+    fit = [row for row in rows if row["group"] in {"group-0", "group-1"}]
+    holdout = [row for row in rows if row["group"] in {"group-2", "group-3"}]
+    validate_split_membership(fit, holdout, {"group-0", "group-1"}, SOURCE)
+
+    leaked_group = dict(holdout[0], group="group-0")
+    with pytest.raises(ValueError, match="groups overlap"):
+        validate_split_membership(fit, [leaked_group, *holdout[1:]], set(), SOURCE)
+
+    seen_group = dict(holdout[0])
+    with pytest.raises(ValueError, match="previously consumed"):
+        validate_split_membership(fit, holdout, {seen_group["group"]}, SOURCE)

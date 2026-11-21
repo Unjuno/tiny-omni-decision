@@ -1,4 +1,4 @@
-"""Deterministic TRAIN-only group split for condition-relevance state binding."""
+"""Deterministic TRAIN-only group splits for native text state holdouts."""
 
 import hashlib
 from collections import Counter, defaultdict
@@ -7,7 +7,15 @@ SOURCE = "text:condition_relevance_v1"
 SPLIT_ID = "native-text-state-group-holdout-v1"
 
 
-def build_split(rows, previously_consumed_ids, *, seed=17, holdout_fraction=0.5):
+def build_split(
+    rows,
+    previously_consumed_ids,
+    *,
+    seed=17,
+    holdout_fraction=0.5,
+    source=SOURCE,
+    split_id=SPLIT_ID,
+):
     """Hold out half of groups never drawn by the prior common TRAIN sampler.
 
     The candidate vocabulary and prompt templates recur by design. Group IDs
@@ -18,9 +26,11 @@ def build_split(rows, previously_consumed_ids, *, seed=17, holdout_fraction=0.5)
         raise ValueError("nonnegative integer seed required")
     if not 0 < holdout_fraction < 1:
         raise ValueError("holdout fraction must be strictly between zero and one")
-    rows = [row for row in rows if row.get("source") == SOURCE]
+    if not isinstance(source, str) or not source or not isinstance(split_id, str) or not split_id:
+        raise ValueError("nonempty source and split ID required")
+    rows = [row for row in rows if row.get("source") == source]
     if not rows or any(row.get("split") != "train" for row in rows):
-        raise ValueError("nonempty condition-relevance TRAIN rows required")
+        raise ValueError("nonempty target TRAIN rows required")
     ids = [row["id"] for row in rows]
     if len(ids) != len(set(ids)):
         raise ValueError("TRAIN row IDs must be unique")
@@ -40,7 +50,7 @@ def build_split(rows, previously_consumed_ids, *, seed=17, holdout_fraction=0.5)
         raise ValueError("insufficient untouched groups for a nontrivial holdout")
     ranked = sorted(
         untouched_groups,
-        key=lambda group: hashlib.sha256(f"{seed}:{SPLIT_ID}:{group}".encode()).digest(),
+        key=lambda group: hashlib.sha256(f"{seed}:{split_id}:{group}".encode()).digest(),
     )
     holdout_groups = set(ranked[:count])
     fit = [row for row in rows if row["group"] not in holdout_groups]
@@ -49,9 +59,10 @@ def build_split(rows, previously_consumed_ids, *, seed=17, holdout_fraction=0.5)
     fit_tasks = Counter(row["task"] for row in fit)
     holdout_tasks = Counter(row["task"] for row in holdout)
     if set(fit_tasks) != set(holdout_tasks) or min(holdout_tasks.values()) < 2:
-        raise ValueError("every condition-relevance task needs at least two held groups")
+        raise ValueError("every task needs at least two held groups")
     return {
-        "source": SOURCE,
+        "source": source,
+        "split_id": split_id,
         "seed": seed,
         "holdout_fraction_of_previously_untouched_groups": holdout_fraction,
         "fit_rows": fit,
@@ -80,7 +91,7 @@ def _assert_disjoint(fit, holdout, previously_seen_groups):
         raise ValueError("a previously consumed state group entered holdout")
 
 
-def balanced_order(rows, steps, *, seed=17):
+def balanced_order(rows, steps, *, seed=17, split_id=SPLIT_ID):
     """Round-robin task strata with deterministic within-task permutations."""
     import random
 
@@ -93,7 +104,7 @@ def balanced_order(rows, steps, *, seed=17):
     cursors = Counter()
     rngs = {}
     for task, pool in pools.items():
-        digest = hashlib.sha256(f"{seed}:{SPLIT_ID}:{task}".encode()).digest()
+        digest = hashlib.sha256(f"{seed}:{split_id}:{task}".encode()).digest()
         rngs[task] = random.Random(int.from_bytes(digest[:8], "big"))
         rngs[task].shuffle(pool)
     order = []
@@ -110,7 +121,7 @@ def balanced_order(rows, steps, *, seed=17):
     return order
 
 
-def counterfactual_donor_indices(rows, *, seed=17):
+def counterfactual_donor_indices(rows, *, seed=17, split_id=SPLIT_ID):
     """Map each held row to another same-task group whose answer differs."""
     by_task = defaultdict(list)
     for index, row in enumerate(rows):
@@ -129,7 +140,7 @@ def counterfactual_donor_indices(rows, *, seed=17):
             ]
             if not candidates:
                 raise ValueError(f"no different-label same-task state donor for {task}")
-            digest = hashlib.sha256(f"{seed}:{SPLIT_ID}:donor:{row['id']}".encode()).digest()
+            digest = hashlib.sha256(f"{seed}:{split_id}:donor:{row['id']}".encode()).digest()
             selected = int.from_bytes(digest[:8], "big") % len(candidates)
             donors[index] = candidates[selected][0]
     if len(donors) != len(rows):

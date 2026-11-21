@@ -32,7 +32,12 @@ import torch
 from scripts.native_candidate_inputs import positions
 from scripts.native_fit import learning_rate, option_order, summarize
 from scripts.native_text_state_holdout import (
-    SOURCE,
+    SOURCE as CONDITION_RELEVANCE_SOURCE,
+)
+from scripts.native_text_state_holdout import (
+    SPLIT_ID as CONDITION_RELEVANCE_SPLIT_ID,
+)
+from scripts.native_text_state_holdout import (
     balanced_order,
     build_split,
     counterfactual_donor_indices,
@@ -44,6 +49,28 @@ DEFAULT_CONFIG = REPO / "configs/pretrained_reuse/native_text_state_group_holdou
 CHECKPOINT_INTERVAL = 256
 UPDATES = 2048
 BOOTSTRAP_REPLICATES = 5000
+SPLIT_PROFILES = {
+    CONDITION_RELEVANCE_SOURCE: {
+        "split_id": CONDITION_RELEVANCE_SPLIT_ID,
+        "eligible_groups": 130,
+        "heldout_groups": 65,
+    },
+    "text:programmatic_decision_v1": {
+        "split_id": "native-text-programmatic-group-holdout-v1",
+        "eligible_groups": 513,
+        "heldout_groups": 256,
+    },
+}
+COUNTERFACTUAL_INTERVENTION = "same-task counterfactual state with mapped donor target"
+
+
+def configured_source_split(config):
+    source = config.get("source")
+    if source is None and config.get("id") == "native-text-state-group-holdout-v1":
+        source = CONDITION_RELEVANCE_SOURCE
+    profile = SPLIT_PROFILES.get(source)
+    split_id = config.get("split_id", profile["split_id"] if profile else None)
+    return source, split_id
 
 
 def write_json(path, value):
@@ -83,20 +110,43 @@ def validate_config(config):
     }
     if config.get("training") != expected_training:
         raise ValueError("training config differs from the fixed experiment implementation")
+    source, split_id = configured_source_split(config)
+    profile = SPLIT_PROFILES.get(source)
+    if not profile or split_id != profile["split_id"]:
+        raise ValueError("unsupported source/split identity")
     split = config.get("split", {})
     if (
         split.get("seed") != 17
         or split.get("holdout_fraction_of_eligible_groups") != 0.5
-        or split.get("eligible_groups_not_seen_by_prior_2048_step_sampler") != 130
-        or split.get("heldout_group_count") != 65
+        or split.get("eligible_groups_not_seen_by_prior_2048_step_sampler")
+        != profile["eligible_groups"]
+        or split.get("heldout_group_count") != profile["heldout_groups"]
     ):
-        raise ValueError("group split differs from the preregistered TRAIN-only split")
+        raise ValueError("group split differs from the preregistered TRAIN-only source profile")
     evaluation = config.get("evaluation", {})
     if (
         evaluation.get("official_validation_loaded") is not False
         or evaluation.get("sealed_audit_loaded") is not False
     ):
         raise ValueError("official validation and sealed audit must remain closed")
+    interventions = evaluation.get("primary_interventions")
+    if not isinstance(interventions, list) or interventions[:2] != [
+        "same input",
+        "zero text state",
+    ]:
+        raise ValueError("evaluation must include fixed original and zero-state arms")
+    if any(
+        value
+        not in {
+            "same input",
+            "zero text state",
+            COUNTERFACTUAL_INTERVENTION,
+        }
+        for value in interventions
+    ):
+        raise ValueError("unsupported input intervention")
+    if len(interventions) != len(set(interventions)):
+        raise ValueError("duplicate input intervention")
     output_root = Path(config["output_root"]).resolve()
     if output_root.drive.upper() != "C:":
         raise ValueError("artifact output root must resolve to the local C: volume")
@@ -111,6 +161,28 @@ def validate_output_path(config, output):
     destination = Path(output).resolve()
     if destination.drive.upper() != "C:" or not destination.is_relative_to(root):
         raise ValueError("output must be a new child of the configured local C: artifact root")
+
+
+def validate_split_membership(fit_rows, holdout_rows, previously_seen_groups, source):
+    rows = fit_rows + holdout_rows
+    if not rows or any(row.get("source") != source or row.get("split") != "train" for row in rows):
+        raise ValueError("split artifact contains non-target/non-TRAIN rows")
+    fit_ids = [row["id"] for row in fit_rows]
+    holdout_ids = [row["id"] for row in holdout_rows]
+    fit_groups = {row["group"] for row in fit_rows}
+    holdout_groups = {row["group"] for row in holdout_rows}
+    fit_observations = {row["observation"] for row in fit_rows}
+    holdout_observations = {row["observation"] for row in holdout_rows}
+    if len(fit_ids) != len(set(fit_ids)) or len(holdout_ids) != len(set(holdout_ids)):
+        raise ValueError("split artifact contains duplicate row IDs")
+    if set(fit_ids) & set(holdout_ids):
+        raise ValueError("fit and holdout row IDs overlap")
+    if fit_groups & holdout_groups:
+        raise ValueError("fit and holdout state groups overlap")
+    if fit_observations & holdout_observations:
+        raise ValueError("fit and holdout observations overlap")
+    if holdout_groups & set(previously_seen_groups):
+        raise ValueError("previously consumed state group entered the holdout")
 
 
 def tracked_python_hashes():
@@ -216,6 +288,7 @@ def build_preflight(config_path, output):
     source_commit = require_clean_source()
     config = read_json(config_path)
     validate_config(config)
+    source, split_id = configured_source_split(config)
     validate_output_path(config, output)
     verify_pins(config["input_pins"])
     root, corpus_receipt, rows = load_train_corpus(config)
@@ -225,13 +298,15 @@ def build_preflight(config_path, output):
     ):
         raise ValueError("TRAIN corpus receipt and config hash disagree")
     prior_ids = prior_sampler_ids(rows)
-    source_rows = [row for row in rows if row.get("source") == SOURCE]
+    source_rows = [row for row in rows if row.get("source") == source]
     consumed = {row["id"] for row in source_rows if row["id"] in prior_ids}
     split = build_split(
         rows,
         consumed,
         seed=config["split"]["seed"],
         holdout_fraction=config["split"]["holdout_fraction_of_eligible_groups"],
+        source=source,
+        split_id=split_id,
     )
     description = describe_split(split)
     expected = config["split"]
@@ -253,20 +328,24 @@ def build_preflight(config_path, output):
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
     split_payload = {
-        "split_id": "native-text-state-group-holdout-v1",
+        "split_id": split_id,
         "fit_ids": [row["id"] for row in split["fit_rows"]],
         "holdout_ids": [row["id"] for row in split["holdout_rows"]],
         "fit_groups": split["fit_groups"],
         "holdout_groups": split["holdout_groups"],
         "previously_seen_groups": split["previously_seen_groups"],
         "previously_untouched_groups": split["previously_untouched_groups"],
-        "donor_indices": counterfactual_donor_indices(split["holdout_rows"]),
     }
+    if COUNTERFACTUAL_INTERVENTION in config["evaluation"]["primary_interventions"]:
+        split_payload["donor_indices"] = counterfactual_donor_indices(
+            split["holdout_rows"], split_id=split_id
+        )
     write_json(output / "split.json", split_payload)
     receipt = {
         "status": "PASS_TRAIN_ONLY_GROUP_PREFLIGHT",
         "source_commit": source_commit,
         "config_sha256": sha(Path(config_path)),
+        "split_sha256": sha(output / "split.json"),
         "input_pins": config["input_pins"],
         "python_source_hashes": tracked_python_hashes(),
         "split": description,
@@ -447,6 +526,7 @@ def train(config_path, output, preflight_path, preflight_sha256):
     source_commit = require_clean_source()
     config = read_json(config_path)
     validate_config(config)
+    source, split_id = configured_source_split(config)
     validate_output_path(config, output)
     if sha(Path(preflight_path) / "preflight.json") != preflight_sha256:
         raise ValueError("preflight receipt hash mismatch")
@@ -457,6 +537,8 @@ def train(config_path, output, preflight_path, preflight_sha256):
         or preflight["config_sha256"] != sha(Path(config_path))
     ):
         raise ValueError("preflight/source/config does not match this run")
+    if sha(Path(preflight_path) / "split.json") != preflight.get("split_sha256"):
+        raise ValueError("preflight split artifact hash mismatch")
     usage = subprocess.check_output(
         ["nvidia-smi", "--query-gpu=memory.used,utilization.gpu", "--format=csv,noheader,nounits"],
         text=True,
@@ -489,21 +571,23 @@ def train(config_path, output, preflight_path, preflight_sha256):
     try:
         root, corpus_receipt, rows = load_train_corpus(config)
         split_payload = read_json(Path(preflight_path) / "split.json")
+        if split_payload.get("split_id") != split_id:
+            raise ValueError("preflight split identity does not match the configured source")
         by_id = {row["id"]: row for row in rows}
         fit_rows = [by_id[ident] for ident in split_payload["fit_ids"]]
         holdout = [by_id[ident] for ident in split_payload["holdout_ids"]]
-        if any(
-            row.get("source") != SOURCE or row.get("split") != "train" for row in fit_rows + holdout
-        ):
-            raise ValueError("split artifact contains non-target/non-TRAIN rows")
-        if [row["group"] for row in fit_rows if row["id"] in split_payload["holdout_ids"]]:
-            raise ValueError("holdout ID appeared in fit rows")
+        validate_split_membership(
+            fit_rows,
+            holdout,
+            split_payload.get("previously_seen_groups", []),
+            source,
+        )
         if (
             len(fit_rows) != preflight["split"]["fit_row_count"]
             or len(holdout) != preflight["split"]["holdout_row_count"]
         ):
             raise ValueError("preflight row counts changed")
-        order = balanced_order(fit_rows, UPDATES, seed=17)
+        order = balanced_order(fit_rows, UPDATES, seed=17, split_id=split_id)
         draws = [index for batch in order for index in batch]
         sampling = {
             "steps": len(order),
@@ -544,6 +628,7 @@ def train(config_path, output, preflight_path, preflight_sha256):
         result.update(
             status="TRAINING",
             run_id=config["id"],
+            source=source,
             variant=(
                 "text-only native readout; frozen pretrained text states and candidate features"
             ),
@@ -648,12 +733,18 @@ def train(config_path, output, preflight_path, preflight_sha256):
         if step != UPDATES:
             raise RuntimeError("fixed 2048 updates not completed")
 
-        donor_indices = {
-            int(key): int(value) for key, value in split_payload["donor_indices"].items()
-        }
-        normal_scores = np.full((len(holdout), 40), -1e30, dtype=np.float32)
+        use_counterfactual = (
+            COUNTERFACTUAL_INTERVENTION in config["evaluation"]["primary_interventions"]
+        )
+        donor_indices = (
+            {int(key): int(value) for key, value in split_payload["donor_indices"].items()}
+            if use_counterfactual
+            else {}
+        )
+        score_width = max(len(row["options"]) for row in holdout)
+        normal_scores = np.full((len(holdout), score_width), -1e30, dtype=np.float32)
         zero_scores = np.full_like(normal_scores, -1e30)
-        swapped_scores = np.full_like(normal_scores, -1e30)
+        swapped_scores = np.full_like(normal_scores, -1e30) if use_counterfactual else None
         swap_rows = []
         prediction_lines = []
         model.eval()
@@ -668,65 +759,69 @@ def train(config_path, output, preflight_path, preflight_sha256):
                     for block in blocks
                 ]
                 zero = model(zero_blocks, queries).cpu().numpy()
-                donor = holdout[donor_indices[index]]
-                donor_blocks, _ = store.get(donor)
-                swapped = model(donor_blocks, queries).cpu().numpy()
-                donor_answer = donor["option_ids"][donor["target_index"]]
-                swapped_target = row["option_ids"].index(donor_answer)
                 normal_scores[index, : len(normal)] = normal
                 zero_scores[index, : len(zero)] = zero
-                swapped_scores[index, : len(swapped)] = swapped
-                changed = copy(row)
-                changed["target_index"] = swapped_target
-                changed["group"] = donor["group"]
-                changed["observation"] = donor["observation"]
-                swap_rows.append(changed)
-                prediction_lines.append(
-                    json.dumps(
-                        {
-                            "id": row["id"],
-                            "state_group": row["group"],
-                            "donor_id": donor["id"],
-                            "donor_group": donor["group"],
-                            "task": row["task"],
-                            "target_id": row["option_ids"][row["target_index"]],
-                            "prediction_id": row["option_ids"][int(normal.argmax())],
-                            "normal_scores": normal.tolist(),
-                            "zero_state_scores": zero.tolist(),
-                            "counterfactual_state_scores": swapped.tolist(),
-                            "counterfactual_target_id": donor_answer,
-                        },
-                        ensure_ascii=False,
-                        allow_nan=False,
+                prediction = {
+                    "id": row["id"],
+                    "state_group": row["group"],
+                    "task": row["task"],
+                    "target_id": row["option_ids"][row["target_index"]],
+                    "prediction_id": row["option_ids"][int(normal.argmax())],
+                    "normal_scores": normal.tolist(),
+                    "zero_state_scores": zero.tolist(),
+                }
+                if use_counterfactual:
+                    donor = holdout[donor_indices[index]]
+                    donor_blocks, _ = store.get(donor)
+                    swapped = model(donor_blocks, queries).cpu().numpy()
+                    donor_answer = donor["option_ids"][donor["target_index"]]
+                    if donor_answer not in row["option_ids"]:
+                        raise ValueError("counterfactual donor answer is absent from row options")
+                    swapped_target = row["option_ids"].index(donor_answer)
+                    swapped_scores[index, : len(swapped)] = swapped
+                    changed = copy(row)
+                    changed["target_index"] = swapped_target
+                    changed["group"] = donor["group"]
+                    changed["observation"] = donor["observation"]
+                    swap_rows.append(changed)
+                    prediction.update(
+                        donor_id=donor["id"],
+                        donor_group=donor["group"],
+                        counterfactual_state_scores=swapped.tolist(),
+                        counterfactual_target_id=donor_answer,
                     )
-                )
+                prediction_lines.append(json.dumps(prediction, ensure_ascii=False, allow_nan=False))
                 if (index + 1) % 128 == 0:
                     print("holdout inference", index + 1, "/", len(holdout), flush=True)
         torch.cuda.synchronize()
-        np.savez_compressed(
-            output / "holdout-predictions.npz",
-            normal=normal_scores,
-            zero_state=zero_scores,
-            counterfactual_state=swapped_scores,
-        )
+        prediction_arrays = {"normal": normal_scores, "zero_state": zero_scores}
+        if use_counterfactual:
+            prediction_arrays["counterfactual_state"] = swapped_scores
+        np.savez_compressed(output / "holdout-predictions.npz", **prediction_arrays)
         (output / "predictions.jsonl").write_text(
             "\n".join(prediction_lines) + "\n", encoding="utf-8"
         )
         normal_metrics = summarize(holdout, normal_scores)
         zero_metrics = summarize(holdout, zero_scores)
-        swapped_metrics = summarize(swap_rows, swapped_scores)
         input_use = {
             "normal": normal_metrics,
             "zero_state": zero_metrics,
-            "counterfactual_state_swap": swapped_metrics,
-            "counterfactual_targets_mapped_by_option_id": True,
+            "primary_interventions": config["evaluation"]["primary_interventions"],
             "normal_vs_zero_state_macro_group_bootstrap": bootstrap_macro_deltas(
                 holdout, normal_scores, zero_scores, [row["target_index"] for row in holdout]
             ),
-            "normal_vs_counterfactual_swap_group_bootstrap": bootstrap_macro_deltas(
-                holdout, normal_scores, swapped_scores, [row["target_index"] for row in swap_rows]
-            ),
         }
+        if use_counterfactual:
+            input_use.update(
+                counterfactual_state_swap=summarize(swap_rows, swapped_scores),
+                counterfactual_targets_mapped_by_option_id=True,
+                normal_vs_counterfactual_swap_group_bootstrap=bootstrap_macro_deltas(
+                    holdout,
+                    normal_scores,
+                    swapped_scores,
+                    [row["target_index"] for row in swap_rows],
+                ),
+            )
         write_json(output / "holdout-metrics.json", input_use)
         final_checkpoint = output / f"checkpoint-{UPDATES:04}.pt"
         model.load_state_dict(
@@ -742,6 +837,8 @@ def train(config_path, output, preflight_path, preflight_sha256):
         np.testing.assert_array_equal(normal_scores, reload_scores)
         result.update(
             status="PASS_TRAIN_ONLY_GROUP_HOLDOUT_COMPLETE",
+            source=source,
+            split_id=split_id,
             step=UPDATES,
             best_step=None,
             selected_step=UPDATES,
