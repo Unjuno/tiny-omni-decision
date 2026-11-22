@@ -1,0 +1,74 @@
+{
+  "format": "pretrained_reuse_multimodal_source_screen_v1",
+  "dataset_id": "DROID",
+  "recorded_at": "2026-11-12",
+  "status": "REVIEW_NOT_ADMITTED",
+  "scope": "metadata-only screen of official DROID documentation and droid_100 publisher metadata; no media or annotations opened",
+  "sources": {
+    "official_paper": "https://arxiv.org/abs/2403.12945",
+    "official_dataset_docs": "https://droid-dataset.github.io/droid/the-droid-dataset.html",
+    "official_docs_repo_commit": "1548722f199772a43217c0d4c811c639be66e380",
+    "official_bucket_prefix": "gs://gresearch/robotics/droid_100/1.0.0/"
+  },
+  "rights": {
+    "paper_statement": "The authors state that the full DROID dataset is released under CC BY 4.0.",
+    "commercial_use": "CC BY 4.0 permits commercial use with attribution; confirm selected component and privacy scope before acquisition.",
+    "media_blur": "The official docs identify the sample as r2d2_faceblur; actual frame-level blur was not inspected.",
+    "status": "PROMISING_COMPONENT_SCOPE_REQUIRES_CONFIRMATION"
+  },
+  "dataset_scale": {
+    "paper_trajectories": 76000,
+    "paper_scenes": 564,
+    "paper_buildings": 52,
+    "paper_collectors": 50,
+    "official_rlds_release_size": "about 1.7 TB",
+    "official_raw_release_size": "about 8.7 TB",
+    "small_sample": {
+      "episodes": 100,
+      "split": "train only",
+      "bytes": 2192594069,
+      "shards": 31,
+      "group_identity_in_schema": false
+    }
+  },
+  "observations": {
+    "modalities": ["video", "robot_proprioception", "action", "language_instruction"],
+    "camera_fields": ["exterior_image_1_left", "exterior_image_2_left", "wrist_image_left"],
+    "state_fields": ["cartesian_position", "gripper_position", "joint_position"],
+    "action_dimension": 7,
+    "episode_metadata_fields": ["file_path", "recording_folderpath"],
+    "publisher_grouped_split": "NOT_FOUND_IN_SAMPLE_SCHEMA"
+  },
+  "r2_gate": {
+    "rights": "PAPER_LICENSE_FOUND; SELECTED COMPONENT AND PRIVACY SCOPE NEED CONFIRMATION",
+    "independent_grouped_split": "NOT_ESTABLISHED_FROM_SAMPLE",
+    "validation_floor": "100 episodes are below the provisional 200 independent-scene validation floor, even under the impossible best case of one unique scene per episode.",
+    "supplied_option_task": "NOT_PRESENT; continuous action requires a frozen training-only option/codebook adaptation",
+    "both_input_necessity": "UNKNOWN_NOT_TESTED",
+    "decision": "DO_NOT_ACQUIRE_DROID_100_FOR_QUALITY_EVALUATION; full release remains conditional on a selective metadata-defined cohort and task feasibility"
+  },
+  "integrity": {
+    "dataset_payload_downloaded": false,
+    "media_opened": false,
+    "labels_opened": false,
+    "model_loaded": false,
+    "training_or_evaluation": false,
+    "sealed_audit_accessed": false,
+    "paid_compute": false
+  },
+  "external_artifacts": {
+    "directory": "D:/CodexArtifacts/pretrained-reuse-r2/droid-source-screen-20261112-attempt-01",
+    "dataset_info.json": {
+      "bytes": 760,
+      "sha256": "58646aa75fd054a0d8670edd676620267adb32550dc228545d70a3418abb1834"
+    },
+    "features.json": {
+      "bytes": 18665,
+      "sha256": "4c556e2e38e179e41089e07cf54273b1540d67d3c78a420898370329813c9a25"
+    },
+    "gcs-object-metadata.json": {
+      "bytes": 37268,
+      "sha256": "13728e1b75a484b06d6606c24138f189ec7c063dede32ccde643dd59168a9c5f"
+    }
+  }
+}
