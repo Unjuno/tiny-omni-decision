@@ -1,3 +1,12 @@
+**2026-11-22 R2 spoken-palette TRAIN-only modality interventions:** On 96
+fixed training screens from 24 speaker groups, a same-speaker audio-color swap
+changed the prediction in 96/96 cases and selected the color's position in
+96/96. Target-absent screen counterfactuals increased uncertainty (uncertainty
+AUROC 0.980; speaker-bootstrap 95% interval 0.965–0.991), while removing an
+unrelated color left accuracy at 96/96. These are in-sample mechanism checks on
+the fitting speakers; they are not generalization or product-quality evidence
+and do not close R2-M. See [paired intervention report](docs/pretrained_reuse/R2_SPOKEN_PALETTE_TRAIN_ONLY_MODALITY_INTERVENTIONS_20261122.md).
+
 **2026-11-22 R7 encoder-only Path A four-route replay:** On the same fixed
 development-validation inputs, the compact Whisper encoder-only assembly
 reproduced the full assembly's comparison deltas for Video, Image, Text and
