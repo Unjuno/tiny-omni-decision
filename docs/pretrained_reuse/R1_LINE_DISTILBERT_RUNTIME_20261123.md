@@ -26,9 +26,11 @@ at the pinned revision. Every downloaded file was hashed; the weight SHA-256
 matches the Hub LFS object digest. No model artifact was committed to Git.
 The external machine-readable smoke record is
 `r1-line-distilbert-runtime-audit.json` (SHA-256
-`ff2654d2fd89a2a374d74d7079db1fb5703791114199c441924bb44986899f66`). The
-source-of-truth candidate inventory now includes this checkpoint; its updated
-SHA-256 is `a84288f12861d3bbcf0c5ecd823de4872c0750862b3eb42156829b119659045b`.
+`d62486b7ec2ad59c0d7d9a644b0a44776c536de5e393b49e0834fc89fcd79c57`). Its
+tokenizer subrecord is `tokenizer-forward-smoke.json` (SHA-256
+`d8be9421f60eda085eccd528a7803940feac038e4567a56922456bdc12158364`). The
+source-of-truth candidate inventory includes this checkpoint; its updated
+SHA-256 is `640418d297af45fa97d3f2577c17a652dc7e63cad2fcf0e904525841e54fad22`.
 
 For the CPU load smoke, PyTorch's `weights_only=True` loader read the checkpoint
 as a tensor-only state dictionary. The standard Transformers
@@ -39,21 +41,24 @@ separate running Orbitune process. Exact loaded parameter count was
 68,712,704; trainable count was zero.
 
 The Hub tokenizer uses reviewed Apache-2.0 custom Python code, MeCab, and
-SentencePiece with `unidic_lite`. These tokenizer dependencies are not installed
-in the current environment, so **tokenization and end-to-end text inference
-have not yet passed**. No remote code was executed. The checkpoint load smoke
-does not establish Decision quality, calibration, or package fit.
+SentencePiece with `unidic_lite`. These dependencies were installed only in a
+new isolated virtual environment (`fugashi==1.3.2`,
+`sentencepiece==0.2.0`, `unidic-lite==1.0.8`); the base environment was not
+changed. After reviewing the pinned tokenizer code, four fixed Japanese
+question/candidate pairs produced repeatable token IDs within the model
+vocabulary, and the frozen encoder returned finite `[4, 22, 768]` output. This
+is a local tokenizer+encoder smoke, not a comparison to an independent
+tokenizer implementation. It does not establish Decision quality, calibration,
+or package fit.
 
 ## Decision and next gate
 
-**Checkpoint feasibility: PASS. Encoder forward: PASS. Tokenizer: NOT RUN.
-Decision quality: NOT MEASURED. Product/release eligibility: NOT ESTABLISHED.**
+**Checkpoint feasibility: PASS. Short tokenizer+encoder smoke: PASS. Decision
+quality: NOT MEASURED. Product/release eligibility: NOT ESTABLISHED.**
 
-If proceeding, first create an isolated tokenizer environment pinned to this
-revision and its declared dependencies, compare token IDs against the official
-tokenizer on fixed Japanese fixtures, and run a small CPU-only smoke through the
-same typed-decision input pipeline. Only after that passes should a paired
-readout comparison be considered. The existing typed-decision validation is
+The next gate is a small CPU-only smoke through the same typed-decision input
+pipeline, followed by an explicitly limited paired readout diagnostic only if
+the active CPU workload has ended. The existing typed-decision validation is
 already exposed and uses synthetic teacher distributions, so any reuse must be
 labelled a diagnostic rather than independent confirmation; a new human-labeled
 decision task remains necessary for a quality claim.

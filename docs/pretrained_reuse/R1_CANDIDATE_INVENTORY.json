@@ -772,9 +772,9 @@
       "passed_load": true,
       "has_real_weights": true,
       "runtime_supported": true,
-      "runtime_evidence": "CPU weights_only=True tensor-state load and strict=True DistilBertForMaskedLM load; frozen finite encoder forward [1,4,768], 1 CPU thread; tokenizer not executed because fugashi/sentencepiece/unidic_lite are absent",
+      "runtime_evidence": "CPU weights_only=True tensor-state load and strict=True DistilBertForMaskedLM load; frozen finite encoder forward [1,4,768]; isolated tokenizer with four deterministic Japanese question/candidate fixtures yielded valid vocabulary IDs and finite [4,22,768] output; tokenizer-forward-smoke.json SHA-256 d8be9421f60eda085eccd528a7803940feac038e4567a56922456bdc12158364",
       "task_quality_status": "UNMEASURED; no Decision readout or task metric",
-      "decision": "retain as compact Japanese BERT-family candidate; tokenizer parity and Decision quality gates remain open",
+      "decision": "retain as compact Japanese BERT-family candidate; task-specific Decision quality and package/runtime budget gates remain open",
       "parameter_tensor_bytes": 274850816,
       "report": "docs/pretrained_reuse/R1_LINE_DISTILBERT_RUNTIME_20261123.md",
       "audit_date": "2026-11-23",
@@ -794,7 +794,7 @@
     },
     {
       "date": "2026-11-23",
-      "scope": "append pinned LINE Japanese DistilBERT tensor-safe load, strict model load, CPU encoder forward and declared license audit; tokenizer and task quality remain unmeasured",
+      "scope": "append pinned LINE Japanese DistilBERT tensor-safe load, strict model load, tokenizer fixture and CPU encoder forward; Decision quality remains unmeasured",
       "report": "docs/pretrained_reuse/R1_LINE_DISTILBERT_RUNTIME_20261123.md"
     }
   ]
