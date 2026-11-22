@@ -1,3 +1,13 @@
+**2026-11-22 R2-M NOAA MRMS / ASOS metadata screen:** A reproducible
+metadata-only catalog screen found 873 ASOS station-month files and 720
+two-minute MRMS timestamps for one day, but did not establish independent
+storm groups, exact station/grid/time joins, or explicit downstream ASOS
+rights. The proposed radar-versus-gauge comparison is directly solvable by a
+rule, so this source is not admitted as Decision quality evidence. No
+observation payload, model, GPU, or evaluation was used. See
+[source screen](docs/pretrained_reuse/R2_NOAA_MRMS_ASOS_SOURCE_SCREEN_20261122.md)
+and [receipt](manifests/pretrained_reuse/noaa-mrms-asos-source-screen-20261122.json).
+
 **2026-11-22 R2-M HapTile control-interpretation correction:** A code-to-report
 audit corrected the prior validation-control wording without changing results:
 the shuffle controls replace inputs across task groups (with donor cycling for

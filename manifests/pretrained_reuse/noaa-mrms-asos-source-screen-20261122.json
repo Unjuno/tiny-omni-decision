@@ -1,0 +1,47 @@
+{
+  "format": "noaa_mrms_asos_source_screen_v1",
+  "status": "REVIEW_NOT_ADMITTED",
+  "screened_at_utc": "2026-11-22T04:39:42.101392+00:00",
+  "method": "CPU-only download and parse of public catalog metadata; no observation payload access",
+  "script": "scripts/pretrained_reuse/screen_noaa_radar_asos_catalog.py",
+  "script_output_directory": "C:/CodexLocalArtifacts/pretrained-reuse-r2/noaa-radar-asos-screen-20261122-attempt-02",
+  "screen_receipt_sha256": "f74bde08a2b83811e11a2e3a7df7f7ab14e5169a48ff6511db9edffe8d869973",
+  "sources": [
+    {
+      "id": "asos-one-minute-pg2",
+      "catalog_url": "https://www.ncei.noaa.gov/data/automated-surface-observing-system-one-minute-pg2/access/2024/05/",
+      "catalog_response_bytes": 155457,
+      "catalog_response_sha256": "80bf635975d4bcc6f80a7c50dcf45594b0ec845c0bbf329599cfda6115cabd01",
+      "station_month_files": 873,
+      "unique_station_ids": 873,
+      "listed_payload_bytes": 3353725870,
+      "explicit_downstream_license_grant_established": false
+    },
+    {
+      "id": "mrms-radar-only-qpe-1h",
+      "product": "CONUS/RadarOnly_QPE_01H_00.00",
+      "catalog_url": "https://noaa-mrms-pds.s3.amazonaws.com/?list-type=2&prefix=CONUS/RadarOnly_QPE_01H_00.00/20240501/",
+      "catalog_response_bytes": 209085,
+      "catalog_response_sha256": "05be978f9b034c93e69c2fdcbc8d95094f68b3d9a92798aa6179c815c3f5fc7b",
+      "date": "2024-05-01",
+      "listed_object_count": 720,
+      "unique_timestamps": 720,
+      "cadence_minutes": 2,
+      "listed_compressed_payload_bytes": 471875988,
+      "product_period": "rolling 1-hour accumulation"
+    }
+  ],
+  "payload_objects_downloaded": 0,
+  "observations_or_media_opened": false,
+  "model_or_checkpoint_loaded": false,
+  "training_or_evaluation_performed": false,
+  "gpu_used": false,
+  "task_admitted": false,
+  "limitations": [
+    "Catalog counts do not establish independent station or storm-event counts.",
+    "Exact station/grid/time matches and station relocation history were not established.",
+    "The proposed greater/within/less-than radar-to-gauge task is directly computable by a deterministic comparison rule.",
+    "Explicit downstream rights for the mixed-origin ASOS archive remain unresolved."
+  ],
+  "recommendation": "Do not acquire data or build features until rights, exact joins, storm-disjoint groups, and a nontrivial both-input task are established."
+}
