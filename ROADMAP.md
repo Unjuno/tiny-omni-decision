@@ -1,3 +1,16 @@
+**2026-11-22 R2-M HapTile TRAIN-only kinematic diagnostic:** A new fixed
+constant-velocity rule used only the last two aligned XYZ state samples on the
+1,112 frozen TRAIN examples (24 task groups); it predicted 858 targets (77.16%
+sample Accuracy, 76.34% macro task Accuracy) versus 36.24% / 36.56% for
+always-hold, beating that baseline on 22/24 tasks. This is an in-sample,
+parameter-free task-shape diagnostic, not OOF or generalization evidence and
+not a comparison to the different five-task validation split. It shows the
+target has a strong kinematic-persistence cue; it does not establish video or
+tactile benefit. The source remains `REVIEW_NOT_ADMITTED`; no validation,
+calibration or sealed-audit rows were loaded, and no model was fit. See
+[reproducible protocol and per-task results](docs/pretrained_reuse/R2M_HAPTILE_TRAIN_KINEMATIC_PERSISTENCE_20261122.md)
+and [receipt](manifests/pretrained_reuse/haptile-train-kinematic-persistence-20261122.json).
+
 **2026-11-22 R2-M HapTile task-held-out temporal Decision pilot:** Completed
 all six frozen-feature arms at 80 epochs / 2,800 updates per arm on CPU. The
 full text+vision+tactile-video+robot-state readout selected epoch 19 by

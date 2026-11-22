@@ -1,0 +1,74 @@
+{
+  "format": "haptile_train_kinematic_persistence_receipt_v1",
+  "status": "completed_train_only_fixed_rule_diagnostic",
+  "experiment_id": "haptile-train-kinematic-persistence-20261122-attempt-02",
+  "source_commit": "c2df5f48ea633e3dc2da28fb00909abd0e625a8f",
+  "script": "scripts/pretrained_reuse/evaluate_haptile_kinematic_persistence_train.py",
+  "script_sha256": "fe19accbc7b1c7b3eae2c24c9ee0c1eb1f52434ff6bea20e20b7139ff50a64b7",
+  "test": "tests/test_evaluate_haptile_kinematic_persistence_train.py",
+  "test_sha256": "41ea3b94c06bfbd86ab18a8115c5a82a7cca26232d48a24a79360be5327de49d",
+  "command": "py -3.11 scripts/pretrained_reuse/evaluate_haptile_kinematic_persistence_train.py --train-cache C:\\CodexLocalArtifacts\\pretrained-reuse-r2\\haptile-task-v1\\train-joined-v1\\decision-features.npz --output C:\\CodexLocalArtifacts\\pretrained-reuse-r2\\haptile-task-v1\\train-kinematic-persistence-20261122-attempt-02\\result.json",
+  "runtime": {
+    "started_at_utc": "2026-11-22T04:04:26.807409+00:00",
+    "finished_at_utc": "2026-11-22T04:04:27.028615+00:00",
+    "elapsed_wall_seconds": 0.22112390003167093,
+    "python": "3.11.9",
+    "numpy": "2.4.6",
+    "device": "cpu",
+    "cuda_used": false,
+    "paid_compute_cost_usd": 0
+  },
+  "verification": {
+    "focused_tests": "7 passed",
+    "full_cpu_suite": "3271 passed, 11 skipped",
+    "ruff_check_all": "passed",
+    "json_manifest_parse": "passed",
+    "git_diff_check": "passed"
+  },
+  "input": {
+    "split": "train",
+    "cache_path": "C:\\CodexLocalArtifacts\\pretrained-reuse-r2\\haptile-task-v1\\train-joined-v1\\decision-features.npz",
+    "cache_sha256": "4d0b8bfc4d9d279ec04e76811f6a9fc6a8410ceb3d498a33cca9cc0112ba42c2",
+    "receipt_path": "C:\\CodexLocalArtifacts\\pretrained-reuse-r2\\haptile-task-v1\\train-joined-v1\\result.json",
+    "receipt_sha256": "b0292b9396c8dfa338f915228749aedca8ea76ca8690faf2bb3fdeb41b30ecf4",
+    "examples": 1112,
+    "task_groups": 24,
+    "sealed_audit_opened": false,
+    "validation_loaded": false,
+    "calibration_loaded": false
+  },
+  "rule": {
+    "parameters_fitted": 0,
+    "inputs": "last two aligned state XYZ positions and their timestamps only",
+    "horizon_seconds": 0.5,
+    "deadband_meters": 0.005,
+    "class_rule": "existing dominant signed axis / hold target function, x/y/z tie order"
+  },
+  "results": {
+    "persistence_correct": 858,
+    "persistence_accuracy": 0.7715827338129496,
+    "persistence_macro_task_accuracy": 0.7633817434585861,
+    "always_hold_correct": 403,
+    "always_hold_accuracy": 0.36241007194244607,
+    "always_hold_macro_task_accuracy": 0.36556472819163083,
+    "tasks_persistence_beats_always_hold": 22
+  },
+  "output": {
+    "path": "C:\\CodexLocalArtifacts\\pretrained-reuse-r2\\haptile-task-v1\\train-kinematic-persistence-20261122-attempt-02\\result.json",
+    "sha256": "290c4ec94d06d401d8be2d30a193368aef23da202f7a1a6998eca91cb78a8a70"
+  },
+  "limitations": [
+    "This is an in-sample TRAIN-only deterministic diagnostic, not OOF or held-out generalization.",
+    "It does not measure model quality or a modality benefit.",
+    "The HapTile source remains REVIEW_NOT_ADMITTED; source count and operator mapping are unresolved.",
+    "The historical five-task validation metrics are on different rows and must not be compared directly."
+  ],
+  "sealed_audit": {
+    "loaded": false,
+    "metrics_read": false
+  },
+  "model_fit": false,
+  "model_weights_loaded": false,
+  "corpus_modified": false,
+  "product_promotion": false
+}
