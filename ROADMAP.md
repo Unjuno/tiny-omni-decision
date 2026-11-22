@@ -1,12 +1,12 @@
-**2026-11-22 R2 compact BERT text-task candidate screen:** Pinned the
-PolyAI-maintained BANKING77 dataset at `1846984189f2bc0ac51c6fc3a600fa9e1714e0c6`;
-its card declares CC BY 4.0 and describes 77 English banking intents. A
-TRAIN-only audit verified 10,003 rows, 9,999 normalized utterances and four
-same-label duplicate groups; the published test payload was not opened. The
-source has no participant/conversation IDs and leaves language-producer
-provenance unspecified, so it remains a development candidate pending group
-identity review. It can test compact BERT-family intent probabilities, not
-general text or multimodal quality. No model was loaded or trained. See
+**2026-11-22 R2 compact BERT text-task probe:** Pinned the PolyAI-maintained
+BANKING77 dataset at `1846984189f2bc0ac51c6fc3a600fa9e1714e0c6`; its card
+declares CC BY 4.0. TRAIN-only integrity audit found 9,999 normalized
+utterances among 10,003 rows. A seed-17 content-grouped 8,005/1,998 split has
+zero content overlap. Frozen MiniLM-L3 plus a 29,645-parameter linear readout
+reached 89.69% Accuracy / 0.4191 NLL / 0.1549 Brier / 0.0281 ECE on this
+development validation; reload reproduced probabilities exactly. The source
+lacks person/conversation IDs, and its test payload remains unopened. This is
+narrow banking intent evidence, not general text or multimodal quality. See
 [source screen](docs/pretrained_reuse/R2_BANKING77_BERT_SOURCE_SCREEN_20261122.md)
 and [manifest](manifests/pretrained_reuse/banking77-text-source-screen-20261122.json).
 
