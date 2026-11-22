@@ -4600,3 +4600,14 @@ does not constitute independent evidence. See the
 [fixed-rule diagnostic](docs/pretrained_reuse/R2M_HAPTILE_KINEMATIC_PERSISTENCE_VALIDATION_20261122.md).
 The source remains `REVIEW_NOT_ADMITTED`; HapTile has no audio. Do not further
 tune on this exposed validation or infer product-level multimodal quality.
+
+**2026-11-22 R2 DROID debug-sample screen:** Pinned the official `droid_100`
+RLDS metadata and parsed only the first record of one 27.5 MB train shard as a
+CPU schema smoke. The sample has 100 train episodes and no validation split;
+the inspected episode exposes only path metadata, and its path embeds
+`success`. The raw metadata needed to establish scene/building/contributor
+groups was unavailable for that episode. The inspected record is quarantined;
+DROID is not admitted for quality evaluation, and no model was fit. Do not
+download the remaining debug sample or full release for this task without a
+group-disjoint, non-leaking task plan. See the [source screen](docs/pretrained_reuse/R2_DROID_SOURCE_SCREEN_20261122.md)
+and [pinned evidence](manifests/pretrained_reuse/droid-source-screen-20261122.json).

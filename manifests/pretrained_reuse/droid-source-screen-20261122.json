@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "source": "DROID",
+  "dataset_subset": "droid_100 / r2d2_faceblur",
+  "source_version": "1.0.0",
+  "official_source_revision": "33ae6a67274f36d2e29525b86f23a56616ef43a7",
+  "license": "CC BY 4.0",
+  "decision": "parser_smoke_only_rejected_for_path_a_quality_evaluation",
+  "sealed_audit_accessed": false,
+  "model_training_or_evaluation_performed": false,
+  "source_facts": {
+    "debug_subset_episode_count": 100,
+    "debug_subset_split_names": ["train"],
+    "debug_subset_shard_count": 31,
+    "debug_subset_total_bytes": 2192594069,
+    "full_rlds_inventory_object_count": 2051,
+    "full_rlds_train_shard_count": 2048,
+    "full_rlds_total_bytes": 1834750560103,
+    "episode_context_fields_observed": [
+      "episode_metadata/file_path",
+      "episode_metadata/recording_folderpath"
+    ],
+    "official_group_metadata_availability": "documented_in_raw_release_but_not_present_for_the_inspected_episode_prefix",
+    "train_validation_group_disjointness_proven": false,
+    "path_label_leakage_observed": true
+  },
+  "local_evidence": {
+    "object_inventory_sha256": "f925852ee4c999528fa83f6c828d00470eaa4d11e4d7d0847f57956f98ab1d84",
+    "debug_object_list_sha256": "aae35c1283c507945b8c2612b656d8960e2573f324df49ed714b5336d85f10da",
+    "debug_dataset_info_sha256": "58646aa75fd054a0d8670edd676620267adb32550dc228545d70a3418abb1834",
+    "debug_features_sha256": "4c556e2e38e179e41089e07cf54273b1540d67d3c78a420898370329813c9a25",
+    "license_text_sha256": "7e7170e3cebf88a9f60c7b8421418323c09304da1af4d5e90f4da1dc1c8a2661",
+    "downloaded_first_shard_bytes": 27488816,
+    "downloaded_first_shard_sha256": "37d04d3586fbde386d14122320d8f7d866b37007ff7a8d96625e72a3994dda70",
+    "parsed_first_record_step_count": 166,
+    "parsed_first_record_serialized_sha256": "c43174e210d3202147433b06965f4ea3faf7dbd2271c88e07b085d8c54e770bc",
+    "parsed_first_record_identity_sha256": "44506ba565b1249e5a1d49ff8612dcbd5305c841e323e3991cc2164a6d25c62e",
+    "quarantined_from_all_future_splits": true,
+    "raw_source_path_stored": false
+  },
+  "limitations": [
+    "debug subset has no independent validation split",
+    "episode-level context does not include verified scene/building/contributor IDs",
+    "inspected file path embeds the success outcome",
+    "robot action targets require a separately fixed decision task and admissible group split",
+    "no quality or multimodal fusion claim is supported"
+  ],
+  "references": {
+    "official_documentation": "https://droid-dataset.github.io/droid/the-droid-dataset",
+    "official_repository": "https://github.com/droid-dataset/droid"
+  }
+}
