@@ -1,0 +1,129 @@
+schema_version: 1
+experiment_id: haptile-temporal-action-decision-seed17-v1
+seed: 17
+device: cpu
+data:
+  source: Voxel51/HapTile
+  conversion_revision: c8593da98d3facb7a9293842514f0ee4ad3f2318
+  split_manifest: manifests/pretrained_reuse/haptile-task-split-v1-20261122.json
+  split_manifest_sha256: adacd722c1c51ce47bce139063dab1b01981d9e10d7e512c80e756e7d3e428e8
+  train_receipt_sha256: f160edf505487cdf4333277c88987036b3d691eb25208aeb0a7f8445da13995c
+  train_action_preflight_sha256: 263ff3d1e7fde087632238d3b634629bc6315d203dfb8f3dcd225f26bb64daeb
+  sealed_audit_loading: false
+  train_examples: 1113
+  train_task_groups: 24
+  validation_task_groups: 5
+  calibration_task_groups: 4
+  query: episode_midpoint_of_end_effector_pose_log_time
+  context_seconds: 1.0
+  video_num_frames: 8
+  max_frame_time_error_seconds: 0.1
+  max_state_staleness_seconds: 0.2
+  target: dominant_xyz_displacement_250_to_500ms
+  target_deadband_m: 0.005
+  options:
+    - id: -x
+      text: move the end effector in the negative X direction
+    - id: +x
+      text: move the end effector in the positive X direction
+    - id: -y
+      text: move the end effector in the negative Y direction
+    - id: +y
+      text: move the end effector in the positive Y direction
+    - id: -z
+      text: move the end effector in the negative Z direction
+    - id: +z
+      text: move the end effector in the positive Z direction
+    - id: hold
+      text: hold the end effector still
+  question: >-
+    Given the instruction and the past one second of robot observations, which
+    direction will the end effector move during the next 250 to 500 milliseconds?
+  state_channel_order:
+    - pose_x
+    - pose_y
+    - pose_z
+    - velocity_vx
+    - velocity_vy
+    - velocity_vz
+    - velocity_wx
+    - velocity_wy
+    - velocity_wz
+    - joint_base
+    - joint_shoulder
+    - joint_elbow
+    - joint_wrist_1
+    - joint_wrist_2
+    - joint_wrist_3
+    - joint_velocity_base
+    - joint_velocity_shoulder
+    - joint_velocity_elbow
+    - joint_velocity_wrist_1
+    - joint_velocity_wrist_2
+    - joint_velocity_wrist_3
+    - gripper_position
+    - tactile_left
+    - tactile_right
+    - tactile_normalized
+video_encoder:
+  id: google/videoprism-base-f16r288
+  revision: be719a406d563b66f0ac969e7c94bab8e997c81a
+  source_commit: c6eba0ece3dd49a24ffc44582966997a4a59f1d8
+  checkpoint_sha256: 61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29
+  parameters: 114365184
+  frozen: true
+  precision: source_checkpoint_float32_parameters
+  streams:
+    - /front-camera
+    - /wrist-camera
+    - /tactile-left
+    - /tactile-right
+text_encoder:
+  id: sentence-transformers/paraphrase-MiniLM-L3-v2
+  revision: 4ca70771034acceecb2e72475f72050fcdde4ddc
+  weights_sha256: cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433
+  parameters: 17389824
+  frozen: true
+  pooling: masked_mean
+readout:
+  type: VideoSensorTemporalDecisionScorer
+  video_feature_width: 3072
+  sensor_channels: 25
+  option_features: question_option_pair_4way
+  context_width: 384
+  sensor_hidden_size: 32
+  fusion_width: 64
+  attention_heads: 4
+  scorer_hidden_width: 64
+  trainable_parameters: 519683
+  total_dense_parameters: 132274691
+  text_only_control_parameters: 196865
+  all_comparison_heads_parameters: 716548
+  modes: [text_only, state_text, vision_text, tactile_text, vision_tactile_text, full]
+training:
+  epochs: 80
+  batch_size: 32
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  loss: cross_entropy
+  checkpoint_selection: minimum_validation_macro_task_group_nll
+  early_stopping: false
+  option_order_randomized_each_train_batch: true
+  sensor_normalization: train_only_channelwise_mean_std
+  seed_per_arm: 17
+evaluation:
+  metrics: [accuracy, nll, brier, ece_15_bins]
+  aggregation: [sample_weighted, macro_task_group]
+  bootstrap_draws: 2000
+  bootstrap_unit: task_group
+  paired_controls:
+    - best_single_stream
+    - missing_video
+    - missing_sensor
+    - task_group_shuffled_video
+    - task_group_shuffled_sensor
+prohibitions:
+  quantization: false
+  sealed_audit_loading: false
+  product_promotion: false
+claim_scope: one_seed_task_grouped_haptile_development_validation_pilot
