@@ -1,3 +1,12 @@
+**2026-11-14 R2 Localized Narratives official-rights recheck:** Google’s
+CC BY 4.0 notice explicitly covers the annotations, but the official page does
+not separately grant rights/consent for the linked voice recordings. COCO
+defers image use to Flickr, whose official guidance requires photo-level
+license/creator evidence absent from the pinned COCO metadata. The candidate
+remains `REVIEW_NOT_ADMITTED`; do not access media or fit/score a model until
+both rights gates pass, then audit full-shard exposure and an annotator/image-
+disjoint split. See [official-rights recheck](docs/pretrained_reuse/R2_LOCALIZED_NARRATIVES_OFFICIAL_RIGHTS_RECHECK_20261114.md).
+
 **2026-11-13 R2 Localized Narratives source screen:** A metadata-only screen found a plausible synchronized audio+image region-grounding task, but the available COCO image metadata lacks creator attribution, the 100 official validation annotators all overlap train shard 0, and voice-recording rights / consent scope remain unverified. Keep the candidate `REVIEW_NOT_ADMITTED`; no media, model, or evaluation data were loaded. See [source screen](docs/pretrained_reuse/R2_LOCALIZED_NARRATIVES_SOURCE_SCREEN_20261113.md).
 **2026-11-12 R2 MiniWoB DINOv2 Path A result:** On the frozen 512/512 screen-only MiniWoB development split, the 22.06M-parameter frozen DINOv2-small plus a 76.3K readout reached 96.09% Accuracy / 0.1231 NLL at selected epoch 99. Position-only, black-screen and cross-episode screen-permutation controls stayed near 23–24% chance; option-ID remapping survived candidate-order permutation with zero argmax flips. This is a narrow synthetic UI action result with a visible train/validation gap, not general image/video or Omni quality, and it does not replace the pinned VideoPrism runtime gate or close multimodal M-2. See [full Path A results](docs/pretrained_reuse/R2_MINIWOB_DINO_PATH_A_RESULTS_20261112.md).
 **2026-11-12 R2 MiniWoB screen-only preflight:** The pinned synthetic click-color corpus is independently reverified (512 train / 512 development validation; zero ID, group, or screen-pixel overlap) and its five focused CPU tests pass. No model was scored. The approved system Python lacks the pinned VideoPrism JAX/Flax stack, while its dedicated runtime is blocked by Windows Application Control; the RTX 3080 was occupied by a separate Orbitune job during the recheck. R2 quality and multimodal M-2 remain open. See [preflight report](docs/pretrained_reuse/R2_MINIWOB_SCREEN_ACTION_PREFLIGHT_20261112.md).
