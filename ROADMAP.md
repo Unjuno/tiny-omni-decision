@@ -1,3 +1,12 @@
+**2026-11-22 R2 UCI HAR sensor validation error follow-up:** A read-only
+analysis of the frozen 100-epoch validation predictions found static summaries
+outperform the causal LSTM by 14.05 percentage points, with LSTM `SITTING`
+recall 0% and `LAYING` recall 3.91%. All four held-out participants favored
+static; four participants are too few for a useful bootstrap interval. The
+post-hoc analysis did not load weights or open the already closed public test.
+This is an optional single-sensor diagnostic, not four-modality progress or a
+reason to expand the LSTM. See [validation error analysis](docs/pretrained_reuse/R2_UCI_HAR_SENSOR_LONG_BUDGET_ERROR_ANALYSIS_20261122.md).
+
 **2026-11-22 R2-M HapTile archive-history follow-up:** Metadata history shows an earlier source revision had 39 ZIPs, including a misspelled `remove_suger_bag.zip`; the pinned source has 38 and retains the canonical archive. The old alias has 68 trajectory names, 61 matching the retained archive and 7 names unique to the alias. The paper's 1,726 versus pinned source's 1,700 count remains unresolved; name overlap does not prove payload identity. Only 128 KiB of ZIP-tail metadata was fetched. HapTile remains `REVIEW_NOT_ADMITTED`, with development claims limited to task-held-out results. See [reconciliation](docs/pretrained_reuse/R2M_HAPTILE_ARCHIVE_HISTORY_20261122.md).
 
 **2026-11-22 R7 Path A shared audio–image runtime integration:** Added the
