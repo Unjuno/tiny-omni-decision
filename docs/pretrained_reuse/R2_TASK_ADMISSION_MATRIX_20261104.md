@@ -53,3 +53,13 @@ A read-only split-code/manifest screen found only 10 groups unselected from the 
 ## CREMA-D source-code follow-up — 2026-11-04
 
 Pinned source code confirms same-filename `VoiceVote`, `FaceVote`, and `MultiModalVote` columns, so a common AV target is structurally possible. The repository requests usage registration, while individual voice/face rights, consent scope, and a verified actor/sentence split remain unresolved. Keep this narrow emotion source `REVIEW_NOT_ADMITTED`; no data access, registration, or fit. See [source-code follow-up](R2_CREMA_D_AV_SOURCE_SCREEN_20261102.md#pinned-source-code-follow-up--2026-11-04).
+
+## 2026-11-10 Glasgow AV-radar speech source screen
+
+The University of Glasgow repository labels the dataset CC BY 4.0, but
+identifiable audio/video is controlled-access and the reported 800 samples
+come from only four speakers. Its approximately 17 GB archive and four
+independent speaker groups do not support disjoint train, calibration, and
+development evaluation; necessity of all AV-radar inputs is also unproven.
+No payload or access request was made. Keep `REVIEW_NOT_ADMITTED`; see [the
+source screen](R2_GLASGOW_AV_RADAR_SPEECH_SOURCE_SCREEN_20261110.md).

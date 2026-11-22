@@ -68,6 +68,30 @@
       "payload": {"sampled_part_bytes": 40549578578, "sampled_part_gib": 37.765, "acquired": false},
       "validation_exposure": "no evaluation",
       "decision": "REVIEW_NOT_ADMITTED"
+    },
+    {
+      "id": "glasgow_av_radar_speech",
+      "source": "University of Glasgow Enlighten Research Data DOI 10.5525/gla.researchdata.2109",
+      "rights": "CC_BY_4.0_REPOSITORY_METADATA; IDENTIFIABLE_AV_IS_CONTROLLED_ACCESS",
+      "source_revision": "Public record screened 2026-11-10; no downloadable archive revision acquired",
+      "modalities": ["audio", "video", "radar_sensor"],
+      "task": "Ten-word speech recognition with adverse-condition robustness motivation",
+      "group_key": "speaker",
+      "task_requires_all_inputs": "NOT_ESTABLISHED; audio may carry the speech target; matched adverse-condition controls not available",
+      "split": {
+        "samples": 800,
+        "independent_speakers": 4,
+        "words": 10,
+        "repetitions_per_word_per_speaker": 20,
+        "valid_disjoint_train_calibration_dev": false
+      },
+      "payload": {
+        "reported_size_gib_approx": 15.83,
+        "controlled_access": true,
+        "acquired": false
+      },
+      "decision": "REVIEW_NOT_ADMITTED_TOO_FEW_SPEAKER_GROUPS_AND_CONTROLLED_ACCESS",
+      "evidence": "docs/pretrained_reuse/R2_GLASGOW_AV_RADAR_SPEECH_SOURCE_SCREEN_20261110.md"
     }
   ],
   "overall_decision": "NO_CANDIDATE_CURRENTLY_PASSES_ALL_R2_M_GATES",
