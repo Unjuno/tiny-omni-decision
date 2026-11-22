@@ -27,6 +27,10 @@ from torch import Tensor, nn
 from transformers import AutoModel, AutoTokenizer
 
 from tiny_omni_decision.tensor_features import compact_cls_features
+from tiny_omni_decision.token_contracts import (
+    embedding_vocab_padding,
+    validate_token_id_bounds,
+)
 from tiny_omni_decision.typed_decisions_ja import (
     TypedDecisionChoiceGroup,
     normalized_state_sha256,
@@ -56,6 +60,11 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--dataset-revision", required=True)
     parser.add_argument("--tokenizer-dir", type=Path, required=True)
     parser.add_argument("--encoder", action="append", type=_parse_encoder, required=True)
+    parser.add_argument(
+        "--trust-remote-tokenizer-code",
+        action="store_true",
+        help="Execute reviewed local custom tokenizer code; model weights remain local-only.",
+    )
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--seed", type=int, default=17)
     parser.add_argument("--epochs", type=int, default=8)
@@ -132,21 +141,32 @@ def _encode(
     encode_batch_size: int,
     max_length: int,
     cpu_threads: int,
+    trust_remote_tokenizer_code: bool,
 ) -> tuple[Tensor, list[dict[str, Any]], dict[str, Any]]:
     torch.set_num_threads(cpu_threads)
     tokenizer = AutoTokenizer.from_pretrained(
-        tokenizer_dir, local_files_only=True, use_fast=False
+        tokenizer_dir,
+        local_files_only=True,
+        use_fast=False,
+        trust_remote_code=trust_remote_tokenizer_code,
     )
-    encoder = AutoModel.from_pretrained(
-        encoder_dir, local_files_only=True, add_pooling_layer=False
-    ).to("cpu").eval()
+    try:
+        encoder = AutoModel.from_pretrained(
+            encoder_dir, local_files_only=True, add_pooling_layer=False
+        )
+    except TypeError as error:
+        if "unexpected keyword argument 'add_pooling_layer'" not in str(error):
+            raise
+        # Some encoder families, including DistilBERT, do not implement a pooler.
+        encoder = AutoModel.from_pretrained(encoder_dir, local_files_only=True)
+    encoder = encoder.to("cpu").eval()
     for parameter in encoder.parameters():
         parameter.requires_grad_(False)
     if max_length > int(encoder.config.max_position_embeddings):
         raise ValueError("max_length exceeds the encoder's position limit")
     vocab_size = int(encoder.config.vocab_size)
-    if int(tokenizer.vocab_size) != vocab_size:
-        raise ValueError("tokenizer and encoder vocabulary sizes differ")
+    tokenizer_vocab_size = int(tokenizer.vocab_size)
+    unused_embedding_rows = embedding_vocab_padding(tokenizer_vocab_size, vocab_size)
 
     group_indices: list[list[int]] = []
     pair_texts: list[tuple[str, str]] = []
@@ -178,6 +198,8 @@ def _encode(
                 padding=True,
                 return_tensors="pt",
             )
+            token_ids = encoded["input_ids"]
+            validate_token_id_bounds(int(token_ids.min()), int(token_ids.max()), vocab_size)
             last_hidden = encoder(**encoded).last_hidden_state
             # On CPU, a CLS slice is a view into the full [batch, seq, hidden]
             # allocation. Clone it so the feature cache cannot retain every
@@ -197,6 +219,9 @@ def _encode(
     metadata = {
         "encoder_parameters": sum(parameter.numel() for parameter in encoder.parameters()),
         "hidden_size": int(encoder.config.hidden_size),
+        "encoder_vocabulary_size": vocab_size,
+        "tokenizer_vocabulary_size": tokenizer_vocab_size,
+        "unused_embedding_rows": unused_embedding_rows,
         "max_position_embeddings": int(encoder.config.max_position_embeddings),
         "candidate_pairs": len(pair_texts),
         "truncated_candidate_pairs": truncated_pairs,
@@ -204,6 +229,8 @@ def _encode(
         "max_untruncated_tokens": max_untruncated_tokens,
         "feature_extraction_seconds": elapsed,
         "frozen_parameters": all(not parameter.requires_grad for parameter in encoder.parameters()),
+        "tokenizer_class": type(tokenizer).__name__,
+        "trust_remote_tokenizer_code": trust_remote_tokenizer_code,
     }
     del encoder, tokenizer
     return feature_rows, [{"candidate_indices": indices} for indices in group_indices], metadata
@@ -450,6 +477,7 @@ def _run_encoder(
         encode_batch_size=args.encode_batch_size,
         max_length=args.max_length,
         cpu_threads=args.cpu_threads,
+        trust_remote_tokenizer_code=args.trust_remote_tokenizer_code,
     )
     feature_seconds = time.perf_counter() - feature_started
     rebuilt_groups = []
