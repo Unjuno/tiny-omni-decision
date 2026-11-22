@@ -32,6 +32,7 @@ jobs:
           python -m json.tool manifests/pretrained_reuse/soundactions-v2-source-20261121.json > /dev/null
           python -m json.tool manifests/pretrained_reuse/habit-source-screen-20261121.json > /dev/null
           python -m json.tool manifests/pretrained_reuse/haptile-train-kinematic-persistence-20261122.json > /dev/null
+          python -m json.tool manifests/pretrained_reuse/haptile-archive-history-20261122.json > /dev/null
           tiny-omni-decision validate-model-manifest manifests/base-model.example.yaml
           for manifest in manifests/dataset.example.yaml manifests/candidates/*.yaml; do
             tiny-omni-decision validate-dataset-manifest "$manifest"

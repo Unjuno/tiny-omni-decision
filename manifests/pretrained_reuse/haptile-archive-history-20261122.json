@@ -1,0 +1,80 @@
+{
+  "format": "haptile_archive_history_range_audit_v1",
+  "source_disposition": "REVIEW_NOT_ADMITTED",
+  "dataset": "HapTile2026/HapTile",
+  "task_group": "remove_sugar_bag",
+  "task_group_split": "train",
+  "revisions": {
+    "earlier": {
+      "revision": "917407abe013ac6a4c69544832900eeb2e879b28",
+      "commit_title": "with language instruction",
+      "commit_date": "2026-06-18T17:52:01.000Z",
+      "zip_archive_count": 39
+    },
+    "pinned_source": {
+      "revision": "54887384f1fe9e93b799e104194a582f9d8840b8",
+      "commit_title": "deleted duplicate file",
+      "commit_date": "2026-06-18T17:54:32.000Z",
+      "zip_archive_count": 38
+    }
+  },
+  "tree_comparison": {
+    "common_zip_files": 38,
+    "common_zip_files_with_identical_git_oid": 38,
+    "removed_path": "Data/remove_suger_bag.zip",
+    "retained_canonical_path": "Data/remove_sugar_bag.zip",
+    "canonical_lfs_oid_unchanged": "58d0207f3d564cf7a43ce0a8438a799b191b8cb047553d8a6a8fe5159f6b397d"
+  },
+  "archive_central_directory": {
+    "removed_alias_h5_paths": 68,
+    "canonical_h5_paths": 61,
+    "shared_internal_h5_names": 61,
+    "removed_alias_only_h5_names": [
+      "0417_163342/trajectory.h5",
+      "0417_163417/trajectory.h5",
+      "0417_163617/trajectory.h5",
+      "0417_163702/trajectory.h5",
+      "0417_163733/trajectory.h5",
+      "0417_164540/trajectory.h5",
+      "0417_164614/trajectory.h5"
+    ],
+    "payload_identity_proven": false
+  },
+  "count_reconciliation": {
+    "pinned_source_trajectory_entries": 1700,
+    "earlier_tree_entries_by_archive_central_directory_count": 1768,
+    "paper_reported_demonstrations": 1726,
+    "paper_to_pinned_difference": 26,
+    "discrepancy_resolved": false
+  },
+  "external_artifacts": {
+    "directory": "C:/CodexLocalArtifacts/pretrained-reuse-r2/haptile-source-history-20261122-attempt-03",
+    "result_path": "result.json",
+    "result_sha256": "9f9ecb6a3a42fb5c9df1881e6c7ac4552b2d2e9bd5b5351a1cd35864a68c2edc",
+    "commits_response_sha256": "ed8fb48ab341563a82fc9601fcc418ce1ef1e4cd6f37f2d7847fc094d0ab07c7",
+    "old_tree_response_sha256": "a9be80a2fdc654489b59f95bfcf143378e138c39b9b69a829c92142a16840ced",
+    "pinned_tree_response_sha256": "53bea10cb417002ee84416606d9f58e09de020bd1cb952e12c1ca59286444551",
+    "removed_alias_tail_sha256": "65aaca48bf1b167c0262973bfab3e56dba4d96af0236cf96d999db53e5c6e161",
+    "canonical_tail_sha256": "c768ae52c566b0d5fb6fa6cfa3e1f72432fcd71995ba07eb4935e3dca15ff99e"
+  },
+  "reproduction_code": {
+    "script": "scripts/pretrained_reuse/audit_haptile_archive_history.py",
+    "script_sha256": "e2fdb93ed9538a1bb831974e2b67c7497aacc45a2b6273a6a1bbf22fdd0b764c",
+    "test": "tests/test_audit_haptile_archive_history.py",
+    "test_sha256": "6b20a62bcb9b63b54220d694be5c31d9a0335d42657a457dad33115b70da54cc",
+    "focused_tests": "3 passed",
+    "ruff": "passed"
+  },
+  "privacy_and_scope": {
+    "bytes_requested_from_archives": 131072,
+    "media_or_hdf5_payload_opened": false,
+    "sealed_audit_accessed": false,
+    "training_or_model_evaluation": false,
+    "existing_corpus_or_checkpoint_modified": false
+  },
+  "limitations": [
+    "Overlapping central-directory names do not prove that the underlying HDF5 payloads are identical.",
+    "The source paper count remains 26 above the pinned 1700-entry release; the earlier spelling-alias revision has 1768 entries by raw ZIP count and does not resolve the paper count.",
+    "Per-episode operator identity remains unmapped; results cannot support unseen-operator claims."
+  ]
+}

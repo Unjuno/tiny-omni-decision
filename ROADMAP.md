@@ -1,3 +1,5 @@
+**2026-11-22 R2-M HapTile archive-history follow-up:** Metadata history shows an earlier source revision had 39 ZIPs, including a misspelled `remove_suger_bag.zip`; the pinned source has 38 and retains the canonical archive. The old alias has 68 trajectory names, 61 matching the retained archive and 7 names unique to the alias. The paper's 1,726 versus pinned source's 1,700 count remains unresolved; name overlap does not prove payload identity. Only 128 KiB of ZIP-tail metadata was fetched. HapTile remains `REVIEW_NOT_ADMITTED`, with development claims limited to task-held-out results. See [reconciliation](docs/pretrained_reuse/R2M_HAPTILE_ARCHIVE_HISTORY_20261122.md).
+
 **2026-11-22 R7 Path A shared audio–image runtime integration:** Added the
 spoken-color/generated-screen task to a new four-route assembly. Exact Whisper
 encoder tensors match the resident Path A checkpoint (67/67); the R7-specific
