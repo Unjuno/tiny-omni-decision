@@ -398,6 +398,15 @@ encoder retains numeric magnitude; field localization, question binding and
 decision readout remain unresolved. Do not tune on these FIT OOF results. See
 [protocol and results](docs/pretrained_reuse/R2_NATIVE_NUMERIC_SPAN_DECODER_DIAGNOSTIC_20261121.md).
 
+**2026-11-22 R2 numeric-task serialization audit:** A read-only audit of the
+same hash-pinned FIT boundary found all 24,576 objects use the fixed
+`cost,id,risk,time` key order; a direct structured min/max rule reproduces the
+same 4,608 FIT labels. This is not model accuracy, but it shows the benchmark
+cannot test learned field localization and weakens the case for another BERT
+capacity sweep on this corpus. Preserve it unchanged; any further BERT test
+needs a separately frozen task/source and independent groups. See [audit and
+scope](docs/pretrained_reuse/R2_NATIVE_NUMERIC_FIELD_ORDER_AUDIT_20261122.md).
+
 **2026-11-21 R2 EVE-ESA EO MCQA TRAIN-only grouped CV:** The frozen
 MiniLM-L3 + 196,865-parameter readout reached 65.39% OOF Accuracy (95% grouped
 bootstrap interval 62.77–68.02%), 0.9052 NLL, 0.4552 Brier and 4.73% ECE over
