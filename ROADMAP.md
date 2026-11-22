@@ -1,3 +1,12 @@
+**2026-11-22 R7 DINOv2 dynamic INT8 pilot:** A read-only, CPU-only
+quantization compatibility run over the already exposed spoken-color
+audio+screen development task reduced the DINOv2 state payload from 88.25 MB
+to 24.67 MB and passed strict state reload. Accuracy changed 99.99% → 98.70%,
+but NLL/Brier/ECE worsened substantially and 123/9,528 argmaxes flipped. Audio
+embeddings and the scorer stayed fixed float32; this is not a complete package
+or product-quality result. No training, GPU, or sealed audit was used. See
+[protocol and results](docs/pretrained_reuse/R7_SPOKEN_PALETTE_DINO_DYNAMIC_INT8_20261122.md).
+
 **2026-11-22 R2-M fresh audiovisual source gate:** The already admitted
 Lombard and SoundActions paired-audio/video experiments do not show a robust
 fusion advantage, and their development cohorts are exposed. A read-only
