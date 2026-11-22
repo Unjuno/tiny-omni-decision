@@ -30,7 +30,7 @@ The external machine-readable smoke record is
 tokenizer subrecord is `tokenizer-forward-smoke.json` (SHA-256
 `d8be9421f60eda085eccd528a7803940feac038e4567a56922456bdc12158364`). The
 source-of-truth candidate inventory includes this checkpoint; its updated
-SHA-256 is `640418d297af45fa97d3f2577c17a652dc7e63cad2fcf0e904525841e54fad22`.
+SHA-256 is `d4dfa9a6b1fbfd4c9c32deecf7ea1985f1ca884a030d8086a71552060f7c2529`.
 
 For the CPU load smoke, PyTorch's `weights_only=True` loader read the checkpoint
 as a tensor-only state dictionary. The standard Transformers
@@ -51,13 +51,48 @@ is a local tokenizer+encoder smoke, not a comparison to an independent
 tokenizer implementation. It does not establish Decision quality, calibration,
 or package fit.
 
+## Typed-Decision pipeline smoke
+
+A small CPU-only smoke passed through the repository's actual frozen-feature
+and candidate-readout pipeline. It used seed 17, one state per workflow in each
+partition (four grouped states / 20 decisions for train and validation), two
+readout epochs, one CPU thread, and the same frozen synthetic teacher-label
+source. The publisher's public test was not loaded. The tokenizer had 32,000
+IDs while the model's embedding table has 32,768 rows; the 768 extra rows are
+unused padding, and every emitted ID was checked against the embedding table.
+
+The frozen encoder has **68,087,808 parameters**; the readout has **98,561**,
+for **68,186,369 pre-quantization parameters** in this smoke configuration.
+The full upstream masked-LM checkpoint has 68,712,704 parameters, but its MLM
+head is omitted from Decision inference. Feature extraction took 51.61 seconds
+for 142 candidate pairs on CPU; the readout fit took 0.014 seconds. The best
+readout was epoch 2, and reloading reproduced all probabilities exactly.
+
+The tiny validation smoke produced macro teacher-agreement Accuracy 0.375,
+soft NLL 1.1762, soft Brier 0.1624, and ECE 0.1917. With only 20 decisions and
+checkpoint selection on those same rows, these figures verify plumbing only;
+they are **not** a model-quality estimate and must not be compared to the full
+BERT-base / LightSPLADE run or any 95% product target. The full paired
+comparison remains unrun. The smoke output and hashes are preserved outside
+Git in `typed-decisions-ja-line-distilbert-smoke-20261123-attempt-03`, with
+manifest SHA-256
+`21f575044f3e27739d0c9eec403295659019ac4c035c96e502f94d624ff6389e`.
+
+This smoke exposed integration issues before the successful attempt:
+`AutoModel` passes no `add_pooling_layer` argument to DistilBERT, the custom
+tokenizer needs its reviewed local code explicitly enabled, and its 32,000-token
+SentencePiece vocabulary is padded to a 32,768-row embedding. The comparison
+CLI now has an opt-in local tokenizer-code flag, falls back to the model's
+native no-pooler constructor, and validates emitted IDs against the actual
+embedding bounds. Pure CPU tests cover padded vocabularies and invalid IDs.
+The implementation is commit `71fb2deef77727abeb5e61f8b408873f767a9179`.
+
 ## Decision and next gate
 
 **Checkpoint feasibility: PASS. Short tokenizer+encoder smoke: PASS. Decision
 quality: NOT MEASURED. Product/release eligibility: NOT ESTABLISHED.**
 
-The next gate is a small CPU-only smoke through the same typed-decision input
-pipeline, followed by an explicitly limited paired readout diagnostic only if
+The next gate is an explicitly limited paired readout diagnostic only after
 the active CPU workload has ended. The existing typed-decision validation is
 already exposed and uses synthetic teacher distributions, so any reuse must be
 labelled a diagnostic rather than independent confirmation; a new human-labeled

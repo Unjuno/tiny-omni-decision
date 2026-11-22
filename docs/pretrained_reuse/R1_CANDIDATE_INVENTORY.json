@@ -772,7 +772,7 @@
       "passed_load": true,
       "has_real_weights": true,
       "runtime_supported": true,
-      "runtime_evidence": "CPU weights_only=True tensor-state load and strict=True DistilBertForMaskedLM load; frozen finite encoder forward [1,4,768]; isolated tokenizer with four deterministic Japanese question/candidate fixtures yielded valid vocabulary IDs and finite [4,22,768] output; tokenizer-forward-smoke.json SHA-256 d8be9421f60eda085eccd528a7803940feac038e4567a56922456bdc12158364",
+      "runtime_evidence": "CPU weights_only=True tensor-state load and strict=True DistilBertForMaskedLM load; frozen finite encoder forward [1,4,768]; isolated tokenizer with four deterministic Japanese question/candidate fixtures yielded valid vocabulary IDs and finite [4,22,768] output; tokenizer-forward-smoke.json SHA-256 d8be9421f60eda085eccd528a7803940feac038e4567a56922456bdc12158364; train-only typed-Decision pipeline smoke: 4 state-groups/20 decisions per split, finite output, best readout reload parity 0.0; diagnostic-only, not quality evidence (manifest SHA-256 21f575044f3e27739d0c9eec403295659019ac4c035c96e502f94d624ff6389e)",
       "task_quality_status": "UNMEASURED; no Decision readout or task metric",
       "decision": "retain as compact Japanese BERT-family candidate; task-specific Decision quality and package/runtime budget gates remain open",
       "parameter_tensor_bytes": 274850816,
@@ -795,6 +795,11 @@
     {
       "date": "2026-11-23",
       "scope": "append pinned LINE Japanese DistilBERT tensor-safe load, strict model load, tokenizer fixture and CPU encoder forward; Decision quality remains unmeasured",
+      "report": "docs/pretrained_reuse/R1_LINE_DISTILBERT_RUNTIME_20261123.md"
+    },
+    {
+      "date": "2026-11-23",
+      "scope": "append four-workflow train-only typed-Decision pipeline smoke for LINE DistilBERT; small synthetic teacher-labeled sample, not a quality result",
       "report": "docs/pretrained_reuse/R1_LINE_DISTILBERT_RUNTIME_20261123.md"
     }
   ]
