@@ -86,6 +86,8 @@ matched the prior selected option and probabilities.
   Torch worker `61d0acccbed8c3fdfc80d90b15ecd772fccce0fda00d522eb06431087ef9c85a`,
   and smoke script
   `805bada7c7fef47460aed2aaed7cef3346d98cb476147b5fdffe89f6215ff9c8`.
+  Those exact implementation files are committed at
+  `4a4e312d593542b6226d7f71ce437872a475fb97`.
 - The base R7 output was a previously retained TRAIN-only smoke receipt; no
   Evaluation or sealed-audit rows were used for this integration.
 
