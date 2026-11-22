@@ -1,5 +1,13 @@
 # Tiny Omni Decision
 
+**2026-11-22 R2-M spoken-color + screen-action mechanism pilot:** A 30.36M
+pre-quantization-parameter frozen Whisper/DINOv2 stack with a 98,561-parameter
+shared choice scorer reached 99.99% Accuracy on one constructed four-color
+audio+image task. Mean-replacement and mismatch controls show dependence on
+both inputs. This uses only generated still screens and four held-out speaker
+groups from source TRAIN; it is development evidence, not broad modality or
+product quality. [Protocol, metrics, hashes and limitations](docs/pretrained_reuse/R2M_SPOKEN_PALETTE_AUDIO_IMAGE_DECISION_20261122.md).
+
 **2026-11-22 HapTile frozen-feature Decision pilot:** The full
 vision+tactile-video+robot-state+text readout selected 63.1% task-macro
 validation Accuracy / 1.120 NLL across five held-out task groups; the best

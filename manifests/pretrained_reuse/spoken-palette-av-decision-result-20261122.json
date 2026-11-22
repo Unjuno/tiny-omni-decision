@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "experiment_id": "spoken-color-screen-action-v1-seed17",
+  "status": "PASS_EXECUTION_WITH_LIMITED_DEVELOPMENT_EVALUATION",
+  "report": "docs/pretrained_reuse/R2M_SPOKEN_PALETTE_AUDIO_IMAGE_DECISION_20261122.md",
+  "source_branch": "codex/pretrained-reuse-next-20261115",
+  "source_commit_at_run": "2db54c9b74f3548083983ce4d505d2736918e92c",
+  "source_code_sha256_final": {
+    "trainer": "f429e0762942449bb1734c6f21cd81052633b7c385a8864214f8d9817596cc56",
+    "corpus_builder": "b5d068713f120c1d561a20dcbc003465a46c4b87b55f334b0ad9439b4de47565",
+    "task_generator": "171e645a83001f122fb966db0df4e59624552a0e4fc601c5ed59c324774c286b"
+  },
+  "config_sha256": "d6fe92c1a702fef8dc20f4f25c1138e4079dcef022c9168e15134035db771996",
+  "final_checked_in_config_sha256": "316e86897a6e6768feb6c730f101a8bb9fc66a3c4f0dbc7d15a8303df714b775",
+  "post_run_config_cleanup": "Removed duplicate identical selector_min_delta key; effective value unchanged.",
+  "corpus_manifest_sha256": "b75a9e5ea629b8e1d8cb188ef4ee9c9a9b3e784b0f387ce9eed0a27072d72c7a",
+  "source_manifest_sha256": "5876e57a4c71108fe3483fde6e18f3977121942c9208567488f042247626577d",
+  "source_train_rows_sha256": "259f3ee36aa956618a89819338c2ecb67b194c82dbf636df70b551e00a5d78b0",
+  "whisper_feature_bank_sha256": "e09aab88f31957c53c2e48f38a7e79971739efc916547cd5fd3dd6a1bca0a509",
+  "evaluation_policy": {
+    "sealed_audit_opened": false,
+    "source_official_validation_or_test_used": false,
+    "candidate_selection": "selection split macro-color NLL",
+    "temperature_calibration": "calibration split, scalar grid only",
+    "evaluation_split_opened_after_freeze": true,
+    "additional_seeds_or_search": false,
+    "gpu_or_cloud_used": false,
+    "product_promotion": false
+  },
+  "parameters": {
+    "whisper_frozen": 8208384,
+    "dinov2_small_frozen": 22056576,
+    "trainable_readout": 98561,
+    "resident_total_prequantization": 30363521
+  },
+  "training": {
+    "seed": 17,
+    "epochs_completed": 12,
+    "optimizer_updates": 3036,
+    "best_epoch": 5,
+    "early_stopping": "selection patience 7 reached",
+    "checkpoint_best_sha256": "48b4a12401f9da88472b290536ca5e3fe3b708319af9d221caa5ce4b75e9c1b5",
+    "checkpoint_final_sha256": "8b617550dbc32b8a21f89daf5796d4567ce4c77bf924aed251481a082b4b42fe"
+  },
+  "evaluation": {
+    "count": 9528,
+    "accuracy": 0.999895046179681,
+    "macro_color_accuracy": 0.9998926116838488,
+    "nll": 0.001189835706948548,
+    "macro_color_nll": 0.0011996584839112862,
+    "brier": 0.00040906664389102684,
+    "ece_15": 0.0008634910062518493,
+    "scope": "constructed four-color task; four heldout speaker groups; development only"
+  },
+  "external_artifact_root": "C:/CodexArtifacts/pretrained-reuse-r2/spoken-palette-av-decision-v1-fit-attempt-01",
+  "large_artifacts_committed": false
+}

@@ -1,3 +1,13 @@
+**2026-11-22 R2-M audio+image supplied-option mechanism pilot:** A frozen
+Whisper/DINOv2 stack (30.36M pre-quantization parameters) and 98,561-parameter
+shared scorer completed a four-color spoken-command/screen-action task. On
+9,528 decisions from four held-out source-TRAIN speaker groups, Accuracy was
+99.99%; replacing either input dropped performance to chance. This validates
+only paired-input use in the constructed task, not general Omni quality,
+natural video, or product readiness. Best epoch 5 was retained after selection
+loss began worsening. [Results and scope](docs/pretrained_reuse/R2M_SPOKEN_PALETTE_AUDIO_IMAGE_DECISION_20261122.md)
+and [machine-readable receipt](manifests/pretrained_reuse/spoken-palette-av-decision-result-20261122.json).
+
 **2026-11-22 R2-M RoboTwin unified metadata screen:** The pinned LeRobot
 candidate lists 27,500 train-only episodes, three video views, robot state and
 continuous actions, with no audio. Its dataset repository has no license

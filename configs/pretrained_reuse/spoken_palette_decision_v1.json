@@ -1,0 +1,102 @@
+{
+  "experiment_id": "spoken-color-screen-action-v1-seed17",
+  "seed": 17,
+  "device": "cpu",
+  "source": {
+    "dataset_id": "Sheffield/Lombard-Grid",
+    "license": "CC-BY-4.0",
+    "policy": "ALLOW",
+    "source_manifest": "manifests/pretrained_reuse/lombard-grid-source-20261014.json",
+    "source_manifest_sha256": "5876e57a4c71108fe3483fde6e18f3977121942c9208567488f042247626577d",
+    "original_train_rows_sha256": "259f3ee36aa956618a89819338c2ecb67b194c82dbf636df70b551e00a5d78b0",
+    "audio_feature_path": "C:/CodexArtifacts/pretrained-reuse-r2/lombard-grid-whisper-features-01",
+    "audio_pooled_sha256": "e09aab88f31957c53c2e48f38a7e79971739efc916547cd5fd3dd6a1bca0a509",
+    "audio_encoder": "openai/whisper-tiny encoder-only",
+    "audio_encoder_revision": "169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
+    "audio_encoder_parameters": 8208384,
+    "screen_encoder_config": "configs/pretrained_reuse/miniwob_dino_path_a_v1.json",
+    "screen_encoder_config_sha256": "93e91614b0beda403172e462a9d0b05857486a2d0d48ec38e9b84613d3dae29e",
+    "screen_encoder": "facebook/dinov2-small",
+    "screen_encoder_revision": "ed25f3a31f01632728cabb09d1542f84ab7b0056",
+    "screen_encoder_parameters": 22056576
+  },
+  "task": {
+    "name": "spoken-color-to-screen-action-v1",
+    "question": "Choose the supplied screen action showing the color spoken in the audio clip.",
+    "colors": [
+      "blue",
+      "green",
+      "red",
+      "white"
+    ],
+    "candidate_count": 4,
+    "screen_has_no_target_or_query_text": true,
+    "option_ids_are_opaque_and_randomized": true,
+    "factorial_layout_split": {
+      "all_layouts": 24,
+      "train_parity": 0,
+      "heldout_parity": 1,
+      "variants_per_layout": 2
+    },
+    "speaker_group_split": {
+      "seed": 17,
+      "ordered_by": "SHA-256(spoken-palette-v1|17|speaker|<speaker_group>)",
+      "group_counts": {
+        "train": 24,
+        "selection": 4,
+        "calibration": 4,
+        "evaluation": 4
+      }
+    },
+    "unimodal_reference": {
+      "audio_only_accuracy_ceiling": 0.25,
+      "image_only_macro_accuracy_ceiling": 0.25,
+      "image_only_sample_ceiling_is_reported_from_observed_train_label_prior": true
+    }
+  },
+  "features": {
+    "audio": "frozen 384D mean Whisper-encoder representation",
+    "image": "frozen DINOv2 cls, mean-patch, 3x3 local center patch and normalized option coordinates (1154D per option)",
+    "concatenated_option_width": 1538,
+    "normalization": "mean/std from unique TRAIN audio sources and TRAIN screens only; std<=1e-6 becomes 1"
+  },
+  "model": {
+    "architecture": "shared FrozenFeatureCandidateScorer(feature_size=1538, hidden_size=64)",
+    "trainable_parameters": 98561,
+    "resident_total_prequantization_parameters": 30363521,
+    "pretrained_encoders_frozen": true,
+    "json_output": "typed choice probabilities over supplied opaque option IDs"
+  },
+  "training": {
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.001,
+    "batch_size": 256,
+    "max_epochs": 40,
+    "scheduler": "cosine over the fixed 40-epoch budget",
+    "loss": "cross entropy over the four supplied action options",
+    "selector": "earliest minimum macro-color selection NLL; min_delta=0.0001",
+    "early_stopping_patience": 7,
+    "selector_min_delta": 0.0001,
+    "checkpoint_policy": "save validation-selected best and final separately",
+    "calibration": "one scalar temperature selected on calibration macro-color NLL from 81 log-spaced values in [0.25,4.0]",
+    "additional_seed_or_architecture_search": false
+  },
+  "evaluation": {
+    "evaluation_split_is_read_only_until_candidate_and_temperature_freeze": true,
+    "report": [
+      "Accuracy",
+      "macro-color Accuracy",
+      "NLL",
+      "macro-color NLL",
+      "Brier",
+      "ECE-15",
+      "mean confidence",
+      "paired group metrics",
+      "input intervention controls"
+    ],
+    "sealed_audit_opened": false,
+    "scope": "controlled audio+image action task; not a four-modality or product-quality result"
+  },
+  "artifact_root": "C:/CodexArtifacts/pretrained-reuse-r2/spoken-palette-av-decision-v1-fit-attempt-01"
+}
