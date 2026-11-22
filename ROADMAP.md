@@ -7,6 +7,16 @@ unrelated color left accuracy at 96/96. These are in-sample mechanism checks on
 the fitting speakers; they are not generalization or product-quality evidence
 and do not close R2-M. See [paired intervention report](docs/pretrained_reuse/R2_SPOKEN_PALETTE_TRAIN_ONLY_MODALITY_INTERVENTIONS_20261122.md).
 
+**2026-11-22 R2 LVOmniBench source screen:** Official metadata describes 275
+long audio-video sources and 1,014 manually authored four-choice questions
+designed to need both modalities, but the paper explicitly licenses the dataset
+CC BY-NC-SA 4.0. The Apache-2.0 annotation mirror says it defaults to that
+license because upstream was unspecified, which conflicts with the paper and
+does not license the underlying media. The source is gated, exact per-video
+media license variants were not verified, and no separate development split
+was identified. Keep `NOT_ADMITTED_FOR_PRODUCT_QUALITY`; no annotations/media,
+access request, split, or model were used. See [screen and pinned metadata](docs/pretrained_reuse/R2_LVOMNIBENCH_SOURCE_SCREEN_20261122.md) and [manifest](manifests/pretrained_reuse/lvomnibench-source-screen-20261122.json).
+
 **2026-11-22 R7 image storage dtype audit:** The latest 594,168,210-byte
 encoder-only four-route package stores its 114.37M-parameter VideoPrism image
 archive as float32 (457.48 MB), despite `f16` in the filename. Arithmetic-only

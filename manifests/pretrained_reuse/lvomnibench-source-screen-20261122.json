@@ -1,0 +1,57 @@
+{
+  "format": "lvomnibench_source_screen_v1",
+  "dataset_id": "LVOmniBench",
+  "status": "NOT_ADMITTED_FOR_PRODUCT_QUALITY",
+  "official_project_url": "https://kd-tao.github.io/LVOmniBench/",
+  "official_paper_url": "https://arxiv.org/abs/2603.19217",
+  "official_repository": {
+    "url": "https://github.com/KD-TAO/LVOmniBench",
+    "revision": "68d5e3db2f9762b29f90c585fb59fd27f6607a68"
+  },
+  "source_revisions": {
+    "upstream_dataset": {
+      "id": "KD-TAO/LVOmniBench",
+      "revision": "587494e7abcf1c1e3db6be3055db052363bf3636",
+      "gated": "auto"
+    },
+    "annotation_repack": {
+      "id": "xxayt/LVOmniBench",
+      "revision": "ae9d203ca347b8195d3448e2528ff00d858c3e0f",
+      "declared_license": "Apache-2.0",
+      "license_note": "Repack says upstream license is unspecified and defaults the annotation mirror to Apache-2.0; this conflicts with the official paper's CC BY-NC-SA 4.0 dataset license."
+    }
+  },
+  "rights": {
+    "official_dataset_license": "CC-BY-NC-SA-4.0",
+    "underlying_media": "Official paper says source videos are from YouTube and adhere to Creative Commons licenses; exact per-video license variants were not verified.",
+    "product_directed_use_allowed": false
+  },
+  "source_screen": {
+    "method": "official project/paper/repository and dataset-card metadata only",
+    "annotations_downloaded": false,
+    "media_accessed": false,
+    "model_or_checkpoint_accessed": false,
+    "access_request_sent": false,
+    "split_created": false,
+    "feature_extraction_training_or_evaluation_performed": false,
+    "gpu_used": false
+  },
+  "task_fit": {
+    "native_task": "long-form audio-video multiple-choice question answering",
+    "reported_videos": 275,
+    "reported_questions": 1014,
+    "reported_video_duration_minutes": [10, 90],
+    "both_modalities_required_claim": "Official authors state questions are designed to require joint audio-visual reasoning; not independently validated here.",
+    "supplied_option_output_match": true,
+    "development_split_identified": false,
+    "product_quality_evaluation_admitted": false
+  },
+  "limitations": [
+    "official paper's CC BY-NC-SA 4.0 terms are incompatible with the product-directed source pool",
+    "annotation mirror's Apache-2.0 declaration does not resolve the upstream paper's license or underlying media rights",
+    "no auditable per-video Creative Commons variant ledger was identified in the reviewed metadata",
+    "no separate development split was identified for iterative model selection",
+    "long video duration creates unresolved local processing and storage cost"
+  ],
+  "recommendation": "Do not download or use for product training, tuning, or quality claims. Reconsider only after product-compatible rights for annotations and each media asset plus an independently grouped development split are documented."
+}
