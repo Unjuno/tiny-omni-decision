@@ -1,3 +1,11 @@
+**2026-11-22 R2-M fresh audiovisual source gate:** The already admitted
+Lombard and SoundActions paired-audio/video experiments do not show a robust
+fusion advantage, and their development cohorts are exposed. A read-only
+official-source check found VGGSound/AVSpeech media-rights scope unresolved,
+AVIA under a signed research-only agreement, and VoxDub CC BY-NC-SA; none is
+admitted for another product-directed fit. HubEgo still requires user-approved
+access. No new payload was acquired. [Gate and next criteria](docs/pretrained_reuse/R2M_FRESH_AV_SOURCE_GATE_20261122.md).
+
 **2026-11-22 R2-M audio+image supplied-option mechanism pilot:** A frozen
 Whisper/DINOv2 stack (30.36M pre-quantization parameters) and 98,561-parameter
 shared scorer completed a four-color spoken-command/screen-action task. On
