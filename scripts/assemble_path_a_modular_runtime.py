@@ -8,7 +8,13 @@ import json
 import subprocess
 from pathlib import Path
 
-from tiny_omni_decision.modular_bundle import assemble_modular_bundle
+from tiny_omni_decision.audio_runtime import (
+    AUDIO_MODEL_REVISION,
+    AUDIO_WEIGHTS_SHA256,
+    TEXT_WEIGHTS_SHA256,
+)
+from tiny_omni_decision.bundle_validation import verify_bundle
+from tiny_omni_decision.modular_bundle import assemble_modular_bundle, extend_modular_bundle
 from tiny_omni_decision.text_runtime import (
     MODEL_PARAMETERS as TEXT_MODEL_PARAMETERS,
 )
@@ -38,14 +44,23 @@ from tiny_omni_decision.video_runtime import (
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--audio-bundle", type=Path, required=True)
-    parser.add_argument("--image-bundle", type=Path, required=True)
+    parser.add_argument("--audio-bundle", type=Path)
+    parser.add_argument("--image-bundle", type=Path)
+    parser.add_argument("--base-assembly", type=Path)
     parser.add_argument("--text-readout", type=Path)
     parser.add_argument("--text-report", type=Path)
     parser.add_argument("--video-readout", type=Path)
     parser.add_argument("--video-report", type=Path)
+    parser.add_argument("--librispeech-bundle", type=Path)
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
+    if args.base_assembly is not None:
+        if args.audio_bundle is not None or args.image_bundle is not None:
+            parser.error("--base-assembly cannot be combined with --audio-bundle/--image-bundle")
+        if args.text_readout is not None or args.video_readout is not None:
+            parser.error("text/video task inputs are already present in --base-assembly")
+    elif args.audio_bundle is None or args.image_bundle is None:
+        parser.error("provide either --base-assembly or both --audio-bundle and --image-bundle")
     if (args.text_readout is None) != (args.text_report is None):
         parser.error("--text-readout and --text-report must be provided together")
     if (args.video_readout is None) != (args.video_report is None):
@@ -173,12 +188,81 @@ def main() -> None:
                 / "src/tiny_omni_decision/decision.py",
             },
         }
-    manifest = assemble_modular_bundle(
-        {"audio": args.audio_bundle, "image": args.image_bundle},
-        args.output_dir,
-        source_commit=source_commit,
-        shared_tasks=shared_tasks,
-    )
+    if args.librispeech_bundle is not None:
+        libri_root = args.librispeech_bundle.resolve(strict=True)
+        libri_manifest = json.loads(
+            (libri_root / "bundle-manifest.json").read_text(encoding="utf-8")
+        )
+        verify_bundle(libri_root, libri_manifest)
+        models = libri_manifest.get("models", {})
+        if (
+            libri_manifest.get("bundle_id") != "path-a-audio-librispeech-transcript-choice-v1"
+            or models.get("audio", {}).get("revision") != AUDIO_MODEL_REVISION
+            or models.get("audio", {}).get("weights_sha256") != AUDIO_WEIGHTS_SHA256
+            or models.get("text", {}).get("revision") != TEXT_MODEL_REVISION
+            or models.get("text", {}).get("weights_sha256") != TEXT_WEIGHTS_SHA256
+            or int(libri_manifest.get("total_parameters", -1))
+            != int(models.get("audio", {}).get("parameters", -2))
+            + int(models.get("text", {}).get("parameters", -2))
+            + int(models.get("readout", {}).get("parameters", -2))
+        ):
+            raise ValueError(
+                "LibriSpeech bundle identity, encoders, or parameter accounting mismatch"
+            )
+        source_root = Path(__file__).resolve().parents[1]
+        readout = libri_root / str(models["readout"]["path"])
+        if hashlib.sha256(readout.read_bytes()).hexdigest() != models["readout"]["sha256"]:
+            raise ValueError("LibriSpeech readout hash differs from its manifest")
+        shared_tasks["librispeech"] = {
+            "task_id": "librispeech-transcript-choice-v1",
+            "scope": str(libri_manifest["scope"]),
+            "source_report_sha256": str(libri_manifest["source_run_report_sha256"]),
+            "runtime_environment": libri_manifest.get("environment_at_build", {}),
+            "shared_assets": [
+                {
+                    "name": "whisper-tiny",
+                    "path": "components/audio/models/audio-whisper-tiny",
+                    "weights_sha256": AUDIO_WEIGHTS_SHA256,
+                    "parameters": int(models["audio"]["parameters"]),
+                    "revision": AUDIO_MODEL_REVISION,
+                },
+                {
+                    "name": "minilm-en",
+                    "path": "components/audio/models/text-minilm-en",
+                    "weights_sha256": TEXT_WEIGHTS_SHA256,
+                    "parameters": int(models["text"]["parameters"]),
+                    "revision": TEXT_MODEL_REVISION,
+                },
+            ],
+            "parameters": [
+                {
+                    "name": "librispeech-readout",
+                    "identity": str(models["readout"]["sha256"]),
+                    "parameters": int(models["readout"]["parameters"]),
+                    "path": "readout/best-readout.pt",
+                }
+            ],
+            "files": {
+                "readout/best-readout.pt": readout,
+                "runtime/audio_runtime.py": source_root
+                / "src/tiny_omni_decision/audio_runtime.py",
+                "runtime/decision.py": source_root / "src/tiny_omni_decision/decision.py",
+            },
+        }
+    if args.base_assembly is not None:
+        manifest = extend_modular_bundle(
+            args.base_assembly,
+            shared_tasks,
+            args.output_dir,
+            source_commit=source_commit,
+        )
+    else:
+        manifest = assemble_modular_bundle(
+            {"audio": args.audio_bundle, "image": args.image_bundle},
+            args.output_dir,
+            source_commit=source_commit,
+            shared_tasks=shared_tasks,
+        )
     print(json.dumps(manifest, indent=2, ensure_ascii=False))
 
 

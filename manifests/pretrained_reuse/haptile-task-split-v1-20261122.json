@@ -1,0 +1,71 @@
+{
+  "conversion_card_sha256": "f0462ecc55d172e8a3c51ac5c874969e6f0482f093812482d28f730ba0558fbb",
+  "conversion_revision": "c8593da98d3facb7a9293842514f0ee4ad3f2318",
+  "development_episode_counts": {
+    "calibration": 169,
+    "train": 1113,
+    "validation": 169
+  },
+  "development_splits": {
+    "calibration": [
+      "move_spoon",
+      "press_coffee_machine",
+      "put_sponge",
+      "turn_water_bottle"
+    ],
+    "train": [
+      "insert_peg",
+      "move_cable",
+      "move_plush_toy",
+      "move_rubiks_cube",
+      "move_toy_car",
+      "move_water_bottle",
+      "put_apple",
+      "put_banana",
+      "put_baseball",
+      "put_fork",
+      "put_golf_ball",
+      "put_lego",
+      "put_orange",
+      "put_spatula",
+      "put_stack_glass_cups",
+      "remove_cloth",
+      "remove_laundry_pod",
+      "remove_screwdriver",
+      "remove_sugar_bag",
+      "stack_bowls",
+      "stack_disposable_cup",
+      "stack_glass_cups",
+      "turn_can",
+      "wipe_whiteboard"
+    ],
+    "validation": [
+      "fold_tshirt",
+      "move_can",
+      "put_spoon",
+      "put_strawberry",
+      "turn_cleanser_bottle"
+    ]
+  },
+  "episode_media_or_action_labels_read": false,
+  "format": "haptile_task_group_split_commitment_v1",
+  "group_unit": "task slug; no task appears across splits",
+  "hash_input_template": "tiny-omni-decision-haptile-task-v1|seed=17|task={task}",
+  "manifest_sha256": "bf9d2a7b0d7a7cf6dd3a67585771aff804b9d6a5f8463ed0fe1a9ea6ce474f06",
+  "private_manifest_sha256": "65429759914b53b39f77b6a7506dc2bef99b210c26e8d6f64b14c1c96757385b",
+  "sealed_audit": {
+    "episode_count": 248,
+    "group_and_count_commitment_sha256": "9b20f59ebc29864a59d216e52b0997b4184738a17b5f141d1cce8cf7bc94ce5f",
+    "task_group_count": 5,
+    "task_ids_in_public_manifest": false
+  },
+  "sealed_audit_accessed": false,
+  "seed": 17,
+  "source_revision": "54887384f1fe9e93b799e104194a582f9d8840b8",
+  "split_sizes_in_task_groups": {
+    "calibration": 4,
+    "sealed_audit": 5,
+    "train": 24,
+    "validation": 5
+  }
+}

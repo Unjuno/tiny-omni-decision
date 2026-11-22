@@ -1,0 +1,68 @@
+{
+  "format": "r2_habit_transition_feature_package_v1",
+  "recorded_at": "2026-11-21",
+  "status": "FROZEN_FEATURE_PLUMBING_PASS_QUALITY_UNEVALUATED",
+  "dataset": {
+    "name": "HABIT",
+    "revision": "bae97d251907743f8fb6db7e70c61d361df4dc1e",
+    "license": "CC BY 4.0",
+    "audit_receipt_sha256": "9b7a9d6c0efbc0be055df55277ea107d9be0cd6a45dcbcb5e0571d0257796672",
+    "episode_metadata_sha256": "0aa53b5ab7c6c22ed8662bc77ce0ba3d5bcfa62bc885f1a928c586f76e95fff5",
+    "subtask_metadata_sha256": "dcb0a7fe179c3f015bcef5bf3047de34d92dab2f0b8e2a55521b2fb0a21203a9",
+    "sealed_audit_accessed": false,
+    "action_columns_read": false
+  },
+  "split": {
+    "selection_sha256": "9a024c1054d568c3b7f4304f86059195908b6c40ba79e255358d064504e05b6a",
+    "train_transitions": 202,
+    "validation_transitions": 76,
+    "train_video_assets": 66,
+    "validation_video_assets": 24,
+    "train_task_groups": 36,
+    "validation_task_groups": 6,
+    "group_and_media_disjoint": true
+  },
+  "model": {
+    "name": "VideoPrism-B",
+    "revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+    "source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+    "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "frames_per_transition": 8,
+    "video_embedding_shape": [278, 8, 768],
+    "sensor_sequence_shape": [278, 8, 14],
+    "sensor_channels": [
+      "robot0.observation.state.cartesian_position",
+      "robot0.observation.state.joint_positions",
+      "robot0.observation.state.gripper_position"
+    ],
+    "cpu_only": true
+  },
+  "execution": {
+    "python": "3.11.16",
+    "jax": "0.6.2",
+    "tensorflow": "2.18.1",
+    "pyav_input_preparation": "18.1.1",
+    "pyav_encoder_worker": "18.1.0",
+    "total_command_wall_seconds": 711,
+    "worker_process_seconds_including_model_load": 652,
+    "worker_reported_seconds_after_model_load": 645.1605,
+    "video_decode_seconds": 76.258723,
+    "model_forward_seconds": 561.024537,
+    "working_set_bytes_at_exit": 1902837760,
+    "peak_working_set_measured": false,
+    "training_performed": false,
+    "cloud_cost_usd": 0
+  },
+  "artifacts": {
+    "features_directory": "C:\\CodexArtifacts\\pretrained-reuse-r2\\habit-transition-features-20261121-attempt-02",
+    "feature_cache_sha256": "654cd9001fde2329719840889381a9ffa3d5763f65386ba0d5fdba7fc1039076",
+    "transition_inputs_sha256": "3d14cb0c39b1d8135afc097c9c483f634396868f39dc11407fc920f57b4e4ef9",
+    "feature_result_sha256": "d52f191d37989a16d77f63d632a9c1b890b84868c805e3f5684e367cb7748bc0",
+    "executed_extractor_sha256": "84168600eb6841aa61c775f7505882aea9cab31a798ffc44a587dea6fa99ccf5",
+    "executed_extractor_copy": "C:\\CodexArtifacts\\pretrained-reuse-r2\\habit-transition-features-20261121-attempt-02\\extract_habit_transition_features.executed.py",
+    "text_aligned_package_directory": "C:\\CodexArtifacts\\pretrained-reuse-r2\\habit-transition-decision-data-20261121-attempt-01",
+    "text_aligned_examples_sha256": "550c1725c547bef3784f8ef83f520aaf9baea4e23b19817cfe2cc631621d4292",
+    "package_report_sha256": "90b63ec050a0836c6f2f611b8edcbeb72bf7c64ded7b15b9f02e6a9e29b6b91d",
+    "training_or_quality_metrics": "NOT_RUN"
+  }
+}

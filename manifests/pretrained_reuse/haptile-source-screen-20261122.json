@@ -1,0 +1,89 @@
+{
+  "format": "haptile_source_screen_v1",
+  "dataset_id": "HapTile vision-tactile-language-action",
+  "status": "REVIEW_NOT_ADMITTED",
+  "source": {
+    "repository": "https://huggingface.co/datasets/HapTile2026/HapTile",
+    "revision": "54887384f1fe9e93b799e104194a582f9d8840b8",
+    "license": "CC BY 4.0",
+    "gated": false,
+    "task_archive_count": 38,
+    "total_archive_bytes": 16001478139,
+    "total_repository_file_bytes": 16001480670,
+    "zip_index_range_scan": {
+      "receipt_path": "C:/CodexLocalArtifacts/pretrained-reuse-r2/haptile-source-metadata-screen-01/zip-index-range-scan.json",
+      "receipt_sha256": "24bfc28a4f477c7818c4199a90bd70ac891ba9237fd0c62e2914469b9428d281",
+      "archives_scanned": 38,
+      "trajectory_h5_total": 1700,
+      "range_bytes_read": 2490368,
+      "method": "Read only the final 65536 bytes of each pinned ZIP; parse EOCD and central-directory filenames. No media or archive contents downloaded."
+    },
+    "metadata_response": {
+      "path": "C:/CodexLocalArtifacts/pretrained-reuse-r2/haptile-source-metadata-screen-01/dataset-info.json",
+      "bytes": 1961,
+      "sha256": "55d5763e7f9d7ca725f7a0d97b7157a8c592d73dfab43444115aa311a95e6e50"
+    },
+    "file_tree_response": {
+      "receipt_path": "C:/CodexLocalArtifacts/pretrained-reuse-r2/haptile-source-metadata-screen-01/pagination-receipt.json",
+      "original_response_bytes": 37644,
+      "original_response_sha256": "d8537e2e725f4715f62e48f821ff612669faf8c604f05c18d1815dbddf4d557f",
+      "parsed_copy_path": "C:/CodexLocalArtifacts/pretrained-reuse-r2/haptile-source-metadata-screen-01/file-tree-complete.json",
+      "parsed_copy_bytes": 50506,
+      "parsed_copy_sha256": "57af93cac7a41c56d11968c191de668ac084390232d412d728b378d8eaddec48"
+    }
+  },
+  "paper": {
+    "url": "https://arxiv.org/abs/2606.04825",
+    "version": "v2",
+    "demonstrations": 1726,
+    "tasks": 38,
+    "operators": 9,
+    "collection_scene_count": 1,
+    "sampling_hz": 15
+  },
+  "conversion_reference": {
+    "repository": "https://huggingface.co/datasets/Voxel51/HapTile",
+    "revision": "c8593da98d3facb7a9293842514f0ee4ad3f2318",
+    "card_sha256": "f0462ecc55d172e8a3c51ac5c874969e6f0482f093812482d28f730ba0558fbb",
+    "count_comparison_receipt": {
+      "path": "C:/CodexLocalArtifacts/pretrained-reuse-r2/haptile-source-metadata-screen-01/conversion-count-reconciliation.json",
+      "sha256": "6bdbe176adf3b76abfbebcce25a7c28c7a18a0131bcdbdf699a94c56893326c1"
+    },
+    "reported_episodes": 1699,
+    "reported_size_text": "6.31 GB",
+    "source_episode_count": 1700,
+    "per_task_count_difference": {
+      "task": "move_plush_toy",
+      "source_entries": 71,
+      "conversion_samples": 70,
+      "conversion_card_says_one_empty_trajectory_omitted": true,
+      "omitted_episode_identity_verified": false
+    },
+    "official_split": "single train split",
+    "operator_id_field_documented": false
+  },
+  "gates": {
+    "license_and_public_access_pass": true,
+    "multimodal_task_is_plausible": true,
+    "task_group_keys_documented": true,
+    "operator_identity_mappable": false,
+    "official_train_validation_test_split": false,
+    "source_to_conversion_episode_count_reconciled": true,
+    "paper_to_source_episode_count_reconciled": false,
+    "causal_supplied_option_task_frozen": false,
+    "media_downloaded": false,
+    "feature_extraction_started": false,
+    "model_loaded_or_trained": false,
+    "sealed_audit_accessed": false
+  },
+  "known_risks": [
+    "The pinned source has 1,700 trajectory entries and the Voxel51 conversion has 1,699; counts differ only at move_plush_toy, consistent with the card's one-empty-trajectory note, but the omitted episode was not opened to verify identity or emptiness.",
+    "The paper's 1,726 count remains 26 above the pinned source and unexplained.",
+    "Collection used one laboratory scene; external-environment transfer is untested.",
+    "Paper reports nine operators but screened metadata does not map episodes to operators.",
+    "Haptic feedback levels are computed from tactile marker-motion signals and are not independent same-time labels.",
+    "Published tactile ablations show task- and architecture-dependent gains and losses."
+  ],
+  "decision": "Promising for task-held-out multimodal action-choice development after exact release, episode counts, group keys and causal target are frozen. Do not use for unseen-operator claims without operator mapping.",
+  "report": "docs/pretrained_reuse/R2M_HAPTILE_SOURCE_SCREEN_20261122.md"
+}

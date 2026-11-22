@@ -256,6 +256,7 @@ def assemble_modular_bundle(
             "supports_joint_audio_video": False,
             "has_standalone_text_task": "text" in shared_tasks,
             "has_temporal_video_task": "video" in shared_tasks,
+            "has_librispeech_audio_choice_task": "librispeech" in shared_tasks,
             "package_target_bytes": 200_000_000,
             "component_count": len(component_rows),
             "components": component_rows,
@@ -273,6 +274,163 @@ def assemble_modular_bundle(
             json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
         )
         return manifest
+    except Exception:
+        shutil.rmtree(output)
+        raise
+
+
+def extend_modular_bundle(
+    base_package: Path,
+    shared_tasks: dict[str, dict[str, Any]],
+    output_dir: Path,
+    *,
+    source_commit: str,
+) -> dict[str, Any]:
+    """Create a new immutable assembly by adding task readouts to a verified package."""
+    base_root = base_package.resolve(strict=True)
+    base_manifest = verify_modular_bundle(base_root)
+    output = output_dir.resolve()
+    if output.exists():
+        raise FileExistsError(f"refusing to overwrite modular bundle: {output}")
+    names = list(shared_tasks)
+    if len(names) != len(set(names)) or any(
+        not name.strip() or "/" in name or "\\" in name for name in names
+    ):
+        raise ValueError("shared task names must be nonempty single path segments")
+    if any(item.get("name") in names for item in base_manifest["components"]):
+        raise ValueError("an added shared task already exists in the base package")
+
+    shutil.copytree(base_root, output)
+    try:
+        (output / "package-manifest.json").unlink()
+        components = list(base_manifest["components"])
+        for name, spec in shared_tasks.items():
+            task_root = output / "components" / name
+            task_root.mkdir(parents=True)
+            local_files = []
+            for relative_name, source_path in spec["files"].items():
+                relative = Path(str(relative_name))
+                destination = (task_root / relative).resolve()
+                if not destination.is_relative_to(task_root.resolve()):
+                    raise ValueError("shared task file path escapes its component")
+                source = Path(source_path).resolve(strict=True)
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(source, destination)
+                local_files.append(
+                    {
+                        "path": relative.as_posix(),
+                        "bytes": destination.stat().st_size,
+                        "sha256": sha256_file(destination),
+                    }
+                )
+            local_hashes = {item["path"]: item["sha256"] for item in local_files}
+            for artifact in spec["parameters"]:
+                if local_hashes.get(artifact["path"]) != artifact["identity"]:
+                    raise ValueError("shared task parameter identity does not match its file")
+            shared_assets = []
+            for asset in spec["shared_assets"]:
+                relative = Path(str(asset["path"]))
+                shared_path = (output / relative).resolve()
+                if not shared_path.is_relative_to(output) or not shared_path.exists():
+                    raise ValueError("shared task dependency is missing or outside the package")
+                if shared_path.is_dir():
+                    weight_path = (
+                        shared_path / str(asset.get("file", "model.safetensors"))
+                    ).resolve()
+                    if not weight_path.is_relative_to(shared_path):
+                        raise ValueError("shared asset file path escapes its directory")
+                else:
+                    weight_path = shared_path
+                if not weight_path.is_file() or sha256_file(weight_path) != asset["weights_sha256"]:
+                    raise ValueError("shared task dependency weight hash mismatch")
+                shared_assets.append({**asset, "path": relative.as_posix()})
+            task_manifest = {
+                "schema_version": 1,
+                "task_id": spec["task_id"],
+                "scope": spec["scope"],
+                "source_report_sha256": spec["source_report_sha256"],
+                "runtime_environment": spec.get("runtime_environment", {}),
+                "shared_assets": shared_assets,
+                "parameters": spec["parameters"],
+                "files": local_files,
+            }
+            task_manifest_path = task_root / "task-manifest.json"
+            task_manifest_path.write_text(
+                json.dumps(task_manifest, indent=2, ensure_ascii=False) + "\n",
+                encoding="utf-8",
+            )
+            components.append(
+                {
+                    "kind": "shared_task",
+                    "name": name,
+                    "task_id": task_manifest["task_id"],
+                    "path": f"components/{name}",
+                    "task_manifest_sha256": sha256_file(task_manifest_path),
+                    "scope": spec["scope"],
+                    "runtime_environment": spec.get("runtime_environment", {}),
+                    "parameters": spec["parameters"],
+                    "shared_parameter_refs": [
+                        {
+                            "identity": str(asset["weights_sha256"]),
+                            "parameters": int(asset["parameters"]),
+                        }
+                        for asset in shared_assets
+                    ],
+                }
+            )
+
+        all_files = []
+        content_sizes: dict[str, int] = {}
+        for path in sorted(item for item in output.rglob("*") if item.is_file()):
+            relative = path.relative_to(output).as_posix()
+            digest = sha256_file(path)
+            size = path.stat().st_size
+            all_files.append({"path": relative, "bytes": size, "sha256": digest})
+            content_sizes.setdefault(digest, size)
+        unique_parameters: dict[str, int] = {}
+        parameter_items = []
+        for component in components:
+            for artifact in component["parameters"]:
+                identity = artifact["identity"]
+                if not identity:
+                    raise ValueError("component has an unhashed parameter artifact")
+                count = int(artifact["parameters"])
+                previous = unique_parameters.setdefault(identity, count)
+                if previous != count:
+                    raise ValueError("parameter artifact hash has conflicting parameter counts")
+                parameter_items.append({**artifact, "component": component["name"]})
+        component_parameter_sum = sum(
+            int(item["parameters"])
+            for component in components
+            for item in component["parameters"]
+        ) + sum(
+            int(item["parameters"])
+            for component in components
+            for item in component.get("shared_parameter_refs", [])
+        )
+        base_manifest.update(
+            {
+                "created_utc": datetime.now(UTC).isoformat(),
+                "source_commit": source_commit,
+                "components": components,
+                "component_count": len(components),
+                "parameter_artifacts": parameter_items,
+                "unique_runtime_parameters": sum(unique_parameters.values()),
+                "component_parameter_sum": component_parameter_sum,
+                "unique_content_file_bytes": sum(content_sizes.values()),
+                "package_file_bytes_excluding_manifest": sum(row["bytes"] for row in all_files),
+                "package_target_met": sum(row["bytes"] for row in all_files)
+                <= int(base_manifest["package_target_bytes"]),
+                "files": all_files,
+                "has_librispeech_audio_choice_task": any(
+                    item.get("name") == "librispeech" for item in components
+                ),
+            }
+        )
+        (output / "package-manifest.json").write_text(
+            json.dumps(base_manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+        )
+        return base_manifest
     except Exception:
         shutil.rmtree(output)
         raise
@@ -366,6 +524,11 @@ def verify_modular_bundle(package_dir: Path) -> dict[str, Any]:
                 component_root,
                 json.loads(component_manifest_path.read_text(encoding="utf-8")),
             )
+    if bool(manifest.get("has_librispeech_audio_choice_task")) != any(
+        component.get("kind") == "shared_task" and component.get("name") == "librispeech"
+        for component in components
+    ):
+        raise ValueError("LibriSpeech task flag differs from package components")
     size = sum(int(entry["bytes"]) for entry in manifest["files"])
     if size != int(manifest["package_file_bytes_excluding_manifest"]):
         raise ValueError("package byte accounting mismatch")

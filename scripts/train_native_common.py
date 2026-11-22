@@ -1,5 +1,8 @@
 """Pinned common native head fit, TRAIN-only smoke, or independent checkpoint replay."""
 
+# Bootstrap CUBLAS and this worktree's src path before importing torch/project code.
+# ruff: noqa: E402
+
 import argparse
 import hashlib
 import importlib.metadata
@@ -13,6 +16,9 @@ import time
 import traceback
 from datetime import UTC, datetime
 from pathlib import Path
+
+REPO = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO / "src"))
 
 os.environ["CUBLAS_WORKSPACE_CONFIG"] = ":4096:8"
 
@@ -31,10 +37,12 @@ from scripts.native_fit import (
 from scripts.native_fit_runtime import FeatureStore
 from scripts.native_video_cache import sha
 from tiny_omni_decision.native_candidate import NativeCandidateReadout
-from tiny_omni_decision.native_temporal import TemporalNativeCandidate
+from tiny_omni_decision.native_temporal import (
+    CapacityMatchedNativeCandidate,
+    TemporalNativeCandidate,
+)
 
-REPO = Path(__file__).resolve().parents[1]
-CONFIG = REPO / "configs/pretrained_reuse/native_common_fit_v1.json"
+DEFAULT_CONFIG = REPO / "configs/pretrained_reuse/native_common_fit_v1.json"
 
 
 def write(path, value):
@@ -54,7 +62,8 @@ def verify(pins):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--phase", choices=["smoke", "train", "replay"], required=True)
-    parser.add_argument("--variant", choices=["baseline", "lstm"], required=True)
+    parser.add_argument("--variant", choices=["baseline", "lstm", "capacity_mlp"], required=True)
+    parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--reference", type=Path)
     parser.add_argument("--reference-sha256")
@@ -83,7 +92,8 @@ def main():
         source_commit=subprocess.check_output(
             ["git", "rev-parse", "HEAD"], cwd=REPO, text=True
         ).strip(),
-        config_sha256=sha(CONFIG),
+        runtime_package_path=str(REPO / "src/tiny_omni_decision"),
+        config_sha256=sha(args.config),
         started_utc=datetime.now(UTC).isoformat(),
         step=0,
         best_step=None,
@@ -96,7 +106,7 @@ def main():
     )
     write(args.output / "result.json", result)
     try:
-        config = json.loads(CONFIG.read_text())
+        config = json.loads(args.config.read_text())
         if config["training"] != {
             "seed": 17,
             "max_steps": 2048,
@@ -111,7 +121,7 @@ def main():
         }:
             raise ValueError("configuration differs from the implemented fixed schedule")
         pins = dict(config["input_pins"])
-        pins[str(CONFIG)] = sha(CONFIG)
+        pins[str(args.config)] = sha(args.config)
         source_names = subprocess.check_output(
             ["git", "ls-files", "-z", "--", "*.py"], cwd=REPO, text=True
         ).split("\0")
@@ -141,7 +151,7 @@ def main():
             if (
                 reference["status"] != expected
                 or reference["validated_hashes"] != pins
-                or reference["config_sha256"] != sha(CONFIG)
+                or reference["config_sha256"] != sha(args.config)
                 or reference["variant"] != args.variant
             ):
                 raise ValueError("matching completed reference required")
@@ -232,7 +242,13 @@ def main():
         base.load_state_dict(
             torch.load(config["initial_readout"], map_location="cpu", weights_only=True)
         )
-        model = (base if args.variant == "baseline" else TemporalNativeCandidate(base)).cuda()
+        if args.variant == "baseline":
+            model = base
+        elif args.variant == "lstm":
+            model = TemporalNativeCandidate(base)
+        else:
+            model = CapacityMatchedNativeCandidate(base)
+        model = model.cuda()
         parameters = sum(p.numel() for p in model.parameters())
         if 195365529 + parameters > 200000000:
             raise ValueError("prequantization cap exceeded")
@@ -288,7 +304,7 @@ def main():
                 python_rng=random.getstate(),
                 numpy_rng=(rng[0], rng[1].tolist(), *rng[2:]),
                 sampler_file_sha256=sha(args.output / "sampling.json"),
-                config_sha256=sha(CONFIG),
+                config_sha256=sha(args.config),
             )
             path = args.output / f"checkpoint-{step:04}.pt"
             torch.save(value, path)

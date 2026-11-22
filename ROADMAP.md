@@ -1,4 +1,306 @@
+**2026-11-22 R2-M DextraVerse video+tactile contact gate:** The pinned
+44,197,744,857-byte archive passed its publisher SHA-256 and the read-only
+array checks found 261 episodes / 10,983 eligible windows, with no invalid
+timestamp sequences or duplicate head-video hashes. The frozen 12-option gate
+failed because `left_index` has only 38 queries from 18 episodes (minimum 50).
+Stop before feature extraction or fitting; do not collapse classes. A ZIP
+wrapper-directory assumption was fixed and covered by CPU tests. See the
+[protocol and full external report receipt](docs/pretrained_reuse/R2M_DEXTRAVERSE_CONTACT_DECISION_PROTOCOL_20261122.md)
+and [manifest](manifests/pretrained_reuse/dextraverse-contact-decision-source-preflight-20261122.json).
+
+**2026-11-22 R2-M VistaData-Bimanual metadata screen:** The pinned CC BY 4.0
+release contains one unscrew-coffee-jar task and 30 Zarr episode groups, but no
+documented independent participant/session grouping, official split, or
+supplied-option Decision target requiring both video and touch. Only sparse
+ZIP metadata ranges were read; the 8.12 GB archive was not saved, and no media
+or model was used. Keep `REVIEW_NOT_ADMITTED`; at most this supports a small
+within-task pilot after task and grouping are frozen. See [screen](docs/pretrained_reuse/R2M_VISTADATA_BIMANUAL_METADATA_SCREEN_20261122.md)
+and [manifest](manifests/pretrained_reuse/vistadata-bimanual-metadata-screen-20261122.json).
+
+**2026-11-22 R2-M HapTile source screen:** A read-only ZIP index scan found
+1,700 `trajectory.h5` entries across the 38 pinned CC BY 4.0 archives using
+2.49 MB of HTTP Range metadata only. A pinned comparison to the Voxel51 card
+shows the only per-task count difference is `move_plush_toy` (71 source entries
+vs. 70 conversion samples), consistent with the card's one-empty-trajectory
+omission; the omitted episode was not inspected. The paper's 1,726 count
+remains 26 above the pinned release. The paper reports nine operators, but no
+episode-level operator mapping or official split was found.
+The paper's tactile gains are task-dependent, and haptic labels derive from
+tactile marker motion. No media or model was loaded. Keep `REVIEW_NOT_ADMITTED`
+until the paper/release difference, group keys, and causal action-choice task
+are resolved. See [source screen](docs/pretrained_reuse/R2M_HAPTILE_SOURCE_SCREEN_20261122.md)
+and [manifest](manifests/pretrained_reuse/haptile-source-screen-20261122.json).
+
+**2026-11-22 R2-M HABIT data scale-up:** Expanded the same frozen train and
+validation selection from 202/76 to 606/228 transitions and trained all four
+seed-17 readout arms for the fixed 80 epochs. Every arm selected epoch 2, then
+showed falling train NLL with rising validation NLL. On the 76 IDs shared with
+the old pilot, the scaled run did not improve Accuracy, NLL, or Brier; paired
+video+state Accuracy was unchanged while NLL/Brier worsened slightly. The
+expanded validation still contains only six task groups, so this remains
+selection-affected development evidence, not an independent test. Keep the
+run as negative/limited data-scale evidence and seek new grouped data before
+further fitting. See [results](docs/pretrained_reuse/R2M_HABIT_DATA_SCALE_RESULTS_20261122.md)
+and [manifest](manifests/pretrained_reuse/habit-data-scale-results-20261122.json).
+
+**2026-11-22 R2-M HABIT expanded-train grouped OOF:** A fixed five-fold,
+train-only OOF run evaluated the same four readout arms at epochs 1/2/4/8 on
+606 rows, grouped into 37 connected task/video components. Train CE fell while
+OOF NLL generally worsened after epoch 1. At epoch 8, video+state was below
+state-only (38.1% vs 42.7% Accuracy; 1.141 vs 1.078 NLL); paired component
+bootstrap supports a negative difference on this development sample. The
+video-only contrast remains uncertain. No validation, sealed audit or
+checkpoint selection was used. Stop fitting this fixed pilot and seek a new
+independent task/source. See [diagnostics](docs/pretrained_reuse/R2M_HABIT_DATA_SCALE_TRAIN_ONLY_DIAGNOSTICS_20261122.md)
+and [manifest](manifests/pretrained_reuse/habit-data-scale-train-only-grouped-oof-20261122.json).
+
+**2026-11-22 R2-M Hoi! force/video source screen:** Official metadata reports
+3,048 sequences, force/tactile synchronized with video for the instrumented
+gripper, and CC BY 4.0 with commercial adaptation permitted. It is a promising
+sensor-fusion candidate. The paper confirms state-change and articulation
+labels that can be mapped into two-option decisions, but option conversion,
+row-level schema and leakage-resistant object/environment/demonstrator splits
+remain unverified. The data page shows a download guestbook name field; no
+personal information was submitted and no payload was downloaded. Keep it
+`REVIEW_NOT_ADMITTED` until those gates are resolved. See
+[screen](docs/pretrained_reuse/R2_HOI_FORCE_VIDEO_SOURCE_SCREEN_20261122.md)
+and [receipt](manifests/pretrained_reuse/hoi-force-video-source-screen-20261122.json).
+The official file-list API exposes 4,769 metadata rows (~3.19 TB listed); all
+rows set `fileAccessRequest=true` despite `restricted=false`. It lists 20
+`manifest.csv` files, but pinned upstream code shows these are per-package
+artifact inventories, not split definitions; no split discrepancy is inferred.
+The paper's environment grouping remains unverified. No file payload was
+requested. See the source-screen correction for the pinned code evidence.
+
+**2026-11-22 R2-M AVSBench source screen:** The publisher documents an audio-video sound-source segmentation task with pixel-level masks, including multi-object scenes where only some visible objects are sounding. The dataset is CC BY-NC 4.0; its Apache-2.0 code license does not broaden data rights. The dense-mask target is also distinct from supplied-option JSON Decision. No annotations/media were downloaded, no access request sent, and no model was run. Keep it outside the product-training pool; reconsider only for a separately scoped noncommercial grounding study. See [source screen](docs/pretrained_reuse/R2_AVSBENCH_SOURCE_SCREEN_20261122.md) and [receipt](manifests/pretrained_reuse/avsbench-source-screen-20261122.json).
+**2026-11-22 R2-M Eidon Tracker POV metadata screen:** Pinned CC BY 4.0
+video/IMU repositories publish 13,451 recordings from 27 contributors with
+consented but unblurred private-home video. The 1.12 MB metadata index shows
+activity imbalance, only 2,841 recordings with raw motion, and uneven
+contributor-group support; a deterministic five-fold hash allocation leaves
+held folds with only 72 and 48 valid full-rig raw-motion examples. This is a
+narrow development candidate only: no video/sensor necessity is established,
+label provenance is unspecified, the full video set is 9.05 TB, and all
+metadata/task labels are now development-exposed. No video/IMU payload or model
+was accessed. See [source screen](docs/pretrained_reuse/R2_EIDON_TRACKER_POV_SOURCE_METADATA_SCREEN_20261122.md)
+and [receipt](manifests/pretrained_reuse/eidon-tracker-pov-source-screen-20261122.json).
+**2026-11-22 R2-M EgoViz-120 train-only MCAP sample audit:** The smallest indexed payload from already-frozen train group `g114` (150,184,348 bytes; SHA-256 pinned in the receipt) decoded all 449 head-left H.264 frames at 1920x1200 with zero corrupt frames. Video, wrist-camera, IMU and action-message timestamps are closely aligned; a single frame broadly matches the sink-cleaning label. One clip shows a possible one-message action-phase offset, with endpoint convention unresolved. This establishes decode/synchronization plumbing only: labels remain model-generated/unverified, participant independence and paired-input necessity remain unknown, and the source stays `REVIEW_NOT_ADMITTED`. No development/test payload, model, or sealed audit was used. See [sample audit](docs/pretrained_reuse/R2_EGOVIZ120_TRAIN_MCAP_SAMPLE_AUDIT_20261122.md) and [receipt](manifests/pretrained_reuse/egoviz120-train-mcap-sample-audit-20261122.json).
+**2026-11-21 R2-M HABIT temporal Decision pilot result:** The fixed CPU run
+completed 80 epochs for text-only, video-only, state-only and paired
+video+state readouts; all four selected epoch 4 by validation macro-group NLL.
+Training NLL kept falling while validation NLL rose sharply after epoch 4,
+especially for temporal arms. The paired arm had slightly lower NLL but lower
+Accuracy and worse ECE than text-only/video-only; missing/shuffled-stream
+controls barely changed Accuracy. This small six-group pilot overfit and did
+not demonstrate useful paired-input necessity. Training checkpoints and
+histories were preserved; the final report was reconstructed after fixing a
+validation-group matching failure. Exact run duration is unknown. See [protocol
+and results](docs/pretrained_reuse/R2M_HABIT_TEMPORAL_DECISION_PROTOCOL_20261121.md)
+and [run manifest](manifests/pretrained_reuse/habit-temporal-decision-20261121.json).
+
+**2026-11-21 R2-M HABIT train-only text identifiability audit:** In the frozen
+202-row train package, 27/36 normalized instruction+candidate-set keys had
+conflicting target actions (187 rows); 24 conflict keys spanned episodes and
+videos. Repeated-key majority was 51.76% (103/199), a diagnostic of text-only
+ambiguity, not generalization or a model ceiling. Validation metrics,
+checkpoint selection, training and sealed-audit access were not performed.
+This supports checking state/video label context and expanding independent
+task-group coverage before further architecture tuning. See [protocol](docs/pretrained_reuse/R2M_HABIT_TEMPORAL_DECISION_PROTOCOL_20261121.md#train-only-text-identifiability-audit)
+and [audit manifest](manifests/pretrained_reuse/habit-train-text-identifiability-20261121.json).
+
+**2026-11-22 R2-M HABIT train-only grouped OOF:** A fixed five-fold split held
+all task/video-connected groups together and compared the existing text-only,
+video-only, state-only and paired readouts at epochs 1/2/4/8 over the original
+202 train rows. Individual video/state arms were slightly better around epoch
+2–4; paired results were mixed, and 10,000-draw task-group bootstrap intervals
+for macro-group NLL included zero. No checkpoint was selected; original
+development validation and sealed audit were not used. This is weak single-seed
+development evidence, not quality proof. See [results](docs/pretrained_reuse/R2M_HABIT_TRAIN_ONLY_GROUPED_OOF_20261122.md)
+and [manifest](manifests/pretrained_reuse/habit-train-only-grouped-oof-20261122.json).
+
+**2026-11-21 R2-M HABIT source preflight:** Pinned public revision
+`bae97d251907743f8fb6db7e70c61d361df4dc1e` declares CC BY 4.0 and includes
+synced video, robot state and subtask labels. A metadata preflight found a
+63-vs-60 task-count mismatch, one undocumented scenario, and role-count
+discrepancies; 114 episodes are quarantined and ambiguous task groups remain
+train-only. Two non-audit clips decoded and produced finite pinned
+VideoPrism-B CPU features; two Parquets passed target/option mapping. This is
+runtime plumbing only, not quality evidence. See [source screen](docs/pretrained_reuse/R2_HABIT_SOURCE_SCREEN_20261121.md),
+[mapping smoke](docs/pretrained_reuse/R2_HABIT_DATA_MAPPING_SMOKE_20261121.md),
+and [manifest](manifests/pretrained_reuse/habit-source-screen-20261121.json).
+The option audit found repeated action text in 5,273/9,113 eligible
+train/validation episodes; `habit_decision.py` collapses repeats to unique
+semantic choices and fails closed on one-choice or unmappable targets. The two
+existing Parquet samples pass all 1,122 frame-label mappings and yield five
+causal transition cutoffs (input ends 100 ms before target onset). On those
+samples, video PTS and Parquet timestamps align within 0.004 ms; all five
+pre-onset windows use only past video and 14-D robot0 state. Split-wide media
+integrity, broader data admission and quality evidence remain open. A
+66-train/24-validation front-view pilot is now fetched and fully decoded (626
+MB). It yields 202/76 causal train/validation transitions, 33/6 usable task
+groups, zero exact media hash overlap, and <0.004 ms max video/Parquet timing
+error. Three validation groups contain no multi-option examples. These are
+plumbing results only; model training and quality evaluation have not run.
+See the HABIT mapping smoke record.
+
+**2026-11-21 R2-M Zenodo audio+vibration follow-up:** The 25 source archives
+(4.57 GB) were hash-verified; only `multisensor-1` was used under a frozen
+participant split, with 7 train / 2 calibration / 2 development-validation /
+2 sealed-audit participants and one quarantined participant. The hard same-trial
+matching model stayed at chance. On a separate 21-activity Decision, train-only
+participant-grouped OOF favored audio-only (79.43% vs 72.29% Accuracy; worse
+fusion NLL/Brier/ECE). A parameter-matched control on the already exposed
+two-person validation showed mixed participant effects; it cannot establish
+new-person fusion benefit. Sealed audit remains unopened. Stop tuning this
+source/task and find a fresh, sufficiently grouped task; HubEgo remains pending
+the user's account approval. See [matching](docs/pretrained_reuse/R2M_AUDIO_VIBRATION_MATCH_PILOT_20261120.md),
+[grouped CV](docs/pretrained_reuse/R2M_TRAIN_ONLY_PARTICIPANT_CV_20261121.md),
+[capacity control](docs/pretrained_reuse/R2M_CAPACITY_MATCHED_SENSOR_CONTROL_20261121.md),
+and [source preflight](docs/pretrained_reuse/R2M_ZENODO_PAYLOAD_PREFLIGHT_20261120.md).
+
+**2026-11-21 R2-M EVIORA-HAR screen:** Official Zenodo metadata declares
+CC BY-NC 4.0 for a roughly 131 GB video/IMU corpus. It cannot enter this
+product-directed path. Metadata only; no labels, media or consent-form archive
+were opened. See [source screen](docs/pretrained_reuse/R2_EVIORA_HAR_SOURCE_SCREEN_20261121.md)
+and [manifest](manifests/pretrained_reuse/eviora-har-video-imu-source-screen-20261121.json).
+
+**2026-11-21 R2-M MUVS video+sensor source screen:** The new 5,039-fragment,
+17-event camera-selection dataset is a plausible Decision task, and Zenodo
+metadata identifies its deposit as CC BY 4.0. The publisher README separately
+states the GCS-hosted video license is “TO BE ADDED,” while the project site
+reserves copyright. A follow-up train-only metadata preflight acquired the
+CC BY deposit, found 3,181 multi-option annotations and a 54.86% leave-one-event-out
+camera-ID prior baseline, plus 57 `ActiveCameras` mismatches. The archive's
+12/5 event split filenames conflict with README's 11/6 claim. GCS video remains
+unaccessed and test members were not decompressed or parsed; this is not task
+quality evidence. See [source screen](docs/pretrained_reuse/R2_MUVS_VIDEO_SENSOR_SOURCE_SCREEN_20261121.md)
+and [machine-readable record](manifests/pretrained_reuse/muvs-video-sensor-source-screen-20261121.json).
+
+**2026-11-21 R2-M xPhi-Ego-100 source screen:** The official card declares
+Apache-2.0 and recorded participant consent, but access requires a logged-in
+request form. It reports 152 workers across eight sites, 195.5 GB, no audio,
+and model-generated action labels. This is below the provisional independent
+group screen and does not establish a task requiring both video and IMU. No
+form or payload was accessed; keep `REVIEW_NOT_ADMITTED`. See [source screen](docs/pretrained_reuse/R2_XPHI_EGO100_SOURCE_SCREEN_20261121.md).
+
+**2026-11-21 R2 frozen numeric-span diagnostic:** A CPU-only seed-17,
+five-fold group OOF probe over the existing 768 FIT state groups decoded raw
+numeric span values from frozen DeBERTa token states (macro Pearson r 0.972;
+MAE 10.54 on the generated value scale). With gold field/object alignment and
+min/max direction supplied, candidate Accuracy was 88.39%; a within-state
+feature derangement scored 3.65%. This is an oracle-assisted TRAIN diagnostic,
+not independent quality evidence or product accuracy. It suggests the frozen
+encoder retains numeric magnitude; field localization, question binding and
+decision readout remain unresolved. Do not tune on these FIT OOF results. See
+[protocol and results](docs/pretrained_reuse/R2_NATIVE_NUMERIC_SPAN_DECODER_DIAGNOSTIC_20261121.md).
+
+**2026-11-21 R2 EVE-ESA EO MCQA TRAIN-only grouped CV:** The frozen
+MiniLM-L3 + 196,865-parameter readout reached 65.39% OOF Accuracy (95% grouped
+bootstrap interval 62.77–68.02%), 0.9052 NLL, 0.4552 Brier and 4.73% ECE over
+1,257 valid TRAIN rows. It exceeded uniform choice, but remained weak and
+variable on a narrow text-only EO task. Four malformed rows with a missing
+target option were excluded by a pre-fit integrity rule. Do not retune these
+OOF predictions or infer multimodal quality; retire this task candidate and
+prioritize a fresh admitted decision task. HubEgo payload access remains
+pending user account approval. See [protocol](docs/pretrained_reuse/R2_EVE_EO_MCQA_TRAIN_GROUP_CV_PROTOCOL_20261121.md)
+and [results](docs/pretrained_reuse/R2_EVE_EO_MCQA_TRAIN_GROUP_CV_RESULTS_20261121.md).
+
+**2026-11-21 R2 MotorSense video+EMG/IMU source screen:** The publisher
+describes synchronized video, bilateral EMG/IMU and temporally labeled actions,
+but the official Hub lists the dataset license only as `other`; the GitHub MIT
+license covers code, not data. The archive is about 0.9 TB and faces are not
+blurred. No payload or metadata was downloaded. Keep `REVIEW_NOT_ADMITTED`
+pending authoritative data-use and consent terms; do not confuse MotorSense
+with the account-gated HubEgo candidate. See [source screen](docs/pretrained_reuse/R2_MOTORSENSE_VIDEO_EMG_SOURCE_SCREEN_20261121.md).
+
+**2026-11-21 R2 TallyQA-VG TRAIN-only grouped CV:** The fixed five-fold
+nested group CV over 3,101 source TRAIN questions completed. Image+question
+scored 55.37% / 1.0711 NLL / 0.5820 Brier; question-only scored 56.56% /
+1.0753 / 0.5821. Paired component-bootstrap intervals include zero. Zeroing
+image on the selected joint readout reduced Accuracy by 2.00 pp and worsened
+proper scores, indicating input sensitivity but not demonstrated held-group
+benefit. Saved checkpoints reproduced all OOF probabilities exactly. This
+retrospective four-choice adaptation is not product-quality evidence; do not
+continue tuning this source. Official validation/test and sealed audit remain
+unopened. See [protocol](docs/pretrained_reuse/R2_TALLYQA_VG_TRAIN_GROUP_CV_PROTOCOL_20261121.md)
+and [results](docs/pretrained_reuse/R2_TALLYQA_VG_TRAIN_GROUP_CV_RESULTS_20261121.md).
+
+**2026-11-21 R2-M vibration temporal-bandwidth audit:** A fixed, hash-verified
+TRAIN-only sample of 133 activity × participant trials shows the current
+whole-record 128-point linear interpolation gives duration-dependent Nyquist
+limits (median 14.76 Hz; range 0.30–28.07 Hz) for a published ~1.08 kHz
+accelerometer. Median raw demeaned energy above the token-grid Nyquist was
+98.21%; this is a signal-bandwidth diagnostic, not a model-quality result or
+proof of causality. Next, compare fixed 128-bin per-axis RMS envelopes against
+the existing point-sampled features under the same seven-participant TRAIN-only
+CV. The RMS run completed all 14 fits. RMS fusion improved over the legacy
+fusion result but failed the preregistered same-run Audio-only proper-score
+criterion: macro NLL and Brier worsened, with only +0.08 pp macro Accuracy.
+Retire this source/task fusion path; do not spend more capacity on it. A
+run-to-run Audio-only prediction mismatch (746/5,449 decisions) weakens direct
+causal interpretation of historical deltas, while the within-run comparison
+remains paired. Validation and sealed audit remain unopened. See
+[audit and preregistered follow-up](docs/pretrained_reuse/R2M_TEMPORAL_BANDWIDTH_AUDIT_20261121.md).
+The RMS-window CV itself is separately fixed in the
+[follow-up protocol](docs/pretrained_reuse/R2M_RMS_WINDOW_FOLLOWUP_PROTOCOL_20261121.md).
+See [RMS-window results](docs/pretrained_reuse/R2M_RMS_WINDOW_CV_RESULTS_20261121.md).
+
+**2026-11-21 R2 programmatic decision state-group holdout:** A separate
+2,048-update text readout used 6,144 TRAIN rows and evaluated 2,048 rows from
+256 state groups unseen by the prior sampler. Accuracy was 22.71% against a
+task-balanced uniform-choice reference of 23.75%; zero-state ablation changed
+6.84% of choices but had no reliable effect on task-macro metrics. The source
+is a generated reasoning proxy, and this result does not demonstrate useful
+state binding or general text competence. Official validation and sealed audit
+remain unopened. Retire this holdout and investigate frozen representation /
+readout limits before spending more capacity or seeds. See
+[protocol and results](docs/pretrained_reuse/R2_NATIVE_PROGRAMMATIC_DECISION_GROUP_HOLDOUT_20261121.md).
+
+**2026-11-21 R2 Text state-group holdout:** The fixed terminal 2,048-update
+text-only fit used 7,152 TRAIN rows and 1,040 held rows from 65 state groups
+that the prior sampler never consumed. Macro Accuracy was 13.04% over 40
+choices. Zeroing state reduced Accuracy modestly, while a same-task
+counterfactual swap with the donor answer mapped by option ID had a paired
+group-bootstrap interval spanning zero. State contribution is small and
+robust state-to-candidate binding is unproven. The D:-mounted first attempt
+failed before a checkpoint at step 128; a fresh attempt completed entirely on
+local C: using seven hash-identical TRAIN-only copies. Official validation and
+sealed audit remain unopened. Do not retune this holdout; move to a distinct,
+unused TRAIN decision source. See [protocol and results](docs/pretrained_reuse/R2_NATIVE_TEXT_STATE_GROUP_HOLDOUT_20261121.md).
+
+**2026-11-21 R2 frozen input-use/coverage diagnostic:** On the selected native
+baseline and already exposed development validation, Image zeroing/shuffling
+reduced accuracy by 9.0/9.7 points; Text-state shuffling changed little while
+candidate-query removal worsened NLL. The exact 2,048-update TRAIN sampler used
+6,656 of 100,580 unique question rows and repeated all 512 Video rows; there
+were no unused Video groups in this frozen corpus, while Text/Image/Audio have
+substantial unused coverage. No fitting or sealed-audit access. Next: address
+text state-to-candidate binding and weak Image tasks with train-only grouped
+diagnostics, and establish a split-safe Video source pool before extending the
+balanced sampler. [Protocol, all interventions, hashes and limits](docs/pretrained_reuse/R2_NATIVE_WEAK_INPUT_USE_DIAGNOSTIC_20261121.md).
+
+**2026-11-21 R2 native temporal capacity-matched control:** The 1.035M-parameter
+tokenwise MLP completed 2,048 updates and exact checkpoint replay against the
+frozen baseline/LSTM arms. Its final Video NLL/Brier were close to LSTM; paired
+scene-cluster intervals include zero for MLP-vs-LSTM, so recurrence-specific
+benefit is not demonstrated. Step 1920 was not scheduled by the frozen 256-step
+evaluation interval; no interpolated point is reported. Validation was exposed,
+the sealed audit was unopened, and no model was promoted. Next: stop LSTM-only
+capacity sweeps and prioritize task-specific input-use plus weak Image/Text
+diagnostics. [Full results, all modalities, hashes and limits](docs/pretrained_reuse/R2_NATIVE_TEMPORAL_CAPACITY_CONTROL_RESULTS_20261121.md).
+
+**2026-11-21 R2 SoundActions train-only nested CV:** A five-fold recording-ID CV over only the 246 eligible train recordings gave 68.29% audio-only, 40.65% video-only and 67.07% gated A/V Accuracy. The gated-vs-audio paired interval includes zero and its OOF NLL/Brier/ECE are worse; video-only sustained-class Accuracy is 1.69%. This supports stopping fusion tuning on this small single-recordist task, not a general encoder limit. Original development-validation rows were excluded from split/model/scoring; sealed audit was unopened. See [protocol and results](docs/pretrained_reuse/R2_SOUND_ACTIONS_TRAIN_ONLY_GROUP_CV_20261121.md).
+**2026-11-21 R2-M Video+sensor Decision integration:** Added an untrained readout joining frozen timestamped video features, a causal sensor LSTM, decision-context-conditioned fusion, content-addressed text-question features, hash-checked temporal caches and typed probability JSON. CPU tests pass; an RTX 3080 synthetic-cache smoke measured the whole NPZ/hash/calibration/transfer/inference path at 17.17 ms for 8 video tokens / 250 sensor steps / 21 choices. The path's readout is 295,235 parameters, excluding upstream encoders. This does not establish task quality or fusion benefit; rights-cleared paired data and controlled video-only/sensor-only/paired validation remain required. See [integration record](docs/pretrained_reuse/R2M_VIDEO_SENSOR_DECISION_INTEGRATION_20261121.md).
+**2026-11-21 R1 VideoPrism-B runtime recheck:** The existing pinned 457,475,296-byte checkpoint still matches SHA-256 `61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29`. A fresh offline CPU load reproduced 114,365,184 float32 parameters and finite `[1,2048,768]` features from a deterministic 8-frame fixture; output SHA matches prior runs. This is runtime integrity only, not task quality or GPU/device latency. Checkpoint, source checkout and prior run outputs were not modified. See [recheck](docs/pretrained_reuse/R1_VIDEOPRISM_RUNTIME_RECHECK_20261121.md).
+**2026-11-20 R2 UCI HAR 100-epoch validation-only follow-up:** The fixed static scorer improved from 66.16% / 0.8443 validation Accuracy/NLL at epoch 12 to 76.06% / 0.6270 at its validation-selected epoch 84. The LSTM selected epoch was 15 with 62.01% / 0.7278, a small change from epoch 12; later Accuracy fluctuated, while NLL was worse at the terminal epoch. First 12 epochs exactly reproduce the earlier run. The official public test was not reopened; models remain narrow sensor diagnostics. See [long-budget results](docs/pretrained_reuse/R2_UCI_HAR_SENSOR_LONG_BUDGET_RESULTS_20261120.md).
+**2026-11-17 R5 Audio precision-path follow-up:** The initial CUDA FP32 path exceeded the `1e-5` parity gate (`2.10e-5` max probability delta). With cuDNN TF32 disabled only around the Whisper forward, a fixed four-query request reached `1.19e-7`; the packaged dispatcher returned all four typed decisions and passed the same tolerance. The opt-in `fp32_no_tf32` mode restores backend flags on success or failure; other precision modes do not write those flags. Targeted CPU tests cover restoration paths (26 passed) and Ruff passes. This remains narrow runtime-parity evidence, not task-quality or general cross-device evidence. No labels, sealed audit, training, or checkpoint changes. See [diagnostic](docs/pretrained_reuse/R5_PATH_A_AUDIO_INTERMEDIATE_PRECISION_DIAGNOSTIC_20261117.md).
+**2026-11-16 R2 AIST bimanual metadata follow-up:** The official downloader describes 117 archive files, with sample archives in the multi-GB range; archive byte sizes and a representative subset were not verified. Its public index is task/archive metadata, not an episode/session split manifest. Together with the official-page/CSV count conflict and prompt leakage risk, this candidate remains `REVIEW_NOT_ADMITTED`; no archive, Dropbox link, media, or trajectory was accessed. See [metadata follow-up](docs/pretrained_reuse/R2_AIST_BIMANUAL_METADATA_FOLLOWUP_20261116.md).
+**2026-11-15 R1 DINOv2-small runtime recheck:** The pinned Apache-2.0 `facebook/dinov2-small` local checkpoint (22,056,576 parameters; safetensors SHA-256 `ae1e99fcefd534ed978cdeb8326f08030c96e28b7a81ffcbc98a857c84d14be1`) loaded offline on CPU with a finite `[1,257,384]` image feature output; parameters stayed frozen. This is checkpoint/runtime evidence only, not Decision quality or VideoPrism admission. See [recheck](docs/pretrained_reuse/R1_DINOV2_CPU_RECHECK_20261115.md).
+**2026-11-16 R2 Path A four-route CPU replay:** Video/Image/Text passed the saved-output probability tolerance and typed JSON checks; Audio typed JSON and argmax were stable but probability parity missed the unchanged `1e-5` gate by `6.18e-4`, consistent with the recorded CPU FP32/CUDA BF16 difference. Cold/warm timing and exact hashes are recorded; this is not quality evidence, and no training or sealed-audit access occurred. The package remains 687.3 MB, over the provisional 200 MB target. See [four-route replay](docs/pretrained_reuse/R2_PATH_A_FOUR_ROUTE_CPU_DISPATCH_20261116.md).
+**2026-11-15 R2 MiniWoB DINO saved-result replay:** The preserved CPU-only Path A run replays against the same 512/512 corpus, frozen features, and selected checkpoint; prediction replay is exact and candidate-order remapping remains within its predeclared tolerance. A Windows junction alias caused a path-string-only receipt mismatch; the finalizer now canonicalizes corpus roots, with a regression test. No run artifact or checkpoint changed. This is reproducibility evidence on the previously exposed synthetic development set, not a new quality result. See [audit](docs/pretrained_reuse/R2_MINIWOB_RESULT_REPLAY_AUDIT_20261115.md).
 **2026-11-13 R2 Localized Narratives source screen:** A metadata-only screen found a plausible synchronized audio+image region-grounding task, but the available COCO image metadata lacks creator attribution, the 100 official validation annotators all overlap train shard 0, and voice-recording rights / consent scope remain unverified. Keep the candidate `REVIEW_NOT_ADMITTED`; no media, model, or evaluation data were loaded. See [source screen](docs/pretrained_reuse/R2_LOCALIZED_NARRATIVES_SOURCE_SCREEN_20261113.md).
+**2026-11-15 R2 AVQA source screen:** The official source documents four-choice annotations and a both-audio-and-video category, but reports only 22 such examples, uses VGG-Sound/YouTube source clips, and publishes ACM non-commercial terms without a product-use grant for the videos. Keep `REVIEW_NOT_ADMITTED`; no annotation or media payload was accessed. See [source screen](docs/pretrained_reuse/R2_AVQA_SOURCE_SCREEN_20261115.md).
+**2026-11-15 R2 FAIR-Play source screen:** The pinned CC BY 4.0 repository documents 1,871 aligned audio/video clips, but the paper describes one room and 20 volunteers, while published random clip splits do not establish participant-disjoint groups or recording-consent scope. Keep `REVIEW_NOT_ADMITTED`; no LFS objects or media were fetched. See [screen](docs/pretrained_reuse/R2_FAIR_PLAY_SOURCE_SCREEN_20261115.md).
 **2026-11-12 R2 MiniWoB DINOv2 Path A result:** On the frozen 512/512 screen-only MiniWoB development split, the 22.06M-parameter frozen DINOv2-small plus a 76.3K readout reached 96.09% Accuracy / 0.1231 NLL at selected epoch 99. Position-only, black-screen and cross-episode screen-permutation controls stayed near 23–24% chance; option-ID remapping survived candidate-order permutation with zero argmax flips. This is a narrow synthetic UI action result with a visible train/validation gap, not general image/video or Omni quality, and it does not replace the pinned VideoPrism runtime gate or close multimodal M-2. See [full Path A results](docs/pretrained_reuse/R2_MINIWOB_DINO_PATH_A_RESULTS_20261112.md).
 **2026-11-12 R2 MiniWoB screen-only preflight:** The pinned synthetic click-color corpus is independently reverified (512 train / 512 development validation; zero ID, group, or screen-pixel overlap) and its five focused CPU tests pass. No model was scored. The approved system Python lacks the pinned VideoPrism JAX/Flax stack, while its dedicated runtime is blocked by Windows Application Control; the RTX 3080 was occupied by a separate Orbitune job during the recheck. R2 quality and multimodal M-2 remain open. See [preflight report](docs/pretrained_reuse/R2_MINIWOB_SCREEN_ACTION_PREFLIGHT_20261112.md).
 **2026-11-10 R2 TallyQA Visual Genome development probe:** Pinned TallyQA
@@ -2810,6 +3112,7 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 ### R0 — Evidence preservation and design lock (**first action**)
 
+- [x] 2026-11-15 live refresh: PR #15 remains Draft/Open at `bfb13bf`; 94 PRs and 171 local worktrees were observed; the primary checkout's dirty user work was preserved; the separate Orbitune process was using the RTX 3080, so no GPU work was started. This refresh did not rehash large external media stores. See [the live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261115.md).
 - [x] Archive a machine-readable inventory of `main`, current independent branch/PR revisions, benchmark/data manifest hashes and experiment checkpoint hashes without modifying their bytes (`docs/pretrained_reuse/R0_INVENTORY.json`; 2026-10-10 snapshot).
 - [x] Reconcile the current remote PR head/base states and local worktree/process snapshot; preserve all independent branches and runs. Read-only contribution/dependency review for PRs #9–#14: `docs/pretrained_reuse/R0_OPEN_PR_REVIEW_20261011.md`. All remain open and unchanged; CI for PRs #13/#14 was not verifiable from the unauthenticated status lookup.
 - [x] Refresh the live PR/worktree/process/storage snapshot without modifying existing experiments (`docs/pretrained_reuse/R0_LIVE_RECHECK_20261028.md` and `.json`). The 2026-10-28 snapshot inventoried 28 PRs and 84 worktrees. A read-only follow-up on 2026-10-29 confirms PR #15 remains Draft/Open at the current branch head, 28 PRs (#9–#36) remain open, and 84 worktrees are present; see `docs/pretrained_reuse/R0_LIVE_AUDIT_20261029_1204JST.md` and `.json`. No experiment was interrupted or changed. This refresh does not close the open device/task-criteria gate below.
@@ -2831,6 +3134,15 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 **Exit:** at least one executable, legally usable video candidate and one viable small text/audio path; otherwise pause architecture selection.
 
 ### R2 — Frozen modular baseline A (**main low-compute milestone**)
+
+- [x] 2026-11-15 metadata-only AVSD/Charades screen: AVSD is response generation rather than supplied-option Decision, its repository describes registration-gated data access, and Charades rights remain non-commercial/primary-page-redirect unresolved. No data or media was accessed; candidate stays `REVIEW_NOT_ADMITTED`. See [screen](docs/pretrained_reuse/R2_AVSD_SOURCE_TASK_SCREEN_20261115.md).
+- [x] 2026-11-15 independent CPU review of PR #94 JSONL/temporal-session contracts: 16 focused tests and Ruff pass; no inspected contract defect. This verifies runtime plumbing only. Existing Clotho-AQA joint evidence remains mixed/overfit and is not reopened. See [review](docs/pretrained_reuse/R2_PATH_A_PR94_INDEPENDENT_REVIEW_20261115.md).
+- [x] 2026-11-17 R2-M sensor stem implementation: added a causal, timestamp-aware LSTM stem for calibrated sensor windows. The 12-channel/64-hidden configuration contains 20,224 trainable parameters; CPU contract tests cover invalid padding, timeline validation, finite outputs and gradients. This advances M-1 architecture plumbing only: no task data or quality comparison was run. The rights-approved, source-grouped sensor task and deterministic-rule baseline remain open. See [implementation record](docs/pretrained_reuse/R2_SENSOR_TEMPORAL_STEM_20261117.md).
+- [x] 2026-11-20 R2-M sensor Decision integration: the LSTM state now feeds the candidate-conditioned, text-free readout and stable option-ID JSON path. The configured 12-channel/8-attribute model has 29,697 parameters; CPU tests check option permutation and output ordering. No data or quality claim. See [integration record](docs/pretrained_reuse/R2_SENSOR_TEMPORAL_DECISION_INTEGRATION_20261120.md).
+- [x] 2026-11-20 raw sensor runtime adapter: verified payload SHA-256, channel order, calibration/range, normalization inputs, causal timestamp cutoff and fresh-evidence abstention before temporal inference. Synthetic CPU tests only; no dataset or quality evaluation. See [runtime record](docs/pretrained_reuse/R2_SENSOR_TEMPORAL_RAW_RUNTIME_20261120.md).
+- [x] 2026-11-20 UCI HAR sensor-only probe (first 12-epoch fit and one-time public-test read): static summaries scored 70.44% Accuracy / 0.8043 NLL; the scratch LSTM scored 59.08% / 0.7687 on nine participant-held-out test subjects. The LSTM's paired subject-bootstrap Accuracy difference was -11.32 pp (95% CI -15.55 to -7.10 pp), despite better NLL/Brier/ECE and near-zero recall for SITTING/LAYING. Both validation losses were still decreasing at epoch 12, so this is not an architecture ceiling. The public test is now closed; see [results](docs/pretrained_reuse/R2_UCI_HAR_SENSOR_TEMPORAL_RESULTS_20261120.md), [protocol](docs/pretrained_reuse/R2_UCI_HAR_SENSOR_TEMPORAL_PROTOCOL_20261120.md) and [source manifest](manifests/pretrained_reuse/uci-har-sensor-v1.json).
+- [x] Validation-only 100-epoch budget follow-up completed on 2026-11-20 with the frozen seed, initialization, architecture, data, split, sampler, optimizer and CPU protocol. Static validation selected epoch 84; the LSTM selected epoch 15. The official test was not reopened. The next fixed task is the one-time selected-validation error breakdown in [the analysis protocol](docs/pretrained_reuse/R2_UCI_HAR_VALIDATION_ERROR_ANALYSIS_PROTOCOL_20261121.md); no training or test access is planned.
+- [x] 2026-11-20 metadata-only MMCSG source/task screen: the Meta dataset agreement allows commercial model development but requires entity-level acceptance and restricts dataset incorporation/distribution; speaker-independence across splits and a genuine both-input-required Decision task are unverified. No agreement was accepted and no payload was accessed. Keep `REVIEW_NOT_ADMITTED` pending provider clarification and task/split gates. See [source/task screen](docs/pretrained_reuse/R2_MMCSG_SOURCE_TASK_SCREEN_20261120.md).
 
 **2026-10-29 R2-M OpenPack source screen:** The pinned official OpenPack
 release is a relevant video/wearable-sensor work-activity source, but its
@@ -2959,6 +3271,8 @@ these limits remain explicit in `docs/pretrained_reuse/R2_STARSS23_SPLITS_202610
 **Exit:** demonstrable gain on held-out joint decisions, without erasing unique modality information. If no paired data, record R4 as not testable and use A/B rather than fabricate alignment.
 
 ### R5 — State reuse and caching (**functionally driven, not assumed**)
+
+- [x] 2026-11-15 Audio CPU/FP32 parity decomposition: same-process CPU repeat is deterministic; the larger delta is mostly CUDA BF16-versus-FP32, but the worst CPU-FP32-versus-CUDA-FP32 difference remains 2.11e-5 and exceeds the unchanged 1e-5 tolerance. This is a fixed-request numerical diagnostic, not quality evidence. See [the parity decomposition](docs/pretrained_reuse/R5_PATH_A_AUDIO_CPU_PARITY_DECOMPOSITION_20261115.md).
 
 - [x] Establish content-based observation caching correctness and multi-query reuse for sequential Image/Video updates. A real-worker probe passed all 14 checks on two images and two scenes: same-path/same-mtime replacement re-encoded, stale hashes were rejected, aliases and restored content reused features, and all 12 decisions matched saved predictions within 2.4e-7. Audio now also caches single-event features across requests: eight repeated four-query requests avoided all eight re-encodes, matched uncached probabilities exactly, and reduced observed median roundtrip from 13.19 to 2.96 ms. Seven Audio update checks and an isolated bundle reload passed. Concurrent streams and timestamped state remain open. See `docs/pretrained_reuse/R5_OBSERVATION_UPDATES_20261011.md` and `docs/pretrained_reuse/R5_AUDIO_REQUEST_REUSE_20261011.md`.
 - [ ] If delayed queries need persistence, compare no memory, 16/32/64 compressed latent slots, and a gated update; retain time/location/missingness metadata. No default promise of action-conditioned physics.
@@ -3980,3 +4294,174 @@ scene split; keep PhysicalAI `REVIEW_NOT_ADMITTED` and do not fit/evaluate a
 readout. See [full protocol and outputs](docs/pretrained_reuse/R2_PHYSICALAI_FRESH_SCENE_SIMILARITY_20261103.md).
 **2026-11-04 12:23 JST R0 artifact-retention recheck:** C: had 7.23 GiB free; the RTX 3080 showed 15,832/16,384 MiB allocated while Orbitune's separate worker/watchdog were active. The R2 store remains 521,491 files / 684.97 GiB logical. Stale Torch wheel bundles, model caches, temporary checkpoints, crash dumps, corpora and experiment data were retained because no newly inspected item passed the established hash/recoverability/active-reader gate. No GPU work, deletion, process intervention, or change to the user's PhysicalAI manifests occurred. See [retention recheck](docs/pretrained_reuse/R0_ARTIFACT_RETENTION_RECHECK_20261104_1223JST.md).
 **2026-11-12 R2 RoboMIND 2.0 screen:** The pinned top-level ModelScope repository (`75a95b8`) describes camera/state/force/tactile streams and 310K trajectories. A pinned Tienkung simulation sub-repository lists 303 timestamped HDF5 episodes for one task across six dates, but no declared task split or official scene/session grouping; 303 must not be counted as independent groups. Rights scope and a supplied-option task requiring both inputs remain unverified. The older 1.x train/val example does not establish a 2.0 split. Keep `REVIEW_NOT_ADMITTED`; no LFS object or media was fetched. See [source/task screen](docs/pretrained_reuse/R2_ROBOMIND2_SOURCE_TASK_SCREEN_20261112.md).
+
+**2026-11-17 Path A Audio precision parity:** A fixed, previously observed 640-asset / 2,560-query development input comparison found CUDA FP32-no-TF32 vs CPU FP32 maximum probability delta 1.8239e-5; 2 decisions exceed the unchanged 1e-5 gate, though no argmax changed. This does not establish a quality regression or general parity (all clips were <=1 s). No labels or sealed audit were used by the run; one target field appeared in a single preparatory schema row inspection, recorded as limited development-label exposure. Keep `auto` default and the precision contract open. [Protocol, hashes and limitations](docs/pretrained_reuse/R5_PATH_A_AUDIO_FP32_PARITY_640_20261117.md).
+
+**2026-11-17 Path A LibriSpeech numeric precision follow-up:** On the existing fixed dev-clean request set (1,938 unique assets, 1.56–24.695 s), CPU FP32 vs CUDA FP32-no-TF32 had four decisions above the unchanged 1e-5 max probability delta (3 random-distractor, 1 hard-distractor) and zero argmax changes. This is label-free numeric parity only, not another task-quality score; no training or checkpoint selection. Keep the precision contract open. [Protocol, hashes, resource use and limitations](docs/pretrained_reuse/R5_PATH_A_AUDIO_LIBRISPEECH_PRECISION_20261117.md).
+
+**2026-11-17 Path A LibriSpeech hard-negative task adaptation:** A new
+speaker-disjoint split from OpenSLR train-clean-100 was fixed (13,902 train /
+3,467 validation targets; no speaker, asset, or normalized-text overlap).
+With frozen Whisper Tiny + MiniLM features and a 344,321-parameter readout,
+the selected final-epoch checkpoint reached 93.94% random-negative and 88.38%
+hard-negative accuracy on the same held-speaker validation; the existing
+Speech Commands readout scored 25.58% and 25.90%. This is narrow English
+audiobook transcript-choice evidence, not general audio understanding. The
+first run exposed a condition-aggregation/selector defect; intermediate epoch
+weights were not saved, so the only surviving final checkpoint was scored
+post hoc and is not a recoverable historical best. No sealed/test data was
+used and no product artifact was promoted. See [run report and limitations](docs/pretrained_reuse/R5_LIBRISPEECH_TRAIN_CLEAN_100_READOUT_20261117.md).
+
+**2026-11-17 Path A LibriSpeech 100-epoch learning curve:** A fresh seed-17 CPU run on the same exposed speaker-held-out split completed all 100 epochs (86,900 optimizer updates). Equal-condition validation NLL selected epoch 40: random/hard accuracy 96.02%/92.90%, with hard NLL 0.2834; by epoch 100 hard NLL worsened to 0.4779. This supports further useful optimization beyond the old four-epoch endpoint for this narrow audiobook transcript-choice task, while showing validation overfit after the selected epoch. It is development-only, not general audio quality or product evidence. [Run protocol, curve, hashes and limits](docs/pretrained_reuse/R5_LIBRISPEECH_100_EPOCH_LEARNING_CURVE_20261117.md).
+
+**2026-11-17 Path A LibriSpeech runtime integration:** A separate bundle built from commit 2e138969 loaded the pinned Whisper Tiny/MiniLM snapshots and selected epoch-40 readout, imported its runtime code from the bundle itself, returned typed choice JSON, and matched the saved development prediction within 8.76e-12; save/reload probability delta was zero. CPU single-item inference was 0.183–0.278 s, not a benchmark. The 227,115,067-byte package exceeds the provisional 200 MB target; no quantization was attempted. This is a narrow development runtime smoke, not an Omni/product result. [Bundle protocol, hashes, preserved failed attempts and limits](docs/pretrained_reuse/R5_LIBRISPEECH_RUNTIME_BUNDLE_20261117.md).
+
+**2026-11-17 Path A LibriSpeech shared runtime route:** Added a separate typed
+`librispeech` route to the existing dispatcher. It reuses the pinned Audio
+route's single Whisper Tiny and MiniLM instances and adds only the
+344,321-parameter LibriSpeech readout. A new immutable five-component assembly
+has 170,844,037 unique pre-quantization parameters and is 688,661,995 bytes;
+the provisional 200 MB package target remains unmet. One already observed
+held-speaker validation sample reproduced its saved probabilities within
+8.76e-12 on CPU. This checks routing and packaging only, not quality or a new
+validation result. Original artifacts containing extra unmanifested bytecode
+were preserved; manifest-only copies passed strict verification. [Implementation,
+artifacts and source-integrity details](docs/pretrained_reuse/R5_PATH_A_LIBRISPEECH_SHARED_RUNTIME_20261117.md).
+**2026-11-17 Path A five-component runtime regression:** On the new assembly,
+the existing Video/Image/Text routes passed saved-probability parity and typed
+JSON checks. Audio typed JSON and argmaxes also matched, but CPU FP32
+probability parity failed the unchanged `1e-5` gate (`6.18e-4` max delta).
+The overall replay is recorded as failed parity; this does not implicate the
+added LibriSpeech head. [Exact route results and artifact hash](docs/pretrained_reuse/R5_PATH_A_LIBRISPEECH_SHARED_RUNTIME_20261117.md).
+**2026-11-20 R2-M audio+sensor source gate:** Zenodo record `10.5281/zenodo.7937591` is cleared for bounded local development under CC BY 4.0; its metadata reports per-activity archives with publisher checksums, while the paper documents 14 participants, 8,615 activity trials and synchronized audio/vibration. No data payload or labels were opened. The proposed M2 task is same-trial audio/vibration matching with same-activity hard negatives and participant-grouped splits; source-format feasibility and the split are still pending. This does not establish fusion quality. See [source gate](docs/pretrained_reuse/R2M_ZENODO_AUDIO_VIBRATION_ADMISSION_20261120.md) and [manifest](manifests/pretrained_reuse/r2m-zenodo-audio-vibration-20261120.json).
+**2026-11-20 R2-M temporal fusion primitive:** Added an untrained 141,986-parameter default audio+sensor time-aware gated feature fusion block with explicit presence/valid masks and candidate-conditioned residual gates. Fourteen focused CPU tests and Ruff pass. This is wiring/mechanics only; no corpus fit, quality gain or product admission is claimed. The real paired-source task gate remains pending. See [implementation record](docs/pretrained_reuse/R2M_TIME_AWARE_GATED_FUSION_20261120.md).
+**2026-11-20 R2-M split freezer:** Added an identifier-only SHA-256 participant splitter for the new audio/vibration source. It fails closed unless exactly 14 real participants remain after removing the no-activity sentinel and deterministically assigns 8/2/2/2 groups. Nine focused split tests pass; no source IDs or labels were read while implementing it. See [source gate](docs/pretrained_reuse/R2M_ZENODO_AUDIO_VIBRATION_ADMISSION_20261120.md).
+
+**2026-11-20 R2-M payload and synchronization preflight:** All 25 approved
+Zenodo archives passed publisher MD5 and local SHA-256 checks. Identifier
+inventory found 14 real participants and 8,615 trials in one selected
+`multisensor-1` member per activity. A schema probe inadvertently loaded one
+audio/vibration trial from sealed participant 0 before any fit; that
+participant is quarantined and a replacement 7/2/2/2 split is frozen, leaving
+participants 1 and 16 sealed. A bounded preflight of 364 train/calibration/
+validation records found nonempty audio and equal-length vibration axes, with
+audio/vibration duration ratios from 0.99973 to 1.00040. This establishes
+format-level synchronization only; hard-negative feasibility and model
+quality remain untested. See [payload preflight and access correction](docs/pretrained_reuse/R2M_ZENODO_PAYLOAD_PREFLIGHT_20261120.md).
+
+**2026-11-20 R2-M frozen-feature and pair preflight follow-up:** One train-only
+record passed a strict frozen EfficientAT DyMN-0.4 load and yielded finite
+35x384 temporal audio features. A deterministic same-activity,
+duration-matched pair-index implementation passed focused CPU tests. The full
+allowed corpus yields 5,448 train, 759 calibration, and 761 validation anchors;
+validation has 395 cross-participant and 366 within-participant negatives.
+This supports a pilot but does not establish fusion quality. Feature caching
+and model fitting remain to be done; no sealed-audit signal was accessed and
+no model was fit. See
+[feature and pair preflight](docs/pretrained_reuse/R2M_EFFAT_FEATURE_AND_PAIR_PREFLIGHT_20261120.md).
+
+**2026-11-20 R2-M audio+vibration matching pilot complete:** Built and hash-
+verified frozen features for 6,971 allowed trial assets, then completed a
+seed-17, 80-epoch local RTX 3080 gated-readout run (54,480 updates; 178,563
+trainable parameters). Calibration selected epoch 16. Validation stayed at
+49.93% binary accuracy / 0.69315 NLL; paired two-candidate choice accuracy was
+45.34%, versus 50.59% for the fixed temporal-correlation baseline. Missing,
+wrong-trial and timing-shift controls showed no useful two-input dependence.
+This matching formulation is **not supported by the pilot** and does not
+measure the product target. No sealed audit, quantization or product promotion
+was performed. Preserve the checkpoints and exact prediction outputs outside
+Git; provenance caveats are recorded.
+See [full protocol and results](docs/pretrained_reuse/R2M_AUDIO_VIBRATION_MATCH_PILOT_20261120.md).
+
+**2026-11-21 R2-M raw sensor-scale follow-up:** A one-factor 80-epoch repeat used train-only per-axis z-scores on the same 5,449 train trials, pair index, split, seed and 761 exposed validation pairs as the raw-count pilot. Paired-choice Accuracy moved from 45.34% to 48.09%, but remains below chance; NLL/Brier shifts are tiny and no participant-generalization claim is justified. This does not support sensor scaling as a sufficient cause of the previous failure. Both runs, hashes and limitations are recorded in [the normalization follow-up](docs/pretrained_reuse/R2M_SENSOR_SCALE_NORMALIZATION_FOLLOWUP_20261121.md).
+
+**2026-11-21 R2-M supplied-activity Decision comparison:** Three fixed-budget
+attempts are preserved. Attempt 3 changed only AdamW weight decay from 0.01 to
+0.1 after train-only vibration normalization. The gated audio+vibration model
+improved over attempt 2 on the same 762 validation IDs (sample Accuracy
+71.92%→75.85%, macro Accuracy 64.80%→72.46%, macro NLL 0.9455→0.8908, macro
+Brier 0.4698→0.3870), while audio-only regressed. The original one-row sensor
+rotation was ineffective because rows were activity-sorted. A corrected
+same-participant/different-activity sensor swap reduced selected fusion macro
+Accuracy by 9.56 pp on these two participants, showing content sensitivity but
+not new-person generalization. This remains a promising development result,
+not product quality evidence. All three arms completed 80 epochs and late NLL
+showed strong overfitting. Keep attempts and checkpoints separate, do not
+promote the model, and retain the open 95–98% four-modality objective. No
+sealed audit or quantization. See [full report](docs/pretrained_reuse/R2M_SUPPLIED_ACTIVITY_DECISION_20261121.md)
+and [sensor-dependence diagnostic](docs/pretrained_reuse/R2M_SENSOR_DEPENDENCE_DIAGNOSTIC_20261121.md).
+
+**2026-11-21 R2-M parameter-matched sensor-absent control:** A fresh 80-epoch
+run used the same two-stream, 180,387-parameter model and exact attempt-03
+training configuration/initial seed while masking sensor input throughout
+training and evaluation. On the identical 762 exposed validation IDs, paired
+fusion was +4.65 pp in macro Accuracy (participant×activity paired-bootstrap
+95% interval +1.66 to +7.55 pp), with better macro NLL/Brier; sample Accuracy
+was nearly tied (+0.13 pp, interval −2.36 to +2.62 pp). Effects opposed by
+participant: fusion improved participant 9 and regressed participant 15. The
+result weakens the parameter-count-only explanation for macro metrics on these
+subjects but does not establish new-person benefit. The control overfit late
+(train Accuracy 100%, calibration macro NLL 3.606 at epoch 80; calibration
+best epoch 4). No sealed audit or product promotion. Next require a fresh
+participant-grouped admitted source/task before generalizing sensor fusion.
+See [controlled protocol and results](docs/pretrained_reuse/R2M_CAPACITY_MATCHED_SENSOR_CONTROL_20261121.md).
+
+**2026-11-21 R2-M train-only participant-grouped CV:** Compared Audio-only
+against audio+vibration gated fusion across seven outer folds of the original
+training participants. On 5,449 paired OOF predictions and the same 24 choices,
+Audio-only reached 79.43% sample / 80.12% macro Accuracy (macro NLL 0.7044),
+while fusion reached 72.29% / 73.27% (macro NLL 1.2633). Fusion regressed on
+five of seven held-out participants. All 14 fits completed 80 epochs, showed
+late overfit, and selected checkpoints using only an inner participant's
+calibration rows. This is exploratory train-only CV with overlapping fit
+groups, not an independent final test or product-quality result. Sealed audit
+and previously exposed calibration/validation participants were not used. Do
+not promote this fusion candidate for this task; keep the broader sensor and
+four-modality objectives open. [Protocol, OOF metrics, histories and hashes](docs/pretrained_reuse/R2M_TRAIN_ONLY_PARTICIPANT_CV_20261121.md).
+**2026-11-21 R2 UCI HAR selected-validation error analysis:** Hash-verified the frozen static epoch-84 and LSTM epoch-15 prediction artifacts and analyzed the same 1,324 exposed validation windows. LSTM predicted `STANDING` for every `SITTING` sample (0% recall) and 220/230 `LAYING` samples (3.91% recall), consistently across four held-out participants; walking class behavior varied by participant. Static summary features remain stronger on this narrow prewindowed HAR task. This descriptive, selection-affected validation analysis loaded no signals, checkpoints, or official-test records and is not a blind or population-level estimate. See [protocol](docs/pretrained_reuse/R2_UCI_HAR_VALIDATION_ERROR_ANALYSIS_PROTOCOL_20261121.md) and [results](docs/pretrained_reuse/R2_UCI_HAR_VALIDATION_ERROR_ANALYSIS_20261121.md).
+**2026-11-21 R2-M HubEgo-100K source screen:** The pinned HF v1.0 card and paper report 72,754 episodes from 12,227 contributors with synchronized egocentric RGB/IMU and 35 machine-generated action families under CC BY 4.0. The official repository is access-gated and requires login plus a short form; no form or payload access was attempted. Its paper recommends contributor-disjoint evaluation and says a stratified split is available on request, but labels are not human-audited. This is a promising fresh video+sensor candidate, not yet admitted or evidence of both-input necessity. See [source screen](docs/pretrained_reuse/R2_HUBEGO100K_VIDEO_IMU_SOURCE_SCREEN_20261121.md) and [pinned metadata](manifests/pretrained_reuse/hubego100k-source-screen-20261121.json).
+**2026-11-21 R2 MiniWoB prospective evaluation record reconciled:** Verified the preserved 2026-11-14 CPU-only run over 1,024 accepted, previously unused seeds and screens. The frozen DINO screen-only scorer scored 96.97% on this synthetic click-color task; position-only, black-screen, and screen-shuffle controls were near four-choice chance. The checkpoint had earlier dev-validation selection history, so these episodes are now exposed development evidence and must not be tuned against. This does not establish general image/video quality or multimodal fusion. Do not repeat this cohort; prioritize rights-cleared, both-input-required R2 tasks. See [report](docs/pretrained_reuse/R2_MINIWOB_FROZEN_GENERALIZATION_20261114.md).
+**2026-11-21 R2 audio/video task admission:** Pinned SoundActions v2 under its explicit CC BY 4.0 license. Froze a 266/53/46 recording-ID train/validation/sealed split; IDs 1–35 were forced to train because their overview labels had appeared in the source preview. The publisher's SHA-256 inventory shows zero exact asset-byte collisions across 1,095 paired media files, but does not check near-duplicates. Prior paper results favor audio-only over its paired model, and labels have κfree 0.46; run a compact frozen audio/video comparison only if local media/runtime preflight passes. No media or model has been loaded and no training has started. See [source/task screen](docs/pretrained_reuse/R2_SOUND_ACTIONS_SOURCE_SCREEN_20261121.md).
+**2026-11-21 R2 SoundActions frozen temporal pilot:** The follow-up run extracted only the 294 majority-labeled train/validation recordings, verified all 588 media files against publisher SHA-256, and left all 46 sealed-audit recordings unopened. On the same 48 validation recordings, audio-only reached 64.58% Accuracy / 0.809 NLL, video-only 43.75% / 1.123, and the gated BiLSTM A/V readout 52.08% / 0.914. The paired model's Accuracy was below audio-only, and zero/permuted-video controls showed no video benefit; all three conditions overfit. No model promotion or quantization. See [protocol, curves, hashes and limitations](docs/pretrained_reuse/R2_SOUND_ACTIONS_TEMPORAL_RESULTS_20261121.md).
+**2026-11-21 R2-M HABIT causal feature pilot:** Extracted frozen VideoPrism-B `[278,8,768]` and aligned robot-state `[278,8,14]` inputs for 202 train transitions / 76 validation transitions, then aligned the pinned high-level task text, candidate options and target index. Train/validation remain disjoint by task group and video hash; sealed-audit records and action columns were not accessed. This is a CPU plumbing pass with no fitting or quality metrics; validation covers only six task groups. See [runtime, hashes and limits](docs/pretrained_reuse/R2M_HABIT_TRANSITION_FEATURES_20261121.md).
+**2026-11-21 R2-M HABIT temporal Decision protocol and result:** Fixed a one-seed CPU comparison of text-only, video-only, state-only and video+state readouts over the same frozen 202/76 transition package. MiniLM-L3 and VideoPrism-B stayed frozen; the temporal readout has 370,819 trainable parameters. All four arms completed 80 epochs without early stopping and selected epoch 4 by validation macro task-group NLL. Training NLL fell as validation NLL rose sharply after selection; paired missing/shuffled-stream controls barely changed Accuracy. The small six-group pilot overfit and did not establish useful paired-input necessity. Sealed audit remained unopened; no promotion or quantization. The run report was reconstructed from preserved best/last checkpoints after fixing a validation-group matching failure; exact runtime is unknown. See [protocol and results](docs/pretrained_reuse/R2M_HABIT_TEMPORAL_DECISION_PROTOCOL_20261121.md) and [run manifest](manifests/pretrained_reuse/habit-temporal-decision-20261121.json).
+
+**2026-11-22 R2-M DextraVerse video+tactile candidate preflight:** Pinned the
+public CC BY 4.0 `pick_cube_place_box` task and its real-robot schema. The
+publisher documents 261 episodes, head RGB, and calibrated per-fingertip
+3-axis force in N. A causal next-contact task has been fixed prospectively:
+both hands' 10 fingertips feed the sensor path, head video feeds the visual
+path, and the 12 labels include hand-specific contact outcomes. This avoids
+inferring the active hand from future measurements; all three bimanual
+episodes remain included. The archive is downloading to an external C: attempt
+directory. Array/timestamp integrity, class support, and grouped evaluation
+remain unverified. The pure CPU target/split helper has 12 passing synthetic
+tests; no real examples or model fit/evaluation exist yet, and sealed audit
+remains unopened.
+Do not treat this as admitted or as product-quality evidence. See the
+[fixed protocol](docs/pretrained_reuse/R2M_DEXTRAVERSE_CONTACT_DECISION_PROTOCOL_20261122.md)
+and [source receipt](manifests/pretrained_reuse/dextraverse-contact-decision-source-preflight-20261122.json).
+
+**2026-11-22 R2-M DextraVerse feature-extraction plumbing:** Added a separate
+read-only, archive-hash-gated frozen-feature worker for the pinned public
+DextraVerse candidate. It streams selected windows from ZIP64 `ZipStore`
+without full extraction, retains all eight VideoPrism temporal positions, and
+stores query-relative two-hand tactile histories and per-array hashes in a new
+external output directory. Zarr and VideoPrism run in their existing isolated
+environments through a tested local binary pipe; neither environment is
+upgraded. Seven new CPU tests bring candidate-specific tests to 19; Ruff,
+compile, both runtime CLI entry points and diff checks pass. Batch-8 inference
+matched a synthetic clip processed alone within `1.91e-6` maximum absolute
+error. The 44.2 GB payload is still downloading (about 27 GB written at this
+snapshot); the real
+archive checksum, class support, feature extraction and any model evaluation
+remain unverified. The native JAX runtime is CPU-only; its one-example cold
+pipe smoke passed, and prior pinned-model batch-8 measurements indicate
+roughly 1.18 s/item after warm-up (about 6.2 h for the earlier 13.7k-clip
+estimate). Actual DextraVerse query count and ZIP-read overhead are unknown.
+The extractor now uses batch 8 and caches each episode's RGB span under a 1 GiB
+cap; its CLI regression test verifies the separate worker-Python argument. See
+[protocol](docs/pretrained_reuse/R2M_DEXTRAVERSE_CONTACT_DECISION_PROTOCOL_20261122.md#runtime-preflight).
+
+
+**2026-11-22 R2-M HapTile task-held-out pilot:** Added a deterministic seed-17 task-group split; the initial gripper target was rejected from train-only evidence. The pinned 1,113-episode train corpus is present and its LFS/Git hashes and MCAP CRCs passed. Full train-only target counts are `-x:106,+x:190,-y:46,+y:86,-z:35,+z:246,hold:404`; 19/24 train task groups lack at least one class, limiting held-out-task generalization. Separate frozen validation and calibration task groups (169 episodes each) are now downloaded and integrity-checked; their target preflights and label counts are recorded in the [protocol](docs/pretrained_reuse/R2M_HAPTILE_ACTION_CHOICE_PROTOCOL_20261122.md). Sealed audit remains unopened. A CPU VideoPrism-B 24-episode smoke produced `[24,4,8,768]` features in 176 seconds. An ordered distinct-frame selector fix, causal 25-channel state/instruction extraction, development-only data gates, and executable seven-way JSON readout are covered by 71 passing HapTile tests (one skipped) and Ruff. Full train video feature extraction remains in progress (508/1,113 at 09:12 JST); no model fitting, quantization or product promotion has occurred. HapTile has no audio and cannot by itself satisfy the four-modality objective. See [protocol and current evidence](docs/pretrained_reuse/R2M_HAPTILE_ACTION_CHOICE_PROTOCOL_20261122.md), [split commitment](manifests/pretrained_reuse/haptile-task-split-v1-20261122.json), and the scripts/tests.

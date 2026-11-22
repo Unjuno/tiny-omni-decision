@@ -1,0 +1,118 @@
+{
+  "format": "dextraverse_contact_decision_source_preflight_v1",
+  "dataset_id": "DextraVerse pick_cube_place_box real-robot task",
+  "status": "STOPPED_INSUFFICIENT_CLASS_SUPPORT",
+  "source": {
+    "repository": "https://huggingface.co/datasets/ntumars/DextraVerse",
+    "revision": "257731928e25cd068b02d80d18d8f3cb77075a14",
+    "license": "CC BY 4.0",
+    "metadata_response_sha256": "6cf0084a1f4d589a2e92ce7bb3e3d4af4bd4f4494626c8179f9c678e546a0e95",
+    "file_tree_response_sha256": "9a7b6e6b897ca089f22855a943e6fe17eddc5cfe587c116ff28fb81e1118c4d2",
+    "real_robot_readme": {
+      "path": "DextraVerse/README_real_robot.md",
+      "bytes": 3449,
+      "sha256": "8cb64a0519db1fa60f4963eaf99af98f3c098ffb8f90c24e14a3fa80923db20c"
+    },
+    "publisher_checksums_file": {
+      "path": "SHA256SUMS.txt",
+      "bytes": 509,
+      "sha256": "9f35f048b691eb0220c6cbecde11b94d38aed8b7d71cc9903e5c082075430968"
+    }
+  },
+  "task_metadata": {
+    "episodes_reported": 261,
+    "frames_reported": 138382,
+    "reported_episode_types": {
+      "left_hand": 140,
+      "right_hand": 116,
+      "bimanual_retained_by_protocol": 3,
+      "never_grasp_retained": 2
+    },
+    "tactile_schema": "10 left-then-right fingertips x 3 calibrated force components in N; per-finger force components are in that sensor's own frame",
+    "video_schema": "RGB 320x240 head/egocentric camera for every episode",
+    "episode_identity": "meta/episode_ends in the Zarr v2 replay buffer",
+    "target_schema": "12 fixed options: side-specific finger, simultaneous, or no new contact"
+  },
+  "payload": {
+    "path": "DextraVerse/pick_cube_place_box.zarr.zip",
+    "expected_bytes": 44197744857,
+    "hf_blob_oid": "7456e5175751abb6fd833e242c412ea62412def4",
+    "publisher_sha256": "9f9d8d0e6a6eebac12f1bf63fae59bea46e9531db2b9921440aa553289d07aa4",
+    "download_status_at_record": "COMPLETE_HASH_VERIFIED",
+    "downloaded_bytes_at_record": 44197744857,
+    "download_observed_at": "2026-11-22T05:41:10+09:00",
+    "download_process_status_at_record": "download process exited after reaching the pinned byte count",
+    "transport_attempts": [
+      {
+        "transport": "curl single stream",
+        "status": "resumed and continuing",
+        "observed_rate_mib_per_second": "about 5 to 6"
+      },
+      {
+        "transport": "huggingface_hub hf_xet",
+        "status": "stopped after 90 seconds without payload-byte progress",
+        "payload_bytes_written": 0
+      }
+    ],
+    "local_attempt_root": "C:/CodexLocalArtifacts/pretrained-reuse-r2/dextraverse-contact-decision-attempt-01",
+    "repository_media_committed": false
+  },
+  "preflight_result": {
+    "status": "STOP_INSUFFICIENT_SUPPORT_OR_IDENTITY_OVERLAP",
+    "report_path": "C:/CodexLocalArtifacts/pretrained-reuse-r2/dextraverse-contact-decision-attempt-01/real-data-preflight-02/report.json",
+    "report_bytes": 8476768,
+    "report_sha256": "f7806087ef47405c3e270445842250770d589970a7b40f8971032d82fb24f014",
+    "array_scan_seconds_excluding_archive_hash": 106.311533599976,
+    "usable_episodes": 261,
+    "valid_queries": 10983,
+    "outer_fold_episode_counts": {"0": 53, "1": 52, "2": 52, "3": 52, "4": 52},
+    "invalid_timestamp_episodes": 0,
+    "duplicate_head_video_hash_groups": 0,
+    "cross_fold_duplicate_head_video_hash_groups": 0,
+    "insufficient_classes": ["left_index"],
+    "class_support": {
+      "left_thumb": {"queries": 148, "episodes": 51},
+      "left_index": {"queries": 38, "episodes": 18},
+      "left_middle": {"queries": 266, "episodes": 88},
+      "left_ring": {"queries": 125, "episodes": 40},
+      "left_little": {"queries": 718, "episodes": 114},
+      "right_thumb": {"queries": 52, "episodes": 24},
+      "right_index": {"queries": 307, "episodes": 40},
+      "right_middle": {"queries": 532, "episodes": 92},
+      "right_ring": {"queries": 70, "episodes": 22},
+      "right_little": {"queries": 2259, "episodes": 159},
+      "simultaneous": {"queries": 134, "episodes": 56},
+      "no_new_contact_within_1s": {"queries": 6334, "episodes": 244}
+    },
+    "feature_extraction_started": false,
+    "model_fit_started": false
+  },
+  "preflight_execution": {
+    "command": "python -m scripts.pretrained_reuse.inspect_dextraverse_contact_archive --archive <pinned archive> --output <real-data-preflight-02/report.json>",
+    "runtime": {
+      "python": "3.11.9",
+      "numpy": "2.4.6",
+      "zarr": "2.18.7",
+      "device": "CPU"
+    },
+    "repository_head_when_run": "7781da3381c00fb5aed17c8f24a6ef71c9b24f36",
+    "repository_worktree_dirty_for_root-wrapper-fix": true,
+    "preflight_script_sha256": "77f6a27f4d83d22444c05a096edd29ad2b2b79e83840b12fabf736cb4f00680d",
+    "same_script_content_committed_as": "faa1c541b22f2314d66bb8451de52e2e65985da7",
+    "sealed_audit_accessed": false
+  },
+  "gates": {
+    "source_is_public_and_ungated": true,
+    "license_allows_research_use_with_attribution": true,
+    "synthetic_zipstore_preflight_smoke_passed": true,
+    "archive_sha256_verified": true,
+    "both_force_arrays_and_head_video_verified": true,
+    "target_support_measured": true,
+    "target_support_passed": false,
+    "media_identity_overlap_verified": true,
+    "grouped_evaluation_started": false,
+    "model_training_or_evaluation_started": false,
+    "sealed_audit_accessed": false
+  },
+  "decision": "Stop this candidate before feature extraction or fitting: left_index has 38 queries, below the fixed 50-query minimum. Do not merge classes or alter the frozen windows after inspecting the results. The media-identity gate passed; no model quality claim is available."
+}

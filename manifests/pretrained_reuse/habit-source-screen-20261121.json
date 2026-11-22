@@ -1,0 +1,174 @@
+{
+  "format": "r2_habit_source_screen_v1",
+  "experiment_id": "r2-habit-human-aware-video-state-decision",
+  "recorded_at": "2026-11-21",
+  "status": "METADATA_PREFLIGHT_PASS_QUALITY_ADMISSION_PENDING",
+  "source": {
+    "name": "HABIT: Human-Aware Behavior and Interaction Training Dataset for Robot Manipulation",
+    "repository": "https://huggingface.co/datasets/configinc/HABIT",
+    "revision": "bae97d251907743f8fb6db7e70c61d361df4dc1e",
+    "license": "CC BY 4.0",
+    "reported_episodes": 10563,
+    "reported_hours": 164.19,
+    "reported_tasks": 60,
+    "camera_views_per_episode": 5,
+    "reported_modalities": ["video", "robot_state", "text_annotations"],
+    "audio_collected": false,
+    "reported_human_collectors": "approximately 10 at one institution",
+    "consent": "paper states written consent covered public CC BY 4.0 release",
+    "faces_blurred": true,
+    "participant_identity_field_in_inspected_public_metadata": false
+  },
+  "accessed": {
+    "full_metadata_downloaded": true,
+    "full_metadata_bytes": 9433626,
+    "full_episodes_jsonl_sha256": "0aa53b5ab7c6c22ed8662bc77ce0ba3d5bcfa62bc885f1a928c586f76e95fff5",
+    "full_tasks_jsonl_sha256": "9d407780b6ae0ae31677556bfd97982b74339389d52ecbe9e3a7c6a2948be013",
+    "full_subtasks_jsonl_sha256": "dcb0a7fe179c3f015bcef5bf3047de34d92dab2f0b8e2a55521b2fb0a21203a9",
+    "full_human_subtasks_jsonl_sha256": "6f4ba296ca2a79423d9ab28119a52be01402bbf08c856bff20a8d40a064c3877",
+    "full_info_json_sha256": "41749996d359830ede789179d4bb0c08a90db1a3bd97928e0f7d8d05f948ce08",
+    "task_details_file_count": 60,
+    "task_details_total_bytes": 73824,
+    "task_details_sha256": "19fe6b0c740499456cc7f450a7ccf4f3fdce1c064c99a0fa77ce3576c5068aa4",
+    "sample_metadata_bytes": 117905,
+    "sample_episode_parquet_bytes": 1494353,
+    "sample_episode_parquet_sha256": "42bf404fc435c0dd058ec0f7ed1d6da62b1131725676041cfed5bc2eba3f66d0",
+    "sample_episode_rows_inspected": 513,
+    "selected_train_validation_video_files_downloaded": 2,
+    "selected_video_bytes": 9269185,
+    "selected_video_sha256": {
+      "train_episode_000000_front_view": "5ed917a199048b458d0d12d2a955ae397b273dfecc76d5b94d3d815069b12bd2",
+      "validation_episode_001802_front_view": "5f2c242d63965b059bec78804acd3126da8f0a28d14d73a42aad937d27e681ba"
+    },
+    "selected_full_split_parquet_files_downloaded": 2,
+    "selected_full_split_parquet_bytes": 3240727,
+    "full_dataset_video_or_parquet_downloaded": false,
+    "publisher_validation_or_test_accessed": false,
+    "quality_evaluation_run": false,
+    "gpu_work_started": false,
+    "cloud_cost_usd": 0
+  },
+  "runtime_smoke": {
+    "status": "PASS_CPU_FROZEN_ENCODER_SMOKE",
+    "script_sha256": "70e082b10b2d8343b9104740494855a97d3357200db52f383cb392be02e46be8",
+    "pyav": "18.1.0",
+    "python": "3.11.16",
+    "jax": "0.6.2",
+    "tensorflow": "2.18.1",
+    "device": "TFRT_CPU_0",
+    "gpu_used": false,
+    "decoded_frames": {
+      "train_episode_000000": 653,
+      "validation_episode_001802": 469
+    },
+    "decoded_dimensions": "640x480",
+    "decoded_fps": 10,
+    "audio_streams": 0,
+    "frames_per_video_to_model": 8,
+    "token_features_shape": [1, 2048, 768],
+    "pooled_feature_shape": [768],
+    "forward_seconds": {
+      "train_episode_000000_first_compile_included": 10.8575,
+      "validation_episode_001802": 2.0739
+    },
+    "wall_seconds": 15.822,
+    "peak_working_set_bytes": 4157022208,
+    "pooled_feature_sha256": {
+      "train_episode_000000": "ec15f448ce26b9f3fcc9936da549b98b5132a4ada3c23b033d5c7f2faf73284c",
+      "validation_episode_001802": "6392dba6bb093c690134ef7c2fad3fa26f1eceab92ba76a23ad6f2698fa7b2a1"
+    },
+    "quality_metrics": "NOT_COMPUTED"
+  },
+  "target_mapping_smoke": {
+    "episodes": [0, 1802],
+    "state_vector_dimension": 14,
+    "action_fields_present_but_excluded_from_model_input": true,
+    "train_candidate_count": 3,
+    "train_target_indices_all_mapped_to_candidates": true,
+    "validation_candidate_count": 4,
+    "validation_target_indices_all_mapped_to_candidates": true,
+    "full_split_parquet_sha256": {
+      "train_episode_000000": "5103ad7b6425a26687f6bfa0824830615793ae4617c5762dec0b83523eccff41",
+      "validation_episode_001802": "72b127129ed8d11edd2fa2cdf4b56485d259bb5dcb1cb3f691d06a65e19bc6ab"
+    },
+    "sealed_audit_accessed": false
+  },
+  "metadata_audit": {
+    "episode_rows": 10563,
+    "unique_episode_indices": 10563,
+    "unique_input_keys": 10563,
+    "task_index_values": 63,
+    "scenario_ids": 66,
+    "high_level_instructions": 63,
+    "task_details_files": 60,
+    "scenario_ids_covered_by_task_details": 65,
+    "scenario_ids_without_task_details": ["S7791"],
+    "role_episode_counts_from_task_details": {
+      "collaborator": 3229,
+      "coworker": 3824,
+      "supervisor": 3396,
+      "unknown": 114
+    },
+    "publisher_role_episode_counts": {
+      "collaborator": 3198,
+      "coworker": 3969,
+      "supervisor": 3396
+    },
+    "role_count_discrepancy_resolved": false
+  },
+  "split_preflight": {
+    "seed": 17,
+    "grouping": [
+      "task-details SID aliases",
+      "task_index",
+      "exact NFKC/case/whitespace normalized high-level instruction"
+    ],
+    "train_groups": 40,
+    "train_episodes": 7655,
+    "train_episode_id_sha256": "01c01b5d5864864cc4989d3c2fbf8218287ef37865d28c8976e28e8700bbf8d3",
+    "validation_groups": 9,
+    "validation_episodes": 1458,
+    "validation_episode_id_sha256": "ae4e80e7f6e9d43f9d50c922c5435bf9921bfdb2f252644bcf8ca85bcedb3615",
+    "sealed_audit_groups": 9,
+    "sealed_audit_episodes": 1336,
+    "sealed_audit_episode_id_sha256": "e6231beb53380706544531a8bf648c72ddd4a331ecfe99a48ac3aa187d4e18e6",
+    "sealed_audit_ids_written": false,
+    "quarantined_groups": 1,
+    "quarantined_episodes": 114,
+    "quarantined_episode_id_sha256": "d816dc1a1abf38b64eb1c3122cc56143888b6a46dd4e919a83db61ff04d2ac08",
+    "mixed_role_groups_train_only": 2,
+    "role_groups_validation": {
+      "collaborator": 3,
+      "coworker": 3,
+      "supervisor": 3
+    },
+    "role_groups_sealed_audit": {
+      "collaborator": 3,
+      "coworker": 3,
+      "supervisor": 3
+    },
+    "media_identity_overlap_verified": false,
+    "normalized_media_content_overlap_verified": false,
+    "quality_fitting_admitted": false
+  },
+  "artifacts": {
+    "source_code_base_commit": "bcc6e1c34c2f499a47370b7b3394d4cc57cd46ad",
+    "local_evidence_directory": "C:\\CodexArtifacts\\pretrained-reuse-r2\\habit-source-screen-20261121-attempt-02",
+    "preflight_receipt": "C:\\CodexArtifacts\\pretrained-reuse-r2\\habit-metadata-preflight-20261121-attempt-01\\habit-metadata-preflight.json",
+    "source_screen": "docs/pretrained_reuse/R2_HABIT_SOURCE_SCREEN_20261121.md",
+    "preflight_code": "src/tiny_omni_decision/habit_preflight.py",
+    "preflight_code_sha256": "719875edc2a62974020ccb703c716a03a9a69e6dca1c426ee80a41dd7e8da79d",
+    "preflight_cli": "scripts/audit_habit_metadata.py",
+    "preflight_cli_sha256": "668603d19f33bda3086be7405d1a0dfea834054acb321f8986d85ea0a0f8dcf9",
+    "preflight_test": "tests/test_habit_preflight.py",
+    "preflight_test_sha256": "2ccb7b0159aa9cdcd02aacaa494612163193260aedcb8c248023e13354eddfcb",
+    "mapping_smoke_report": "docs/pretrained_reuse/R2_HABIT_DATA_MAPPING_SMOKE_20261121.md",
+    "video_smoke_receipt": "C:\\CodexArtifacts\\pretrained-reuse-r2\\habit-media-runtime-smoke-20261121-attempt-01\\videoprism-runtime-smoke.json"
+  },
+  "evidence_urls": [
+    "https://habit-dataset.github.io/",
+    "https://huggingface.co/datasets/configinc/HABIT/tree/bae97d251907743f8fb6db7e70c61d361df4dc1e",
+    "https://huggingface.co/datasets/configinc/HABIT/blob/bae97d251907743f8fb6db7e70c61d361df4dc1e/README.md",
+    "https://arxiv.org/abs/2606.31682"
+  ]
+}

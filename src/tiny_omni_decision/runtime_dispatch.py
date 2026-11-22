@@ -177,6 +177,7 @@ class PathARuntimeDispatcher:
         videoprism_source: Path,
         worker_log_dir: Path,
         device: str = "cuda",
+        audio_encoder_precision: str = "auto",
     ) -> None:
         self.assembly_dir = assembly_dir.resolve(strict=True)
         verify_started = time.perf_counter()
@@ -190,6 +191,9 @@ class PathARuntimeDispatcher:
         if device not in {"cpu", "cuda"}:
             raise ValueError("device must be cpu or cuda")
         self.device = device
+        if audio_encoder_precision not in {"auto", "fp32", "bf16", "fp32_no_tf32"}:
+            raise ValueError("audio_encoder_precision must be auto, bf16, fp32, or fp32_no_tf32")
+        self.audio_encoder_precision = audio_encoder_precision
         self._torch_worker: JsonLineWorker | None = None
         self._videoprism_worker: JsonLineWorker | None = None
         self._request_id = 0
@@ -227,6 +231,8 @@ class PathARuntimeDispatcher:
                     str(self.assembly_dir),
                     "--device",
                     self.device,
+                    "--audio-encoder-precision",
+                    self.audio_encoder_precision,
                 ],
                 cwd=self._project_root,
                 env=self._worker_env,
@@ -278,7 +284,7 @@ class PathARuntimeDispatcher:
                 }
             )
             response = {**scored, "video_encoder": encoded["encoder_metrics"]}
-        elif task in {"text", "audio"}:
+        elif task in {"text", "audio", "librispeech"}:
             response = self._ensure_torch().request(
                 {"request_id": request_id, "task": task, "payload": payload}
             )
@@ -306,25 +312,28 @@ class PathARuntimeDispatcher:
     ) -> dict[str, Any]:
         """Return the raw Path A response plus typed JSON records for its scores.
 
-        Audio accepts one spec per query; every other task returns one score and
-        therefore requires exactly one spec. This adapter preserves the original
-        dispatcher API and adds no model parameters or calibration.
+        Audio and LibriSpeech accept one spec per query; every other task
+        returns one score and therefore requires exactly one spec. This adapter
+        preserves the original dispatcher API and adds no model parameters or
+        calibration.
         """
 
         if not isinstance(decision_specs, list) or not all(
             isinstance(item, TypedDecisionSpec) for item in decision_specs
         ):
             raise ValueError("decision_specs must be a list of TypedDecisionSpec")
-        if task == "audio":
+        if task in {"audio", "librispeech"}:
             queries = payload.get("queries")
             if not isinstance(queries, list) or len(decision_specs) != len(queries):
-                raise ValueError("audio requires one decision spec per audio query")
+                if task == "audio":
+                    raise ValueError("audio requires one decision spec per audio query")
+                raise ValueError("librispeech requires one decision spec per query")
             for query, spec in zip(queries, decision_specs, strict=True):
                 query_options = query.get("options") if isinstance(query, dict) else None
                 if not isinstance(query_options, (list, tuple)) or tuple(
                     query_options
                 ) != spec.option_texts:
-                    raise ValueError("audio decision option texts must match query order")
+                    raise ValueError(f"{task} decision option texts must match query order")
         else:
             if len(decision_specs) != 1:
                 raise ValueError("non-audio Path A tasks require exactly one decision spec")
@@ -356,7 +365,7 @@ class PathARuntimeDispatcher:
             )
 
         response = self.dispatch(task, payload)
-        if task == "audio":
+        if task in {"audio", "librispeech"}:
             scored = response.get("decisions")
             if not isinstance(scored, list) or len(scored) != len(decision_specs):
                 raise RuntimeError("audio worker score count did not match its query count")

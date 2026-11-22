@@ -1,0 +1,52 @@
+{
+  "format": "vistadata_bimanual_metadata_screen_v1",
+  "dataset_id": "VistaData-Bimanual unscrew_coffee_jar",
+  "status": "REVIEW_NOT_ADMITTED",
+  "source": {
+    "repository": "https://huggingface.co/datasets/KLHWONG/vistadata-bimanual",
+    "revision": "0884b103c76a3e60ad0dcd9549e56b567a00fedd",
+    "license": "CC BY 4.0",
+    "card_task_scope": "single unscrew-coffee-jar task",
+    "archive_path": "vistadata-bimanual/unscrew_coffee_jar.zarr.zip",
+    "archive_bytes": 8115705227,
+    "hf_blob_oid": "a558587f3aad8ae15de1ad1fa299598fbcbc0ef8",
+    "hf_lfs_sha256": "6b12f4a5c403d58a7fa5c30cdbe0742c33202c24b16cc2cd176e2bb4bd48de18",
+    "api_metadata_response": {
+      "path": "C:/CodexLocalArtifacts/pretrained-reuse-r2/vistadata-bimanual-metadata-screen-02/dataset-info.json",
+      "bytes": 1410,
+      "sha256": "f2e238732f3c17885ad45b46100a5d150b68c4bd474b8c366c547465b0e2d133"
+    },
+    "api_file_tree_response": {
+      "path": "C:/CodexLocalArtifacts/pretrained-reuse-r2/vistadata-bimanual-metadata-screen-02/file-tree.json",
+      "bytes": 962,
+      "sha256": "883455688011160878b7cfcf514214e9ae7fa88215f2a71b9204640e06a05931"
+    }
+  },
+  "metadata_preflight": {
+    "archive_saved_locally": false,
+    "range_response_bytes_approx": 33008406,
+    "zarr_root": "unscrew_coffee_jar.zarr",
+    "episode_ends_shape": [30],
+    "episode_count": 30,
+    "official_participant_or_session_groups": null,
+    "official_split": null,
+    "documented_supplied_option_decision_target": false,
+    "media_extracted_or_decoded": false,
+    "model_loaded": false,
+    "training_or_validation_run": false,
+    "sealed_audit_accessed": false
+  },
+  "observations": {
+    "modalities": ["wrist_rgb", "third_person_rgb", "robot_state", "GelSight_tactile_rgb"],
+    "tactile_sensor_coverage": "one fingertip on the right arm",
+    "independent_group_count": "unknown; do not equate episodes with independent participants or sessions",
+    "limitations": [
+      "only 30 episodes for one task",
+      "no public participant/session grouping or official held-out split in the card",
+      "no supplied-option Decision target shown in the public metadata",
+      "both-input necessity is unestablished"
+    ]
+  },
+  "decision": "Keep REVIEW_NOT_ADMITTED. Do not use this as evidence for broad multimodal quality or start a product-quality fit without a predeclared grouped task and both-input controls.",
+  "report": "docs/pretrained_reuse/R2M_VISTADATA_BIMANUAL_METADATA_SCREEN_20261122.md"
+}

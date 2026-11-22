@@ -1,0 +1,42 @@
+schema_version: 1
+experiment_id: habit-train-only-grouped-oof-seed17-v0
+seed: 17
+device: cpu
+data:
+  package_revision: bae97d251907743f8fb6db7e70c61d361df4dc1e
+  package_directory: C:/CodexArtifacts/pretrained-reuse-r2/habit-transition-decision-data-20261121-attempt-01
+  package_report_sha256: 90b63ec050a0836c6f2f611b8edcbeb72bf7c64ded7b15b9f02e6a9e29b6b91d
+  transition_examples_sha256: 550c1725c547bef3784f8ef83f520aaf9baea4e23b19817cfe2cc631621d4292
+  feature_cache_sha256: 654cd9001fde2329719840889381a9ffa3d5763f65386ba0d5fdba7fc1039076
+  included_split: train
+  group_identity: connected_components(task_group_id, video_sha256)
+  folds: 5
+  validation_split_used: false
+training:
+  epochs: 8
+  batch_size: 32
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  optimizer: AdamW
+  loss: cross_entropy
+  option_order_randomized_each_train_batch: true
+  sensor_normalization: per_fold_train_rows_only
+  checkpoint_selection: none
+  early_stopping: false
+  seed_per_fold_and_arm: 17
+architectures:
+  modes: [text_only, video_only, state_only, video_state]
+  source: configs/pretrained_reuse/habit_temporal_decision.yaml
+  architecture_changed: false
+evaluation:
+  metrics: [accuracy, nll, brier, ece_15_bins]
+  aggregation: [sample_weighted, macro_task_group]
+  fixed_curve_epochs: [1, 2, 4, 8]
+  out_of_fold_predictions: true
+  sealed_audit_accessed: false
+  development_validation_metrics_computed: false
+prohibitions:
+  quantization: false
+  product_promotion: false
+  hyperparameter_search: false
+  checkpoint_selection: false

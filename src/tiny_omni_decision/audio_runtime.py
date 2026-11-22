@@ -35,6 +35,7 @@ AUDIO_FEATURE_SIZE = 384
 TEXT_FEATURE_SIZE = 384
 PAIR_FEATURE_SIZE = 7 * AUDIO_FEATURE_SIZE
 READOUT_HIDDEN_SIZE = 128
+AUDIO_ENCODER_PRECISIONS = frozenset({"auto", "bf16", "fp32", "fp32_no_tf32"})
 
 
 @dataclass(frozen=True)
@@ -43,12 +44,41 @@ class DecisionQuery:
     options: tuple[str, ...]
 
 
+def resolve_audio_encoder_precision(
+    requested: str, device_type: str, *, bf16_supported: bool
+) -> str:
+    """Resolve the audio encoder's compute dtype without changing model weights."""
+    if requested not in AUDIO_ENCODER_PRECISIONS:
+        raise ValueError("audio_encoder_precision must be auto, bf16, fp32, or fp32_no_tf32")
+    if device_type not in {"cpu", "cuda"}:
+        raise ValueError("audio encoder supports CPU or CUDA")
+    if requested == "auto":
+        # Preserve the pre-option runtime path, which always enabled CUDA BF16 autocast.
+        return "bf16" if device_type == "cuda" else "fp32"
+    if requested == "bf16":
+        if device_type != "cuda":
+            raise ValueError("bf16 audio encoder precision requires CUDA")
+        if not bf16_supported:
+            raise RuntimeError("CUDA device does not support BF16 autocast")
+    return requested
+
+
 def _file_sha256(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as stream:
         for block in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def validate_readout_artifact(path: Path, expected_sha256: str) -> None:
+    """Require an exact local readout hash before loading checkpoint tensors."""
+    if not path.is_file():
+        raise FileNotFoundError(path)
+    if len(expected_sha256) != 64 or any(c not in "0123456789abcdef" for c in expected_sha256):
+        raise ValueError("expected readout SHA-256 must be 64 lowercase hex characters")
+    if _file_sha256(path) != expected_sha256:
+        raise ValueError("Path A readout hash mismatch")
 
 
 def read_pcm_wav(path: Path) -> np.ndarray:
@@ -112,7 +142,9 @@ class SpeechCommandsMultiQueryRuntime:
         readout_path: Path,
         *,
         device: str | torch.device = "cpu",
+        audio_encoder_precision: str = "auto",
         audio_cache_entries: int = 64,
+        expected_readout_sha256: str = READOUT_SHA256,
     ) -> None:
         if audio_cache_entries < 0:
             raise ValueError("audio cache capacity must be nonnegative")
@@ -124,20 +156,26 @@ class SpeechCommandsMultiQueryRuntime:
             raise RuntimeError("CUDA was requested but is unavailable")
         if self.device.type not in {"cpu", "cuda"}:
             raise ValueError("runtime supports CPU or CUDA")
+        self.audio_encoder_precision = resolve_audio_encoder_precision(
+            audio_encoder_precision,
+            self.device.type,
+            bf16_supported=(
+                torch.cuda.is_bf16_supported() if self.device.type == "cuda" else False
+            ),
+        )
 
         audio_dir = model_dir / "audio-whisper-tiny"
         text_dir = model_dir / "text-minilm-en"
         audio_weights = audio_dir / "model.safetensors"
         text_weights = text_dir / "model.safetensors"
-        for path in (audio_weights, text_weights, readout_path):
+        for path in (audio_weights, text_weights):
             if not path.is_file():
                 raise FileNotFoundError(path)
         if _file_sha256(audio_weights) != AUDIO_WEIGHTS_SHA256:
             raise ValueError("Whisper Tiny weight hash mismatch")
         if _file_sha256(text_weights) != TEXT_WEIGHTS_SHA256:
             raise ValueError("MiniLM weight hash mismatch")
-        if _file_sha256(readout_path) != READOUT_SHA256:
-            raise ValueError("Path A readout hash mismatch")
+        validate_readout_artifact(readout_path, expected_readout_sha256)
 
         self.audio_model = WhisperModel.from_pretrained(
             audio_dir, local_files_only=True, dtype=torch.float32
@@ -189,11 +227,23 @@ class SpeechCommandsMultiQueryRuntime:
         input_features = encoded.input_features.to(self.device)
         autocast = (
             torch.autocast(device_type="cuda", dtype=torch.bfloat16)
-            if self.device.type == "cuda"
+            if self.audio_encoder_precision == "bf16"
             else nullcontext()
         )
-        with torch.inference_mode(), autocast:
-            hidden = self.audio_encoder(input_features).last_hidden_state
+        if self.audio_encoder_precision == "fp32_no_tf32":
+            original_matmul_tf32 = torch.backends.cuda.matmul.allow_tf32
+            original_cudnn_tf32 = torch.backends.cudnn.allow_tf32
+            torch.backends.cuda.matmul.allow_tf32 = False
+            torch.backends.cudnn.allow_tf32 = False
+            try:
+                with torch.inference_mode(), autocast:
+                    hidden = self.audio_encoder(input_features).last_hidden_state
+            finally:
+                torch.backends.cuda.matmul.allow_tf32 = original_matmul_tf32
+                torch.backends.cudnn.allow_tf32 = original_cudnn_tf32
+        else:
+            with torch.inference_mode(), autocast:
+                hidden = self.audio_encoder(input_features).last_hidden_state
         pooled_rows = []
         for index, waveform in enumerate(waveforms):
             valid_tokens = min(hidden.shape[1], max(1, math.ceil(len(waveform) / 320)))
@@ -245,7 +295,9 @@ class SpeechCommandsMultiQueryRuntime:
         audio: Tensor,
         queries: Sequence[DecisionQuery],
         text_vectors: dict[str, Tensor],
+        scorer: FrozenFeatureCandidateScorer | None = None,
     ) -> list[DecisionOutput]:
+        scorer = self.scorer if scorer is None else scorer
         outputs = []
         with torch.inference_mode():
             for query in queries:
@@ -254,7 +306,7 @@ class SpeechCommandsMultiQueryRuntime:
                     [text_vectors[f"Candidate answer: {option}."] for option in query.options]
                 )
                 features = pair_candidate_features(audio, question_vector, candidate_vectors)
-                logits = self.scorer(features.to(self.device)).squeeze(-1).float()
+                logits = scorer(features.to(self.device)).squeeze(-1).float()
                 if not torch.isfinite(logits).all():
                     raise ValueError("readout produced non-finite candidate scores")
                 probabilities = torch.softmax(logits, dim=-1).cpu()
@@ -312,6 +364,40 @@ class SpeechCommandsMultiQueryRuntime:
         text_vectors = self._encode_texts(self._texts_for_queries([queries]))
         return self._score_queries(audio, queries, text_vectors)
 
+    def decide_many_with_readout(
+        self,
+        audio_path: Path,
+        queries: Sequence[DecisionQuery],
+        scorer: FrozenFeatureCandidateScorer,
+        *,
+        expected_media_sha256: str | None = None,
+    ) -> list[DecisionOutput]:
+        """Score a task-specific head while reusing the pinned encoders/features."""
+        self._validate_queries(queries)
+        digest = _file_sha256(audio_path)
+        if expected_media_sha256 is not None and digest != expected_media_sha256:
+            raise ValueError("audio hash differs from the supplied frozen identity")
+        cached = self.audio_cache.get(digest) if self.audio_cache is not None else None
+        if cached is None:
+            audio = self._encode_audio(audio_path)
+            self.audio_encoder_calls += 1
+            if _file_sha256(audio_path) != digest:
+                raise ValueError("audio content changed while encoding")
+            feature_hash = hashlib.sha256(audio.numpy().tobytes()).hexdigest()
+            if self.audio_cache is not None:
+                self.audio_cache.put(digest, audio, feature_hash)
+        else:
+            audio, feature_hash = cached
+        self.audio_cache_metrics = {
+            "cache_hit": cached is not None,
+            "media_sha256": digest,
+            "feature_sha256": feature_hash,
+            "cache_entries": len(self.audio_cache) if self.audio_cache is not None else 0,
+            "single_event_encoder_calls": self.audio_encoder_calls,
+        }
+        text_vectors = self._encode_texts(self._texts_for_queries([queries]))
+        return self._score_queries(audio, queries, text_vectors, scorer=scorer)
+
     def decide_batch(
         self,
         audio_paths: Sequence[Path],
@@ -333,4 +419,3 @@ class SpeechCommandsMultiQueryRuntime:
             self._score_queries(audio, queries, text_vectors)
             for audio, queries in zip(audio_vectors, queries_by_audio, strict=True)
         ]
-
