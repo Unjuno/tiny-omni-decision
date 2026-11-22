@@ -1,3 +1,12 @@
+**2026-11-22 R2-M RoboTwin unified metadata screen:** The pinned LeRobot
+candidate lists 27,500 train-only episodes, three video views, robot state and
+continuous actions, with no audio. Its dataset repository has no license
+metadata, the publisher card says MIT, and official docs describe Apache-2.0;
+the data/assets license scope is unresolved. Task/episode group keys and a
+non-leaking supplied-option Decision contract are also unverified. Keep it
+`REVIEW_NOT_ADMITTED`; no payload, model, GPU or audit was accessed. See
+[screen and pinned metadata hashes](docs/pretrained_reuse/R2_ROBOTWIN_UNIFIED_SOURCE_TASK_SCREEN_20261122.md).
+
 **2026-11-22 R2-M Hoi! metadata capacity reconciliation:** The exact version-1
 Dataverse file listing has 57 outer entries (27.42 GB listed; 39 ZIPs) under
 `bathroom_1/gripper`, not the previously recorded 1,421 entries / 1.27 TB.
