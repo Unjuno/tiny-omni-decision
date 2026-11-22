@@ -119,9 +119,69 @@ def _extract_one(path: Path, query_time_s: float) -> tuple[str, np.ndarray]:
     return instruction, sequence
 
 
+def select_video_eligible_train_files(
+    *, files: list[dict[str, object]],
+    action: dict[str, object], eligibility: dict[str, object],
+    receipt_sha256: str, action_sha256: str, split_manifest_sha256: str,
+) -> tuple[list[dict[str, object]], int]:
+    """Apply the label-blind frozen video-window gate to train state extraction."""
+    streams = ["/front-camera", "/wrist-camera", "/tactile-left", "/tactile-right"]
+    expected_criteria = {
+        "context_seconds": 1.0,
+        "frames_per_stream": 8,
+        "max_frame_time_error_seconds": 0.1,
+        "causal_cutoff_inclusive": True,
+        "streams": streams,
+        "excluded_only_for": "insufficient distinct causal frames in fixed window",
+    }
+    if (eligibility.get("format") != "haptile_train_video_window_eligibility_v2"
+            or eligibility.get("split") != "train"
+            or eligibility.get("input_receipt_sha256") != receipt_sha256
+            or eligibility.get("action_preflight_sha256") != action_sha256
+            or eligibility.get("split_manifest_sha256") != split_manifest_sha256
+            or eligibility.get("selection_uses_labels") is not False
+            or eligibility.get("sealed_audit_opened") is not False
+            or eligibility.get("criteria") != expected_criteria):
+        raise ValueError("train video-window eligibility provenance differs")
+    action_rows = action.get("samples")
+    eligible_rows = eligibility.get("eligible_samples")
+    excluded_rows = eligibility.get("excluded_samples")
+    if (not isinstance(action_rows, list) or not isinstance(eligible_rows, list)
+            or not isinstance(excluded_rows, list)):
+        raise ValueError("train eligibility partitions are missing")
+    all_by_path = {str(row.get("path")): row for row in files}
+    action_by_path = {str(row.get("path")): row for row in action_rows if isinstance(row, dict)}
+    eligible_by_path = {
+        str(row.get("path")): row for row in eligible_rows if isinstance(row, dict)
+    }
+    excluded_by_path = {
+        str(row.get("path")): row for row in excluded_rows if isinstance(row, dict)
+    }
+    if (len(all_by_path) != len(files) or len(action_by_path) != len(action_rows)
+            or len(eligible_by_path) != len(eligible_rows)
+            or len(excluded_by_path) != len(excluded_rows)
+            or set(eligible_by_path) & set(excluded_by_path)
+            or set(eligible_by_path) | set(excluded_by_path) != set(all_by_path)
+            or set(action_by_path) != set(all_by_path)):
+        raise ValueError("train video-window gate does not partition frozen media IDs")
+    for path, row in all_by_path.items():
+        action_row = action_by_path[path]
+        gate_row = eligible_by_path.get(path, excluded_by_path.get(path))
+        task = row.get("task") or Path(path).parts[1]
+        if (row.get("sha256") != action_row.get("sha256")
+                or row.get("sha256") != gate_row.get("sha256")
+                or task != gate_row.get("task")):
+            raise ValueError(f"train video-window media identity differs: {path}")
+    if (int(eligibility.get("corpus_examples", -1)) != len(files)
+            or int(eligibility.get("eligible_examples", -1)) != len(eligible_rows)
+            or int(eligibility.get("excluded_examples", -1)) != len(excluded_rows)):
+        raise ValueError("train video-window gate counts differ from the corpus")
+    return [all_by_path[str(row["path"])] for row in eligible_rows], len(excluded_rows)
+
+
 def extract_train_state_text(
     *, receipt_path: Path, action_path: Path, split_manifest_path: Path,
-    output_dir: Path,
+    eligibility_path: Path, output_dir: Path,
 ) -> dict[str, object]:
     try:
         from mcap.reader import make_reader  # noqa: F401
@@ -143,6 +203,13 @@ def extract_train_state_text(
     target_by_path = {row["path"]: row for row in action["samples"]}
     if len(target_by_path) != len(files) or len(action["samples"]) != len(files):
         raise ValueError("target rows and train media receipt do not align one-to-one")
+    eligibility = json.loads(eligibility_path.read_text(encoding="utf-8"))
+    source_count = len(files)
+    files, excluded_count = select_video_eligible_train_files(
+        files=files, action=action, eligibility=eligibility,
+        receipt_sha256=sha256_file(receipt_path), action_sha256=sha256_file(action_path),
+        split_manifest_sha256=sha256_file(split_manifest_path),
+    )
 
     output_dir.mkdir(parents=True)
     shutil.copy2(Path(__file__), output_dir / "extract_haptile_train_state_text.executed.py")
@@ -181,6 +248,9 @@ def extract_train_state_text(
         "split_manifest_sha256": sha256_file(split_manifest_path),
         "source_revision": split["conversion_revision"],
         "train_examples": len(records),
+        "pre_eligibility_examples": source_count,
+        "video_window_excluded_examples": excluded_count,
+        "video_window_eligibility_sha256": sha256_file(eligibility_path),
         "train_task_groups": task_order,
         "state_shape": list(np.load(state_path, mmap_mode="r").shape),
         "state_channels": list(STREAM_WIDTHS),
@@ -200,12 +270,14 @@ def main() -> None:
     parser.add_argument("--receipt", type=Path, required=True)
     parser.add_argument("--action-preflight", type=Path, required=True)
     parser.add_argument("--split-manifest", type=Path, required=True)
+    parser.add_argument("--video-eligibility", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
     print(json.dumps(extract_train_state_text(
         receipt_path=args.receipt,
         action_path=args.action_preflight,
         split_manifest_path=args.split_manifest,
+        eligibility_path=args.video_eligibility,
         output_dir=args.output_dir,
     ), indent=2))
 

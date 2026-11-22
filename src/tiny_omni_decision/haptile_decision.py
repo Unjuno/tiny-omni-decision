@@ -14,7 +14,7 @@ from .video_sensor_temporal_decision import VideoSensorTemporalDecisionScorer
 
 HAPTILE_MODES = (
     "text_only",
-    "state_text",
+    "state_only",
     "vision_text",
     "tactile_text",
     "vision_tactile_text",
@@ -88,7 +88,7 @@ class HapTileActionDecisionScorer(nn.Module):
         video = video_values.permute(0, 2, 1, 3).contiguous().view(batch, 8, 3072)
         use_vision = mode in {"vision_text", "vision_tactile_text", "full"}
         use_tactile = mode in {"tactile_text", "vision_tactile_text", "full"}
-        use_state = mode in {"state_text", "full"}
+        use_state = mode in {"state_only", "full"}
         if not use_vision:
             video[:, :, :1536] = 0
         if not use_tactile:

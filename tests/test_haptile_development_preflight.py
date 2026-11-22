@@ -17,6 +17,7 @@ def manifest_and_receipt() -> tuple[dict[str, object], dict[str, object]]:
         },
         "development_episode_counts": {"validation": 2, "calibration": 1},
         "sealed_audit": {"task_group_count": 1},
+        "sealed_audit_accessed": False,
     }
     files = [
         {
@@ -36,6 +37,10 @@ def manifest_and_receipt() -> tuple[dict[str, object], dict[str, object]]:
         "sealed_audit_opened": False,
         "task_count": 2,
         "episode_count": 2,
+        "total_bytes": 2,
+        "task_tree_receipts": {
+            "valid_a": {"mcap_count": 1}, "valid_b": {"mcap_count": 1},
+        },
         "files": files,
     }
     return manifest, receipt
@@ -65,6 +70,20 @@ def test_rejects_sealed_audit_opened(manifest_and_receipt) -> None:
     manifest, receipt = manifest_and_receipt
     receipt["sealed_audit_opened"] = True
     with pytest.raises(ValueError, match="sealed audit isolation"):
+        validate_development_receipt(receipt, manifest, "manifest-hash", "validation")
+
+
+def test_rejects_manifest_that_does_not_prove_audit_isolation(manifest_and_receipt) -> None:
+    manifest, receipt = manifest_and_receipt
+    manifest["sealed_audit_accessed"] = True
+    with pytest.raises(ValueError, match="manifest does not prove sealed audit"):
+        validate_development_receipt(receipt, manifest, "manifest-hash", "validation")
+
+
+def test_rejects_task_metadata_count_mismatch(manifest_and_receipt) -> None:
+    manifest, receipt = manifest_and_receipt
+    receipt["task_tree_receipts"]["valid_a"]["mcap_count"] = 0
+    with pytest.raises(ValueError, match="media count differs"):
         validate_development_receipt(receipt, manifest, "manifest-hash", "validation")
 
 

@@ -62,6 +62,17 @@ def test_haptile_multimodal_decision_reaches_temporal_and_fusion_parameters():
     assert model.readout.scorer.network[0].weight.grad is not None
 
 
+def test_state_only_ablation_ignores_visual_inputs():
+    model = HapTileActionDecisionScorer().eval()
+    inputs = _features()
+    changed = list(inputs)
+    changed[0] = torch.randn_like(inputs[0]) * 1000
+    with torch.inference_mode():
+        expected = model(*inputs, mode="state_only")
+        actual = model(*changed, mode="state_only")
+    torch.testing.assert_close(actual, expected, rtol=0, atol=1e-6)
+
+
 def test_haptile_decide_returns_option_ordered_probability_json():
     model = HapTileActionDecisionScorer().eval()
     inputs = _features()

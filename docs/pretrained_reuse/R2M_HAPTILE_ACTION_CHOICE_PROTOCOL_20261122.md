@@ -148,6 +148,13 @@ are disjoint from train and each other by the frozen split; sealed task names
 were not loaded. Validation metrics will select model arm and epoch;
 calibration remains reserved for temperature fitting only.
 
+A validation feature smoke on one fixed episode produced finite
+`[1,4,8,768]` features in 25.2 seconds, using the pinned VideoPrism worker
+environment on CPU. The first launch pointed at a bare uv Python without
+NumPy and exited before model load; it wrote no features. The retry used the
+already-installed VideoPrism virtual environment and passed. The full 169-row
+validation feature extraction is now running in its own output directory.
+
 ## Implementation and local runtime evidence (2026-11-22)
 
 The full train-only corpus is now present at
@@ -197,3 +204,31 @@ At the 2026-11-22 09:12 JST snapshot it had completed 508/1,113 examples on CPU
 full extraction must finish and pass receipt/hash checks before model fitting.
 No model has been trained; the downloaded validation/calibration data are held
 for development-only evaluation and sealed-audit data remain unopened.
+
+### Eligibility-gated feature run update (2026-11-22, 10:48 JST)
+
+The earlier train VideoPrism attempts under `train-video-features-v1` and
+`train-video-features-v2` remain preserved and incomplete. A label-blind fixed
+window preflight now gates all feature paths without changing frame count or
+timing: train has 1,112/1,113 eligible episodes, validation 169/169, and
+calibration 169/169. The single train exclusion is
+`data/put_stack_glass_cups/episode_024.fo.mcap`, which lacks eight distinct
+causal video frames in each fixed stream. A complete label-blind state scan
+also found that this same episode lacks pose history at the one-second context
+start; it is not an additional exclusion. Train state features were therefore
+re-extracted for the same 1,112 IDs, and their receipt/action/split provenance
+and eligibility hash are recorded in the external result.
+
+Fresh frozen text features are complete for train (1,112), validation (169),
+and calibration (169), using the pinned MiniLM revision and weight hash above.
+The 169-row validation feature join passed the exact eligibility, ID, media
+hash, target, and causal timestamp checks. Calibration video features and the
+train video feature extraction are still pending; the active CPU train-video
+run `train-video-features-v3` had processed 396/1,112 examples at this snapshot.
+No Decision fitting or calibration has run. The effective config SHA-256 is
+`c0003bf98d8182e945fc45b25378f0bec5ba3b0889b7bdae89eafce08c284f80`; its
+temperature rule fits a single deterministic scalar on calibration task-macro
+NLL only after validation-based model selection. Calibration is not used for
+arm or checkpoint selection. The full repository CPU suite passed with 3,258
+tests and 11 skipped, and Ruff passed. Sealed audit remains unopened; no
+quantization or product promotion has occurred.

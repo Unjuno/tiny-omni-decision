@@ -151,6 +151,94 @@ def _load_development_inputs(
     return receipt, samples
 
 
+def _apply_video_eligibility(
+    samples: list[dict[str, object]],
+    *,
+    eligibility_path: Path,
+    split_name: str,
+    receipt_path: Path,
+    action_path: Path,
+    split_manifest_path: Path,
+) -> tuple[list[dict[str, object]], int]:
+    """Filter to the exact label-blind fixed-window gate and verify its provenance."""
+    eligibility = json.loads(eligibility_path.read_text(encoding="utf-8"))
+    expected = {
+        "format": f"haptile_{split_name}_video_window_eligibility_v2",
+        "split": split_name,
+        "input_receipt_sha256": sha256_file(receipt_path),
+        "action_preflight_sha256": sha256_file(action_path),
+        "split_manifest_sha256": sha256_file(split_manifest_path),
+        "selection_uses_labels": False,
+        "sealed_audit_opened": False,
+    }
+    for key, value in expected.items():
+        if eligibility.get(key) != value:
+            raise ValueError(f"video eligibility {key} does not match the requested split")
+    criteria = eligibility.get("criteria")
+    if criteria != {
+        "context_seconds": 1.0,
+        "frames_per_stream": 8,
+        "max_frame_time_error_seconds": 0.1,
+        "causal_cutoff_inclusive": True,
+        "streams": list(VIDEO_TOPICS),
+        "excluded_only_for": "insufficient distinct causal frames in fixed window",
+    }:
+        raise ValueError("video eligibility criteria differ from the frozen window policy")
+
+    all_by_path = {str(sample["path"]): sample for sample in samples}
+    if len(all_by_path) != len(samples):
+        raise ValueError("input samples contain duplicate media paths")
+    eligible_rows = eligibility.get("eligible_samples")
+    excluded_rows = eligibility.get("excluded_samples")
+    if not isinstance(eligible_rows, list) or not isinstance(excluded_rows, list):
+        raise ValueError("video eligibility rows are missing")
+    eligible_by_path = {
+        str(row.get("path")): row for row in eligible_rows if isinstance(row, dict)
+    }
+    excluded_by_path = {
+        str(row.get("path")): row for row in excluded_rows if isinstance(row, dict)
+    }
+    if (len(eligible_by_path) != len(eligible_rows)
+            or len(excluded_by_path) != len(excluded_rows)
+            or set(eligible_by_path) & set(excluded_by_path)
+            or set(eligible_by_path) | set(excluded_by_path) != set(all_by_path)):
+        raise ValueError("video eligibility does not partition the exact input media set")
+
+    selected: list[dict[str, object]] = []
+    for sample in samples:
+        path = str(sample["path"])
+        row = eligible_by_path.get(path)
+        if row is None:
+            excluded = excluded_by_path[path]
+            if excluded.get("sha256") != sample.get("sha256"):
+                raise ValueError(f"excluded video identity differs from action input: {path}")
+            continue
+        query_time = float(sample["query_time_log_seconds"])
+        if (row.get("sha256") != sample.get("sha256")
+                or row.get("task") != sample.get("task")
+                or float(row.get("query_time_log_seconds", float("nan"))) != query_time):
+            raise ValueError(f"eligible video identity differs from action input: {path}")
+        times_by_topic = row.get("selected_frame_times_log_seconds")
+        if not isinstance(times_by_topic, dict) or set(times_by_topic) != set(VIDEO_TOPICS):
+            raise ValueError(f"eligibility timestamps do not cover all frozen streams: {path}")
+        targets = np.linspace(query_time - 1.0, query_time, 8)
+        for topic in VIDEO_TOPICS:
+            times = np.asarray(times_by_topic[topic], dtype=np.float64)
+            if (times.shape != (8,) or not np.isfinite(times).all()
+                    or np.any(times[1:] <= times[:-1]) or np.any(times > query_time)
+                    or np.any(np.abs(times - targets) > 0.1 + 1e-9)):
+                raise ValueError(f"eligibility timestamps violate the frozen frame policy: {path}")
+        selected.append({
+            **sample,
+            "eligibility_selected_frame_times_log_seconds": times_by_topic,
+        })
+    if (len(selected) != int(eligibility.get("eligible_examples", -1))
+            or len(excluded_by_path) != int(eligibility.get("excluded_examples", -1))
+            or len(all_by_path) != int(eligibility.get("corpus_examples", -1))):
+        raise ValueError("video eligibility counts differ from the exact input corpus")
+    return selected, len(excluded_by_path)
+
+
 def _decode_causal_window(
     path: Path, topic: str, query_time_s: float
 ) -> tuple[np.ndarray, list[float]]:
@@ -272,6 +360,7 @@ def extract_features(
     receipt_path: Path,
     action_path: Path,
     split_manifest_path: Path,
+    eligibility_path: Path,
     output_dir: Path,
     worker_python: Path,
     checkpoint: Path,
@@ -290,7 +379,15 @@ def extract_features(
         )
     else:
         raise ValueError("split must be train, validation, or calibration")
-    samples = all_samples if limit is None else all_samples[:limit]
+    samples, excluded_examples = _apply_video_eligibility(
+        all_samples,
+        eligibility_path=eligibility_path,
+        split_name=split_name,
+        receipt_path=receipt_path,
+        action_path=action_path,
+        split_manifest_path=split_manifest_path,
+    )
+    samples = samples if limit is None else samples[:limit]
     if not samples or (limit is not None and limit <= 0):
         raise ValueError("feature extraction requires a positive sample count")
     output_dir.mkdir(parents=True)
@@ -345,6 +442,15 @@ def extract_features(
                 clip, frame_times = _decode_causal_window(media_path, topic, query_time)
                 clips.append(clip)
                 selected_timestamps[topic] = frame_times
+            expected_timestamps = sample["eligibility_selected_frame_times_log_seconds"]
+            if any(
+                not np.allclose(
+                    selected_timestamps[topic], expected_timestamps[topic],
+                    rtol=0.0, atol=1e-6,
+                )
+                for topic in VIDEO_TOPICS
+            ):
+                raise ValueError(f"extracted frames differ from label-blind preflight: {relative}")
             decode_seconds += time.perf_counter() - decode_started
             write_video_batch(process.stdin, np.stack(clips))
             encoder_started = time.perf_counter()
@@ -409,6 +515,9 @@ def extract_features(
         "input_receipt_sha256": sha256_file(receipt_path),
         "action_preflight_sha256": sha256_file(action_path),
         "split_manifest_sha256": sha256_file(split_manifest_path),
+        "video_window_eligibility_sha256": sha256_file(eligibility_path),
+        "corpus_examples_before_video_gate": len(all_samples),
+        "video_window_excluded_examples": excluded_examples,
         "stream_order": list(VIDEO_TOPICS),
         "feature_shape": list(features.shape),
         "feature_dtype": str(features.dtype),
@@ -448,6 +557,7 @@ def main() -> None:
     parser.add_argument("--receipt", type=Path, required=True)
     parser.add_argument("--action-preflight", type=Path, required=True)
     parser.add_argument("--split-manifest", type=Path, required=True)
+    parser.add_argument("--video-eligibility-manifest", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--worker-python", type=Path, required=True)
     parser.add_argument("--checkpoint", type=Path, required=True)
@@ -461,6 +571,7 @@ def main() -> None:
         receipt_path=args.receipt,
         action_path=args.action_preflight,
         split_manifest_path=args.split_manifest,
+        eligibility_path=args.video_eligibility_manifest,
         output_dir=args.output_dir,
         worker_python=args.worker_python,
         checkpoint=args.checkpoint,

@@ -57,6 +57,8 @@ def validate_development_receipt(
         raise ValueError("receipt includes a different or multiple data split")
     if receipt.get("sealed_audit_opened") is not False:
         raise ValueError("receipt does not prove sealed audit isolation")
+    if manifest.get("sealed_audit_accessed") is not False:
+        raise ValueError("public manifest does not prove sealed audit isolation")
     splits = manifest.get("development_splits")
     totals = manifest.get("development_episode_counts")
     if not isinstance(splits, dict) or not isinstance(totals, dict):
@@ -80,6 +82,8 @@ def validate_development_receipt(
         raise ValueError("development receipt does not match the frozen episode count")
     paths: set[str] = set()
     tasks: set[str] = set()
+    counts_by_task: Counter[str] = Counter()
+    total_bytes = 0
     validated: list[dict[str, object]] = []
     for raw in files:
         if not isinstance(raw, dict):
@@ -95,11 +99,25 @@ def validate_development_receipt(
             raise ValueError("receipt contains duplicate media paths")
         paths.add(normalized)
         tasks.add(task)
+        counts_by_task[task] += 1
+        size = raw.get("size")
+        if isinstance(size, bool) or not isinstance(size, int) or size < 0:
+            raise ValueError("receipt contains an invalid media byte size")
+        total_bytes += size
         validated.append(raw)
     if tasks != set(requested):
         raise ValueError("receipt does not cover exactly the requested task groups")
     if receipt.get("task_count") != len(requested):
         raise ValueError("receipt task count differs from the frozen split")
+    trees = receipt.get("task_tree_receipts")
+    if not isinstance(trees, dict) or set(trees) != set(requested):
+        raise ValueError("task metadata receipts do not match the requested split")
+    for task in requested:
+        row = trees.get(task)
+        if not isinstance(row, dict) or row.get("mcap_count") != counts_by_task[task]:
+            raise ValueError("task media count differs from its pinned metadata receipt")
+    if receipt.get("total_bytes") != total_bytes:
+        raise ValueError("receipt total byte count differs from its media inventory")
     return validated
 
 

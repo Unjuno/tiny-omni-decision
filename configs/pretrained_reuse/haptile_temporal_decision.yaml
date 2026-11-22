@@ -9,11 +9,20 @@ data:
   split_manifest_sha256: adacd722c1c51ce47bce139063dab1b01981d9e10d7e512c80e756e7d3e428e8
   train_receipt_sha256: f160edf505487cdf4333277c88987036b3d691eb25208aeb0a7f8445da13995c
   train_action_preflight_sha256: 263ff3d1e7fde087632238d3b634629bc6315d203dfb8f3dcd225f26bb64daeb
+  train_video_window_eligibility_sha256: e70627d646907ba5dddd6a4f92b72ea489ab766c1ffbe267a01a5ab049326039
   sealed_audit_loading: false
-  train_examples: 1113
+  train_examples: 1112
   train_task_groups: 24
+  validation_examples: 169
   validation_task_groups: 5
+  validation_receipt_sha256: 58e931cc6c172e9fd7f7dd96c35b10ab30ef79e3675d552c1eb693ba50a2b5d4
+  validation_action_preflight_sha256: 8167c735eb16a0a7e809e74a6c63bafb420585db1433b9ef8bb974749ccce453
+  validation_video_window_eligibility_sha256: 774ef48e5ffff497313026ab41c7a416a768f1929182f5952c25660d3684b992
+  calibration_examples: 169
   calibration_task_groups: 4
+  calibration_receipt_sha256: 92c4a86a6018bf32293963318adc9dfcc652908ab63a5e7c5ef805432145dd64
+  calibration_action_preflight_sha256: cc86a2833c8c6004ae78ca2dd6785b7315eb71e46b9ef27c5997f0be78d81ff7
+  calibration_video_window_eligibility_sha256: 4b4ca1708b3c644159386d8eec6d5122288e53027663d77f736676a42148151b
   query: episode_midpoint_of_end_effector_pose_log_time
   context_seconds: 1.0
   video_num_frames: 8
@@ -99,12 +108,13 @@ readout:
   total_dense_parameters: 132274691
   text_only_control_parameters: 196865
   all_comparison_heads_parameters: 716548
-  modes: [text_only, state_text, vision_text, tactile_text, vision_tactile_text, full]
+  modes: [text_only, state_only, vision_text, tactile_text, vision_tactile_text, full]
 training:
   epochs: 80
   batch_size: 32
   learning_rate: 0.001
   weight_decay: 0.0001
+  min_delta: 0.0001
   loss: cross_entropy
   checkpoint_selection: minimum_validation_macro_task_group_nll
   early_stopping: false
@@ -116,6 +126,13 @@ evaluation:
   aggregation: [sample_weighted, macro_task_group]
   bootstrap_draws: 2000
   bootstrap_unit: task_group
+  calibration_temperature:
+    fit_after_validation_selection: true
+    objective: minimum_calibration_macro_task_group_nll
+    search: log_spaced_scalar_grid
+    minimum: 0.25
+    maximum: 4.0
+    points: 151
   paired_controls:
     - best_single_stream
     - missing_video
