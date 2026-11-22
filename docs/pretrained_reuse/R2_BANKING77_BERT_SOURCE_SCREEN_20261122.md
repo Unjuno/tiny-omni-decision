@@ -47,9 +47,23 @@ This final-block adaptation did not improve on the frozen readout's 89.69% Accur
 
 ## Relevance to compact BERT-family work
 
-This gives the BERT question a concrete, useful but narrow test: route an English banking query to one of 77 supplied intent IDs and return calibrated option probabilities. Existing project candidates MiniLM-L3 (17.39M parameters) and MiniLM-L6 cross-encoder (22.71M) are plausible size-matched comparisons; a larger encoder must be counted against the complete multimodal parameter budget. The task may diagnose text classification and calibration, but it cannot establish arbitrary-option reasoning or improve the video/audio temporal pathway by itself.
+This gives the BERT question a concrete, useful but narrow test: route an English banking query to one of 77 supplied intent IDs and return calibrated option probabilities. The task may diagnose text classification and calibration, but it cannot establish arbitrary-option reasoning or improve the video/audio temporal pathway by itself.
 
-The next useful text-side comparison is a single controlled change to the same frozen split: unfreeze only the final MiniLM-L3 encoder block while keeping the same readout, seed, optimizer family and validation-NLL selector. If it does not approach the provisional target without calibration damage, compare the already available MiniLM-L6 only if the complete product parameter budget remains satisfied. Do not use the publisher test for this selection. Do not turn the fixed-label classifier into an arbitrary-option result by relabeling the same task.
+## Frozen MiniLM-L6 comparison
+
+The official [all-MiniLM-L6-v2 model card](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2) declares Apache-2.0 and describes a 384-dimensional sentence encoder; the pinned Hub revision is `1110a243fdf4706b3f48f1d95db1a4f5529b4d41`. Actual local loading counted 22,713,216 encoder parameters and verified a finite short-text forward. Its 90,868,376-byte weight file has SHA-256 `53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db`.
+
+The comparison kept the seed-17 BANKING77 split, feature pooling, 77-way standardized linear readout, optimizer, early-stop rule, validation-NLL selector, and evaluation rows fixed against the L3 baseline. Only the frozen pretrained encoder checkpoint changed. On CPU FP32, 8,005 training rows (8,001 unique content groups) and 1,998 validation rows completed 11 epochs in 32.16 seconds; epoch 5 was selected by minimum validation NLL.
+
+| Model / selected checkpoint | Accuracy | Macro F1 | NLL | Brier | ECE-15 |
+|---|---:|---:|---:|---:|---:|
+| Frozen MiniLM-L3, epoch 6 | 89.69% | 89.65% | 0.41907 | 0.15487 | 0.02810 |
+| Frozen MiniLM-L6, epoch 5 | 91.44% | 91.70% | 0.33253 | 0.12766 | 0.02296 |
+| L3 final-block adaptation, epoch 2 | 85.84% | 85.86% | 0.71451 | 0.22210 | 0.07259 |
+
+The L6 candidate improves the L3 development-validation point estimates by 1.75 percentage points Accuracy and lowers NLL by 0.08654, Brier by 0.02722, and ECE-15 by 0.00514. It remains below the 95% stretch target. Training CE kept falling after epoch 5 while validation NLL worsened; epoch 8 reached the highest observed accuracy (92.09%) but a worse NLL, so it was not selected. The saved epoch-5 checkpoint reloaded with identical predictions and maximum probability delta 0. No temperature fitting was used.
+
+This is evidence that pretrained encoder choice matters for this narrow text classification task and supports keeping the BERT-family path open. It is not an independent-source result: participant/conversation IDs are unavailable, and the same validation set selected the checkpoint and compared L3 versus L6. The publisher test remains unopened. Do not infer arbitrary-option or multimodal quality from these figures. The L6 experiment's complete config, per-class metrics, predictions, curves, run metadata, file hashes and reload receipt are in `C:\CodexArtifacts\pretrained-reuse-r2-local\banking77-minilm-l6-frozen-readout-v1-attempt-01` and the machine manifest.
 
 ## Machine receipt
 

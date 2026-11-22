@@ -161,11 +161,61 @@
     "probability_max_abs_delta_after_reload": 0.0,
     "official_test_loaded": false
   },
+  "minilm_l6_frozen_readout_experiment": {
+    "experiment_id": "banking77-minilm-l6-frozen-readout-v1",
+    "status": "COMPLETED_DEVELOPMENT_VALIDATION_ONLY",
+    "source_commit": "d60294951e18f12de0c3e1345b5e2cd97805804f",
+    "model_card_url": "https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2",
+    "license": "Apache-2.0",
+    "model_revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "model_weights_bytes": 90868376,
+    "model_weights_sha256": "53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db",
+    "encoder_parameters": 22713216,
+    "trainable_readout_parameters": 29645,
+    "total_parameters": 22742861,
+    "seed": 17,
+    "device": "cpu",
+    "dtype": "float32",
+    "train_rows": 8005,
+    "train_unique_content_groups": 8001,
+    "validation_rows": 1998,
+    "validation_unique_content_groups": 1998,
+    "split_manifest_sha256": "d95bb74e6f28eac63012a95d808c6a9a82941e08960c57d52ad3e020c2a183e2",
+    "best_epoch": 5,
+    "epochs_completed": 11,
+    "elapsed_seconds": 32.16,
+    "selection_metric": "minimum validation multiclass NLL",
+    "validation_metrics": {
+      "accuracy": 0.9144144058227539,
+      "macro_recall": 0.9149663816085039,
+      "macro_f1": 0.9170368003624412,
+      "nll": 0.3325289487838745,
+      "brier": 0.127656489610672,
+      "ece_15": 0.022959416585578173
+    },
+    "delta_vs_minilm_l3": {
+      "accuracy": 0.0175175070762634,
+      "nll": -0.08654266595840454,
+      "brier": -0.02721726894378662,
+      "ece_15": -0.005136044524888249
+    },
+    "best_checkpoint_sha256": "5846768a9b598eb4821e63b630086fb01bc866dd006261124c88dd6a01199577",
+    "history_sha256": "29e70bf3264f8830e2269418e879d8d7537ed62d15652dbb255c3c4b7ee01c79",
+    "validation_predictions_sha256": "914bf7919bc862aaabac99f84d2a66849d3afb72dd563e4d104d8c525f11e810",
+    "validation_metrics_sha256": "705d417ece5ed88b98c8ba07eafc78cf5ec17c1f06542c60a6bbd66c2aea22c3",
+    "reload_verification_sha256": "3e90a29f841d86697bab05494a458c9f2a6eb9d306dd645a83726993ad517f0c",
+    "run_metadata_sha256": "2c6554b5492e70e0726fbe489179f0ad6af19beb34e7749de85270760a153da0",
+    "effective_config_sha256": "88d40acd4cad12714c23f18c655e64d291d90191d433d5a8f8f6a09683396ed0",
+    "training_script_sha256": "726588807c153ef7e8ce29e79453d5c70860255c80e81a4bcd5b789927c3be50",
+    "output_directory": "C:/CodexArtifacts/pretrained-reuse-r2-local/banking77-minilm-l6-frozen-readout-v1-attempt-01",
+    "probability_max_abs_delta_after_reload": 0.0,
+    "official_test_loaded": false
+  },
   "limitations": [
     "The dataset card lists source language producers as More Information Needed and supplies no participant or conversation IDs; independent speaker/customer grouping is unverified.",
     "Normalized utterance identity can prevent exact-content leakage but cannot establish source-person independence or near-duplicate paraphrase separation.",
     "The task is a fixed-label, single-domain intent classifier; it does not establish arbitrary supplied-option reasoning, general text quality, or multimodal fusion.",
     "The published test payload remains unopened and must not enter iterative training, model selection, or calibration."
   ],
-  "recommendation": "Keep the frozen MiniLM-L3 readout as the strongest completed Banking77 development candidate. The tested last-block adaptation did not improve it. This is not a BERT-family ceiling; consider other encoder sizes or training controls only as separate, validation-selected experiments after resolving source-group provenance. Do not make independent-source or product-quality claims."
+  "recommendation": "Keep the frozen MiniLM-L6 readout as the strongest completed BANKING77 development candidate; it improved the L3 validation point estimates but remains below 95% and lacks independent source-group evidence. The tested L3 last-block adaptation harmed validation results. The official test remains closed; do not make arbitrary-option or product-quality claims."
 }

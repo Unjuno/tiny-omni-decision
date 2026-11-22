@@ -1,3 +1,14 @@
+**2026-11-22 R0 live refresh (22:27 JST):** Public PR state, branch heads,
+181 registered worktrees, 217 remote branch refs, C: free space and GPU/process
+state were rechecked read-only. PR #15 remains Draft/Open; PR #111 is Draft/Open
+and green at `d602949`. Orbitune PID 116420 was left untouched, no Tiny Omni
+GPU work was active, and existing user edits remain intact. R2-M still lacks
+an admitted independent task proving multi-input necessity and a reliable
+fusion gain. See the [live audit](docs/pretrained_reuse/R0_LIVE_AUDIT_20261122_2227JST.md)
+and [machine receipt](manifests/pretrained_reuse/r0-live-audit-20261122-2227jst.json).
+The recent MAVAD and A3CarScene source screens (#109/#110) also fail current
+rights/grouping/task gates; neither supplies a usable R2-M corpus.
+
 **2026-11-22 R2 compact BERT text-task probe:** Pinned the PolyAI-maintained
 BANKING77 dataset at `1846984189f2bc0ac51c6fc3a600fa9e1714e0c6`; its card
 declares CC BY 4.0. TRAIN-only integrity audit found 9,999 normalized
@@ -13,7 +24,12 @@ The follow-up unfreezing only MiniLM-L3's final block selected epoch 2 at
 85.84% Accuracy / 0.7145 NLL / 0.2221 Brier / 0.0726 ECE, below the frozen
 readout on every reported metric; train CE kept falling while validation NLL
 stalled. This rejects that one adaptation recipe, not BERT-family encoders.
-The publisher test remains unopened; see the same source screen and manifest.
+The frozen 22.71M-parameter MiniLM-L6 encoder plus the same readout then reached
+91.44% Accuracy / 0.3325 NLL / 0.1277 Brier / 0.0230 ECE on the same validation
+IDs, improving the L3 point estimates but remaining below the 95% target.
+Its epoch-5 checkpoint reload reproduced predictions exactly. The test remains
+unopened and source-person groups are unknown; see the same source screen and
+manifest.
 
 **2026-11-22 R2 spoken-palette TRAIN-only modality interventions:** On 96
 fixed training screens from 24 speaker groups, a same-speaker audio-color swap

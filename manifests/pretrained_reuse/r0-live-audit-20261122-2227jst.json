@@ -1,0 +1,90 @@
+{
+  "format": "pretrained_reuse_r0_live_audit_v1",
+  "observed_at": "2026-11-22T13:27:37Z",
+  "repository": "Unjuno/tiny-omni-decision",
+  "source": {
+    "main": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+    "roadmap_branch": "docs/pretrained-reuse-roadmap-20261010",
+    "roadmap_head": "ea014431b163f69176c52f5df8944f2dc7f7583f",
+    "work_branch": "codex/pretrained-reuse-next-20261115",
+    "work_head": "d60294951e18f12de0c3e1345b5e2cd97805804f",
+    "work_head_matches_origin": true
+  },
+  "pull_requests": {
+    "open_count": 103,
+    "roadmap_pr": {
+      "number": 15,
+      "state": "open",
+      "draft": true,
+      "head": "ea014431b163f69176c52f5df8944f2dc7f7583f"
+    },
+    "work_pr": {
+      "number": 111,
+      "state": "open",
+      "draft": true,
+      "head": "d60294951e18f12de0c3e1345b5e2cd97805804f",
+      "ci_test": "success",
+      "actions_run_id": 45027010398,
+      "check_run_id": 137222121299,
+      "annotation": "upstream Node.js 20 deprecation warning"
+    },
+    "recent_av_source_screens": [
+      {
+        "number": 109,
+        "state": "open",
+        "draft": true,
+        "head": "codex/r2-mavad-source-screen-20261116",
+        "head_sha": "452f717ee9d0168b8923b47ac6af2e8322c4f303",
+        "disposition": "REVIEW_NOT_ADMITTED: only three confirmed camera-scene groups; parent recording split and both-input Decision gate not established; audio privacy unresolved"
+      },
+      {
+        "number": 110,
+        "state": "open",
+        "draft": true,
+        "head": "codex/r2-a3carscene-source-screen-20261116",
+        "head_sha": "bd128427ef992148bf0f3cebb2c69cbd589bb0ed",
+        "disposition": "REVIEW_NOT_ADMITTED: dataset license missing from OSF metadata; 14 known acquisition-day groups; both-input Decision gate not established"
+      }
+    ]
+  },
+  "inventory_counts": {
+    "registered_worktrees": 181,
+    "remote_branch_refs": 217,
+    "open_pull_requests": 103
+  },
+  "storage": {
+    "drive": "C:",
+    "free_bytes": 145927262208
+  },
+  "gpu": {
+    "name": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "temperature_c": 59,
+    "memory_used_mib": 8259,
+    "memory_total_mib": 16384,
+    "utilization_percent": 10
+  },
+  "processes": {
+    "orbitune_training_pid": 116420,
+    "orbitune_left_running": true,
+    "tiny_omni_training_active": false,
+    "intervention_performed": false
+  },
+  "banking77": {
+    "source_revision": "1846984189f2bc0ac51c6fc3a600fa9e1714e0c6",
+    "split_sha256": "d95bb74e6f28eac63012a95d808c6a9a82941e08960c57d52ad3e020c2a183e2",
+    "official_test_opened": false,
+    "artifacts_external_to_git": true
+  },
+  "disposition": {
+    "r0_exit": "PARTIAL: snapshot refreshed; deployment device latency/energy and complete approved task battery remain open",
+    "r1_exit": "PARTIAL: executable licensed VideoPrism-B; V-JEPA 2.1 weight grant remains REVIEW",
+    "r2_exit": "OPEN: modality probes exist; required independent multi-input-necessary fusion evidence is missing",
+    "r3_r8": "conditional or open; no promotion or sealed release evaluation"
+  },
+  "mutations": {
+    "legacy_worktrees_modified": false,
+    "legacy_processes_interrupted": false,
+    "legacy_data_or_checkpoints_modified": false,
+    "sealed_audit_opened": false
+  }
+}

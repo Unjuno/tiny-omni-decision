@@ -1,0 +1,56 @@
+{
+  "experiment_id": "banking77-minilm-l6-frozen-readout-v1",
+  "source": {
+    "dataset_id": "PolyAI/banking77",
+    "revision": "1846984189f2bc0ac51c6fc3a600fa9e1714e0c6",
+    "train_sha256": "8dc89b87a188509c42cce5a086e8f7c1ff4a225bdd9ae3f23e6cdfa5806e363a",
+    "split_manifest_sha256": "d95bb74e6f28eac63012a95d808c6a9a82941e08960c57d52ad3e020c2a183e2",
+    "official_test_loaded": false
+  },
+  "model": {
+    "id": "sentence-transformers/all-MiniLM-L6-v2",
+    "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "license": "Apache-2.0",
+    "weights_sha256": "53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db",
+    "parameters": 22713216,
+    "encoder_trainable": false,
+    "pooling": "attention-mask mean of last hidden states",
+    "max_sequence_length": 128,
+    "weight_bytes": 90868376,
+    "config_sha256": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41",
+    "tokenizer_sha256": {
+      "tokenizer.json": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037",
+      "tokenizer_config.json": "acb92769e8195aabd29b7b2137a9e6d6e25c476a4f15aa4355c233426c61576b",
+      "special_tokens_map.json": "303df45a03609e4ead04bc3dc1536d0ab19b5358db685b6f3da123d05ec200e3",
+      "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+    }
+  },
+  "decision_head": {
+    "type": "single linear layer",
+    "input_features": 384,
+    "output_classes": 77,
+    "class_weights": null,
+    "input_standardization": "per-dimension mean/std fitted on training split only"
+  },
+  "training": {
+    "seed": 17,
+    "device": "cpu",
+    "precision": "float32",
+    "optimizer": "AdamW",
+    "learning_rate": 0.01,
+    "weight_decay": 0.01,
+    "batch_size": 256,
+    "max_epochs": 60,
+    "early_stopping_patience": 6,
+    "early_stopping_min_delta": 0.00001,
+    "checkpoint_selector": "minimum validation multiclass NLL",
+    "calibration": "none; raw softmax probabilities"
+  },
+  "evaluation": {
+    "metrics": ["accuracy", "macro_recall", "macro_f1", "nll", "brier", "ece_15"],
+    "save_each_validation_prediction": true,
+    "independent_source_group_claim": false,
+    "official_test_loaded": false
+  },
+  "output_policy": "new external artifact directory; refuse overwrite; no model/data artifacts in Git"
+}
