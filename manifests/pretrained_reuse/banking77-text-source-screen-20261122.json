@@ -68,6 +68,7 @@
   "baseline_experiment": {
     "experiment_id": "banking77-minilm-l3-frozen-readout-v1",
     "status": "COMPLETED_DEVELOPMENT_VALIDATION_ONLY",
+    "source_commit": "fc8d4899a5ef0cb2a8090e3f41dd0a963c25da68",
     "base_model": "sentence-transformers/paraphrase-MiniLM-L3-v2",
     "base_model_revision": "4ca70771034acceecb2e72475f72050fcdde4ddc",
     "base_model_sha256": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433",
@@ -98,7 +99,7 @@
     "validation_predictions_sha256": "6fb64ec7253f256bd063f5d895cddf5c11977ad5453d362eb5f00b1c3842fdfa",
     "reload_verification_sha256": "d4a8ee29a1849f1d57c5678cd77bea25c2e9b37aee3db0e8bc3a6d40aec82c6e",
     "training_history_sha256": "e37ec3735f6e91a1baf7c94c3c533bd529b1ad2b7b14b11fab5d923b2dc2b180",
-    "run_metadata_sha256": "8bdac5e05da511d74dde08634d12e57bc74cd493a6e723f6966e997b8fd13c92",
+    "run_metadata_sha256": "1ec4d6b34318f01dcc3dca0ae63692f880a31c2413f99a3b2218caaca051e789",
     "effective_config_sha256": "6e48bc5ed11f8355c64a52542ce09799bd5ef2a6445243d690e2bd1e721c96fd",
     "training_script_sha256": "8ecf66c8c094eb32973b2624218d9e110c6e45f59761d51055520b212096baad",
     "split_builder_script_sha256": "9487e8f4fb01036873b7416fb06c53c7a4a945a30dc93e2fbc38272fbb55e818",

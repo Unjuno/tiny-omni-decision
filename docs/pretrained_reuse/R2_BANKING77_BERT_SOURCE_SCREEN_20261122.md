@@ -35,7 +35,7 @@ The first fixed candidate uses the pinned MiniLM-L3 encoder frozen and trains on
 
 Save/reload reproduced all 1,998 predictions exactly; maximum probability delta was 0. No source-group confidence interval is reported because source-person/conversation IDs are unavailable. This baseline is below the provisional 95% accuracy goal. It only tests a frozen encoder with a linear readout, so it does not establish a BERT-family ceiling or justify a general text-quality claim. The official test remains unopened.
 
-The run is outside Git at `C:\CodexArtifacts\pretrained-reuse-r2-local\banking77-minilm-l3-readout-v1-attempt-01`. It retains the best readout, full validation probabilities, per-class counts/metrics, epoch history, metadata and reload receipt. Hashes are in the machine manifest.
+The run is outside Git at `C:\CodexArtifacts\pretrained-reuse-r2-local\banking77-minilm-l3-readout-v1-attempt-01`. It retains the best readout, full validation probabilities, per-class counts/metrics, epoch history, effective config, metadata and reload receipt. Training code/config are in source commit `fc8d4899a5ef0cb2a8090e3f41dd0a963c25da68`; artifact hashes are in the machine manifest.
 
 ## Relevance to compact BERT-family work
 
