@@ -773,8 +773,8 @@
       "has_real_weights": true,
       "runtime_supported": true,
       "runtime_evidence": "CPU weights_only=True tensor-state load and strict=True DistilBertForMaskedLM load; frozen finite encoder forward [1,4,768]; isolated tokenizer with four deterministic Japanese question/candidate fixtures yielded valid vocabulary IDs and finite [4,22,768] output; tokenizer-forward-smoke.json SHA-256 d8be9421f60eda085eccd528a7803940feac038e4567a56922456bdc12158364; train-only typed-Decision pipeline smoke: 4 state-groups/20 decisions per split, finite output, best readout reload parity 0.0; diagnostic-only, not quality evidence (manifest SHA-256 21f575044f3e27739d0c9eec403295659019ac4c035c96e502f94d624ff6389e)",
-      "task_quality_status": "UNMEASURED; no Decision readout or task metric",
-      "decision": "retain as compact Japanese BERT-family candidate; task-specific Decision quality and package/runtime budget gates remain open",
+      "task_quality_status": "A first-four-layer truncated derivative was measured once on source-independent JCoLA development and collapsed to the majority option; do not infer quality of the full six-layer checkpoint from this derivative.",
+      "decision": "do not adopt the four-layer derivative for the frozen shared-option scorer; its text-only total is budget-compatible but failed on this task. The six-layer checkpoint exceeds the present four-tower budget and remains a teacher/reference only pending a fresh task source.",
       "parameter_tensor_bytes": 274850816,
       "report": "docs/pretrained_reuse/R1_LINE_DISTILBERT_RUNTIME_20261123.md",
       "audit_date": "2026-11-23",
@@ -785,7 +785,7 @@
     }
   ],
   "incremental_update_date": "2026-11-23",
-  "incremental_update_scope": "append pinned LINE Japanese DistilBERT runtime audit; preserve prior candidate records",
+  "incremental_update_scope": "append pinned LINE Japanese DistilBERT runtime audit and one source-grouped task-specific derivative result; preserve prior candidate records",
   "additional_audit_updates": [
     {
       "date": "2026-11-02",
@@ -801,6 +801,11 @@
       "date": "2026-11-23",
       "scope": "append four-workflow train-only typed-Decision pipeline smoke for LINE DistilBERT; small synthetic teacher-labeled sample, not a quality result",
       "report": "docs/pretrained_reuse/R1_LINE_DISTILBERT_RUNTIME_20261123.md"
+    },
+    {
+      "date": "2026-11-23",
+      "scope": "one source-grouped JCoLA OOD development comparison of a frozen first-four-layer DistilBERT derivative and frozen BERT-base; both predict the majority option and this development set is now exposed",
+      "report": "docs/pretrained_reuse/R2_JCOLA_BERT_GROUPED_RESULTS_20261123.md"
     }
   ]
 }
