@@ -75,6 +75,39 @@ end-to-end package runtime benchmarks.
 The BERT run's source-code commit is `4476fe1abceaa993c82200301fd2658393db728e`;
 the Ruri run's source-code commit is `6791a5003e6deaa6fb2458bcb3aa1f58dc52ef33`.
 
+## Three-way Japanese NLI probe (existing artifact audit)
+
+A third, already-completed frozen-encoder probe was present in the local
+artifact store and is included here for completeness. It uses the pinned
+Japanese BERT-base v3 checkpoint and a 128-hidden tanh pair scorer on
+premise/hypothesis inputs. The grouped development split has 18,005 train and
+4,502 validation pairs across 8,097 normalized-sentence/image groups, with
+zero group, image, or normalized-sentence overlap. The publisher test was not
+opened. The selected epoch-6 readout has 111,305,987 total parameters before
+quantization and reached 78.10% accuracy, 0.5592 NLL, 0.3156 Brier, and
+0.0199 ECE-15. Accuracy is badly uneven across labels: entailment 24.18%,
+contradiction 78.44%, and neutral 91.00% (macro class accuracy 64.54%). The
+training CE continued falling through epoch 8 while validation NLL was best
+at epoch 6 and worsened at epoch 7, so this probe also shows a generalization
+gap and class-imbalance weakness. It is not a supplied-choice benchmark and
+does not support a 95% claim.
+
+The source is the pinned JGLUE repository revision
+`6791a5003e6deaa6fb2458bcb3aa1f58dc52ef33` (CC-BY-SA-4.0, as recorded in the
+split manifest). This license and its share-alike obligations need separate
+product review before any derivative dataset use. The BERT weights, split,
+feature cache, readout, predictions, and training script were rehashed against
+the external run report; every recorded hash matched. The run was CPU-only,
+seed 17, eight epochs, with validation-NLL selection. Its source commit was
+`4476fe1abceaa993c82200301fd2658393db728e`; this experiment must not be
+repeated or retuned on the exposed validation split.
+
+This is evidence that a Japanese BERT pair scorer can emit three-way
+probabilities on one grouped NLI development set, but its poor
+entailment recall makes it a weak direct option-verification mechanism. It
+does not change the whole-model budget decision or replace the need for a
+fresh, task-admitted Decision evaluation.
+
 ## Whole-model budget impact
 
 The pinned R1 four-tower proposal (V-JEPA 2.1 ViT-B encoder + Japanese
@@ -102,6 +135,8 @@ copied into Git:
 - MASSIVE paired comparison: `massive-ja-jp-bert-ruri70m-paired-comparison-20261123-attempt-01/`
 - CommonsenseQA BERT: `jcommonsenseqa-tohoku-bertbasev3-readout-v1-attempt-01/`
 - CommonsenseQA Ruri: `jcommonsenseqa-ruri70m-readout-v1-attempt-01/`
+- JNLI BERT: `jnli-tohoku-bertbasev3-readout-v1-attempt-01/`
+- JNLI grouped split: `jnli-yjcaptions-grouped-split-v1-attempt-01/`
 
 MASSIVE data hashes (BERT and Ruri runs): train
 `ab55ddd41e4cf0f07f65bddc84432bea40ceb36caaa94c6edf15499ddf6a1270`,
@@ -133,6 +168,14 @@ run records Apache-2.0. Ruri is pinned to
 | CommonsenseQA Ruri predictions | `2044d741c9d165728d502f73f0c6fe1675b51496c0a505ed3dae7875f21fb5f2` |
 | CommonsenseQA BERT training script | `f4f0239da44fcfbbc4c9255856825060305e5ed1520ce033752e03a53c3bdae2` |
 | CommonsenseQA Ruri training script | `566367e4ac23c7280dbf77fe51ff503a91bd388b04eed8346d6e51aab9970d34` |
+| JNLI BERT `run-report.json` | `e21f98c3f55b028a5eeca2e5176e5830cce598d70d38ec07a77c9564ee6d076b` |
+| JNLI BERT `best-readout.pt` | `d59e5cc36795cf9e50bd2b864f3de048c27fa9a6de67cf428c7ef72aea2de91b` |
+| JNLI BERT frozen features | `8fd40588ff16dbc1cf0fba39b316a96a7c4837ad0fdedb61e3712c9e76b5c038` |
+| JNLI BERT validation predictions | `8c0d07f74c1ab070ad1b8c969426198e5eeb30c1c91a3c114e19ad750f0fc3b0` |
+| JNLI BERT training script | `37827c8567cd47b535b1b7fe96bffe077456f68555595ea52fd9d9cdf30c4833` |
+| JNLI train split | `cca3b23dc2c8b4bd2d340d697163ce262d2310bad82ecdb95258c06d7a8d5d6c` |
+| JNLI validation split | `253cd3234430d4bce79e287a38b317a936534bdd65c89bfbfb1524785b4b7aaa` |
+| JNLI split manifest | `cbf1e92f74ef042cf019514627ac221af9a7c6a8068c118c4697ccc7b83c8156` |
 
 The MASSIVE runs record Python 3.11.9, PyTorch 2.6.0+cu124 and Transformers
 5.6.2, but ran on CPU; CUDA was not used. The separate Orbitune GPU process
@@ -151,3 +194,21 @@ source. This is conditional on data admission and must be compared against the
 existing Ruri/MiniLM path under the complete resident-parameter accounting.
 It does not supersede R2's need to establish direct modality and genuinely
 joint-input Decision quality.
+
+## Compact BERT-family candidate (metadata screen only)
+
+The official Hugging Face model card for
+[`bizreach-inc/light-splade-japanese-28M`](https://huggingface.co/bizreach-inc/light-splade-japanese-28M)
+declares Apache-2.0, 27,747,968 FP32 parameters, an 8-layer/384-hidden
+Japanese BERT architecture, and Japanese mMARCO sparse-retrieval training.
+The Hub metadata revision observed on 2026-11-23 is
+`64d8f31a2196074dbd5de7707bbe6f14be3ab985`. This is small enough to replace
+the 36,705,536-parameter Ruri-v3-30m tower with about 8.96M fewer parameters.
+No weights were downloaded and no quality run was performed. Its retrieval
+training and sparse-vocabulary output make it a candidate to screen, not
+evidence that it will improve option scoring; it should only be tested on a
+newly admitted, grouped development source with a fixed scorer and the Ruri
+baseline retained. Official model card claims and intended use can be reviewed
+at the linked card; the revision and size above came from the Hugging Face
+model metadata API. This metadata check does not establish downstream
+redistribution or product suitability.
