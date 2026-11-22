@@ -26,6 +26,7 @@ import transformers
 from torch import Tensor, nn
 from transformers import AutoModel, AutoTokenizer
 
+from tiny_omni_decision.tensor_features import compact_cls_features
 from tiny_omni_decision.typed_decisions_ja import (
     TypedDecisionChoiceGroup,
     normalized_state_sha256,
@@ -123,11 +124,6 @@ def _texts(group: TypedDecisionChoiceGroup) -> list[tuple[str, str]]:
     ]
 
 
-def _compact_cls_features(last_hidden: Tensor) -> Tensor:
-    """Copy CLS rows into compact CPU storage, releasing full-token tensors."""
-    return last_hidden[:, 0].float().clone().cpu()
-
-
 def _encode(
     encoder_dir: Path,
     tokenizer_dir: Path,
@@ -186,7 +182,7 @@ def _encode(
             # On CPU, a CLS slice is a view into the full [batch, seq, hidden]
             # allocation. Clone it so the feature cache cannot retain every
             # batch's full token activations.
-            hidden = _compact_cls_features(last_hidden)
+            hidden = compact_cls_features(last_hidden)
             if not torch.isfinite(hidden).all():
                 raise ValueError("encoder returned non-finite CLS features")
             output.append(hidden)

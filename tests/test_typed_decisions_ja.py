@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 import pytest
-import torch
 
-from scripts.compare_typed_decisions_ja_encoders import _compact_cls_features
 from tiny_omni_decision.typed_decisions_ja import (
     normalized_state_sha256,
     parse_typed_decisions_ja_row,
@@ -97,10 +95,3 @@ def test_state_identity_hash_normalizes_unicode_and_whitespace() -> None:
     assert normalized_state_sha256(left) == normalized_state_sha256(right)
 
 
-def test_cls_feature_cache_does_not_retain_all_token_hidden_states() -> None:
-    hidden = torch.zeros((2, 7, 4), dtype=torch.float32)
-
-    cls_features = _compact_cls_features(hidden)
-
-    assert cls_features.shape == (2, 4)
-    assert cls_features.untyped_storage().nbytes() == cls_features.numel() * 4
