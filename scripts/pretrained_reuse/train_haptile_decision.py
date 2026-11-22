@@ -83,6 +83,11 @@ def _load_config(config_path: Path) -> tuple[dict[str, Any], str]:
         "points": 151,
     }:
         raise ValueError("temperature calibration policy differs from the frozen protocol")
+    if config.get("evaluation", {}).get("paired_controls") != [
+        "best_single_stream", "missing_video", "missing_sensor",
+        "task_group_shuffled_video", "task_group_shuffled_sensor",
+    ]:
+        raise ValueError("paired validation controls differ from the frozen protocol")
     if sha256_file(SPLIT_PATH) != config["data"].get("split_manifest_sha256"):
         raise ValueError("frozen split manifest SHA-256 differs")
     return config, hashlib.sha256(payload).hexdigest()
@@ -246,6 +251,24 @@ def _metrics(
     }
 
 
+def _train_prior_metrics(
+    train_targets: np.ndarray, validation: dict[str, np.ndarray],
+) -> dict[str, Any]:
+    """Evaluate a train-label-frequency prior without looking at validation labels."""
+    counts = np.bincount(
+        np.asarray(train_targets, dtype=np.int64), minlength=len(ACTION_LABELS)
+    )
+    if counts.sum() != len(train_targets) or counts.sum() == 0:
+        raise ValueError("train targets do not form a valid class prior")
+    probabilities = counts.astype(np.float64) / counts.sum()
+    logits = torch.log(torch.from_numpy(probabilities).float().clamp_min(1e-12))
+    repeated_logits = logits.unsqueeze(0).expand(len(validation["targets"]), -1)
+    return _metrics(
+        repeated_logits, torch.from_numpy(validation["targets"].copy()).long(),
+        validation["task_groups"].tolist(), validation["sample_paths"].tolist(),
+    )
+
+
 def _ece(confidence: np.ndarray, correct: np.ndarray) -> float:
     value = 0.0
     for bucket in range(15):
@@ -376,6 +399,50 @@ def _fit_temperature(
         "calibration_examples": len(logits),
         "calibration_fitting_metrics_are_in_sample": True,
     }
+
+
+def _shuffle_values_across_task_groups(
+    values: np.ndarray, task_groups: list[str],
+) -> np.ndarray:
+    """Deterministically replace every task group with another group's stream."""
+    if values.shape[0] != len(task_groups):
+        raise ValueError("stream values and task groups are misaligned")
+    groups = sorted(set(task_groups))
+    if len(groups) < 2:
+        raise ValueError("cross-task stream control requires multiple groups")
+    indices = {group: np.flatnonzero(np.asarray(task_groups) == group) for group in groups}
+    shuffled = values.copy()
+    for group_index, group in enumerate(groups):
+        source_group = groups[(group_index + 1) % len(groups)]
+        destination = indices[group]
+        source = indices[source_group]
+        source_indices = source[np.arange(len(destination)) % len(source)]
+        shuffled[destination] = values[source_indices]
+    return shuffled
+
+
+def _apply_validation_control(
+    arrays: dict[str, np.ndarray], control: str, state_mean: Tensor,
+) -> dict[str, np.ndarray]:
+    controlled = dict(arrays)
+    if control == "missing_video":
+        controlled["video_values"] = np.zeros_like(arrays["video_values"])
+    elif control == "missing_sensor":
+        mean = state_mean.detach().cpu().numpy().astype(np.float32, copy=False)
+        controlled["state_values"] = np.broadcast_to(
+            mean[None, None, :], arrays["state_values"].shape
+        ).copy()
+    elif control == "task_group_shuffled_video":
+        controlled["video_values"] = _shuffle_values_across_task_groups(
+            arrays["video_values"], arrays["task_groups"].tolist()
+        )
+    elif control == "task_group_shuffled_sensor":
+        controlled["state_values"] = _shuffle_values_across_task_groups(
+            arrays["state_values"], arrays["task_groups"].tolist()
+        )
+    else:
+        raise ValueError(f"unknown validation control: {control}")
+    return controlled
 
 
 def _fit_arm(
@@ -573,6 +640,14 @@ def run_experiment(
              mean=state_mean.numpy(), std=state_std.numpy())
     started = datetime.now(UTC).isoformat()
     training = config["training"]
+    train_prior = _train_prior_metrics(train["targets"], validation)
+    (output / "train-prior-validation-predictions.jsonl").write_text(
+        json.dumps(train_prior["predictions"], separators=(",", ":")) + "\n",
+        encoding="utf-8",
+    )
+    train_prior_summary = {
+        key: value for key, value in train_prior.items() if key != "predictions"
+    }
     arm_results = {}
     for mode in HAPTILE_MODES:
         arm_results[mode] = _fit_arm(
@@ -603,6 +678,86 @@ def run_experiment(
     }
     (output / "validation-model-selection.json").write_text(
         json.dumps(validation_selection, indent=2) + "\n", encoding="utf-8"
+    )
+    best_single_stream_mode = min(
+        ("text_only", "state_only"),
+        key=lambda mode: (
+            float(arm_results[mode]["best_validation"]["macro_task_group_nll"]), mode
+        ),
+    )
+    fusion_modes = ("vision_text", "tactile_text", "vision_tactile_text", "full")
+    best_fusion_mode = min(
+        fusion_modes,
+        key=lambda mode: (
+            float(arm_results[mode]["best_validation"]["macro_task_group_nll"]), mode
+        ),
+    )
+    fusion_model = HapTileActionDecisionScorer()
+    fusion_model.load_state_dict(
+        torch.load(
+            arm_results[best_fusion_mode]["best_checkpoint"],
+            map_location="cpu", weights_only=True,
+        )
+    )
+    fusion_validation = _evaluate(
+        fusion_model, best_fusion_mode, validation, state_mean, state_std
+    )
+    stream_controls: dict[str, Any] = {
+        "best_single_stream": {
+            "mode": best_single_stream_mode,
+            "metrics": {
+                key: value for key, value in
+                arm_results[best_single_stream_mode]["best_validation"].items()
+            },
+        },
+        "best_fusion": {
+            "mode": best_fusion_mode,
+            "best_epoch": arm_results[best_fusion_mode]["best_epoch"],
+            "metrics": {
+                key: value for key, value in fusion_validation.items()
+                if key != "predictions"
+            },
+        },
+        "controls": {},
+        "paired_intervals_vs_unperturbed_fusion": {},
+        "stream_assignment": (
+            "sorted task groups rotate to the next group; source rows cycle in order"
+        ),
+        "selection_affected_validation": True,
+    }
+    with (output / "validation-stream-control-predictions.jsonl").open(
+        "w", encoding="utf-8"
+    ) as prediction_stream:
+        prediction_stream.write(json.dumps({
+            "control": "unperturbed_fusion",
+            "mode": best_fusion_mode,
+            "predictions": fusion_validation["predictions"],
+        }, separators=(",", ":")) + "\n")
+        for control in (
+            "missing_video", "missing_sensor", "task_group_shuffled_video",
+            "task_group_shuffled_sensor",
+        ):
+            controlled_arrays = _apply_validation_control(
+                validation, control, state_mean
+            )
+            controlled_metrics = _evaluate(
+                fusion_model, best_fusion_mode, controlled_arrays,
+                state_mean, state_std,
+            )
+            stream_controls["controls"][control] = {
+                key: value for key, value in controlled_metrics.items()
+                if key != "predictions"
+            }
+            stream_controls["paired_intervals_vs_unperturbed_fusion"][control] = (
+                _paired_group_bootstrap(fusion_validation, controlled_metrics)
+            )
+            prediction_stream.write(json.dumps({
+                "control": control,
+                "mode": best_fusion_mode,
+                "predictions": controlled_metrics["predictions"],
+            }, separators=(",", ":")) + "\n")
+    (output / "validation-stream-controls.json").write_text(
+        json.dumps(stream_controls, indent=2) + "\n", encoding="utf-8"
     )
     calibration = _load_split(
         artifact_root, "calibration", int(data["calibration_examples"]), config
@@ -731,7 +886,18 @@ def run_experiment(
             mode: arm_results[mode]["optimizer_updates"] for mode in HAPTILE_MODES
         },
         "selected_by_validation": selection,
+        "train_prior_validation": train_prior_summary,
+        "train_class_support": np.bincount(
+            train["targets"], minlength=len(ACTION_LABELS)
+        ).tolist(),
+        "validation_class_support": np.bincount(
+            validation["targets"], minlength=len(ACTION_LABELS)
+        ).tolist(),
+        "calibration_class_support": np.bincount(
+            calibration["targets"], minlength=len(ACTION_LABELS)
+        ).tolist(),
         "calibration_fit": calibration_report,
+        "validation_stream_controls": stream_controls,
         "arms": arm_results,
         "paired_group_bootstrap_vs_best_unimodal": comparisons,
         "train_state_normalization_sha256": sha256_file(

@@ -8,8 +8,11 @@ import pytest
 torch = pytest.importorskip("torch")
 
 from scripts.pretrained_reuse.train_haptile_decision import (  # noqa: E402
+    _apply_validation_control,
     _batch_tensors,
     _metrics,
+    _shuffle_values_across_task_groups,
+    _train_prior_metrics,
 )
 
 
@@ -77,3 +80,46 @@ def test_state_only_batch_uses_instruction_free_features():
     )
     assert torch.equal(batch[4], torch.ones((1, 384)))
     assert torch.equal(batch[5], torch.ones((1, 7, 1536)))
+
+
+def test_task_group_stream_shuffle_uses_only_other_groups_deterministically():
+    groups = ["a", "a", "b", "b", "c", "c"]
+    values = np.asarray([[0], [1], [10], [11], [20], [21]], dtype=np.float32)
+    first = _shuffle_values_across_task_groups(values, groups)
+    second = _shuffle_values_across_task_groups(values, groups)
+    np.testing.assert_array_equal(first, second)
+    group_order = ["a", "b", "c"]
+    for index, group in enumerate(groups):
+        destination_group_index = group_order.index(group)
+        expected_source = group_order[(destination_group_index + 1) % len(group_order)]
+        assert expected_source != group
+        assert int(first[index, 0] // 10) == group_order.index(expected_source)
+
+
+def test_missing_sensor_control_becomes_train_normalized_zero():
+    arrays = {
+        "video_values": np.ones((2, 4, 8, 768), dtype=np.float32),
+        "state_values": np.full((2, 8, 25), 99, dtype=np.float32),
+    }
+    mean = torch.arange(25, dtype=torch.float32)
+    controlled = _apply_validation_control(arrays, "missing_sensor", mean)
+    np.testing.assert_array_equal(
+        controlled["state_values"], np.broadcast_to(mean.numpy(), (2, 8, 25))
+    )
+    np.testing.assert_array_equal(arrays["state_values"], 99)
+
+
+def test_train_prior_uses_only_train_class_frequencies():
+    train_targets = np.asarray([0, 1, 1], dtype=np.int64)
+    validation = {
+        "targets": np.asarray([0, 1], dtype=np.int64),
+        "task_groups": np.asarray(["task-a", "task-b"]),
+        "sample_paths": np.asarray(["a", "b"]),
+    }
+    first = _train_prior_metrics(train_targets, validation)
+    validation["targets"] = np.asarray([6, 5], dtype=np.int64)
+    second = _train_prior_metrics(train_targets, validation)
+    expected = {"-x": pytest.approx(1 / 3), "+x": pytest.approx(2 / 3)}
+    for row in first["predictions"] + second["predictions"]:
+        assert row["probabilities"]["-x"] == expected["-x"]
+        assert row["probabilities"]["+x"] == expected["+x"]

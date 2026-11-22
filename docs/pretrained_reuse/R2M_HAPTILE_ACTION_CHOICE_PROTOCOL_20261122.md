@@ -232,3 +232,17 @@ NLL only after validation-based model selection. Calibration is not used for
 arm or checkpoint selection. The full repository CPU suite passed with 3,258
 tests and 11 skipped, and Ruff passed. Sealed audit remains unopened; no
 quantization or product promotion has occurred.
+
+Post-snapshot implementation check (2026-11-22, 10:59 JST): the trainer now
+also computes the train-frequency prior and, on validation only, selects the
+best fusion arm among vision/text, tactile/text, vision+tactile+text, and full
+inputs. It records paired group-bootstrap comparisons against a best single
+stream and runs zero-replacement and cross-task-group stream-shuffle controls
+for video and robot state. These interventions do not influence arm or epoch
+selection. A separate synthetic four-row CPU smoke completed one full-mode
+training epoch, checkpoint reload parity, all four stream controls, and
+calibration-temperature fitting; it is an execution smoke only and supplies
+no task-quality evidence. Targeted tests for the new controls passed. The
+train VideoPrism process continued on CPU and had reached 500/1,112 examples;
+the full train features, calibration video features, and real-data fit remain
+unfinished.
