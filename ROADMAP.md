@@ -1,3 +1,12 @@
+**2026-11-22 R7 Path A Whisper decoder storage audit:** The resident Audio
+runtime only calls Whisper's encoder. A pinned CPU export removed the unused
+decoder tensors from a new artifact and matched the original encoder weights
+and deterministic forward exactly: 151.06 MB → 32.84 MB, saving 118.22 MB.
+Applying that saving to the current assembly would still leave about 594.17 MB,
+so the 200 MB target remains unmet; runtime/package integration and measured
+quantization are still required. Existing assembly and weights were untouched.
+See [audit and reproduction receipt](docs/pretrained_reuse/R7_PATH_A_WHISPER_ENCODER_ONLY_AUDIT_20261122.md).
+
 **2026-11-22 R2 UCI HAR sensor validation error follow-up:** A read-only
 analysis of the frozen 100-epoch validation predictions found static summaries
 outperform the causal LSTM by 14.05 percentage points, with LSTM `SITTING`
