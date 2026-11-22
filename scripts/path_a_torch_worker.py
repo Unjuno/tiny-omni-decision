@@ -153,9 +153,7 @@ def main() -> None:
                 shared_audio_model_revision=AUDIO_MODEL_REVISION,
                 shared_audio_weights_sha256=AUDIO_WEIGHTS_SHA256,
             )
-    startup_peak_allocated = (
-        torch.cuda.max_memory_allocated() if args.device == "cuda" else None
-    )
+    startup_peak_allocated = torch.cuda.max_memory_allocated() if args.device == "cuda" else None
     startup_peak_reserved = torch.cuda.max_memory_reserved() if args.device == "cuda" else None
 
     # These task runtimes use the identical pinned MiniLM files. Share one
@@ -200,7 +198,9 @@ def main() -> None:
         "audio_encoder_precision": audio.audio_encoder_precision,
         "shared_minilm_instances_after_consolidation": 1,
         "audio_encoder_revision": AUDIO_MODEL_REVISION,
-        "audio_encoder_weights_sha256": AUDIO_WEIGHTS_SHA256,
+        "audio_encoder_weights_sha256": audio.audio_weights_sha256,
+        "audio_encoder_source_checkpoint_sha256": AUDIO_WEIGHTS_SHA256,
+        "audio_encoder_storage_format": audio.audio_storage_format,
         "audio_readout_sha256": AUDIO_READOUT_SHA256,
         "librispeech_readout_sha256": libri_readout_sha256,
         "librispeech_readout_loaded": libri_scorer is not None,
@@ -216,9 +216,7 @@ def main() -> None:
         "video_readout_sha256": VIDEO_READOUT_SHA256,
         "rss_before_load_bytes": rss_before_load,
         "rss_after_load_bytes": process.memory_info().rss,
-        "peak_working_set_after_load_bytes": getattr(
-            process.memory_info(), "peak_wset", None
-        ),
+        "peak_working_set_after_load_bytes": getattr(process.memory_info(), "peak_wset", None),
         "startup_peak_cuda_allocated_bytes": startup_peak_allocated,
         "startup_peak_cuda_reserved_bytes": startup_peak_reserved,
         "cuda_allocated_bytes_after_load": (
@@ -260,7 +258,8 @@ def main() -> None:
                         for item in payload["queries"]
                     ]
                     decisions = audio.decide_many(
-                        Path(payload["audio_path"]), queries,
+                        Path(payload["audio_path"]),
+                        queries,
                         expected_media_sha256=payload.get("expected_media_sha256"),
                     )
                     result = {
@@ -325,9 +324,7 @@ def main() -> None:
                         torch.cuda.max_memory_allocated() if args.device == "cuda" else None
                     ),
                     "rss_after_request_bytes": process.memory_info().rss,
-                    "peak_working_set_bytes": getattr(
-                        process.memory_info(), "peak_wset", None
-                    ),
+                    "peak_working_set_bytes": getattr(process.memory_info(), "peak_wset", None),
                 }
             )
             protocol.write(json.dumps(result, ensure_ascii=False) + "\n")

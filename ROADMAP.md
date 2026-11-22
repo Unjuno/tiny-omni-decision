@@ -1,3 +1,12 @@
+**2026-11-22 R7 Path A Whisper encoder-only runtime variant:** A new isolated
+assembly stores only Whisper's 8.21M-parameter encoder, shares it across the
+Audio and spoken-palette paths, and replays the fixed TRAIN raw-input JSON
+request with max probability delta `6.14e-12`. Package payload fell from
+712.39 MB to 594.17 MB and logical runtime parameters from 192.65M to 163.10M;
+the 200 MB target remains unmet. This was one compatibility smoke, not quality,
+RAM or latency evidence. Legacy package/checkpoints were left unchanged. See
+[variant report](docs/pretrained_reuse/R7_PATH_A_ENCODER_ONLY_RUNTIME_20261122.md).
+
 **2026-11-22 R7 Path A Whisper decoder storage audit:** The resident Audio
 runtime only calls Whisper's encoder. A pinned CPU export removed the unused
 decoder tensors from a new artifact and matched the original encoder weights

@@ -18,8 +18,16 @@ from pathlib import Path
 
 import numpy as np
 import torch
+from safetensors.torch import load_file
 from torch import Tensor
-from transformers import AutoModel, AutoTokenizer, WhisperFeatureExtractor, WhisperModel
+from transformers import (
+    AutoModel,
+    AutoTokenizer,
+    WhisperConfig,
+    WhisperFeatureExtractor,
+    WhisperModel,
+)
+from transformers.models.whisper.modeling_whisper import WhisperEncoder
 
 from tiny_omni_decision.decision import DecisionOutput, FrozenFeatureCandidateScorer
 from tiny_omni_decision.feature_cache import BoundedFeatureCache
@@ -27,6 +35,8 @@ from tiny_omni_decision.feature_cache import BoundedFeatureCache
 AUDIO_MODEL_ID = "openai/whisper-tiny"
 AUDIO_MODEL_REVISION = "169d4a4341b33bc18d8881c4b69c2e104e1cc0af"
 AUDIO_WEIGHTS_SHA256 = "7ebd0e69e78190ffe1438491fa05cc1f5c1aa3a4c4db3bc1723adbb551ea2395"
+AUDIO_ENCODER_STATE_SHA256 = "d7f4b75d10f8ec4af79a32cc6dd20160f0c669c67bd104c1f1ab3f9d5d36a2a8"
+AUDIO_ENCODER_PARAMETERS = 8_208_384
 TEXT_MODEL_ID = "sentence-transformers/paraphrase-MiniLM-L3-v2"
 TEXT_MODEL_REVISION = "4ca70771034acceecb2e72475f72050fcdde4ddc"
 TEXT_WEIGHTS_SHA256 = "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433"
@@ -81,6 +91,37 @@ def validate_readout_artifact(path: Path, expected_sha256: str) -> None:
         raise ValueError("Path A readout hash mismatch")
 
 
+def load_path_a_audio_model(audio_dir: Path, device: torch.device) -> tuple[torch.nn.Module, str]:
+    """Load either the legacy full Whisper checkpoint or a pinned encoder-only export."""
+    full_weights = audio_dir / "model.safetensors"
+    encoder_weights = audio_dir / "encoder.safetensors"
+    if full_weights.is_file() and encoder_weights.is_file():
+        raise ValueError("audio bundle contains ambiguous full and encoder-only Whisper weights")
+    if encoder_weights.is_file():
+        if _file_sha256(encoder_weights) != AUDIO_ENCODER_STATE_SHA256:
+            raise ValueError("Whisper encoder-only weight hash mismatch")
+        config = WhisperConfig.from_pretrained(audio_dir, local_files_only=True)
+        config._attn_implementation = "eager"
+        model = WhisperEncoder(config).eval().to(device)
+        state = load_file(encoder_weights, device="cpu")
+        incompatible = model.load_state_dict(state, strict=True)
+        if incompatible.missing_keys or incompatible.unexpected_keys:
+            raise ValueError("Whisper encoder-only state did not load strictly")
+        if sum(parameter.numel() for parameter in model.parameters()) != AUDIO_ENCODER_PARAMETERS:
+            raise ValueError("unexpected Whisper encoder-only parameter count")
+        return model, "encoder_only"
+    if not full_weights.is_file():
+        raise FileNotFoundError(full_weights)
+    if _file_sha256(full_weights) != AUDIO_WEIGHTS_SHA256:
+        raise ValueError("Whisper Tiny weight hash mismatch")
+    model = (
+        WhisperModel.from_pretrained(audio_dir, local_files_only=True, dtype=torch.float32)
+        .eval()
+        .to(device)
+    )
+    return model, "full_checkpoint"
+
+
 def read_pcm_wav(path: Path) -> np.ndarray:
     """Read the exact input format used by the pinned Speech Commands probe."""
     with wave.open(str(path), "rb") as stream:
@@ -105,9 +146,11 @@ def pair_candidate_features(audio: Tensor, question: Tensor, candidates: Tensor)
         raise ValueError(f"audio and text features must have size {AUDIO_FEATURE_SIZE}")
     if candidates.shape[0] < 2:
         raise ValueError("at least two candidate options are required")
-    if not torch.isfinite(audio).all() or not torch.isfinite(question).all() or not torch.isfinite(
-        candidates
-    ).all():
+    if (
+        not torch.isfinite(audio).all()
+        or not torch.isfinite(question).all()
+        or not torch.isfinite(candidates).all()
+    ):
         raise ValueError("candidate feature inputs must be finite")
     audio_rows = audio.unsqueeze(0).expand(len(candidates), -1)
     question_rows = question.unsqueeze(0).expand(len(candidates), -1)
@@ -166,28 +209,35 @@ class SpeechCommandsMultiQueryRuntime:
 
         audio_dir = model_dir / "audio-whisper-tiny"
         text_dir = model_dir / "text-minilm-en"
-        audio_weights = audio_dir / "model.safetensors"
         text_weights = text_dir / "model.safetensors"
-        for path in (audio_weights, text_weights):
-            if not path.is_file():
-                raise FileNotFoundError(path)
-        if _file_sha256(audio_weights) != AUDIO_WEIGHTS_SHA256:
-            raise ValueError("Whisper Tiny weight hash mismatch")
+        if not text_weights.is_file():
+            raise FileNotFoundError(text_weights)
         if _file_sha256(text_weights) != TEXT_WEIGHTS_SHA256:
             raise ValueError("MiniLM weight hash mismatch")
         validate_readout_artifact(readout_path, expected_readout_sha256)
 
-        self.audio_model = WhisperModel.from_pretrained(
-            audio_dir, local_files_only=True, dtype=torch.float32
-        ).eval().to(self.device)
-        self.audio_encoder = self.audio_model.encoder
+        self.audio_model, self.audio_storage_format = load_path_a_audio_model(
+            audio_dir, self.device
+        )
+        self.audio_encoder = (
+            self.audio_model.encoder
+            if self.audio_storage_format == "full_checkpoint"
+            else self.audio_model
+        )
+        self.audio_weights_sha256 = (
+            AUDIO_WEIGHTS_SHA256
+            if self.audio_storage_format == "full_checkpoint"
+            else AUDIO_ENCODER_STATE_SHA256
+        )
         self.audio_processor = WhisperFeatureExtractor.from_pretrained(
             audio_dir, local_files_only=True
         )
         self.text_tokenizer = AutoTokenizer.from_pretrained(text_dir, local_files_only=True)
-        self.text_model = AutoModel.from_pretrained(
-            text_dir, local_files_only=True, dtype=torch.float32
-        ).eval().to(self.device)
+        self.text_model = (
+            AutoModel.from_pretrained(text_dir, local_files_only=True, dtype=torch.float32)
+            .eval()
+            .to(self.device)
+        )
         for model in (self.audio_model, self.text_model):
             for parameter in model.parameters():
                 parameter.requires_grad_(False)
@@ -209,7 +259,13 @@ class SpeechCommandsMultiQueryRuntime:
             for model in (self.audio_model, self.text_model, self.scorer)
             for parameter in model.parameters()
         )
-        if self.parameter_count != 55_494_785:
+        expected_audio_parameters = (
+            37_760_640
+            if self.audio_storage_format == "full_checkpoint"
+            else AUDIO_ENCODER_PARAMETERS
+        )
+        expected_parameter_count = expected_audio_parameters + 17_389_824 + 344_321
+        if self.parameter_count != expected_parameter_count:
             raise ValueError(f"unexpected total runtime parameter count: {self.parameter_count}")
 
     def _encode_audio_batch(self, paths: Sequence[Path]) -> list[Tensor]:
@@ -330,8 +386,11 @@ class SpeechCommandsMultiQueryRuntime:
         return texts
 
     def decide_many(
-        self, audio_path: Path, queries: Sequence[DecisionQuery],
-        *, expected_media_sha256: str | None = None,
+        self,
+        audio_path: Path,
+        queries: Sequence[DecisionQuery],
+        *,
+        expected_media_sha256: str | None = None,
     ) -> list[DecisionOutput]:
         """Reuse content-addressed single-event features across sequential requests.
 

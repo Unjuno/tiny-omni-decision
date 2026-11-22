@@ -5,6 +5,7 @@ from types import SimpleNamespace
 from unittest.mock import Mock
 
 import pytest
+from safetensors.torch import save_file
 
 np = pytest.importorskip("numpy")
 torch = pytest.importorskip("torch")
@@ -28,9 +29,12 @@ read_pcm_wav = audio_runtime.read_pcm_wav
 def test_audio_precision_resolution_preserves_auto_default_and_allows_fp32(
     requested: str, device_type: str, bf16_supported: bool, expected: str
 ) -> None:
-    assert audio_runtime.resolve_audio_encoder_precision(
-        requested, device_type, bf16_supported=bf16_supported
-    ) == expected
+    assert (
+        audio_runtime.resolve_audio_encoder_precision(
+            requested, device_type, bf16_supported=bf16_supported
+        )
+        == expected
+    )
 
 
 def test_audio_precision_resolution_rejects_unsupported_modes() -> None:
@@ -156,6 +160,7 @@ def test_batch_audio_never_reuses_single_event_cache(tmp_path) -> None:
 def test_audio_runtime_can_score_with_an_independent_task_readout() -> None:
     runtime = object.__new__(audio_runtime.SpeechCommandsMultiQueryRuntime)
     runtime.device = torch.device("cpu")
+
     class FirstOption(torch.nn.Module):
         def forward(self, features):
             return torch.arange(len(features), 0, -1, dtype=features.dtype).unsqueeze(-1)
@@ -257,3 +262,47 @@ def test_readout_artifact_requires_the_declared_hash(tmp_path) -> None:
         audio_runtime.validate_readout_artifact(checkpoint, "not-a-hash")
     with pytest.raises(FileNotFoundError):
         audio_runtime.validate_readout_artifact(tmp_path / "missing.pt", digest)
+
+
+def test_audio_runtime_loads_hash_checked_encoder_only_weights(tmp_path, monkeypatch) -> None:
+    weight_path = tmp_path / "audio-whisper-tiny" / "encoder.safetensors"
+    weight_path.parent.mkdir()
+    state = {"projection.weight": torch.tensor([[1.0, 2.0], [3.0, 4.0]])}
+    save_file(state, weight_path)
+    digest = audio_runtime._file_sha256(weight_path)
+    monkeypatch.setattr(audio_runtime, "AUDIO_ENCODER_STATE_SHA256", digest)
+
+    class FakeConfig:
+        _attn_implementation = None
+
+        @classmethod
+        def from_pretrained(cls, *_args, **_kwargs):
+            return cls()
+
+    class FakeEncoder(torch.nn.Module):
+        def __init__(self, config):
+            super().__init__()
+            self.config = config
+            self.projection = torch.nn.Linear(2, 2, bias=False)
+
+    monkeypatch.setattr(audio_runtime, "WhisperConfig", FakeConfig)
+    monkeypatch.setattr(audio_runtime, "WhisperEncoder", FakeEncoder)
+    monkeypatch.setattr(audio_runtime, "AUDIO_ENCODER_PARAMETERS", 4)
+
+    model, storage_format = audio_runtime.load_path_a_audio_model(
+        weight_path.parent, torch.device("cpu")
+    )
+
+    assert storage_format == "encoder_only"
+    torch.testing.assert_close(model.projection.weight, state["projection.weight"])
+    assert model.config._attn_implementation == "eager"
+
+
+def test_audio_runtime_rejects_ambiguous_full_and_encoder_only_weights(tmp_path) -> None:
+    audio_dir = tmp_path / "audio-whisper-tiny"
+    audio_dir.mkdir()
+    (audio_dir / "model.safetensors").write_bytes(b"full")
+    (audio_dir / "encoder.safetensors").write_bytes(b"compact")
+
+    with pytest.raises(ValueError, match="ambiguous"):
+        audio_runtime.load_path_a_audio_model(audio_dir, torch.device("cpu"))
