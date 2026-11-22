@@ -92,6 +92,27 @@ The implementation is commit `71fb2deef77727abeb5e61f8b408873f767a9179`.
 **Checkpoint feasibility: PASS. Short tokenizer+encoder smoke: PASS. Decision
 quality: NOT MEASURED. Product/release eligibility: NOT ESTABLISHED.**
 
+### Four-tower parameter fit
+
+To check the 200M pre-quantization ceiling, the encoder was also instantiated
+from the pinned config with fewer DistilBERT layers and counted directly; no
+weights were truncated or evaluated in these counts. Replacing the current
+36,705,536-parameter Ruri text tower in the 178,689,152-parameter four-tower
+proposal gives:
+
+| LINE DistilBERT encoder depth | Encoder parameters | Four-tower total with the 98,561-parameter smoke readout | Margin to 200M |
+|---:|---:|---:|---:|
+| 6 (pinned checkpoint) | 68,087,808 | 210,169,985 | -10,169,985 |
+| 4 (config-only count) | 53,912,064 | 195,994,241 | +4,005,759 |
+| 3 (config-only count) | 46,824,192 | 188,906,369 | +11,093,631 |
+
+The 4- and 3-layer rows are arithmetic feasibility checks only. They do not
+show that removing upper layers preserves Japanese Decision quality, and the
+smoke readout is not a final product head. The six-layer checkpoint therefore
+does not fit the present four-tower budget unchanged; a reduced-depth variant
+would need a separate fixed-protocol quality and runtime evaluation, with all
+resident heads included before accepting it.
+
 The next gate is an explicitly limited paired readout diagnostic only after
 the active CPU workload has ended. The existing typed-decision validation is
 already exposed and uses synthetic teacher distributions, so any reuse must be
