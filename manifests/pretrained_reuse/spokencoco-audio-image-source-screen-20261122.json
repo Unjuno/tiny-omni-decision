@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "source": "MIT SLS SpokenCOCO (human-recorded corpus) + MS-COCO images",
+  "decision": "review_not_admitted_for_product_path_a",
+  "checked_on": "2026-11-22",
+  "source_revisions": {
+    "mit_sls_page": "https://sls.csail.mit.edu/downloads/placesaudio/",
+    "mit_sls_page_sha256": "59d3362690fc4c2fa0dc800bcd691379f327f293a3f043463b21014b5dd28a81",
+    "coco_terms_page": "https://cocodataset.org/dataset/termsofuse.htm",
+    "coco_terms_page_sha256": "bd019f88ee44c29b2f19c5b99888cf5bc2e7c16f57b6e52af8ed3a60462e8bdd",
+    "coco_terms_last_modified": "2023-11-09T02:34:22Z"
+  },
+  "source_facts": {
+    "spoken_caption_count_approx": 600000,
+    "spoken_caption_type": "human speakers reading MS-COCO captions",
+    "audio_license_declared_by_mit_sls": "CC BY-SA",
+    "audio_license_admitted_by_repository_policy": false,
+    "coco_annotation_license": "CC BY 4.0",
+    "coco_image_rights": "original copyrights remain with source owners; Flickr terms apply",
+    "per_image_rights_verified": false,
+    "asset_and_speaker_group_split_verified": false,
+    "prospective_task": "select the image matching a spoken caption from supplied image candidates"
+  },
+  "access": {
+    "audio_payload_bytes_fetched": 0,
+    "image_payload_bytes_fetched": 0,
+    "annotations_fetched": false,
+    "model_loaded_or_fitted": false,
+    "evaluation_performed": false,
+    "sealed_audit_accessed": false
+  },
+  "limitations": [
+    "CC BY-SA is outside the repository's current explicit permissive-license set",
+    "COCO annotation licensing does not grant rights to all underlying images",
+    "per-image Flickr rights were not checked",
+    "speaker/asset-disjoint split feasibility was not verified",
+    "candidate covers audio and image, not video"
+  ]
+}

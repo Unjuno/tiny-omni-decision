@@ -4611,3 +4611,12 @@ DROID is not admitted for quality evaluation, and no model was fit. Do not
 download the remaining debug sample or full release for this task without a
 group-disjoint, non-leaking task plan. See the [source screen](docs/pretrained_reuse/R2_DROID_SOURCE_SCREEN_20261122.md)
 and [pinned evidence](manifests/pretrained_reuse/droid-source-screen-20261122.json).
+
+**2026-11-22 R2 SpokenCOCO audio-image source screen:** MIT SLS describes
+about 600k human-recorded readings of MS-COCO captions under CC BY-SA, which is
+outside this repository's current permissive-license set. COCO separately
+states that image copyrights remain with source owners and Flickr terms apply;
+per-image rights and a speaker/asset-disjoint split were not established. No
+payload was fetched. Keep the candidate `REVIEW_NOT_ADMITTED`; do not infer
+image rights from the annotation license. See [source screen](docs/pretrained_reuse/R2_SPOKENCOCO_AUDIO_IMAGE_SOURCE_SCREEN_20261122.md)
+and [receipt](manifests/pretrained_reuse/spokencoco-audio-image-source-screen-20261122.json).
