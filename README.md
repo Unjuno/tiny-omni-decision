@@ -1,5 +1,13 @@
 # Tiny Omni Decision
 
+**2026-11-22 Path A shared audio–image runtime:** The narrow spoken-color
+task now runs inside a new four-route assembly while reusing the already
+resident Whisper encoder. Exact saved-output parity passed on one previously
+used TRAIN request; package accounting is 192.65M logical pre-quantization
+parameters / 712.4 MB, so the provisional 200 MB target remains unmet. This is
+runtime integration evidence only, not new task-quality evidence. [Report and
+limits](docs/pretrained_reuse/R7_PATH_A_SHARED_AUDIO_IMAGE_INTEGRATION_20261122.md).
+
 **2026-11-22 R2-M spoken-color + screen-action mechanism pilot:** A 30.36M
 pre-quantization-parameter frozen Whisper/DINOv2 stack with a 98,561-parameter
 shared choice scorer reached 99.99% Accuracy on one constructed four-color

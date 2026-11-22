@@ -7,11 +7,13 @@ from pathlib import Path
 
 import numpy as np
 import pytest
+import torch
 
 from tiny_omni_decision.decision import FrozenFeatureCandidateScorer
 from tiny_omni_decision.spoken_palette_runtime import (
     SpokenPaletteRuntime,
     _checked_bundle_file,
+    _resolve_shared_audio_encoder,
     read_pcm_wav,
     waveform_from_wav_bytes,
 )
@@ -119,3 +121,50 @@ def test_options_reject_duplicate_ids_and_bad_coordinates() -> None:
     duplicate[1]["x_norm"] = float("nan")
     with pytest.raises(ValueError, match="coordinates"):
         SpokenPaletteRuntime._option_positions(duplicate)
+
+
+def test_shared_audio_encoder_reuses_exact_declared_module() -> None:
+    class Encoder(torch.nn.Module):
+        def __init__(self) -> None:
+            super().__init__()
+            self.config = type("Config", (), {"d_model": 384})()
+
+    encoder = Encoder()
+    metadata = {
+        "shared_audio_encoder": {
+            "model_id": "openai/whisper-tiny",
+            "revision": "pinned-revision",
+            "weights_sha256": "a" * 64,
+        }
+    }
+    result = _resolve_shared_audio_encoder(
+        metadata,
+        encoder,
+        model_id="openai/whisper-tiny",
+        revision="pinned-revision",
+        weights_sha256="a" * 64,
+    )
+    assert result is encoder
+
+
+def test_shared_audio_encoder_rejects_wrong_checkpoint_identity() -> None:
+    class Encoder(torch.nn.Module):
+        def __init__(self) -> None:
+            super().__init__()
+            self.config = type("Config", (), {"d_model": 384})()
+
+    metadata = {
+        "shared_audio_encoder": {
+            "model_id": "openai/whisper-tiny",
+            "revision": "pinned-revision",
+            "weights_sha256": "a" * 64,
+        }
+    }
+    with pytest.raises(ValueError, match="identity differs"):
+        _resolve_shared_audio_encoder(
+            metadata,
+            Encoder(),
+            model_id="openai/whisper-tiny",
+            revision="different-revision",
+            weights_sha256="a" * 64,
+        )

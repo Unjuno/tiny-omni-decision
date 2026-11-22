@@ -167,6 +167,8 @@ class PathARuntimeDispatcher:
     - audio: ``audio_path``, ``queries`` (question/options pairs)
     - image: ``image_path``, ``taxonomy``, ``options``
     - video: ``video_path``, ``question``, ``candidate_statement``
+    - spoken_palette_av: ``audio_path``, ``image_path``, option objects with IDs,
+      text and normalized image coordinates (CPU task bundle only)
     """
 
     def __init__(
@@ -284,7 +286,7 @@ class PathARuntimeDispatcher:
                 }
             )
             response = {**scored, "video_encoder": encoded["encoder_metrics"]}
-        elif task in {"text", "audio", "librispeech"}:
+        elif task in {"text", "audio", "librispeech", "spoken_palette_av"}:
             response = self._ensure_torch().request(
                 {"request_id": request_id, "task": task, "payload": payload}
             )

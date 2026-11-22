@@ -17,6 +17,7 @@ import psutil
 import torch
 
 from tiny_omni_decision.audio_runtime import (
+    AUDIO_MODEL_ID,
     AUDIO_MODEL_REVISION,
     AUDIO_WEIGHTS_SHA256,
     PAIR_FEATURE_SIZE,
@@ -30,6 +31,7 @@ from tiny_omni_decision.audio_runtime import (
     READOUT_SHA256 as AUDIO_READOUT_SHA256,
 )
 from tiny_omni_decision.decision import FrozenFeatureCandidateScorer
+from tiny_omni_decision.spoken_palette_runtime import SpokenPaletteRuntime
 from tiny_omni_decision.text_runtime import (
     MODEL_REVISION as TEXT_PROBE_MODEL_REVISION,
 )
@@ -140,6 +142,17 @@ def main() -> None:
             libri_scorer.eval()
             for parameter in libri_scorer.parameters():
                 parameter.requires_grad_(False)
+        palette_task_root = components / "spoken_palette_av"
+        palette_runtime = None
+        palette_task_manifest = palette_task_root / "task-manifest.json"
+        if palette_task_manifest.is_file() and args.device == "cpu":
+            palette_runtime = SpokenPaletteRuntime(
+                palette_task_root,
+                shared_audio_encoder=audio.audio_encoder,
+                shared_audio_model_id=AUDIO_MODEL_ID,
+                shared_audio_model_revision=AUDIO_MODEL_REVISION,
+                shared_audio_weights_sha256=AUDIO_WEIGHTS_SHA256,
+            )
     startup_peak_allocated = (
         torch.cuda.max_memory_allocated() if args.device == "cuda" else None
     )
@@ -167,6 +180,11 @@ def main() -> None:
             text.scorer,
             video.scorer,
             *([libri_scorer] if libri_scorer is not None else []),
+            *(
+                [palette_runtime.visual_encoder, palette_runtime.scorer]
+                if palette_runtime is not None
+                else []
+            ),
         ]
     )
     ready = {
@@ -186,6 +204,10 @@ def main() -> None:
         "audio_readout_sha256": AUDIO_READOUT_SHA256,
         "librispeech_readout_sha256": libri_readout_sha256,
         "librispeech_readout_loaded": libri_scorer is not None,
+        "spoken_palette_av_loaded": palette_runtime is not None,
+        "spoken_palette_shares_audio_encoder": (
+            palette_runtime is not None and palette_runtime.audio_encoder is audio.audio_encoder
+        ),
         "text_encoder_revision": TEXT_MODEL_REVISION,
         "text_encoder_weights_sha256": TEXT_WEIGHTS_SHA256,
         "text_probe_model_revision": TEXT_PROBE_MODEL_REVISION,
@@ -266,6 +288,19 @@ def main() -> None:
                         "encoder_metrics": dict(audio.audio_cache_metrics),
                         "readout_sha256": libri_readout_sha256,
                     }
+                elif task == "spoken_palette_av":
+                    if palette_runtime is None:
+                        raise ValueError(
+                            "spoken_palette_av requires its task bundle and the CPU worker"
+                        )
+                    result = json.loads(
+                        palette_runtime.decide(
+                            Path(payload["audio_path"]),
+                            Path(payload["image_path"]),
+                            request_id=str(request.get("request_id", "")),
+                            options=payload["options"],
+                        )
+                    )
                 elif task == "video_score":
                     feature = torch.tensor(payload["video_feature"], dtype=torch.float32)
                     decision = video.decide(

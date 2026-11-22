@@ -1,3 +1,15 @@
+**2026-11-22 R7 Path A shared audio–image runtime integration:** Added the
+spoken-color/generated-screen task to a new four-route assembly. Exact Whisper
+encoder tensors match the resident Path A checkpoint (67/67); the R7-specific
+feature-extractor settings remain task-local because its mel-filter metadata
+differs from the Speech Commands path. One TRAIN-only raw-input replay matched
+the standalone output within `6.14e-12`; existing Video/Image/Text parity
+passed, while Audio retains its known `6.18e-4` CPU/CUDA precision delta.
+The package is 192,654,853 logical pre-quantization parameters and 712,388,264
+bytes, so the provisional 200 MB package target is still unmet. No labels,
+sealed audit, training or GPU were used. This does not establish broad quality
+or natural AV fusion. See [integration measurements and limits](docs/pretrained_reuse/R7_PATH_A_SHARED_AUDIO_IMAGE_INTEGRATION_20261122.md).
+
 **2026-11-22 R7 spoken-palette JSON runtime smoke:** A pinned CPU bundle now
 loads raw mono 16 kHz audio and a screen image and returns typed JSON option
 probabilities. The 57.97 MB model/config payload contains 30.36M logical

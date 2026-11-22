@@ -18,6 +18,7 @@ import numpy as np
 import torch
 from PIL import Image
 from safetensors.torch import load_file
+from torch import nn
 from transformers import AutoConfig, AutoModel, WhisperConfig, WhisperFeatureExtractor
 from transformers.models.whisper.modeling_whisper import WhisperEncoder
 
@@ -95,10 +96,43 @@ def _checked_bundle_file(root: Path, relative: str, expected_hash: str) -> Path:
     return path
 
 
+def _resolve_shared_audio_encoder(
+    metadata: dict[str, Any],
+    encoder: nn.Module | None,
+    *,
+    model_id: str | None,
+    revision: str | None,
+    weights_sha256: str | None,
+) -> nn.Module | None:
+    shared = metadata.get("shared_audio_encoder")
+    if shared is None:
+        if any(value is not None for value in (encoder, model_id, revision, weights_sha256)):
+            raise ValueError("bundle does not declare a shared audio encoder")
+        return None
+    if not isinstance(shared, dict) or not isinstance(encoder, nn.Module):
+        raise ValueError("bundle requires a declared shared audio encoder module")
+    expected = (shared.get("model_id"), shared.get("revision"), shared.get("weights_sha256"))
+    supplied = (model_id, revision, weights_sha256)
+    if supplied != expected:
+        raise ValueError("shared audio encoder identity differs from the task bundle")
+    if getattr(getattr(encoder, "config", None), "d_model", None) != AUDIO_WIDTH:
+        raise ValueError("shared audio encoder has an unexpected hidden width")
+    return encoder
+
+
 class SpokenPaletteRuntime:
     """Frozen Whisper + dynamic-INT8 DINOv2 + calibrated option scorer."""
 
-    def __init__(self, bundle_root: Path, *, threads: int = 4) -> None:
+    def __init__(
+        self,
+        bundle_root: Path,
+        *,
+        threads: int = 4,
+        shared_audio_encoder: nn.Module | None = None,
+        shared_audio_model_id: str | None = None,
+        shared_audio_model_revision: str | None = None,
+        shared_audio_weights_sha256: str | None = None,
+    ) -> None:
         self.bundle_root = bundle_root.resolve(strict=True)
         self.metadata = json.loads(
             (self.bundle_root / "runtime-bundle.json").read_text(encoding="utf-8")
@@ -112,17 +146,28 @@ class SpokenPaletteRuntime:
         files = self.metadata.get("files")
         if not isinstance(files, dict):
             raise ValueError("bundle file hash table is missing")
+        shared_audio_encoder = _resolve_shared_audio_encoder(
+            self.metadata,
+            shared_audio_encoder,
+            model_id=shared_audio_model_id,
+            revision=shared_audio_model_revision,
+            weights_sha256=shared_audio_weights_sha256,
+        )
+
         paths = {
             name: _checked_bundle_file(self.bundle_root, entry["path"], entry["sha256"])
             for name, entry in files.items()
         }
         whisper_root = self.bundle_root / "whisper"
-        whisper_config = WhisperConfig.from_pretrained(whisper_root, local_files_only=True)
-        whisper_config._attn_implementation = "eager"
-        self.audio_encoder = WhisperEncoder(whisper_config).eval().requires_grad_(False)
-        self.audio_encoder.load_state_dict(
-            load_file(paths["whisper_encoder"], device="cpu"), strict=True
-        )
+        if shared_audio_encoder is None:
+            whisper_config = WhisperConfig.from_pretrained(whisper_root, local_files_only=True)
+            whisper_config._attn_implementation = "eager"
+            self.audio_encoder = WhisperEncoder(whisper_config).eval().requires_grad_(False)
+            self.audio_encoder.load_state_dict(
+                load_file(paths["whisper_encoder"], device="cpu"), strict=True
+            )
+        else:
+            self.audio_encoder = shared_audio_encoder.eval().requires_grad_(False)
         self.audio_processor = WhisperFeatureExtractor.from_pretrained(
             whisper_root, local_files_only=True
         )
