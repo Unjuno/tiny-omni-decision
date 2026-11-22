@@ -4799,3 +4799,15 @@ per-image rights and a speaker/asset-disjoint split were not established. No
 payload was fetched. Keep the candidate `REVIEW_NOT_ADMITTED`; do not infer
 image rights from the annotation license. See [source screen](docs/pretrained_reuse/R2_SPOKENCOCO_AUDIO_IMAGE_SOURCE_SCREEN_20261122.md)
 and [receipt](manifests/pretrained_reuse/spokencoco-audio-image-source-screen-20261122.json).
+
+**2026-11-23 R2 Japanese BERT-family size comparison:** A single frozen
+Ruri-v3-70m readout on the same fixed JCommonsenseQA development split scored
+50.70% Accuracy / 1.2193 NLL / 0.6129 Brier / 0.0292 ECE, versus Ruri-v3-30m
+at 47.65% / 1.2904 / 0.6474 / 0.0389. The paired question-group bootstrap
+favored the 70m point estimates, but both checkpoints were selected on this
+same exposed validation; no blind test exists in the pinned release. The
+70,199,681-parameter candidate is a better narrow Japanese text probe, still
+far below the 95% aspiration and not multimodal evidence. Stop tuning this
+split; require an independent, rights-cleared Japanese Decision task for the
+next BERT-family comparison. See [report](docs/pretrained_reuse/R2_JCOMMONSENSEQA_RURI70M_READOUT_20261123.md)
+and the updated [machine manifest](manifests/pretrained_reuse/jcommonsenseqa-ruri-readout-20261122.json).

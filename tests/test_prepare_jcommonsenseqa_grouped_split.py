@@ -7,6 +7,22 @@ from scripts.prepare_jcommonsenseqa_grouped_split import (
     build_grouped_split,
     target_text_is_ambiguous,
 )
+from scripts.train_jcommonsenseqa_ruri_readout import MODEL_PINS
+
+
+def test_ruri_readout_accepts_only_fixed_verified_model_revisions() -> None:
+    assert MODEL_PINS == {
+        "cl-nagoya/ruri-v3-30m": {
+            "revision": "24899e5de370b56d179604a007c0d727bf144504",
+            "license": "Apache-2.0",
+            "weights_sha256": "e94155e342cbfc33280c345c6e2912905fb5de6e1a3adeb938f395aafd2f8832",
+        },
+        "cl-nagoya/ruri-v3-70m": {
+            "revision": "07a8b0aba47d29d2ca21f89b915c1efe2c23d1cc",
+            "license": "Apache-2.0",
+            "weights_sha256": "c959b76a535eee838b1f1e6b8999ba513ef8d87a6f8c3534c50dcda1eb5f6a62",
+        },
+    }
 
 
 def row(q_id: int, question: str, label: int = 0) -> dict[str, object]:

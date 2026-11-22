@@ -14,12 +14,26 @@ from typing import Any
 
 import torch
 import torch.nn.functional as F
-from prepare_jcommonsenseqa_grouped_split import sha256_file, target_text_is_ambiguous
 from torch import Tensor, nn
 from transformers import AutoModel, AutoTokenizer
 
-MODEL_REVISION = "24899e5de370b56d179604a007c0d727bf144504"
-MODEL_SHA256 = "e94155e342cbfc33280c345c6e2912905fb5de6e1a3adeb938f395aafd2f8832"
+if __package__:
+    from scripts.prepare_jcommonsenseqa_grouped_split import sha256_file, target_text_is_ambiguous
+else:
+    from prepare_jcommonsenseqa_grouped_split import sha256_file, target_text_is_ambiguous
+
+MODEL_PINS = {
+    "cl-nagoya/ruri-v3-30m": {
+        "revision": "24899e5de370b56d179604a007c0d727bf144504",
+        "license": "Apache-2.0",
+        "weights_sha256": "e94155e342cbfc33280c345c6e2912905fb5de6e1a3adeb938f395aafd2f8832",
+    },
+    "cl-nagoya/ruri-v3-70m": {
+        "revision": "07a8b0aba47d29d2ca21f89b915c1efe2c23d1cc",
+        "license": "Apache-2.0",
+        "weights_sha256": "c959b76a535eee838b1f1e6b8999ba513ef8d87a6f8c3534c50dcda1eb5f6a62",
+    },
+}
 
 
 class FrozenFeatureCandidateScorer(nn.Module):
@@ -79,6 +93,7 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--validation", type=Path, required=True)
     parser.add_argument("--split-manifest", type=Path, required=True)
     parser.add_argument("--model", type=Path, required=True)
+    parser.add_argument("--model-id", choices=tuple(MODEL_PINS), default="cl-nagoya/ruri-v3-30m")
     parser.add_argument("--revision", required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--seed", type=int, default=17)
@@ -148,15 +163,17 @@ def _ambiguous(rows: list[dict[str, Any]]) -> list[int]:
 
 def main() -> None:
     args = _args()
-    if args.revision != MODEL_REVISION:
-        raise ValueError("unexpected Ruri model revision")
+    model_pin = MODEL_PINS[args.model_id]
+    if args.revision != model_pin["revision"]:
+        raise ValueError(f"unexpected revision for {args.model_id}")
     output = args.output_dir.resolve()
     if output.exists():
         raise FileExistsError(f"refusing to overwrite output directory: {output}")
     if args.model.resolve().is_symlink():
         raise ValueError("model path must be a concrete local directory")
-    if sha256_file(args.model / "model.safetensors") != MODEL_SHA256:
-        raise ValueError("local Ruri weights do not match the pinned SHA-256")
+    weights_sha256 = sha256_file(args.model / "model.safetensors")
+    if weights_sha256 != model_pin["weights_sha256"]:
+        raise ValueError(f"local {args.model_id} weights do not match the pinned SHA-256")
     split_receipt = json.loads(args.split_manifest.read_text(encoding="utf-8"))
     if split_receipt["official_test_downloaded_or_opened"]:
         raise ValueError("official test access is prohibited")
@@ -293,10 +310,20 @@ def main() -> None:
         "validation_rows": len(validation),
         "validation_question_groups": len(validation_groups),
         "group_overlap": 0,
+        "model_id": args.model_id,
         "model_revision": args.revision,
-        "model_weights_sha256": MODEL_SHA256,
+        "model_license_declared": model_pin["license"],
+        "model_weights_sha256": weights_sha256,
+        "model_weights_bytes": (args.model / "model.safetensors").stat().st_size,
+        "model_config_sha256": sha256_file(args.model / "config.json"),
+        "encoder_class": type(encoder).__name__,
+        "encoder_hidden_size": int(encoder.config.hidden_size),
+        "encoder_layers": int(encoder.config.num_hidden_layers),
         "encoder_parameters_frozen": sum(parameter.numel() for parameter in encoder.parameters()),
         "trainable_readout_parameters": trainable_parameters,
+        "total_prequantization_parameters": (
+            sum(parameter.numel() for parameter in encoder.parameters()) + trainable_parameters
+        ),
         "readout": "shared 1024->128 GELU->1 option scorer over [q,c,abs(q-c),q*c]",
         "optimizer": "AdamW(lr=1e-3, weight_decay=1e-4)",
         "epochs": args.epochs,

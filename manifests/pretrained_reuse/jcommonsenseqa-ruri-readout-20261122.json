@@ -139,5 +139,124 @@
       "paired_bootstrap": "83b2a1130a035dcc1b953d7d2f04fa3f1a3c952602f45c62cc0c77f51759f022"
     }
   },
-  "caveat": "Checkpoint selection and comparison used the same grouped development validation. No claim of blind test or general/multimodal quality."
+  "caveat": "Checkpoint selection and comparison used the same grouped development validation. No claim of blind test or general/multimodal quality.",
+  "ruri_v3_70m_readout_followup": {
+    "status": "development_validation_only",
+    "model": {
+      "id": "cl-nagoya/ruri-v3-70m",
+      "revision": "07a8b0aba47d29d2ca21f89b915c1efe2c23d1cc",
+      "declared_license": "Apache-2.0",
+      "frozen_parameters": 70002816,
+      "weight_sha256": "c959b76a535eee838b1f1e6b8999ba513ef8d87a6f8c3534c50dcda1eb5f6a62",
+      "weight_bytes": 280019040,
+      "config_sha256": "f03b934538e46fc12a36067c17cb9e214c8ef0d89375293aa68c81bdc1f937ae",
+      "local_model_files": {
+        "README.md": {
+          "bytes": 7935,
+          "sha256": "3ba99cadeda898ac568621b16f3c0a0a9164145704c09dafd5c5cd9158d0fd4a"
+        },
+        "config.json": {
+          "bytes": 1323,
+          "sha256": "f03b934538e46fc12a36067c17cb9e214c8ef0d89375293aa68c81bdc1f937ae"
+        },
+        "model.safetensors": {
+          "bytes": 280019040,
+          "sha256": "c959b76a535eee838b1f1e6b8999ba513ef8d87a6f8c3534c50dcda1eb5f6a62"
+        },
+        "modules.json": {
+          "bytes": 229,
+          "sha256": "8f4b264b80206c830bebbdcae377e137925650a433b689343a63bdc9b3145460"
+        },
+        "sentence_bert_config.json": {
+          "bytes": 54,
+          "sha256": "eb9b44b13c0f52a3b3685c3b1cbdea1ba8b04bea123b98f61610048940776eb1"
+        },
+        "tokenizer.json": {
+          "bytes": 6724873,
+          "sha256": "0a94ac9a0a02c067bdef25b72ae9f4ee33f48f552e55988d444f6d25eeb1d062"
+        },
+        "tokenizer.model": {
+          "bytes": 1831879,
+          "sha256": "008293028e1a9d9a1038d9b63d989a2319797dfeaa03f171093a57b33a3a8277"
+        },
+        "tokenizer_config.json": {
+          "bytes": 3779,
+          "sha256": "34004511993472f15c7202074284c57788c161fb6567de164b8e0c0266f155e4"
+        },
+        "special_tokens_map.json": {
+          "bytes": 968,
+          "sha256": "30bf8256f9a1eb3287af2a9b7940465e29a38aad4a459a3e773bb3a14bd34c0f"
+        }
+      }
+    },
+    "run_directory": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\jcommonsenseqa-ruri70m-readout-v1-attempt-01",
+    "source_commit_before_probe": "41c90829f97b095dcaa4a9267a8d0bd36b6d4eff",
+    "executed_training_script_sha256": "566367e4ac23c7280dbf77fe51ff503a91bd388b04eed8346d6e51aab9970d34",
+    "run_report_sha256": "0866a25ad93eb3e4e1313e79bd717edf87b055dd76f831a37527b187ffd8f8ad",
+    "readout_parameters": 196865,
+    "total_prequantization_parameters": 70199681,
+    "selected_epoch": 7,
+    "validation_metrics": {
+      "count": 2004,
+      "accuracy": 0.5069860219955444,
+      "nll": 1.2192519903182983,
+      "brier": 0.6129146814346313,
+      "ece_15_bins": 0.02916542897948962
+    },
+    "training_metrics_at_selected_epoch": {
+      "count": 8054,
+      "accuracy": 0.5248323678970337,
+      "nll": 1.183502197265625,
+      "brier": 0.5975387096405029,
+      "ece_15_bins": 0.023367111236486066
+    },
+    "paired_comparison_to_ruri_v3_30m": {
+      "group_count": 1984,
+      "iterations": 10000,
+      "seed": 17,
+      "resampling_unit": "normalized exact-question content_group_id; all rows in each group travel together",
+      "candidate_minus_baseline": {
+        "accuracy": {
+          "point_difference": 0.030439121756487025,
+          "bootstrap_95_percentile_interval": [
+            0.007987918322117623,
+            0.052552552552552555
+          ]
+        },
+        "nll": {
+          "point_difference": -0.07117843608539191,
+          "bootstrap_95_percentile_interval": [
+            -0.09829418701365773,
+            -0.04343242680947468
+          ]
+        },
+        "brier": {
+          "point_difference": -0.03446076989057337,
+          "bootstrap_95_percentile_interval": [
+            -0.04744324052203958,
+            -0.02131447636855457
+          ]
+        }
+      },
+      "note": "Descriptive only: this validation was used for checkpoint selection and candidate comparison.",
+      "baseline_rows": 2004,
+      "candidate_rows": 2004
+    },
+    "reload_verification": {
+      "matching_argmax_rows": 2004,
+      "total_rows": 2004,
+      "maximum_probability_absolute_delta": 0.0
+    },
+    "artifact_hashes": {
+      "best-readout.pt": "0f00851f2f6268b2e1c9373c16a0fbde5431ce7a6429af3f0ef0d39538784aad",
+      "frozen-features.pt": "e6e28ac561713444ea4c264a3d2f3bbde0f15a19e5b1deb22b32080c7fc8d707",
+      "paired-30m-comparison.json": "c9de15f6e2e04cb6d217c8a4e569ca26d43969f9343b8a4fbb68259ef14ea7f4",
+      "reload-verification.json": "20fa69a2cdc689ad08489f3785ca9259f7815a4d5fdd44f3bf0db2aa5b3fe6ac",
+      "run-report.json": "0866a25ad93eb3e4e1313e79bd717edf87b055dd76f831a37527b187ffd8f8ad",
+      "training-script-executed.py": "566367e4ac23c7280dbf77fe51ff503a91bd388b04eed8346d6e51aab9970d34",
+      "validation-predictions.jsonl": "2044d741c9d165728d502f73f0c6fe1675b51496c0a505ed3dae7875f21fb5f2"
+    },
+    "official_test_downloaded_or_opened": false,
+    "caveat": "Checkpoint selection and comparison use the same grouped development validation; these results do not establish independent Japanese or general/multimodal quality."
+  }
 }
