@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "status": "development_validation_only",
+  "task": "Japanese five-choice commonsense QA",
+  "official_test_downloaded_or_opened": false,
+  "source": {
+    "repository": "https://github.com/yahoojapan/JGLUE",
+    "tag": "v1.1.0",
+    "tag_object": "6dbf79c766d3e64a1a575ef474cb654b6c9385d4",
+    "commit": "6791a5003e6deaa6fb2458bcb3aa1f58dc52ef33",
+    "license": "CC-BY-SA-4.0",
+    "train_rows": 8939,
+    "publisher_validation_rows": 1119,
+    "test_payload_present": false,
+    "source_file_sha256": {
+      "train": "641c254ba52924fe20837d5694a50d35da2312b3dcf4983d2b00736976cbe6c7",
+      "validation": "01c73e37420368da82729ee82cc6279f5d9b6a22b2e2fb8dae814261fae13bea",
+      "README.md": "a92dca61bb91c38eed4ec49b091e258a4e5f28c225d18741dedcc27e2e87d2eb",
+      "LICENSE": "b41b90bc49eef8ca3387304e839ae8059b917e80346028493bccc0597a47fbbd"
+    }
+  },
+  "split": {
+    "protocol": "jcommonsenseqa-question-grouped-development-v1",
+    "seed": 17,
+    "normalization": "NFKC + casefold + collapsed whitespace",
+    "train_rows": 8054,
+    "train_groups": 7938,
+    "validation_rows": 2004,
+    "validation_groups": 1984,
+    "cross_split_question_overlap": 0,
+    "repeated_question_groups": 102,
+    "repeated_groups_with_conflicting_correct_answer": 69,
+    "rows_with_duplicate_choice_text": 1,
+    "rows_with_ambiguous_target_text": 0,
+    "train_jsonl_sha256": "358dde70ee3b2e80fc70e1a09c4dc69d5e956079bc2444e4189adb79fba92de6",
+    "validation_jsonl_sha256": "3e2a71524e0aeb789141f0591df361ee4a5edf889a469bbe595a0483437a9f61",
+    "split_manifest_sha256": "af9b142c96b3aa9e62fb4eedd426e145ccfc069d282f29f5abad34a864d4beea"
+  },
+  "model": {
+    "id": "cl-nagoya/ruri-v3-30m",
+    "revision": "24899e5de370b56d179604a007c0d727bf144504",
+    "license": "Apache-2.0",
+    "frozen_parameters": 36705536,
+    "weight_sha256": "e94155e342cbfc33280c345c6e2912905fb5de6e1a3adeb938f395aafd2f8832"
+  },
+  "readout": {
+    "architecture": "shared MLP over [q,c,abs(q-c),q*c], 1024->128 GELU->1",
+    "trainable_parameters": 131329,
+    "total_prequantization_parameters": 36836865,
+    "seed": 17,
+    "epochs": 8,
+    "selected_epoch": 8,
+    "optimizer": "AdamW(lr=0.001, weight_decay=0.0001)",
+    "batch_questions": 64,
+    "device": "cpu"
+  },
+  "validation_metrics": {
+    "accuracy": 0.47654691338539124,
+    "nll": 1.2904305458068848,
+    "brier": 0.6473754048347473,
+    "ece_15_bins": 0.03889487139479129
+  },
+  "comparison": {
+    "frozen_ruri_cosine": {
+      "accuracy": 0.455089807510376,
+      "nll": 1.5894482135772705,
+      "brier": 0.7918817400932312,
+      "ece_15_bins": 0.24701915681362152
+    },
+    "uniform_random_expected_accuracy": 0.2,
+    "train_majority_choice_position": 1,
+    "majority_position_accuracy": 0.20409181714057922
+  },
+  "training_metrics": {
+    "accuracy": 0.48485225439071655,
+    "nll": 1.268557071685791,
+    "brier": 0.6380382180213928,
+    "ece_15_bins": 0.026339188440135556
+  },
+  "artifacts_outside_git": {
+    "root": "C:\\CodexArtifacts\\pretrained-reuse-r2-local",
+    "run_report_sha256": "808f102cc1cf015518153cc6812d3d875f3e8e08cede8ef2302edfe7842414d7",
+    "checkpoint_sha256": "5a5f22bc24404052b9c2492162f9c01fe78068ee9cf21b069e7f785af376f8e0",
+    "frozen_features_sha256": "6249d665e048733f0e38ecf02fdbe84a0d9ee52d013ef2572dae4de130b45a38",
+    "validation_predictions_sha256": "ea26a4f60619bddff6d1789a5b1e98f0129c493ae3206c51f87bbdacd3e552d7",
+    "comparison_sha256": "13a33f1ef846ea9c769fadb137840f8dbbf7bd5644e3f67120e094e3c35d85da"
+  },
+  "reload_verification": {
+    "matching_argmax_rows": 2004,
+    "total_rows": 2004,
+    "maximum_probability_absolute_delta": 0.0
+  },
+  "caveat": "Checkpoint selection and comparison used the same grouped development validation. No claim of blind test or general/multimodal quality."
+}

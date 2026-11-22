@@ -57,6 +57,17 @@ keeping them separate from the multimodal product claim. See the
 [CLINC150 comparison](docs/pretrained_reuse/R2_CLINC150_MINILM_READOUT_20261122.md)
 and [manifest](manifests/pretrained_reuse/clinc150-minilm-readout-20261122.json).
 
+**2026-11-22 R2 Japanese BERT-family five-choice probe:** Frozen Ruri-v3-30m
+with a 131,329-parameter shared option scorer reached 47.65% Accuracy / 1.2904
+NLL / 0.6474 Brier / 0.0389 ECE on a seed-17, exact-question-grouped 2,004-row
+development validation. Raw frozen-Ruri cosine scored 45.51%; uniform expected
+accuracy is 20%. Train/validation Accuracy differed by 0.83 points, and
+validation NLL still improved at the 8-epoch cap. This is a weak, narrow
+Japanese commonsense-QA result, far below the 95% target; the official test is
+absent from the pinned JGLUE release. It supports further BERT-family probes,
+not a general or multimodal claim. See [report](docs/pretrained_reuse/R2_JCOMMONSENSEQA_RURI_READOUT_20261122.md)
+and [manifest](manifests/pretrained_reuse/jcommonsenseqa-ruri-readout-20261122.json).
+
 **2026-11-22 R2 spoken-palette TRAIN-only modality interventions:** On 96
 fixed training screens from 24 speaker groups, a same-speaker audio-color swap
 changed the prediction in 96/96 cases and selected the color's position in
