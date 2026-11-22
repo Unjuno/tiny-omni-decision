@@ -1,3 +1,15 @@
+**2026-11-23 R2 Japanese BERT-family independent-source follow-up:** A frozen
+Japanese BERT-base encoder and 106,172-parameter 60-intent readout were trained
+on MASSIVE Japanese train data with exact normalized utterance duplicates
+removed against publisher validation (286 rows removed). On the 2,033-row
+validation set, the epoch-8 NLL-selected candidate reached 81.65% accuracy,
+75.24% macro accuracy across 59 represented intents, 0.6872 NLL, 0.2730 Brier,
+and 0.0360 ECE. Publisher test and project sealed audit remain unopened. This
+is useful independent-source Japanese text-path evidence, but is selection-
+affected, has low-support labels, remains below 95–98%, and says nothing about
+multimodal quality. No quantization or promotion. See the [report](docs/pretrained_reuse/R2_MASSIVE_JA_BERT_READOUT_20261123.md)
+and [machine manifest](manifests/pretrained_reuse/massive-ja-bert-readout-20261123.json).
+
 **2026-11-22 R0 live refresh (22:27 JST):** Public PR state, branch heads,
 181 registered worktrees, 217 remote branch refs, C: free space and GPU/process
 state were rechecked read-only. PR #15 remains Draft/Open; PR #111 is Draft/Open

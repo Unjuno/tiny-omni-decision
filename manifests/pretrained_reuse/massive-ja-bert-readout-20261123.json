@@ -1,0 +1,167 @@
+{
+  "schema_version": 1,
+  "status": "completed_development_validation_only",
+  "source_commit_before_experiment": "d42653ceb21acbc96171608145664eef80e767a8",
+  "source": {
+    "repository": "https://huggingface.co/datasets/AmazonScience/massive",
+    "revision": "5092332a2835c4d29c617ef6d118123a1abecd19",
+    "license": "CC-BY-4.0",
+    "locale": "ja-JP",
+    "publisher_test_downloaded_or_opened": false,
+    "train_parquet_sha256": "f1404ede08f40ffe4fd64f72adb312304ab7cb5afa1d0bdf4fc61e518bc49de8",
+    "validation_parquet_sha256": "36283fc28102e6c232ce6928917fa31b898c5d678f18f90f411a086c008c1cc9"
+  },
+  "split": {
+    "protocol": "massive-ja-jp-publisher-train-dev-slurp-id-and-text-disjoint-v1",
+    "publisher_train_rows": 11514,
+    "publisher_validation_rows": 2033,
+    "train_rows_after_overlap_removal": 11228,
+    "train_rows_removed_for_normalized_text_overlap": 286,
+    "train_intent_coverage": 60,
+    "validation_intent_coverage": 59,
+    "train_unique_normalized_utterances": 10891,
+    "train_repeated_rows_after_first": 337,
+    "train_conflicting_label_utterance_groups": 14,
+    "train_rows_in_conflicting_label_groups": 34,
+    "validation_unique_normalized_utterances": 2015,
+    "validation_repeated_rows_after_first": 18,
+    "validation_conflicting_label_utterance_groups": 0,
+    "cross_split_source_id_overlap": 0,
+    "cross_split_normalized_utterance_overlap": 0,
+    "train_jsonl_sha256": "ab55ddd41e4cf0f07f65bddc84432bea40ceb36caaa94c6edf15499ddf6a1270",
+    "validation_jsonl_sha256": "aa42d55cb8afcf7170483322e6a129acd4657a9acf3ea3530fea265a36679707",
+    "split_manifest_sha256": "d9fdcc0235b3caecac462574e6111a6c1bf59102eab3ce39361c7fb42af9ed1d",
+    "annotated_utterance_or_worker_metadata_used": false,
+    "project_sealed_audit_opened": false
+  },
+  "model": {
+    "id": "tohoku-nlp/bert-base-japanese-v3",
+    "revision": "65243d6e5629b969c77309f217bd7b1a79d43c7e",
+    "license": "Apache-2.0",
+    "weights_bytes": 447406217,
+    "weights_sha256": "e172862e0674054d65e0ba40d67df2a4687982f589db44aa27091c386e5450a4",
+    "frozen_parameters": 111207168,
+    "readout_parameters": 106172,
+    "total_prequantization_parameters": 111313340,
+    "readout": "768 -> 128 tanh -> dropout 0.1 -> 60 logits"
+  },
+  "training": {
+    "seed": 17,
+    "epochs": 8,
+    "selected_epoch_by_validation_nll": 8,
+    "batch_size": 64,
+    "encode_batch_size": 64,
+    "max_length": 128,
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001,
+    "device": "cpu",
+    "feature_extraction_seconds": 200.33092909993138,
+    "readout_fit_seconds": 3.323980599991046,
+    "checkpoint_reload_verified": true,
+    "environment": {
+      "python": "3.11.9",
+      "torch": "2.6.0+cu124",
+      "transformers": "5.6.2",
+      "fugashi": "1.5.2",
+      "unidic-lite": "1.0.8"
+    }
+  },
+  "validation": {
+    "count": 2033,
+    "accuracy": 0.8165273070335388,
+    "macro_accuracy_present_intents": 0.7523550219455007,
+    "intents_present": 59,
+    "nll": 0.6872186660766602,
+    "brier": 0.2730323076248169,
+    "ece_15_bins": 0.035991229116916656,
+    "mean_confidence": 0.8385421633720398,
+    "selection_affected": true
+  },
+  "artifacts_external_to_git": {
+    "root": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\massive-ja-jp-bert-readout-20261123-attempt-01",
+    "frozen_features_sha256": "3177c8d3c29aa2b2519334de53045eb9ba049fc696db01b290f95a21a811f0fc",
+    "best_readout_sha256": "49d22f13ac6a4b4f3f31798d70d986d815950eb4e4460cb30cc34ab7e012254b",
+    "validation_predictions_sha256": "8c675c3afe1893bec47b53214678935964d4e06931e4a3698a3abc2772319040",
+    "run_report_sha256": "6f5842e2d12b87585dc937305a55824191ec90fbf29041a8eb85a42c690b0312"
+  },
+  "scripts": {
+    "prepare_sha256": "7bd90dcf84fcc3a50e9a8cd95feee60968a7bb61c74cfbe1ce4c123c7cf1f9f0",
+    "train_sha256": "e2e7a51d90c2f308528b23c3ccf6c10bcc1c809118b0a773e330701d9441131e"
+  },
+  "epoch_curve": [
+    {
+      "epoch": 1,
+      "train_ce": 1.8111846768720583,
+      "accuracy": 0.7560255527496338,
+      "macro_accuracy_present_intents": 0.6362404210840241,
+      "nll": 0.9909675717353821,
+      "brier": 0.3854587972164154,
+      "ece_15_bins": 0.15044891834259033
+    },
+    {
+      "epoch": 2,
+      "train_ce": 0.8045816021886739,
+      "accuracy": 0.8007870316505432,
+      "macro_accuracy_present_intents": 0.7109530436790595,
+      "nll": 0.7677674889564514,
+      "brier": 0.30207934975624084,
+      "ece_15_bins": 0.05746113881468773
+    },
+    {
+      "epoch": 3,
+      "train_ce": 0.6457013216885653,
+      "accuracy": 0.7968519330024719,
+      "macro_accuracy_present_intents": 0.7097795605659485,
+      "nll": 0.7301479578018188,
+      "brier": 0.2913997769355774,
+      "ece_15_bins": 0.025857074186205864
+    },
+    {
+      "epoch": 4,
+      "train_ce": 0.5339949381622401,
+      "accuracy": 0.808657169342041,
+      "macro_accuracy_present_intents": 0.7276472174010035,
+      "nll": 0.7038983702659607,
+      "brier": 0.2806015908718109,
+      "ece_15_bins": 0.027262721210718155
+    },
+    {
+      "epoch": 5,
+      "train_ce": 0.46743382733653893,
+      "accuracy": 0.808657169342041,
+      "macro_accuracy_present_intents": 0.7068084604659323,
+      "nll": 0.7156949639320374,
+      "brier": 0.28197595477104187,
+      "ece_15_bins": 0.024904722347855568
+    },
+    {
+      "epoch": 6,
+      "train_ce": 0.4107898253608834,
+      "accuracy": 0.8145597577095032,
+      "macro_accuracy_present_intents": 0.7536872691017086,
+      "nll": 0.7017770409584045,
+      "brier": 0.27559199929237366,
+      "ece_15_bins": 0.018071619793772697
+    },
+    {
+      "epoch": 7,
+      "train_ce": 0.36611821536313405,
+      "accuracy": 0.815543532371521,
+      "macro_accuracy_present_intents": 0.765911331116143,
+      "nll": 0.689596951007843,
+      "brier": 0.274898886680603,
+      "ece_15_bins": 0.03486483171582222
+    },
+    {
+      "epoch": 8,
+      "train_ce": 0.3245637775398791,
+      "accuracy": 0.8165273070335388,
+      "macro_accuracy_present_intents": 0.7523550219455007,
+      "nll": 0.6872186660766602,
+      "brier": 0.2730323076248169,
+      "ece_15_bins": 0.035991229116916656
+    }
+  ],
+  "interpretation": "Text-path candidate only; below the 95-98% aspiration; no multimodal evidence or quantization."
+}
