@@ -300,7 +300,7 @@ def _load_split(split: str, root: Path) -> tuple[dict[str, np.ndarray], dict[str
         action_path = root / f"{split}-action-preflight-v1.json"
         state_dir = root / f"{split}-state-text-v2"
         video_dir = root / (
-            "calibration-video-features-v2"
+            "calibration-video-features-v3"
             if split == "calibration" else "validation-video-features-v1"
         )
     state_result = json.loads((state_dir / "result.json").read_text(encoding="utf-8"))

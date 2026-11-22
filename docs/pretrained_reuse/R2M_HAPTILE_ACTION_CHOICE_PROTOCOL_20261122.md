@@ -246,3 +246,19 @@ no task-quality evidence. Targeted tests for the new controls passed. The
 train VideoPrism process continued on CPU and had reached 500/1,112 examples;
 the full train features, calibration video features, and real-data fit remain
 unfinished.
+
+Calibration video extraction subsequently completed on CPU in 1,528.7 seconds:
+169/169 examples, 676 clips, 128.3 seconds decoding and 1,394.6 seconds waiting
+for the pinned VideoPrism worker. The external result records feature SHA-256
+`9591708ea8635f4adfec682d513b2e9436646822e8b812f504b90e17a5bcb669`, pinned
+checkpoint SHA-256 `61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29`,
+eligibility SHA-256 `4b4ca1708b3c644159386d8eec6d5122288e53027663d77f736676a42148151b`,
+and `sealed_audit_opened: false`. The 169-row calibration join passed ID,
+target, media-hash, and causal timestamp checks; its combined feature SHA-256 is
+`a6659c6e43d7c2d09242b493cb7eede7977d09703b776719e37c58a7078b8acb`. A
+separate trainer loader verification confirmed its 4 task groups and typed
+feature shapes. The first calibration attempt used the wrong Python import
+path for MCAP and is retained as a failed attempt; the successful v3 output
+uses the pinned local dependency directory. At this update, train video
+extraction remained active at 760/1,112, and no real-data model fitting had
+started.

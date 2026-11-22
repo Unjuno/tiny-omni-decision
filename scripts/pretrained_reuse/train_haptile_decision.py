@@ -114,7 +114,7 @@ def _load_split(
         expected_receipt = config["data"][f"{split}_receipt_sha256"]
         expected_action = config["data"][f"{split}_action_preflight_sha256"]
         video_directory = artifact_root / (
-            "calibration-video-features-v2"
+            "calibration-video-features-v3"
             if split == "calibration" else "validation-video-features-v1"
         )
     eligibility_path = artifact_root / f"{split}-video-window-eligibility-v2.json"
