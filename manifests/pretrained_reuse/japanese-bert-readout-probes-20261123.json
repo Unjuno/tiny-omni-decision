@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "status": "completed_development_probes",
+  "official_test_or_sealed_audit_opened": false,
+  "source_commit_before_experiment": "4476fe1abceaa993c82200301fd2658393db728e",
+  "model": {
+    "id": "tohoku-nlp/bert-base-japanese-v3",
+    "revision": "65243d6e5629b969c77309f217bd7b1a79d43c7e",
+    "declared_license": "Apache-2.0",
+    "architecture": "BERT-base Japanese v3, 12 layers, hidden size 768",
+    "frozen_parameters": 111207168,
+    "weights_bytes": 447406217,
+    "weights_sha256": "e172862e0674054d65e0ba40d67df2a4687982f589db44aa27091c386e5450a4",
+    "files": {
+      "config.json": "2a86800f7f45c980d14cbb0f22a71e4f42642fad8c4b2b658fb98b65dfa9e527",
+      "pytorch_model.bin": "e172862e0674054d65e0ba40d67df2a4687982f589db44aa27091c386e5450a4",
+      "README.md": "8020d22a2a4492ccd0e110b6e42925e1ebe13c441b8efe449be0f813567c3ec2",
+      "tokenizer_config.json": "d40f1e84b9a179a96b5e143ac54151158bb8c703b5134da4ea98a3faf4643ce8",
+      "vocab.txt": "5e9a696b0191b833cfdf8eefada01f41f23ccbd7e7746946864260b1cdd0a784"
+    }
+  },
+  "jnli": {
+    "protocol": "jnli-yjcaptions-image-and-normalized-sentence-grouped-v1",
+    "source_repository": "https://github.com/yahoojapan/JGLUE",
+    "source_revision": "6791a5003e6deaa6fb2458bcb3aa1f58dc52ef33",
+    "source_license": "CC-BY-SA-4.0",
+    "publisher_train_sha256": "4367d2969587047e2de70178a67baab964ac1dcb7e043ca719a9468d2662bafe",
+    "publisher_dev_sha256": "1d00fbfa77abd4ec538e986ab840f99d5d63c79b0f37b4b6a225350750190e80",
+    "train_rows": 18005,
+    "validation_rows": 4502,
+    "train_groups": 6456,
+    "validation_groups": 1641,
+    "cross_split_group_overlap": 0,
+    "cross_split_underlying_image_overlap": 0,
+    "cross_split_normalized_sentence_overlap": 0,
+    "train_jsonl_sha256": "cca3b23dc2c8b4bd2d340d697163ce262d2310bad82ecdb95258c06d7a8d5d6c",
+    "validation_jsonl_sha256": "253cd3234430d4bce79e287a38b317a936534bdd65c89bfbfb1524785b4b7aaa",
+    "split_manifest_sha256": "cbf1e92f74ef042cf019514627ac221af9a7c6a8068c118c4697ccc7b83c8156",
+    "seed": 17,
+    "model_readout": {
+      "readout_parameters": 98819,
+      "total_prequantization_parameters": 111305987,
+      "selected_epoch_by_validation_nll": 6,
+      "epochs": 8,
+      "validation": {
+        "count": 4502,
+        "accuracy": 0.7809862494468689,
+        "nll": 0.559163510799408,
+        "brier": 0.3155892491340637,
+        "ece_15_bins": 0.01992332749068737,
+        "per_class_accuracy": {
+          "entailment": 0.24183006584644318,
+          "contradiction": 0.7843567132949829,
+          "neutral": 0.9099920988082886
+        }
+      },
+      "reload_verification": {
+        "status": "pass",
+        "matching_argmax_rows": 4502,
+        "max_probability_abs_delta": 2.9802322387695312e-8,
+        "tolerance": 1e-7,
+        "checkpoint_sha256": "d59e5cc36795cf9e50bd2b864f3de048c27fa9a6de67cf428c7ef72aea2de91b"
+      },
+      "training_script_sha256": "37827c8567cd47b535b1b7fe96bffe077456f68555595ea52fd9d9cdf30c4833",
+      "run_report_sha256": "e21f98c3f55b028a5eeca2e5176e5830cce598d70d38ec07a77c9564ee6d076b",
+      "predictions_sha256": "8c0d07f74c1ab070ad1b8c969426198e5eeb30c1c91a3c114e19ad750f0fc3b0"
+    }
+  },
+  "jcommonsenseqa": {
+    "protocol": "jcommonsenseqa-question-grouped-development-v1",
+    "source_revision": "6791a5003e6deaa6fb2458bcb3aa1f58dc52ef33",
+    "source_license": "CC-BY-SA-4.0",
+    "train_rows": 8054,
+    "validation_rows": 2004,
+    "train_groups": 7938,
+    "validation_groups": 1984,
+    "cross_split_question_overlap": 0,
+    "train_jsonl_sha256": "358dde70ee3b2e80fc70e1a09c4dc69d5e956079bc2444e4189adb79fba92de6",
+    "validation_jsonl_sha256": "3e2a71524e0aeb789141f0591df361ee4a5edf889a469bbe595a0483437a9f61",
+    "split_manifest_sha256": "af9b142c96b3aa9e62fb4eedd426e145ccfc069d282f29f5abad34a864d4beea",
+    "ruri70m_baseline": {
+      "total_prequantization_parameters": 70199681,
+      "selected_epoch": 7,
+      "accuracy": 0.5069860219955444,
+      "nll": 1.2192519903182983,
+      "brier": 0.6129146814346313,
+      "ece_15_bins": 0.02916542897948962
+    },
+    "bert_readout": {
+      "readout_parameters": 98561,
+      "total_prequantization_parameters": 111305729,
+      "selected_epoch_by_validation_nll": 7,
+      "epochs": 8,
+      "validation": {
+        "count": 2004,
+        "accuracy": 0.7095808383233533,
+        "macro_accuracy_by_target_position": 0.7099650502204895,
+        "nll": 0.7904098638526202,
+        "brier": 0.4047206575447429,
+        "ece_15_bins": 0.03833254625649146,
+        "mean_confidence": 0.6768524050712585
+      },
+      "weights_bytes": 447406217,
+      "checkpoint_sha256": "e5936a7c86c2a78ac49fb0e386cc666ee02417fa5e7af793e4dd38c0c6f80e31",
+      "run_report_sha256": "945d6d1413fcadae3941bb94fb5bce8604d7bb023d5cf9f5d9e481f6da51a140",
+      "predictions_sha256": "ba409e600a190c2e2468a13e5eb546af64b7fee9d3d4a45c8e9ce1be7d5334dc",
+      "training_script_sha256": "f4f0239da44fcfbbc4c9255856825060305e5ed1520ce033752e03a53c3bdae2"
+    },
+    "paired_comparison": {
+      "baseline": "cl-nagoya/ruri-v3-70m",
+      "bootstrap_unit": "normalized exact-question group",
+      "iterations": 10000,
+      "seed": 17,
+      "accuracy_difference": 0.20259481037924154,
+      "accuracy_difference_ci95": [0.1757342030865877, 0.22915626560159763],
+      "nll_difference": -0.4288421973014269,
+      "nll_difference_ci95": [-0.4738406414051333, -0.3826572727363579],
+      "brier_difference": -0.20819399700410396,
+      "brier_difference_ci95": [-0.2306209530314772, -0.18524049076011814],
+      "comparison_script_sha256": "0ae8312ac3ac4210d1b081ad70a309b24d24e847d4377d88dca725019af8b2b9",
+      "comparison_result_sha256": "1c92862cc46a7d13ede1132b5129fb24eef388e55e4405c6e8ab9e070b1adad4",
+      "checkpoint_reload": "pass; zero max probability delta in paired comparison"
+    }
+  },
+  "hardware_and_environment": {
+    "cpu": "Intel Core i7-12700H",
+    "gpu_used": false,
+    "gpu_note": "RTX 3080 was occupied by another existing process; no GPU jobs were started",
+    "python": "3.11.9",
+    "pytorch": "2.6.0+cu124",
+    "transformers": "5.6.2",
+    "fugashi": "1.5.2",
+    "unidic_lite": "1.0.8",
+    "pytorch_cpu_threads": 4
+  },
+  "interpretation": {
+    "validation_was_used_for_checkpoint_selection": true,
+    "independent_test_result": false,
+    "multimodal_evidence": false,
+    "95_to_98_percent_goal_met": false,
+    "quantization_performed": false,
+    "model_promoted": false
+  }
+}

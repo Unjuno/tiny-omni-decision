@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-11-23 Japanese BERT text probe:** On the same grouped JCommonsenseQA
+development validation, frozen Japanese BERT-base plus a small option scorer
+reached 70.96% Accuracy / 0.790 NLL versus Ruri-v3-70m at 50.70% / 1.219.
+This supports keeping BERT in the text-path candidate set, but is
+selection-affected, text-only, below the 95–98% goal, and its 447 MB FP32 base
+has not been quantized. [Protocol and limits](docs/pretrained_reuse/R2_JAPANESE_BERT_READOUT_PROBES_20261123.md).
+
 **2026-11-22 Path A shared audio–image runtime:** The narrow spoken-color
 task now runs inside a new four-route assembly while reusing the already
 resident Whisper encoder. Exact saved-output parity passed on one previously

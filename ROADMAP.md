@@ -4811,3 +4811,14 @@ far below the 95% aspiration and not multimodal evidence. Stop tuning this
 split; require an independent, rights-cleared Japanese Decision task for the
 next BERT-family comparison. See [report](docs/pretrained_reuse/R2_JCOMMONSENSEQA_RURI70M_READOUT_20261123.md)
 and the updated [machine manifest](manifests/pretrained_reuse/jcommonsenseqa-ruri-readout-20261122.json).
+
+**2026-11-23 R2 Japanese BERT-base follow-up:** Frozen
+`tohoku-nlp/bert-base-japanese-v3` plus a 98.6K option scorer reached 70.96%
+Accuracy / 0.7904 NLL on the same exposed JCommonsenseQA validation, versus
+Ruri-v3-70m at 50.70% / 1.2193; a paired question-group interval favored the
+BERT readout. On grouped JNLI validation it scored 78.10%, but entailment
+accuracy was only 24.18%. Keep it as a text-path candidate for further
+validation, not as the Omni model: it is text-only, selection-affected, below
+the 95–98% aspiration, and the 111.31M total model has not been quantized or
+integrated. See [paired probes and limits](docs/pretrained_reuse/R2_JAPANESE_BERT_READOUT_PROBES_20261123.md)
+and [manifest](manifests/pretrained_reuse/japanese-bert-readout-probes-20261123.json).
