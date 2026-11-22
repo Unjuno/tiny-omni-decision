@@ -7,7 +7,7 @@ The latest encoder-only four-route package is 594,168,210 payload bytes
 metadata-only inspection of its largest weight archive found that
 `components/image/videoprism-base-f16r288.npz` contains 114,365,184 parameters
 stored as **float32**, despite `f16` in its filename. Its SHA-256 is
-`61fa62eedbe4f8d4ba76a99b8b79abd0137426a4931c48204ab70446b6411f29`.
+`61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29`.
 
 This is a storage-format finding, not evidence of a runtime or quality bug.
 The existing package and archive were not modified. The archive's 40 NPY
@@ -62,3 +62,7 @@ precision export with deterministic runtime parity and a measured full-package
 byte count. Any quality comparison must use the already declared development
 validation protocol and must not be presented as independent evidence; the
 currently exposed evaluation cannot become blind again.
+
+Correction: an initial transcription in this report inserted one extra `b`
+in the checkpoint hash. The corrected value above was checked against both
+source manifests and the actual source file during the FP16 export preflight.

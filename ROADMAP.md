@@ -15,6 +15,15 @@ image precision estimates show float16 and int8 alone would still exceed the
 not been implemented or quality-checked. Existing artifacts were untouched.
 See [dtype and size audit](docs/pretrained_reuse/R7_PATH_A_IMAGE_STORAGE_DTYPE_AUDIT_20261122.md).
 
+**2026-11-22 R7 VideoPrism FP16 storage diagnostic:** A separate FP16-storage
+bundle with FP32 JAX compute reduced the image bundle to 229,413,804 bytes.
+On the same exposed 512-image CLEVR-4 selection validation, 2,048 decisions
+had one changed prediction and maximum probability delta 0.01214, failing the
+unchanged 1e-5 runtime parity gate. Accuracy/NLL/Brier stayed nearly unchanged,
+but image accuracy remains 87.94% overall and 60.94% on count. The estimated
+full assembly remains 365,438,780 bytes; no independent quality claim follows.
+See [paired precision report](docs/pretrained_reuse/R7_PATH_A_VIDEOPRISM_FP16_STORAGE_20261122.md).
+
 **2026-11-22 R7 encoder-only Path A four-route replay:** On the same fixed
 development-validation inputs, the compact Whisper encoder-only assembly
 reproduced the full assembly's comparison deltas for Video, Image, Text and

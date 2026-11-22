@@ -7,6 +7,7 @@ import hashlib
 import json
 import sys
 import time
+import types
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -27,6 +28,18 @@ def sha256_file(path: Path) -> str:
 
 def jsonl(path: Path) -> list[dict[str, Any]]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+
+
+def load_bundled_runtime(bundle: Path) -> Any:
+    """Load the runtime shipped in this bundle, even if the source package is loaded."""
+    runtime_path = bundle / "runtime" / "tiny_omni_decision" / "videoprism_runtime.py"
+    module_name = f"_path_a_videoprism_runtime_{hashlib.sha256(str(bundle).encode()).hexdigest()}"
+    module = types.ModuleType(module_name)
+    module.__file__ = str(runtime_path)
+    sys.modules[module_name] = module
+    code = compile(runtime_path.read_text(encoding="utf-8"), str(runtime_path), "exec")
+    exec(code, module.__dict__)
+    return module.VideoPrismClevr4Runtime
 
 
 def main() -> None:
@@ -50,8 +63,7 @@ def main() -> None:
         raise ValueError("--images must be positive")
     manifest = json.loads((bundle / "bundle-manifest.json").read_text(encoding="utf-8"))
     verify_bundle(bundle, manifest)
-    sys.path.insert(0, str(bundle / "runtime"))
-    from tiny_omni_decision.videoprism_runtime import VideoPrismClevr4Runtime
+    VideoPrismClevr4Runtime = load_bundled_runtime(bundle)
 
     report_path = args.baseline_run_report.resolve(strict=True)
     source_report = json.loads(report_path.read_text(encoding="utf-8"))
