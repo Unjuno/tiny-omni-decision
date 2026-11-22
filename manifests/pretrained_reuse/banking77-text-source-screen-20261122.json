@@ -211,6 +211,34 @@
     "probability_max_abs_delta_after_reload": 0.0,
     "official_test_loaded": false
   },
+  "minilm_l6_raw_text_runtime_verification": {
+    "status": "COMPLETED_DEVELOPMENT_VALIDATION_REPLAY",
+    "implementation_files": {
+      "runtime_sha256": "dd6175214c4da327280273f943114cd7b73155855a10f7b1d27e5309d6ab77e1",
+      "verification_script_sha256": "bacb05109c5c87fe7c22fa0378e7490434ad69cd0c5896d1421e71e0b0ef79d3",
+      "test_sha256": "1c638d4b9197a93f06d4b75a6648b40a280b82a13949d4f856fc921583f04b79"
+    },
+    "runtime_contract": "raw English text to probabilities over the fixed 77 publisher intents, serialized as typed JSON; arbitrary free-text option scoring unsupported",
+    "class_mapping_source": "publisher README at pinned dataset revision 1846984189f2bc0ac51c6fc3a600fa9e1714e0c6",
+    "class_mapping_readme_sha256": "f3786a5327fd6533c7c0ff3ff654e20ee3d1261d2fa41667381f59a2e42364e1",
+    "prequantization_parameters": 22742861,
+    "validation_rows_replayed": 1998,
+    "device": "CPU FP32",
+    "elapsed_seconds": 24.904476800002158,
+    "metrics": {
+      "accuracy": 0.9144144058227539,
+      "macro_f1": 0.9170368003624412,
+      "nll": 0.3325289189815521,
+      "brier": 0.1276564747095108,
+      "ece_15": 0.022959456478627432
+    },
+    "exact_argmax_matches_saved_predictions": true,
+    "max_probability_absolute_delta": 0.0000024437904357910156,
+    "typed_json_smoke_passed": true,
+    "receipt_path": "C:/CodexArtifacts/pretrained-reuse-r2-local/banking77-minilm-l6-runtime-verify-attempt-02/reload-verification.json",
+    "receipt_sha256": "71e4133a7b852940789cc1448a87648f0cfd81b3b6bcda1cbeadd7856c25af",
+    "official_test_loaded": false
+  },
   "limitations": [
     "The dataset card lists source language producers as More Information Needed and supplies no participant or conversation IDs; independent speaker/customer grouping is unverified.",
     "Normalized utterance identity can prevent exact-content leakage but cannot establish source-person independence or near-duplicate paraphrase separation.",

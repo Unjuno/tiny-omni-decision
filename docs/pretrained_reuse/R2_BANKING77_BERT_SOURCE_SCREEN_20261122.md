@@ -65,6 +65,14 @@ The L6 candidate improves the L3 development-validation point estimates by 1.75 
 
 This is evidence that pretrained encoder choice matters for this narrow text classification task and supports keeping the BERT-family path open. It is not an independent-source result: participant/conversation IDs are unavailable, and the same validation set selected the checkpoint and compared L3 versus L6. The publisher test remains unopened. Do not infer arbitrary-option or multimodal quality from these figures. The L6 experiment's complete config, per-class metrics, predictions, curves, run metadata, file hashes and reload receipt are in `C:\CodexArtifacts\pretrained-reuse-r2-local\banking77-minilm-l6-frozen-readout-v1-attempt-01` and the machine manifest.
 
+## Raw-text to typed-JSON runtime verification
+
+A local CPU runtime now loads the pinned MiniLM-L6 encoder and selected readout, takes raw English text, and returns the fixed 77-class intent probabilities through the repository's typed JSON serializer. Class IDs use the exact numeric-to-name mapping in the publisher README pinned at revision `1846984189f2bc0ac51c6fc3a600fa9e1714e0c6` (README SHA-256 `f3786a5327fd6533c7c0ff3ff654e20ee3d1261d2fa41667381f59a2e42364e1`). The runtime checks the encoder and readout weight hashes before loading, requires the full class option set, and refuses arbitrary free-text option scoring.
+
+The saved L6 readout was reloaded and run over all 1,998 fixed development-validation utterances in original order. Argmax matched the saved training-run predictions on all rows; maximum per-class probability absolute difference was `2.44e-6`. Recomputed metrics were Accuracy `91.44%`, macro F1 `91.70%`, NLL `0.33253`, Brier `0.12766`, and ECE-15 `0.02296`. CPU elapsed time was `24.90 s` for 1,998 one-at-a-time requests. Typed JSON smoke passed. Receipt: `C:\CodexArtifacts\pretrained-reuse-r2-local\banking77-minilm-l6-runtime-verify-attempt-02\reload-verification.json`.
+
+The runtime is an executable narrow text classification example, not general arbitrary-option Decision reasoning. Validation is development-only and participant/conversation group independence is unverified; the publisher test remains unopened. This does not close the broader text, image, audio, video, or multi-input quality requirements.
+
 ## Machine receipt
 
 The machine-readable source screen and pins are in [`banking77-text-source-screen-20261122.json`](../../manifests/pretrained_reuse/banking77-text-source-screen-20261122.json). The publisher test and all other sealed-audit data remain unopened. The baseline used the local pinned MiniLM-L3 checkpoint on CPU; GPU was not used.

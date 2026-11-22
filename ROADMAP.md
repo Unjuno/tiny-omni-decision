@@ -31,6 +31,13 @@ Its epoch-5 checkpoint reload reproduced predictions exactly. The test remains
 unopened and source-person groups are unknown; see the same source screen and
 manifest.
 
+The L6 candidate now also runs from raw text to typed JSON on the pinned fixed
+77-intent taxonomy. Replaying all 1,998 development-validation inputs through
+the local runtime matched every saved argmax; maximum probability delta was
+2.44e-6. This demonstrates save/load/runtime consistency for the narrow
+BANKING77 classifier, not arbitrary option scoring or broader text quality.
+The publisher test remains unopened. See the source screen and machine manifest.
+
 **2026-11-22 R2 spoken-palette TRAIN-only modality interventions:** On 96
 fixed training screens from 24 speaker groups, a same-speaker audio-color swap
 changed the prediction in 96/96 cases and selected the color's position in
