@@ -1,0 +1,59 @@
+{
+  "experiment_id": "banking77-minilm-l12-frozen-readout-v1",
+  "source": {
+    "dataset_id": "PolyAI/banking77",
+    "revision": "1846984189f2bc0ac51c6fc3a600fa9e1714e0c6",
+    "train_sha256": "8dc89b87a188509c42cce5a086e8f7c1ff4a225bdd9ae3f23e6cdfa5806e363a",
+    "split_manifest_sha256": "d95bb74e6f28eac63012a95d808c6a9a82941e08960c57d52ad3e020c2a183e2",
+    "official_test_loaded": false
+  },
+  "model": {
+    "id": "sentence-transformers/all-MiniLM-L12-v2",
+    "revision": "a50ef00143b4d5391434df20ae11632588ac25be",
+    "license": "Apache-2.0",
+    "parameters": 33360000,
+    "encoder_trainable": false,
+    "pooling": "attention-mask mean of last hidden states",
+    "max_sequence_length": 128,
+    "weight_bytes": 133466304,
+    "files_sha256": {
+      "config.json": "bc451f333af67312ba0de5018ef1c9ba663cb18549443e568f0bd35262dc1c48",
+      "model.safetensors": "d2d541e5f101695ae495eacd867a8d025ecfe8f9674fb23aa6cf93cdb60a5542",
+      "modules.json": "84e40c8e006c9b1d6c122e02cba9b02458120b5fb0c87b746c41e0207cf642cf",
+      "sentence_bert_config.json": "70f4448f31320443fe3557cacea5abf2dcc4915dda8c80646bec9f3bb0aa5a1f",
+      "special_tokens_map.json": "303df45a03609e4ead04bc3dc1536d0ab19b5358db685b6f3da123d05ec200e3",
+      "tokenizer_config.json": "fba7637034542f691ef4b1ad735d664971e8d9723012a1973d4ee985742e8e72",
+      "tokenizer.json": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037",
+      "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3",
+      "1_Pooling/config.json": "4be450dde3b0273bb9787637cfbd28fe04a7ba6ab9d36ac48e92b11e350ffc23"
+    }
+  },
+  "decision_head": {
+    "type": "single linear layer",
+    "input_features": 384,
+    "output_classes": 77,
+    "class_weights": null,
+    "input_standardization": "per-dimension mean/std fitted on training split only"
+  },
+  "training": {
+    "seed": 17,
+    "device": "cpu",
+    "precision": "float32",
+    "optimizer": "AdamW",
+    "learning_rate": 0.01,
+    "weight_decay": 0.01,
+    "batch_size": 256,
+    "max_epochs": 60,
+    "early_stopping_patience": 6,
+    "early_stopping_min_delta": 0.00001,
+    "checkpoint_selector": "minimum validation multiclass NLL",
+    "calibration": "none; raw softmax probabilities"
+  },
+  "evaluation": {
+    "metrics": ["accuracy", "macro_recall", "macro_f1", "nll", "brier", "ece_15"],
+    "save_each_validation_prediction": true,
+    "independent_source_group_claim": false,
+    "official_test_loaded": false
+  },
+  "output_policy": "new external artifact directory; refuse overwrite; no model/data artifacts in Git"
+}

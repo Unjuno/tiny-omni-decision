@@ -73,6 +73,22 @@ The saved L6 readout was reloaded and run over all 1,998 fixed development-valid
 
 The runtime is an executable narrow text classification example, not general arbitrary-option Decision reasoning. Validation is development-only and participant/conversation group independence is unverified; the publisher test remains unopened. This does not close the broader text, image, audio, video, or multi-input quality requirements.
 
+## Frozen MiniLM-L12 comparison
+
+To check whether more depth in this BERT-family encoder improves the same text task, `sentence-transformers/all-MiniLM-L12-v2` was pinned to Hub revision `a50ef00143b4d5391434df20ae11632588ac25be` (Apache-2.0). The actually loaded encoder has 33,360,000 parameters, 12 layers, hidden size 384, and a 133,466,304-byte `model.safetensors` file (SHA-256 `d2d541e5f101695ae495eacd867a8d025ecfe8f9674fb23aa6cf93cdb60a5542`). Its features were frozen; only the same 384→77 linear readout was trained. The exact L3/L6 train/validation split, seed 17, AdamW settings, 60-epoch cap, patience 6, minimum NLL selector, and no-calibration policy were reused.
+
+| Frozen encoder / selected epoch | Parameters incl. readout | Accuracy | Macro F1 | NLL | Brier | ECE-15 |
+|---|---:|---:|---:|---:|---:|---:|
+| MiniLM-L3 / 6 | 17,419,469 | 89.69% | 89.65% | 0.41907 | 0.15487 | 0.02810 |
+| MiniLM-L6 / 5 | 22,742,861 | **91.44%** | **91.70%** | 0.33253 | **0.12766** | **0.02296** |
+| MiniLM-L12 / 6 | 33,389,645 | 90.69% | 90.79% | **0.31691** | 0.13485 | 0.03408 |
+
+L12 improved NLL over L6 by `0.01561`, while Accuracy fell `0.75` percentage points and Brier/ECE worsened. L6 remains better on Accuracy, macro F1, Brier, and ECE; L12 is better only on NLL. Do not collapse these into an unqualified winner. Within the L12 run, train CE continued to fall after epoch 6 while validation NLL and calibration generally worsened; epochs 8 and 11 reached 91.49% Accuracy but were correctly not selected under the fixed minimum-NLL rule. This is an overfitting warning on this development split.
+
+L12 completed 12 epochs in `56.77 s` on CPU FP32. The selected checkpoint was reloaded and replayed on all 1,998 validation examples: argmax matched every saved prediction and maximum probability delta was zero. The selected encoder+readout has 33,389,645 pre-quantization parameters and the direct safetensors+readout files total about 133.59 MB, before packaging metadata. A standalone L12 inference runtime was not added; the L6 candidate remains the implemented fixed-taxonomy JSON runtime. The model snapshot download contains additional upstream export formats outside the experiment output; only the pinned Torch model and tokenizer inputs were used for this run.
+
+This is a single-seed comparison selected and evaluated on the same development validation set, with no verified source-person groups. It does not justify a general text score or a test-set claim. Full config, curves, prediction rows, checkpoint, reload receipt and hashes are in `C:\CodexArtifacts\pretrained-reuse-r2-local\banking77-minilm-l12-frozen-readout-v1-attempt-01`; the official test payload remains unopened.
+
 ## Machine receipt
 
 The machine-readable source screen and pins are in [`banking77-text-source-screen-20261122.json`](../../manifests/pretrained_reuse/banking77-text-source-screen-20261122.json). The publisher test and all other sealed-audit data remain unopened. The baseline used the local pinned MiniLM-L3 checkpoint on CPU; GPU was not used.

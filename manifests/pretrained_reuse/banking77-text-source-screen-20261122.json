@@ -239,11 +239,74 @@
     "receipt_sha256": "71e4133a7b852940789cc1448a87648f0cfd81b3b6bcda1cbeadd7856c25af",
     "official_test_loaded": false
   },
+  "minilm_l12_frozen_readout_experiment": {
+    "experiment_id": "banking77-minilm-l12-frozen-readout-v1",
+    "status": "COMPLETED_DEVELOPMENT_VALIDATION_ONLY",
+    "model_card_url": "https://huggingface.co/sentence-transformers/all-MiniLM-L12-v2",
+    "license": "Apache-2.0",
+    "model_revision": "a50ef00143b4d5391434df20ae11632588ac25be",
+    "model_weights_bytes": 133466304,
+    "model_weights_sha256": "d2d541e5f101695ae495eacd867a8d025ecfe8f9674fb23aa6cf93cdb60a5542",
+    "model_file_sha256": {
+      "config.json": "bc451f333af67312ba0de5018ef1c9ba663cb18549443e568f0bd35262dc1c48",
+      "model.safetensors": "d2d541e5f101695ae495eacd867a8d025ecfe8f9674fb23aa6cf93cdb60a5542",
+      "modules.json": "84e40c8e006c9b1d6c122e02cba9b02458120b5fb0c87b746c41e0207cf642cf",
+      "sentence_bert_config.json": "70f4448f31320443fe3557cacea5abf2dcc4915dda8c80646bec9f3bb0aa5a1f",
+      "special_tokens_map.json": "303df45a03609e4ead04bc3dc1536d0ab19b5358db685b6f3da123d05ec200e3",
+      "tokenizer_config.json": "fba7637034542f691ef4b1ad735d664971e8d9723012a1973d4ee985742e8e72",
+      "tokenizer.json": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037",
+      "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3",
+      "1_Pooling/config.json": "4be450dde3b0273bb9787637cfbd28fe04a7ba6ab9d36ac48e92b11e350ffc23"
+    },
+    "encoder_parameters": 33360000,
+    "trainable_readout_parameters": 29645,
+    "total_parameters": 33389645,
+    "seed": 17,
+    "device": "cpu",
+    "dtype": "float32",
+    "train_rows": 8005,
+    "train_unique_content_groups": 8001,
+    "validation_rows": 1998,
+    "validation_unique_content_groups": 1998,
+    "split_manifest_sha256": "d95bb74e6f28eac63012a95d808c6a9a82941e08960c57d52ad3e020c2a183e2",
+    "best_epoch": 6,
+    "epochs_completed": 12,
+    "elapsed_seconds": 56.77371960005257,
+    "selection_metric": "minimum validation multiclass NLL",
+    "validation_metrics": {
+      "accuracy": 0.9069069027900696,
+      "macro_recall": 0.9066580408683601,
+      "macro_f1": 0.9078853371606728,
+      "nll": 0.31691431999206543,
+      "brier": 0.1348462849855423,
+      "ece_15": 0.0340813711901926
+    },
+    "comparison_to_minilm_l6": {
+      "accuracy_delta": -0.007507503032684326,
+      "nll_delta": -0.015614628791809082,
+      "brier_delta": 0.0071897953748703,
+      "ece_15_delta": 0.011121954604614258
+    },
+    "overfitting_signal": "train CE continued falling after selected epoch 6 while validation NLL and calibration worsened",
+    "best_checkpoint_sha256": "73dc4874f743ed3a2ee29943e4bc630b73b0fd6f220f52edc51d24775ede0676",
+    "training_history_sha256": "fad9319f8c7c0244806b4b4096c0b09b83d7192522366947e5f42dd57bf3eb80",
+    "validation_predictions_sha256": "ade70f8a1a10c2cdef025380be59c8cc85d745e83cdda9a26cfe32a34be5d77b",
+    "validation_metrics_sha256": "3f464cb781a14d023f5ade757fd81acb91179040ef030777f234fe2a16336c1c",
+    "run_metadata_sha256": "32fd330807828bed3c0fe61fdb006c96c5f93e520309da59bfb39c8c1416337f",
+    "reload_verification_sha256": "92fa2699da58ee3110a78239a2dbf2cbe17fd47e08786ebf2f55d749636e73be",
+    "effective_config_sha256": "b74eba04cb2e6246c911b98fe1d18fe394e552469ec40397cce687a63d116d9a",
+    "training_script_sha256": "5abdb0a8bde39554741ea41e0de0f8cb5b3d9540bc692f26d0ae48e81f6929a9",
+    "reload_script_sha256": "57ecdae8c3826f3165aa6897ef68b4e5d139aa7c202890176b47f491e5133eb3",
+    "exact_argmax_matches_saved_predictions": true,
+    "max_probability_abs_delta_after_reload": 0.0,
+    "output_directory": "C:/CodexArtifacts/pretrained-reuse-r2-local/banking77-minilm-l12-frozen-readout-v1-attempt-01",
+    "official_test_loaded": false
+  },
   "limitations": [
     "The dataset card lists source language producers as More Information Needed and supplies no participant or conversation IDs; independent speaker/customer grouping is unverified.",
     "Normalized utterance identity can prevent exact-content leakage but cannot establish source-person independence or near-duplicate paraphrase separation.",
     "The task is a fixed-label, single-domain intent classifier; it does not establish arbitrary supplied-option reasoning, general text quality, or multimodal fusion.",
     "The published test payload remains unopened and must not enter iterative training, model selection, or calibration."
   ],
-  "recommendation": "Keep the frozen MiniLM-L6 readout as the strongest completed BANKING77 development candidate; it improved the L3 validation point estimates but remains below 95% and lacks independent source-group evidence. The tested L3 last-block adaptation harmed validation results. The official test remains closed; do not make arbitrary-option or product-quality claims."
+  "recommendation": "Keep frozen MiniLM-L6 as the current executable JSON runtime because it leads the tested candidates on Accuracy, Brier, and ECE; MiniLM-L12 has lower NLL but worse Accuracy, Brier, and ECE at a 10.65M-parameter increase. Neither meets the 95% stretch target, and both results use the same exposed development validation without verified source-person groups. The tested L3 last-block adaptation harmed validation results. Keep the official test closed and make no arbitrary-option or product-quality claims."
 }
