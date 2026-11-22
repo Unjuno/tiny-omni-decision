@@ -178,7 +178,7 @@ Artifacts are external to Git under
 | Paired bootstrap JSON | `78816392655d4bd2378386a853e70cf86d28c0562832c46575b58f7b14280a0d` |
 | Full comparison script | `b224a0bb8618e0dc69d9c0cec788bfead0699eeab2a4d668411c5574482c58b5` |
 | Bootstrap analysis script | `e9e655ef4cb099b2a954e05efa6494c42c58b287fb36cf4f3ac5d414c1527a74` |
-| Combined run manifest | `c883ad6e13d93ac672cb31278b8061b3ba26af64c96219aa683754872c750d0e` |
+| Combined run manifest | `f6a217fb36a2668fa7bcb365ccbf7e5642a0e6b853826ed0eb9d2ff75ecdd553` |
 
 The executed comparison used the CLI below for each model, changing only the
 encoder name/path, `--encode-batch-size`, and output directory. Model-specific
@@ -210,6 +210,11 @@ bootstrap was run with 10,000 repetitions and seed `20261123` using
 On the isolated R2 worktree, full `ruff check .` passed, full `pytest -q`
 passed (**2,903 passed, 11 skipped**), and the CI workflow's model-manifest,
 dataset-manifest, catalog, and example-manifest audit commands all passed.
+The first GitHub Actions run exposed that a regression test imported optional
+PyTorch during collection although CI installs only `.[dev]`. The tensor-copy
+helper was moved into a small module and its memory test now skips cleanly when
+PyTorch is absent; the final CI run passed at commit
+`4dc83df04b00ce2164375faaade58e4acf67ac93` (run 4915).
 Both selected readouts reload with a maximum probability delta of exactly
 zero. Model weights, feature caches, source media, and full validation
 predictions remain external to Git.
