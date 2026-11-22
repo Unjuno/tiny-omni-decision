@@ -38,9 +38,9 @@ were not modified.
 - The feature assembler needed an uncommitted fix before the joined arrays
   could be built; its exact executed SHA-256 was
   `fc714b47312a3c99fd8d5ca65b8f6021b049749df1a76b67f7a9533307d0adc1`.
-  That tested fix is included in the current working diff and is being
-  committed with this result. The training script itself is byte-identical to
-  the recorded source revision.
+  That tested fix is included in commit `fe427691`, which records this result;
+  it was not part of the `source_commit` below. The training script itself is
+  byte-identical to the recorded source revision.
 - Command: `py -3.11 scripts/pretrained_reuse/train_haptile_decision.py --artifact-root C:\\CodexLocalArtifacts\\pretrained-reuse-r2\\haptile-task-v1 --output C:\\CodexLocalArtifacts\\pretrained-reuse-r2\\haptile-task-v1\\fit-seed17-v1-attempt-01 --config configs/pretrained_reuse/haptile_temporal_decision.yaml`
 - Start/end: 2026-11-22 03:15:47.813–03:31:19.322 UTC (15m 31.5s)
 - Device: CPU, Intel Family 6 Model 154; 4 torch threads; Python 3.11.9,
