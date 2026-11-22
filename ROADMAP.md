@@ -45,6 +45,18 @@ NLL-selected epoch 6. This does not show that deeper BERT encoders reliably
 improve the task; the fixed L6 text JSON runtime remains the current executable
 candidate, with all results still development-only.
 
+**2026-11-22 R2 cross-domain BERT-family check:** On a separate CLINC150
+multi-domain intent/OOS development split with normalized exact-content groups
+kept intact, frozen MiniLM-L6 and L12 plus the same 58,135-parameter readout
+both reached 95.72% accuracy. L12 had slightly lower NLL/Brier/ECE at 10.65M
+extra encoder parameters and about 1.8x CPU time; its OOS validation subset was
+only 24 examples. The official test was never loaded, and this
+checkpoint-selected validation does not demonstrate generalization or
+multimodal quality. This supports continuing BERT-family text probes while
+keeping them separate from the multimodal product claim. See the
+[CLINC150 comparison](docs/pretrained_reuse/R2_CLINC150_MINILM_READOUT_20261122.md)
+and [manifest](manifests/pretrained_reuse/clinc150-minilm-readout-20261122.json).
+
 **2026-11-22 R2 spoken-palette TRAIN-only modality interventions:** On 96
 fixed training screens from 24 speaker groups, a same-speaker audio-color swap
 changed the prediction in 96/96 cases and selected the color's position in

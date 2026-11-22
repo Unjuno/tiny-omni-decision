@@ -1,0 +1,92 @@
+{
+  "experiment_id": "clinc150-minilm-frozen-readout-v1",
+  "source": {
+    "dataset_id": "clinc/clinc_oos",
+    "dataset_revision": "155b9c710419136e17307b80d0a13e68cd46b4ec",
+    "config": "plus",
+    "license": "CC-BY-3.0",
+    "upstream_repository": "https://github.com/clinc/oos-eval",
+    "upstream_revision": "828f8093932c8fe6ca7936c3d2e52903b1c523de",
+    "source_train_sha256": "30188119cf9f86fc9db27e1c22442d091cb5cb0913c9496f945fe11e7a02a28f",
+    "source_validation_sha256": "fbd545b46c611c4a7ba4b48cae6c7f09bb5b59f33ff56206ad1cd366c85cdfaa",
+    "official_test_downloaded_or_opened": false
+  },
+  "development_split": {
+    "protocol": "seed-17 grouped exact-content, stratified by sorted label tuple, 80/20",
+    "normalization": "NFKC, casefold, collapse whitespace",
+    "source_rows": 18350,
+    "source_unique_content_groups": 18347,
+    "duplicate_content_groups_across_publisher_splits": 3,
+    "conflicting_label_content_groups": 2,
+    "train_rows": 14680,
+    "train_unique_groups": 14677,
+    "validation_rows": 3670,
+    "validation_unique_groups": 3670,
+    "cross_split_overlap": 0,
+    "manifest_sha256": "229a890f1921ebd5bd50de31ef704baef733d6b4c44d6ee6396ad82fc4078c6d",
+    "train_jsonl_sha256": "47510c0e459940209d08bed0a50a2791fb71fbd10d76b8a8cb2894428c802484",
+    "validation_jsonl_sha256": "0cd8f93bf800c22e171b35e8bad9709533d21f311945fe30decd5f699a78775c"
+  },
+  "training": {
+    "seed": 17,
+    "device": "CPU",
+    "dtype": "float32",
+    "encoder_frozen": true,
+    "head": "linear 384-to-151",
+    "trainable_parameters": 58135,
+    "optimizer": "AdamW",
+    "learning_rate": 0.01,
+    "weight_decay": 0.01,
+    "batch_size": 256,
+    "max_epochs": 60,
+    "patience": 6,
+    "min_delta": 0.00001,
+    "selector": "minimum validation multiclass NLL",
+    "official_test_used": false
+  },
+  "candidates": {
+    "minilm_l6": {
+      "model_id": "sentence-transformers/all-MiniLM-L6-v2",
+      "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+      "encoder_parameters": 22713216,
+      "best_epoch": 6,
+      "epochs_completed": 12,
+      "elapsed_seconds_cpu": 34.10088199994061,
+      "metrics": {
+        "accuracy": 0.957220733165741,
+        "macro_recall": 0.960485651214128,
+        "macro_f1": 0.9597233458792646,
+        "nll": 0.17973387241363525,
+        "brier": 0.06456775218248367,
+        "ece_15": 0.011918550237253621,
+        "oos_count": 24,
+        "oos_accuracy": 1.0,
+        "oos_nll": 0.0018418262479826808
+      },
+      "head_sha256": "a333863efd1f2f872a157d5eebc60f549af0d841268726d3158c1565a2d35435",
+      "metrics_sha256": "5112aafe8f888b6b492dd3ffa74ec66c3845c0bee5fb21f729bdfc8b7ff08e09"
+    },
+    "minilm_l12": {
+      "model_id": "sentence-transformers/all-MiniLM-L12-v2",
+      "revision": "a50ef00143b4d5391434df20ae11632588ac25be",
+      "encoder_parameters": 33360000,
+      "best_epoch": 6,
+      "epochs_completed": 12,
+      "elapsed_seconds_cpu": 61.42723050003406,
+      "metrics": {
+        "accuracy": 0.957220733165741,
+        "macro_recall": 0.9612109744560076,
+        "macro_f1": 0.9597852289163538,
+        "nll": 0.17038863897323608,
+        "brier": 0.06210577115416505,
+        "ece_15": 0.010500188283113448,
+        "oos_count": 24,
+        "oos_accuracy": 1.0,
+        "oos_nll": 0.007167861331254244
+      },
+      "head_sha256": "9cace12d37ea3ece97c95a824508ae3e7cef1f0a7ba86942d9cf581167eac7f4",
+      "metrics_sha256": "01b3f956d726a420edde5ca025d4d1842053652ff5ba324d5ba74c085b06271e"
+    }
+  },
+  "interpretation": "development-only one-seed result; shared validation selected checkpoints and compared candidates; does not establish multi-input or multimodal quality"
+}
