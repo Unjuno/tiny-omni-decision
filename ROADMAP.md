@@ -2810,8 +2810,8 @@ The current `pyproject.toml` ML extra targets the **legacy Gemma stack** (Torch 
 
 ### R0 — Evidence preservation and design lock (**first action**)
 
-Latest read-only live snapshot (2026-11-22):
-[`R0_LIVE_AUDIT_20261122.md`](docs/pretrained_reuse/R0_LIVE_AUDIT_20261122.md).
+Latest read-only live snapshot (2026-11-22 19:24 JST):
+[`R0_LIVE_AUDIT_20261122_1924JST.md`](docs/pretrained_reuse/R0_LIVE_AUDIT_20261122_1924JST.md).
 
 - [x] Archive a machine-readable inventory of `main`, current independent branch/PR revisions, benchmark/data manifest hashes and experiment checkpoint hashes without modifying their bytes (`docs/pretrained_reuse/R0_INVENTORY.json`; 2026-10-10 snapshot).
 - [x] Reconcile the current remote PR head/base states and local worktree/process snapshot; preserve all independent branches and runs. Read-only contribution/dependency review for PRs #9–#14: `docs/pretrained_reuse/R0_OPEN_PR_REVIEW_20261011.md`. All remain open and unchanged; CI for PRs #13/#14 was not verifiable from the unauthenticated status lookup.
