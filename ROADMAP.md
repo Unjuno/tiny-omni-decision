@@ -1,3 +1,12 @@
+**2026-11-22 R7 spoken-palette JSON runtime smoke:** A pinned CPU bundle now
+loads raw mono 16 kHz audio and a screen image and returns typed JSON option
+probabilities. The 57.97 MB model/config payload contains 30.36M logical
+pre-quantization parameters, with only DINOv2 Linear weights stored dynamic
+qint8. A single TRAIN-only mechanics smoke passed; the task uses generated
+screens, and no quality evaluation or Video runtime was performed. This does
+not close R2-M or the product-quality gate. See
+[runtime scope and receipt](docs/pretrained_reuse/R7_SPOKEN_PALETTE_JSON_RUNTIME_20261122.md).
+
 **2026-11-22 R7 dynamic-INT8 calibration-only fit:** Using only the frozen
 14,280-row Calibration split, the predeclared 81-point scalar-temperature rule
 selected `0.40613` for the qint8 DINOv2 path (previous fixed temperature
