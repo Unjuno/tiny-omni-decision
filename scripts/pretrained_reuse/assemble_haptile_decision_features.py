@@ -215,25 +215,33 @@ def apply_video_window_eligibility(
         selected_actions.append(row)
 
     state_by_path = {str(row.get("path")): row for row in state_rows}
-    if len(state_by_path) != len(state_rows) or set(state_by_path) != set(all_paths):
-        raise ValueError("state feature rows do not cover the original frozen sample IDs")
+    state_paths = set(state_by_path)
+    if (len(state_by_path) != len(state_rows)
+            or state_paths not in (set(all_paths), eligible_paths)):
+        raise ValueError("state features do not match original or eligible frozen sample IDs")
     for path, row in state_by_path.items():
         action = action_by_path[path]
         if (row.get("sha256") != action.get("sha256")
                 or row.get("target") != action.get("target")
                 or row.get("task_group") != action.get("task")):
             raise ValueError(f"state feature provenance differs from action row: {path}")
-    state_indices = [index for index, row in enumerate(state_rows)
-                     if str(row["path"]) in eligible_paths]
     if state_values.shape[0] != len(state_rows):
         raise ValueError("state feature tensor and examples differ before eligibility filtering")
-    selected_states = [state_rows[index] for index in state_indices]
-    selected_state_values = state_values[state_indices]
+    if state_paths == eligible_paths:
+        selected_states = state_rows
+        selected_state_values = state_values
+    else:
+        state_indices = [index for index, row in enumerate(state_rows)
+                         if str(row["path"]) in eligible_paths]
+        selected_states = [state_rows[index] for index in state_indices]
+        selected_state_values = state_values[state_indices]
 
     text_paths = [str(value) for value in text_cache.get("sample_paths", [])]
     text_index = {path: index for index, path in enumerate(text_paths)}
-    if len(text_index) != len(text_paths) or set(text_paths) != set(all_paths):
-        raise ValueError("text feature rows do not cover the original frozen sample IDs")
+    text_path_set = set(text_paths)
+    if (len(text_index) != len(text_paths)
+            or text_path_set not in (set(all_paths), eligible_paths)):
+        raise ValueError("text features do not match original or eligible frozen sample IDs")
     text_hashes = [str(value) for value in text_cache.get("media_sha256", [])]
     text_targets = [str(value) for value in text_cache.get("targets", [])]
     if len(text_hashes) != len(text_paths) or len(text_targets) != len(text_paths):
@@ -243,12 +251,15 @@ def apply_video_window_eligibility(
         if (text_hashes[index] != action.get("sha256")
                 or text_targets[index] != action.get("target")):
             raise ValueError(f"text feature provenance differs from action row: {path}")
-    text_indices = [text_index[path] for path in text_paths if path in eligible_paths]
-    selected_text_cache = {
-        key: (value[text_indices] if isinstance(value, np.ndarray)
-              and value.ndim > 0 and value.shape[0] == len(text_paths) else value)
-        for key, value in text_cache.items()
-    }
+    if text_path_set == eligible_paths:
+        selected_text_cache = text_cache
+    else:
+        text_indices = [text_index[path] for path in text_paths if path in eligible_paths]
+        selected_text_cache = {
+            key: (value[text_indices] if isinstance(value, np.ndarray)
+                  and value.ndim > 0 and value.shape[0] == len(text_paths) else value)
+            for key, value in text_cache.items()
+        }
 
     video_by_path = {str(row.get("path")): row for row in video_rows}
     if len(video_by_path) != len(video_rows) or set(video_by_path) != eligible_paths:
@@ -284,6 +295,16 @@ def apply_video_window_eligibility(
     )
 
 
+def _state_split_proven(result: dict[str, object], split: str) -> bool:
+    if result.get("split") == split:
+        return True
+    return (
+        split == "train"
+        and result.get("status") == "complete_train_only_state_text_extraction"
+        and result.get("validation_or_sealed_audit_opened") is False
+    )
+
+
 def _load_split(split: str, root: Path) -> tuple[dict[str, np.ndarray], dict[str, object]]:
     directory = root / f"{split}-joined-v1"
     if directory.exists():
@@ -314,11 +335,18 @@ def _load_split(split: str, root: Path) -> tuple[dict[str, np.ndarray], dict[str
     state_values = np.load(state_dir / "state-sequences.npy", mmap_mode="r", allow_pickle=False)
     with np.load(text_dir / "text-features.npz", allow_pickle=False) as cache:
         text_cache = {key: cache[key] for key in cache.files}
-    if (state_result.get("split", split) != split
+    state_split_proven = _state_split_proven(state_result, split)
+    state_audit_opened = state_result.get(
+        "sealed_audit_opened", state_result.get("validation_or_sealed_audit_opened")
+    )
+    video_audit_opened = video_result.get(
+        "sealed_audit_opened", video_result.get("validation_or_sealed_audit_opened")
+    )
+    if (not state_split_proven
             or video_result.get("development_split") != (None if split == "train" else split)
             or text_result.get("split") != split
-            or state_result.get("sealed_audit_opened") is not False
-            or video_result.get("sealed_audit_opened") is not False
+            or state_audit_opened is not False
+            or video_audit_opened is not False
             or text_result.get("sealed_audit_opened") is not False):
         raise ValueError(f"feature provenance does not prove {split} isolation")
     manifest = json.loads(

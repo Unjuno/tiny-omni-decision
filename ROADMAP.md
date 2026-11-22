@@ -1,3 +1,19 @@
+**2026-11-22 R2-M HapTile task-held-out temporal Decision pilot:** Completed
+all six frozen-feature arms at 80 epochs / 2,800 updates per arm on CPU. The
+full text+vision+tactile-video+robot-state readout selected epoch 19 by
+validation macro task-group NLL (1.120; macro Accuracy 63.1%, Brier 0.508,
+ECE 0.197) and outperformed the selected state-only arm on this same
+five-task-group validation split. All arms showed substantial late
+overfitting; the full arm's final validation macro NLL was 4.199. Paired
+stream-ablation/shuffle controls changed predictions, but validation-based
+selection and five groups make these preliminary development results. The
+sealed audit stayed closed, no quantization or promotion occurred, and HapTile
+has no audio or still-image task. The frozen encoder stack plus head has about
+132.3M parameters, but VideoPrism weights alone occupy 457,475,296 bytes, so
+the provisional 200 MB package goal is not met. Keep this as an exploratory
+result, not product evidence. See [results](docs/pretrained_reuse/R2M_HAPTILE_TEMPORAL_DECISION_RESULTS_20261122.md)
+and [protocol](docs/pretrained_reuse/R2M_HAPTILE_ACTION_CHOICE_PROTOCOL_20261122.md).
+
 **2026-11-22 R2-M DextraVerse video+tactile contact gate:** The pinned
 44,197,744,857-byte archive passed its publisher SHA-256 and the read-only
 array checks found 261 episodes / 10,983 eligible windows, with no invalid

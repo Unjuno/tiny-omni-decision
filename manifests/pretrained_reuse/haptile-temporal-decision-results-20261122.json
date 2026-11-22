@@ -1,0 +1,152 @@
+{
+  "format": "haptile_temporal_decision_results_v1",
+  "status": "completed_exploratory_task_held_out_validation_pilot",
+  "experiment_id": "haptile-temporal-action-decision-seed17-v1",
+  "source_commit": "d5b83c0d6dcf0281f560a9432ca1b674de1e72fb",
+  "config_path": "configs/pretrained_reuse/haptile_temporal_decision.yaml",
+  "config_sha256": "c0003bf98d8182e945fc45b25378f0bec5ba3b0889b7bdae89eafce08c284f80",
+  "executed_script_sha256": "290c7a175e5ed2d8fe97399b46d83f39c0fc82e9874efc1ba0cc4e9dee0d4e04",
+  "feature_assembler_sha256": "fc714b47312a3c99fd8d5ca65b8f6021b049749df1a76b67f7a9533307d0adc1",
+  "run_started_at_utc": "2026-11-22T03:15:47.812739+00:00",
+  "run_finished_at_utc": "2026-11-22T03:31:19.322230+00:00",
+  "device": "cpu",
+  "cuda_used": false,
+  "paid_compute_cost": 0,
+  "seed": 17,
+  "epochs_per_mode": 80,
+  "optimizer_updates_per_mode": 2800,
+  "total_optimizer_updates": 16800,
+  "train": {
+    "examples": 1112,
+    "task_groups": 24,
+    "unique_media_assets": 1112,
+    "pre_video_gate_examples": 1113,
+    "video_gate_excluded_examples": 1,
+    "joined_feature_sha256": "4d0b8bfc4d9d279ec04e76811f6a9fc6a8410ceb3d498a33cca9cc0112ba42c2"
+  },
+  "validation": {
+    "examples": 169,
+    "task_groups": 5,
+    "unique_media_assets": 169,
+    "joined_feature_sha256": "ed874a01274e23e6ac8da4645fbc2a46aca1422df7ca3145c8ddb33c797fa44",
+    "arm_selection_used": true
+  },
+  "calibration": {
+    "examples": 169,
+    "task_groups": 4,
+    "unique_media_assets": 169,
+    "joined_feature_sha256": "a6659c6e43d7c2d09242b493cb7eede7977d09703b776719e37c58a7078b8acb",
+    "loaded_after_validation_selection": true
+  },
+  "encoders": {
+    "video": {
+      "name": "VideoPrism-B",
+      "revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+      "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+      "parameters": 114365184,
+      "checkpoint_bytes": 457475296
+    },
+    "text": {
+      "name": "MiniLM-L3",
+      "revision": "4ca70771034acceecb2e72475f72050fcdde4ddc",
+      "weights_sha256": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433",
+      "parameters": 17389824
+    },
+    "selected_decision_head_parameters": 519683,
+    "combined_parameters": 132274691
+  },
+  "arms": {
+    "text_only": {
+      "best_epoch": 1,
+      "trainable_parameters": 196865,
+      "macro_task_group_accuracy": 0.40598639455782315,
+      "macro_task_group_nll": 1.7116767644882203,
+      "macro_task_group_brier": 0.774478246893608,
+      "macro_task_group_ece": 0.19377257300071976,
+      "last_epoch_macro_task_group_nll": 1.793512773513794,
+      "best_reload_verified": true
+    },
+    "state_only": {
+      "best_epoch": 12,
+      "trainable_parameters": 519683,
+      "macro_task_group_accuracy": 0.4741496598639456,
+      "macro_task_group_nll": 1.4301918983459472,
+      "macro_task_group_brier": 0.6265951893069389,
+      "macro_task_group_ece": 0.22786747299084048,
+      "last_epoch_macro_task_group_nll": 4.287192142009735,
+      "best_reload_verified": true
+    },
+    "vision_text": {
+      "best_epoch": 5,
+      "trainable_parameters": 519683,
+      "macro_task_group_accuracy": 0.4244897959183674,
+      "macro_task_group_nll": 1.4915267944335937,
+      "macro_task_group_brier": 0.6812509075250931,
+      "macro_task_group_ece": 0.24170180323172588,
+      "last_epoch_macro_task_group_nll": 5.337442445755005,
+      "best_reload_verified": true
+    },
+    "tactile_text": {
+      "best_epoch": 11,
+      "trainable_parameters": 519683,
+      "macro_task_group_accuracy": 0.4219047619047619,
+      "macro_task_group_nll": 1.731025505065918,
+      "macro_task_group_brier": 0.7722641605381553,
+      "macro_task_group_ece": 0.275010251727234,
+      "last_epoch_macro_task_group_nll": 3.9474432945251463,
+      "best_reload_verified": true
+    },
+    "vision_tactile_text": {
+      "best_epoch": 11,
+      "trainable_parameters": 519683,
+      "macro_task_group_accuracy": 0.4726530612244898,
+      "macro_task_group_nll": 1.441378152370453,
+      "macro_task_group_brier": 0.6376028386724555,
+      "macro_task_group_ece": 0.22290236018952872,
+      "last_epoch_macro_task_group_nll": 6.677826642990112,
+      "best_reload_verified": true
+    },
+    "full": {
+      "best_epoch": 19,
+      "trainable_parameters": 519683,
+      "macro_task_group_accuracy": 0.6312925170068027,
+      "macro_task_group_nll": 1.1195183157920838,
+      "macro_task_group_brier": 0.5077574635701114,
+      "macro_task_group_ece": 0.19669145501187058,
+      "last_epoch_macro_task_group_nll": 4.199160408973694,
+      "best_reload_verified": true,
+      "checkpoint_sha256": "60ffd21c01a09bcb5d054b3abc28e60714f580b955de9125986b7985d539d70f"
+    }
+  },
+  "selected_mode": "full",
+  "selected_epoch": 19,
+  "selected_by_validation_only": true,
+  "paired_stream_controls": {
+    "missing_video_macro_nll": 1.6504382729530334,
+    "missing_sensor_macro_nll": 2.661704051494598,
+    "task_group_shuffled_video_macro_nll": 2.1704248905181887,
+    "task_group_shuffled_sensor_macro_nll": 2.8957932233810424
+  },
+  "paired_task_group_bootstrap_vs_state_only": {
+    "seed": 17,
+    "draws": 2000,
+    "task_groups": 5,
+    "selection_affected_validation": true,
+    "macro_accuracy_difference": 0.15714285714285717,
+    "macro_accuracy_percentile_95_interval": [
+      0.07333333333333338,
+      0.24095238095238097
+    ],
+    "macro_nll_difference": -0.3106735825538635,
+    "macro_nll_percentile_95_interval": [
+      -0.413798451423645,
+      -0.20754871368408204
+    ]
+  },
+  "sealed_audit_loaded": false,
+  "audio_available": false,
+  "all_four_modality_goal_evaluated": false,
+  "quantization_performed": false,
+  "product_promotion": false,
+  "external_run_directory": "C:\\CodexLocalArtifacts\\pretrained-reuse-r2\\haptile-task-v1\\fit-seed17-v1-attempt-01"
+}

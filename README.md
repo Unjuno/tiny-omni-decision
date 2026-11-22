@@ -1,5 +1,12 @@
 # Tiny Omni Decision
 
+**2026-11-22 HapTile frozen-feature Decision pilot:** The full
+vision+tactile-video+robot-state+text readout selected 63.1% task-macro
+validation Accuracy / 1.120 NLL across five held-out task groups; the best
+checkpoint was epoch 19 and all arms overfit late. Stream controls changed
+predictions, but this is selection-affected pilot evidence. HapTile has no
+audio or still-image task; this is not a product model. [Results and limits](docs/pretrained_reuse/R2M_HAPTILE_TEMPORAL_DECISION_RESULTS_20261122.md).
+
 **2026-11-21 R2 frozen input-use diagnosis:** The selected native Image path
 uses visual content (zero/shuffle controls lower accuracy by 9.0/9.7 points),
 while Text candidate queries matter more than same-task state features. The
