@@ -6,6 +6,7 @@ import pytest
 
 from scripts.audit_hoi_source_metadata import (
     parse_environment_index_keys,
+    summarize_directory_prefix,
     summarize_metadata_payload,
 )
 
@@ -36,6 +37,20 @@ def test_parse_environment_index_keys_ranges_and_explicit_lists() -> None:
     }
 
 
+def test_summarize_directory_prefix_distinguishes_outer_zip_bytes() -> None:
+    files = [
+        file_entry("bathroom_1/gripper/camera", "camera_rgb.zip", 100),
+        file_entry("bathroom_1/gripper/sensor", "force_torque.zip", 40),
+        file_entry("bathroom_1/hand/camera", "camera_rgb.zip", 900),
+        file_entry("bathroom_1/gripper", "annotation.json", 7),
+    ]
+
+    assert summarize_directory_prefix(files, "bathroom_1/gripper") == {
+        "entry_count": 3,
+        "listed_object_bytes": 147,
+        "zip_object_count": 2,
+        "listed_compressed_zip_bytes": 140,
+    }
 def test_summarize_metadata_payload_reports_union_and_paired_rgb() -> None:
     document = {
         "data": {
@@ -70,6 +85,12 @@ def test_summarize_metadata_payload_reports_union_and_paired_rgb() -> None:
     result = summarize_metadata_payload(json.dumps(document).encode())
 
     assert result["file_count"] == 4
+    assert result["directory_prefix_inventory"]["bathroom_1/gripper"] == {
+        "entry_count": 2,
+        "listed_object_bytes": 17,
+        "zip_object_count": 1,
+        "listed_compressed_zip_bytes": 10,
+    }
     assert result["candidate_environment_index_keys"] == {
         "force_torque": 2,
         "umi_telemetry": 2,

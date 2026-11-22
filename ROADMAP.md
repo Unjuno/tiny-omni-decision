@@ -1,3 +1,12 @@
+**2026-11-22 R2-M Hoi! metadata capacity reconciliation:** The exact version-1
+Dataverse file listing has 57 outer entries (27.42 GB listed; 39 ZIPs) under
+`bathroom_1/gripper`, not the previously recorded 1,421 entries / 1.27 TB.
+Those larger figures could refer to expanded members but are not reproducible
+from the public outer listing, so expanded bytes remain `UNKNOWN`. The 21
+non-empty top-level labels also do not recover the publisher's 38 environment
+identities; 198 filename-derived sensor keys remain unverified groups. No
+payload was accessed. See [reconciliation](docs/pretrained_reuse/R2_HOI_METADATA_CAPACITY_RECONCILIATION_20261122.md).
+
 **2026-11-22 R2-M Hoi! annotation-schema follow-up:** Pinned public code at
 `f60ef16` shows interaction windows can be manually labeled `open` or `close`
 with an optional integer index, making a two-option Decision mapping plausible.

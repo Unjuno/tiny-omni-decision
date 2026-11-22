@@ -54,6 +54,34 @@ def _sum_bytes(entries: list[dict[str, Any]]) -> int:
     return sum(int(entry["dataFile"]["filesize"]) for entry in entries)
 
 
+def summarize_directory_prefix(
+    files: list[dict[str, Any]], prefix: str
+) -> dict[str, int]:
+    """Sum Dataverse file objects under an exact directory prefix.
+
+    ``listed_object_bytes`` is the sum of outer Dataverse file sizes. For ZIP
+    objects this is compressed archive size, not expanded member size.
+    """
+    normalized = prefix.strip("/")
+    entries = [
+        entry
+        for entry in files
+        if str(entry.get("directoryLabel", "")) == normalized
+        or str(entry.get("directoryLabel", "")).startswith(f"{normalized}/")
+    ]
+    zip_entries = [
+        entry
+        for entry in entries
+        if str(entry.get("dataFile", {}).get("filename", "")).lower().endswith(".zip")
+    ]
+    return {
+        "entry_count": len(entries),
+        "listed_object_bytes": _sum_bytes(entries),
+        "zip_object_count": len(zip_entries),
+        "listed_compressed_zip_bytes": _sum_bytes(zip_entries),
+    }
+
+
 def summarize_metadata_payload(payload: bytes) -> dict[str, Any]:
     """Hash and summarize one Dataverse JSON metadata response."""
     dataset = json.loads(payload)
@@ -98,6 +126,11 @@ def summarize_metadata_payload(payload: bytes) -> dict[str, Any]:
         if re.fullmatch(r"interaction_splitting_info.*\.json", entry["dataFile"]["filename"])
     ]
     roots = {str(entry.get("directoryLabel", "")).split("/", maxsplit=1)[0] for entry in files}
+    nonempty_roots = {
+        str(entry.get("directoryLabel", "")).split("/", maxsplit=1)[0]
+        for entry in files
+        if entry.get("directoryLabel")
+    }
 
     selected_names = (
         "camera_rgb.zip",
@@ -119,6 +152,12 @@ def summarize_metadata_payload(payload: bytes) -> dict[str, Any]:
         "file_count": len(files),
         "total_bytes": _sum_bytes(files),
         "top_level_directory_count": len(roots),
+        "nonempty_top_level_directory_count": len(nonempty_roots),
+        "directory_prefix_inventory": {
+            "bathroom_1/gripper": summarize_directory_prefix(
+                files, "bathroom_1/gripper"
+            )
+        },
         "interaction_window_json_count": len(interaction_json),
         "interaction_window_json_directory_count": len(
             {str(entry.get("directoryLabel", "")) for entry in interaction_json}

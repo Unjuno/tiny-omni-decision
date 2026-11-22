@@ -53,6 +53,30 @@
       "manifest_columns": ["relative_path", "artifact_type", "size_bytes", "size_human", "source_relative_path", "note"],
       "manifest_is_split_definition": false
     },
+    "metadata_capacity_reconciliation_20261122": {
+      "dataset_metadata_api_response_bytes": 4269526,
+      "dataset_metadata_api_response_sha256": "a99356070fd2215cc86870971055bf194e43ee40209d454fb8513998f61f6f6a",
+      "versioned_file_list_api_response_bytes": 4258029,
+      "versioned_file_list_api_response_sha256": "ee1b129467d2b68ebc32aafef099ba351406c7ddc0bb8ff36418a8e7406e4d51",
+      "versioned_file_count": 4769,
+      "versioned_listed_total_bytes": 3186202640224,
+      "nonempty_top_level_directory_labels": 21,
+      "bathroom_1_gripper_prefix": {
+        "outer_metadata_rows": 57,
+        "listed_outer_bytes": 27417208876,
+        "zip_file_count": 39,
+        "listed_compressed_zip_bytes": 27413439341,
+        "expanded_member_bytes": "UNKNOWN"
+      },
+      "previously_reported_uncompressed_subtree_claim": {
+        "file_count": 1421,
+        "bytes": 1274184763539,
+        "status": "NOT_REPRODUCED_FROM_OUTER_FILE_LIST; expanded-size interpretation is unverified"
+      },
+      "candidate_environment_index_key_union": 198,
+      "independent_group_count": "UNKNOWN",
+      "payload_opened": false
+    },
     "annotation_schema_followup": {
       "repository_revision": "f60ef1669859e2b3ac71743923292ccbedb0e1df",
       "inspected_file": "data_processing/src/hoi/annotation_tools/interaction_splitting_verifier.py",
