@@ -53,6 +53,19 @@
       "manifest_columns": ["relative_path", "artifact_type", "size_bytes", "size_human", "source_relative_path", "note"],
       "manifest_is_split_definition": false
     },
+    "annotation_schema_followup": {
+      "repository_revision": "f60ef1669859e2b3ac71743923292ccbedb0e1df",
+      "inspected_file": "data_processing/src/hoi/annotation_tools/interaction_splitting_verifier.py",
+      "file_sha256": "5ba58e74c438cf7b2e1d440f5e822a9c3e3581bfc52c63c0e0596ba0965eb23",
+      "window_fields": ["start_ns", "end_ns", "duration_s"],
+      "optional_manual_label_choices": ["open", "close", "blank"],
+      "optional_integer_index": true,
+      "binary_choice_mapping_structurally_possible": true,
+      "payload_label_presence_and_validity_verified": false,
+      "index_semantics_verified": false,
+      "group_split_keys_verified": false,
+      "dataset_payload_opened": false
+    },
     "dataset_payload_downloaded": false,
     "personal_information_submitted": false,
     "access_request_submitted": false,

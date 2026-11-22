@@ -1,3 +1,11 @@
+**2026-11-22 R2-M Hoi! annotation-schema follow-up:** Pinned public code at
+`f60ef16` shows interaction windows can be manually labeled `open` or `close`
+with an optional integer index, making a two-option Decision mapping plausible.
+It does not establish released-row label completeness, index semantics, or
+participant/object/environment split keys. The 3.19 TB source remains
+`REVIEW_NOT_ADMITTED`; no identity was submitted and no payload was opened.
+See [follow-up](docs/pretrained_reuse/R2_HOI_FORCE_VIDEO_ANNOTATION_SCHEMA_FOLLOWUP_20261122.md).
+
 **2026-11-22 R2-M NOAA MRMS / ASOS metadata screen:** A reproducible
 metadata-only catalog screen found 873 ASOS station-month files and 720
 two-minute MRMS timestamps for one day, but did not establish independent
