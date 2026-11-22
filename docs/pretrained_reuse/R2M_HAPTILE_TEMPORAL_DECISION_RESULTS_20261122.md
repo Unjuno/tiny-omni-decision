@@ -99,12 +99,29 @@ generalization evidence.
 
 ## Input-dependence controls and calibration
 
-On the selected full model, validation macro NLL was 1.120. Replacing video with
-zeros raised it to 1.650; replacing the robot-state/tactile sequence raised it
-to 2.662. Shuffling video within task groups raised it to 2.170; shuffling
-sensor/state streams raised it to 2.896. These controls show sensitivity to
-the supplied streams in this pilot. They do not establish robust cross-modal
-reasoning or out-of-distribution utility.
+On the selected full model, validation macro NLL was 1.120. Replacing the
+numerical values in all four video feature streams with zeros raised it to
+1.650. Replacing all 25 state channels with their train means raised it to
+2.662; that tensor includes pose, velocity, joints, gripper position, and
+three scalar tactile fields. The two tactile-camera feature streams remain
+present in this control.
+
+The two `task_group_shuffled_*` controls do not shuffle within task groups.
+They map each sorted task group to the next sorted group and cycle through the
+donor rows in order. With unequal group sizes this can reuse donor rows and is
+not a bijective permutation. Recipient timestamps remain unchanged. The video
+value replacement raised macro NLL to 2.170; the state value replacement raised
+it to 2.896.
+
+All four controls modify values only. The evaluator still calls the model in
+`full` mode, so its video and sensor validity/presence masks remain true. The
+zero-video and train-mean-state inputs are therefore **value replacements**,
+not missing-stream interventions. These measurements show sensitivity to
+these specific cross-task/value perturbations on the same selection-affected
+development validation set. They do not isolate within-task modality
+dependence, establish that a modality is necessary, or establish robust
+cross-modal reasoning or out-of-distribution utility. The original prediction
+files, control metrics, checkpoints, and training run are unchanged.
 
 After validation-based checkpoint selection, one scalar temperature was fitted
 on the separate 169-example calibration split using four different task groups.

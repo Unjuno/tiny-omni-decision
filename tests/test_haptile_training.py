@@ -11,6 +11,7 @@ from scripts.pretrained_reuse.train_haptile_decision import (  # noqa: E402
     _apply_validation_control,
     _batch_tensors,
     _metrics,
+    _run_batch,
     _shuffle_values_across_task_groups,
     _train_prior_metrics,
 )
@@ -96,6 +97,18 @@ def test_task_group_stream_shuffle_uses_only_other_groups_deterministically():
         assert int(first[index, 0] // 10) == group_order.index(expected_source)
 
 
+def test_task_group_stream_shuffle_cycles_donors_when_group_sizes_differ():
+    groups = ["a", "a", "a", "b", "c", "c"]
+    values = np.asarray([[0], [1], [2], [10], [20], [21]], dtype=np.float32)
+    shuffled = _shuffle_values_across_task_groups(values, groups)
+
+    # Sorted task groups rotate a <- b <- c <- a. Group a receives the one
+    # available b row three times; c receives the first two a rows.
+    np.testing.assert_array_equal(shuffled[:3], [[10], [10], [10]])
+    np.testing.assert_array_equal(shuffled[3:4], [[20]])
+    np.testing.assert_array_equal(shuffled[4:], [[0], [1]])
+
+
 def test_missing_sensor_control_becomes_train_normalized_zero():
     arrays = {
         "video_values": np.ones((2, 4, 8, 768), dtype=np.float32),
@@ -107,6 +120,48 @@ def test_missing_sensor_control_becomes_train_normalized_zero():
         controlled["state_values"], np.broadcast_to(mean.numpy(), (2, 8, 25))
     )
     np.testing.assert_array_equal(arrays["state_values"], 99)
+    # This is a mean-state replacement, not a missing-stream intervention.
+    # The four visual streams (including tactile cameras) are unchanged.
+    np.testing.assert_array_equal(controlled["video_values"], arrays["video_values"])
+
+
+def test_full_model_keeps_stream_presence_true_after_value_replacement():
+    from tiny_omni_decision.haptile_decision import HapTileActionDecisionScorer
+
+    class ReadoutSpy(torch.nn.Module):
+        def forward(self, *args, **kwargs):
+            self.video_valid = args[2]
+            self.video_present = args[3]
+            self.sensor_valid = args[6]
+            self.sensor_present = args[7]
+            return torch.zeros((args[0].shape[0], 7))
+
+    arrays = {
+        "video_values": np.ones((1, 4, 8, 768), dtype=np.float32),
+        "video_timestamps_ms": np.tile(np.arange(8, dtype=np.float32), (1, 1)),
+        "state_values": np.full((1, 8, 25), 99, dtype=np.float32),
+        "state_timestamps_ms": np.tile(np.arange(8, dtype=np.float32), (1, 1)),
+        "context_features": np.zeros((1, 384), dtype=np.float32),
+        "option_features": np.zeros((1, 7, 1536), dtype=np.float32),
+        "targets": np.asarray([0], dtype=np.int64),
+    }
+    state_mean = torch.arange(25, dtype=torch.float32)
+    controlled = _apply_validation_control(arrays, "missing_sensor", state_mean)
+    batch = _batch_tensors(
+        controlled, [0], state_mean, torch.ones(25), mode="full",
+        shuffle_options=False, rng=random.Random(17),
+    )
+
+    model = HapTileActionDecisionScorer()
+    spy = ReadoutSpy()
+    model.readout = spy
+    _run_batch(model, "full", batch)
+    assert torch.count_nonzero(batch[0]) == 1 * 4 * 8 * 768
+    assert torch.count_nonzero(batch[2]) == 0
+    assert torch.all(spy.video_valid)
+    assert torch.all(spy.video_present)
+    assert torch.all(spy.sensor_valid)
+    assert torch.all(spy.sensor_present)
 
 
 def test_train_prior_uses_only_train_class_frequencies():

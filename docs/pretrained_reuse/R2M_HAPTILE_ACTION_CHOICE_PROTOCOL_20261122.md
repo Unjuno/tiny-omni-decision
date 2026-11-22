@@ -48,6 +48,12 @@ absolute displacement. Ties resolve in x, y, z order. Future pose is target
 only and must never enter model inputs. The exact label code is in
 `src/tiny_omni_decision/haptile_action.py`.
 
+**Timing limitation:** `t` is derived from the complete episode pose-log range,
+including its final timestamp. The input windows are causal relative to this
+externally supplied cutoff, but the benchmark does not establish an online
+trigger that could choose `t` before the episode ends. Treat the results as
+fixed-cutoff action prediction, not real-time decision triggering.
+
 Inputs end at `t` and cover only `[t-1.0 s, t]`: task instruction; front and
 wrist RGB video; left and right tactile video; and robot state for a separate
 state-only control. Use eight evenly spaced frames per stream. Do not include

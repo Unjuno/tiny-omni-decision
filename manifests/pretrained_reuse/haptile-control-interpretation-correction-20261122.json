@@ -1,0 +1,64 @@
+{
+  "format": "haptile_control_interpretation_correction_v1",
+  "status": "documentation_corrected_no_replay",
+  "baseline_repository_commit": "13240541e382809da8e1e894aaa7fea5399507ac",
+  "historical_result_report_git_blob_before_correction": "dc5ec0e6e4c43e6138c895061dda7b00384a6253",
+  "training_run": {
+    "artifact_directory": "C:/CodexLocalArtifacts/pretrained-reuse-r2/haptile-task-v1/fit-seed17-v1-attempt-01",
+    "executed_script_sha256": "290c7a175e5ed2d8fe97399b46d83f39c0fc82e9874efc1ba0cc4e9dee0d4e04",
+    "control_results_sha256": "4a6d106ef29a6bbb9702010d7f900502cef9d73e45845ca62242f02545a184c0",
+    "experiment_report_sha256": "75f88f59550417db525b1372ea02d39e2f7e4789ec66e56952ace4028a1fd29e",
+    "predictions_reloaded_or_rescored": false,
+    "weights_loaded": false,
+    "training_repeated": false,
+    "validation_or_calibration_read": false,
+    "sealed_audit_read": false
+  },
+  "corrected_interpretation": {
+    "task_group_shuffle": "cross-task value replacement; sorted groups rotate to next group and donor rows cycle, so unequal group sizes reuse donors; recipient timestamps stay fixed",
+    "missing_video": "all four video streams zeroed, but full-mode validity/presence masks remain true",
+    "missing_sensor": "all 25 state channels replaced with train means; tactile-camera video remains present and full-mode state masks remain true",
+    "query_time": "midpoint derived from full episode pose-log range; causal inputs conditional on cutoff, not a real-time trigger test",
+    "metrics_changed": false
+  },
+  "saved_macro_task_group_nll": {
+    "unmodified_full": 1.1195183157920838,
+    "zero_all_four_video_stream_values": 1.6504382729530334,
+    "train_mean_replaced_all_state_channels": 2.661704051494598,
+    "cross_task_video_value_replacement": 2.1704248905181887,
+    "cross_task_state_value_replacement": 2.8957932233810424
+  },
+  "verification": {
+    "tests": "py -3.11 -m pytest tests/test_haptile_training.py -q",
+    "focused_result": "8 passed",
+    "full_test_command": "py -3.11 -m pytest -q",
+    "full_test_result": "3273 passed, 11 skipped in 63.93s",
+    "ruff_command": "py -3.11 -m ruff check .",
+    "ruff_result": "All checks passed",
+    "manifest_file_hashes": "5 of 5 match",
+    "gpu_used": false,
+    "external_cost_usd": 0
+  },
+  "files": {
+    "result_report": {
+      "path": "docs/pretrained_reuse/R2M_HAPTILE_TEMPORAL_DECISION_RESULTS_20261122.md",
+      "sha256": "46b69dce274c6b5aed5686119e961b25466b96a06b4db906c4935963ece3991b"
+    },
+    "task_protocol": {
+      "path": "docs/pretrained_reuse/R2M_HAPTILE_ACTION_CHOICE_PROTOCOL_20261122.md",
+      "sha256": "0442534d97aeeaf4125b73822039fcB88b49ac0eb9e4952226babd1eef05b707"
+    },
+    "correction_report": {
+      "path": "docs/pretrained_reuse/R2M_HAPTILE_CONTROL_INTERPRETATION_CORRECTION_20261122.md",
+      "sha256": "434dc00f4ec16f13400411a56cd7ce1670e37e52f76d492c1c435deb82a2ea95"
+    },
+    "test_file": {
+      "path": "tests/test_haptile_training.py",
+      "sha256": "74cde66110a3413d7afd7196024e0a50c9e0cde4e85924e9228dc021d06f34cb"
+    },
+    "training_script": {
+      "path": "scripts/pretrained_reuse/train_haptile_decision.py",
+      "sha256": "290c7a175e5ed2d8fe97399b46d83f39c0fc82e9874efc1ba0cc4e9dee0d4e04"
+    }
+  }
+}

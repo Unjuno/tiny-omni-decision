@@ -1,3 +1,11 @@
+**2026-11-22 R2-M HapTile control-interpretation correction:** A code-to-report
+audit corrected the prior validation-control wording without changing results:
+the shuffle controls replace inputs across task groups (with donor cycling for
+unequal groups), zero/mean replacements retain full-mode presence masks, and
+the cutoff depends on the full episode timestamp range. Synthetic regressions
+cover these semantics; no model, prediction, or validation result was replayed.
+See [correction record](docs/pretrained_reuse/R2M_HAPTILE_CONTROL_INTERPRETATION_CORRECTION_20261122.md).
+
 **2026-11-22 R2-M HapTile TRAIN-only kinematic diagnostic:** A new fixed
 constant-velocity rule used only the last two aligned XYZ state samples on the
 1,112 frozen TRAIN examples (24 task groups); it predicted 858 targets (77.16%
