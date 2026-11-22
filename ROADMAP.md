@@ -4583,3 +4583,20 @@ cap; its CLI regression test verifies the separate worker-Python argument. See
 
 
 **2026-11-22 R2-M HapTile task-held-out pilot:** Added a deterministic seed-17 task-group split; the initial gripper target was rejected from train-only evidence. The pinned 1,113-episode train corpus is present and its LFS/Git hashes and MCAP CRCs passed. Full train-only target counts are `-x:106,+x:190,-y:46,+y:86,-z:35,+z:246,hold:404`; 19/24 train task groups lack at least one class, limiting held-out-task generalization. Separate frozen validation and calibration task groups (169 episodes each) are now downloaded and integrity-checked; their target preflights and label counts are recorded in the [protocol](docs/pretrained_reuse/R2M_HAPTILE_ACTION_CHOICE_PROTOCOL_20261122.md). Sealed audit remains unopened. A CPU VideoPrism-B 24-episode smoke produced `[24,4,8,768]` features in 176 seconds. An ordered distinct-frame selector fix, causal 25-channel state/instruction extraction, development-only data gates, and executable seven-way JSON readout are covered by 71 passing HapTile tests (one skipped) and Ruff. Full train video feature extraction remains in progress (508/1,113 at 09:12 JST); no model fitting, quantization or product promotion has occurred. HapTile has no audio and cannot by itself satisfy the four-modality objective. See [protocol and current evidence](docs/pretrained_reuse/R2M_HAPTILE_ACTION_CHOICE_PROTOCOL_20261122.md), [split commitment](manifests/pretrained_reuse/haptile-task-split-v1-20261122.json), and the scripts/tests.
+
+**2026-11-22 R2-M HapTile run reconciliation and fixed-rule diagnostic:** The
+earlier 09:12 extraction count above is a historical snapshot. The external
+run later completed 1,112 eligible train-video feature rows and all six
+predeclared CPU readout arms (80 epochs / 2,800 updates each); validation
+selected the full vision+tactile+state+text arm at epoch 19 with 63.1% macro
+task Accuracy / 1.120 macro NLL, then showed substantial later overfitting.
+The run and control interpretation are recorded in the
+[results](docs/pretrained_reuse/R2M_HAPTILE_TEMPORAL_DECISION_RESULTS_20261122.md)
+and [correction](docs/pretrained_reuse/R2M_HAPTILE_CONTROL_INTERPRETATION_CORRECTION_20261122.md).
+A one-time, zero-fit kinematic-persistence rule scored 72.3% macro Accuracy
+on the same five selection-affected validation task groups, above the selected
+readout's 63.1%; this flags target predictability from short-term state and
+does not constitute independent evidence. See the
+[fixed-rule diagnostic](docs/pretrained_reuse/R2M_HAPTILE_KINEMATIC_PERSISTENCE_VALIDATION_20261122.md).
+The source remains `REVIEW_NOT_ADMITTED`; HapTile has no audio. Do not further
+tune on this exposed validation or infer product-level multimodal quality.
