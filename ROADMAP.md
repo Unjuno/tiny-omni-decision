@@ -1,3 +1,12 @@
+**2026-11-22 R7 dynamic-INT8 calibration-only fit:** Using only the frozen
+14,280-row Calibration split, the predeclared 81-point scalar-temperature rule
+selected `0.40613` for the qint8 DINOv2 path (previous fixed temperature
+`0.90125`). Calibration-set macro NLL/ECE moved 0.13324/0.07316 →
+0.07538/0.00665; Accuracy stayed 97.72%. These are in-sample calibration
+diagnostics only. The already exposed Evaluation split was not opened. No
+training, GPU, or sealed-audit access occurred. See
+[protocol and limits](docs/pretrained_reuse/R7_SPOKEN_PALETTE_DINO_INT8_CALIBRATION_20261122.md).
+
 **2026-11-22 R7 DINOv2 dynamic INT8 pilot:** A read-only, CPU-only
 quantization compatibility run over the already exposed spoken-color
 audio+screen development task reduced the DINOv2 state payload from 88.25 MB
