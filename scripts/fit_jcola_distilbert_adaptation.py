@@ -1,7 +1,4 @@
 """Compare frozen and upper-layer-adapted compact Japanese BERT on grouped CV.
-        "adapted_optimizer": (
-            f"AdamW lr={args.learning_rate}, wd={args.weight_decay}; grad clip 1.0"
-        ),
 
 This experiment uses only the pinned JCoLA in-domain TRAIN file. It deliberately
 does not open either publisher validation file, the public OOD development set,
@@ -531,6 +528,9 @@ def main() -> None:
         "frozen_baseline": "first-four-layer CLS, 128-tanh scorer, AdamW lr=2e-3, wd=1e-4",
         "adapted_candidate": (
             "four-layer DistilBERT; layers 0-1 frozen; layers 2-3 and scorer trainable"
+        ),
+        "adapted_optimizer": (
+            f"AdamW lr={args.learning_rate}, wd={args.weight_decay}; grad clip 1.0"
         ),
         "checkpoint_selection": "none; fixed epoch 5 endpoint",
         "label_weighting": "none; unweighted cross entropy",
