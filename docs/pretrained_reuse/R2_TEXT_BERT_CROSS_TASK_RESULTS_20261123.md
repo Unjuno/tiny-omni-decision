@@ -212,3 +212,28 @@ baseline retained. Official model card claims and intended use can be reviewed
 at the linked card; the revision and size above came from the Hugging Face
 model metadata API. This metadata check does not establish downstream
 redistribution or product suitability.
+
+## Compact candidate CPU runtime audit
+
+Downloaded only the pinned model files to the new external artifact directory
+`C:\CodexArtifacts\pretrained-reuse-r2-local\light-splade-ja28m-runtime-audit-20261123-attempt-01\`.
+At revision `64d8f31a2196074dbd5de7707bbe6f14be3ab985`, the 111,007,808-byte
+`model.safetensors` hash is
+`4354b4cf64ca2a18eb60b38165a913365e74704457b6ad3f28631cebd769d0e1`, matching
+the revision-pinned Hub metadata. A CPU-only `AutoModel` load with the unused
+MLM/SPLADE vocabulary head and pooler omitted produced finite last-hidden
+states of shape `[1, 26, 384]`. This encoder path contains 27,566,592
+parameters; the publisher's complete SPLADE checkpoint declares 27,747,968.
+On Python 3.11.9 / PyTorch 2.6.0+cu124 / Transformers 5.6.2 with four CPU
+threads, observed load time was 0.818 s and first forward time was 0.060 s.
+CUDA was hidden from the process. The tokenizer initially failed because
+`fugashi` was absent; pinned `fugashi==1.5.2` and `unidic-lite==1.0.8` were
+installed only under this external artifact directory, leaving the shared
+Python environment unchanged. This is a runtime smoke, not a quality result.
+The script, Hub metadata snapshot, and machine-readable runtime report are
+preserved in that directory; no weights or media were added to Git. Their
+SHA-256 hashes are: script
+`a0ae93155fe64f2a82225c60320d3c0fa03e4e15138fd900e9e57d34fb1c36ea`, runtime
+report `17478a5b260a254de0829ca4708c025dd414b9f7eb35fb2e503463d764d58238`,
+and Hub revision metadata
+`d43bb05e2033fec3c6bd34efc820756be811407697f3a1747f833db7ba78c3dd`.
