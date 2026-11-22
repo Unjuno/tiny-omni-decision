@@ -5,7 +5,7 @@ feature-extractor settings remain task-local because its mel-filter metadata
 differs from the Speech Commands path. One TRAIN-only raw-input replay matched
 the standalone output within `6.14e-12`; existing Video/Image/Text parity
 passed, while Audio retains its known `6.18e-4` CPU/CUDA precision delta.
-The package is 192,654,853 logical pre-quantization parameters and 712,388,264
+The package is 192,654,853 logical pre-quantization parameters and 712,388,681
 bytes, so the provisional 200 MB package target is still unmet. No labels,
 sealed audit, training or GPU were used. This does not establish broad quality
 or natural AV fusion. See [integration measurements and limits](docs/pretrained_reuse/R7_PATH_A_SHARED_AUDIO_IMAGE_INTEGRATION_20261122.md).
