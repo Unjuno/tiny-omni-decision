@@ -96,9 +96,11 @@ Both tools refuse to overwrite existing output paths.
 
 This change establishes a real runtime use of the encoder-only checkpoint and
 preserves the fixed paired-audio/image task output on one existing TRAIN
-request. It does not change any learned weights or improve task quality. It
-does not exercise all four task routes after the storage change, qualify
-natural multimodal decision quality, meet the 200 MB package target, or
-establish lower RAM or latency. Keep this as an engineering variant; continue
-with full Path A route parity and then quantify the remaining VideoPrism / text
-storage reductions without promoting this package.
+request. A follow-up exercised all four fixed Path A routes against saved
+development-validation predictions; Video, Image and Text parity passed, while
+the pre-existing Audio CPU-FP32 versus CUDA-BF16 delta remained unchanged.
+That replay did not change weights or measure task quality. Natural multimodal
+quality, the 200 MB package target, and lower RAM or latency remain unproven.
+Keep this as an engineering variant; quantify the remaining VideoPrism / text
+storage reductions without promoting this package. See the [four-route replay
+report](R7_PATH_A_ENCODER_ONLY_FOUR_ROUTE_REPLAY_20261122.md).

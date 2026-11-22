@@ -1,3 +1,12 @@
+**2026-11-22 R7 encoder-only Path A four-route replay:** On the same fixed
+development-validation inputs, the compact Whisper encoder-only assembly
+reproduced the full assembly's comparison deltas for Video, Image, Text and
+Audio on first and warm calls. Typed JSON passed all four; Video/Image/Text
+parity passed. The known Audio CPU-FP32 vs saved CUDA-BF16 delta remains
+`6.18e-4`, unchanged, so the aggregate parity gate still fails. Target labels
+were not used for scoring; no training or sealed-audit access occurred. This is runtime preservation, not quality
+evidence. See [four-route report](docs/pretrained_reuse/R7_PATH_A_ENCODER_ONLY_FOUR_ROUTE_REPLAY_20261122.md).
+
 **2026-11-22 R7 Path A Whisper encoder-only runtime variant:** A new isolated
 assembly stores only Whisper's 8.21M-parameter encoder, shares it across the
 Audio and spoken-palette paths, and replays the fixed TRAIN raw-input JSON
