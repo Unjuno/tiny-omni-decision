@@ -237,3 +237,15 @@ SHA-256 hashes are: script
 report `17478a5b260a254de0829ca4708c025dd414b9f7eb35fb2e503463d764d58238`,
 and Hub revision metadata
 `d43bb05e2033fec3c6bd34efc820756be811407697f3a1747f833db7ba78c3dd`.
+
+## Follow-up: typed-decision quality result
+
+The metadata/runtime screen above was followed by a frozen-feature comparison
+on a train-only Japanese typed-decision split. The 27.6M LightSPLADE-derived
+CLS encoder scored 43.40% macro teacher-mode Accuracy, 1.1300 soft NLL, and
+0.2282 Brier; same-condition 110.7M Japanese BERT-base scored 53.40%, 1.0751,
+and 0.2010. A paired state bootstrap supports the validation difference, but
+both readouts were selected on that validation and the targets are English-
+state teacher distributions, not human truth. The full experiment, per-task
+results, uncertainty, hashes, truncation, and compute cost are documented in
+[the typed-decision comparison report](R2_TYPED_DECISIONS_JA_BERT_COMPARISON_20261123.md).
