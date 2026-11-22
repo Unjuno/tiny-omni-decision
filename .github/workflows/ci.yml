@@ -26,6 +26,7 @@ jobs:
         run: pytest -q
       - name: Validate manifests
         run: |
+          python -m json.tool manifests/pretrained_reuse/jcommonsenseqa-ruri-readout-20261122.json > /dev/null
           python -m json.tool manifests/pretrained_reuse/closed-public-test-audits.json > /dev/null
           python -m json.tool manifests/pretrained_reuse/uci-har-sensor-v1.json > /dev/null
           python -m json.tool manifests/pretrained_reuse/365-sound-actions-split-v1-20261121.json > /dev/null
