@@ -7,6 +7,14 @@ unrelated color left accuracy at 96/96. These are in-sample mechanism checks on
 the fitting speakers; they are not generalization or product-quality evidence
 and do not close R2-M. See [paired intervention report](docs/pretrained_reuse/R2_SPOKEN_PALETTE_TRAIN_ONLY_MODALITY_INTERVENTIONS_20261122.md).
 
+**2026-11-22 R7 image storage dtype audit:** The latest 594,168,210-byte
+encoder-only four-route package stores its 114.37M-parameter VideoPrism image
+archive as float32 (457.48 MB), despite `f16` in the filename. Arithmetic-only
+image precision estimates show float16 and int8 alone would still exceed the
+200 MB package target; packed 4-bit only barely fits before overhead and has
+not been implemented or quality-checked. Existing artifacts were untouched.
+See [dtype and size audit](docs/pretrained_reuse/R7_PATH_A_IMAGE_STORAGE_DTYPE_AUDIT_20261122.md).
+
 **2026-11-22 R7 encoder-only Path A four-route replay:** On the same fixed
 development-validation inputs, the compact Whisper encoder-only assembly
 reproduced the full assembly's comparison deltas for Video, Image, Text and
