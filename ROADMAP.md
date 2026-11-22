@@ -9,6 +9,11 @@ lacks person/conversation IDs, and its test payload remains unopened. This is
 narrow banking intent evidence, not general text or multimodal quality. See
 [source screen](docs/pretrained_reuse/R2_BANKING77_BERT_SOURCE_SCREEN_20261122.md)
 and [manifest](manifests/pretrained_reuse/banking77-text-source-screen-20261122.json).
+The follow-up unfreezing only MiniLM-L3's final block selected epoch 2 at
+85.84% Accuracy / 0.7145 NLL / 0.2221 Brier / 0.0726 ECE, below the frozen
+readout on every reported metric; train CE kept falling while validation NLL
+stalled. This rejects that one adaptation recipe, not BERT-family encoders.
+The publisher test remains unopened; see the same source screen and manifest.
 
 **2026-11-22 R2 spoken-palette TRAIN-only modality interventions:** On 96
 fixed training screens from 24 speaker groups, a same-speaker audio-color swap

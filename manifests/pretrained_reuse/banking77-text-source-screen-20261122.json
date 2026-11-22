@@ -112,11 +112,60 @@
     "probability_max_abs_delta_after_reload": 0.0,
     "official_test_loaded": false
   },
+  "last_block_adaptation_experiment": {
+    "experiment_id": "banking77-minilm-l3-last-block-v1",
+    "status": "COMPLETED_DEVELOPMENT_VALIDATION_ONLY",
+    "source_commit": "e977a5576f87771434b8f75a9095bee9914ec57f",
+    "base_model": "sentence-transformers/paraphrase-MiniLM-L3-v2",
+    "base_model_revision": "4ca70771034acceecb2e72475f72050fcdde4ddc",
+    "base_model_sha256": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433",
+    "base_parameters": 17389824,
+    "trainable_final_block_parameters": 1774464,
+    "trainable_readout_parameters": 29645,
+    "trainable_parameters_total": 1804109,
+    "seed": 17,
+    "device": "cpu",
+    "dtype": "float32",
+    "train_rows": 8005,
+    "validation_rows": 1998,
+    "best_epoch": 2,
+    "epochs_completed": 6,
+    "elapsed_seconds": 209.24,
+    "selection_metric": "minimum validation multiclass NLL",
+    "optimizer": "AdamW; final-block lr 2e-5, readout lr 0.01, weight decay 0.01",
+    "batch_size": 32,
+    "padding": "dynamic within each batch; max token length 128",
+    "validation_metrics": {
+      "accuracy": 0.8583583831787109,
+      "macro_recall": 0.861612885042454,
+      "macro_f1": 0.8586164528395797,
+      "nll": 0.7145057320594788,
+      "brier": 0.22210346162319183,
+      "ece_15": 0.07259159589485842
+    },
+    "comparison_to_frozen_readout": {
+      "accuracy_delta": -0.03853851556777954,
+      "nll_delta": 0.2954341173171997,
+      "brier_delta": 0.06722970306873322,
+      "ece_15_delta": 0.04449613478422165
+    },
+    "history_sha256": "2d9ee5e9baea218c89ee7565e2f6fccf4138846e0b92ee88387a1f3ee802d973",
+    "checkpoint_sha256": "465a5ee2abe3a1ebae28ec83bb06bdc5e1b389cc43e98fb7154d7e4748377973",
+    "validation_metrics_sha256": "b4dff2254c74d6e4b5c5fa6ac4a0fc89c05232c18e1dfecacf837236ddfc73f3",
+    "validation_predictions_sha256": "d23a81359dc1061e7c750d5864a28c4e1bc73823127a9f84946b98e9c1915ef1",
+    "reload_verification_sha256": "a0ca91184eea3cc3deca7342522d5d7f0f7e692f61e09d0678465e33214ffc99",
+    "run_metadata_sha256": "4a2ddd88232efdcc96978fad56b468942ff583a83e640521903aa08cdad8c100",
+    "effective_config_sha256": "584672c1a2233f699c8633d950c7bdcc0ab21b947ac2390b8a67d52dcb769aa5",
+    "training_script_sha256": "e84898406bfe608d54a54bb3fc5b22a259b396f90120fedc12040627fea54659",
+    "output_directory": "C:/CodexArtifacts/pretrained-reuse-r2-local/banking77-minilm-l3-last-block-v1-attempt-02",
+    "probability_max_abs_delta_after_reload": 0.0,
+    "official_test_loaded": false
+  },
   "limitations": [
     "The dataset card lists source language producers as More Information Needed and supplies no participant or conversation IDs; independent speaker/customer grouping is unverified.",
     "Normalized utterance identity can prevent exact-content leakage but cannot establish source-person independence or near-duplicate paraphrase separation.",
     "The task is a fixed-label, single-domain intent classifier; it does not establish arbitrary supplied-option reasoning, general text quality, or multimodal fusion.",
     "The published test payload remains unopened and must not enter iterative training, model selection, or calibration."
   ],
-  "recommendation": "Keep as a bounded TRAIN-only development candidate for compact BERT-family text Decision comparison after a deterministic content-grouped split is frozen. Do not make independent-source or product-quality claims until source-group provenance and the complete task protocol are resolved."
+  "recommendation": "Keep the frozen MiniLM-L3 readout as the strongest completed Banking77 development candidate. The tested last-block adaptation did not improve it. This is not a BERT-family ceiling; consider other encoder sizes or training controls only as separate, validation-selected experiments after resolving source-group provenance. Do not make independent-source or product-quality claims."
 }

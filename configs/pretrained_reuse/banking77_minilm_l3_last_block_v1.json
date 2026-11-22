@@ -1,0 +1,37 @@
+{
+  "experiment_id": "banking77-minilm-l3-last-block-v1",
+  "source": {
+    "dataset_id": "PolyAI/banking77",
+    "revision": "1846984189f2bc0ac51c6fc3a600fa9e1714e0c6",
+    "split_manifest_sha256": "d95bb74e6f28eac63012a95d808c6a9a82941e08960c57d52ad3e020c2a183e2",
+    "official_test_loaded": false
+  },
+  "model": {
+    "id": "sentence-transformers/paraphrase-MiniLM-L3-v2",
+    "revision": "4ca70771034acceecb2e72475f72050fcdde4ddc",
+    "weights_sha256": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433",
+    "encoder_layers_trainable": ["last transformer block"],
+    "pooling": "attention-mask mean of last hidden states",
+    "max_sequence_length": 128
+  },
+  "training": {
+    "seed": 17,
+    "device": "cpu",
+    "precision": "float32",
+    "encoder_optimizer": "AdamW",
+    "encoder_learning_rate": 0.00002,
+    "head_learning_rate": 0.01,
+    "weight_decay": 0.01,
+    "batch_size": 32,
+    "max_epochs": 12,
+    "early_stopping_patience": 4,
+    "early_stopping_min_delta": 0.00001,
+    "checkpoint_selector": "minimum validation multiclass NLL",
+    "calibration": "none; raw softmax probabilities"
+  },
+  "evaluation": {
+    "metrics": ["accuracy", "macro_recall", "macro_f1", "nll", "brier", "ece_15"],
+    "official_test_loaded": false
+  },
+  "output_policy": "new external artifact directory; refuse overwrite; no model/data artifacts in Git"
+}
