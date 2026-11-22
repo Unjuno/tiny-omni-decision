@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.metadata
 import json
 import platform
 import random
@@ -543,6 +544,9 @@ def main() -> None:
         "torch": torch.__version__,
         "cuda_runtime": torch.version.cuda,
         "transformers": __import__("transformers").__version__,
+        "sentencepiece": importlib.metadata.version("sentencepiece"),
+        "fugashi": importlib.metadata.version("fugashi"),
+        "unidic-lite": importlib.metadata.version("unidic-lite"),
         "started_at": started_at,
         "publisher_in_domain_validation_loaded": False,
         "publisher_ood_development_loaded": False,
