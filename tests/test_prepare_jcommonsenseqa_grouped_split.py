@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import pytest
 
+from scripts.compare_jcommonsenseqa_ruri_readouts import _paired_group_bootstrap
 from scripts.prepare_jcommonsenseqa_grouped_split import (
     build_grouped_split,
     target_text_is_ambiguous,
@@ -66,3 +67,54 @@ def test_target_text_ambiguity_uses_normalized_choice_identity() -> None:
     example = row(0, "ambiguous", label=0)
     example["choice1"] = "Ａnswer-0-0"
     assert target_text_is_ambiguous(example)
+
+
+def test_paired_bootstrap_keeps_question_groups_together_and_is_deterministic() -> None:
+    rows = [
+        {
+            "sample_id": "q-1",
+            "content_group_id": "g1",
+            "target_index": 0,
+            "probabilities": [0.7, 0.075, 0.075, 0.075, 0.075],
+        },
+        {
+            "sample_id": "q-2",
+            "content_group_id": "g1",
+            "target_index": 1,
+            "probabilities": [0.7, 0.075, 0.075, 0.075, 0.075],
+        },
+        {
+            "sample_id": "q-3",
+            "content_group_id": "g2",
+            "target_index": 0,
+            "probabilities": [0.1, 0.7, 0.1, 0.05, 0.05],
+        },
+    ]
+    result = _paired_group_bootstrap(rows, rows, iterations=100, seed=17)
+    repeat = _paired_group_bootstrap(rows, rows, iterations=100, seed=17)
+    assert result == repeat
+    assert result["group_count"] == 2
+    assert all(
+        value["point_difference"] == 0.0 for value in result["candidate_minus_baseline"].values()
+    )
+
+
+def test_paired_bootstrap_rejects_misaligned_prediction_rows() -> None:
+    baseline = [
+        {
+            "sample_id": "q-1",
+            "content_group_id": "g1",
+            "target_index": 0,
+            "probabilities": [0.2] * 5,
+        }
+    ]
+    candidate = [
+        {
+            "sample_id": "wrong-id",
+            "content_group_id": "g1",
+            "target_index": 0,
+            "probabilities": [0.2] * 5,
+        }
+    ]
+    with pytest.raises(ValueError, match="do not align"):
+        _paired_group_bootstrap(baseline, candidate, iterations=10, seed=17)

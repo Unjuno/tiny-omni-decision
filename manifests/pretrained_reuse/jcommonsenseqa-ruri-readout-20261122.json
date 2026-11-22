@@ -90,5 +90,54 @@
     "total_rows": 2004,
     "maximum_probability_absolute_delta": 0.0
   },
+  "frozen_joint_pair_followup": {
+    "status": "development_validation_only_candidate_rejected",
+    "run_directory": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\jcommonsenseqa-ruri-pair-readout-v1-attempt-01",
+    "analysis_directory": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\jcommonsenseqa-ruri-readout-paired-analysis-attempt-01",
+    "input_change": "encode question and each option together with frozen Ruri; same seed, rows, optimizer, epoch budget and selector",
+    "started_at_utc": "2026-11-22T15:06:54.027847+00:00",
+    "ended_at_utc": "2026-11-22T15:07:29.044735+00:00",
+    "trainable_readout_parameters": 131323,
+    "total_prequantization_parameters": 36836859,
+    "selected_epoch": 7,
+    "validation_metrics": {
+      "accuracy": 0.42914173007011414,
+      "nll": 1.3654273748397827,
+      "brier": 0.6914300322532654,
+      "ece_15_bins": 0.04126206721493346
+    },
+    "training_metrics_at_selected_epoch": {
+      "accuracy": 0.42761361598968506,
+      "nll": 1.3981460332870483,
+      "brier": 0.7045153975486755,
+      "ece_15_bins": 0.029038819547086724
+    },
+    "resource": {
+      "feature_extraction_seconds_cuda": 28.86297769995872,
+      "readout_training_seconds_cpu": 4.085637700045481,
+      "cuda_peak_allocated_bytes": 314831872
+    },
+    "paired_group_bootstrap": {
+      "baseline": "separate question and option features",
+      "candidate": "joint question-option pair features",
+      "iterations": 10000,
+      "seed": 17,
+      "group_count": 1984,
+      "accuracy_difference": -0.04740518962075848,
+      "accuracy_difference_95_percentile_interval": [-0.07050088169084541, -0.024548790871678265],
+      "nll_difference": 0.0749969692053072,
+      "nll_difference_95_percentile_interval": [0.049990985862182646, 0.10054820200784652],
+      "brier_difference": 0.044054546621271,
+      "brier_difference_95_percentile_interval": [0.0315535238753062, 0.05713191631242687],
+      "interpretation": "post-selection development diagnostic, not independent confirmation"
+    },
+    "artifacts_sha256": {
+      "run_report": "edcfee4da25456e9b375fc7ded1da2c51ac19c3aef32c7d381df08077e5073d6",
+      "checkpoint": "cf51188d7a7bb73a7d4b54968af075f01918aa28a78bda5d29f7f463d883897c",
+      "features": "b1db4015122d6bed80c2e30e8e4a1412a17a42ca5222549927388e824328fe26",
+      "validation_predictions": "adf08f41ea0b2f2f3ece6b659d7a2fa6818394ef9962bcaaf5b4cd37cea77d0a",
+      "paired_bootstrap": "83b2a1130a035dcc1b953d7d2f04fa3f1a3c952602f45c62cc0c77f51759f022"
+    }
+  },
   "caveat": "Checkpoint selection and comparison used the same grouped development validation. No claim of blind test or general/multimodal quality."
 }

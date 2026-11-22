@@ -16,7 +16,8 @@ The data came from the public [JGLUE v1.1.0 release](https://github.com/yahoojap
 pinned to commit `6791a5003e6deaa6fb2458bcb3aa1f58dc52ef33`. Its license is
 CC BY-SA 4.0. The source has 8,939 publisher-train rows and 1,119 publisher-
 validation rows. The release contains no test payload; no test data was
-downloaded or opened.
+downloaded or opened. Product redistribution and derivative-model use remain
+subject to rights review; this experiment is not a license clearance.
 
 The two published development splits were combined and repartitioned by
 normalized question identity (NFKC, casefold, collapsed whitespace), using
@@ -96,6 +97,37 @@ task adaptation, or benchmark ambiguity. The experiment is evidence to test
 Japanese BERT encoders further, not evidence to claim BERT has solved the
 Decision objective.
 
+### Frozen joint question-option representation follow-up (2026-11-23 JST)
+
+To test whether independently embedded question and option vectors discarded
+useful interaction information, a second candidate passed every
+question-option pair together through the same frozen Ruri encoder. Only the
+shared scorer changed; it used a 256-to-509-to-1 MLP (131,323 trainable
+parameters), seed 17, the same train/validation files, AdamW schedule and
+eight-epoch cap. This was frozen feature extraction, not Ruri fine-tuning.
+
+| Candidate | Accuracy | NLL | Brier | ECE-15 | Selected epoch |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Separate question/option features + shared scorer | 47.65% | 1.29043 | 0.64738 | 0.03889 | 8 |
+| Joint question-option encoding + shared scorer | 42.91% | 1.36543 | 0.69143 | 0.04126 | 7 |
+
+The paired difference was computed on the same 2,004 rows; a 10,000-replicate
+bootstrap resampled 1,984 normalized exact-question groups (seed 17). Joint
+encoding minus separate encoding was `-4.74 pp` Accuracy (percentile 95% CI
+`[-7.05, -2.45]`), `+0.0750` NLL (`[+0.0500, +0.1005]`) and `+0.0441` Brier
+(`[+0.0316, +0.0571]`). The checkpoint was selected on this same validation,
+so these intervals are descriptive after selection, not independent
+confirmation. This tested mean pooling of a frozen joint pair; it does not
+rule out fine-tuning, task prefixes, other pooling, or stronger Japanese
+encoders. However, it provides no reason to continue tuning this already-used
+split. Any next Japanese option-scoring experiment needs a newly admitted,
+independent source/task or an explicit label as exploratory development work.
+
+Joint-pair features were extracted on the local RTX 3080 Laptop GPU in 28.86 s,
+with 314,831,872 bytes peak allocated; fitting the readout took 4.09 s. The
+encoder remained frozen. Exact settings, the full curve and artifacts are in
+the paired candidate's external run report and the machine manifest below.
+
 ## Reproduction artifacts
 
 The full prepared data, cached frozen features, checkpoint, validation
@@ -105,6 +137,8 @@ probabilities, and run metadata are outside Git under
 - `jcommonsenseqa-grouped-split-v1-attempt-01`
 - `jcommonsenseqa-ruri-readout-v1-attempt-01`
 - `jcommonsenseqa-ruri-readout-analysis-attempt-03`
+- `jcommonsenseqa-ruri-pair-readout-v1-attempt-01`
+- `jcommonsenseqa-ruri-readout-paired-analysis-attempt-01`
 
 The cached features are 208,792,234 bytes; the readout checkpoint is 527,352
 bytes. Key hashes are recorded in

@@ -67,6 +67,10 @@ Japanese commonsense-QA result, far below the 95% target; the official test is
 absent from the pinned JGLUE release. It supports further BERT-family probes,
 not a general or multimodal claim. See [report](docs/pretrained_reuse/R2_JCOMMONSENSEQA_RURI_READOUT_20261122.md)
 and [manifest](manifests/pretrained_reuse/jcommonsenseqa-ruri-readout-20261122.json).
+**2026-11-23 follow-up:** A frozen joint question-option encoding scored
+42.91% / 1.3654 NLL / 0.6914 Brier, worse than the separate-feature readout by
+4.74 Accuracy points; paired question-group intervals exclude zero but are
+post-selection development diagnostics. Stop tuning this exposed split.
 
 **2026-11-22 R2 spoken-palette TRAIN-only modality interventions:** On 96
 fixed training screens from 24 speaker groups, a same-speaker audio-color swap
