@@ -1,0 +1,863 @@
+{
+  "captured_at_local": "2026-11-13T16:40:36+09:00",
+  "repository": "Unjuno/tiny-omni-decision",
+  "roadmap_branch": {
+    "name": "docs/pretrained-reuse-roadmap-20261010",
+    "head": "bfb13bf6e9ac4f2ce244eb51e470afa907587380",
+    "pr": 15,
+    "pr_state": "open",
+    "pr_draft": true,
+    "pr_base": "main"
+  },
+  "repository_snapshot": {
+    "open_pr_count": 80,
+    "local_branch_count": 191,
+    "remote_branch_count": 182,
+    "registered_worktree_count": 147,
+    "open_prs": [
+      {
+        "number": 88,
+        "title": "docs: record DROID metadata cohort feasibility gate",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-12T15:41:21Z",
+        "base_ref": "codex/r2-droid-source-screen-20261112",
+        "head_ref": "codex/r2-droid-metadata-cohort-20261113",
+        "head_sha": "0cdd3ae88b312de3505ea83c109f37b7c40e3f37"
+      },
+      {
+        "number": 87,
+        "title": "docs: screen DROID for Path A video-state decisions",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-12T14:24:58Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-droid-source-screen-20261112",
+        "head_sha": "caf2035049f239cac608700c5d24c815d06ce9d4"
+      },
+      {
+        "number": 86,
+        "title": "docs: screen AIST Bimanual for R2",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-12T13:48:10Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/aist-bimanual-source-screen-20261112",
+        "head_sha": "ee972ec001a523cb581da1acfc8b2aabd22c2bbc"
+      },
+      {
+        "number": 85,
+        "title": "Fix TallyQA count option label leakage",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-12T09:50:44Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-tallyqa-label-independent-options-20261112",
+        "head_sha": "9ed741bc717c0c1eff737c59542f48c8c445ca52"
+      },
+      {
+        "number": 84,
+        "title": "Document TCA-Bench and FAVE source gates",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-12T09:02:07Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-tca-fave-source-screen-20261112",
+        "head_sha": "c6e7c5460dcbda98b05afcca703bf32f9e10b34a"
+      },
+      {
+        "number": 83,
+        "title": "Fix mixed-route Path A worker arguments",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-12T06:55:21Z",
+        "base_ref": "codex/path-a-video-text-parity-20261111",
+        "head_ref": "codex/path-a-mixed-route-arg-fix-20261112",
+        "head_sha": "ef5c2bfb23e3ace8b47a81a3cecd4a0cbcea9c1c"
+      },
+      {
+        "number": 82,
+        "title": "Test temporal session isolation and concurrent updates",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-12T06:26:27Z",
+        "base_ref": "codex/path-a-video-text-parity-20261111",
+        "head_ref": "codex/r5-temporal-session-isolation-20261112",
+        "head_sha": "c90c99ed03062fd6bd0964a659a6707956d4c441"
+      },
+      {
+        "number": 81,
+        "title": "Record Perception Test TRAIN metadata exposure",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-12T08:17:54Z",
+        "base_ref": "codex/r2-cohort-usage-ledger-20261111",
+        "head_ref": "codex/r2-perception-cohort-exposure-20261112",
+        "head_sha": "e9f54d3649e2923999d6a6e80d64b3f9b979a3d6"
+      },
+      {
+        "number": 80,
+        "title": "docs: refresh pretrained reuse live audit",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-12T05:17:40Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r0-live-recheck-20261111",
+        "head_sha": "25e25471ccf7ed065d3ec0f4af6c14bac6398c61"
+      },
+      {
+        "number": 79,
+        "title": "Gate Speech Commands multiquery on cohort history",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-11T05:08:35Z",
+        "base_ref": "codex/r2-specialized-cohort-gates-20261111",
+        "head_ref": "codex/r2-audio-multiquery-cohort-gate-20261111",
+        "head_sha": "b295b8ce2d235182c5ef23bac24a5c9e5416daee"
+      },
+      {
+        "number": 78,
+        "title": "Verify Perception TRAIN raw-runtime feature parity",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-11T04:52:46Z",
+        "base_ref": "codex/path-a-video-text-runtime-20261111",
+        "head_ref": "codex/path-a-video-text-parity-20261111",
+        "head_sha": "d45e4570c1898a77419182e6bf1509df59302002"
+      },
+      {
+        "number": 77,
+        "title": "Gate specialized frozen trainers on cohort history",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-11T04:21:38Z",
+        "base_ref": "codex/r2-core-trainer-cohort-gates-20261111",
+        "head_ref": "codex/r2-specialized-cohort-gates-20261111",
+        "head_sha": "82b70b094a9a7f429466164f167e26f7e6d77237"
+      },
+      {
+        "number": 76,
+        "title": "Gate core Path A trainers on cohort history",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-11T03:59:33Z",
+        "base_ref": "codex/r2-cohort-ledger-launcher-gates-20261111",
+        "head_ref": "codex/r2-core-trainer-cohort-gates-20261111",
+        "head_sha": "5a1367b6e86df52d384bfec788dfa540f57598f2"
+      },
+      {
+        "number": 75,
+        "title": "Record insufficient fresh Speech Commands validation remainder",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-11T03:45:25Z",
+        "base_ref": "codex/r2-cohort-usage-ledger-20261111",
+        "head_ref": "codex/r2-cohort-ledger-launcher-gates-20261111",
+        "head_sha": "5e181e43de51e680eb706b9ba401076e2c52b13d"
+      },
+      {
+        "number": 74,
+        "title": "Screen otoSpeech Task against R2 source gates",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-11T02:59:14Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-otospeech-source-screen-20261111",
+        "head_sha": "0a5cfed998526a4693b694a6a407b556d4adfbc2"
+      },
+      {
+        "number": 73,
+        "title": "Add experimental Path A Perception Test video-text runtime",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-11T02:45:28Z",
+        "base_ref": "codex/path-a-shared-minilm-load-20261111",
+        "head_ref": "codex/path-a-video-text-runtime-20261111",
+        "head_sha": "a922fda5616b7460dfe945db47a33abdc589a094"
+      },
+      {
+        "number": 72,
+        "title": "Add a fail-closed cohort reuse ledger",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-11T01:55:58Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-cohort-usage-ledger-20261111",
+        "head_sha": "5bd71a11ae726d39f17f81464c811c985bb5f2cf"
+      },
+      {
+        "number": 71,
+        "title": "Implement and evaluate frozen Perception Test video-text Decision reader",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-11T00:35:00Z",
+        "base_ref": "codex/r2-perception-mcqa-exposure-audit-20261111",
+        "head_ref": "codex/r2-perception-mcqa-patha-20261111",
+        "head_sha": "ba44218ddd78fdf3e3364cbf5bb951ff7ed49eb0"
+      },
+      {
+        "number": 70,
+        "title": "Audit Perception Test MCQA exposure candidates",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-10T19:20:11Z",
+        "base_ref": "codex/r2-perception-test-source-screen-20261111",
+        "head_ref": "codex/r2-perception-mcqa-exposure-audit-20261111",
+        "head_sha": "7c517235eb65275a6e4a20187d03dbba7e05c806"
+      },
+      {
+        "number": 69,
+        "title": "Screen new synchronized AV source candidates",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-10T18:44:15Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-av-source-screen-20261111",
+        "head_sha": "fda386f33dda7cd2a064d83eaf0791776b0fa3aa"
+      },
+      {
+        "number": 68,
+        "title": "Record QASC same-state criterion diagnostic",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-10T18:16:51Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r5-qasc-same-state-record-20261111",
+        "head_sha": "63d0d16fa5e657725bbfc4a59acd9e7c9e02743b"
+      },
+      {
+        "number": 67,
+        "title": "Add Perception Test QA adapter and record prior-exposure limits",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-10T17:45:34Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-perception-test-source-screen-20261111",
+        "head_sha": "5ddcd2c0d337c29db8d6c7faa86fdb6c657dc611"
+      },
+      {
+        "number": 66,
+        "title": "Share MiniLM initialization across Path A routes",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-10T16:54:44Z",
+        "base_ref": "codex/r2-speech-commands-m1-runtime-20261110",
+        "head_ref": "codex/path-a-shared-minilm-load-20261111",
+        "head_sha": "ca70e572b14e3a00fbd800b5f71d3f7df5d5b7e2"
+      },
+      {
+        "number": 65,
+        "title": "Audit and reject Drone Detection source for Path A",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-10T17:59:14Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-drone-dataset-source-screen-20261111",
+        "head_sha": "8d9c70a61226727ae043f9483c0f9dd9f68af820"
+      },
+      {
+        "number": 64,
+        "title": "Record Commons sound-category AV admission recheck",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-10T15:45:09Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-commons-av-metadata-recheck-20261111",
+        "head_sha": "21604a424cb939366cc18bb43675d40f6e4ca177"
+      },
+      {
+        "number": 63,
+        "title": "Add task-scoped Speech Commands M1 JSONL route",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-10T15:10:56Z",
+        "base_ref": "codex/path-a-videomae-image-jsonl-runtime-20261110",
+        "head_ref": "codex/r2-speech-commands-m1-runtime-20261110",
+        "head_sha": "bc1754097ecb584b1d26a8efb1b744c1e441747f"
+      },
+      {
+        "number": 62,
+        "title": "Audit AVMIT feature producer provenance",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-10T14:03:20Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r1-avmit-producer-provenance-20261110",
+        "head_sha": "38a4774b9afc89587b6df7c96d916ba04d71a535"
+      },
+      {
+        "number": 61,
+        "title": "Add frozen AVMIT correspondence diagnostic",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-10T13:10:30Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-avmit-metadata-gate-20261110",
+        "head_sha": "d63228c74baf6d6369ee4b5269b4778007f1fd13"
+      },
+      {
+        "number": 60,
+        "title": "Audit VideoMAE real-video CUDA runtime",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-10T11:54:22Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r1-videomae-real-video-cuda-20261110",
+        "head_sha": "7ee19e424aec8f8b45ba3b20de6a88cb8156f63e"
+      },
+      {
+        "number": 59,
+        "title": "Add TallyQA Visual Genome frozen-feature probe",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-10T11:29:24Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-tallyqa-vg-source-screen-20261110",
+        "head_sha": "a4960b3f855787f0281db689c0cccbba1d83ce78"
+      },
+      {
+        "number": 58,
+        "title": "Diagnose VideoMAE Clevr-4 count feature separability",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-10T08:50:45Z",
+        "base_ref": "codex/path-a-videomae-clevr4-100k-20261110",
+        "head_ref": "codex/path-a-clevr4-count-feature-diagnostic-20261110",
+        "head_sha": "86dfb014a1e27e77588b3410ca2ff7955615b475"
+      },
+      {
+        "number": 57,
+        "title": "Integrate frozen VideoMAE Clevr-4 image Decision route",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-13T05:54:22Z",
+        "base_ref": "codex/path-a-videomae-jsonl-runtime-20261110",
+        "head_ref": "codex/path-a-videomae-image-jsonl-runtime-20261110",
+        "head_sha": "781b2146a3c06ff7bfbd5ca95ba666aae3c34614"
+      },
+      {
+        "number": 56,
+        "title": "Diagnose Clevr-4 count readout capacity on frozen VideoMAE features",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-10T07:30:42Z",
+        "base_ref": "codex/path-a-videomae-clevr4-100k-20261110",
+        "head_ref": "codex/r2-videomae-count-linear-readout-20261110",
+        "head_sha": "47f7efe9a6417f0e22078794a2605278024510c0"
+      },
+      {
+        "number": 55,
+        "title": "Run VideoMAE Path A Decision probe on Clevr-4 100k",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-09T23:42:53Z",
+        "base_ref": "codex/clevr4-100k-phash-audit-20261110",
+        "head_ref": "codex/path-a-videomae-clevr4-100k-20261110",
+        "head_sha": "7d65f11e18da2b2ab5fbd24eb77340308082e00e"
+      },
+      {
+        "number": 54,
+        "title": "Audit Clevr-4 100k internal validation exposure",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-09T21:49:23Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/clevr4-100k-phash-audit-20261110",
+        "head_sha": "520ff9b73fc0b15503b699505547084c58407535"
+      },
+      {
+        "number": 53,
+        "title": "Add bounded VideoMAEv2 CUDA runtime smoke",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-09T20:57:03Z",
+        "base_ref": "codex/path-a-videomaev2-runtime-20261110",
+        "head_ref": "codex/path-a-videomae-jsonl-runtime-20261110",
+        "head_sha": "34bc72a1253d8fd71e03f99a8c413497da753f3c"
+      },
+      {
+        "number": 52,
+        "title": "Add Torch-only Path A video runtime candidate",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-09T20:46:05Z",
+        "base_ref": "codex/r1-checkpoint-recheck-20261110",
+        "head_ref": "codex/path-a-videomaev2-runtime-20261110",
+        "head_sha": "573807248ac0cf7483a80b75ffb9b9c401ad90b9"
+      },
+      {
+        "number": 51,
+        "title": "Audit RoboMNIST residual group exposure",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-09T20:32:11Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-robomnist-residual-exposure-audit-20261110",
+        "head_sha": "055672fefd6e95b5a805c42b908fce1223d39090"
+      },
+      {
+        "number": 50,
+        "title": "feat: runnable task-scoped Path A JSONL runtime",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-09T20:16:16Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r1-checkpoint-recheck-20261110",
+        "head_sha": "a15a0becc1007a1af56db17ba9f2ea9fb06d286c"
+      },
+      {
+        "number": 49,
+        "title": "docs: record fresh-speaker audio evidence in R2 roadmap",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-09T16:44:20Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-audio-fresh-speaker-roadmap-20261110",
+        "head_sha": "c611f6704660f10b5d3fd9b6105dfda175b27518"
+      },
+      {
+        "number": 48,
+        "title": "Record fresh-speaker Speech Commands transfer evaluation",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-09T18:09:50Z",
+        "base_ref": "codex/r2-train-only-temporal-cv-20261104",
+        "head_ref": "codex/r2-speechcmd-fresh-speaker-eval-20261110",
+        "head_sha": "35a3ee31cb2dc61003e8a8f55e2686e04c13b012"
+      },
+      {
+        "number": 47,
+        "title": "R2: screen C-MHAD video and IMU source",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-09T14:59:36Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-cmhad-source-screen-20261109",
+        "head_sha": "bd51470b4afaf08ec97cc8ce11292c36cc80cecb"
+      },
+      {
+        "number": 46,
+        "title": "R2: verify the frozen Path A audio runtime locally",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-09T14:49:15Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-patha-audio-runtime-smoke-20261109",
+        "head_sha": "3a4eb91bb9e8cf4a60efdb981de54c2449adbb4c"
+      },
+      {
+        "number": 45,
+        "title": "R2: Measure overfitting, temporal order and task transfer",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-04T18:55:07Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-train-only-temporal-cv-20261104",
+        "head_sha": "bab97ff8ee32b3cbca716c792f26520e01691130"
+      },
+      {
+        "number": 44,
+        "title": "Evaluate EgoViz readouts on fresh unused session groups",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-04T18:09:47Z",
+        "base_ref": "codex/r2-egoviz-gru-temporal-20261030",
+        "head_ref": "codex/r2-egoviz-fresh-session-validation-20261030",
+        "head_sha": "500db1d3f2ae6e16441d93f4ab267a8576385ba4"
+      },
+      {
+        "number": 43,
+        "title": "Evaluate a fixed-budget temporal GRU on EgoViz frozen features",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-30T10:35:59Z",
+        "base_ref": "codex/r2-egoviz-train-coverage-20261030",
+        "head_ref": "codex/r2-egoviz-gru-temporal-20261030",
+        "head_sha": "ff14607e5a11f13a481b92fe0979854dd1fa1153"
+      },
+      {
+        "number": 42,
+        "title": "Evaluate expanded EgoViz training-session coverage",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-30T10:20:12Z",
+        "base_ref": "codex/r2-egoviz-channel-budget-20261030",
+        "head_ref": "codex/r2-egoviz-train-coverage-20261030",
+        "head_sha": "135dac6cd6d3b936af2d8dca3df4b20d256c1e14"
+      },
+      {
+        "number": 41,
+        "title": "Compare channel pooling under a fixed 512-epoch budget",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-30T05:21:46Z",
+        "base_ref": "codex/r2-egoviz-pilot-transfer-20261030",
+        "head_ref": "codex/r2-egoviz-channel-budget-20261030",
+        "head_sha": "7417f472828b94af26a318c2fd9ec8439e6686c6"
+      },
+      {
+        "number": 40,
+        "title": "Evaluate fixed EgoViz calibration on excluded pilot sessions",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-30T05:10:39Z",
+        "base_ref": "codex/r2-egoviz-temperature-20261030",
+        "head_ref": "codex/r2-egoviz-pilot-transfer-20261030",
+        "head_sha": "3ae292a92d11d4cb146859dfdc9d762d81fc1591"
+      },
+      {
+        "number": 39,
+        "title": "Evaluate training-session cross-fitted calibration",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-30T05:05:56Z",
+        "base_ref": "codex/r2-egoviz-mcap-preflight-20261029",
+        "head_ref": "codex/r2-egoviz-temperature-20261030",
+        "head_sha": "1380fb44cc910ad59b32aca8e424340c61001943"
+      },
+      {
+        "number": 38,
+        "title": "feat: validate EgoViz temporal correspondence on unseen sessions",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-30T04:58:44Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-egoviz-mcap-preflight-20261029",
+        "head_sha": "0ee4ddd23a8b6949f446d1a7745085e54ef4b2d7"
+      },
+      {
+        "number": 37,
+        "title": "Record iNaturalist CC0 expansion coverage gate",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-29T15:52:04Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-inat-expansion-roadmap-20261029",
+        "head_sha": "e3909424a583c7fc5a216e7f277624b6403569d3"
+      },
+      {
+        "number": 36,
+        "title": "docs: screen FZI-AURA and DAVE AV candidates",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-28T12:33:33Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-fzi-aura-source-screen-20261028",
+        "head_sha": "57aa474d9f15b2f70d9f9dc6fb441e69d377ba99"
+      },
+      {
+        "number": 35,
+        "title": "docs: update ZOD schema and source gate",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-28T12:02:18Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-zod-cam-lidar-screen-20261028",
+        "head_sha": "3160975fac62e1c1cb79ad91dc94b0f3b7bf2bcb"
+      },
+      {
+        "number": 34,
+        "title": "Correct GOOSE instance-label mapping audit",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-28T11:46:37Z",
+        "base_ref": "codex/r2-droid-later-shard-uncertainty-20261028",
+        "head_ref": "codex/r2-goose-instance-map-audit-20261028",
+        "head_sha": "2a6a022f9974c2b0aec79da759b4d1fd0d27b57a"
+      },
+      {
+        "number": 33,
+        "title": "Add paired site uncertainty audit for DROID later-shard transfer",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-28T11:15:07Z",
+        "base_ref": "codex/r2-droid-temporal-transfer-20261028",
+        "head_ref": "codex/r2-droid-later-shard-uncertainty-20261028",
+        "head_sha": "b8245103d221daea225f9666862f6b149462aa1b"
+      },
+      {
+        "number": 32,
+        "title": "Evaluate frozen DROID readouts on later shard groups",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-28T10:21:39Z",
+        "base_ref": "codex/r2-droid-site-universe-audit-20261028",
+        "head_ref": "codex/r2-droid-temporal-transfer-20261028",
+        "head_sha": "a8db60d262b9655cb00897f26cdec9ee6a177070"
+      },
+      {
+        "number": 31,
+        "title": "Record DROID unseen-site shard sample audit",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-28T01:45:13Z",
+        "base_ref": "codex/r2-droid-expanded-sites-20261028",
+        "head_ref": "codex/r2-droid-site-universe-audit-20261028",
+        "head_sha": "aefb1a1a3cd09959e73dfac79dbf319fce63c367"
+      },
+      {
+        "number": 30,
+        "title": "Record AVSBench source and rights gate",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-24T14:41:09Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-avsbench-source-screen-20261024",
+        "head_sha": "6b1c783d4e55f44ffeab3cb50fdf726d022cc6ca"
+      },
+      {
+        "number": 29,
+        "title": "Add CommonsenseQA 2.0 text Decision transfer probe",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-24T14:28:13Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-csqa2-text-decision-20261024",
+        "head_sha": "f057a031ffe271c51c138b439800cae2863a9149"
+      },
+      {
+        "number": 28,
+        "title": "docs: refresh R0 repository and live GPU audit",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-24T14:13:23Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r0-live-audit-20261024",
+        "head_sha": "c0ca187c0dfe9be9b54439b70fde1c723047ec46"
+      },
+      {
+        "number": 27,
+        "title": "docs: reconcile AV source screen with completed synthetic run",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-24T14:09:23Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-joint-av-source-screen-20261024",
+        "head_sha": "e2c05dc5f0d0aee681345e723147df47ac307392"
+      },
+      {
+        "number": 26,
+        "title": "Record pinned native shared-readout gradient diagnostic",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-24T14:00:42Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-shared-gradient-audit-20261024",
+        "head_sha": "8eb702a126a512b269fd3fd083b7f973478a6947"
+      },
+      {
+        "number": 25,
+        "title": "docs: add RoboPro and otoSpeech R2 source screens",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-24T13:31:13Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-robopro-source-screen-20261024",
+        "head_sha": "096d9cfb83bb1898a05b5a4fcd313ef232363f34"
+      },
+      {
+        "number": 24,
+        "title": "Record CLEVR-4 100k fixed-readout transfer results",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-23T12:45:23Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/clevr4-100k-transfer-eval-20261023",
+        "head_sha": "204d1f2932dc8def5a8830226a7e03926b88a6c5"
+      },
+      {
+        "number": 23,
+        "title": "R2: record scalar audio projection diagnostic",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-22T03:59:54Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/roadmap-scalar-audio-update-20261022",
+        "head_sha": "df4ac9b02b66b60a3231df7f765c82bb436c908f"
+      },
+      {
+        "number": 22,
+        "title": "docs: screen FAIR-Play for R2 AV matching",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-21T19:33:18Z",
+        "base_ref": "codex/r2-clevrer-synthetic-av-coverage-20261022",
+        "head_ref": "codex/r2-fair-play-source-screen-20261022",
+        "head_sha": "936a9837299b25095c0f0703768f1079af24b424"
+      },
+      {
+        "number": 21,
+        "title": "R2: CLEVRER synthetic AV coverage v2 results",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-21T17:59:37Z",
+        "base_ref": "codex/r2-clevrer-synthetic-av-protocol",
+        "head_ref": "codex/r2-clevrer-synthetic-av-coverage-20261022",
+        "head_sha": "61b02dbbb84102f87bcaaaec6ecb54ff935a7705"
+      },
+      {
+        "number": 20,
+        "title": "Add stable typed Decision JSON output",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-21T05:23:30Z",
+        "base_ref": "codex/r0-r2-continuation-20261021",
+        "head_ref": "codex/r2-json-decision-contract-20261021",
+        "head_sha": "7c4ac37fbeb8b18445e05882baa4282d65901189"
+      },
+      {
+        "number": 19,
+        "title": "Screen AMI for cross-modal speaker-to-face matching",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-29T05:28:47Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-ami-av-source-screen-20261021",
+        "head_sha": "db8e83fa4f7aab3280e90b630f904b5fe3f2ab3c"
+      },
+      {
+        "number": 18,
+        "title": "Screen CaptainCook4D for a procedural step-text video task",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-20T21:35:21Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-captaincook4d-screen-20261021",
+        "head_sha": "13b6fa22348cb5de4c905bcf365da17dbec5695a"
+      },
+      {
+        "number": 17,
+        "title": "Screen MAVD Urbansas audiovisual source integrity",
+        "state": "open",
+        "draft": false,
+        "updated_at": "2026-10-20T21:19:28Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r2-mavd-source-screen-20261021",
+        "head_sha": "79f83b55b58d82612c1941cf600dcca6357ba9f5"
+      },
+      {
+        "number": 16,
+        "title": "Record PE-Core T16 checkpoint CPU audit",
+        "state": "open",
+        "draft": false,
+        "updated_at": "2026-10-21T05:46:12Z",
+        "base_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_ref": "codex/r1-pe-core-audit-20261021",
+        "head_sha": "afea6624dfe247350ecbb704d61099304009f2a0"
+      },
+      {
+        "number": 15,
+        "title": "docs: replace Gemma-first roadmap with pretrained-reuse Omni Decision strategy",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-11-13T03:52:53Z",
+        "base_ref": "main",
+        "head_ref": "docs/pretrained-reuse-roadmap-20261010",
+        "head_sha": "bfb13bf6e9ac4f2ce244eb51e470afa907587380"
+      },
+      {
+        "number": 14,
+        "title": "fix: QAT bottlenecks and latest-step checkpoint handoff",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-08T10:54:56Z",
+        "base_ref": "codex/ternary-student-recovery",
+        "head_ref": "fix/student-qat-training-handoff",
+        "head_sha": "c3391a0c689d69df3300686d9c287546b741e7c8"
+      },
+      {
+        "number": 13,
+        "title": "feat: ternary-first student recovery with conditional LoRA",
+        "state": "open",
+        "draft": false,
+        "updated_at": "2026-10-08T02:27:05Z",
+        "base_ref": "main",
+        "head_ref": "feat/ternary-student-recovery",
+        "head_sha": "6a343af31b2d064de302dc9d93eeca17b27dcadd"
+      },
+      {
+        "number": 12,
+        "title": "feat: add strict postquant teacher cache boundary",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-06T17:54:48Z",
+        "base_ref": "codex/postquant-numerical-core",
+        "head_ref": "codex/postquant-teacher-cache",
+        "head_sha": "c79a50bd937de9266fb1277efd68fd24b3989a61"
+      },
+      {
+        "number": 11,
+        "title": "feat: postquant numerical core and CPU checker (no model execution)",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-06T17:19:22Z",
+        "base_ref": "codex/postquant-worker-entrypoints",
+        "head_ref": "codex/postquant-numerical-core",
+        "head_sha": "8e39f7a8088d5fb8a77c93ee763b5b01484a63b5"
+      },
+      {
+        "number": 10,
+        "title": "feat: safe postquant worker entrypoints (no training launch)",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-06T15:33:14Z",
+        "base_ref": "codex/roadmap-compression-video-specialization",
+        "head_ref": "codex/postquant-worker-entrypoints",
+        "head_sha": "1fbe0adad7e9307baabbdc9387b8e27819b78932"
+      },
+      {
+        "number": 9,
+        "title": "Teacher v1: leakage-safe quality pipeline",
+        "state": "open",
+        "draft": true,
+        "updated_at": "2026-10-04T10:04:40Z",
+        "base_ref": "main",
+        "head_ref": "codex/teacher-quality-v1",
+        "head_sha": "8bf351c9b2537e03780d55edf12c45ad09819134"
+      }
+    ]
+  },
+  "spatial_candidate": {
+    "branch": "codex/path-a-videomae-spatial-grid-20261113",
+    "head": "5ab9e7efce0ea5816984cadfe2fc9bbf2d7876a0",
+    "pr": null,
+    "common_ancestor_counts": {
+      "roadmap_only": 17,
+      "candidate_only": 20
+    },
+    "candidate_ci": "run #4230 success"
+  },
+  "process_device": {
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU, 11 MiB, 16384 MiB, 0 %",
+    "separate_orbitune_watchdog_and_checkpoint_sync_processes_observed": true,
+    "processes_modified": false,
+    "no_tiny_omni_training_process_observed": true
+  },
+  "storage": [
+    {
+      "name": "C",
+      "free_bytes": 610854453248,
+      "used_bytes": 412057645056
+    },
+    {
+      "name": "D",
+      "free_bytes": 1391738732544,
+      "used_bytes": 2609047416832
+    }
+  ],
+  "constraints": {
+    "cloud_compute_allowed": false,
+    "prequant_parameter_target": "100-200M",
+    "postquant_package_target_bytes": 200000000,
+    "package_target_requires_measured_export_reload_parity": true,
+    "per_defined_task_accuracy_target": 0.95,
+    "stretch_accuracy_target": 0.98,
+    "task_battery_device_latency_energy_gate": "open"
+  },
+  "audit_boundary": "Existing branches, PRs, datasets, checkpoints, artifacts and processes were not modified; a new isolated worktree branch was created for this audit and follow-up.",
+  "audit_branch": {
+    "name": "codex/pretrained-reuse-r0-r2-progress-20261113",
+    "based_on": "bfb13bf6e9ac4f2ce244eb51e470afa907587380",
+    "worktree_created_for_roadmap_aligned_followup": true
+  }
+}
