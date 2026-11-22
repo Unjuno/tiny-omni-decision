@@ -104,6 +104,53 @@ Exact artifacts are external to Git under
 The machine-readable summary is
 [`massive-ja-bert-readout-20261123.json`](../../manifests/pretrained_reuse/massive-ja-bert-readout-20261123.json).
 
+## Compact Japanese encoder comparison
+
+A second frozen encoder, `cl-nagoya/ruri-v3-70m`, was compared on the exact
+same frozen train/validation JSONL, seed, readout width, optimizer, epoch
+budget and checkpoint selector. It uses the SentenceTransformer-style masked
+mean pooling followed by L2 normalization; BERT uses its `[CLS]` feature. Thus
+this is a comparison of two frozen representation/readout pipelines, not an
+encoder-only causal ablation. Both validation-selected checkpoints share the
+same selection-affected development data.
+
+| Candidate | Total parameters before quantization | Encoder file | Accuracy | Macro Accuracy (59 present intents) | NLL | Brier | ECE-15 | Feature time (CPU) |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Japanese BERT-base + head | 111,313,340 | 447.41 MB | 81.65% | 75.24% | 0.6872 | 0.2730 | 0.0360 | 200.33 s |
+| Ruri-v3-70m + head | 70,059,836 | 280.02 MB | 75.50% | 68.49% | 0.8983 | 0.3483 | 0.0559 | 138.70 s |
+
+The paired bootstrap resampled 2,015 normalized-text groups with replacement
+for 10,000 PCG64 replicates (seed 17; percentile 95% intervals). BERT minus
+Ruri was +6.15 percentage points Accuracy (95% interval +4.28 to +8.06 pp),
+−0.2111 NLL (−0.2654 to −0.1577), and −0.0752 Brier (−0.0951 to −0.0556).
+This interval describes the already-used validation split and does not account
+for checkpoint selection; it is not independent confirmation.
+
+The Ruri run's external directory is
+`C:\CodexArtifacts\pretrained-reuse-r2-local\massive-ja-jp-ruri70m-readout-20261123-attempt-01`;
+the paired-comparison directory is
+`C:\CodexArtifacts\pretrained-reuse-r2-local\massive-ja-jp-bert-ruri70m-paired-comparison-20261123-attempt-01`.
+Their selected readout, feature, validation-prediction, run-report, and paired
+comparison SHA-256 values are recorded in the machine manifest. Both scripts
+were snapshotted alongside their external run/comparison receipts.
+
+An isolated reload verifier then loaded each saved readout and cached feature
+tensor in a new CPU process with the same four-thread setting. For both BERT
+and Ruri it reproduced all 2,033 saved argmaxes and probabilities with maximum
+absolute difference `0.0` (`atol=1e-7`, `rtol=0`). The first verification
+attempt with the process-default thread count differed by up to `1.13e-6` for
+BERT and `6.26e-7` for Ruri; matching the recorded four-thread setting removed
+that numeric difference. The final verification receipts and verifier hash
+are in the machine manifest and both external run directories.
+
+On this task, BERT is the stronger text candidate. Ruri saves about 41.25M
+pre-quantization parameters and 167.39 MB of FP32 weight-file size, and extracts
+features about 31% faster on this CPU, but loses meaningful intent quality.
+The Ruri encoder alone is below the roadmap's 100–200M target range and would
+leave more room for other towers if combined; no such multimodal combination
+was tested. Neither raw checkpoint file meets the <=200 MB package target, and
+no quantization was performed.
+
 ## Decision
 
 Keep Japanese BERT-base as a text-path candidate: it transfers to a distinct

@@ -18,9 +18,20 @@ def test_massive_ja_bert_manifest_records_disjoint_split_and_selected_result() -
     assert manifest["split"]["project_sealed_audit_opened"] is False
     assert manifest["training"]["selected_epoch_by_validation_nll"] == 8
     assert manifest["training"]["checkpoint_reload_verified"] is True
+    assert manifest["bert_readout_reload_verification"]["matching_argmax_rows"] == 2033
+    assert manifest["bert_readout_reload_verification"]["max_probability_abs_delta"] == 0.0
     assert manifest["validation"]["selection_affected"] is True
     assert manifest["validation"]["accuracy"] < 0.95
     assert len(manifest["epoch_curve"]) == manifest["training"]["epochs"]
     assert manifest["epoch_curve"][-1]["epoch"] == manifest["training"][
         "selected_epoch_by_validation_nll"
     ]
+    comparison = manifest["ruri70m_comparison"]
+    assert comparison["model"]["total_prequantization_parameters"] < manifest[
+        "model"
+    ]["total_prequantization_parameters"]
+    assert comparison["validation"]["accuracy"] < manifest["validation"]["accuracy"]
+    assert comparison["reload_verification"]["max_probability_abs_delta"] == 0.0
+    assert manifest["paired_bert_minus_ruri70m_comparison"]["bootstrap"][
+        "iterations"
+    ] == 10_000

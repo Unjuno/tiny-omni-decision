@@ -163,5 +163,204 @@
       "ece_15_bins": 0.035991229116916656
     }
   ],
-  "interpretation": "Text-path candidate only; below the 95-98% aspiration; no multimodal evidence or quantization."
+  "interpretation": "Text-path candidate only; below the 95-98% aspiration; no multimodal evidence or quantization.",
+  "ruri70m_comparison": {
+    "model": {
+      "id": "cl-nagoya/ruri-v3-70m",
+      "revision": "07a8b0aba47d29d2ca21f89b915c1efe2c23d1cc",
+      "license": "Apache-2.0",
+      "frozen_parameters": 70002816,
+      "weights_bytes": 280019040,
+      "weights_sha256": "c959b76a535eee838b1f1e6b8999ba513ef8d87a6f8c3534c50dcda1eb5f6a62",
+      "pooling": "attention-mask mean pooling followed by L2 normalization",
+      "readout_parameters": 57020,
+      "total_prequantization_parameters": 70059836
+    },
+    "training": {
+      "seed": 17,
+      "epochs": 8,
+      "selected_epoch_by_validation_nll": 8,
+      "feature_extraction_seconds": 138.70012519997545,
+      "readout_fit_seconds": 3.0466403999598697,
+      "device": "cpu",
+      "checkpoint_reload_verified": true
+    },
+    "validation": {
+      "count": 2033,
+      "accuracy": 0.7550418376922607,
+      "macro_accuracy_present_intents": 0.6849353172011294,
+      "intents_present": 59,
+      "nll": 0.8983426094055176,
+      "brier": 0.34825026988983154,
+      "ece_15_bins": 0.0558759942650795,
+      "mean_confidence": 0.7083039879798889
+    },
+    "run_report_sha256": "53339d55671dcd1c5541f9b948d4587bec50a3b8fecbe0cc8ca56642bd928076",
+    "frozen_features_sha256": "42f19bfb389b99575d36dd287a43788177a8fc157dd9319cd162181b773ff5b1",
+    "best_readout_sha256": "1cae7a5015b134e0061c2f7f3b75759bc0ff4347e1fcacaddec2e3edf29033a4",
+    "validation_predictions_sha256": "f6e53c1524b80ee8d0ea03368e14b5707054ac27f8eff160530d39546627f2ed",
+    "training_script_sha256": "b273e42de2c47533433a0ba9f1e4e1b29c53f362494168326efc6a8049ae698d",
+    "epoch_curve": [
+      {
+        "epoch": 1,
+        "train_ce": 3.190165592188185,
+        "accuracy": 0.4279389977455139,
+        "macro_accuracy_present_intents": 0.21558254957199097,
+        "nll": 2.311664581298828,
+        "brier": 0.7594624161720276,
+        "ece_15_bins": 0.18216226994991302
+      },
+      {
+        "epoch": 2,
+        "train_ce": 1.863954397765073,
+        "accuracy": 0.6143630146980286,
+        "macro_accuracy_present_intents": 0.466110189839945,
+        "nll": 1.5104058980941772,
+        "brier": 0.5578737258911133,
+        "ece_15_bins": 0.17459644377231598
+      },
+      {
+        "epoch": 3,
+        "train_ce": 1.3492642282084986,
+        "accuracy": 0.6709296703338623,
+        "macro_accuracy_present_intents": 0.5525832597987127,
+        "nll": 1.2116005420684814,
+        "brier": 0.4584849178791046,
+        "ece_15_bins": 0.11405600607395172
+      },
+      {
+        "epoch": 4,
+        "train_ce": 1.12503684413704,
+        "accuracy": 0.7058534026145935,
+        "macro_accuracy_present_intents": 0.6196929293416314,
+        "nll": 1.0902445316314697,
+        "brier": 0.41577181220054626,
+        "ece_15_bins": 0.09499093890190125
+      },
+      {
+        "epoch": 5,
+        "train_ce": 1.0061556185511025,
+        "accuracy": 0.7289719581604004,
+        "macro_accuracy_present_intents": 0.6464190882141307,
+        "nll": 1.006016731262207,
+        "brier": 0.3864022493362427,
+        "ece_15_bins": 0.07277560979127884
+      },
+      {
+        "epoch": 6,
+        "train_ce": 0.9247824949297038,
+        "accuracy": 0.7397934198379517,
+        "macro_accuracy_present_intents": 0.6660574603888948,
+        "nll": 0.9553179144859314,
+        "brier": 0.36902254819869995,
+        "ece_15_bins": 0.06735154241323471
+      },
+      {
+        "epoch": 7,
+        "train_ce": 0.8681780777194283,
+        "accuracy": 0.7506148815155029,
+        "macro_accuracy_present_intents": 0.6761444670669103,
+        "nll": 0.9269218444824219,
+        "brier": 0.3586694300174713,
+        "ece_15_bins": 0.051979854702949524
+      },
+      {
+        "epoch": 8,
+        "train_ce": 0.8222672558304939,
+        "accuracy": 0.7550418376922607,
+        "macro_accuracy_present_intents": 0.6849353172011294,
+        "nll": 0.8983426094055176,
+        "brier": 0.34825026988983154,
+        "ece_15_bins": 0.0558759942650795
+      }
+    ],
+    "source_commit_before_experiment": "c2f2a8ae83a1ac3964c534d08c9ea19c33e05bb9",
+    "started_at_utc": "2026-11-22T17:13:55.354428+00:00",
+    "ended_at_utc": "2026-11-22T17:16:18.307064+00:00",
+    "artifacts_external_to_git": {
+      "root": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\massive-ja-jp-ruri70m-readout-20261123-attempt-01",
+      "frozen_features_sha256": "42f19bfb389b99575d36dd287a43788177a8fc157dd9319cd162181b773ff5b1",
+      "best_readout_sha256": "1cae7a5015b134e0061c2f7f3b75759bc0ff4347e1fcacaddec2e3edf29033a4",
+      "validation_predictions_sha256": "f6e53c1524b80ee8d0ea03368e14b5707054ac27f8eff160530d39546627f2ed",
+      "run_report_sha256": "53339d55671dcd1c5541f9b948d4587bec50a3b8fecbe0cc8ca56642bd928076"
+    },
+    "reload_verification": {
+      "status": "pass",
+      "rows": 2033,
+      "matching_argmax_rows": 2033,
+      "max_probability_abs_delta": 0.0,
+      "tolerance_atol": 1e-07,
+      "tolerance_rtol": 0,
+      "feature_cache_sha256": "42f19bfb389b99575d36dd287a43788177a8fc157dd9319cd162181b773ff5b1",
+      "checkpoint_sha256": "1cae7a5015b134e0061c2f7f3b75759bc0ff4347e1fcacaddec2e3edf29033a4",
+      "predictions_sha256": "f6e53c1524b80ee8d0ea03368e14b5707054ac27f8eff160530d39546627f2ed",
+      "receipt_sha256": "2bfb8d6006ba0146bde7830c9d8f041d37ad8e886ec617aa870568bc6f3e5733",
+      "verifier_sha256": "fdf5e970a2975624db9887cc58f0bf8a75cec3138f16c6f0b3028d9a3a6589d4"
+    }
+  },
+  "paired_bert_minus_ruri70m_comparison": {
+    "rows": 2033,
+    "normalized_text_groups": 2015,
+    "bootstrap": {
+      "unit": "normalized exact utterance group",
+      "iterations": 10000,
+      "seed": 17,
+      "rng": "NumPy PCG64",
+      "interval": "percentile 95%"
+    },
+    "group_weighted_point_metrics": {
+      "bert": {
+        "accuracy": 0.8165272995573045,
+        "nll": 0.6872187138805387,
+        "brier": 0.2730323227890493
+      },
+      "ruri": {
+        "accuracy": 0.7550418101328087,
+        "nll": 0.89834257359668,
+        "brier": 0.3482502706680686
+      }
+    },
+    "paired_differences": {
+      "accuracy": {
+        "difference_bert_minus_ruri": 0.06148548942449583,
+        "ci95_percentile": [
+          0.042814960629921295,
+          0.08055068092185448
+        ]
+      },
+      "nll": {
+        "difference_bert_minus_ruri": -0.21112385971614134,
+        "ci95_percentile": [
+          -0.2654363469883353,
+          -0.15774203274287016
+        ]
+      },
+      "brier": {
+        "difference_bert_minus_ruri": -0.07521794787901925,
+        "ci95_percentile": [
+          -0.0950688527280181,
+          -0.05564599566180887
+        ]
+      }
+    },
+    "selection_affected_validation": true,
+    "independent_test": false,
+    "saved_comparison_sha256": "2fdf545b4cdf854e059b9c9f835242140143850b3c4b5e6233dd104f61e0eb6c",
+    "comparison_script_sha256": "5a0ddf7acf51afc117f34a543005ee3f951a644d03e2fd20af68e3436f24bf9c",
+    "output_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\massive-ja-jp-bert-ruri70m-paired-comparison-20261123-attempt-01\\comparison.json",
+    "paired_bootstrap_receipt_sha256": "2fdf545b4cdf854e059b9c9f835242140143850b3c4b5e6233dd104f61e0eb6c"
+  },
+  "bert_readout_reload_verification": {
+    "status": "pass",
+    "rows": 2033,
+    "matching_argmax_rows": 2033,
+    "max_probability_abs_delta": 0.0,
+    "tolerance_atol": 1e-07,
+    "tolerance_rtol": 0,
+    "feature_cache_sha256": "3177c8d3c29aa2b2519334de53045eb9ba049fc696db01b290f95a21a811f0fc",
+    "checkpoint_sha256": "49d22f13ac6a4b4f3f31798d70d986d815950eb4e4460cb30cc34ab7e012254b",
+    "predictions_sha256": "8c675c3afe1893bec47b53214678935964d4e06931e4a3698a3abc2772319040",
+    "receipt_sha256": "94efa0cbd122720ec49247db9759a551a9cc7c0cf09f32afe2fdbb5fd168829a",
+    "verifier_sha256": "fdf5e970a2975624db9887cc58f0bf8a75cec3138f16c6f0b3028d9a3a6589d4"
+  }
 }

@@ -1,14 +1,13 @@
-**2026-11-23 R2 Japanese BERT-family independent-source follow-up:** A frozen
-Japanese BERT-base encoder and 106,172-parameter 60-intent readout were trained
-on MASSIVE Japanese train data with exact normalized utterance duplicates
-removed against publisher validation (286 rows removed). On the 2,033-row
-validation set, the epoch-8 NLL-selected candidate reached 81.65% accuracy,
-75.24% macro accuracy across 59 represented intents, 0.6872 NLL, 0.2730 Brier,
-and 0.0360 ECE. Publisher test and project sealed audit remain unopened. This
-is useful independent-source Japanese text-path evidence, but is selection-
-affected, has low-support labels, remains below 95–98%, and says nothing about
-multimodal quality. No quantization or promotion. See the [report](docs/pretrained_reuse/R2_MASSIVE_JA_BERT_READOUT_20261123.md)
-and [machine manifest](manifests/pretrained_reuse/massive-ja-bert-readout-20261123.json).
+**2026-11-23 R2 Japanese BERT-family independent-source follow-up:** On the
+same normalized-text-disjoint MASSIVE Japanese split, frozen BERT-base reached
+81.65% Accuracy / 0.6872 NLL while frozen Ruri-v3-70m reached 75.50% / 0.8983;
+a 10,000-replicate text-group paired bootstrap favored BERT on Accuracy, NLL
+and Brier. Ruri saves about 41.25M parameters but lowers text quality on this
+task. The 2,033-row validation set selected checkpoints; publisher test and
+project sealed audit remain unopened. This is narrow text-path evidence below
+95–98%, not multimodal quality. No quantization or promotion. See the
+[report](docs/pretrained_reuse/R2_MASSIVE_JA_BERT_READOUT_20261123.md) and
+[machine manifest](manifests/pretrained_reuse/massive-ja-bert-readout-20261123.json).
 
 **2026-11-22 R0 live refresh (22:27 JST):** Public PR state, branch heads,
 181 registered worktrees, 217 remote branch refs, C: free space and GPU/process
