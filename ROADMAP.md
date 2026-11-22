@@ -1,3 +1,15 @@
+**2026-11-22 R2 compact BERT text-task candidate screen:** Pinned the
+PolyAI-maintained BANKING77 dataset at `1846984189f2bc0ac51c6fc3a600fa9e1714e0c6`;
+its card declares CC BY 4.0 and describes 77 English banking intents. A
+TRAIN-only audit verified 10,003 rows, 9,999 normalized utterances and four
+same-label duplicate groups; the published test payload was not opened. The
+source has no participant/conversation IDs and leaves language-producer
+provenance unspecified, so it remains a development candidate pending group
+identity review. It can test compact BERT-family intent probabilities, not
+general text or multimodal quality. No model was loaded or trained. See
+[source screen](docs/pretrained_reuse/R2_BANKING77_BERT_SOURCE_SCREEN_20261122.md)
+and [manifest](manifests/pretrained_reuse/banking77-text-source-screen-20261122.json).
+
 **2026-11-22 R2 spoken-palette TRAIN-only modality interventions:** On 96
 fixed training screens from 24 speaker groups, a same-speaker audio-color swap
 changed the prediction in 96/96 cases and selected the color's position in

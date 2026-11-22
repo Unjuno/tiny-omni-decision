@@ -1,0 +1,58 @@
+{
+  "format": "banking77_text_source_screen_v1",
+  "dataset_id": "BANKING77",
+  "status": "DEVELOPMENT_CANDIDATE_GROUP_IDENTITY_REVIEW_REQUIRED",
+  "publisher_dataset_url": "https://huggingface.co/datasets/PolyAI/banking77",
+  "publisher_revision": "1846984189f2bc0ac51c6fc3a600fa9e1714e0c6",
+  "publisher_revision_ref": "main",
+  "dataset_license": "CC-BY-4.0",
+  "source_screen": {
+    "method": "pinned PolyAI-maintained dataset repository card/tree plus TRAIN-only parquet audit",
+    "train_partition_downloaded": true,
+    "official_test_partition_downloaded_or_opened": false,
+    "validation_created": false,
+    "model_or_checkpoint_accessed": false,
+    "training_or_evaluation_performed": false,
+    "gpu_used": false
+  },
+  "source_artifacts": {
+    "readme_bytes": 13049,
+    "readme_sha256": "f3786a5327fd6533c7c0ff3ff654e20ee3d1261d2fa41667381f59a2e42364e1",
+    "train_path": "data/train-00000-of-00001.parquet",
+    "train_bytes": 293553,
+    "train_sha256": "8dc89b87a188509c42cce5a086e8f7c1ff4a225bdd9ae3f23e6cdfa5806e363a",
+    "test_path_metadata_only": "data/test-00000-of-00001.parquet",
+    "test_bytes_from_publisher_tree_metadata": 92409,
+    "test_lfs_sha256_from_publisher_tree_metadata": "1f40f777c33f0edfa6c530ff84fe2878db6490838c12d22d036f626948905341"
+  },
+  "task_fit": {
+    "native_task": "single-domain banking intent classification over 77 supplied intent options",
+    "publisher_total_rows": 13083,
+    "publisher_train_rows": 10003,
+    "publisher_test_rows": 3080,
+    "train_classes": 77,
+    "train_class_count_min": 35,
+    "train_class_count_max": 187,
+    "potential_value": "a fine-grained practical text-only Decision task with multiclass probability output",
+    "product_scope": "English banking intent routing only; not general text reasoning or multimodal quality",
+    "option_contract": "fixed intent-ID option set; arbitrary unseen options are not established"
+  },
+  "train_only_integrity_audit": {
+    "audit_result_sha256": "efa3bd53afd4fc703f38e5b3a8cae81eff334712bb47aab09b9cb819e247f79d",
+    "row_count": 10003,
+    "unique_nfkc_casefold_whitespace_normalized_utterances": 9999,
+    "duplicate_content_groups": 4,
+    "rows_in_duplicate_content_groups": 8,
+    "duplicate_groups_crossing_labels": 0,
+    "mean_character_length": 59.47375787263821,
+    "median_character_length": 47.0,
+    "row_order_text_sha256": "56ce29f3ddbb44d657004e6d8690588606ffece827fa23f10bb7a6149acc0829"
+  },
+  "limitations": [
+    "The dataset card lists source language producers as More Information Needed and supplies no participant or conversation IDs; independent speaker/customer grouping is unverified.",
+    "Normalized utterance identity can prevent exact-content leakage but cannot establish source-person independence or near-duplicate paraphrase separation.",
+    "The task is a fixed-label, single-domain intent classifier; it does not establish arbitrary supplied-option reasoning, general text quality, or multimodal fusion.",
+    "The published test payload remains unopened and must not enter iterative training, model selection, or calibration."
+  ],
+  "recommendation": "Keep as a bounded TRAIN-only development candidate for compact BERT-family text Decision comparison after a deterministic content-grouped split is frozen. Do not make independent-source or product-quality claims until source-group provenance and the complete task protocol are resolved."
+}
