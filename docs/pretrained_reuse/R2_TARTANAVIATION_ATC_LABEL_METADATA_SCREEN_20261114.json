@@ -1,0 +1,1203 @@
+{
+  "source_repo": "twangodev/tartanaviation-atc-labels",
+  "pinned_revision": "0775355c388aae64335522f40bff9fc5129b2922",
+  "pinned_tree_api": "https://huggingface.co/api/datasets/twangodev/tartanaviation-atc-labels/tree/0775355c388aae64335522f40bff9fc5129b2922?recursive=true&expand=false",
+  "expected_shards": 184,
+  "verified_shards": 184,
+  "total_bytes": 25246122,
+  "rows": 531050,
+  "unique_utterance_ids": 531050,
+  "duplicate_id_rows": 0,
+  "review_status_counts": {
+    "auto": 530724,
+    "verified": 157,
+    "rejected": 132,
+    "edited": 35,
+    "non_speech": 2
+  },
+  "null_counts_selected_metadata_columns": {
+    "utterance_id": 0,
+    "review_status": 0,
+    "confidence": 0,
+    "agreement_score": 0,
+    "rover_confidence": 0,
+    "advisory_disagree": 0,
+    "n_models_agree": 0,
+    "callsign_matched": 0
+  },
+  "identifier_structure_histogram": {
+    "parts=6,length=19": 272642,
+    "parts=6,length=18": 205715,
+    "parts=6,length=20": 40589,
+    "parts=6,length=17": 11591,
+    "parts=6,length=21": 513
+  },
+  "distinct_prefix_counts": {
+    "1": 2,
+    "2": 24,
+    "3": 589,
+    "4": 670,
+    "5": 40899
+  },
+  "columns_read": [
+    "utterance_id",
+    "review_status",
+    "confidence",
+    "agreement_score",
+    "rover_confidence",
+    "advisory_disagree",
+    "n_models_agree",
+    "callsign_matched"
+  ],
+  "transcript_column_read": false,
+  "callsign_text_column_read": false,
+  "media_downloaded": false,
+  "shards": [
+    {
+      "path": "shard-00000.parquet",
+      "bytes": 150975,
+      "sha256": "b9a036e1bf52ba670ad7d3a2fb7a280e81e1136f4741101ef4d388c70cff4171",
+      "rows": 3789
+    },
+    {
+      "path": "shard-00001.parquet",
+      "bytes": 148353,
+      "sha256": "5045d09d00f11c7b373133686c9421b8811241e0b8b57e90c9384e35129bd244",
+      "rows": 3599
+    },
+    {
+      "path": "shard-00002.parquet",
+      "bytes": 141979,
+      "sha256": "70a3c860c9d554978de7b59683709b504e98a73e5fa9db98456aaeba10e65402",
+      "rows": 2806
+    },
+    {
+      "path": "shard-00003.parquet",
+      "bytes": 146995,
+      "sha256": "cafd46c14efaa6532c3903ce728da6f040a95e433446939d92845b19079bf341",
+      "rows": 3001
+    },
+    {
+      "path": "shard-00004.parquet",
+      "bytes": 152917,
+      "sha256": "ff75034746dbb4c8745f40779b342f8d98153b73a4b5264a811ae260377530d8",
+      "rows": 3427
+    },
+    {
+      "path": "shard-00005.parquet",
+      "bytes": 148874,
+      "sha256": "7e3f62646a3e69d34e9b2bcf89c02a8aef29ba9c17057a821a37469dab7ea05f",
+      "rows": 3086
+    },
+    {
+      "path": "shard-00006.parquet",
+      "bytes": 149610,
+      "sha256": "284605d806ca17d4585696c2bc70ffbe697f4fb991cbfa1fb553d2e71cb57175",
+      "rows": 3044
+    },
+    {
+      "path": "shard-00007.parquet",
+      "bytes": 107698,
+      "sha256": "31cbd4e6c4ec644f829185965f4f5ac9f40a410f4e4ddacba2be77530f870f9c",
+      "rows": 2828
+    },
+    {
+      "path": "shard-00008.parquet",
+      "bytes": 81187,
+      "sha256": "e54bec5cb4a7611109a1469dad96e7f1524b5853db49298692b6a60db6b0ada2",
+      "rows": 2749
+    },
+    {
+      "path": "shard-00009.parquet",
+      "bytes": 140618,
+      "sha256": "e307aeececa70c575cf2d478e7299bf2e589cb9f18c5364e63328b381172418f",
+      "rows": 2748
+    },
+    {
+      "path": "shard-00010.parquet",
+      "bytes": 141253,
+      "sha256": "b48bb3c73033ea8423c74fea10d8cdeeba1957c59bc55be1b5ddba8881bdb7ba",
+      "rows": 2619
+    },
+    {
+      "path": "shard-00011.parquet",
+      "bytes": 141357,
+      "sha256": "a0941274da0d2ec2218ab76a808cbb4039304d89460a339a40b340f154e9b887",
+      "rows": 2780
+    },
+    {
+      "path": "shard-00012.parquet",
+      "bytes": 146612,
+      "sha256": "424237038c03d8bbbb6bb252becb64a7481d66219241cc4785c148f9f02fb6d5",
+      "rows": 2928
+    },
+    {
+      "path": "shard-00013.parquet",
+      "bytes": 147070,
+      "sha256": "ee0a3c2bb14c7570a27c0b40bcefa527ad801503f5ab066a3a6ab5e835b2334f",
+      "rows": 3099
+    },
+    {
+      "path": "shard-00014.parquet",
+      "bytes": 143919,
+      "sha256": "9d1f8d22abf4155c0a3f8b9c9e074433f803ec6b77eb0753095ba4844067b52b",
+      "rows": 3018
+    },
+    {
+      "path": "shard-00015.parquet",
+      "bytes": 145453,
+      "sha256": "8b245eb720fa95c5e86575aace8ef550c132c1e31fcf4770b2a6a08c94485c61",
+      "rows": 3088
+    },
+    {
+      "path": "shard-00016.parquet",
+      "bytes": 153596,
+      "sha256": "807a445777b6f9f6aacaf1eed785ba8ffc19bfed738d1ec827fa7bcbe5630c51",
+      "rows": 3435
+    },
+    {
+      "path": "shard-00017.parquet",
+      "bytes": 147120,
+      "sha256": "f3c99c94a0b80fb92d2e8cf404b3b86db7434c05a11df10280949a883954ea25",
+      "rows": 3661
+    },
+    {
+      "path": "shard-00018.parquet",
+      "bytes": 143671,
+      "sha256": "de1db7ee0e71430b18a307347c74120bb4af940373997db5064231faf2fc8095",
+      "rows": 2821
+    },
+    {
+      "path": "shard-00019.parquet",
+      "bytes": 137352,
+      "sha256": "59a92622722e5da14c7de66a347927f875b6f55f10a8e192171aa8bd5773aacd",
+      "rows": 2785
+    },
+    {
+      "path": "shard-00020.parquet",
+      "bytes": 144727,
+      "sha256": "d49eac92bbbd8bb2cddd5c2052c57f3c0ac66cd77d338f52be22ee4635bc1694",
+      "rows": 2817
+    },
+    {
+      "path": "shard-00021.parquet",
+      "bytes": 144132,
+      "sha256": "81708c921acdddf03675b0c72f137d8f5d539893957d1411fcb78211215ddc2f",
+      "rows": 2842
+    },
+    {
+      "path": "shard-00022.parquet",
+      "bytes": 147532,
+      "sha256": "a5cdfd7c88c882e615b6f2451740c3beed34f1a984a6e7cded164b01738a0040",
+      "rows": 2780
+    },
+    {
+      "path": "shard-00023.parquet",
+      "bytes": 146425,
+      "sha256": "4e4cac1c411aa8daf68d3fc3b6253f3788c87dfda98de347af39c2cc6982ce6f",
+      "rows": 2949
+    },
+    {
+      "path": "shard-00024.parquet",
+      "bytes": 146309,
+      "sha256": "98718fb54559f96b3cac5bc4f4efb5d6391b2875428cf738fd7ddab31c920205",
+      "rows": 3034
+    },
+    {
+      "path": "shard-00025.parquet",
+      "bytes": 148341,
+      "sha256": "65115bd810a552d828744dbc72d2fb06d152990c26eeecc798ad16a3c91ef411",
+      "rows": 2837
+    },
+    {
+      "path": "shard-00026.parquet",
+      "bytes": 140917,
+      "sha256": "e93acd3c2c5e0aacdb7a8e5462fc0149d65dbbb6605801c357720218ca56ba2a",
+      "rows": 2730
+    },
+    {
+      "path": "shard-00027.parquet",
+      "bytes": 147166,
+      "sha256": "b888538456dfc04ebc114eb11b716d5482149e56fc690c91177aa28c557c0c6b",
+      "rows": 2952
+    },
+    {
+      "path": "shard-00028.parquet",
+      "bytes": 145856,
+      "sha256": "fde16d87a3fb4fce00662cf9b2190febe3db4c6205a39a4c2dec1a7e5aec80bf",
+      "rows": 2847
+    },
+    {
+      "path": "shard-00029.parquet",
+      "bytes": 133654,
+      "sha256": "36d07ef5dcf40641dc9defaa894a67e4cda6e41fea8091939bf3c5100c170410",
+      "rows": 2646
+    },
+    {
+      "path": "shard-00030.parquet",
+      "bytes": 138988,
+      "sha256": "51932136b588e8c849a32a541e075db01eb897f83cd6702576e5839c96d207f4",
+      "rows": 2858
+    },
+    {
+      "path": "shard-00031.parquet",
+      "bytes": 142620,
+      "sha256": "f429ff6ebc5050caa82591c772bf24caf692ed4df7faa62766d77dfad83f314a",
+      "rows": 2695
+    },
+    {
+      "path": "shard-00032.parquet",
+      "bytes": 142488,
+      "sha256": "ae3c5b18b390bb70198e310cef21cccbd4d1dba60210b37a8beaef5a5c7553b2",
+      "rows": 3102
+    },
+    {
+      "path": "shard-00033.parquet",
+      "bytes": 149048,
+      "sha256": "907e6429ff35f0e4afc7149c6b720e8b3b8f76f1789741f1f4ce3576e44af606",
+      "rows": 3657
+    },
+    {
+      "path": "shard-00034.parquet",
+      "bytes": 150879,
+      "sha256": "61c9867d7f47d180dc96688bfa70efc8f7602b6626c19718a21a4424c2994911",
+      "rows": 3453
+    },
+    {
+      "path": "shard-00035.parquet",
+      "bytes": 148044,
+      "sha256": "3eee307b1b02f63e9fa02002b176bf4c2d58d86832ecc021ad18704da687d03d",
+      "rows": 2918
+    },
+    {
+      "path": "shard-00036.parquet",
+      "bytes": 145810,
+      "sha256": "29615212fd7d119b572250912884e11cfa5de6fdf94028e08e917dd88f71d690",
+      "rows": 2894
+    },
+    {
+      "path": "shard-00037.parquet",
+      "bytes": 144456,
+      "sha256": "a45c75726605ec4ff1fa51efd49384be1eca8ab41d0aa748b873d285c081e94c",
+      "rows": 2907
+    },
+    {
+      "path": "shard-00038.parquet",
+      "bytes": 151426,
+      "sha256": "cd078e9a017b5cac7320d94116e70b6b6619c28c120dbfbfb4460bd8b37f0b51",
+      "rows": 3378
+    },
+    {
+      "path": "shard-00039.parquet",
+      "bytes": 153330,
+      "sha256": "b2a08c9a8d021564b026c8ea5eee2bad16d0bb54f0d058ec3f67ffa1ef8e98ac",
+      "rows": 3871
+    },
+    {
+      "path": "shard-00040.parquet",
+      "bytes": 151291,
+      "sha256": "4cf99243a961c1724284b9783da34125df444bd2402a2b6361c543cbab1253b1",
+      "rows": 3643
+    },
+    {
+      "path": "shard-00041.parquet",
+      "bytes": 150438,
+      "sha256": "ece24d239fe32ff7586e51b01f3d6abe047cb7296839999017cbaf24c4bb3d42",
+      "rows": 3558
+    },
+    {
+      "path": "shard-00042.parquet",
+      "bytes": 151309,
+      "sha256": "60a89d6e3ee642402866dad0729a663ec187263b91cde345d266e9e8871e473a",
+      "rows": 3667
+    },
+    {
+      "path": "shard-00043.parquet",
+      "bytes": 149012,
+      "sha256": "ac1874baa3bd45872c268c064e17a37000484102eb864d0959d29cdbe9cc4d92",
+      "rows": 3487
+    },
+    {
+      "path": "shard-00044.parquet",
+      "bytes": 146473,
+      "sha256": "acdaba77899e2111d748f6d83cea702853bc1b74c5e1cc4f238ba7d9ead6939d",
+      "rows": 3407
+    },
+    {
+      "path": "shard-00045.parquet",
+      "bytes": 133601,
+      "sha256": "fcbcc6dd2306ca7c628efd59150a1d75a588cd12f7c0296f0f21e46f6eb747be",
+      "rows": 2696
+    },
+    {
+      "path": "shard-00046.parquet",
+      "bytes": 139599,
+      "sha256": "1320d7de6804f2bc2d250d16561454bf4c6455e8854ff87c53e3639ef6cca827",
+      "rows": 2747
+    },
+    {
+      "path": "shard-00047.parquet",
+      "bytes": 136301,
+      "sha256": "4a480f3d6161a35436f3968b3bd5c299666a6a1d616fd061551253d25838bdf0",
+      "rows": 2619
+    },
+    {
+      "path": "shard-00048.parquet",
+      "bytes": 141974,
+      "sha256": "8ea72ed331c144a90a51eada5d997d9e6ae02860c7c9141a1e8434bc90d56dae",
+      "rows": 2746
+    },
+    {
+      "path": "shard-00049.parquet",
+      "bytes": 151146,
+      "sha256": "33eb3ff163fa55c1995541d391d0603295d423bd090a0dc718e73e570a26948b",
+      "rows": 3225
+    },
+    {
+      "path": "shard-00050.parquet",
+      "bytes": 147231,
+      "sha256": "31e10ad3c2aef0cca16e681f2b9e186339c8d68ce953b85bc12ad33d6378027a",
+      "rows": 3028
+    },
+    {
+      "path": "shard-00051.parquet",
+      "bytes": 144897,
+      "sha256": "d25f69d60740ac63a8811f3e513044c558d344e5bbbfef2f0ff1248c46077cef",
+      "rows": 2932
+    },
+    {
+      "path": "shard-00052.parquet",
+      "bytes": 147605,
+      "sha256": "d3c14676501ed8d67bf8ce77a9a4a3add42d2dc65a5efc9ccd64186a681d5fdc",
+      "rows": 3313
+    },
+    {
+      "path": "shard-00053.parquet",
+      "bytes": 143324,
+      "sha256": "bddd6b49c1d3664a2905e73ab514f5df413733345c3b58919f11134426f13f71",
+      "rows": 3168
+    },
+    {
+      "path": "shard-00054.parquet",
+      "bytes": 147400,
+      "sha256": "80333cd7c84c9fe04514b9aeb87bd31b7598ceccd22201224a24b4333d9fd430",
+      "rows": 3434
+    },
+    {
+      "path": "shard-00055.parquet",
+      "bytes": 147967,
+      "sha256": "d64dc814dc2fe05ba80223ca57b0c47a42fcb0b2ca6f2188476cfa1cbe836710",
+      "rows": 3154
+    },
+    {
+      "path": "shard-00056.parquet",
+      "bytes": 144434,
+      "sha256": "9f4bbb3f11abbbfa38f3872f30efb3a869ae424d95e7993effe5c30befbd9167",
+      "rows": 2919
+    },
+    {
+      "path": "shard-00057.parquet",
+      "bytes": 145555,
+      "sha256": "ab0ca618aa2fe88d358d79fcc1e27489ea9525456f661c1693eaa68180f15849",
+      "rows": 2704
+    },
+    {
+      "path": "shard-00058.parquet",
+      "bytes": 148985,
+      "sha256": "2137a7e977afa64aa980a22f2b8110cb1a51fc09c6fb712bfb5c4fdd8468e342",
+      "rows": 2748
+    },
+    {
+      "path": "shard-00059.parquet",
+      "bytes": 138991,
+      "sha256": "deed4b6de25d95b05cf1d4bf4160ec985ea7cf58b31f293179b9ac070f42cb6c",
+      "rows": 2645
+    },
+    {
+      "path": "shard-00060.parquet",
+      "bytes": 135595,
+      "sha256": "21049a15f243255dbd85ab1fd7f25b5f00fc60a28fe23fdff1126c271e782658",
+      "rows": 2797
+    },
+    {
+      "path": "shard-00061.parquet",
+      "bytes": 147276,
+      "sha256": "203328b90c7026615a799f9596958ebad173f0d7547ad72cb967b47bfb793dae",
+      "rows": 3164
+    },
+    {
+      "path": "shard-00062.parquet",
+      "bytes": 148885,
+      "sha256": "c7e66192a741d11798d6b12a706bc6bf912a95e0f8337f2a07f484be071820d5",
+      "rows": 3242
+    },
+    {
+      "path": "shard-00063.parquet",
+      "bytes": 149285,
+      "sha256": "5bcce6fd71ee862e2ea1aa619ac19786bda79cde94d956abe47f1781683a3f80",
+      "rows": 3194
+    },
+    {
+      "path": "shard-00064.parquet",
+      "bytes": 142603,
+      "sha256": "fe8352f44cd315898f1ac79c5a5d9a2a8b8ee7d8768a6176a9b6468f6b253db0",
+      "rows": 2863
+    },
+    {
+      "path": "shard-00065.parquet",
+      "bytes": 142138,
+      "sha256": "1863502f2e0318438ae883f5f0753d2434118fc0282a7dcea292da2e337a19a3",
+      "rows": 3023
+    },
+    {
+      "path": "shard-00066.parquet",
+      "bytes": 149839,
+      "sha256": "40c7b3a5d28d973a96492ed36755e59d8b0cfd80940dd1b476cc7afa30b77890",
+      "rows": 3550
+    },
+    {
+      "path": "shard-00067.parquet",
+      "bytes": 136092,
+      "sha256": "230b92a02b0fd647708cf7edf9ee9b7d316cb6f6fb37ef662abbf768b34b85f5",
+      "rows": 2761
+    },
+    {
+      "path": "shard-00068.parquet",
+      "bytes": 139335,
+      "sha256": "220eee03ffb2ec02b1306f77bda1643567b4fd6935eb442bd9f4da45c74dcaaf",
+      "rows": 2666
+    },
+    {
+      "path": "shard-00069.parquet",
+      "bytes": 126188,
+      "sha256": "fc20fc641a981b550b605e0f09581bcc46305d5323f34fefe1b9a72653fd1381",
+      "rows": 3028
+    },
+    {
+      "path": "shard-00070.parquet",
+      "bytes": 123878,
+      "sha256": "306dc8e4caedf48ecb3b4ec2595a2bb7177b697e7d030ddc33854cd64236af10",
+      "rows": 2649
+    },
+    {
+      "path": "shard-00071.parquet",
+      "bytes": 142771,
+      "sha256": "a36d6be6ac1dc1ffab54f2f60b6209201648dd60242b4a40c02509966857653f",
+      "rows": 2909
+    },
+    {
+      "path": "shard-00072.parquet",
+      "bytes": 147041,
+      "sha256": "a9a40cd9d68e88d48f5f6fb6464ab8719b22cb86b92ff65865319d30d9551a46",
+      "rows": 2832
+    },
+    {
+      "path": "shard-00073.parquet",
+      "bytes": 141759,
+      "sha256": "8ce067b6582d3c9afdf5cc8485c0c76de1ccb08b21cc3c7901d7e061621581c8",
+      "rows": 2750
+    },
+    {
+      "path": "shard-00074.parquet",
+      "bytes": 143449,
+      "sha256": "a4b12c10bc75b0e8fe2318a7e12e3a514d1c96a071890909403897ee173eb611",
+      "rows": 2744
+    },
+    {
+      "path": "shard-00075.parquet",
+      "bytes": 142259,
+      "sha256": "0324567b2076d84382f97e5ef1fe57d65b9f2dcf9316a21ff67621c3f6a48078",
+      "rows": 2888
+    },
+    {
+      "path": "shard-00076.parquet",
+      "bytes": 134483,
+      "sha256": "45d51ded2cbc2741c880bdbe5a8ea5622d428978fff4da860f76811a5a462c94",
+      "rows": 2831
+    },
+    {
+      "path": "shard-00077.parquet",
+      "bytes": 133682,
+      "sha256": "f44ed773bf4d782dffb88580b8cc7db4bb6b69b4fbd9e8942f036dcdae66183e",
+      "rows": 2718
+    },
+    {
+      "path": "shard-00078.parquet",
+      "bytes": 142043,
+      "sha256": "b805396f597c9ede999020c8ff77b7e1af921b712c2569ec90706090ae0f560c",
+      "rows": 2767
+    },
+    {
+      "path": "shard-00079.parquet",
+      "bytes": 140674,
+      "sha256": "4019471ffba5fc4518ffa71a4c49f9a6744b19b2b8a3e9e3900ea3ab7d62fbf9",
+      "rows": 2828
+    },
+    {
+      "path": "shard-00080.parquet",
+      "bytes": 133092,
+      "sha256": "afd041c1018aa27b32d3b19ba647cc5671f45d9aac24ecac8db1d1e615f6b3b9",
+      "rows": 2773
+    },
+    {
+      "path": "shard-00081.parquet",
+      "bytes": 152095,
+      "sha256": "2ce9b3775612819bf324d8e06540b2a66d4ad75222ab64e6632f7325b1a131d6",
+      "rows": 3020
+    },
+    {
+      "path": "shard-00082.parquet",
+      "bytes": 141191,
+      "sha256": "1f75a8be1a4dfb8ccbb2f4372e8edfc92d65cb6ae65bc867242d8380d571c574",
+      "rows": 2801
+    },
+    {
+      "path": "shard-00083.parquet",
+      "bytes": 130322,
+      "sha256": "d25576af4980be02687287dc432fdddc798ef17984047f7a62d76e6868a04425",
+      "rows": 2755
+    },
+    {
+      "path": "shard-00084.parquet",
+      "bytes": 140051,
+      "sha256": "3b777f610c1ef68b03ed47325efd8d028e8e6b053cab8cd90a720cf75caf5b27",
+      "rows": 3147
+    },
+    {
+      "path": "shard-00085.parquet",
+      "bytes": 131662,
+      "sha256": "46416a7a0cbab12a0207b85023fb967a4f87da102eb2f191f2378df468c0236e",
+      "rows": 2747
+    },
+    {
+      "path": "shard-00086.parquet",
+      "bytes": 129768,
+      "sha256": "5a19a1405173891f60f25f077ce20d7faefbea86738313b6d39104146c06cb4b",
+      "rows": 2826
+    },
+    {
+      "path": "shard-00087.parquet",
+      "bytes": 135837,
+      "sha256": "50e67ee1715a89de8f3ba1c260fe32b992a5249be98f1abb602a88a4eb17140b",
+      "rows": 2776
+    },
+    {
+      "path": "shard-00088.parquet",
+      "bytes": 140406,
+      "sha256": "6df34b46264f0cc0f669a6ff4de10fd889f18d28131eb7a0024fee0351347ce5",
+      "rows": 2790
+    },
+    {
+      "path": "shard-00089.parquet",
+      "bytes": 135729,
+      "sha256": "d542e8adff3ee7e2bc9324db537c6e0f488800f479b983406e22c71fdd5ce99b",
+      "rows": 2675
+    },
+    {
+      "path": "shard-00090.parquet",
+      "bytes": 138247,
+      "sha256": "451d37843482069f9d35e8c655ab0c78c818b1c701f5bb5c41ddfb498d22a6aa",
+      "rows": 2871
+    },
+    {
+      "path": "shard-00091.parquet",
+      "bytes": 129774,
+      "sha256": "751c07dc4b5577b8696e7a1a01b59086589c9257dd5fa251408fc485d69b1edd",
+      "rows": 2864
+    },
+    {
+      "path": "shard-00092.parquet",
+      "bytes": 140313,
+      "sha256": "75f24d98ce596913bb90e6289ff112282507a6bac54fa2742317c68c2a8ef27e",
+      "rows": 3025
+    },
+    {
+      "path": "shard-00093.parquet",
+      "bytes": 140442,
+      "sha256": "e8132785dfb6671c260063e5a70d0be7b92dc99b2bfcf6fa792dd11f553df2a0",
+      "rows": 3238
+    },
+    {
+      "path": "shard-00094.parquet",
+      "bytes": 142168,
+      "sha256": "d6af7aaf89e4a3d01a2e03245256e79a7f566bdaf1557ecf8727bbe58645cc4d",
+      "rows": 3335
+    },
+    {
+      "path": "shard-00095.parquet",
+      "bytes": 139982,
+      "sha256": "0ce35266240d52b3502f55bf4ff75b8f070ce4d1d5f0a8bd65e817944893621a",
+      "rows": 3166
+    },
+    {
+      "path": "shard-00096.parquet",
+      "bytes": 140540,
+      "sha256": "dd6d243752773c4782c26bbebf28299cdfee8b748e4c2838432e1125c518ea0c",
+      "rows": 2893
+    },
+    {
+      "path": "shard-00097.parquet",
+      "bytes": 143918,
+      "sha256": "043bd1cade0275830ece4309a460ea5128cb8cd7e513953441d81c9c7e603faa",
+      "rows": 3036
+    },
+    {
+      "path": "shard-00098.parquet",
+      "bytes": 144260,
+      "sha256": "93b84c4196c00e84d2f75af197b73a30a23fb3af98bd08070dccc99a3343cd11",
+      "rows": 2876
+    },
+    {
+      "path": "shard-00099.parquet",
+      "bytes": 141335,
+      "sha256": "4d31df1fb4d90d407af363f5295cbae0a1065b4666a5c90a4707dbc2dcb5638d",
+      "rows": 2787
+    },
+    {
+      "path": "shard-00100.parquet",
+      "bytes": 141005,
+      "sha256": "95dcb9c8c5f012536a1680e7d82f66601fb03d4c0db4032a222c55b66264f3c7",
+      "rows": 2770
+    },
+    {
+      "path": "shard-00101.parquet",
+      "bytes": 137029,
+      "sha256": "5863d87239a1dd0d6f6bbc7a9b6683674b169d2807b1afe9044a55216168902d",
+      "rows": 2714
+    },
+    {
+      "path": "shard-00102.parquet",
+      "bytes": 137958,
+      "sha256": "0d835788f7f6636b62f5692a7cbc155cc96c2d003511fce28e8158402d99bce8",
+      "rows": 2729
+    },
+    {
+      "path": "shard-00103.parquet",
+      "bytes": 138416,
+      "sha256": "56d1a0c6e000119210e6ef614f8d37ca08128014e5bc310a36eb323a37df6aea",
+      "rows": 2789
+    },
+    {
+      "path": "shard-00104.parquet",
+      "bytes": 133318,
+      "sha256": "7872c65be75b689bf33a364b8305345f92ba4455146fc1301ee66bcc062cf29a",
+      "rows": 2623
+    },
+    {
+      "path": "shard-00105.parquet",
+      "bytes": 133392,
+      "sha256": "0f54828019b58642f2d96a0fd268b3b2f63ac89014afeffc143ad776c0621d78",
+      "rows": 2735
+    },
+    {
+      "path": "shard-00106.parquet",
+      "bytes": 136218,
+      "sha256": "4f758b646445b6620b5e54972c1b9823def3350a54c73ed3f4db1365b4c2ef22",
+      "rows": 2744
+    },
+    {
+      "path": "shard-00107.parquet",
+      "bytes": 150182,
+      "sha256": "7745e6151560f45bf6d29cbdfa4522326b11fa90f40992e4ca68f6540ab1d78a",
+      "rows": 3094
+    },
+    {
+      "path": "shard-00108.parquet",
+      "bytes": 145622,
+      "sha256": "e261bd3ead866ce5f6ed39a356ed5a1cf38884e8ed6c904937a603f3931c0132",
+      "rows": 2844
+    },
+    {
+      "path": "shard-00109.parquet",
+      "bytes": 145069,
+      "sha256": "fb34f0c2986ca5a29e55b9fadd18f0f11d3a4b6f96c33c7ae59fd44f1109a476",
+      "rows": 2974
+    },
+    {
+      "path": "shard-00110.parquet",
+      "bytes": 145927,
+      "sha256": "7c601b07cef503b4981a1133769418780f03c3e8e8bc7d2883275729c6d0f012",
+      "rows": 2940
+    },
+    {
+      "path": "shard-00111.parquet",
+      "bytes": 146804,
+      "sha256": "59159170763e19976d71dfe03fad72ffce97a353a8f715fd61572469b56c9cd8",
+      "rows": 2990
+    },
+    {
+      "path": "shard-00112.parquet",
+      "bytes": 136798,
+      "sha256": "cb036b422aa4470200895d68bec541d1483c03cd259b5372779d1199d4218a24",
+      "rows": 2766
+    },
+    {
+      "path": "shard-00113.parquet",
+      "bytes": 131737,
+      "sha256": "59147cfb5a108f1f8b6a672c392cbdb2aef3679240103ee4457aaf07988653bb",
+      "rows": 2716
+    },
+    {
+      "path": "shard-00114.parquet",
+      "bytes": 135387,
+      "sha256": "c246255cf2ffa27d9e888de798b141e1dcd2ae529afc42fd8ad809d3d9dd2041",
+      "rows": 2633
+    },
+    {
+      "path": "shard-00115.parquet",
+      "bytes": 136650,
+      "sha256": "5a5c61d1f767cb4272fb5bb11e0db66d34cc4d90ed57028d91001174877a662e",
+      "rows": 2765
+    },
+    {
+      "path": "shard-00116.parquet",
+      "bytes": 142335,
+      "sha256": "46283eee52c27455e3e678a3617bb118466caa7c129e812d294cf771579eefd7",
+      "rows": 2897
+    },
+    {
+      "path": "shard-00117.parquet",
+      "bytes": 140431,
+      "sha256": "2f8c8488752b6895c80d067db98d8edd818e53fce2cda5bd0b8339f45cb5e85c",
+      "rows": 2810
+    },
+    {
+      "path": "shard-00118.parquet",
+      "bytes": 135131,
+      "sha256": "7b1f34b3424ee05635e0d5f37fbcbcee98c24f6dc28b6b021e44b2b2f41541f4",
+      "rows": 2846
+    },
+    {
+      "path": "shard-00119.parquet",
+      "bytes": 136049,
+      "sha256": "521bede1e85920fceee57c549dd5cf8b7671e8536c50021cef24e2b094ef8aa5",
+      "rows": 2873
+    },
+    {
+      "path": "shard-00120.parquet",
+      "bytes": 132177,
+      "sha256": "01df894b64040434dff7de4861dc04c35b65b700a448d1606d5f682921be4181",
+      "rows": 2944
+    },
+    {
+      "path": "shard-00121.parquet",
+      "bytes": 142660,
+      "sha256": "f3ddc41f587ec411eec4a1aaddb80de1263644bf31690e06740a555585c44620",
+      "rows": 3094
+    },
+    {
+      "path": "shard-00122.parquet",
+      "bytes": 134562,
+      "sha256": "8957fe72f53e1fdb84f857b5c45d8b731a9e1009987f6e77cd396dcdb26f8001",
+      "rows": 3014
+    },
+    {
+      "path": "shard-00123.parquet",
+      "bytes": 131845,
+      "sha256": "c505af82ded52ad92d336b1922380ab30e90b343ebdae5992f769b0c2af67cdd",
+      "rows": 2758
+    },
+    {
+      "path": "shard-00124.parquet",
+      "bytes": 94686,
+      "sha256": "c8194b67bc870996771aef1cfa641c0f10eea5819b73454fdd7582893dcbb496",
+      "rows": 2770
+    },
+    {
+      "path": "shard-00125.parquet",
+      "bytes": 109383,
+      "sha256": "6571e80fd9044c0009bd77f8d5ef18e70023d3f9b63f8c1c3fcfe175a5f0a294",
+      "rows": 2764
+    },
+    {
+      "path": "shard-00126.parquet",
+      "bytes": 125144,
+      "sha256": "df7567b1a1535c08f556d96e95649d36b792555d4b7c9fffc01c2e64883ac4db",
+      "rows": 2837
+    },
+    {
+      "path": "shard-00127.parquet",
+      "bytes": 147336,
+      "sha256": "bff6e404153436dae2475a8b466c65481de38fb6772209b483475fc9ee0f95d3",
+      "rows": 2994
+    },
+    {
+      "path": "shard-00128.parquet",
+      "bytes": 135971,
+      "sha256": "f5acce6e801dc85ec1f3d81efcedab469b9ef9c1f18951400397b5ade53c6af5",
+      "rows": 2933
+    },
+    {
+      "path": "shard-00129.parquet",
+      "bytes": 147026,
+      "sha256": "a063b315ec156b65f47d49841c5066452a39bac3062c921ec441925081e314aa",
+      "rows": 3035
+    },
+    {
+      "path": "shard-00130.parquet",
+      "bytes": 151153,
+      "sha256": "e98c63456675edf63a68828745f0b60a56829f16d715d46758d95023bb99c16e",
+      "rows": 3833
+    },
+    {
+      "path": "shard-00131.parquet",
+      "bytes": 140729,
+      "sha256": "89794b33fbe10f6f9969b13528eb56f8b85f49adff475145753a818667fc2163",
+      "rows": 3158
+    },
+    {
+      "path": "shard-00132.parquet",
+      "bytes": 130139,
+      "sha256": "4d0d5f844d7afb8d9e017e452e17e1a8999c7352271b1c483577778edafecc6f",
+      "rows": 2704
+    },
+    {
+      "path": "shard-00133.parquet",
+      "bytes": 130579,
+      "sha256": "de7fbc45ac60665784a12392749ed2c92b2f977c94add4f0a6158fca8f55e0d8",
+      "rows": 2695
+    },
+    {
+      "path": "shard-00134.parquet",
+      "bytes": 128442,
+      "sha256": "f20f5d8b802523b81cfa0ade5572505c8e4fb9095b2638ebee37d53a4615ad11",
+      "rows": 2739
+    },
+    {
+      "path": "shard-00135.parquet",
+      "bytes": 130535,
+      "sha256": "07ab3af953230f61d2685d6be3935bc171752548d635590dad6f1e0bedc6ddc4",
+      "rows": 2822
+    },
+    {
+      "path": "shard-00136.parquet",
+      "bytes": 127183,
+      "sha256": "cce18442f6ea75e023d41ac63c74f63a58003820585746db14215b549acdea4d",
+      "rows": 2626
+    },
+    {
+      "path": "shard-00137.parquet",
+      "bytes": 127155,
+      "sha256": "19735ee92c027dc05793e0e41bf12d6fe48b6fc5de2394b258000ab61fde707b",
+      "rows": 2578
+    },
+    {
+      "path": "shard-00138.parquet",
+      "bytes": 131307,
+      "sha256": "7b929ec6b05dab20b4e61c499bb1bfb47f91d28e46a2ff3716b47a354e27d532",
+      "rows": 2756
+    },
+    {
+      "path": "shard-00139.parquet",
+      "bytes": 145908,
+      "sha256": "4dda09278e4eeebb0451a2d4731a65b077bd906a56e80f91e3aaa702e7725ac6",
+      "rows": 3172
+    },
+    {
+      "path": "shard-00140.parquet",
+      "bytes": 154906,
+      "sha256": "2b8e4ca844ee45893bba02e8b522b4c141248ab72f1a34b33f57043bc5783cf8",
+      "rows": 3308
+    },
+    {
+      "path": "shard-00141.parquet",
+      "bytes": 149736,
+      "sha256": "9941a7a780bdb34eaf29d8fd5fa577669736925a86b698ca4ab85f2ca66eace8",
+      "rows": 3139
+    },
+    {
+      "path": "shard-00142.parquet",
+      "bytes": 145404,
+      "sha256": "daa735a023267dbb8068389784e35958fa1acf85d859cd62f4e3280105736c7a",
+      "rows": 3010
+    },
+    {
+      "path": "shard-00143.parquet",
+      "bytes": 142178,
+      "sha256": "1039f5fcb67c6072c47df58db9e630e56b406b3707c410c3be01f11f778ae733",
+      "rows": 2910
+    },
+    {
+      "path": "shard-00144.parquet",
+      "bytes": 135827,
+      "sha256": "537741e8ed9747fc3c6037cab7adb41b58c31a2528848b8a5daf2b36a3b30fcc",
+      "rows": 2878
+    },
+    {
+      "path": "shard-00145.parquet",
+      "bytes": 134081,
+      "sha256": "69b1409bd8822dd3c2c1c180c64995d69e275fe5c33e61b837318d18ae5b4e9a",
+      "rows": 2830
+    },
+    {
+      "path": "shard-00146.parquet",
+      "bytes": 135546,
+      "sha256": "7ebf57f5b471939fe07f0223ad4d89037db7b9d44c4b5e9da2d5e8fc048fd0fe",
+      "rows": 2709
+    },
+    {
+      "path": "shard-00147.parquet",
+      "bytes": 133456,
+      "sha256": "225d7c24a8189c83d521fb81c55a8b4eccb7c1996a9af70f3a0ae66f51f0a058",
+      "rows": 2714
+    },
+    {
+      "path": "shard-00148.parquet",
+      "bytes": 133257,
+      "sha256": "20ae73310a3878822ce746859794e4e1fccfcc8e44a303f08382bc91f53f90e5",
+      "rows": 2720
+    },
+    {
+      "path": "shard-00149.parquet",
+      "bytes": 129006,
+      "sha256": "cebe044c6b9913c77bd9a31f1d3a1737fd8c28aa170fa6f3c31a656bfab597c8",
+      "rows": 2767
+    },
+    {
+      "path": "shard-00150.parquet",
+      "bytes": 128074,
+      "sha256": "413bcff7bf448c5b60b3ddfa9eacc9cb907054de2ed1666b2a9b993a694d27f3",
+      "rows": 2835
+    },
+    {
+      "path": "shard-00151.parquet",
+      "bytes": 130629,
+      "sha256": "c8a6fff9b6164dc556a8161443ddedf6badcdd7b58d9e23f9b99067996c8404e",
+      "rows": 2608
+    },
+    {
+      "path": "shard-00152.parquet",
+      "bytes": 129610,
+      "sha256": "11fc7ca6867aa86c1c59022acd951abeedd07204fb34c4fdc4191d117c805a44",
+      "rows": 2543
+    },
+    {
+      "path": "shard-00153.parquet",
+      "bytes": 135627,
+      "sha256": "5a5d503433836d4c128eb39c3c59c1ce780736793c179614ccf8d2e1a3a44764",
+      "rows": 2774
+    },
+    {
+      "path": "shard-00154.parquet",
+      "bytes": 132166,
+      "sha256": "7519ee991c3465cd8620f5a5a4334e76f162fd39c90eb38d2c9357b7a7258d94",
+      "rows": 2820
+    },
+    {
+      "path": "shard-00155.parquet",
+      "bytes": 134025,
+      "sha256": "67db4c007cf1a21eba228e3036fe78f91ddf4c31264c640bc0f3ddac20e6d5ac",
+      "rows": 2692
+    },
+    {
+      "path": "shard-00156.parquet",
+      "bytes": 129953,
+      "sha256": "4d8de559a59f0aa864d1642d09401db21d6fcfcc6a518aeaa32aa1c15ce72b1f",
+      "rows": 2639
+    },
+    {
+      "path": "shard-00157.parquet",
+      "bytes": 127294,
+      "sha256": "c2d525cb19d2fe39c056409b0e099b4d5041784907b87a488c79f02f58cca92a",
+      "rows": 2629
+    },
+    {
+      "path": "shard-00158.parquet",
+      "bytes": 130052,
+      "sha256": "da086a5c0cd8c048528724151d8607b8e28887352ed26e97f5a7ff0ee6a7973d",
+      "rows": 2672
+    },
+    {
+      "path": "shard-00159.parquet",
+      "bytes": 104788,
+      "sha256": "a92173d67a2b0da6cbcffdf75de5c77567a07d15286e4110924ba3118ca2e424",
+      "rows": 2380
+    },
+    {
+      "path": "shard-00160.parquet",
+      "bytes": 111292,
+      "sha256": "f1449892bbdeb88121507111f198e4aa1b4beca92a29f69ecf0911ad7490d714",
+      "rows": 2482
+    },
+    {
+      "path": "shard-00161.parquet",
+      "bytes": 120995,
+      "sha256": "a689a1a257448c56c10f45b152c7d9eb92cb19d3dc9019efa540890443baeaa4",
+      "rows": 2536
+    },
+    {
+      "path": "shard-00162.parquet",
+      "bytes": 118193,
+      "sha256": "10def19e54e529ecea0f2255c8592d5252438143817e08a244c1f8886c69d12e",
+      "rows": 2553
+    },
+    {
+      "path": "shard-00163.parquet",
+      "bytes": 122702,
+      "sha256": "1f31efdb51e0261543f41d5d934680d56efcd3e08fcc591d870a3f74b74902c3",
+      "rows": 2671
+    },
+    {
+      "path": "shard-00164.parquet",
+      "bytes": 124840,
+      "sha256": "f5cb870444436cc11a0edf35443d647e831bb7f7bb7c983b87ad7a95f725b251",
+      "rows": 2732
+    },
+    {
+      "path": "shard-00165.parquet",
+      "bytes": 119506,
+      "sha256": "25ec234f9ed085e94970c0b14da719e274e9cac97bcda5b3de3fb16054ef8384",
+      "rows": 2571
+    },
+    {
+      "path": "shard-00166.parquet",
+      "bytes": 107787,
+      "sha256": "ccb2d54bbc688dbe2738772b38fa0754fbdc6cd7dfbdb26306f9c0637fa927bc",
+      "rows": 2399
+    },
+    {
+      "path": "shard-00167.parquet",
+      "bytes": 108108,
+      "sha256": "e2982d929907b49383945d5dc0607614bb85883cd5c0ce416d670a1b34c22b7f",
+      "rows": 2369
+    },
+    {
+      "path": "shard-00168.parquet",
+      "bytes": 126868,
+      "sha256": "ca7bfc946a75f6a967122d2d5b91b3dc8c1a31f935b539d36f19b31a872caddd",
+      "rows": 2651
+    },
+    {
+      "path": "shard-00169.parquet",
+      "bytes": 130174,
+      "sha256": "42858df703d1fd858881ad19c51672388cbee8f1894602e3097a6afc16a2169d",
+      "rows": 2600
+    },
+    {
+      "path": "shard-00170.parquet",
+      "bytes": 130305,
+      "sha256": "24d6192f8425b82a57ac3677dfea5bf46325f82c379b701ec9d0f94df835ace9",
+      "rows": 2642
+    },
+    {
+      "path": "shard-00171.parquet",
+      "bytes": 128497,
+      "sha256": "5d0a046dbbfaadf910e3a0f0dbc9d88731a2cf43525aee7ec892ca3d1827f912",
+      "rows": 2665
+    },
+    {
+      "path": "shard-00172.parquet",
+      "bytes": 130673,
+      "sha256": "6b2c66cff42c21f89138c405b005eabb1f8d780e0653b650c1658db1af562e38",
+      "rows": 2608
+    },
+    {
+      "path": "shard-00173.parquet",
+      "bytes": 125450,
+      "sha256": "80ca02a077a97b2c869320029a692c83f5ebf81fb88b40d9285991fe19e898e5",
+      "rows": 2671
+    },
+    {
+      "path": "shard-00174.parquet",
+      "bytes": 135220,
+      "sha256": "dddcfeab7bbeb3c26e75d7171e9a4d19405125833240b0455afa2cec8a2c532e",
+      "rows": 2700
+    },
+    {
+      "path": "shard-00175.parquet",
+      "bytes": 129843,
+      "sha256": "52340c7f7dc8fa83f6972370b75d488b41c196288722b56f6104c7403e576cf2",
+      "rows": 2606
+    },
+    {
+      "path": "shard-00176.parquet",
+      "bytes": 128193,
+      "sha256": "b860652c5b0067280ddcb09fc679d5ca1c450618af7e29109e530e41669484f1",
+      "rows": 2595
+    },
+    {
+      "path": "shard-00177.parquet",
+      "bytes": 123262,
+      "sha256": "7b02759475e89e339dd3715fb3718ed6474302db4bc1376780f124cd4a790e0f",
+      "rows": 2629
+    },
+    {
+      "path": "shard-00178.parquet",
+      "bytes": 133150,
+      "sha256": "6eea41b51b2c2792e47159a8ee17f773cc60408a869c5175f1455c25d0463e49",
+      "rows": 2722
+    },
+    {
+      "path": "shard-00179.parquet",
+      "bytes": 136875,
+      "sha256": "bc5cea98318a2d8aca6ec9ef7ee71e2cdfadf586cdef3043ee88c8ffbcd6c827",
+      "rows": 2734
+    },
+    {
+      "path": "shard-00180.parquet",
+      "bytes": 131285,
+      "sha256": "0d50bad13604c811c09763b619b8428dd1becbd19dc3b64791ed708b675a1de7",
+      "rows": 2793
+    },
+    {
+      "path": "shard-00181.parquet",
+      "bytes": 129881,
+      "sha256": "5a7a315efc1e3dd0db5f5ff6995d417ac0ae7d50bef76d4be40ca9586a08045a",
+      "rows": 2726
+    },
+    {
+      "path": "shard-00182.parquet",
+      "bytes": 135688,
+      "sha256": "600b0fc25bafb1c53206bce558d690dc718238f5e7b7eaf6a60c298684415f71",
+      "rows": 2742
+    },
+    {
+      "path": "shard-00183.parquet",
+      "bytes": 35645,
+      "sha256": "6a5e2b2aaa9956d6cba23575f9d918b73e73064b7c5d8425a1101e3d93cdd296",
+      "rows": 675
+    }
+  ],
+  "group_audit": {
+    "airport_count": 2,
+    "date_value_count": 534,
+    "airport_date_group_count": 670,
+    "parent_clip_group_count": 40899,
+    "human_verified_or_edited_rows": 192,
+    "human_verified_or_edited_unique_parent_clips": 191,
+    "human_reviewed_rows_including_rejected": 324,
+    "human_reviewed_unique_parent_clips_including_rejected": 320,
+    "speaker_id_in_source_schema": false,
+    "official_provided_splits": [
+      "train"
+    ],
+    "quality_gate_floor_examples": 1000,
+    "quality_gate_floor_independent_groups": 200
+  },
+  "source_card": {
+    "repo": "twangodev/tartanaviation-atc-adsb-utterances",
+    "revision": "bc588362d2f877e6ba0910fe7b6e035649d43918",
+    "readme_sha256": "55c7d20800bd7f339f2b72898022c7d8482ac6a96309a274fc90348a516bcf34",
+    "declared_license": "cc-by-4.0",
+    "group_key_semantics": "clip_id={airport}/{date}/{n}; utterance_id={clip_id}/{i}"
+  },
+  "labels_card": {
+    "repo": "twangodev/tartanaviation-atc-labels",
+    "revision": "0775355c388aae64335522f40bff9fc5129b2922",
+    "readme_sha256": "19d3d7c16d328f1e90378fe934f2fd5910aa8f7b8fd63a883a247ba55f10ef92",
+    "declared_license": "cc-by-4.0",
+    "license_basis_claim": "inherited from CMU AirLab TartanAviation"
+  },
+  "screen_decision": {
+    "quality_evaluation": "REVIEW_NOT_ADMITTED",
+    "weak_supervision_training": "NOT_ADMITTED_PENDING_TASK_AND_GROUP_REVIEW",
+    "reason_codes": [
+      "only_train_split",
+      "no_speaker_id",
+      "human_verified_or_edited_examples_below_1000",
+      "human_verified_or_edited_clip_groups_below_200",
+      "machine_generated_labels_are_not_gold",
+      "ADS-B_callsign_snap_creates_target_circularity_risk"
+    ]
+  }
+}
