@@ -194,6 +194,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     config = AutoConfig.from_pretrained(args.model_dir, local_files_only=True)
     if config.model_type != "distilbert" or int(config.n_layers) != 6:
         raise ValueError("expected the pinned six-layer LINE DistilBERT checkpoint")
+    if args.encoder_layers != 4:
+        raise ValueError("this controlled adaptation run uses exactly the first four layers")
+    config.n_layers = args.encoder_layers
     if args.max_length > int(config.max_position_embeddings):
         raise ValueError("max_length exceeds the pinned DistilBERT positional limit")
     tokenizer = AutoTokenizer.from_pretrained(
@@ -204,13 +207,46 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     )
     started_at = datetime.now(UTC)
     started = time.perf_counter()
-    encoder = AutoModel.from_pretrained(
+    encoder, loading_info = AutoModel.from_pretrained(
         args.model_dir,
         config=config,
         local_files_only=True,
+        output_loading_info=True,
         trust_remote_code=True,
         use_safetensors=False,
-    ).to(device)
+    )
+    missing_keys = sorted(str(key) for key in loading_info["missing_keys"])
+    unexpected_keys = sorted(str(key) for key in loading_info["unexpected_keys"])
+    if missing_keys:
+        raise ValueError(f"checkpoint has missing DistilBERT keys: {missing_keys[:8]}")
+    dropped_layers = sorted(
+        {
+            layer
+            for layer in range(args.encoder_layers, 6)
+            if any(f"layer.{layer}." in key for key in unexpected_keys)
+        }
+    )
+    pretraining_heads = (
+        "vocab_transform.",
+        "vocab_layer_norm.",
+        "vocab_projector.",
+    )
+    unrecognized = [
+        key
+        for key in unexpected_keys
+        if not any(marker in key for marker in ("transformer.layer.4.", "transformer.layer.5."))
+        and not key.startswith(pretraining_heads)
+        and not any(
+            marker in key
+            for marker in ("vocab_transform.", "vocab_layer_norm.", "vocab_projector.")
+        )
+    ]
+    if dropped_layers != [4, 5] or unrecognized:
+        raise ValueError(
+            "expected only pretrained DistilBERT layers 4/5 and MLM-head keys to be dropped; "
+            f"layers={dropped_layers}, extra={unrecognized[:8]}"
+        )
+    encoder.to(device)
     encoder.train()
     trainable_names = freeze_except_top_layers(encoder, trainable_layers=args.trainable_layers)
     readout = Readout(int(config.hidden_size)).to(device)
@@ -248,7 +284,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     history: list[dict[str, Any]] = []
     runner_hash = sha256_file(Path(__file__))
     effective_config = {
-        "experiment_id": "jamp-line-distilbert-top2-adaptation-v1",
+        "experiment_id": "jamp-line-distilbert-first4-top2-adaptation-v1",
         "seed": args.seed,
         "epochs": effective_epochs,
         "batch_size": args.batch_size,
@@ -266,6 +302,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         "early_stopping": False,
         "model_revision": LINE_REVISION,
         "model_weight_sha256": model_hash,
+        "encoder_layers": args.encoder_layers,
+        "dropped_pretrained_layers": dropped_layers,
         "source_train_sha256": split_manifest["source_file_sha256"],
         "train_sha256": split_manifest["train_sha256"],
         "validation_sha256": split_manifest["validation_sha256"],
@@ -415,7 +453,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     else:
         peak_vram = 0
     report = {
-        "experiment_id": "jamp-line-distilbert-top2-adaptation-v1",
+        "experiment_id": "jamp-line-distilbert-first4-top2-adaptation-v1",
         "source_commit": subprocess.run(
             ["git", "-C", str(Path(__file__).resolve().parents[2]), "rev-parse", "HEAD"],
             check=True,
@@ -435,6 +473,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             "revision": LINE_REVISION,
             "weight_sha256": model_hash,
             "layers": int(config.n_layers),
+            "dropped_pretrained_layers": dropped_layers,
             "trainable_layer_count": args.trainable_layers,
             "trainable_parameter_names": trainable_names,
             "trainable_encoder_parameters": sum(
@@ -524,6 +563,7 @@ def main() -> None:
     parser.add_argument("--eval-batch-size", type=int, default=128)
     parser.add_argument("--max-length", type=int, default=512)
     parser.add_argument("--trainable-layers", type=int, default=2)
+    parser.add_argument("--encoder-layers", type=int, default=4)
     parser.add_argument("--encoder-learning-rate", type=float, default=2e-5)
     parser.add_argument("--readout-learning-rate", type=float, default=2e-3)
     parser.add_argument("--weight-decay", type=float, default=1e-4)
