@@ -28,23 +28,40 @@ def _encode_input(model, tokenizer, text, pair=None):
     encoded = tokenizer(text, text_pair=pair, return_tensors="pt", padding=False,
                         add_special_tokens=True, truncation=False)
     ids = encoded["input_ids"]
-    if (set(encoded) != {"input_ids", "attention_mask", "token_type_ids"}
+    if (not {"input_ids", "attention_mask"}.issubset(encoded)
+            or set(encoded) - {"input_ids", "attention_mask", "token_type_ids"}
             or ids.ndim != 2 or ids.shape[0] != 1 or ids.shape[1] < 2
             or any(v.shape != ids.shape or v.dtype != torch.long for v in encoded.values())
             or not (encoded["attention_mask"] == 1).all()
             or ids[0, 0].item() != tokenizer.cls_token_id
             or ids[0, -1].item() != tokenizer.sep_token_id):
         raise ValueError("unrecognized unpadded CLS/SEP tokenizer layout")
-    if pair is None and not (encoded["token_type_ids"] == 0).all():
+    if pair is None and "token_type_ids" in encoded and not (encoded["token_type_ids"] == 0).all():
         raise ValueError("single-sequence token types must be zero")
     return {k: v.to(device) for k, v in encoded.items()}
 
 
+def _backbone(model):
+    if hasattr(model, "base_model"):
+        return model.base_model
+    if hasattr(model, "deberta"):
+        return model.deberta
+    return model
+
+
+def _hidden_size(model):
+    config = getattr(model, "config", None)
+    value = getattr(config, "hidden_size", 384)
+    if type(value) is not int or value < 1:
+        raise ValueError("positive encoder hidden size required")
+    return value
+
+
 def _forward(model, encoded):
-    hidden = model.deberta(**encoded).last_hidden_state
-    if (hidden.shape != (*encoded["input_ids"].shape, 384)
+    hidden = _backbone(model)(**encoded, return_dict=True).last_hidden_state
+    if (hidden.shape != (*encoded["input_ids"].shape, _hidden_size(model))
             or not torch.isfinite(hidden).all()):
-        raise ValueError("finite original384-wide token states required")
+        raise ValueError("finite encoder-width token states required")
     return hidden[0]
 
 
@@ -58,8 +75,10 @@ def observation_tokens(model, tokenizer, text):
     output = []
     for index, (start, stop, keep) in enumerate(spans):
         window = torch.cat([ids[:, :1], ids[:, start + 1:stop + 1], ids[:, -1:]], 1)
-        features = _forward(model, dict(input_ids=window, attention_mask=torch.ones_like(window),
-                                        token_type_ids=torch.zeros_like(window)))
+        encoded_window = {"input_ids": window, "attention_mask": torch.ones_like(window)}
+        if "token_type_ids" in encoded:
+            encoded_window["token_type_ids"] = torch.zeros_like(window)
+        features = _forward(model, encoded_window)
         if index == 0:
             output.append(features[:1])
         output.append(features[1 + keep:-1])

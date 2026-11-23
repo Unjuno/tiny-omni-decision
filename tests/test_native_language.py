@@ -109,3 +109,28 @@ def test_nonfinite_model_output_is_not_cached():
 
     with pytest.raises(ValueError):
         module().candidate_vector(NonfiniteModel().eval(), Tokenizer(), '3', '4')
+
+
+def test_distilbert_style_encoder_without_token_type_ids_keeps_native_width():
+    class DistilTokenizer(Tokenizer):
+        def __call__(self, text, text_pair=None, **kwargs):
+            result = super().__call__(text, text_pair, **kwargs)
+            result.pop("token_type_ids")
+            return result
+
+    class DistilModel(torch.nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.parameter = torch.nn.Parameter(torch.zeros(1), requires_grad=False)
+            self.config = type("Config", (), {"hidden_size": 768})()
+
+        def forward(self, input_ids, attention_mask, return_dict=True):
+            values = input_ids.float().unsqueeze(-1).expand(-1, -1, 768)
+            return type("Output", (), {"last_hidden_state": values})()
+
+    model = DistilModel().eval()
+    tokens, _ = module().observation_tokens(model, DistilTokenizer(), "3 4")
+    query = module().candidate_vector(model, DistilTokenizer(), "3", "4")
+    assert tokens.shape == (4, 768)
+    assert query.shape == (768,)
+    torch.testing.assert_close(query, torch.full((768,), 2.4))

@@ -10,7 +10,10 @@ from tiny_omni_decision.native_candidate import NativeTokenBlock
 
 
 class FeatureStore:
-    def __init__(self, observations, banks, query_map, device="cuda"):
+    def __init__(self, observations, banks, query_map, device="cuda", *, text_width=384):
+        if type(text_width) is not int or text_width < 1:
+            raise ValueError("text_width must be a positive integer")
+        self.text_width = text_width
         self.observations, self.banks, self.device = observations, banks, device
         self.arrays, self.cache = OrderedDict(), OrderedDict()
         self.cache_bytes = 0
@@ -18,7 +21,11 @@ class FeatureStore:
         vectors = []
         for key, entry in query_map.items():
             value = self.array(entry["bank"])[entry["offset"]]
-            if value.shape != (384,) or value.dtype != np.float32 or not np.isfinite(value).all():
+            if (
+                value.shape != (text_width,)
+                or value.dtype != np.float32
+                or not np.isfinite(value).all()
+            ):
                 raise ValueError("invalid saved query feature")
             self.query_indices[key] = len(vectors)
             vectors.append(value.copy())
@@ -42,7 +49,11 @@ class FeatureStore:
                     bank = bank[feature["index"]]
                 start, count = feature["offset"], feature["tokens"]
                 value = np.array(bank[start : start + count], copy=True)
-                width = 768 if feature["kind"] in ("image", "video") else 384
+                width = (
+                    768 if feature["kind"] in ("image", "video")
+                    else self.text_width if feature["kind"] == "text"
+                    else 384
+                )
                 if (
                     value.shape != (count, width)
                     or value.dtype != np.float32

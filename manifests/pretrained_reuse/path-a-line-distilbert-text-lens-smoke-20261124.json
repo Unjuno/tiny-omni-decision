@@ -1,0 +1,62 @@
+{
+  "format": "path_a_line_distilbert_text_lens_smoke_v1",
+  "status": "PASS_CPU_INTEGRATION_SMOKE_NO_QUALITY_EVALUATION",
+  "source_commit_before_working_changes": "187cb33c3681209cadacf5ba47dcc4ac30c0b87d",
+  "roadmap_base": "32767c281de0de1504973e8a79de37621f9c2fc6",
+  "candidate": {
+    "model_id": "line-corporation/line-distilbert-base-japanese",
+    "revision": "c32d05753d0d4be0f60482291a9452ec7e6f7d68",
+    "license": "Apache-2.0",
+    "starting_layers": 6,
+    "active_layers": 4,
+    "hidden_width": 768,
+    "parameters": 53912064,
+    "starting_checkpoint_sha256": "9d8b678bd9ce14363d5e6e3dc53c7dd7c76f8ad11394ccffd200f15e9f6819eb"
+  },
+  "execution": {
+    "device": "CPU",
+    "network_access": false,
+    "training": false,
+    "validation_loaded": false,
+    "sealed_audit_loaded": false,
+    "dataset_rows_loaded": false,
+    "state_feature_shape": [10, 768],
+    "candidate_feature_shape": [4, 768],
+    "readout_parameters": 1184641,
+    "shared_text_lens_parameters": 295296,
+    "candidate_logits_finite": true,
+    "probabilities_finite_and_normalized": true,
+    "save_reload_logits_exact": true,
+    "quality_metrics": null,
+    "elapsed_command_seconds_including_process_start_and_model_load": 8.34,
+    "python": "3.11.9",
+    "torch": "2.6.0+cu124",
+    "transformers": "5.6.2"
+  },
+  "path_a_parameter_projection": {
+    "previous_frozen_total": 195365529,
+    "replaced_encoder": "microsoft/deberta-v3-xsmall",
+    "replaced_encoder_parameters": 70830722,
+    "replacement_encoder_parameters": 53912064,
+    "new_frozen_total": 178446871,
+    "new_readout_plus_lens_parameters": 1184641,
+    "projected_total_pre_quantization_parameters": 179631512,
+    "basis": "arithmetic substitution in manifests/pretrained_reuse/path-a-parameter-accounting-20261029.json; not an assembled runtime measurement"
+  },
+  "source_files_sha256": {
+    "scripts/native_fit_runtime.py": "94be0248d5e93e507911ad02f39b6f7f8d8ac866647a01d6b37322823fbd8fc0",
+    "src/tiny_omni_decision/native_candidate.py": "e14b901c27054ec615c0b2822bcea4d505b78cf3464b6c64f430bf4f719f6a03",
+    "src/tiny_omni_decision/native_language.py": "3b3872fc584440b4fe29b8eafdd601e1088e81053d952567d4099301e0bfbe83",
+    "tests/test_native_candidate.py": "4c0c3a387689c7a46a7ddf0a379c79455d91fea0c48268fa8a5e3ac8e316acd5",
+    "tests/test_native_fit.py": "78d81d8a462845ef9aabe471374ad3ebc40ec86b14ee931a7f9a363f5aa12b2d",
+    "tests/test_native_language.py": "c886b836758faa1da21bddf36b12bf5e544565925cadb3a39fc30141da63c08f"
+  },
+  "verification": {
+    "focused_tests": "45 passed",
+    "ruff": "passed",
+    "git_diff_check": "passed"
+  },
+  "cloud_cost": 0,
+  "existing_artifacts_modified": false,
+  "product_promotion": false
+}

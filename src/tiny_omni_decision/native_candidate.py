@@ -24,8 +24,18 @@ class NativeTokenBlock:
 class NativeCandidateReadout(nn.Module):
     """Candidate-equivariant cross attention over explicit native token blocks."""
 
-    def __init__(self):
+    def __init__(self, *, text_input_width: int = WIDTHS["text"]):
         super().__init__()
+        if type(text_input_width) is not int or text_input_width < 1:
+            raise ValueError("text_input_width must be a positive integer")
+        self.text_input_width = text_input_width
+        self.widths = {**WIDTHS, "text": text_input_width}
+        # One shared trainable lens maps text memories and query vectors to the
+        # established 384-D readout interface. The baseline remains an identity.
+        self.text_lens = (
+            nn.Identity() if text_input_width == WIDTHS["text"]
+            else nn.Linear(text_input_width, WIDTHS["text"])
+        )
         self.projections = nn.ModuleDict({k: nn.Linear(d, 192) for k, d in WIDTHS.items()})
         self.modality = nn.Embedding(len(WIDTHS), 192)
         self.position = nn.Linear(3, 192, bias=False)
@@ -38,22 +48,22 @@ class NativeCandidateReadout(nn.Module):
         reference = self.modality.weight
         if (
             not isinstance(queries, torch.Tensor) or queries.ndim != 2
-            or not 2 <= queries.shape[0] <= 40 or queries.shape[1] != 384
+            or not 2 <= queries.shape[0] <= 40 or queries.shape[1] != self.text_input_width
             or queries.dtype != reference.dtype or queries.device != reference.device
             or not torch.isfinite(queries).all()
         ):
-            raise ValueError("finite2..40x384 queries on the model dtype/device required")
+            raise ValueError("finite option query vectors on the model dtype/device required")
         if not isinstance(blocks, (list, tuple)) or not 1 <= len(blocks) <= 16:
             raise ValueError("1..16 native token blocks required")
         count = 0
         memories = []
         for block in blocks:
-            if not isinstance(block, NativeTokenBlock) or block.kind not in WIDTHS:
+            if not isinstance(block, NativeTokenBlock) or block.kind not in self.widths:
                 raise ValueError("known native token block required")
             x, pos, mask = block.values, block.positions, block.valid
             if (
                 not all(isinstance(v, torch.Tensor) for v in (x, pos, mask))
-                or x.ndim != 2 or x.shape[1] != WIDTHS[block.kind] or len(x) < 1
+                or x.ndim != 2 or x.shape[1] != self.widths[block.kind] or len(x) < 1
                 or pos.shape != (len(x), 3) or mask.shape != (len(x),)
                 or x.dtype != reference.dtype or pos.dtype != reference.dtype
                 or mask.dtype != torch.bool
@@ -66,10 +76,11 @@ class NativeCandidateReadout(nn.Module):
             if count > 8192:
                 raise ValueError("8192 token cap exceeded; no silent truncation")
             kind = list(WIDTHS).index(block.kind)
-            memories.append(self.projections[block.kind](x[mask])
+            values = self.text_lens(x[mask]) if block.kind == "text" else x[mask]
+            memories.append(self.projections[block.kind](values)
                             + self.position(pos[mask]) + self.modality.weight[kind])
         memory = self.memory_norm(torch.cat(memories)).unsqueeze(0)
-        q = self.query(queries)
+        q = self.query(self.text_lens(queries))
         attended, _ = self.attention(q.unsqueeze(0), memory, memory, need_weights=False)
         attended = attended.squeeze(0)
         logits = self.score(torch.cat([q, attended, q * attended, (q - attended).abs()], -1))

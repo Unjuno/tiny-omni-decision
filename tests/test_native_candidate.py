@@ -114,3 +114,30 @@ def test_json_validation_and_tie_stability():
         with pytest.raises(ValueError):
             candidate_json(scores, ids)
     assert candidate_json(torch.zeros(2), ["b", "a"])["selected_option_id"] == "a"
+
+
+def test_768d_bert_text_uses_shared_lens_and_keeps_nontext_widths():
+    from tiny_omni_decision.native_candidate import NativeCandidateReadout, NativeTokenBlock
+
+    torch.manual_seed(17)
+    baseline = NativeCandidateReadout()
+    model = NativeCandidateReadout(text_input_width=768)
+    assert sum(p.numel() for p in model.parameters()) == (
+        sum(p.numel() for p in baseline.parameters()) + 768 * 384 + 384
+    )
+    text = NativeTokenBlock(
+        "text", torch.randn(5, 768), torch.randn(5, 3), torch.ones(5, dtype=torch.bool)
+    )
+    image = NativeTokenBlock(
+        "image", torch.randn(3, 768), torch.randn(3, 3), torch.ones(3, dtype=torch.bool)
+    )
+    queries = torch.randn(4, 768)
+    scores = model([text, image], queries)
+    assert scores.shape == (4,) and torch.isfinite(scores).all()
+    loss = -scores.log_softmax(0)[0]
+    loss.backward()
+    assert model.text_lens.weight.grad is not None
+    assert torch.isfinite(model.text_lens.weight.grad).all()
+    assert model.text_lens.weight.grad.abs().sum() > 0
+    with pytest.raises(ValueError):
+        model([text, image], torch.randn(4, 384))

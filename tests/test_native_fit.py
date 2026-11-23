@@ -126,6 +126,31 @@ def test_feature_store_does_not_use_targets_or_task_names(tmp_path):
     assert not q.requires_grad and not blocks[0].values.requires_grad
 
 
+def test_feature_store_accepts_separately_pinned_768d_text_banks(tmp_path):
+    pytest.importorskip("torch")
+    from scripts.native_fit_runtime import FeatureStore
+
+    values = np.arange(2 * 768, dtype=np.float32).reshape(2, 768)
+    queries = np.ones((2, 768), dtype=np.float32)
+    np.save(tmp_path / "states.npy", values)
+    np.save(tmp_path / "queries.npy", queries)
+    banks = {
+        "states": dict(path=str(tmp_path / "states.npy")),
+        "bert/queries.npy": dict(path=str(tmp_path / "queries.npy")),
+    }
+    observations = {"x": dict(features=[dict(kind="text", bank="states", offset=0, tokens=2)])}
+    mapping = {
+        "a": dict(bank="bert/queries.npy", offset=0),
+        "b": dict(bank="bert/queries.npy", offset=1),
+    }
+    store = FeatureStore(observations, banks, mapping, device="cpu", text_width=768)
+    blocks, q = store.get(dict(observation="x", queries=["a", "b"]))
+    assert blocks[0].values.shape == (2, 768)
+    assert q.shape == (2, 768)
+    with pytest.raises(ValueError):
+        FeatureStore(observations, banks, mapping, device="cpu", text_width=384)
+
+
 def test_cpu_replay_scores_rows_in_order_and_keeps_option_padding():
     torch = pytest.importorskip("torch")
     from scripts.replay_native_common_cpu import score_validation
