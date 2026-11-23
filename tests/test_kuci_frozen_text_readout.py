@@ -1,7 +1,9 @@
 import pytest
-import torch
 
-from scripts.train_kuci_frozen_text_readout import (
+torch = pytest.importorskip("torch")
+pytest.importorskip("transformers")
+
+from scripts.train_kuci_frozen_text_readout import (  # noqa: E402
     CandidateScorer,
     _cpu_state_dict,
     _line_dropped_layers,
