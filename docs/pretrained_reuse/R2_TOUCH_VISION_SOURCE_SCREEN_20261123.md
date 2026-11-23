@@ -40,6 +40,21 @@ low-power: K=20 held-out materials, with held-out-material tactile-to-text
 Recall@1 averaging 25.1 ± 6.1% over three draws. These are source authors'
 results, not Tiny Omni measurements.
 
+### 2026-11-23 release metadata recheck
+
+The current official project page explicitly documents held-out material
+splits (K=2/5/20), category, contact-position, sensor, trajectory, and
+sequence-level protocols, and links the split-generation toolkit in the
+official code repository. This resolves the question of whether a physically
+grouped protocol exists; it does not change the 122-material ceiling or the
+need to verify the data release itself. The linked Figshare share endpoint
+returned HTTP 202 with an empty response body in a metadata-only request during
+this recheck. No file listing, archive, or media payload was obtained, so the
+dataset file manifest, sizes, pinned data revision, and hashes remain UNKNOWN.
+The candidate therefore remains inadmissible for the provisional 200-group
+quality gate; the unresolved Figshare metadata is not a reason to bypass the
+endpoint or retrieve the payload by another route.
+
 A possible later engineering task is supplied-option selection among material
 descriptors from a causal tactile sequence, with the associated material image
 as an optional complementary input. It would require frozen material-group
