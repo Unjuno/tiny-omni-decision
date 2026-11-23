@@ -1,0 +1,63 @@
+{
+  "id": "path-a-line-distilbert-features-v1",
+  "seed": 17,
+  "model_id": "line-corporation/line-distilbert-base-japanese",
+  "model_revision": "c32d05753d0d4be0f60482291a9452ec7e6f7d68",
+  "model_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\line-distilbert-ja-20261123-attempt-01",
+  "model_files": {
+    "config.json": "18b4278227eb4ddc2d755fbc0a65b958b3c0ca94c7e67a4418d318679af38737",
+    "pytorch_model.bin": "9d8b678bd9ce14363d5e6e3dc53c7dd7c76f8ad11394ccffd200f15e9f6819eb",
+    "distilbert_japanese_tokenizer.py": "4af801fa352072c633fcff2c98f61522c6ca31a6ba4489dd2bc8420f2a144fe9",
+    "spiece.model": "bcfafc8c0662d9c8f39621a64c74260f2ad120310c8dd24886de2dddaf599b4e",
+    "tokenizer_config.json": "ce4195ae05d31a092b6267741d734384ce977f6d1e1506dafa150b162c6cd135"
+  },
+  "retained_layers": 4,
+  "hidden_width": 768,
+  "expected_parameters": 53912064,
+  "corpus_root": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02",
+  "corpus_result_sha256": "47a6d2f3495810bac58f57dec1a962f8b490fa409c75671b46bb2999fde87d49",
+  "corpus_artifact_hashes": {
+    "observations.json": "e82febae93455cc06a2fb31f3dcc83ebcb79328552aff2ec4da507d660186afb",
+    "pairs.json": "7bd4cd1878c73e50539159ab7bfebf6fd3bb46d8f335ae494086cc18af02c4ea",
+    "query-map.json": "6d7d0ed1dfe6ec50d1c9b0801c689f3584f2050c6237180b0303f758fe6e1e15",
+    "banks.json": "44ef5f26ffb01bd264c7283f82e6a6f37f1a4d3c34f522515ddfc7fc2acb6520"
+  },
+  "source_files": {
+    "binding_train": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\binding_train.jsonl",
+    "numeric_train": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\numeric_train.jsonl",
+    "legacy_train": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\legacy_train.jsonl",
+    "validation": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\validation.jsonl",
+    "old_validation": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\old_validation.jsonl",
+    "legacy_validation": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\legacy_validation.jsonl"
+  },
+  "corpus_files": [
+    "result.json",
+    "observations.json",
+    "pairs.json",
+    "query-map.json",
+    "banks.json"
+  ],
+  "expected_unique_text_states": 4382,
+  "expected_all_query_pairs": 24950,
+  "window_tokens": 512,
+  "overlap_tokens": 32,
+  "max_tokens": 8192,
+  "input_pins": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\binding_train.jsonl": "89f1f2dff2a3ea1bdddc8a488fab454889a3a04cc803e34962937597db3b91e1",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\numeric_train.jsonl": "c34b0d5ff04707b5af059f0886117583efd59808f5ec217fd995333aab644f9d",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\legacy_train.jsonl": "a6d363fe4349432ecaf2a29465ee166e7f53ddf577d930884afaa0327df0814c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\validation.jsonl": "ebc458ec4dd0e64aaa8620d4bf5cdf7cb219b3fbf3bce148c479ea84f03532ae",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\old_validation.jsonl": "01cd6c8f55df5e68770408b8825711e9b7f2ea3ec7e9a3022725bbb4e5a0f536",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\legacy_validation.jsonl": "265aa8b5d9ee372a02481427bfa1620bc68f6593af1137fb3e000227e4a8774c"
+  },
+  "runtime": {
+    "dtype": "float32",
+    "attention": "eager",
+    "batch_size": 1,
+    "tf32": false,
+    "disk_reserve_bytes": 4294967296,
+    "max_wall_seconds": 21600,
+    "max_vram_bytes": 8589934592,
+    "max_rss_bytes": 10737418240
+  }
+}

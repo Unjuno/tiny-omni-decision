@@ -27,7 +27,7 @@ produced window lengths `[512, 36]`, retaining all 516 positions.
 - Model: `line-corporation/line-distilbert-base-japanese`, revision
   `c32d05753d0d4be0f60482291a9452ec7e6f7d68`, Apache-2.0.
 - Source checkpoint `pytorch_model.bin` SHA-256:
-  `9d8b678bd9ce14363d5e6e3dc53c7dd7c76f8ad11394ccffd200e1f9e6819eb`.
+  `9d8b678bd9ce14363d5e6e3dc53c7dd7c76f8ad11394ccffd200f15e9f6819eb`.
 - The source checkpoint has six layers; the candidate explicitly retains the
   first four and has 53,912,064 total parameters, all frozen.
 - The source is a masked-language-model checkpoint loaded as `DistilBertModel`.
@@ -49,6 +49,18 @@ produced window lengths `[512, 36]`, retaining all 516 positions.
   reproduction.
 - The smoke did not train a readout, load validation labels, evaluate quality,
   or load the sealed audit.
+- A label-free cache-plan pass over the pinned source inventory found 4,382
+  unique text states and all 24,950 common-corpus option queries. The split
+  feature shapes are `[497588,768]` for train states,
+  `[321770,768]` for validation states, and `[24950,768]` for query vectors.
+  FP32 storage is 2,593,714,176 bytes (about 2.42 GiB). The longest state is
+  1,318 tokens; 248 states exceed 512 tokens. One query pair is 516 tokens.
+  All remain below the 8,192-token guard. State-order SHA-256 is
+  `78330026a1ff78d17829475f428da64f38b6982931a5d57ff2a4859d4fee51e3`;
+  query-order SHA-256 is
+  `e5009121b18d4d92c06c22f4e4d6b3774953c25a4713d039257b5ed47f483622`.
+- These are storage/tokenization preflight figures only. The full frozen
+  feature arrays have not yet been captured and no quality result exists.
 - A 768-wide BERT cache and same-protocol Path A comparison remain necessary.
   Existing common-corpus validation is already exposed, so a result there is
   development evidence, not blind confirmation.
