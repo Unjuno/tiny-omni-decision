@@ -1,5 +1,15 @@
 # Tiny Omni Decision
 
+**2026-11-24 R2 Japanese temporal-NLI BERT probe:** A one-time evaluation on
+348 held-out Jamp records found 56.32% Accuracy / 0.9522 NLL for the frozen
+Tohoku BERT-base teacher and 56.90% / 0.8956 for a four-layer adapted LINE
+DistilBERT; validation-only selection remains frozen DistilBERT at 47.41% /
+1.0192 test Accuracy/NLL. The test shares template families with train and
+validation, so it is not unseen-template evidence. BERT-base exceeds the
+provisional 200M four-tower budget; no candidate is promoted, and the 95–98%
+product goal remains unmet. Do not tune on this exposed test. [Protocol, results,
+hashes and limits](docs/pretrained_reuse/R2_JAMP_BERT_TEMPORAL_PROBE_20261124.md).
+
 **2026-11-23 Japanese temporal text probe:** A parameter-budgeted first-four-
 layer DistilBERT reached 71.30% Accuracy / 0.711 NLL on the fixed KUCI
 train-derived validation, versus a matched-pooling Ruri-v3-30m at 41.26% /

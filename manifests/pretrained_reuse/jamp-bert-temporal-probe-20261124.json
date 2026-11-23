@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "experiment_id": "jamp-bert-temporal-probe-20261124",
-  "status": "validation_selection_frozen_test_preflight_opened_no_model_evaluation_yet",
+  "status": "one_shot_publisher_test_evaluation_complete_no_candidate_promoted",
   "source": {
     "repository": "https://github.com/tomo-vv/temporalNLI_dataset",
     "revision": "f578b5daac7bff3855d238c032a60fd047cddd9c",
@@ -10,7 +10,8 @@
     "declared_license": "CC-BY-SA-4.0",
     "test_path": "dataset/test_2.tsv",
     "test_git_blob_sha1": "de331fa36cbddfddbb178d7e3edda90139851a7a",
-    "test_access_policy": "validation selection was committed first; a schema/overlap preflight parsed the test rows but computed no model metrics; perform one fixed evaluation and never tune or repeat"
+    "test_access_policy": "validation selection was committed first; one fixed evaluation completed; never tune or repeat",
+    "test_sha256": "10001a07e00b8a21f370838f6cd3869c7edfb1fd2b7b69cfcefebea68009bf07"
   },
   "task": {
     "type": "Japanese temporal natural-language-inference classification",
@@ -28,6 +29,56 @@
     "cross_candidate_baseline": "lowest validation NLL across the four predeclared candidates",
     "selected_baseline": "line-distilbert-ja-first4",
     "publisher_test_metrics_used_for_selection": false
+  },
+  "one_shot_result": {
+    "source_commit": "c0f32fb9f67908266f9852634b7f5b300d188578",
+    "runner_sha256": "84add0d279dae86bbd0cfe058bb83ad2806b1a5386a867cbf667e27238479393",
+    "result_json_sha256": "7f18673336ba47d3ead10c5b379ce46dfd5689314b50154348c1e198b88ab421",
+    "test_rows": 348,
+    "label_counts": {
+      "contradiction": 116,
+      "entailment": 114,
+      "neutral": 118
+    },
+    "metrics": {
+      "ruri-v3-30m": {
+        "accuracy": 0.3477011621,
+        "nll": 1.1018295288,
+        "brier": 0.6699348688,
+        "ece_15": 0.1172142925
+      },
+      "line-distilbert-ja-first4": {
+        "accuracy": 0.4741379321,
+        "nll": 1.0191662312,
+        "brier": 0.6174804568,
+        "ece_15": 0.1128913194
+      },
+      "tohoku-bert-base-ja-v3": {
+        "accuracy": 0.5632184148,
+        "nll": 0.9521886110,
+        "brier": 0.5737742186,
+        "ece_15": 0.0739137543
+      },
+      "line-distilbert-first4-top2-adapted": {
+        "accuracy": 0.5689654946,
+        "nll": 0.8955787420,
+        "brier": 0.5441309810,
+        "ece_15": 0.0935844128
+      }
+    },
+    "paired_group_bootstrap": {
+      "group_field": "template_num",
+      "group_count": 79,
+      "repetitions": 10000,
+      "seed": 1729,
+      "baseline": "line-distilbert-ja-first4",
+      "interpretation": "descriptive only; all template groups overlap development"
+    },
+    "train_test_normalized_content_overlap": 0,
+    "validation_test_normalized_content_overlap": 0,
+    "test_template_groups_overlapping_train": 62,
+    "test_template_groups_overlapping_validation": 17,
+    "product_promotion": false
   },
   "candidates": [
     "ruri-v3-30m-frozen-encoder-readout",
