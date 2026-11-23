@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "experiment_id": "jamp-bert-temporal-probe-20261124",
-  "status": "development_probe_test_not_yet_opened",
+  "status": "validation_selection_frozen_test_preflight_opened_no_model_evaluation_yet",
   "source": {
     "repository": "https://github.com/tomo-vv/temporalNLI_dataset",
     "revision": "f578b5daac7bff3855d238c032a60fd047cddd9c",
@@ -10,7 +10,7 @@
     "declared_license": "CC-BY-SA-4.0",
     "test_path": "dataset/test_2.tsv",
     "test_git_blob_sha1": "de331fa36cbddfddbb178d7e3edda90139851a7a",
-    "test_access_policy": "one-shot after validation-only selection; never tune or repeat"
+    "test_access_policy": "validation selection was committed first; a schema/overlap preflight parsed the test rows but computed no model metrics; perform one fixed evaluation and never tune or repeat"
   },
   "task": {
     "type": "Japanese temporal natural-language-inference classification",
@@ -38,6 +38,8 @@
   "limits": [
     "This is one synthetic Japanese text task, not multimodal or broad Decision quality.",
     "The official publisher test is not a sealed audit and its labels are not blind after the one-shot run.",
+    "Official train/test num values collide because the field is file-local; text-content hashes, not cross-file num values, are used for identity checks.",
+    "The official test reuses template_num groups from both train and validation, so it is not an unseen-template evaluation.",
     "The Tohoku BERT-base projected four-tower estimate exceeds the provisional 200M parameter target.",
     "No product promotion or 95-98 percent quality claim follows from this experiment."
   ]

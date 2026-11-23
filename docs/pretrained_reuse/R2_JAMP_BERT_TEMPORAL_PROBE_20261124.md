@@ -10,7 +10,7 @@ Sources: [Jamp dataset](https://github.com/tomo-vv/temporalNLI_dataset), [ACL 20
 
 Only official `train_all.tsv` was used to make a deterministic seed-17 grouped split by `template_num`. Five folds were balanced by label and row count; fold 0 is validation. The resulting frozen split has 7,960 train rows in 62 template groups and 1,990 validation rows in 17 groups. There is no template, source ID, or normalized premise/hypothesis overlap across train and validation. The source TSV SHA-256 is `711f496ffd7806b83e13502af6b91774f8e05f1fb13215bd33c6824607e3b07b`; train, validation, and split manifest hashes are in `manifests/pretrained_reuse/jamp-bert-temporal-probe-20261124.json`.
 
-The official `dataset/test_2.tsv` was not read during candidate fitting. A one-shot evaluator is prepared to verify its pinned Git blob, reject train/validation ID or normalized-content overlap, evaluate only checkpoints selected on validation, save row predictions and calibration metrics, and prohibit reuse. The cross-candidate rule is frozen to the lowest validation NLL; that is the frozen four-layer LINE DistilBERT readout. The publisher test is a public task test, not a sealed audit. Its result will not be used for tuning.
+The official `dataset/test_2.tsv` was not read during candidate fitting. After the selection protocol was committed, a preflight parsed the test rows and found `num` collisions with train and validation. The `num` field is file-local, so cross-file collisions are recorded but are not treated as source identity. Normalized premise/hypothesis overlap is the content identity gate and was zero. The preflight computed no model predictions or test metrics. It also found that test `template_num` values overlap all 62 train and 17 validation template groups. Therefore the official test can compare held-out records within known template families, but cannot measure unseen-template generalization. The one-shot evaluator uses validation-selected checkpoints only, saves per-row predictions and calibration metrics, and refuses to overwrite an evaluation output. The cross-candidate rule is frozen to the lowest validation NLL; that is the frozen four-layer LINE DistilBERT readout. The publisher test is a public task test, not a sealed audit. Its result will not be used for tuning.
 
 ## Matched frozen-encoder comparison
 
@@ -36,7 +36,7 @@ The corrected run used seed 17, 12 fixed epochs, 95,520 total row exposures, and
 
 The evidence supports keeping compact Japanese BERT as a text representation candidate and reference, while rejecting the current upper-layer fine-tuning schedule for calibrated decisions. The frozen four-layer DistilBERT is the predeclared baseline for the one-time publisher test comparison, alongside the other validation-selected candidates. This is a single synthetic temporal-text task; it cannot establish the full Omni objective, 95–98% performance, or multimodal fusion. No sealed audit, modality data, or product checkpoint was used or promoted.
 
-The official publisher-test run and final result are appended after the protocol/evaluator commit. The test payload must be used once, with no subsequent parameter, wording, or model selection against its labels.
+The final official publisher-test run and result are appended below after the protocol/evaluator commit. The test payload must not be reused for parameter, wording, or model selection.
 
 ## Artifacts
 

@@ -22,18 +22,20 @@ def _row(num: str, group: str, premise: str, hypothesis: str) -> dict[str, str]:
     }
 
 
-def test_publisher_test_overlap_gate_rejects_id_and_normalized_content_leaks() -> None:
+def test_publisher_test_audit_reports_local_id_collisions_and_rejects_content_leaks() -> None:
     train = [_row("1", "train-group", "A happens", "B follows")]
     validation = [_row("2", "valid-group", "C happens", "D follows")]
     clean_test = [_row("3", "test-group", "E happens", "F follows")]
 
     audit = audit_test_overlap(train, validation, clean_test)
-    assert audit["train_source_id_overlap"] == 0
+    assert audit["train_file_local_num_collisions"] == 0
     assert audit["validation_normalized_pair_overlap"] == 0
     assert audit["train_template_group_overlap"] == 0
 
-    with pytest.raises(ValueError, match="shares source IDs"):
-        audit_test_overlap(train, validation, [_row("1", "new-group", "new", "pair")])
+    local_id_collision = audit_test_overlap(
+        train, validation, [_row("1", "new-group", "new", "pair")]
+    )
+    assert local_id_collision["train_file_local_num_collisions"] == 1
     with pytest.raises(ValueError, match="shares normalized content"):
         audit_test_overlap(
             train,

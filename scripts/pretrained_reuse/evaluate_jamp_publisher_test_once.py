@@ -81,18 +81,14 @@ def audit_test_overlap(
     test_groups = {row.get("template_num", "") for row in test_rows}
     train_pairs, validation_pairs, test_pairs = map(pairs, (train_rows, validation_rows, test_rows))
     overlap = {
-        "train_source_id_overlap": len(train_ids & test_ids),
-        "validation_source_id_overlap": len(validation_ids & test_ids),
+        "train_file_local_num_collisions": len(train_ids & test_ids),
+        "validation_file_local_num_collisions": len(validation_ids & test_ids),
         "train_template_group_overlap": len(train_groups & test_groups),
         "validation_template_group_overlap": len(validation_groups & test_groups),
         "train_normalized_pair_overlap": len(train_pairs & test_pairs),
         "validation_normalized_pair_overlap": len(validation_pairs & test_pairs),
         "test_duplicate_normalized_pairs": len(test_rows) - len(test_pairs),
     }
-    if overlap["train_source_id_overlap"] or overlap["validation_source_id_overlap"]:
-        raise ValueError(
-            f"publisher test shares source IDs with frozen development data: {overlap}"
-        )
     if overlap["train_normalized_pair_overlap"] or overlap["validation_normalized_pair_overlap"]:
         raise ValueError(
             f"publisher test shares normalized content with frozen development data: {overlap}"
