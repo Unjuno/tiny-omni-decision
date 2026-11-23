@@ -1,0 +1,42 @@
+schema_version: 1
+experiment_id: xcopa-minilm-multilingual-zero-shot-20261124
+purpose: frozen text-only sentence-embedding baseline; no training or tuning
+dataset:
+  repository: cambridgeltl/xcopa
+  revision: e2e9d7f105a758ee869cd13e0fe251ef93a29840
+  split: validation
+  license: CC-BY-4.0
+  source_directory: data
+  languages:
+    et: 45bee3404d7dd9c94f4502a24d78eca5a3611034
+    id: 4bb559c26c19da9d571e1603b4227d5d2d8e81d8
+    it: c7da0e9cb7802a0f242ded4e07b27ab5c0e14b7d
+    th: 027e94ca4bdeca734b56475e335a501f6acd7e90
+    tr: 206591c6c26ab5f222611962bb8ebfb6fb67bcc2
+    vi: 237a41dbc54ad35c2e50ccfc7b3b04ba5fa391b6
+    zh: 8c940ea5b620eeb3565df47b93a285257ca50efd
+  excluded_languages:
+    ht: model card does not list Haitian Creole
+    qu: model card does not list Quechua
+    sw: model card does not list Swahili
+    ta: model card does not list Tamil
+  local_data_dir: C:/CodexArtifacts/xcopa-minilm-zero-shot-20261124-attempt-01/data
+encoder:
+  model_id: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+  revision: e8f8c211226b894fcb81acc59f3b34ba3efd5f42
+  license: Apache-2.0
+  local_path: C:/CodexArtifacts/xcopa-minilm-zero-shot-20261124-attempt-01/model
+  expected_parameters: 117653760
+  max_length: 128
+  batch_size: 64
+  pooling: masked_mean
+  normalize_embeddings: true
+scoring:
+  method: cosine_similarity_between_premise_and_choice
+  temperature: 0.05
+  option_permutation_check: true
+  training: none
+  checkpoint_selection: none
+device: cuda
+output:
+  directory: C:/CodexArtifacts/xcopa-minilm-zero-shot-20261124-attempt-01/results
