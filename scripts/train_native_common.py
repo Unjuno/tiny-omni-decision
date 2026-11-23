@@ -117,6 +117,11 @@ def main():
         }:
             raise ValueError("configuration differs from the implemented fixed schedule")
         pins = dict(config["input_pins"])
+        if config.get("text_input_width", 384) == 768:
+            cache_root = Path(config["text_feature_cache"])
+            pins[str(cache_root / "result.json")] = config[
+                "text_feature_cache_result_sha256"
+            ]
         pins[str(args.config.resolve())] = sha(args.config)
         source_names = subprocess.check_output(
             ["git", "ls-files", "-z", "--", "*.py"], cwd=REPO, text=True
