@@ -137,3 +137,17 @@ work should use a fresh, admitted, group-disjoint task/validation pair and a
 predeclared diagnostic that addresses the observed image/text degradation;
 the current result alone does not justify a shared-transformer or weight-merging
 experiment. R0–R8 and the four-modality product gates remain open.
+
+## Software verification
+
+- `ruff check .`: passed.
+- `pytest -q` on the local ML-enabled environment: 2,965 passed, 11 skipped.
+- The repository CI manifest-validation commands passed locally.
+- The first GitHub Actions run for report commit `d1d8aa4a` failed during test
+  collection because CI installs only `.[dev]` and the new integration tests
+  imported optional `torch` at module import time. The tests now call
+  `pytest.importorskip("torch")` at the point of use; the corrected code commit
+  `3309c08d` passed GitHub Actions run
+  [45281123879](https://github.com/Unjuno/tiny-omni-decision/actions/runs/45281123879).
+- No dependency set was expanded, and the ML-specific tests still execute
+  locally where Torch is installed.
