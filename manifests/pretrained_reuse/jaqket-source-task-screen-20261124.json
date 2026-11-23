@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "experiment_id": "jaqket-source-task-screen-20261124",
-  "status": "dev1_integrity_passed_model_probe_not_run",
+  "status": "dev1_probe_complete_dev2_not_opened",
   "source": {
     "official_project": "https://sites.google.com/view/project-aio/dataset",
     "baseline_repository": "https://github.com/cl-tohoku/JAQKET_baseline",
@@ -38,12 +38,12 @@
     "cl-tohoku/bert-base-japanese-v3 (reference only)"
   ],
   "gates": [
-    "Dev1 integrity passed; grouped split hashes are frozen",
-    "Run the frozen representation/readout comparisons and option-title-only controls on Dev1 only",
-    "Review truncation rate, fit history and source-group uncertainty; do not change config after viewing validation results",
-    "Freeze one candidate using validation NLL and compare its quality and product-size role before any Dev2 access",
-    "Dev2 may be opened once only as a public pseudo-test after selection; it is not a blind audit",
-    "Do not download/use non-commercial train questions, Wikipedia article bodies, hidden evaluation data, or sealed audit"
+    "Dev1 integrity and split passed; hashes frozen",
+    "Six frozen encoder/readout runs completed; train CE vs validation NLL confirms overfit after early selected epochs",
+    "BERT-base is the best validation reference but exceeds the provisional four-tower size envelope; DistilBERT is the in-budget candidate but remains far below product quality",
+    "All six validation-selected pair/control checkpoints and their roles are frozen; Dev2 has not been downloaded or evaluated",
+    "If proceeding, run one fixed Dev2 pseudo-test pass only; never change roles, configuration, or checkpoints from its metrics",
+    "No multimodal quality result or product promotion follows from this text-only probe"
   ],
   "dev1_integrity_audit": {
     "artifact_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\jaqket-choice-probe-20261124-attempt-01\\dev1_questions.json",
@@ -85,7 +85,7 @@
     "training_performed": false
   },
   "dev1_probe_protocol_frozen_before_model_fit": {
-    "status": "frozen_no_fit_results_yet",
+    "status": "completed_all_six_fixed_runs",
     "seed": 17,
     "fit_data": "796 official CC-BY-SA-4.0 Dev1 rows from grouped split; validation is the identical 199 frozen rows for all candidates",
     "candidates": [
@@ -131,6 +131,489 @@
     "validation_access": "development-only; no Dev2 until candidate and readout selection are frozen",
     "developer_test_opened": false,
     "sealed_audit_opened": false,
-    "product_promotion": false
+    "product_promotion": false,
+    "dev2_evaluation_plan": {
+      "status": "roles_and_all_six_checkpoints_frozen_before_access",
+      "evaluate_once": true,
+      "selected_conditions": [
+        "ruri-pair-readout",
+        "ruri-option-only",
+        "distil4-pair-readout",
+        "distil4-option-only",
+        "bert-base-pair-readout",
+        "bert-base-option-only"
+      ],
+      "metrics": [
+        "Accuracy",
+        "NLL",
+        "20-class Brier",
+        "ECE-15",
+        "mean confidence"
+      ],
+      "leakage_check": [
+        "normalized question",
+        "answer entity",
+        "unordered candidate set",
+        "qid"
+      ],
+      "grouped_bootstrap": {
+        "group": "normalized answer_entity",
+        "repetitions": 10000,
+        "seed": 1729
+      },
+      "developer_split_is_public_pseudo_test_not_blind_audit": true,
+      "no_selection_or_tuning_on_dev2": true
+    }
+  },
+  "dev1_probe_results": {
+    "source_commit": "080a9077b540a94d9c91245126aa1b5de20d1b3b",
+    "runner_sha256": "b7e56b7a3e13a868fd5714ad6107b5b2308988166060bbb1c8321277d36df652",
+    "runner_file_sha256": "b7e56b7a3e13a868fd5714ad6107b5b2308988166060bbb1c8321277d36df652",
+    "output_root": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\jaqket-choice-probe-20261124-attempt-01",
+    "device": "NVIDIA GeForce RTX 3080 Laptop GPU 16 GB",
+    "torch": "2.6.0+cu124",
+    "transformers": "5.6.2",
+    "cuda": "12.4",
+    "cloud_cost_usd": 0,
+    "runs": {
+      "ruri-pair-readout": {
+        "candidate": "ruri-v3-30m",
+        "option_only": false,
+        "encoder_parameters": 36705536,
+        "encoder_trainable_parameters": 0,
+        "readout_parameters": 33025,
+        "selected_epoch": 5,
+        "selected_validation": {
+          "accuracy": 0.12060301005840302,
+          "nll": 2.819751262664795,
+          "brier": 0.9316205978393555,
+          "ece_15": 0.06751879304647446,
+          "mean_confidence": 0.1570696383714676
+        },
+        "epoch_100_validation": {
+          "validation_accuracy": 0.0954773873090744,
+          "validation_nll": 4.1976470947265625,
+          "validation_brier": 1.1747410297393799,
+          "validation_ece_15": 0.3971443772315979,
+          "validation_mean_confidence": 0.4926217198371887
+        },
+        "train_ce_best_epoch": 2.4609374065495015,
+        "train_ce_epoch_100": 0.002709461940012535,
+        "truncated_pairs": 0,
+        "peak_vram_bytes": 373261824,
+        "total_wall_seconds": 15.44787560007535,
+        "best_readout_sha256": "b9468418c36e7597c8cfede62fe5989fa7f87707a905adfb2e60106068b3287b",
+        "last_readout_sha256": "aa249490241f8fb5457e368295ccf1ded32c938f7aa0d64a16198f37e0830cee",
+        "run_result_sha256": "bee930ea0d10a45676db50da2a828dcacc8dc03204df881eb4071314074d021e",
+        "history_sha256": "5d51db9a03cc5252c6a4605c306efe9fce46da41872316c6c10f95c422c1232f",
+        "validation_predictions_sha256": "7f13da5b648f76aa05aeb1ddfcbeed7de89ff464b8c1c2131bf17d466c15ac99",
+        "feature_sha256": {
+          "train": "c799afa1d12da58a28cb3bbfe3eba20505b903018ab6f884ce444cc5a11ac807",
+          "validation": "e6569ebd67cdbcb89757fecba113763ecf8b8a7eff98acab3fb30194b7ae2cf9"
+        }
+      },
+      "ruri-option-only": {
+        "candidate": "ruri-v3-30m",
+        "option_only": true,
+        "encoder_parameters": 36705536,
+        "encoder_trainable_parameters": 0,
+        "readout_parameters": 33025,
+        "selected_epoch": 1,
+        "selected_validation": {
+          "accuracy": 0.12060301005840302,
+          "nll": 2.849156618118286,
+          "brier": 0.9326764345169067,
+          "ece_15": 0.02630423754453659,
+          "mean_confidence": 0.11731192469596863
+        },
+        "epoch_100_validation": {
+          "validation_accuracy": 0.11055276542901993,
+          "validation_nll": 5.3657546043396,
+          "validation_brier": 1.3174352645874023,
+          "validation_ece_15": 0.49802982807159424,
+          "validation_mean_confidence": 0.5959175229072571
+        },
+        "train_ce_best_epoch": 2.9358812145252324,
+        "train_ce_epoch_100": 0.08123020752890026,
+        "truncated_pairs": 0,
+        "peak_vram_bytes": 263063552,
+        "total_wall_seconds": 8.178851400036365,
+        "best_readout_sha256": "f1f4baa5d65277aaa90573791f92e1f8ef9e57141c99ac6f98f9f4b88636a4ca",
+        "last_readout_sha256": "9c617060d605ce93ae549cbd586cec03542e7087e617534d6adc332a653dfa0d",
+        "run_result_sha256": "3f407f9f495198427ba2dc26c4525e37b25fa8768848eb84f25a1055a8d8a29e",
+        "history_sha256": "b1591f933b752fce18e15c2886b371eeb9719c64b5b79763b62288bfc14f1f7a",
+        "validation_predictions_sha256": "a1da24bef8b63fb46f663da7fac144dd1f39961cf4f851f744a800413f0ae0cd",
+        "feature_sha256": {
+          "train": "a68fe22467ffa2cb6eb7bec889a47f11f570eb46257893d2b53880573062daca",
+          "validation": "a2d45c3fb602298a255225c06464107308a9935c85ecba9e165b221666534b05"
+        }
+      },
+      "distil4-pair-readout": {
+        "candidate": "line-distilbert-ja-first4",
+        "option_only": false,
+        "encoder_parameters": 53912064,
+        "encoder_trainable_parameters": 0,
+        "readout_parameters": 98561,
+        "selected_epoch": 6,
+        "selected_validation": {
+          "accuracy": 0.30150753259658813,
+          "nll": 2.298084020614624,
+          "brier": 0.8471343517303467,
+          "ece_15": 0.10450119525194168,
+          "mean_confidence": 0.2773491144180298
+        },
+        "epoch_100_validation": {
+          "validation_accuracy": 0.22110553085803986,
+          "validation_nll": 4.508923530578613,
+          "validation_brier": 1.140305995941162,
+          "validation_ece_15": 0.4462578296661377,
+          "validation_mean_confidence": 0.6673634648323059
+        },
+        "train_ce_best_epoch": 2.219540693053049,
+        "train_ce_epoch_100": 0.022110040304274416,
+        "truncated_pairs": 0,
+        "peak_vram_bytes": 445065728,
+        "total_wall_seconds": 25.01030860003084,
+        "best_readout_sha256": "ad8154dff55d69fc31e24457cdb880dc248a0fb68938aaf335b3fd4690b7564b",
+        "last_readout_sha256": "203e79d9cd818168b5904b51c8f52ec5075c69c615fed3d2237c4feccbe2db50",
+        "run_result_sha256": "f720b363b36099a5898b52f8e7e1758f8c0f74a7ec9cd123e6cd03de3a9d8673",
+        "history_sha256": "a6c1c36b7ba68c8f00f7e194f8d6faf3383ff4de47c32ea695292826bf7e9e00",
+        "validation_predictions_sha256": "1f9f6d6f80f27f44e232bf40af1ee184af7cc6712dc4d314205b3ac2df964ae5",
+        "feature_sha256": {
+          "train": "ee3ad4e3777eab70b92a9257efba21de135a09bec8272b3600762c7f3508916f",
+          "validation": "03e2edff4283b8c7eb3b333535b9b2708cf0df63d95ba81a082437c2617a8f78"
+        }
+      },
+      "distil4-option-only": {
+        "candidate": "line-distilbert-ja-first4",
+        "option_only": true,
+        "encoder_parameters": 53912064,
+        "encoder_trainable_parameters": 0,
+        "readout_parameters": 98561,
+        "selected_epoch": 2,
+        "selected_validation": {
+          "accuracy": 0.2512562870979309,
+          "nll": 2.5521397590637207,
+          "brier": 0.8843783140182495,
+          "ece_15": 0.059786174446344376,
+          "mean_confidence": 0.22750093042850494
+        },
+        "epoch_100_validation": {
+          "validation_accuracy": 0.21105527877807617,
+          "validation_nll": 5.928165435791016,
+          "validation_brier": 1.3005726337432861,
+          "validation_ece_15": 0.5303783416748047,
+          "validation_mean_confidence": 0.7414336204528809
+        },
+        "train_ce_best_epoch": 2.516014762859249,
+        "train_ce_epoch_100": 0.12626654388916553,
+        "truncated_pairs": 0,
+        "peak_vram_bytes": 326087168,
+        "total_wall_seconds": 11.70596910000313,
+        "best_readout_sha256": "06027c4ed828f2f4904b1f6613a2be4a371d98e4ee21d09e6d718cf98be9e384",
+        "last_readout_sha256": "6304dd5c07ea4fd1a6831b19796d60a2f169924be5a65da1a26a677ae81ecbd3",
+        "run_result_sha256": "335e44f2ee14dfbcfe8c52f6b4c0ec13a7aad18b85ba9f67a3082286d8d403a2",
+        "history_sha256": "3ea1c8e93265ed9dd8cd3201ed05558cb76081a35124dd63b76b6163c8e91a15",
+        "validation_predictions_sha256": "8e03814232d23258a5b9cff9f97f101d632f509bf894e48483c6c4de679ac72b",
+        "feature_sha256": {
+          "train": "964b4fd9be957f08ff73afd80052904eb94b1c7860e104c4091cc8aaac57fcfe",
+          "validation": "3d65febc151a0b06e650ea2a8f35cea4acdd4636690338534f5f86238102c9a2"
+        }
+      },
+      "bert-base-pair-readout": {
+        "candidate": "tohoku-bert-base-ja-v3",
+        "option_only": false,
+        "encoder_parameters": 111207168,
+        "encoder_trainable_parameters": 0,
+        "readout_parameters": 98561,
+        "selected_epoch": 10,
+        "selected_validation": {
+          "accuracy": 0.37185928225517273,
+          "nll": 1.974756121635437,
+          "brier": 0.7602659463882446,
+          "ece_15": 0.058569759130477905,
+          "mean_confidence": 0.4154057800769806
+        },
+        "epoch_100_validation": {
+          "validation_accuracy": 0.356783926486969,
+          "validation_nll": 3.2843050956726074,
+          "validation_brier": 0.9468737840652466,
+          "validation_ece_15": 0.3735369145870209,
+          "validation_mean_confidence": 0.7249956727027893
+        },
+        "train_ce_best_epoch": 1.643233149494957,
+        "train_ce_epoch_100": 0.023439099305501237,
+        "truncated_pairs": 0,
+        "peak_vram_bytes": 629561856,
+        "total_wall_seconds": 42.19104419997893,
+        "best_readout_sha256": "431b895b36089dc625b39fda2feee27adec18df6db8964c04bbf6a44f4a12505",
+        "last_readout_sha256": "fc6070576f0e7b1a94dbedf000864cdc50be0bb3e58d9c47b2e22ca9b328a785",
+        "run_result_sha256": "3f6093bba5833166860921d0ca8b569e9ade2fc09f562e5a4deb218fdc5ceaa0",
+        "history_sha256": "45c1ae8ea81e7d09e378ab2d902345b4a3499dd6d6f5c2f0097d1199380eff0f",
+        "validation_predictions_sha256": "6f9ebf175a86c81534c7fcc434ad5ad4778cac7339d543ccd813328e5ec24863",
+        "feature_sha256": {
+          "train": "579fc792aa2e4cd621c071c191e6cf2d699da53e2b3c16e7d5c3009d533f7020",
+          "validation": "307a03401a4c2b2d304b2ec05014818feaa667d7658569c39758547fe0721645"
+        }
+      },
+      "bert-base-option-only": {
+        "candidate": "tohoku-bert-base-ja-v3",
+        "option_only": true,
+        "encoder_parameters": 111207168,
+        "encoder_trainable_parameters": 0,
+        "readout_parameters": 98561,
+        "selected_epoch": 1,
+        "selected_validation": {
+          "accuracy": 0.18592964112758636,
+          "nll": 2.551328420639038,
+          "brier": 0.8933478593826294,
+          "ece_15": 0.027891147881746292,
+          "mean_confidence": 0.19874821603298187
+        },
+        "epoch_100_validation": {
+          "validation_accuracy": 0.14070351421833038,
+          "validation_nll": 5.620111465454102,
+          "validation_brier": 1.3554227352142334,
+          "validation_ece_15": 0.5952137112617493,
+          "validation_mean_confidence": 0.7359172105789185
+        },
+        "train_ce_best_epoch": 2.7276289738602375,
+        "train_ce_epoch_100": 0.09961801392948208,
+        "truncated_pairs": 0,
+        "peak_vram_bytes": 540460544,
+        "total_wall_seconds": 16.55689769994933,
+        "best_readout_sha256": "c25d69b969030e60a2c114675113f35819e308b30716ff52c73f7861bd4159b5",
+        "last_readout_sha256": "feb1facf6ac8c6d99f012345efe5580d8c432f93d1d47f30a95cc3647098dcbf",
+        "run_result_sha256": "b782b1156e46a52d19a0f9bbf70fc8a020baf8fe33eed739430670230141e3aa",
+        "history_sha256": "625a08012b1c53e85466fa151319890f2614029915e26207f1f2152ce84ceb2a",
+        "validation_predictions_sha256": "4432285e363f9958c8141d959b9daafe3f946654b3642270c927fe2172b22280",
+        "feature_sha256": {
+          "train": "e5d779556ef6c1e7a907f119c65fcd7a317def62676589e437128b4b022e227e",
+          "validation": "85c939d8e24fb52f142c2234863f07ff4e2f9e666d245deac318d5a721e09f36"
+        }
+      }
+    },
+    "paired_group_bootstrap": {
+      "validation_rows": 199,
+      "answer_entity_groups": 195,
+      "grouped_bootstrap": {
+        "group_field": "normalized answer_entity",
+        "repetitions": 10000,
+        "seed": 1729,
+        "interpretation": "descriptive on the same validation used for epoch/model selection; intervals are optimistic"
+      },
+      "metrics": {
+        "ruri-pair": {
+          "accuracy": 0.12060301507537688,
+          "nll": 2.819750847732767,
+          "brier": 0.9316206294830699,
+          "ece_15": 0.0675187944691984
+        },
+        "ruri-option-only": {
+          "accuracy": 0.12060301507537688,
+          "nll": 2.84915665972449,
+          "brier": 0.9326764460632941,
+          "ece_15": 0.026304238854940216
+        },
+        "distil4-pair": {
+          "accuracy": 0.3015075376884422,
+          "nll": 2.2980840730232748,
+          "brier": 0.8471343865077379,
+          "ece_15": 0.10450120551053006
+        },
+        "distil4-option-only": {
+          "accuracy": 0.25125628140703515,
+          "nll": 2.55213952891265,
+          "brier": 0.8843783102534323,
+          "ece_15": 0.05978617974411903
+        },
+        "bert-base-pair": {
+          "accuracy": 0.37185929648241206,
+          "nll": 1.9747559492432305,
+          "brier": 0.7602659806768227,
+          "ece_15": 0.058569752541019704
+        },
+        "bert-base-option-only": {
+          "accuracy": 0.18592964824120603,
+          "nll": 2.551328370756077,
+          "brier": 0.8933479259190049,
+          "ece_15": 0.02789114614078149
+        }
+      },
+      "paired_differences": {
+        "bert-base-pair-minus-distil4-pair": {
+          "accuracy": {
+            "mean_delta": 0.07032583328980921,
+            "percentile_95": [
+              -0.00497512437810943,
+              0.14501821608040177
+            ]
+          },
+          "nll": {
+            "mean_delta": -0.3238409818334798,
+            "percentile_95": [
+              -0.4891267438454545,
+              -0.16397397063612812
+            ]
+          },
+          "brier": {
+            "mean_delta": -0.08705381247367702,
+            "percentile_95": [
+              -0.1355405166322524,
+              -0.039324675721884327
+            ]
+          },
+          "ece_15": {
+            "mean_delta": -0.01590504458486209,
+            "percentile_95": [
+              -0.08488797881517855,
+              0.05333390092712716
+            ]
+          }
+        },
+        "bert-base-pair-minus-ruri-pair": {
+          "accuracy": {
+            "mean_delta": 0.2511669078966823,
+            "percentile_95": [
+              0.17412935323383086,
+              0.3299492385786802
+            ]
+          },
+          "nll": {
+            "mean_delta": -0.8452572265331645,
+            "percentile_95": [
+              -1.0231404219763645,
+              -0.669527308950833
+            ]
+          },
+          "brier": {
+            "mean_delta": -0.17164501746696426,
+            "percentile_95": [
+              -0.2261087536873198,
+              -0.11792011158332813
+            ]
+          },
+          "ece_15": {
+            "mean_delta": 0.030195776502143473,
+            "percentile_95": [
+              -0.021032962199148783,
+              0.08432818875876164
+            ]
+          }
+        },
+        "bert-base-pair-minus-bert-base-option-only": {
+          "accuracy": {
+            "mean_delta": 0.18612176345433673,
+            "percentile_95": [
+              0.1116751269035533,
+              0.2613065326633166
+            ]
+          },
+          "nll": {
+            "mean_delta": -0.5770776364635656,
+            "percentile_95": [
+              -0.7355320066067078,
+              -0.4188751843969205
+            ]
+          },
+          "brier": {
+            "mean_delta": -0.13340939916879666,
+            "percentile_95": [
+              -0.18405045083836116,
+              -0.08333090669564455
+            ]
+          },
+          "ece_15": {
+            "mean_delta": 0.04623948914995201,
+            "percentile_95": [
+              -0.0072576984091551515,
+              0.0990262544747007
+            ]
+          }
+        },
+        "distil4-pair-minus-distil4-option-only": {
+          "accuracy": {
+            "mean_delta": 0.05016112918384607,
+            "percentile_95": [
+              -0.01999999999999999,
+              0.12
+            ]
+          },
+          "nll": {
+            "mean_delta": -0.25360902699166493,
+            "percentile_95": [
+              -0.36673281965921206,
+              -0.14043929491378254
+            ]
+          },
+          "brier": {
+            "mean_delta": -0.03719304761733621,
+            "percentile_95": [
+              -0.06763827163593385,
+              -0.007051435476280046
+            ]
+          },
+          "ece_15": {
+            "mean_delta": 0.038195132683216615,
+            "percentile_95": [
+              -0.026535106166246943,
+              0.10360986279759236
+            ]
+          }
+        },
+        "ruri-pair-minus-ruri-option-only": {
+          "accuracy": {
+            "mean_delta": 0.00036848038007209627,
+            "percentile_95": [
+              -0.05025125628140703,
+              0.05050505050505051
+            ]
+          },
+          "nll": {
+            "mean_delta": -0.02937493134677653,
+            "percentile_95": [
+              -0.09892221450913133,
+              0.03948025125003173
+            ]
+          },
+          "brier": {
+            "mean_delta": -0.0010534175979702925,
+            "percentile_95": [
+              -0.012930787612014341,
+              0.010339723082346632
+            ]
+          },
+          "ece_15": {
+            "mean_delta": 0.03589785493842441,
+            "percentile_95": [
+              -0.009096923535834791,
+              0.08119571495300572
+            ]
+          }
+        }
+      }
+    },
+    "validation_only_roles_frozen": {
+      "best_overall_reference": "tohoku-bert-base-ja-v3",
+      "best_overall_validation_nll": 1.974756121635437,
+      "in_budget_text_candidate": "line-distilbert-ja-first4",
+      "in_budget_candidate_validation_nll": 2.298084020614624,
+      "product_promotion": false,
+      "dev2_evaluation_set": [
+        "ruri-pair-readout",
+        "ruri-option-only",
+        "distil4-pair-readout",
+        "distil4-option-only",
+        "bert-base-pair-readout",
+        "bert-base-option-only"
+      ],
+      "selection_rule": "all six best-validation-NLL readouts are frozen and evaluated once as preselected candidate/control pairs; Dev2 results cannot change roles or weights"
+    },
+    "dev2_downloaded": false,
+    "dev2_evaluated": false,
+    "sealed_audit_opened": false,
+    "learning_curve_interpretation": "all three pair readouts overfit: train CE fell toward zero while validation NLL worsened after selected epoch; no evidence that the full 100 epochs improved validation",
+    "analysis_output_sha256": "dd0e127f3675c300c15b05dc155245bb20d7e7ea2573a628d6f43af7f8a2331c",
+    "analysis_script_sha256": "e77e9119dac49035ff6b9a9039cf04c97b3f77a0f69529fafc1f236d61dee7a0"
   }
 }

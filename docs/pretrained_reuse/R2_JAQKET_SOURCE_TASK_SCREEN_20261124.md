@@ -2,7 +2,7 @@
 
 ## Disposition
 
-**CANDIDATE, limited to the official developer-created Dev1/Dev2 question files.** JAQKET offers a Japanese variable-choice task closer to the product's supplied-option probability interface than the recent fixed-label Jamp NLI probe. It is text-only and knowledge-intensive; it does not qualify multimodal or broad world-understanding quality. Dev1 integrity and a deterministic grouped split now pass; no model-quality fit has run yet.
+**CANDIDATE, limited to the official developer-created Dev1/Dev2 question files.** JAQKET offers a Japanese variable-choice task closer to the product's supplied-option probability interface than the recent fixed-label Jamp NLI probe. It is text-only and knowledge-intensive; it does not qualify multimodal or broad world-understanding quality. Dev1 integrity and a deterministic grouped split pass; the frozen encoder comparison is complete and documented in [R2_JAQKET_BERT_PROBE_20261124.md](R2_JAQKET_BERT_PROBE_20261124.md).
 
 ## Primary-source findings
 
