@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "experiment_id": "jaqket-source-task-screen-20261124",
-  "status": "candidate_limited_to_cc_by_sa_dev_splits_pending_dev1_integrity_audit",
+  "status": "dev1_integrity_passed_model_probe_not_run",
   "source": {
     "official_project": "https://sites.google.com/view/project-aio/dataset",
     "baseline_repository": "https://github.com/cl-tohoku/JAQKET_baseline",
@@ -17,9 +17,19 @@
     "dev2_access": "defer until Dev1-only selection is frozen; one-time pseudo-test"
   },
   "use_policy": {
-    "allowed_splits": ["dev1", "dev2 once after candidate selection"],
-    "excluded_assets": ["train_questions.json", "all_entities.json.gz", "competition-private evaluation data"],
-    "input_fields": ["question", "answer_candidates"],
+    "allowed_splits": [
+      "dev1",
+      "dev2 once after candidate selection"
+    ],
+    "excluded_assets": [
+      "train_questions.json",
+      "all_entities.json.gz",
+      "competition-private evaluation data"
+    ],
+    "input_fields": [
+      "question",
+      "answer_candidates"
+    ],
     "answer_field": "answer_entity"
   },
   "candidate_models": [
@@ -28,11 +38,99 @@
     "cl-tohoku/bert-base-japanese-v3 (reference only)"
   ],
   "gates": [
-    "verify Dev1 hash, schema, and row count",
-    "audit normalized question, answer entity, and candidate-set duplicates",
-    "create a deterministic Dev1-only group split and prove no group/content overlap",
-    "measure option-only and answer-position baselines",
-    "freeze validation selection before opening Dev2",
-    "Dev2 is public pseudo-test, not sealed audit; no retuning"
-  ]
+    "Dev1 integrity passed; grouped split hashes are frozen",
+    "Run the frozen representation/readout comparisons and option-title-only controls on Dev1 only",
+    "Review truncation rate, fit history and source-group uncertainty; do not change config after viewing validation results",
+    "Freeze one candidate using validation NLL and compare its quality and product-size role before any Dev2 access",
+    "Dev2 may be opened once only as a public pseudo-test after selection; it is not a blind audit",
+    "Do not download/use non-commercial train questions, Wikipedia article bodies, hidden evaluation data, or sealed audit"
+  ],
+  "dev1_integrity_audit": {
+    "artifact_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\jaqket-choice-probe-20261124-attempt-01\\dev1_questions.json",
+    "sha256": "cef9d57fa479cd4714ebbe67eb5ae6409fcef1d96d4e9f725f5f93a0c6c1124c",
+    "bytes": 853639,
+    "format": "JSONL",
+    "rows": 995,
+    "unique_qid": 995,
+    "unique_normalized_question": 995,
+    "unique_answer_entity": 983,
+    "unique_unordered_candidate_set": 994,
+    "candidate_count_per_row": 20,
+    "target_exactly_once": true,
+    "duplicate_normalized_candidates": 0,
+    "grouped_split": {
+      "algorithm": "answer_entity_question_candidate_set_group_hash_greedy_v1",
+      "seed": 17,
+      "train_rows": 796,
+      "train_groups": 788,
+      "train_sha256": "e1ef9a97b1136c39fa9fccc50ab8ada72c68bd3883beaa42ef4bfecf764194e8",
+      "validation_rows": 199,
+      "validation_groups": 195,
+      "validation_sha256": "17fa4035106ee2598d08de95b530f466ed8b723a9dde924c3288ffe532d691e8",
+      "validation_qid_order_sha256": "072cd1092312102280c0c839c19c7c035e2c8bedd5d6ea4b930168da9a3970b5",
+      "cross_split_overlap": {
+        "qid": 0,
+        "normalized_question": 0,
+        "answer_entity": 0,
+        "unordered_candidate_set": 0
+      }
+    },
+    "candidate_entity_exposure": {
+      "cross_split_unique_option_title_overlap": 832,
+      "validation_targets_appearing_in_train_options": 33,
+      "validation_targets_appearing_as_train_distractors": 33,
+      "train_only_most_common_answer_position_accuracy": 0.06155778894472362
+    },
+    "sealed_or_public_pseudo_test_opened": false,
+    "training_performed": false
+  },
+  "dev1_probe_protocol_frozen_before_model_fit": {
+    "status": "frozen_no_fit_results_yet",
+    "seed": 17,
+    "fit_data": "796 official CC-BY-SA-4.0 Dev1 rows from grouped split; validation is the identical 199 frozen rows for all candidates",
+    "candidates": [
+      {
+        "id": "ruri-v3-30m",
+        "role": "compact pretrained Japanese encoder baseline"
+      },
+      {
+        "id": "line-distilbert-ja-first4",
+        "role": "in-budget BERT-family candidate; first four pretrained layers only"
+      },
+      {
+        "id": "tohoku-bert-base-ja-v3",
+        "role": "BERT-base text-only teacher/reference; projected product total exceeds provisional size target"
+      }
+    ],
+    "input": "question paired separately with each supplied candidate title; 20 independent pair encodings per question",
+    "readout": "frozen encoder -> attention-mask mean pool -> shared Linear(hidden,128)-Tanh-Linear(128,1), softmax over 20 options",
+    "controls": "same-encoder option-title-only control for each candidate; question is blank",
+    "training": {
+      "optimizer": "AdamW",
+      "learning_rate": 0.002,
+      "weight_decay": 0.0001,
+      "batch_size_questions": 64,
+      "epochs": 100,
+      "lr_scheduler": "constant",
+      "early_stopping": false,
+      "selection": "minimum validation NLL among all 100 epochs"
+    },
+    "encoding": {
+      "max_length": 256,
+      "truncation": "longest_first",
+      "feature_dtype": "float16",
+      "encoder": "frozen"
+    },
+    "metrics": [
+      "accuracy",
+      "NLL",
+      "20-class Brier",
+      "ECE-15",
+      "mean confidence"
+    ],
+    "validation_access": "development-only; no Dev2 until candidate and readout selection are frozen",
+    "developer_test_opened": false,
+    "sealed_audit_opened": false,
+    "product_promotion": false
+  }
 }

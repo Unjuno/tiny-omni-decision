@@ -2,7 +2,7 @@
 
 ## Disposition
 
-**CANDIDATE, limited to the official developer-created Dev1/Dev2 question files.** JAQKET offers a Japanese variable-choice task closer to the product's supplied-option probability interface than the recent fixed-label Jamp NLI probe. It is text-only and knowledge-intensive; it does not qualify multimodal or broad world-understanding quality.
+**CANDIDATE, limited to the official developer-created Dev1/Dev2 question files.** JAQKET offers a Japanese variable-choice task closer to the product's supplied-option probability interface than the recent fixed-label Jamp NLI probe. It is text-only and knowledge-intensive; it does not qualify multimodal or broad world-understanding quality. Dev1 integrity and a deterministic grouped split now pass; no model-quality fit has run yet.
 
 ## Primary-source findings
 
@@ -18,7 +18,15 @@ The [official baseline repository](https://github.com/cl-tohoku/JAQKET_baseline)
 - Only after the selection rule and candidate are frozen, evaluate Dev2 once. Dev2 is public development data used as a pseudo-test, not a sealed audit; do not tune or repeat after opening it.
 - Do not use the non-commercial train questions, hidden/private competition data, or Wikipedia article-body corpus.
 
-Before training, verify the official Dev1 payload hash, schema, row count, target-in-options condition, duplicate questions, and split sufficiency. If Dev1 cannot support a source-disjoint internal validation or has target/candidate shortcuts, stop before fitting and report the exact issue. Do not substitute Dev2 into training after seeing it.
+## Dev1 integrity audit
+
+The official Dev1 file was downloaded once to external artifacts; its SHA-256 is `cef9d57fa479cd4714ebbe67eb5ae6409fcef1d96d4e9f725f5f93a0c6c1124c` (853,639 bytes). It is JSONL with 995 rows. All qids are unique; every row has exactly 20 distinct normalized candidate titles and the answer appears exactly once. There are 995 unique normalized questions, 983 unique answer entities, and 994 unique unordered candidate sets. Thus 12 answer entities and one candidate set repeat; those identities are kept within groups.
+
+The fixed seed-17 split groups by normalized question, answer entity, and exact unordered candidate set. It yields 796 train rows / 788 groups and 199 validation rows / 195 groups, with zero cross-split qid, normalized-question, answer-entity, or candidate-set overlap. The validation qid-order SHA-256 is `072cd1092312102280c0c839c19c7c035e2c8bedd5d6ea4b930168da9a3970b5`; split files and full accounting are outside Git under `C:\\CodexArtifacts\\pretrained-reuse-r2-local\\jaqket-choice-probe-20261124-attempt-01\\grouped-split-v1\\`.
+
+Candidate-title identity still crosses the split: 832 distinct option titles occur on both sides, and 33 of 195 validation answer entities appear among train distractors. All 995 question-plus-answer-plus-option-set rows are unique, but this is not a fully entity-disjoint option vocabulary. The train-only most-common answer-position baseline is 6.16% on validation; chance is 5%. Position counts are retained in the split manifest. This overlap limits claims about unseen answer entities and must be reported with any model metrics.
+
+The deterministic audit implementation is [build_jaqket_dev1_split.py](../../scripts/pretrained_reuse/build_jaqket_dev1_split.py); its unit tests pass. Do not substitute Dev2 into training or open Dev2 before freezing model, readout, and selection rules.
 
 ## Known limitations
 
