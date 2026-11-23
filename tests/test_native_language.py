@@ -73,9 +73,19 @@ def test_question_candidate_mean_includes_original_special_tokens():
     torch.testing.assert_close(value, torch.full((384,), 23 / 7))
 
 
-def test_query_pair_cannot_be_silently_windowed():
-    with pytest.raises(ValueError):
-        module().candidate_vector(Model().eval(), Tokenizer(), '3 ' * 510, '4')
+def test_long_query_pair_windows_without_dropping_or_double_counting_tokens():
+    model = Model().eval()
+    question = '3 ' * 510
+    value = module().candidate_vector(model, Tokenizer(), question, '4')
+    assert model.calls == [512, 34]
+    # Original stream is [CLS] + 510 question tokens + [SEP] + candidate + [SEP].
+    expected = (1 + 510 * 3 + 2 + 4 + 2) / 514
+    torch.testing.assert_close(value, torch.full((384,), expected))
+
+
+def test_extremely_long_query_pair_fails_closed():
+    with pytest.raises(ValueError, match="full-token budget"):
+        module().candidate_vector(Model().eval(), Tokenizer(), '3 ' * 8192, '4')
 
 
 def test_encoder_must_be_eval_and_frozen():

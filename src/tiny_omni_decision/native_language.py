@@ -93,8 +93,33 @@ def observation_tokens(model, tokenizer, text):
 @torch.inference_mode()
 def candidate_vector(model, tokenizer, question, candidate):
     encoded = _encode_input(model, tokenizer, question, candidate)
-    if encoded["input_ids"].shape[1] > 512:
-        raise ValueError("question/candidate pair exceeds512; no silent truncation")
-    hidden = _forward(model, encoded)
-    # Single pair has no padding; use the existing masked-sum/division convention.
-    return hidden.sum(0) / encoded["attention_mask"].sum()
+    ids = encoded["input_ids"]
+    length = ids.shape[1]
+    if length > 8192:
+        raise ValueError("question/candidate pair exceeds the full-token budget")
+    if length <= 512:
+        hidden = _forward(model, encoded)
+    else:
+        # Keep every original token. The earliest window containing a token
+        # supplies its feature; 32-token overlap preserves local context at
+        # window boundaries without double-counting pooled positions.
+        pieces = []
+        start = 0
+        previous_stop = 0
+        while start < length:
+            stop = min(start + 512, length)
+            window = {key: value[:, start:stop] for key, value in encoded.items()}
+            features = _forward(model, window)
+            pieces.append(features[stop - start - (stop - previous_stop):])
+            previous_stop = stop
+            if stop == length:
+                break
+            start = stop - 32
+        hidden = torch.cat(pieces)
+        if hidden.ndim != 2 or hidden.shape != (length, _hidden_size(model)):
+            raise ValueError("long-pair windows failed to retain all token states")
+        expected_tokens = length
+        if sum(len(piece) for piece in pieces) != expected_tokens:
+            raise ValueError("long-pair windows lost or duplicated token positions")
+    # Match the existing all-token mean pooling convention, including specials.
+    return hidden.sum(0) / length
