@@ -85,15 +85,8 @@ feature extraction; no model ran.
 
 ## Candidate Decision task and unresolved labels
 
-A plausible task is: given the task instruction, current RGB observation, and
-14-D proprioceptive state, rank a small set of candidate next-action commands
-or short command snippets and return probabilities as JSON. The logged
-14-dimensional action at 50 Hz can provide a behavioral target. This would be
-**demonstrator-action prediction**, not task-success prediction: the source
-does not label success, failure, safety, or whether alternative actions are
-also valid. A candidate set made from one logged action plus arbitrary action
-negatives could create false negatives. Freeze the action horizon, option
-construction, target ambiguity policy, and no-model priors before fitting.
+A provisional candidate protocol is recorded in
+[`R2_ROBOPRO_PROMPT_SPLIT_AND_ACTION_CONTRACT_20261123.md`](R2_ROBOPRO_PROMPT_SPLIT_AND_ACTION_CONTRACT_20261123.md): given the task instruction, RGB observation, and 14-D proprioceptive state, rank four logged action vectors and return probabilities as JSON. This is **demonstrator-action retrieval**, not task-success prediction. The source does not label success, failure, safety, or whether alternative actions are valid, so all results must be reported as agreement with one recorded command. Candidate uniqueness and ambiguity remain to be checked on a bounded materialized sample.
 
 The source is suitable for testing whether video contributes information
 beyond joint state and task text, but that is not established by its metadata.
@@ -110,9 +103,11 @@ Parquet timestamps and decoded frame PTS before any temporal claim.
 2. Freeze a behavioral action-choice contract that avoids claiming success
    labels, specifies multi-valid-action ambiguity, and makes the options
    available at inference time.
-3. Create a deterministic episode-grouped development split; exclude or
-   co-locate the declared duplicate. Hash every assignment and check all
-   selected file references before fetching media.
+3. **Metadata-only split complete:** seed-17 development manifest assigns whole
+   exact-prompt groups to train/development, excludes the publisher-declared
+   duplicate, and hashes assignments. It does not prove semantic task-family
+   or physical-scene disjointness. Check selected media references before
+   fetching a bounded sample; see the split-and-contract follow-up.
 4. Predeclare the joint-versus-best-unimodal comparison, calibration metrics,
    episode-cluster intervals, temporal controls, and model-selection rule.
 5. Estimate selected-subset bytes and local decode/feature costs. The full
@@ -120,10 +115,12 @@ Parquet timestamps and decoded frame PTS before any temporal claim.
    run artifacts on C: and preserve the existing 2-GiB free-space reserve.
 
 The one-episode smoke above verifies table/video clock alignment as an
-admission preflight, not as a quality experiment. Only after the remaining gates
-pass should a bounded frozen-feature experiment be considered. No model
-experiment was started. Existing Teacher, Path A, BERT, Orbitune, data,
-checkpoints, and open PRs were left unchanged.
+admission preflight, not as a quality experiment. The metadata split narrows
+the task feasibility question but does not pass action-label or
+scene-generalization gates. Only after the remaining checks pass should a
+bounded frozen-feature experiment be considered. No model experiment was
+started. Existing Teacher, Path A, BERT, Orbitune, data, checkpoints, and open
+PRs were left unchanged.
 
 ## Execution record
 
