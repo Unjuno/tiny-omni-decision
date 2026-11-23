@@ -16,6 +16,44 @@ def context_hash(context: str) -> str:
     return hashlib.sha256(normalize_text(context).encode("utf-8")).hexdigest()
 
 
+def validate_source_content_disjoint(
+    train_rows: list[dict[str, Any]], source_rows: list[dict[str, Any]]
+) -> dict[str, int]:
+    """Audit exact Social IQa content overlap without requiring label fields."""
+
+    def content_sets(
+        rows: list[dict[str, Any]],
+    ) -> tuple[set[str], set[tuple[str, ...]], set[tuple[str, ...]]]:
+        contexts: set[str] = set()
+        examples: set[tuple[str, ...]] = set()
+        question_options: set[tuple[str, ...]] = set()
+        for row in rows:
+            if "options" in row:
+                options = row["options"]
+            else:
+                options = [row[key] for key in ("answerA", "answerB", "answerC")]
+            if len(options) != 3:
+                raise ValueError("Social IQa examples must have exactly three options")
+            context = normalize_text(str(row["context"]))
+            question = normalize_text(str(row["question"]))
+            normalized_options = tuple(normalize_text(str(option)) for option in options)
+            contexts.add(context)
+            examples.add((context, question, *normalized_options))
+            question_options.add((question, *normalized_options))
+        return contexts, examples, question_options
+
+    train = content_sets(train_rows)
+    source = content_sets(source_rows)
+    overlaps = {
+        "normalized_context": len(train[0] & source[0]),
+        "normalized_full_example": len(train[1] & source[1]),
+        "normalized_question_options": len(train[2] & source[2]),
+    }
+    if any(overlaps.values()):
+        raise ValueError(f"source content overlap detected: {overlaps}")
+    return overlaps
+
+
 def validate_splits(
     train: list[dict[str, Any]], validation: list[dict[str, Any]]
 ) -> dict[str, Any]:

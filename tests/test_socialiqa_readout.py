@@ -4,7 +4,11 @@ import hashlib
 
 import pytest
 
-from tiny_omni_decision.socialiqa_readout import context_hash, validate_splits
+from tiny_omni_decision.socialiqa_readout import (
+    context_hash,
+    validate_source_content_disjoint,
+    validate_splits,
+)
 
 
 def example(sample_id: str, context: str, question: str, options: list[str], target: int) -> dict:
@@ -46,6 +50,57 @@ def test_validate_splits_rejects_forged_context_hash() -> None:
     row["source_context_sha256"] = hashlib.sha256(b"different").hexdigest()
     with pytest.raises(ValueError, match="context hash"):
         validate_splits([row], [])
+
+
+def test_source_content_audit_accepts_disjoint_unlabeled_publisher_rows() -> None:
+    train = [
+        {
+            "context": "A person cooks.",
+            "question": "Why?",
+            "answerA": "Hungry",
+            "answerB": "Cold",
+            "answerC": "Sleep",
+        }
+    ]
+    dev = [
+        {
+            "context": "A child runs.",
+            "question": "What next?",
+            "answerA": "Stop",
+            "answerB": "Fall",
+            "answerC": "Rest",
+        }
+    ]
+
+    assert validate_source_content_disjoint(train, dev) == {
+        "normalized_context": 0,
+        "normalized_full_example": 0,
+        "normalized_question_options": 0,
+    }
+
+
+def test_source_content_audit_rejects_context_overlap_without_labels() -> None:
+    train = [
+        {
+            "context": "Same story",
+            "question": "Why?",
+            "answerA": "A",
+            "answerB": "B",
+            "answerC": "C",
+        }
+    ]
+    dev = [
+        {
+            "context": " SAME   STORY ",
+            "question": "Why else?",
+            "answerA": "D",
+            "answerB": "E",
+            "answerC": "F",
+        }
+    ]
+
+    with pytest.raises(ValueError, match="source content overlap"):
+        validate_source_content_disjoint(train, dev)
 
 
 def test_metrics_on_uniform_logits_are_finite_and_calibrated() -> None:
