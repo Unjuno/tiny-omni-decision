@@ -29,6 +29,7 @@ project sealed audit were not opened.
 | BANKING77 | Frozen MiniLM-L3: 89.69%; L6: 91.44%; L12: 90.69% | Small BERT-derived encoders can produce compact, executable text classifiers. L6 was the best balanced fixed candidate in this comparison. | Narrow English intent labels; publisher test was not opened and source person/conversation groups are unavailable. L12 did not improve Accuracy over L6. |
 | CLINC150 | Frozen MiniLM-L6 and L12: 95.72% overall Accuracy | High accuracy is possible on a bounded intent taxonomy. | Only 24 validation examples represented OOS; this does not establish robust open-set behavior or broad text Decision quality. |
 | Japanese JCoLA OOD-development subset, 685 rows | Tohoku BERT-base and LINE 4-layer DistilBERT both: 73.28% Accuracy, 50% macro Accuracy, MCC 0; both predicted the majority class for every row. | The same family can fail on a different Japanese decision task; reducing depth alone did not solve it. | The run used a CUDA feature path and CC BY-SA data kept local. The official test and sealed audit were not loaded. |
+| Japanese JCoLA train-only, 10-source grouped out-of-fold evaluation, 6,919 rows | LINE Japanese DistilBERT frozen four-layer readout: 83.38% Accuracy / 50.00% macro Accuracy / 0.4560 NLL / 0.0316 ECE; adapting the upper two layers: 82.08% / 56.32% / 0.5188 / 0.0977. | Upper-layer adaptation recovered some minority-class discrimination (MCC 0.182; unacceptable recall 17.74%) from a majority-class collapse. | Accuracy fell 1.30 pp, NLL worsened 0.0627, ECE worsened 0.0661; paired source bootstrap intervals favored the frozen arm for Accuracy and NLL, while the macro-accuracy interval included zero. Only ten source clusters were available. This does not justify further tuning on JCoLA or a broad BERT sweep. |
 | Typed Decisions Synth internal comparison, 1,200 decisions / 240 state groups | Japanese BERT-base (110.72M total parameters): 53.40% teacher-mode agreement; Light SPLADE (27.62M): 43.40%. BERT-minus-SPLADE Accuracy difference +10.0 pp (paired state-cluster 95% interval +6.60 to +13.40 pp). | BERT contributes semantic signal over the lightweight lexical baseline in this controlled internal task. | The target is agreement with the synthetic teacher distribution, not independent factual correctness. The validation selected readouts; this is not a product benchmark. |
 | Open-Jev amount-control internal split, 6,696 validation rows / 27 document families | Tiny ModernBERT-CJE: 67.57% macro Accuracy, 0.7087 NLL; MiniLM-L3: 69.81%, 0.6778. | A compact pretrained text encoder can operate under a small parameter budget. | Every candidate pair was truncated at the 512-token cap (maximum untruncated length exceeded 1,000 tokens). The result is confounded by input truncation and is not evidence of an encoder ceiling. Labels are programmatically derived and validation groups came from publisher TRAIN. |
 
@@ -38,6 +39,34 @@ revision `65243d6e5629b969c77309f217bd7b1a79d43c7e` (Apache-2.0), with
 447,406,217-byte FP32 weight file alone exceeds the aspirational package-size
 target. No quantization, latency-qualified runtime, or full multimodal
 integration was verified in these BERT comparisons.
+
+### JCoLA upper-layer adaptation follow-up
+
+A separate seed-17, ten-fold source-held-out run used only the publisher's
+JCoLA TRAIN records. Every row received one out-of-fold prediction; no
+publisher development/test or project sealed-audit records were loaded. It
+compared the same four-layer LINE Japanese DistilBERT feature path with a
+fixed scorer against an arm that trained only the upper two DistilBERT layers
+and scorer. The adapted arm had 14,274,305 trainable parameters within a
+54,010,625-parameter candidate; its fixed epoch-5 endpoint was used in every
+fold, without validation-based checkpoint selection.
+
+Adaptation improved macro accuracy from 50.00% to 56.32% and MCC from 0 to
+0.182, but lowered sample accuracy from 83.38% to 82.08%, worsened NLL from
+0.4560 to 0.5188, and worsened ECE-15 from 0.0316 to 0.0977. A paired
+10,000-replicate source-cluster bootstrap gave adapted-minus-frozen intervals
+of `[-0.0281, -0.0032]` for Accuracy, `[-0.0393, +0.0040]` for macro
+Accuracy, and `[+0.0390, +0.0795]` for NLL (positive NLL is worse). With just
+ten source clusters, these are diagnostic, not broad population guarantees.
+The run used 17.8 minutes and peaked at about 0.90 GiB CUDA allocation; this
+completed before the separately observed Orbitune GPU job. The source is
+CC-BY-SA-4.0 and its data/artifacts remain outside Git pending product-rights
+review.
+
+This follow-up refines the earlier JCoLA collapse finding: partial adaptation
+can recover some minority recall, but did not improve the primary accuracy or
+probability-quality measures. It is not evidence that further JCoLA tuning
+will help the product task, and this exposed cohort should not be revisited.
 
 ## Raw-text JSON runtime replay
 
@@ -101,6 +130,7 @@ JSON receipts inspected for this reconciliation.
 | `typed-decisions-ja-bert-vs-light-splade-paired-bootstrap-20261123-attempt-01/paired-bootstrap.json` | `78816392655d4bd2378386a853e70cf86d28c0562832c46575b58f7b14280a0d` |
 | `jcola-bert-grouped-decision-20261123-attempt-01/run-manifest.json` | `3771fe87201048e5829b358a7f52fff3fdf66c0f86f413ad1dca27abcfe12cd9` |
 | `jcola-bert-grouped-decision-20261123-attempt-01/saved-prediction-analysis.json` | `2ca0af27bb5328dac346643b1762950ff0da605080914c7348625700583692ef` |
+| `jcola-distilbert-adaptation-cv-20261123-attempt-02/analysis-summary.json` | `cb7f889a12f0e14d89d8ef337559bf68d63154aa3f1c193dedab829eec1b490e` |
 | `openjev-amount-modernbert-comparison-20261123-attempt-01/run-report.json` | `9b7810073f8c46f9057980d64580b0bf717b4d91efccb36fae804443a25154cf` |
 | `openjev-amount-modernbert-comparison-20261123-attempt-01/paired-family-bootstrap.json` | `2ac293aa9108bf5df1700d01cbd9e9e7d84ccd9d8f708b140422d392dae533a1` |
 
