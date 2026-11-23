@@ -112,7 +112,7 @@ training-set overfit diagnosis without a fixed training prediction comparison.
 The pinned command was:
 
 ```powershell
-python scripts/pretrained_reuse/run_socialiqa_minilm_probe.py `
+python -m scripts.pretrained_reuse.run_socialiqa_minilm_probe `
   --data-dir C:\CodexArtifacts\pretrained-reuse-r2-local\socialiqa-source-screen-20261124-attempt-01\source-payload `
   --output-dir C:\CodexArtifacts\pretrained-reuse-r2-local\socialiqa-minilm-decision-20261124-attempt-01 `
   --hf-cache C:\CodexArtifacts\HuggingFace-cache-MIDI\hub `

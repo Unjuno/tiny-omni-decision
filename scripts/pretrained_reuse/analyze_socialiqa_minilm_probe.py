@@ -15,7 +15,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from scripts.pretrained_reuse.run_socialiqa_minilm_probe import read_split
+from scripts.pretrained_reuse.socialiqa_probe_data import read_split
 
 
 def read_predictions(path: Path) -> list[dict[str, Any]]:

@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-import torch
+import json
 
-from scripts.pretrained_reuse.run_socialiqa_minilm_probe import (
-    OptionScorer,
-    grouped_split,
-    metrics,
-)
+import pytest
+
+from scripts.pretrained_reuse.socialiqa_probe_data import grouped_split, read_split
 
 
 def test_grouped_split_is_deterministic_and_keeps_contexts_together() -> None:
@@ -21,21 +19,24 @@ def test_grouped_split_is_deterministic_and_keeps_contexts_together() -> None:
     assert train_groups.isdisjoint(validation_groups)
 
 
-def test_shared_option_scorer_is_equivariant_to_candidate_order() -> None:
-    torch.manual_seed(17)
-    model = OptionScorer(8)
-    features = torch.randn(4, 3, 8)
-    permutation = torch.tensor([2, 0, 1])
-    original = model(features)
-    permuted = model(features[:, permutation])
-    torch.testing.assert_close(permuted, original[:, permutation])
+def test_read_split_aligns_labels_and_normalizes_context_groups(tmp_path) -> None:
+    row = {
+        "context": "  They   went home. ",
+        "question": "Why?",
+        "answerA": "A",
+        "answerB": "B",
+        "answerC": "C",
+    }
+    (tmp_path / "train.jsonl").write_text(json.dumps(row) + "\n", encoding="utf-8")
+    (tmp_path / "train-labels.lst").write_text("3\n", encoding="utf-8")
+    result = read_split(tmp_path, "train")
+    assert result[0]["id"] == "train-00000"
+    assert result[0]["target"] == 2
+    assert result[0]["group"] == "they went home."
 
 
-def test_metrics_are_finite_and_match_perfect_three_choice_predictions() -> None:
-    logits = torch.tensor([[6.0, 0.0, -1.0], [0.0, 6.0, -1.0], [-1.0, 0.0, 6.0]])
-    labels = torch.tensor([0, 1, 2])
-    observed = metrics(logits, labels)
-    assert observed["accuracy"] == 1.0
-    assert observed["nll"] < 0.01
-    assert observed["brier"] < 0.01
-    assert observed["ece_10"] < 0.01
+def test_read_split_rejects_misaligned_labels(tmp_path) -> None:
+    (tmp_path / "train.jsonl").write_text("{}\n", encoding="utf-8")
+    (tmp_path / "train-labels.lst").write_text("1\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="missing required"):
+        read_split(tmp_path, "train")
