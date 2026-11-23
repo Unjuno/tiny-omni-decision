@@ -3883,6 +3883,16 @@ text transfer. Continue source/task admission before another natural-AV fit;
 preserve all concurrent PRs and exposed validation IDs.
 [Cross-branch evidence and gates](docs/pretrained_reuse/R2_CROSS_BRANCH_EVIDENCE_20261026.md).
 
+**2026-10-26 STARSS23 spatial Decision cross-branch result:** A separate
+room-disjoint audio-only / video-only / joint FOA spatial readout completed on
+the same pinned development task. The 2.70% positive rate made always-`no`
+97.30% Accuracy; joint raw balanced Accuracy was 53.24%, versus 75.51% audio
+only, and the selected/calibrated joint rule had zero positive sensitivity.
+Corrected same-room video reassignment changed little; zeroing video improved
+raw balanced Accuracy. This does not show useful video grounding or joint
+quality. The validation was exposed and has only two rooms; do not repeat or
+tune the run. See the [full cross-branch result and audit trail](docs/pretrained_reuse/R2_STARSS23_SPATIAL_DECISION_RESULTS_20261026.md).
+
 **2026-10-29 07:30 JST R2 one-time text-free image readout evaluation:** A
 frozen VideoPrism-B image taxonomy head, selected on its own development split
 before this one-time evaluation, scored 2,107 CLEVR-4 validation images. Color/texture/count/shape
