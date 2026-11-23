@@ -1,0 +1,68 @@
+{
+  "schema_version": "robopro-state-action-shortcut-summary-v1",
+  "experiment_id": "robopro-state-action-shortcut-train-20261123-attempt-04",
+  "status": "completed_train_only_diagnostic",
+  "admission": "not_admitted_for_r2_m2_fusion_quality",
+  "dataset": "Hoshipu/RoboPro",
+  "revision": "90ec789bf4018eb9c0f75da9f69aab5c185f0fd0",
+  "split_used": "train",
+  "sample_manifest_sha256": "eeab697bc4189ba2b4442ed53def960f248cf146b2cc947c0633905a41340686",
+  "prompt_split_manifest_sha256": "b90196fd2963a5eb90f6e41339f71129c6306fbfd7b45fd80326a5ebdd4c60c1",
+  "download_receipt_sha256": "3c5da58198c80478526cde6513c29cd58954416cf19244a715bfeeec2c275ce3",
+  "source_episodes_metadata_sha256": "88492784987d483618b5144f37bac8c3036bdaaa11d2df730f7b26a804b68658",
+  "source_info_sha256": "91c7d161a416685b08f9db5b195a6ba02f7047d966fa188e0262f854af386cfe",
+  "counts": {
+    "prompt_groups": 16,
+    "episodes": 64,
+    "queries": 192,
+    "top_ties": 7
+  },
+  "fractional_correct": 183.5,
+  "fractional_accuracy": 0.9557291666666666,
+  "per_prompt_accuracy_range": [
+    0.7916666666666666,
+    1.0
+  ],
+  "algorithm": {
+    "progress_points": [0.25, 0.5, 0.75],
+    "candidate_count": 4,
+    "dimensions_used": [
+      "left_waist",
+      "left_shoulder",
+      "left_elbow",
+      "left_forearm_roll",
+      "left_wrist_angle",
+      "left_wrist_rotate",
+      "right_waist",
+      "right_shoulder",
+      "right_elbow",
+      "right_forearm_roll",
+      "right_wrist_angle",
+      "right_wrist_rotate"
+    ],
+    "dimensions_excluded": ["left_gripper", "right_gripper"],
+    "ranking": "sum per-channel ascending midranks of absolute state-command error; fractional credit for top ties"
+  },
+  "development_rows_opened_by_this_audit": false,
+  "model_fit_or_inference": false,
+  "gpu_used": false,
+  "cloud_cost_usd": 0,
+  "result_json_external": "C:/CodexArtifacts/pretrained-reuse-r2-local/robopro-state-action-shortcut-train-20261123-attempt-04/shortcut-audit.json",
+  "result_json_sha256": "9b91031c586c3dd537bb6414b71db081031c9bfe9d967d5ff485ec8691185c56",
+  "audit_script": "scripts/audit_robopro_state_action_shortcut.py",
+  "audit_script_sha256": "a263e856d36922185a81af887937b2e426fb16a2e35246f0b26f2519c3346646",
+  "source_code_commit": "12d63cad04e07ae53ba6c139f7186731668a5267",
+  "limitations": [
+    "This is a fixed train-only shortcut diagnostic, not a generalization estimate.",
+    "The state/command unit declaration is absent; same-name monotone encoding is an explicit assumption.",
+    "A logged demonstrator command is not proven uniquely correct, safe, or optimal.",
+    "The source exposes no audited physical-scene key and no publisher validation/test split."
+  ],
+  "superseded_artifacts": [
+    {
+      "attempt": "attempt-03",
+      "result_json_sha256": "624ec01900254df3b8b846d812b7ef3ab771fe497016cad73ef3e262876ab6ab",
+      "reason": "Preserved; attempt 04 adds explicit frozen input hashes and sampled train/development disjointness checks."
+    }
+  ]
+}
