@@ -110,14 +110,23 @@ generalization. No blind evaluation was performed.
 
 ## Artifacts and reproducibility
 
-- Source commit: `a36f54f23a1b716a134c539c941e3ae0a175fa80` (run code); the
-  paired-bootstrap analysis helper is added in the follow-up source commit.
+- Source commit: `a36f54f23a1b716a134c539c941e3ae0a175fa80` (model run code);
+  paired-bootstrap analysis helper: `8a3499a8901956d3bc72a30de9a9aee9bef2bce9`.
 - Split manifest SHA-256:
   `04578e7550fa90303acca2ffec903deacf231bb04927031d6f430977ff625eea`.
 - Run report SHA-256:
   `9b7810073f8c46f9057980d64580b0bf717b4d91efccb36fae804443a25154cf`.
 - Paired-bootstrap result SHA-256:
   `2ac293aa9108bf5df1700d01cbd9e9e7d84ccd9d8f708b140422d392dae533a1`.
+- Model-run JSON SHA-256: ModernBERT
+  `a76ca7c9644e793bcd477808f6650e2b0aac6c289e6a2640f10a390243e4898c`, MiniLM
+  `32bb8fca2dac3f39ebf3cc4f0335d5011ede0f01b8d248f9373766f75e68511a`.
+- Saved validation-prediction SHA-256: ModernBERT
+  `5f1459504623ed8883d42bb2559cf1a11e626d91a61127ac493ab1ae2b056fb9`, MiniLM
+  `55a5cd9490836d7e136612c9b257aed8d7a4d9b8d2f626867fa3e70e0c3e5eff`.
+- Selected readout SHA-256: ModernBERT
+  `ef65008ce1af2007f7792c87f19586fe47ee189db6012938d49f698e9927fcc0`, MiniLM
+  `335e5c79a799253bc1a14de771fc539aedb874cf64496de0fa1f9dceae435f21`.
 - Results, readouts, and frozen features are under
   `C:\CodexArtifacts\pretrained-reuse-r2-local\openjev-amount-modernbert-comparison-20261123-attempt-01`.
   Parquet data and model weights remain outside Git.
