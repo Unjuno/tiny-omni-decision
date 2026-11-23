@@ -82,6 +82,13 @@ arbitrary supplied options, another modality, an independent quality estimate,
 or a product-level accuracy claim. The validation cohort remains selection-
 affected and must not be used for further model selection.
 
+The runtime script was an uncommitted file in a separate existing development
+worktree and is identified here by hash; it is not part of this PR. Thus this
+receipt proves a local execution, not a clone-and-run implementation delivered
+by this branch. The runtime source and external model/readout files still need
+to be carried into a tracked, product-scoped implementation before this is
+counted as a completed runtime deliverable.
+
 ## Reproducibility receipts
 
 These large artifacts remain outside Git; the hashes below identify the exact
