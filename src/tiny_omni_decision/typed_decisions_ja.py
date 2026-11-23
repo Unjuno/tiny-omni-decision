@@ -1,4 +1,4 @@
-"""Parser for the train-only Japanese Typed Decisions development source."""
+"""Parser for Japanese typed-decision training and explicit final-test rows."""
 
 from __future__ import annotations
 
@@ -70,15 +70,19 @@ def _options(
     return labels, descriptions
 
 
-def parse_typed_decisions_ja_row(row: dict[str, Any]) -> tuple[TypedDecisionChoiceGroup, ...]:
-    """Parse one source TRAIN state into its five soft-target choice groups.
+def parse_typed_decisions_ja_row(
+    row: dict[str, Any], *, expected_split: str = "train"
+) -> tuple[TypedDecisionChoiceGroup, ...]:
+    """Parse one source state, requiring the caller's explicit split.
 
-    This parser deliberately rejects any row whose publisher split is not
-    ``train``. The public test partition is exposed and is never an input to
-    this development path.
+    The default remains publisher ``train`` for all existing fitting and
+    development paths. A final one-shot audit may pass ``expected_split="test"``;
+    other values are rejected so callers cannot silently accept mixed splits.
     """
-    if str(row.get("split")) != "train":
-        raise ValueError("only publisher train rows are accepted")
+    if expected_split not in {"train", "test"}:
+        raise ValueError("expected_split must be 'train' or 'test'")
+    if str(row.get("split")) != expected_split:
+        raise ValueError(f"only publisher {expected_split} rows are accepted")
     sample_id = str(row.get("id", ""))
     workflow = str(row.get("workflow", ""))
     if not sample_id or not workflow:
@@ -134,7 +138,7 @@ def parse_typed_decisions_ja_row(row: dict[str, Any]) -> tuple[TypedDecisionChoi
                 target_probabilities=values,
                 hard_target=hard_target,
                 back_translation_match=back_translation_match,
-                split="train",
+                split=expected_split,
             )
         )
     return tuple(groups)

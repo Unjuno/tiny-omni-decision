@@ -80,6 +80,21 @@ def test_parser_refuses_publisher_test_rows() -> None:
         parse_typed_decisions_ja_row(row)
 
 
+def test_parser_accepts_test_rows_only_when_explicitly_requested() -> None:
+    row = _row()
+    row["split"] = "test"
+
+    groups = parse_typed_decisions_ja_row(row, expected_split="test")
+
+    assert len(groups) == 5
+    assert all(group.split == "test" for group in groups)
+
+
+def test_parser_rejects_unknown_expected_split() -> None:
+    with pytest.raises(ValueError, match="expected_split"):
+        parse_typed_decisions_ja_row(_row(), expected_split="validation")
+
+
 def test_parser_refuses_probability_options_that_do_not_match_schema() -> None:
     row = _row()
     row["gold"]["choice_a"]["probabilities"] = {"stop": 0.5, "unknown": 0.5}
