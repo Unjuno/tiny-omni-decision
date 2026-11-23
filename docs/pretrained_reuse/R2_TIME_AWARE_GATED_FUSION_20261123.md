@@ -2,7 +2,8 @@
 
 ## Outcome
 
-Added a small causal fusion module for aligned frozen-feature snapshots at
+Added a small causal fusion module for aligned frozen-feature snapshots and a
+candidate-conditioned typed-option Decision scorer at
 `src/tiny_omni_decision/time_aware_gated_fusion.py`. Its input is
 `[batch, time, modality, hidden]`, with an explicit availability mask and one
 common-clock timestamp per time step. At each step it learns a modality gate,
@@ -21,11 +22,15 @@ to abstain.
 The existing `FusionDecisionScorer` remains the fixed-vector masked control.
 The new module preserves temporal order and should be compared against that
 control only after an R2-admitted real task, fixed data split and candidate
-contract are available.
+contract are available. `TimeAwareGatedDecisionScorer` concatenates the final
+temporal state with each supplied typed-option feature and returns masked
+option logits. At hidden size 64, four modalities, 12 option features and a
+128-wide option scorer, the complete feature-level scorer has 27,201
+parameters; encoders and projections remain external.
 
 ## CPU smoke checks
 
-`tests/test_time_aware_gated_fusion.py` adds five CPU tests and verifies:
+`tests/test_time_aware_gated_fusion.py` adds eight CPU tests and verifies:
 
 - finite output and normalized per-step modality gates;
 - zero weights for missing modality slots and padding;
@@ -39,7 +44,7 @@ Verification on the local CPU environment:
 
 ```text
 python -m pytest -q tests/test_time_aware_gated_fusion.py tests/test_fusion_decision.py tests/test_temporal_native_decision.py tests/test_native_fusion_smoke_matrix.py
-21 passed
+24 passed
 
 python -m ruff check src/tiny_omni_decision/time_aware_gated_fusion.py tests/test_time_aware_gated_fusion.py
 All checks passed

@@ -12,6 +12,8 @@ from dataclasses import dataclass
 import torch
 from torch import Tensor, nn
 
+from tiny_omni_decision.decision import FrozenFeatureCandidateScorer
+
 
 @dataclass(frozen=True)
 class TimeAwareFusionOutput:
@@ -154,3 +156,61 @@ class TimeAwareGatedFusion(nn.Module):
             modality_weights=torch.stack(weight_rows, dim=1),
             update_gates=torch.stack(gate_rows, dim=1),
         )
+
+
+class TimeAwareGatedDecisionScorer(nn.Module):
+    """Score typed candidate features against a fused temporal observation."""
+
+    def __init__(
+        self,
+        hidden_size: int,
+        modality_count: int,
+        option_size: int,
+        width: int = 128,
+        time_scale_seconds: float = 1.0,
+    ) -> None:
+        super().__init__()
+        if option_size < 1 or width < 1:
+            raise ValueError("option_size and width must be positive")
+        self.option_size = option_size
+        self.fusion = TimeAwareGatedFusion(
+            hidden_size=hidden_size,
+            modality_count=modality_count,
+            time_scale_seconds=time_scale_seconds,
+        )
+        self.option_scorer = FrozenFeatureCandidateScorer(
+            feature_size=hidden_size + option_size,
+            hidden_size=width,
+        )
+
+    def forward(
+        self,
+        features: Tensor,
+        timestamps_seconds: Tensor,
+        available: Tensor,
+        option_features: Tensor,
+        option_valid: Tensor,
+    ) -> Tensor:
+        if option_features.ndim != 3 or option_features.shape[-1] != self.option_size:
+            raise ValueError("option_features must have shape [batch, candidates, option_size]")
+        if option_features.shape[0] != features.shape[0]:
+            raise ValueError("observation and option batch sizes differ")
+        if option_valid.dtype != torch.bool or option_valid.shape != option_features.shape[:2]:
+            raise ValueError("option_valid must be a boolean [batch, candidates] mask")
+        if not (option_valid.sum(dim=-1) >= 2).all():
+            raise ValueError("at least two valid options are required per sample")
+        if not torch.isfinite(option_features[option_valid]).all():
+            raise ValueError("valid option features must be finite")
+
+        observation = self.fusion(features, timestamps_seconds, available).fused
+        safe_options = torch.where(
+            option_valid[..., None], option_features, torch.zeros_like(option_features)
+        )
+        repeated_observation = observation[:, None, :].expand(
+            -1, option_features.shape[1], -1
+        )
+        candidate_features = torch.cat((repeated_observation, safe_options), dim=-1)
+        logits = self.option_scorer(candidate_features)
+        if not torch.isfinite(logits[option_valid]).all():
+            raise ValueError("valid option logits must be finite")
+        return logits.masked_fill(~option_valid, float("-inf"))
