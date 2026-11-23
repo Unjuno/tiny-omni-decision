@@ -1,3 +1,13 @@
+**2026-11-24 R2 compact BERT SocialIQA probe:** On an untouched, CC BY 4.0
+English three-choice task, frozen MiniLM-L3 and L6 with the same shared option
+scorer reached 45.04% / 44.83% Accuracy on the publisher development split;
+their paired context-bootstrap difference included zero. Internal grouped
+validation was about 55%, exposing a large split-generalization gap. Keep BERT
+task-specific; do not launch an unstructured depth sweep. This does not close
+any 95–98% or multimodal gate. No test or sealed audit was accessed. See
+[protocol and results](docs/pretrained_reuse/R2_SOCIALIQA_MINILM_DECISION_PROBE_20261124.md)
+and [manifest](manifests/pretrained_reuse/socialiqa-text-decision-probe-20261124.json).
+
 **2026-11-23 R2 BERT-family reconciliation:** Frozen BERT/MiniLM encoders show
 task-dependent text results. Japanese BERT-base beats Ruri on two development
 tasks; MiniLM-L6 scores 91.44% on BANKING77 validation and 91.82% on its

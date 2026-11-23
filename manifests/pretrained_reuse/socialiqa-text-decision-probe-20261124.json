@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "experiment_id": "r2-socialiqa-minilm-decision-20261124-attempt-01",
+  "status": "completed",
+  "source": {
+    "name": "Social IQa",
+    "publisher": "Allen Institute for AI",
+    "dataset_card": "https://huggingface.co/datasets/allenai/social_i_qa",
+    "official_source_repository": "https://github.com/allenai/rainbow",
+    "source_repository_revision": "ddc370727bb145bbc53c65f5bd39db4beca4115d",
+    "license": "CC-BY-4.0",
+    "license_evidence": "Publisher dataset card",
+    "archive_url": "https://storage.googleapis.com/ai2-mosaic-public/projects/rainbow/v1.0/data/raw/socialiqa/socialiqa-train-dev.zip",
+    "archive_sha256": "ee073914a0fc33265cfbcfc50ec20df9b2e07809c3f420f599138d1f394ef5c3",
+    "official_test_downloaded_or_opened": false,
+    "files": {
+      "train.jsonl": {
+        "rows": 33410,
+        "bytes": 8065079,
+        "sha256": "4c5333dea02be6d212114a83f17f7bbcbdb53b3d692f476bd40dcd242b6233de"
+      },
+      "train-labels.lst": {
+        "rows": 33410,
+        "bytes": 66820,
+        "sha256": "37cd494b60750f4f7a8c7cdd15fad545f4159070dbeb0431597e06e996ae2fd6"
+      },
+      "dev.jsonl": {
+        "rows": 1954,
+        "bytes": 474440,
+        "sha256": "d8128dfe60783a9971b954ca82dd57b87b05d5d40468876d51e8a1ad2c557465"
+      },
+      "dev-labels.lst": {
+        "rows": 1954,
+        "bytes": 3908,
+        "sha256": "2d882ff71969d3980d37dd07aecdf9093c6e63e27c670f3a203bcf3b9b74bc05"
+      }
+    },
+    "group_identity": "normalized context",
+    "publisher_train_dev_group_overlap": 0,
+    "test_data_accessed": false
+  },
+  "split": {
+    "seed": 17,
+    "internal_train_rows": 30069,
+    "internal_train_groups": 29692,
+    "internal_validation_rows": 3341,
+    "internal_validation_groups": 3308,
+    "internal_group_overlap": 0,
+    "publisher_dev_rows": 1954,
+    "publisher_dev_groups": 1930,
+    "publisher_dev_used_for_checkpoint_selection": false,
+    "internal_train_indices_sha256": "51b5c93525cd1701a3cbc4d16da49f21f199548e8c099bc9ece1896e91c86955",
+    "internal_validation_indices_sha256": "c2fd9a1588b2f5ca46b2744ec549782a53ec2b69127f0037c698efbcd36e2006",
+    "publisher_dev_id_order_sha256": "e6318f17e3b6a0e4db5ff23a395b867926e48b28f76d5b2410f1da369a591f7f"
+  },
+  "protocol": {
+    "seed": 17,
+    "max_pair_length": 256,
+    "truncation_strategy": "longest_first",
+    "observed_truncated_candidate_pairs": 0,
+    "feature": "final-layer CLS for [context + question, candidate answer]",
+    "encoder_frozen": true,
+    "shared_scorer": "linear(hidden,128), tanh, linear(128,1)",
+    "readout_parameters": 49409,
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "question_batch_size": 96,
+    "max_epochs": 20,
+    "early_stopping_patience": 3,
+    "minimum_validation_nll_improvement": 0.0001,
+    "selection_metric": "lowest internal validation NLL",
+    "probability_output": "softmax over the three supplied answer options",
+    "no_prompt_or_option_text_search": true
+  },
+  "candidates": [
+    {
+      "model_id": "sentence-transformers/paraphrase-MiniLM-L3-v2",
+      "revision": "4ca70771034acceecb2e72475f72050fcdde4ddc",
+      "encoder_parameters": 17389824,
+      "weight_bytes": 69569488,
+      "weight_sha256": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433",
+      "total_parameters_with_scorer": 17439233,
+      "best_epoch": 8,
+      "internal_validation": {
+        "accuracy": 0.5537264347076416,
+        "nll": 0.9330109357833862,
+        "brier": 0.5529664754867554,
+        "ece_10": 0.02499922977309943
+      },
+      "publisher_dev": {
+        "accuracy": 0.45035824179649353,
+        "nll": 1.0801565647125244,
+        "brier": 0.647861659526825,
+        "ece_10": 0.09528275480655823
+      },
+      "best_readout_sha256": "bb68b0474d41a442caa398db82c09ac713fec51c6048ccad90c533f235f6e6c0",
+      "internal_predictions_sha256": "90e3d74e73f2d7cdb51c46a37ff3532f9eff82baf43f04d3f35eea9d2a769f9d",
+      "publisher_dev_predictions_sha256": "8c47fbad4a2eae21451b9c167d717aafefc3dd835565ba4f1e4d64008a67d4d6"
+    },
+    {
+      "model_id": "cross-encoder/ms-marco-MiniLM-L6-v2",
+      "revision": "233902d25c440f23af6f7d6e94d2946bac0bee0a",
+      "encoder_parameters": 22713216,
+      "weight_bytes": 90870598,
+      "weight_sha256": "821d1aa69520101d6e0737f78a042ae25b19e5cb9160701909d10434f4aeb0ae",
+      "total_parameters_with_scorer": 22762625,
+      "best_epoch": 14,
+      "internal_validation": {
+        "accuracy": 0.5537264347076416,
+        "nll": 0.9448856115341187,
+        "brier": 0.5612144470214844,
+        "ece_10": 0.022069510476977527
+      },
+      "publisher_dev": {
+        "accuracy": 0.4483111500740051,
+        "nll": 1.0895922183990479,
+        "brier": 0.6564366817474365,
+        "ece_10": 0.08212598039821963
+      },
+      "best_readout_sha256": "e2bd4030c4214dcef0e7e1073b454868fe7819b1ca9400cc76138bb115e99df1",
+      "internal_predictions_sha256": "66e6409c4b5d2c1bf1b9393d48b4284008331850d220e777d78f85a225e8c56d",
+      "publisher_dev_predictions_sha256": "c24b276d7b8cc84023c612a8b13ade3d7e9cd1b4e7fe8b88ea6486f7051f5b7d"
+    }
+  ],
+  "paired_bootstrap": {
+    "unit": "normalized publisher-dev context group",
+    "groups": 1930,
+    "metric": "accuracy, MiniLM-L3 minus MiniLM-L6",
+    "replicates": 10000,
+    "seed": 1729,
+    "observed_delta": 0.0020470829068577278,
+    "percentile_95_interval": [-0.02557577478946721, 0.02829254509699268]
+  },
+  "runtime": {
+    "python": "3.11.9",
+    "pytorch": "2.6.0+cu124",
+    "transformers": "5.6.2",
+    "safetensors": "0.8.0",
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU 16 GB",
+    "gpu_idle_before_run": true,
+    "sampled_gpu_allocation_mib": 853,
+    "peak_gpu_allocation_mib": null,
+    "cloud_compute_used": false
+  },
+  "result": {
+    "selected_by_internal_validation_nll": "sentence-transformers/paraphrase-MiniLM-L3-v2",
+    "text_task_pass_95_percent": false,
+    "other_modality_or_product_claims": false,
+    "recommendation": "Keep BERT-family candidates task-specific; do not run another unfocused depth sweep."
+  },
+  "external_artifact_root": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\socialiqa-minilm-decision-20261124-attempt-01"
+}
