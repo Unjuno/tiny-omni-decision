@@ -1,0 +1,109 @@
+# Touch–vision candidate screen — 2026-11-23
+
+## Scope and disposition
+
+Metadata-only screen of RCT and OpenTouch as possible vision + sensor sources
+for R2. No dataset archive, media, annotation payload, model, evaluation split,
+or sealed-audit material was downloaded or opened. No training or inference was
+run.
+
+| Candidate | Screen disposition | Main reason |
+|---|---|---|
+| RCT | `REVIEW_NOT_ADMITTED_FOR_QUALITY` | CC BY 4.0 and a suitable tactile/vision/text structure, but only 122 independent material groups, ambiguous human descriptors, and the official Figshare share could not be enumerated for size or immutable dataset revision. |
+| OpenTouch | `REVIEW_NOT_ADMITTED` | Stronger in-the-wild video/tactile coverage, but the inspected official sources do not establish a dataset license or a fully auditable independent group split; its action/grasp labels are reported as LLM-generated. |
+
+## RCT
+
+The [official RCT project page](https://faerber-lab.github.io/RCT/) describes
+29,279 tactile frames in 1,832 contact sequences, three DIGIT sensors, 122
+materials in seven categories, one high-resolution photograph per material,
+and material-level descriptions from two people who physically touched each
+material. It declares the dataset CC BY 4.0. The associated [official code
+repository](https://github.com/faerber-lab/RCT) was pinned to
+`8d2f2de96b08d7c1e4d754e327b974f3e41283b8`; its README separately states
+Apache-2.0 for code and CC BY 4.0 for the Figshare dataset. The data landing
+page is `https://figshare.com/s/a5ed417ba6602ccad0f6`, but it returned HTTP 403
+through the available page fetch. A public Figshare API title search returned
+no record. Dataset bytes, file manifest, immutable data revision, and hashes
+are therefore **UNKNOWN**. Nothing was downloaded to work around the access
+failure.
+
+The physically meaningful evaluation unit for unseen-material transfer is the
+material, not the frame or press. Thus the effective independent group count
+for the main generalization question is 122, below the roadmap's provisional
+200-group floor. The 1,832 presses and 29,279 adjacent contact frames do not
+increase the number of unseen-material groups. The project reports moderate
+human-human descriptor agreement (Jaccard 0.294) and much lower VLM-human
+agreement, so material-property labels are noisy and should not be treated as
+objective ground truth. Its reported held-out-material results are also
+low-power: K=20 held-out materials, with held-out-material tactile-to-text
+Recall@1 averaging 25.1 ± 6.1% over three draws. These are source authors'
+results, not Tiny Omni measurements.
+
+### 2026-11-23 release metadata recheck
+
+The current official project page explicitly documents held-out material
+splits (K=2/5/20), category, contact-position, sensor, trajectory, and
+sequence-level protocols, and links the split-generation toolkit in the
+official code repository. This resolves the question of whether a physically
+grouped protocol exists; it does not change the 122-material ceiling or the
+need to verify the data release itself. The linked Figshare share endpoint
+returned HTTP 202 with an empty response body in a metadata-only request during
+this recheck. No file listing, archive, or media payload was obtained, so the
+dataset file manifest, sizes, pinned data revision, and hashes remain UNKNOWN.
+The candidate therefore remains inadmissible for the provisional 200-group
+quality gate; the unresolved Figshare metadata is not a reason to bypass the
+endpoint or retrieve the payload by another route.
+
+A possible later engineering task is supplied-option selection among material
+descriptors from a causal tactile sequence, with the associated material image
+as an optional complementary input. It would require frozen material-group
+splits, a predeclared ambiguity policy for the two annotators, and touch-only,
+image-only, joint, missing-input, and shuffled-input controls. This screen does
+not admit that experiment: the independent-group floor, label reliability,
+data-size preflight, and data-revision/hash freeze are still unresolved. Do not
+present an exploratory result on this source as a quality-gate pass.
+
+## OpenTouch
+
+The [official project page](https://opentouch-tactile.github.io/) describes
+five hours of synchronized egocentric video, full-hand tactile maps, and hand
+pose, with three hours of densely annotated contact-rich activity. It reports
+30 Hz synchronization with average 2 ms latency, over 8,000 objects across 14
+environments, and action/grasp classification and cross-modal retrieval
+benchmarks. The [official code repository](https://github.com/OpenTouch-MIT/opentouch)
+documents Google Drive download IDs, but the inspected project page and code
+README do not state dataset reuse terms. The code/download instructions do not
+grant data rights. The page also says high-level descriptions and detailed
+annotations were generated by a large language model. The number and identity
+of independent sessions/objects in a defensible split were not established by
+the inspected material. The code repository's `main` revision was
+`6d1fa38f19d034da431f7a81ef376ad09381ca89`; a versioned data release was not
+identified.
+
+OpenTouch is a stronger structural match for real video + tactile inputs than
+RCT, but remains excluded until the data owner publishes explicit dataset
+terms, a pinned release with hashes, and auditable group-disjoint evaluation
+units. No Google Drive file was accessed.
+
+## Decision
+
+Neither candidate is admitted for fitting or R2 quality evaluation. RCT is the
+more actionable engineering candidate because its dataset license and grouped
+protocol are documented, but it falls below the current provisional group
+floor and has noisy labels. OpenTouch has a more direct video/tactile format
+and broader stated coverage, but its data license and split lineage are
+unresolved. The immediate gate is to obtain an immutable RCT data manifest and
+exact byte sizes through an accessible official endpoint, while keeping its
+122-material limitation explicit; for OpenTouch, require dataset-specific
+rights and group/split metadata before acquisition. This does not relax the
+four-modality quality target or establish joint-input benefit.
+
+## Sources
+
+- [RCT official project and dataset page](https://faerber-lab.github.io/RCT/)
+- [RCT pinned code repository](https://github.com/faerber-lab/RCT/tree/8d2f2de96b08d7c1e4d754e327b974f3e41283b8)
+- [RCT arXiv paper](https://arxiv.org/abs/2606.31694)
+- [RCT Figshare share page](https://figshare.com/s/a5ed417ba6602ccad0f6)
+- [OpenTouch official project page](https://opentouch-tactile.github.io/)
+- [OpenTouch official code repository](https://github.com/OpenTouch-MIT/opentouch/tree/6d1fa38f19d034da431f7a81ef376ad09381ca89)
