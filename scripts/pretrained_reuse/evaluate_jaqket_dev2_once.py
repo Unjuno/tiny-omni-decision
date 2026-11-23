@@ -13,16 +13,28 @@ import numpy as np
 import torch
 from transformers import AutoConfig, AutoModel, AutoTokenizer
 
-from scripts.pretrained_reuse.build_jaqket_dev1_split import _normalized
-from scripts.pretrained_reuse.train_jaqket_frozen_readout import (
-    WEIGHT_HASHES,
-    SharedOptionScorer,
-    _targets,
-    encode_split,
-    metrics,
-    read_jsonl,
-    sha256_file,
-)
+try:
+    from scripts.pretrained_reuse.build_jaqket_dev1_split import _normalized
+    from scripts.pretrained_reuse.train_jaqket_frozen_readout import (
+        WEIGHT_HASHES,
+        SharedOptionScorer,
+        _targets,
+        encode_split,
+        metrics,
+        read_jsonl,
+        sha256_file,
+    )
+except ModuleNotFoundError:
+    from build_jaqket_dev1_split import _normalized
+    from train_jaqket_frozen_readout import (
+        WEIGHT_HASHES,
+        SharedOptionScorer,
+        _targets,
+        encode_split,
+        metrics,
+        read_jsonl,
+        sha256_file,
+    )
 
 FROZEN_READOUTS = {
     "ruri-pair-readout": {
