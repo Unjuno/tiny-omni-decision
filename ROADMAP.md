@@ -1,3 +1,14 @@
+**2026-11-23 R2 Japanese BERT temporal decision probe:** A matched-pooling
+comparison on the frozen train-derived KUCI validation set selected four-layer
+LINE DistilBERT at 71.30% Accuracy / 0.7110 NLL versus Ruri-v3-30m at 41.26%
+/ 1.2751. Connected-group paired bootstrap supports a large difference, but
+the validation also selected checkpoints, so this is exposed development
+evidence, not a blind result or the 95–98% product target. The BERT-family text
+replacement estimates 195.99M total parameters in the proposed four-tower
+arithmetic before quantization; multimodal integration, package size, and
+independent confirmation remain open. Keep both existing paths. Do not retune
+on KUCI validation. See [the fixed probe and limits](docs/pretrained_reuse/R2_KUCI_DISTILBERT_TEMPORAL_PROBE_20261123.md).
+
 **2026-11-23 R2 Japanese BERT publisher-test audit:** With both validation-selected readouts frozen, a one-shot evaluation on all 400 previously unopened publisher test states found BERT-base at 52.54% macro teacher-mode Accuracy / 1.0639 NLL / 0.1712 Brier versus the compact 27.6M LightSPLADE-derived encoder at 44.17% / 1.1299 / 0.2025. State-cluster paired intervals favor BERT on Accuracy/NLL/Brier, but ECE is inconclusive; targets are synthetic teacher distributions, and both models truncate 31% of candidate pairs. This supports BERT as a text teacher/reference only, not 95–98% product quality or a multimodal pass. Do not tune or repeat on this now-open test. See [one-shot test audit](docs/pretrained_reuse/R2_TYPED_DECISIONS_JA_PUBLISHER_TEST_AUDIT_20261123.md).
 
 **2026-11-23 R2 Digital Agency Law QA source screen:** The official PDL 1.0

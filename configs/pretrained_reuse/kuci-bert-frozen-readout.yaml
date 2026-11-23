@@ -1,0 +1,56 @@
+experiment_id: kuci-bert-temporal-probe-v1
+seed: 17
+source:
+  repository: ku-nlp/KUCI
+  revision: 79afa1d63d1f262e6709e9be714d9ad5dae8d6f6
+  path: dataset/train.jsonl
+  license: CC-BY-SA-4.0
+  use: local research comparison; no dataset or trained weights uploaded
+  publisher_dev_or_test_loaded: false
+split:
+  policy: train-only deterministic connected groups
+  group_keys:
+    - core_event_pair
+    - NFKC-normalized context
+    - normalized option set
+  seed: 17
+  validation_fraction: 0.10
+task:
+  type: four-choice Japanese event-continuation decision
+  input_pair: [context, candidate_continuation]
+  max_length: 512
+  truncate: only_first
+  pooling: attention-mask-aware mean over attended tokens for both encoders
+  output: calibrated probabilities over four supplied choices
+encoders:
+  - id: cl-nagoya/ruri-v3-30m
+    revision: 24899e5de370b56d179604a007c0d727bf144504
+    role: current Japanese Path A baseline
+  - id: line-corporation/line-distilbert-base-japanese
+    source_revision: c32d05753d0d4be0f60482291a9452ec7e6f7d68
+    variant: first-four-pretrained-layers
+    layers: [0, 1, 2, 3]
+    role: budget-compatible BERT-family candidate
+readout:
+  architecture: shared hidden-size-128-1 tanh scorer
+  frozen_encoder: true
+  optimizer: AdamW
+  learning_rate: 0.002
+  weight_decay: 0.0001
+  batch_questions: 256
+  max_epochs: 12
+  early_stopping_patience: 3
+  selection_metric: validation NLL
+  selection_min_delta: 0.001
+metrics:
+  - accuracy
+  - nll
+  - brier
+  - ece_15_bins
+  - per_agreement_accuracy_nll
+  - option_order_equivariance
+comparison_scope:
+  product_promotion: false
+  sealed_audit: false
+  official_dev_or_test: false
+  purpose: test whether a compact BERT-family representation helps Japanese temporal/causal option selection versus the current Ruri text tower

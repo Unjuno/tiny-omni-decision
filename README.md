@@ -1,5 +1,14 @@
 # Tiny Omni Decision
 
+**2026-11-23 Japanese temporal text probe:** A parameter-budgeted first-four-
+layer DistilBERT reached 71.30% Accuracy / 0.711 NLL on the fixed KUCI
+train-derived validation, versus a matched-pooling Ruri-v3-30m at 41.26% /
+1.275. This supports a compact BERT-family text candidate, but is not blind
+confirmation, multimodal quality, or the 95–98% target. The proposed four-
+tower arithmetic is 195.99M pre-quantization parameters; independent
+validation and runtime integration remain open. [Full result, curves, hashes,
+and limitations](docs/pretrained_reuse/R2_KUCI_DISTILBERT_TEMPORAL_PROBE_20261123.md).
+
 **2026-10-25 CoGenT-B one-time audit:** A frozen image+question decision
 probe reached 57.90% Accuracy on 15,000 held-out CLEVR-CoGenT-B images and
 responded measurably to image content versus gray/shuffled controls. Results
