@@ -102,6 +102,25 @@ models on identical episode groups, then include missing, shuffled, stale, and
 time-offset controls. Video/state synchronization must be verified from actual
 Parquet timestamps and decoded frame PTS before any temporal claim.
 
+### Post-hoc target-shortcut audit — do not fit this task further
+
+A later diagnostic found a serious weakness in this candidate task. On the 64
+TRAIN episodes only, a fixed heuristic that matched current joint state to
+same-prompt, same-time recorded action options achieved 183.5/192 fractional
+credit (95.57%); seven queries were tied at the top. This was a post-hoc
+training-set shortcut check, not validation or model accuracy. It shows that
+the recorded action can often be identified from state-action persistence
+without video, while the source does not independently label a uniquely valid
+action. The separate exposed development readout also favored state-only over
+text+state+video with a temporal GRU (55.73% vs. 51.56% Accuracy; prompt-group
+paired interval for joint minus state-only: −9.90 to +2.08 percentage points).
+That result is small and non-blind, but it provides no positive video-benefit
+signal. Keep RoboPro `REVIEW_NOT_ADMITTED` for an R2 fusion-quality claim; do
+not scale or retune this candidate set. Any future RoboPro work needs a
+different target with independently grounded validity labels and a newly
+frozen evaluation design. See the [train-only shortcut audit](https://github.com/Unjuno/tiny-omni-decision/blob/codex/r2-robopro-state-shortcut-20261123/docs/pretrained_reuse/R2_ROBOPRO_STATE_ACTION_SHORTCUT_20261123.md)
+and its [review PR](https://github.com/Unjuno/tiny-omni-decision/pull/121).
+
 ## Admission gates before any model run
 
 1. Pin and audit the official task-to-prompt/variant mapping. If a base-task or
