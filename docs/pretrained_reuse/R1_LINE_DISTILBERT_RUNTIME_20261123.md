@@ -106,12 +106,43 @@ proposal gives:
 | 4 (config-only count) | 53,912,064 | 195,994,241 | +4,005,759 |
 | 3 (config-only count) | 46,824,192 | 188,906,369 | +11,093,631 |
 
-The 4- and 3-layer rows are arithmetic feasibility checks only. They do not
-show that removing upper layers preserves Japanese Decision quality, and the
-smoke readout is not a final product head. The six-layer checkpoint therefore
-does not fit the present four-tower budget unchanged; a reduced-depth variant
-would need a separate fixed-protocol quality and runtime evaluation, with all
-resident heads included before accepting it.
+The 3-layer row remains a config-only arithmetic check. A CPU inheritance
+smoke now confirms that the four-layer candidate can actually load the first
+four layers from the pinned six-layer checkpoint with no missing model keys.
+It has 53,912,064 encoder parameters, zero trainable parameters in the frozen
+smoke, and emits finite `[1, 4, 768]` hidden states. Transformers reports 38
+expected unexpected keys: weights for discarded source layers 4–5 and the
+masked-language-model head, which is not part of the Decision encoder. This
+proves load/forward feasibility only; it does not show that truncating the
+upper layers preserves decision quality. The six-layer checkpoint therefore
+does not fit the present four-tower budget unchanged; the four-layer variant
+still requires a fixed-protocol quality and runtime evaluation, with all
+resident heads included before acceptance.
+
+### Four-layer inheritance smoke — 2026-11-23
+
+The pinned six-layer checkpoint was loaded locally and offline with
+`AutoModel.from_pretrained` after setting `DistilBertConfig.n_layers = 4`.
+PyTorch reported no missing keys. The 38 extra checkpoint keys were confined
+to source layers 4–5 and the MLM prediction head. After loading, all encoder
+parameters were frozen; a tokenizer-independent four-token forward returned a
+finite `[1, 4, 768]` tensor. The encoder count was 53,912,064; trainable count
+was zero. On Python 3.11.9, PyTorch 2.6.0+cu124, Transformers 5.6.2, and one
+CPU thread, load took 1.269 s and the smoke forward took 0.0832 s. No GPU,
+tokenizer, real text, gradient, optimizer, fit, or quality evaluation was used.
+
+The source weight file was 274,894,944 bytes with SHA-256
+`9d8b678bd9ce14363d5e6e3dc53c7dd7c76f8ad11394ccffd200f15e9f6819eb`.
+The authoritative external receipt is
+`C:\CodexArtifacts\pretrained-reuse-r2-local\line-distilbert-4layer-load-smoke-20261123-attempt-03\smoke.json`,
+SHA-256 `7c8b1223f5d5887f445810ea6e901438891b7f02f2fa19b1be43a5549d86214d`.
+Attempt 01's forward was finite, but its receipt incorrectly counted
+`requires_grad` flags as trainable even though no optimization occurred; it is
+superseded (receipt SHA-256
+`90d49beea36e4e88d7b579c2b20be547ac9ae85d75dfd6aa240e167127154494`). Attempt
+02 completed the freeze and model checks but failed only while serializing a
+set-valued field; its incomplete-status receipt is preserved with SHA-256
+`b01b7442ae2ab25afb54a3d4efc3c252df94bf44ccff90b3ebec1d86cebc3eb2`.
 
 The next gate is an explicitly limited paired readout diagnostic only after
 the active CPU workload has ended. The existing typed-decision validation is
