@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "experiment_id": "jaqket-source-task-screen-20261124",
-  "status": "dev1_probe_complete_dev2_not_opened",
+  "status": "dev2_one_shot_complete_no_product_promotion",
   "source": {
     "official_project": "https://sites.google.com/view/project-aio/dataset",
     "baseline_repository": "https://github.com/cl-tohoku/JAQKET_baseline",
@@ -38,12 +38,12 @@
     "cl-tohoku/bert-base-japanese-v3 (reference only)"
   ],
   "gates": [
-    "Dev1 integrity and split passed; hashes frozen",
-    "Six frozen encoder/readout runs completed; train CE vs validation NLL confirms overfit after early selected epochs",
-    "BERT-base is the best validation reference but exceeds the provisional four-tower size envelope; DistilBERT is the in-budget candidate but remains far below product quality",
-    "All six validation-selected pair/control checkpoints and their roles are frozen; Dev2 has not been downloaded or evaluated",
-    "If proceeding, run one fixed Dev2 pseudo-test pass only; never change roles, configuration, or checkpoints from its metrics",
-    "No multimodal quality result or product promotion follows from this text-only probe"
+    "Dev1 schema and deterministic grouped split passed; train/validation question, answer-entity, and option-set overlap is zero",
+    "All six preselected frozen readouts were evaluated once on official Dev2 after selection commit 8a982b42",
+    "Dev1/Dev2 have zero qid, normalized-question, and unordered-candidate-set overlap; 22 answer entities overlap and candidate-title identity is shared",
+    "BERT-base uses question context on this narrow 20-choice task but exceeds the provisional four-tower parameter envelope",
+    "Four-layer DistilBERT fits the provisional parameter envelope but scored 24.57% on Dev2; do not promote either candidate",
+    "This text-only task leaves multimodal quality and 95-98% target gates open; no sealed audit was used"
   ],
   "dev1_integrity_audit": {
     "artifact_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\jaqket-choice-probe-20261124-attempt-01\\dev1_questions.json",
@@ -133,7 +133,7 @@
     "sealed_audit_opened": false,
     "product_promotion": false,
     "dev2_evaluation_plan": {
-      "status": "roles_and_all_six_checkpoints_frozen_before_access",
+      "status": "completed_once_no_tuning",
       "evaluate_once": true,
       "selected_conditions": [
         "ruri-pair-readout",
@@ -615,5 +615,325 @@
     "learning_curve_interpretation": "all three pair readouts overfit: train CE fell toward zero while validation NLL worsened after selected epoch; no evidence that the full 100 epochs improved validation",
     "analysis_output_sha256": "dd0e127f3675c300c15b05dc155245bb20d7e7ea2573a628d6f43af7f8a2331c",
     "analysis_script_sha256": "e77e9119dac49035ff6b9a9039cf04c97b3f77a0f69529fafc1f236d61dee7a0"
-  }
+  },
+  "dev2_one_shot_results": {
+    "selection_commit": "8a982b42b06ae1e5692fd8e0be455499ce43a22d",
+    "evaluation_code_commit": "1ad3a86119811eff1556cf7a5205741f85d58b4b",
+    "runner_sha256": "bf79b791d268b301d0b079260834eaec7ea74b85cfde457e728cede92b5e052d",
+    "started_utc": "2026-11-23T16:50:44.794496+00:00",
+    "finished_utc": "2026-11-23T16:52:19.557974+00:00",
+    "dev2": {
+      "sha256": "ec4938b0bb19455b69c8770a57f4f5b2baf32311295b3d1557a8bca4152189d9",
+      "bytes": 867633,
+      "rows": 997,
+      "license": "CC-BY-SA-4.0"
+    },
+    "preflight_sha256": "7e956aaadff2cff22b83a8aae3dcd6d9f9e3a30f4f255d24d9d714ebcde27786",
+    "result_sha256": "24957a9c1c2bc7960264595f0441d2fd6546b8c241a26df55b37c39da4f76a4c",
+    "grouped_analysis_sha256": "6b9d29736174e565ebfccd8016968f1a6d4b709b1f8b7a3e498eebc848784be2",
+    "device": "NVIDIA GeForce RTX 3080 Laptop GPU 16 GB",
+    "cloud_cost_usd": 0,
+    "fixed_readouts_evaluated": {
+      "ruri-pair-readout": {
+        "sha256": "b9468418c36e7597c8cfede62fe5989fa7f87707a905adfb2e60106068b3287b",
+        "prediction_sha256": "a4b1adbf2c3fc38caac148b9dce8896d9e5a55309eeb3c88ec663729fa5e5b47",
+        "metrics": {
+          "accuracy": 0.10330992978936811,
+          "nll": 2.8825916240909786,
+          "brier": 0.9398142233780177,
+          "ece_15": 0.04905860727594991
+        },
+        "peak_gpu_memory_bytes": 363998720,
+        "encoding_seconds": 10.490781600004993,
+        "feature_cache_sha256": "429e7597167cf0204304d8a20dc030bce85cfcf684958de7fbf6d504ab0ad49d"
+      },
+      "ruri-option-only": {
+        "sha256": "f1f4baa5d65277aaa90573791f92e1f8ef9e57141c99ac6f98f9f4b88636a4ca",
+        "prediction_sha256": "95160ee6b7c90afe3c2a49677c7794faab5689ab22ae6aa5edd4b265473a32b5",
+        "metrics": {
+          "accuracy": 0.119358074222668,
+          "nll": 2.871827004430594,
+          "brier": 0.9345404659173339,
+          "ece_15": 0.011392881041962493
+        },
+        "peak_gpu_memory_bytes": 363998720,
+        "encoding_seconds": 3.6836868999525905,
+        "feature_cache_sha256": "8bcfd21dc3755369c68ac9730db5d102f2ca3187a5cdca8030d81039bc0cc65a"
+      },
+      "distil4-pair-readout": {
+        "sha256": "ad8154dff55d69fc31e24457cdb880dc248a0fb68938aaf335b3fd4690b7564b",
+        "prediction_sha256": "58e2203b23855aab23feb5feddd0c6baef3474e8b9422327b622b312655c075c",
+        "metrics": {
+          "accuracy": 0.24573721163490472,
+          "nll": 2.4949099678233626,
+          "brier": 0.8744649514333427,
+          "ece_15": 0.04106294552056696
+        },
+        "peak_gpu_memory_bytes": 470367744,
+        "encoding_seconds": 18.75995730003342,
+        "feature_cache_sha256": "c0aa7b9212cf6e1449f737d0724b5c8ab2deb385302388d4889491810cdcb79d"
+      },
+      "distil4-option-only": {
+        "sha256": "06027c4ed828f2f4904b1f6613a2be4a371d98e4ee21d09e6d718cf98be9e384",
+        "prediction_sha256": "a6245774c46e16588603fc0204486a3f2f3c75230342e0208718e9bcc8b1b108",
+        "metrics": {
+          "accuracy": 0.20661985957873621,
+          "nll": 2.621009797987109,
+          "brier": 0.8951816571505359,
+          "ece_15": 0.038782390363237926
+        },
+        "peak_gpu_memory_bytes": 470367744,
+        "encoding_seconds": 6.059150699991733,
+        "feature_cache_sha256": "77ecea594baae41ccd5542d4cf5f2a693d6e829f5e5378dcc2569d141a36cfc5"
+      },
+      "bert-base-pair-readout": {
+        "sha256": "431b895b36089dc625b39fda2feee27adec18df6db8964c04bbf6a44f4a12505",
+        "prediction_sha256": "cbda7754f64f145a1c7a4760d4033fa524070742e2f41ea5e1b7003af789049d",
+        "metrics": {
+          "accuracy": 0.38415245737211634,
+          "nll": 2.0690863440346137,
+          "brier": 0.7693117265088852,
+          "ece_15": 0.056825147753015316
+        },
+        "peak_gpu_memory_bytes": 661463040,
+        "encoding_seconds": 36.340917799971066,
+        "feature_cache_sha256": "5bce7a7669d50731e86d2c2e8e9be4831d3a9695db2631eeb04108049415b954"
+      },
+      "bert-base-option-only": {
+        "sha256": "c25d69b969030e60a2c114675113f35819e308b30716ff52c73f7861bd4159b5",
+        "prediction_sha256": "b217ea8dd4e21e592a6f6c6b991f392c56cdb7cb2a3b5dfe50b1fa237876ec4a",
+        "metrics": {
+          "accuracy": 0.21163490471414242,
+          "nll": 2.5593794362062487,
+          "brier": 0.8875798461664726,
+          "ece_15": 0.0277045043400202
+        },
+        "peak_gpu_memory_bytes": 661463040,
+        "encoding_seconds": 12.274049900006503,
+        "feature_cache_sha256": "674bb3abb70e4f408f67cc1615a0af719e3beb31b16abe9ebbe046bfa593d207"
+      }
+    },
+    "dev1_dev2_integrity": {
+      "qid_overlap": 0,
+      "normalized_question_overlap": 0,
+      "unordered_candidate_set_overlap": 0,
+      "answer_entity_overlap": 22,
+      "dev2_targets_positive_in_dev1_train": 16,
+      "dev2_targets_positive_in_dev1_validation": 6,
+      "dev2_targets_seen_anywhere_as_dev1_train_option": 160,
+      "dev2_targets_seen_as_dev1_train_distractors": 146,
+      "dev2_targets_seen_anywhere_as_dev1_validation_option": 52,
+      "dev2_targets_seen_as_dev1_validation_distractors": 46,
+      "unique_option_title_overlap_dev1_train": 3160,
+      "unique_option_title_overlap_dev1_validation": 952
+    },
+    "paired_group_bootstrap": {
+      "split_name": "dev2",
+      "dev2_rows": 997,
+      "answer_entity_groups": 989,
+      "grouped_bootstrap": {
+        "group_field": "normalized answer_entity",
+        "repetitions": 10000,
+        "seed": 1729,
+        "interpretation": "public pseudo-test not used for selection; descriptive group-bootstrap intervals"
+      },
+      "metrics": {
+        "ruri-pair": {
+          "accuracy": 0.10330992978936811,
+          "nll": 2.8825916240909786,
+          "brier": 0.9398142233780177,
+          "ece_15": 0.04905860727594991
+        },
+        "ruri-option-only": {
+          "accuracy": 0.119358074222668,
+          "nll": 2.871827004430594,
+          "brier": 0.9345404659173339,
+          "ece_15": 0.011392881041962493
+        },
+        "distil4-pair": {
+          "accuracy": 0.24573721163490472,
+          "nll": 2.4949099678233626,
+          "brier": 0.8744649514333427,
+          "ece_15": 0.04106294552056696
+        },
+        "distil4-option-only": {
+          "accuracy": 0.20661985957873621,
+          "nll": 2.621009797987109,
+          "brier": 0.8951816571505359,
+          "ece_15": 0.038782390363237926
+        },
+        "bert-base-pair": {
+          "accuracy": 0.38415245737211634,
+          "nll": 2.0690863440346137,
+          "brier": 0.7693117265088852,
+          "ece_15": 0.056825147753015316
+        },
+        "bert-base-option-only": {
+          "accuracy": 0.21163490471414242,
+          "nll": 2.5593794362062487,
+          "brier": 0.8875798461664726,
+          "ece_15": 0.0277045043400202
+        }
+      },
+      "paired_differences": {
+        "bert-base-pair-minus-distil4-pair": {
+          "accuracy": {
+            "mean_delta": 0.13877610437357765,
+            "percentile_95": [
+              0.10393541876892032,
+              0.17369477911646586
+            ]
+          },
+          "nll": {
+            "mean_delta": -0.4261804833532233,
+            "percentile_95": [
+              -0.5117243325135338,
+              -0.34298783482139633
+            ]
+          },
+          "brier": {
+            "mean_delta": -0.1053647121479388,
+            "percentile_95": [
+              -0.12913627976332626,
+              -0.08096564423529719
+            ]
+          },
+          "ece_15": {
+            "mean_delta": 0.017249174209500846,
+            "percentile_95": [
+              -0.01074520821640142,
+              0.04529674971287068
+            ]
+          }
+        },
+        "bert-base-pair-minus-ruri-pair": {
+          "accuracy": {
+            "mean_delta": 0.2813129953945704,
+            "percentile_95": [
+              0.24748490945674043,
+              0.3156843156843157
+            ]
+          },
+          "nll": {
+            "mean_delta": -0.8141616466982745,
+            "percentile_95": [
+              -0.9037959185911459,
+              -0.7238659099315305
+            ]
+          },
+          "brier": {
+            "mean_delta": -0.17071318212456635,
+            "percentile_95": [
+              -0.1958490207283178,
+              -0.14521777105381725
+            ]
+          },
+          "ece_15": {
+            "mean_delta": 0.018173746177630692,
+            "percentile_95": [
+              -0.010417655962227794,
+              0.04756412571250856
+            ]
+          }
+        },
+        "bert-base-pair-minus-bert-base-option-only": {
+          "accuracy": {
+            "mean_delta": 0.17267202118596386,
+            "percentile_95": [
+              0.13869346733668342,
+              0.206
+            ]
+          },
+          "nll": {
+            "mean_delta": -0.49045239332184426,
+            "percentile_95": [
+              -0.5673413430382583,
+              -0.4129949552463501
+            ]
+          },
+          "brier": {
+            "mean_delta": -0.1183637937641213,
+            "percentile_95": [
+              -0.14154818538596053,
+              -0.09523282703685206
+            ]
+          },
+          "ece_15": {
+            "mean_delta": 0.029134368190480577,
+            "percentile_95": [
+              -0.0008260631872183995,
+              0.058795955859806764
+            ]
+          }
+        },
+        "distil4-pair-minus-distil4-option-only": {
+          "accuracy": {
+            "mean_delta": 0.038890881487025596,
+            "percentile_95": [
+              0.013091312223795932,
+              0.06419257773319961
+            ]
+          },
+          "nll": {
+            "mean_delta": -0.12608060599325308,
+            "percentile_95": [
+              -0.17551372002344212,
+              -0.07708449980832473
+            ]
+          },
+          "brier": {
+            "mean_delta": -0.020614318040220056,
+            "percentile_95": [
+              -0.033496019211313566,
+              -0.0076692050836170795
+            ]
+          },
+          "ece_15": {
+            "mean_delta": 0.0037816734407858073,
+            "percentile_95": [
+              -0.022155575566801748,
+              0.029171504220651675
+            ]
+          }
+        },
+        "ruri-pair-minus-ruri-option-only": {
+          "accuracy": {
+            "mean_delta": -0.01614819948571108,
+            "percentile_95": [
+              -0.039117352056168495,
+              0.007007007007007002
+            ]
+          },
+          "nll": {
+            "mean_delta": 0.010882345422192958,
+            "percentile_95": [
+              -0.02004357913701551,
+              0.04179930669417017
+            ]
+          },
+          "brier": {
+            "mean_delta": 0.005324617202986775,
+            "percentile_95": [
+              0.0005246600367178833,
+              0.010164882701921996
+            ]
+          },
+          "ece_15": {
+            "mean_delta": 0.03323302292858166,
+            "percentile_95": [
+              0.008201050017880204,
+              0.055867923369518374
+            ]
+          }
+        }
+      }
+    },
+    "evaluation_only": true,
+    "selection_or_tuning_on_dev2": false,
+    "sealed_audit_opened": false,
+    "product_promotion": false,
+    "interpretation": "public pseudo-test supports BERT-family text-context use in this narrow task; target-entity reuse and open public benchmark prevent blind or unseen-entity claims"
+  },
+  "dev2_downloaded": true,
+  "dev2_evaluated": true
 }

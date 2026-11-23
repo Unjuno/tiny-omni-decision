@@ -4,10 +4,10 @@
 task has 995 Dev1 and 997 Dev2 questions declared CC BY-SA 4.0; the 13,061-row
 competition train split is restricted to non-commercial research and is excluded.
 Dev1 is a candidate for internal fit/validation and Dev2 for one pseudo-test
-after selection. On the grouped Dev1 split, frozen BERT-base reached 37.2% and
-four-layer DistilBERT reached 30.2% on 20-choice validation, with clear readout
-overfit. Candidate titles overlap across splits; this remains a limited text
-probe, not a multimodal or product-quality result. [Probe](docs/pretrained_reuse/R2_JAQKET_BERT_PROBE_20261124.md).
+after selection. On 20-choice Dev2, frozen BERT-base reached 38.4% and
+four-layer DistilBERT 24.6%; 22 answer entities repeat from Dev1 and readouts
+overfit on Dev1. BERT helps on this text task but exceeds the provisional
+four-tower size envelope; no model is promoted. [Probe](docs/pretrained_reuse/R2_JAQKET_BERT_PROBE_20261124.md).
 
 **2026-10-25 CoGenT-B one-time audit:** A frozen image+question decision
 probe reached 57.90% Accuracy on 15,000 held-out CLEVR-CoGenT-B images and

@@ -61,7 +61,7 @@ Runs used the local RTX 3080 Laptop GPU (16 GB); no cloud compute was used. Pair
 
 The project’s provisional four-tower parameter projection is about 195.99M for the four-layer DistilBERT candidate and 253.29M for the BERT-base reference. Thus BERT-base is a teacher/reference, not an in-budget product candidate. DistilBERT fits the provisional parameter envelope but reached only 30.15% on this 20-choice validation task. Neither is promoted. The 95–98% target is unmet, and no result here says anything about the other modalities.
 
-### Frozen one-shot public pseudo-test plan
+### Frozen one-shot public pseudo-test
 
 Before opening Dev2, freeze these six validation-selected readouts by SHA-256:
 
@@ -72,8 +72,21 @@ Before opening Dev2, freeze these six validation-selected readouts by SHA-256:
 - BERT-base pair: `431b895b36089dc625b39fda2feee27adec18df6db8964c04bbf6a44f4a12505`
 - BERT-base option-only: `c25d69b969030e60a2c114675113f35819e308b30716ff52c73f7861bd4159b5`
 
-The only Dev2 pass will score these fixed readouts once, report per-condition Accuracy/NLL/Brier/ECE-15 and answer-entity-group paired intervals, and check content/target overlap with Dev1. No model or checkpoint will be selected or changed from Dev2. Dev2 is public and is not a sealed blind audit. It has not yet been downloaded or evaluated.
+These six readouts were evaluated once on the official Dev2 file (997 rows; SHA-256 `ec4938b0bb19455b69c8770a57f4f5b2baf32311295b3d1557a8bca4152189d9`). No checkpoint or configuration was selected or changed from Dev2. It is a public pseudo-test, not a sealed blind audit.
+
+| Encoder / condition | Accuracy | NLL | Brier | ECE-15 |
+|---|---:|---:|---:|---:|
+| Ruri pair | 10.33% | 2.883 | 0.940 | 0.049 |
+| Ruri option-only | 11.94% | 2.872 | 0.935 | 0.011 |
+| DistilBERT pair | 24.57% | 2.495 | 0.874 | 0.041 |
+| DistilBERT option-only | 20.66% | 2.621 | 0.895 | 0.039 |
+| BERT-base pair | 38.42% | 2.069 | 0.769 | 0.057 |
+| BERT-base option-only | 21.16% | 2.559 | 0.888 | 0.028 |
+
+A one-shot 10,000-replicate paired bootstrap over 989 normalized answer entities (seed 1729) found BERT-base pair vs DistilBERT pair at +13.9 pp Accuracy `[+10.4,+17.4]`, −0.426 NLL `[−0.512,−0.343]`, and −0.105 Brier `[−0.129,−0.081]`. BERT-base pair vs its option-only control was +17.3 pp Accuracy `[+13.9,+20.6]`, −0.490 NLL `[−0.567,−0.413]`, and −0.118 Brier `[−0.142,−0.095]`. ECE differences remained uncertain. These intervals describe this one public pseudo-test split; they do not establish general multimodal quality.
+
+There is no qid, normalized-question, or unordered-candidate-set overlap between Dev1 and Dev2. However, 22 target answer entities overlap (16 were positive train targets, 6 validation targets), and 160 Dev2 targets appeared somewhere in train candidate options. Therefore this is not a fully unseen-entity test. The 95–98% target is still unmet; Dev2 metrics do not change the frozen role assignments or promote any candidate.
 
 ## Artifacts and integrity
 
-Each run has `training-history.json`, `validation-predictions.jsonl`, a separately retained best and final readout, effective config/result metadata, and SHA-256 hashes outside Git. The analysis script is [analyze_jaqket_probe.py](../../scripts/pretrained_reuse/analyze_jaqket_probe.py). Unit tests cover split determinism/integrity, metric calculation, permutation equivariance, and grouped-bootstrap reproducibility. The original Ruri, DistilBERT, and BERT-base checkpoints were read-only and unchanged.
+Each training run has `training-history.json`, `validation-predictions.jsonl`, a separately retained best and final readout, effective config/result metadata, and SHA-256 hashes outside Git. Dev2 predictions and evaluation metadata are also external and hash-recorded in the manifest. [analyze_jaqket_probe.py](../../scripts/pretrained_reuse/analyze_jaqket_probe.py) performs the grouped uncertainty analysis; [evaluate_jaqket_dev2_once.py](../../scripts/pretrained_reuse/evaluate_jaqket_dev2_once.py) locks the evaluation to the frozen readout hashes and refuses an existing output path. Unit tests cover split determinism/integrity, metric calculation, permutation equivariance, one-shot overlap checks, and grouped-bootstrap reproducibility. The original Ruri, DistilBERT, and BERT-base checkpoints were read-only and unchanged.
