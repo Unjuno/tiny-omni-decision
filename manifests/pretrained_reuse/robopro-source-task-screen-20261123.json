@@ -1,0 +1,79 @@
+{
+  "schema_version": "tiny-omni-decision.pretrained-reuse-source-screen.v1",
+  "screen_date": "2026-11-23",
+  "status": "REVIEW_NOT_ADMITTED",
+  "repository": "Hoshipu/RoboPro",
+  "repository_type": "dataset",
+  "revision": "90ec789bf4018eb9c0f75da9f69aab5c185f0fd0",
+  "release_version": "1.1.0",
+  "declared_license": "CC-BY-4.0",
+  "source_url": "https://huggingface.co/datasets/Hoshipu/RoboPro",
+  "declared_repository_size_bytes": null,
+  "declared_repository_size_text": "about 43.5 GB",
+  "metadata_only": true,
+  "downloaded_media": false,
+  "read_parquet_values": false,
+  "read_model_weights": false,
+  "opened_official_test": false,
+  "opened_sealed_audit": false,
+  "metadata_artifact_directory": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\robopro-metadata-screen-20261123-attempt-01",
+  "metadata_files": [
+    {
+      "path": "lerobot/roboreal_all_80tasks/meta/info.json",
+      "bytes": 3235,
+      "sha256": "91c7d161a416685b08f9db5b195a6ba02f7047d966fa188e0262f854af386cfe"
+    },
+    {
+      "path": "lerobot/roboreal_all_80tasks/meta/tasks.jsonl",
+      "bytes": 110465,
+      "sha256": "8e114f65fd235eeac8fcd1b32e3c95a859613c6e4af119179366394b976d65bc"
+    },
+    {
+      "path": "lerobot/roboreal_all_80tasks/meta/episodes.jsonl",
+      "bytes": 1443285,
+      "sha256": "88492784987d483618b5144f37bac8c3036bdaaa11d2df730f7b26a804b68658"
+    }
+  ],
+  "declared_data": {
+    "episodes": 16000,
+    "frames": 3728773,
+    "fps": 50,
+    "task_prompts": 1622,
+    "underlying_base_tasks": 80,
+    "camera_streams_per_episode": 3,
+    "video_stream_count": 48000,
+    "video_has_audio": false,
+    "state_dimensions": 14,
+    "action_dimensions": 14,
+    "official_split": {
+      "train": "0:16000",
+      "validation": null,
+      "test": null,
+      "sealed_audit": null
+    }
+  },
+  "observed_metadata_counts": {
+    "episode_rows": 16000,
+    "unique_episode_index_count": 16000,
+    "task_rows": 1622,
+    "episodes_matching_task_prompt": 16000,
+    "task_prompt_episode_count_min": 2,
+    "task_prompt_episode_count_median": 9,
+    "task_prompt_episode_count_max": 79,
+    "task_prompt_ids_with_fewer_than_10_episodes": 815,
+    "task_prompt_ids_with_at_least_200_episodes": 0,
+    "known_publisher_declared_duplicate_pair": [12000, 15999],
+    "duplicate_bytes_independently_verified": false
+  },
+  "limitations": [
+    "No publisher validation/test split; all records are declared train.",
+    "Publisher-declared duplicate episode 15999 duplicates episode 12000; payload hashes were not checked.",
+    "No explicit mapping from 1622 prompt IDs to the 80 underlying base tasks or task-variant scene IDs was found in the inspected metadata.",
+    "Publisher describes fixed scenes per task variant and a single laboratory setup; scene/OOD independence is not established.",
+    "Logged actions are demonstrator behavior, not task success or safety labels; alternative valid actions may make naive negatives ambiguous.",
+    "Video/state synchronization and video content were not independently checked from payloads.",
+    "Both-input necessity has not been demonstrated; matched unimodal and perturbation controls are required."
+  ],
+  "next_gate": "Freeze task/option/label semantics and grouped split, then audit a bounded metadata/video sample before any model fitting.",
+  "report": "docs/pretrained_reuse/R2_ROBOPRO_SOURCE_TASK_SCREEN_20261123.md"
+}
