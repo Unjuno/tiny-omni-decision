@@ -29,8 +29,11 @@ has been evaluated.
 - Download receipt SHA-256:
   `e485cc5be38326529c038a6fcfade27f7fd18eaa2e9e8952cd9af15c1c3d621d`.
 - The extracted HDF5 files and compact metadata inventory remain outside Git.
-  Only participant, trial, timestamp, and HDF5 structure metadata were read;
-  audio, vibration, IR, light, and environmental signal arrays were not read.
+  Participant, trial, timestamp, and HDF5 structure metadata were read. In one
+  `no-activity` file, ragged audio arrays were loaded only to count samples and
+  infer their approximate 60-second duration; waveform values were not
+  inspected or used. Vibration, IR, light, and environmental signal values
+  were not read or processed.
 
 ## Identity and support findings
 
@@ -76,6 +79,30 @@ separate time-block grouping for those 231 rows may be possible, but has not
 been validated; it must also avoid adjacent-window leakage and preserve a
 training example for every reported class.
 
+### Split feasibility check
+
+For the 24 human-activity labels, an exhaustive label-support feasibility
+count over all `8 train / 3 validation / 3 sealed-audit` assignments of the 14
+participants found 60,060 possible assignments. Of these, 42,566 have at least
+one trial for every class in every partition, 14,430 have at least two, and
+830 have at least three. This establishes only that a participant-disjoint
+partition is combinatorially possible; it does not make the 14 participant
+clusters statistically sufficient, and no assignment was selected.
+
+The `no-activity` rows are each approximately 60 seconds long. Their timestamps
+form 13 contiguous runs when separated at gaps over 300 seconds (run sizes
+10, 10, 113, then nine runs of 10 and a final run of 8). The largest run
+dominates this class, and the 13 runs still come from one recording
+environment. The 300-second threshold was used only to describe the observed
+metadata; it is not a frozen split rule. A defensible time-block rule and
+independent-group count would need to be fixed before any model evaluation.
+
+Given the small number of independent human participants, very sparse classes,
+and only 13 candidate background time blocks, this source cannot currently
+support the project's broad high-quality or calibrated multimodal claim. It
+may support a clearly labeled exploratory sensor/audio fusion study only if a
+predeclared grouped protocol and matched unimodal controls are justified.
+
 ## Fit to the product objective
 
 This is optional sensor evidence, not a replacement for the required text,
@@ -87,9 +114,10 @@ compare audio-only, vibration-only, other-sensor-only, and joint-input
 controls, including missing and mismatched streams. Calibration and
 participant-clustered uncertainty matter as much as accuracy.
 
-The next gate is a label-blind split-feasibility audit, including the
-`no-activity` sentinel and sparse-class support. Do not train or promote this
-source unless that audit yields a defensible task and held-out groups.
+This source audit alone does not justify a model run. Prioritize the project's
+required text/image/audio/video Path A evidence; retain this dataset as an
+optional exploratory audio/sensor source rather than spending model-training
+budget on it by default.
 
 ## Reproducibility
 

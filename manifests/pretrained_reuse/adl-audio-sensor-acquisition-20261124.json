@@ -40,7 +40,21 @@
       "rows": 231
     },
     "split_frozen": false,
-    "signal_payload_read": false
+    "participant_group_split_feasibility_8_3_3": {
+      "all_assignments": 60060,
+      "all_24_activity_labels_present_each_partition": 42566,
+      "all_24_activity_labels_at_least_2_each_partition": 14430,
+      "all_24_activity_labels_at_least_3_each_partition": 830,
+      "selected_assignment": null
+    },
+    "no_activity_temporal_inventory": {
+      "record_duration_seconds_approx": 60,
+      "contiguous_runs_at_gap_threshold_seconds_300": 13,
+      "run_sizes": [10, 10, 113, 10, 10, 10, 10, 10, 10, 10, 10, 10, 8],
+      "threshold_frozen": false
+    },
+    "audio_array_lengths_read_for_one_no_activity_file": true,
+    "signal_values_inspected_or_feature_extracted": false
   },
   "class_support_trial_groups": {
     "00_no-activity": 231,
