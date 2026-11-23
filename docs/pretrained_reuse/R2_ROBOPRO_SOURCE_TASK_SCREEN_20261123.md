@@ -19,9 +19,10 @@ read this screen as evidence of Decision quality.
   voices, biometric data, or other personal information, and describes the
   released recordings as synchronized RGB plus robot state/action. These are
   publisher declarations; media was not inspected.
-- The Hub currently reports a repository size of about 43.5 GB. No full clone,
-  video, episode Parquet, or model was downloaded. Only the three small metadata
-  files below were fetched from the pinned revision to `C:\CodexArtifacts`.
+- The Hub currently reports a repository size of about 43.5 GB. No full clone
+  or model was downloaded. The initial screen fetched only the three metadata
+  files below; a later integrity smoke fetched one 13.7-KB train Parquet and one
+  607.7-KB `cam_high` MP4. No other episode or camera was fetched.
 
 | Pinned metadata | Bytes | SHA-256 |
 |---|---:|---|
@@ -53,6 +54,34 @@ independently confirms both have the same prompt and length (328 frames), but
 their media/action bytes were not fetched or hash-compared. Keep this pair in
 the same future split or exclude the duplicate from scoring; do not count both
 as independent evidence.
+
+## One-episode schema and clock smoke
+
+To verify that the advertised action-choice ingredients can be joined, one
+official TRAIN episode was fetched at the same pinned revision:
+
+- Parquet `episode_000000.parquet`: 13,656 bytes,
+  SHA-256 `490285071affe235e500e17563d827b0871ecb6719c060e35fa10830c9906063`.
+- `cam_high/episode_000000.mp4`: 607,681 bytes,
+  SHA-256 `caadec919abfebe7ac7f571f52d0c579dbe86ceacc0d0bdbf9a862ed1a908198`.
+- The Parquet has 169 rows, matching episode metadata length; state and action
+  each decode to finite 14-D float vectors. `frame_index` and `index` are
+  contiguous from 0, `episode_index` stays 0, and `task_index` 8 maps to the
+  episode's `reposition the bottle` prompt.
+- Parquet timestamps run from 0.0 to 3.359999895 s at a median 0.0199999809-s
+  interval. The H.264 640x480 video decodes at 50 fps into 169 frames with PTS
+  from 0.0 to 3.36 s. Maximum absolute Parquet-timestamp/video-PTS difference
+  is `1.14440918e-7` s for this camera and episode.
+- All row-count, dimension, finiteness, index, task mapping, 50-Hz, video decode,
+  and PTS-alignment checks passed. Runtime: Python 3.11.9, PyArrow 25.0.1,
+  PyAV 18.1.0. Machine-readable output and both payload hashes are in
+  `C:\CodexArtifacts\pretrained-reuse-r2-local\robopro-schema-smoke-20261123-attempt-01\robopro-schema-smoke.json`
+  (SHA-256 `2c7a2b675c822ba2e4da1508fca250ab65b59c8139794be9276899292aa6040f`).
+
+This verifies one episode's table/video clock mapping only. It does not establish
+dataset-wide synchronization, semantic task correctness, action validity,
+scene independence, or Decision quality. No pixels were displayed or used for
+feature extraction; no model ran.
 
 ## Candidate Decision task and unresolved labels
 
@@ -90,9 +119,10 @@ Parquet timestamps and decoded frame PTS before any temporal claim.
    repository is about 43.5 GB; do not acquire it wholesale. Keep data and all
    run artifacts on C: and preserve the existing 2-GiB free-space reserve.
 
-Only after these gates pass should a small, pinned media/runtime smoke be
-considered, followed by a bounded frozen-feature experiment. No experiment was
-started for this screen. Existing Teacher, Path A, BERT, Orbitune, data,
+The one-episode smoke above verifies table/video clock alignment as an
+admission preflight, not as a quality experiment. Only after the remaining gates
+pass should a bounded frozen-feature experiment be considered. No model
+experiment was started. Existing Teacher, Path A, BERT, Orbitune, data,
 checkpoints, and open PRs were left unchanged.
 
 ## Execution record
@@ -100,13 +130,16 @@ checkpoints, and open PRs were left unchanged.
 - Screen date: 2026-11-23 (JST).
 - Local metadata directory:
   `C:\CodexArtifacts\pretrained-reuse-r2-local\robopro-metadata-screen-20261123-attempt-01`.
+- Local schema/clock smoke directory:
+  `C:\CodexArtifacts\pretrained-reuse-r2-local\robopro-schema-smoke-20261123-attempt-01`.
 - Download method: HTTPS `curl.exe --fail --location` against the pinned
   Hugging Face `resolve/<revision>/.../meta/` URLs; all three files were
   SHA-256 hashed after receipt.
-- No media, Parquet sensor/action values, pretrained model, train/validation
-  model output, official test, or sealed audit was read.
-- No GPU/model training was started; the RTX 3080 was already occupied by an
-  unrelated Orbitune process at the live check.
+- Only the one pinned TRAIN Parquet and matching `cam_high` video described
+  above were read. No other media, pretrained model, model output, official
+  test, or sealed audit was read.
+- No GPU/model training or feature extraction was started; the RTX 3080 was
+  occupied by an unrelated Orbitune process at the live check.
 - Machine-readable inventory:
   [`robopro-source-task-screen-20261123.json`](../../manifests/pretrained_reuse/robopro-source-task-screen-20261123.json).
 
