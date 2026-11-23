@@ -89,8 +89,11 @@ The implementation is commit `71fb2deef77727abeb5e61f8b408873f767a9179`.
 
 ## Decision and next gate
 
-**Checkpoint feasibility: PASS. Short tokenizer+encoder smoke: PASS. Decision
-quality: NOT MEASURED. Product/release eligibility: NOT ESTABLISHED.**
+**Checkpoint feasibility: PASS. Short tokenizer+encoder smoke: PASS. One
+task-specific quality result: 79.01% sample Accuracy / 70.64% macro Accuracy
+on Japanese MASSIVE 60-intent classification. General supplied-option and
+multimodal quality: NOT ESTABLISHED. Product/release eligibility: NOT
+ESTABLISHED.** See the [one-time result record](R2_LINE_DISTILBERT_MASSIVE_TEST_RESULT_20261123.md).
 
 ### Four-tower parameter fit
 
@@ -114,10 +117,13 @@ smoke, and emits finite `[1, 4, 768]` hidden states. Transformers reports 38
 expected unexpected keys: weights for discarded source layers 4–5 and the
 masked-language-model head, which is not part of the Decision encoder. This
 proves load/forward feasibility only; it does not show that truncating the
-upper layers preserves decision quality. The six-layer checkpoint therefore
-does not fit the present four-tower budget unchanged; the four-layer variant
-still requires a fixed-protocol quality and runtime evaluation, with all
-resident heads included before acceptance.
+upper layers preserves decision quality. A separate first-four-layer
+candidate has since completed one fixed-protocol Japanese MASSIVE task
+evaluation; the result is recorded in the linked report and must not be
+retuned or reevaluated on that exposed test. The six-layer checkpoint does not
+fit the present four-tower budget unchanged. The four-layer task result does
+not establish arbitrary-option, multimodal, or quantized product quality;
+actual product export and package size remain open.
 
 ### Four-layer inheritance smoke — 2026-11-23
 
@@ -144,11 +150,11 @@ superseded (receipt SHA-256
 set-valued field; its incomplete-status receipt is preserved with SHA-256
 `b01b7442ae2ab25afb54a3d4efc3c252df94bf44ccff90b3ebec1d86cebc3eb2`.
 
-The next gate is an explicitly limited paired readout diagnostic only after
-the active CPU workload has ended. The existing typed-decision validation is
-already exposed and uses synthetic teacher distributions, so any reuse must be
-labelled a diagnostic rather than independent confirmation; a new human-labeled
-decision task remains necessary for a quality claim.
+The MASSIVE publisher test is now exposed and must not be used for further
+selection. The existing typed-decision validation is also exposed and uses
+synthetic teacher distributions, so any reuse must be labelled a diagnostic
+rather than independent confirmation. A new, task-admitted human-labeled
+Decision evaluation remains necessary for a general quality claim.
 
 ## Sources
 

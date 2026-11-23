@@ -11,18 +11,24 @@ supports Japanese text quality on two development tasks; it does not establish
 
 This record audits already-completed CPU experiments stored outside Git. It
 does not start a model run, change weights, or access any publisher test or
-sealed audit data. The source-code commit for the MASSIVE run was not recorded
-in its run report and remains **UNKNOWN**; executed scripts and their hashes
-are preserved with the artifacts.
+sealed audit data. At the time of these experiments, the MASSIVE publisher
+test had not been downloaded or opened; it was later evaluated once with a
+separate, frozen four-layer LINE DistilBERT protocol. See the
+[separate test result](R2_LINE_DISTILBERT_MASSIVE_TEST_RESULT_20261123.md).
+The source-code commit for the earlier MASSIVE run was not recorded in its
+run report and remains **UNKNOWN**; executed scripts and their hashes are
+preserved with the artifacts.
 
 ## Japanese 60-intent MASSIVE comparison
 
 Both encoders use the same frozen seed-17 split: 11,228 train and 2,033
 development-validation examples, all from the Japanese 60-intent task. The
 split has zero cross-split source-ID overlap and zero normalized-utterance
-overlap. The publisher test partition was not downloaded or opened. Both
-checkpoints were selected on this validation set after eight epochs, so this
-is development evidence affected by selection.
+overlap. The publisher test was unopened during these runs. Both checkpoints
+were selected on this validation set after eight epochs, so this is
+development evidence affected by selection. A later, separate four-layer
+DistilBERT run is the only experiment recorded here that used the publisher
+test.
 
 | Frozen encoder and readout | Total parameters before quantization | Encoder weight bytes | Accuracy | Macro Accuracy over 59 represented intents | NLL | Brier | ECE-15 |
 |---|---:|---:|---:|---:|---:|---:|---:|

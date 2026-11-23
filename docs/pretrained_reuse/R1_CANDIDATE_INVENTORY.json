@@ -773,10 +773,11 @@
       "has_real_weights": true,
       "runtime_supported": true,
       "runtime_evidence": "CPU weights_only=True tensor-state load and strict=True DistilBertForMaskedLM load; frozen finite encoder forward [1,4,768]; isolated tokenizer with four deterministic Japanese question/candidate fixtures yielded valid vocabulary IDs and finite [4,22,768] output; tokenizer-forward-smoke.json SHA-256 d8be9421f60eda085eccd528a7803940feac038e4567a56922456bdc12158364; train-only typed-Decision pipeline smoke: 4 state-groups/20 decisions per split, finite output, best readout reload parity 0.0; diagnostic-only, not quality evidence (manifest SHA-256 21f575044f3e27739d0c9eec403295659019ac4c035c96e502f94d624ff6389e)",
-      "task_quality_status": "A first-four-layer truncated derivative was measured once on source-independent JCoLA development and collapsed to the majority option; do not infer quality of the full six-layer checkpoint from this derivative.",
-      "decision": "do not adopt the four-layer derivative for the frozen shared-option scorer; its text-only total is budget-compatible but failed on this task. The six-layer checkpoint exceeds the present four-tower budget and remains a teacher/reference only pending a fresh task source.",
+      "task_quality_status": "A first-four-layer truncated derivative collapsed to the majority option on source-grouped JCoLA OOD development. Separately, the frozen four-layer encoder with a fixed 60-intent readout scored 79.01% sample Accuracy and 70.64% macro Accuracy on one previously unopened Japanese MASSIVE publisher test (2,815 scored rows after train-text overlap removal). These are distinct task/head protocols; the MASSIVE test is now exposed and neither result establishes arbitrary-option or multimodal quality.",
+      "decision": "Do not adopt the derivative as a general frozen shared-option scorer: it failed the tested JCoLA protocol. It is a task-specific Japanese intent-classification candidate only, with a fixed 60-way head; the four-layer isolated model has 54,018,236 parameters. The six-layer checkpoint exceeds the present four-tower budget. Do not reuse the exposed MASSIVE test for selection or repeat evaluation.",
       "parameter_tensor_bytes": 274850816,
       "report": "docs/pretrained_reuse/R1_LINE_DISTILBERT_RUNTIME_20261123.md",
+      "quality_report": "docs/pretrained_reuse/R2_LINE_DISTILBERT_MASSIVE_TEST_RESULT_20261123.md",
       "audit_date": "2026-11-23",
       "primary_citations": [
         "https://huggingface.co/line-corporation/line-distilbert-base-japanese/tree/c32d05753d0d4be0f60482291a9452ec7e6f7d68",
@@ -785,7 +786,7 @@
     }
   ],
   "incremental_update_date": "2026-11-23",
-  "incremental_update_scope": "append pinned LINE Japanese DistilBERT runtime audit and one source-grouped task-specific derivative result; preserve prior candidate records",
+  "incremental_update_scope": "append pinned LINE Japanese DistilBERT runtime audit, source-grouped task-specific derivative result, and one-time MASSIVE fixed-intent test result; preserve prior candidate records",
   "additional_audit_updates": [
     {
       "date": "2026-11-02",
@@ -806,6 +807,11 @@
       "date": "2026-11-23",
       "scope": "one source-grouped JCoLA OOD development comparison of a frozen first-four-layer DistilBERT derivative and frozen BERT-base; both predict the majority option and this development set is now exposed",
       "report": "docs/pretrained_reuse/R2_JCOLA_BERT_GROUPED_RESULTS_20261123.md"
+    },
+    {
+      "date": "2026-11-23",
+      "scope": "one-time CPU evaluation of the frozen first-four-layer LINE DistilBERT plus fixed 60-way readout on pinned Japanese MASSIVE publisher test; 79.01% sample and 70.64% macro Accuracy; test now exposed",
+      "report": "docs/pretrained_reuse/R2_LINE_DISTILBERT_MASSIVE_TEST_RESULT_20261123.md"
     }
   ]
 }
