@@ -81,9 +81,25 @@ duplicate candidates and log how many queries survive.
    its 111M parameters to VideoPrism-B's 114.4M already exceeds the 200M
    pre-quantization ceiling before sensor or fusion components.
 5. Do not run the quality experiment until the selected media sample and
-   candidate-action schema pass those checks. This follow-up used CPU-only
-   metadata processing; the RTX 3080 was occupied by the separate Orbitune
-   process at the recorded live check.
+   candidate-action schema pass those checks. An eight-episode CPU-only
+   feature smoke has now decoded the selected train/development clips and
+   extracted frozen VideoPrism windows at 25%, 50%, and 75% episode progress.
+   Each input uses eight uniformly sampled frames ending at its query frame
+   (up to two seconds of history), with the matching eight 14-D state rows;
+   no future video/state rows enter the input. All 24 causal windows and the
+   cache shapes passed. This verifies the preprocessing/runtime path only; it
+   is not a fitted model or task-quality result. The RTX 3080 remained unused.
+
+The feature-smoke report and NPZ cache are external artifacts under
+`C:\CodexArtifacts\pretrained-reuse-r2-local\robopro-action-smoke-20261123-attempt-01\videoprism-feature-smoke-02`.
+The cache is 625,172 bytes (SHA-256
+`8912f6dd2c83f80b4e411cf4e71ccd7ea9e77d21724910068651fbb0819cfce2`). The
+forward passes took 36.25 s in total on CPU; the complete process took 48.00 s,
+and loading the pinned weights took 0.47 s. Cached arrays are `[8,3,8,768]` temporal video features,
+`[8,3,8,14]` aligned state, `[8,3,14]` target actions, and `[2,3,4,14]`
+candidate actions. The 8 episodes and 2 prompts remain a smoke sample, not an
+evaluation set. Action-label ambiguity and scene-held-out generalization are
+still unresolved, so status remains `REVIEW_NOT_ADMITTED`.
 
 ## Reproduction
 
@@ -105,5 +121,6 @@ The recorded metadata SHA-256 values are the same as the source screen:
 - `episodes.jsonl`: `88492784987d483618b5144f37bac8c3036bdaaa11d2df730f7b26a804b68658`
 
 Focused tests cover deterministic assignment, prompt/episode disjointness,
-duplicate exclusion, and malformed prompt mapping. No training, feature
-extraction, official evaluation, sealed audit, or GPU work occurred.
+duplicate exclusion, malformed prompt mapping, causal-window construction,
+and numeric candidate separation. No training, quality evaluation, official
+evaluation, sealed audit, or GPU work occurred.

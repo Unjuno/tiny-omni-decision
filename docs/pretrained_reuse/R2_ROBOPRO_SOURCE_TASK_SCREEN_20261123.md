@@ -80,13 +80,21 @@ official TRAIN episode was fetched at the same pinned revision:
 
 This verifies one episode's table/video clock mapping only. It does not establish
 dataset-wide synchronization, semantic task correctness, action validity,
-scene independence, or Decision quality. No pixels were displayed or used for
-feature extraction; no model ran.
+scene independence, or Decision quality. Later bounded media checks decoded
+eight selected clips and extracted frozen VideoPrism causal-window features
+with CPU-only JAX. No model was fitted and no quality score was computed.
 
 ## Candidate Decision task and unresolved labels
 
 A provisional candidate protocol is recorded in
-[`R2_ROBOPRO_PROMPT_SPLIT_AND_ACTION_CONTRACT_20261123.md`](R2_ROBOPRO_PROMPT_SPLIT_AND_ACTION_CONTRACT_20261123.md): given the task instruction, RGB observation, and 14-D proprioceptive state, rank four logged action vectors and return probabilities as JSON. This is **demonstrator-action retrieval**, not task-success prediction. The source does not label success, failure, safety, or whether alternative actions are valid, so all results must be reported as agreement with one recorded command. Candidate uniqueness and ambiguity remain to be checked on a bounded materialized sample.
+[`R2_ROBOPRO_PROMPT_SPLIT_AND_ACTION_CONTRACT_20261123.md`](R2_ROBOPRO_PROMPT_SPLIT_AND_ACTION_CONTRACT_20261123.md): given the task instruction, RGB observation, and 14-D proprioceptive state, rank four logged action vectors and return probabilities as JSON. This is **demonstrator-action retrieval**, not task-success prediction. The source does not label success, failure, safety, or whether alternative actions are valid, so all results must be reported as agreement with one recorded command. Numeric candidate uniqueness was checked on a bounded sample, but semantic ambiguity remains unresolved.
+
+The bounded eight-episode materialized sample had distinct numeric action
+vectors at three sampled progress points, and all 24 frozen VideoPrism causal
+windows were extracted with matching 14-D state rows on CPU. This verifies
+candidate-vector uniqueness and feature plumbing only; it does not resolve
+semantic multi-valid-action ambiguity or measure Decision quality. The cache,
+checksums, shapes, and timing are recorded in the linked action-contract note.
 
 The source is suitable for testing whether video contributes information
 beyond joint state and task text, but that is not established by its metadata.
