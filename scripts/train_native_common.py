@@ -3,6 +3,7 @@
 import argparse
 import hashlib
 import importlib.metadata
+import inspect
 import json
 import os
 import random
@@ -35,6 +36,10 @@ from tiny_omni_decision.native_temporal import TemporalNativeCandidate
 
 REPO = Path(__file__).resolve().parents[1]
 CONFIG = REPO / "configs/pretrained_reuse/native_common_fit_v1.json"
+if Path(inspect.getfile(NativeCandidateReadout)).resolve() != (
+    REPO / "src/tiny_omni_decision/native_candidate.py"
+).resolve():
+    raise RuntimeError("Python imported a different tiny_omni_decision source tree")
 
 
 def write(path, value):
