@@ -1,3 +1,14 @@
+**2026-11-24 R2 Path A LINE DistilBERT common-corpus fit:** A pinned frozen
+four-layer Japanese BERT text-feature integration completed 2,048 updates and
+passed exact best/final replay on the same 24,346 validation IDs as the native
+baseline. It did not improve the matched macro score: selected macro Accuracy /
+NLL were 29.73% / 1.7378 versus 30.71% / 1.6865 for the native readout.
+Video and Audio accuracy rose modestly, while Image fell 8.8 points and Text
+fell 1.3 points. Keep this as exposed development evidence, not a product
+promotion or blind result; retain the native readout as the better matched
+candidate. No sealed audit or quantization was run. See the [full result and
+replay record](docs/pretrained_reuse/R2_PATHA_LINE_DISTILBERT_COMMON_FIT_RESULTS_20261124.md).
+
 **2026-11-23 R2 Japanese BERT temporal decision probe:** A matched-pooling
 comparison on the frozen train-derived KUCI validation set selected four-layer
 LINE DistilBERT at 71.30% Accuracy / 0.7110 NLL versus Ruri-v3-30m at 41.26%
