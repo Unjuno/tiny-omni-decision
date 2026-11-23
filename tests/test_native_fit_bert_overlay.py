@@ -3,10 +3,13 @@ import json
 
 import numpy as np
 import pytest
-import torch
 
-from scripts.native_fit_runtime import apply_text_feature_overlay
-from tiny_omni_decision.native_candidate import NativeCandidateReadout
+
+def apply_overlay(*args):
+    pytest.importorskip("torch", reason="BERT overlay integration requires the optional ML extra")
+    from scripts.native_fit_runtime import apply_text_feature_overlay
+
+    return apply_text_feature_overlay(*args)
 
 
 def digest(path):
@@ -73,7 +76,7 @@ def test_bert_overlay_replaces_text_and_all_query_banks_without_touching_other_m
     receipt_sha = cache_fixture(tmp_path)
     observations, banks, query_map = fixture_metadata()
 
-    updated_observations, updated_banks, updated_queries, width = apply_text_feature_overlay(
+    updated_observations, updated_banks, updated_queries, width = apply_overlay(
         observations, banks, query_map, tmp_path, receipt_sha
     )
 
@@ -94,6 +97,11 @@ def test_bert_overlay_replaces_text_and_all_query_banks_without_touching_other_m
 
 
 def test_768_readout_reuses_original_seeded_weights_and_adds_only_the_text_lens():
+    torch = pytest.importorskip(
+        "torch", reason="BERT overlay integration requires the optional ML extra"
+    )
+    from tiny_omni_decision.native_candidate import NativeCandidateReadout
+
     torch.manual_seed(17)
     original = NativeCandidateReadout()
     candidate = NativeCandidateReadout(text_input_width=768)
@@ -119,4 +127,4 @@ def test_bert_overlay_rejects_stale_receipts_and_incomplete_identity_coverage(tm
         observations.pop("text:state-validation")
 
     with pytest.raises(ValueError):
-        apply_text_feature_overlay(observations, banks, query_map, tmp_path, receipt_sha)
+        apply_overlay(observations, banks, query_map, tmp_path, receipt_sha)
