@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "experiment_id": "jamp-bert-temporal-probe-20261124",
+  "status": "development_probe_test_not_yet_opened",
+  "source": {
+    "repository": "https://github.com/tomo-vv/temporalNLI_dataset",
+    "revision": "f578b5daac7bff3855d238c032a60fd047cddd9c",
+    "training_path": "dataset/train_all.tsv",
+    "training_sha256": "711f496ffd7806b83e13502af6b91774f8e05f1fb13215bd33c6824607e3b07b",
+    "declared_license": "CC-BY-SA-4.0",
+    "test_path": "dataset/test_2.tsv",
+    "test_git_blob_sha1": "de331fa36cbddfddbb178d7e3edda90139851a7a",
+    "test_access_policy": "one-shot after validation-only selection; never tune or repeat"
+  },
+  "task": {
+    "type": "Japanese temporal natural-language-inference classification",
+    "labels": ["contradiction", "entailment", "neutral"],
+    "split_group": "template_num",
+    "seed": 17,
+    "train_rows": 7960,
+    "validation_rows": 1990,
+    "train_sha256": "360b3c85cb3d91b5fcaa163c93b735c4fe30430e532b28467c7bbf24a0cb64c0",
+    "validation_sha256": "44752811e4e89b45ceffd8e5f19424a3fe88a3046d340c120b4c918b037438d8",
+    "split_manifest_sha256": "f55f724a088c6f6d809435b18afe7e57fa4bff1d78544e52d6ab2aca81598836"
+  },
+  "selection": {
+    "per_run": "minimum validation NLL checkpoint, fixed before publisher-test access",
+    "cross_candidate_baseline": "lowest validation NLL across the four predeclared candidates",
+    "selected_baseline": "line-distilbert-ja-first4",
+    "publisher_test_metrics_used_for_selection": false
+  },
+  "candidates": [
+    "ruri-v3-30m-frozen-encoder-readout",
+    "line-distilbert-ja-first4-frozen-encoder-readout",
+    "tohoku-bert-base-ja-v3-frozen-encoder-readout",
+    "line-distilbert-first4-top2-adapted"
+  ],
+  "limits": [
+    "This is one synthetic Japanese text task, not multimodal or broad Decision quality.",
+    "The official publisher test is not a sealed audit and its labels are not blind after the one-shot run.",
+    "The Tohoku BERT-base projected four-tower estimate exceeds the provisional 200M parameter target.",
+    "No product promotion or 95-98 percent quality claim follows from this experiment."
+  ]
+}
