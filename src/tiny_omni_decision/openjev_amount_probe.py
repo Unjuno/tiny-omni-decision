@@ -8,6 +8,7 @@ import random
 import re
 import unicodedata
 from collections import defaultdict
+from math import log
 from typing import Any
 
 ALLOWED_STATE_FIELDS = frozenset({"text", "policy", "requested_role"})
@@ -136,3 +137,133 @@ def question_type_cells(records: list[dict[str, Any]]) -> dict[str, list[int]]:
     for index, row in enumerate(records):
         cells[row["question_id"]].append(index)
     return dict(sorted(cells.items()))
+
+
+def _prediction_losses(record: dict[str, Any]) -> dict[str, float]:
+    target = [float(value) for value in record["target"]]
+    probabilities = [float(value) for value in record["probabilities"]]
+    if len(target) != len(probabilities) or not target:
+        raise ValueError("prediction and target vectors must have equal non-zero lengths")
+    if any(value < 0.0 for value in target) or abs(sum(target) - 1.0) > 1e-5:
+        raise ValueError("target must be a probability distribution")
+    if any(value < 0.0 or value > 1.0 for value in probabilities):
+        raise ValueError("prediction probabilities must be within [0, 1]")
+    if abs(sum(probabilities) - 1.0) > 1e-5:
+        raise ValueError("prediction probabilities must sum to one")
+    target_index = max(range(len(target)), key=target.__getitem__)
+    prediction_index = max(range(len(probabilities)), key=probabilities.__getitem__)
+    return {
+        "accuracy": float(prediction_index == target_index),
+        "nll": -sum(target[i] * log(max(probabilities[i], 1e-12)) for i in range(len(target))),
+        "brier": sum((probabilities[i] - target[i]) ** 2 for i in range(len(target))),
+    }
+
+
+def paired_family_bootstrap(
+    reference: list[dict[str, Any]],
+    candidate: list[dict[str, Any]],
+    *,
+    seed: int = 17,
+    iterations: int = 2000,
+) -> dict[str, Any]:
+    """Paired percentile bootstrap, resampling whole validation families.
+
+    Deltas are candidate minus reference. Macro metrics average question_id cells,
+    and each cell averages examples within the resampled families.
+    """
+    if iterations < 100:
+        raise ValueError("at least 100 bootstrap iterations are required")
+    reference_by_id = {str(row["id"]): row for row in reference}
+    candidate_by_id = {str(row["id"]): row for row in candidate}
+    if len(reference_by_id) != len(reference) or len(candidate_by_id) != len(candidate):
+        raise ValueError("prediction IDs must be unique")
+    if reference_by_id.keys() != candidate_by_id.keys():
+        raise ValueError("paired models must have identical prediction IDs")
+    paired = []
+    for sample_id in sorted(reference_by_id):
+        left, right = reference_by_id[sample_id], candidate_by_id[sample_id]
+        for key in ("family", "question_id", "target"):
+            if left[key] != right[key]:
+                raise ValueError(f"paired predictions disagree on {key} for {sample_id}")
+        left_metrics = _prediction_losses(left)
+        right_metrics = _prediction_losses(right)
+        paired.append(
+            {
+                "family": str(left["family"]),
+                "question_id": str(left["question_id"]),
+                "delta": {
+                    key: right_metrics[key] - left_metrics[key]
+                    for key in ("accuracy", "nll", "brier")
+                },
+            }
+        )
+    families = sorted({row["family"] for row in paired})
+    if len(families) < 2:
+        raise ValueError("at least two validation families are required")
+    rows_by_family: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    for row in paired:
+        rows_by_family[row["family"]].append(row)
+
+    def macro_delta(selected_families: list[str]) -> dict[str, float]:
+        counts: dict[str, int] = defaultdict(int)
+        sums: dict[str, dict[str, float]] = defaultdict(lambda: defaultdict(float))
+        for family in selected_families:
+            for row in rows_by_family[family]:
+                question_id = row["question_id"]
+                counts[question_id] += 1
+                for metric, value in row["delta"].items():
+                    sums[metric][question_id] += value
+        present = sorted(counts)
+        if not present:
+            raise ValueError("bootstrap sample contained no validation rows")
+        return {
+            metric: sum(sums[metric][question_id] / counts[question_id] for question_id in present)
+            / len(present)
+            for metric in ("accuracy", "nll", "brier")
+        }
+
+    point = macro_delta(families)
+    rng = random.Random(seed)
+    samples = {metric: [] for metric in point}
+    for _ in range(iterations):
+        selected = [rng.choice(families) for _ in families]
+        delta = macro_delta(selected)
+        for metric, value in delta.items():
+            samples[metric].append(value)
+    summary = {}
+    for metric, values in samples.items():
+        summary[metric] = {
+            "candidate_minus_reference": point[metric],
+            "percentile_95_ci": [float(value) for value in np_percentile(values, [2.5, 97.5])],
+            "bootstrap_probability_candidate_better": float(
+                sum(value > 0 for value in values) / iterations
+                if metric == "accuracy"
+                else sum(value < 0 for value in values) / iterations
+            ),
+        }
+    return {
+        "reference_minus_candidate_order": "candidate minus reference",
+        "resampling_unit": "document_family_id",
+        "validation_families": len(families),
+        "validation_predictions": len(paired),
+        "iterations": iterations,
+        "seed": seed,
+        "metrics": summary,
+        "inference_limit": "Internal validation selected checkpoints; intervals are exploratory "
+        "and conditional on selection.",
+    }
+
+
+def np_percentile(values: list[float], percentiles: list[float]) -> list[float]:
+    """Small NumPy-free linear percentile helper for bootstrap summaries."""
+    ordered = sorted(values)
+    if not ordered:
+        raise ValueError("cannot compute a percentile of an empty sample")
+    result = []
+    for percentile in percentiles:
+        location = (len(ordered) - 1) * percentile / 100.0
+        lower = int(location)
+        upper = min(lower + 1, len(ordered) - 1)
+        fraction = location - lower
+        result.append(ordered[lower] * (1.0 - fraction) + ordered[upper] * fraction)
+    return result

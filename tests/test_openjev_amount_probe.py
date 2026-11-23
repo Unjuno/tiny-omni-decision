@@ -8,6 +8,7 @@ from tiny_omni_decision.openjev_amount_probe import (
     assert_split_integrity,
     format_pair,
     make_family_split,
+    paired_family_bootstrap,
     sanitize_state,
     validate_rows,
 )
@@ -79,3 +80,36 @@ def test_validation_rejects_misaligned_target() -> None:
     row["target"] = [1.0]
     with pytest.raises(ValueError, match="target length"):
         validate_rows([row])
+
+
+def test_paired_family_bootstrap_is_deterministic_and_matches_pairs() -> None:
+    reference = [
+        {
+            "id": f"id-{family}",
+            "family": f"family-{family}",
+            "question_id": "amount",
+            "target": [0.0, 1.0],
+            "probabilities": [0.7, 0.3],
+        }
+        for family in range(5)
+    ]
+    candidate = [{**row, "probabilities": [0.2, 0.8]} for row in reference]
+    first = paired_family_bootstrap(reference, candidate, seed=17, iterations=100)
+    second = paired_family_bootstrap(reference, candidate, seed=17, iterations=100)
+    assert first == second
+    assert first["validation_families"] == 5
+    assert first["metrics"]["accuracy"]["candidate_minus_reference"] == 1.0
+    assert first["metrics"]["nll"]["candidate_minus_reference"] < 0.0
+
+
+def test_paired_family_bootstrap_rejects_mismatched_ids() -> None:
+    row = {
+        "id": "one",
+        "family": "family",
+        "question_id": "amount",
+        "target": [1.0, 0.0],
+        "probabilities": [0.8, 0.2],
+    }
+    other = {**row, "id": "two"}
+    with pytest.raises(ValueError, match="identical prediction IDs"):
+        paired_family_bootstrap([row, other], [row, {**other, "id": "three"}], iterations=100)
