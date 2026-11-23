@@ -1,29 +1,41 @@
-# SocialIQA compact BERT Decision probe — 2026-11-24
+# SocialIQA post-exposure compact BERT comparison — 2026-11-24
 
 ## Decision
 
-Keep compact BERT-family encoders as task-dependent text-path candidates, but
-do not continue an unstructured depth sweep based on this result. Two frozen
-MiniLM checkpoints and the same trained option scorer reached about 45% on the
-official SocialIQA development split, far below the 95–98% product aspiration.
-The nominal 3-layer vs 6-layer accuracy difference was only 0.20 percentage
-points, with a context-group paired 95% interval spanning zero. The internal
-train-derived validation scores were about 55%, around ten points above the
-publisher development split. This is evidence of a substantial split/task
-generalization gap for this protocol, not proof that BERT or further training
-cannot work.
+This is a **post-exposure exploratory comparison**, not an independent
+publisher-development evaluation or a prospective BERT-family selection
+study. A prior project run had already trained a frozen all-MiniLM-L6 readout
+on this same publisher train source and inspected the official SocialIQA dev
+split once. Its report explicitly barred future tuning/re-evaluation there.
+The 2026-11-24 run nevertheless evaluated two different MiniLM candidates on
+the same public dev split. Preserve the run and predictions for transparency,
+but do not use these results for model selection, product claims, or as fresh
+confirmation.
 
-This text-only experiment does not close any image, audio, video, fusion,
-calibration, or product-size gate. The text-path choice should remain
-task-specific. The broader BERT evidence reconciliation remains in
+For completeness, the new frozen MiniLM-L3 and MS-MARCO MiniLM-L6 candidates
+scored about 45% on that already-exposed dev split, far below the 95–98%
+aspiration. Their descriptive accuracy difference was only 0.20 points, with
+a context-group paired 95% interval spanning zero. A prior `all-MiniLM-L6-v2`
+run scored 43.40% / 1.0739 NLL / 0.6485 Brier / 0.0763 ECE-15 on the same dev
+split. These are not matched model comparisons: the encoders, input formatting,
+training recipes, and internal splits differ. The internal train-derived
+validation scores around 55% also reuse a training source already exposed to
+prior project fitting. This report therefore supplies no new independent
+generalization evidence and does not establish a BERT-family ceiling.
+
+This text-only run does not close any image, audio, video, fusion, calibration,
+or product-size gate. The SocialIQA source has no stable ATOMIC source-event IDs,
+so exact context grouping cannot guarantee event-disjointness. The text-path
+choice should remain task-specific. The broader BERT evidence reconciliation remains in
 [`R2_BERT_FAMILY_RECONCILIATION_20261123.md`](R2_BERT_FAMILY_RECONCILIATION_20261123.md).
 
 ## Source and split integrity
 
-The experiment used the official [Social IQa dataset card](https://huggingface.co/datasets/allenai/social_i_qa)
-and AI2's [Rainbow source repository](https://github.com/allenai/rainbow),
-pinned at `ddc370727bb145bbc53c65f5bd39db4beca4115d` for the official loader
-definition. The card declares CC BY 4.0. The fetched official train/dev archive
+The experiment used the official [Social IQa dataset card](https://huggingface.co/datasets/allenai/social_i_qa),
+pinned at dataset revision `8835ceb9141d7896d9d968634a9b21ae440e3ec5`, and
+AI2's [Rainbow source repository](https://github.com/allenai/rainbow), pinned
+at `ddc370727bb145bbc53c65f5bd39db4beca4115d` for the loader definition. The
+card declares CC BY 4.0. The fetched official train/dev archive
 SHA-256 is
 `ee073914a0fc33265cfbcfc50ec20df9b2e07809c3f420f599138d1f394ef5c3`; it
 matches the publisher checksum sidecar. Only `train.jsonl`, `train-labels.lst`,
@@ -44,6 +56,10 @@ Seed 17 assigned entire train context groups to internal fit/selection:
 Train/internal-validation context overlap and publisher train/dev context
 overlap were both zero. The internal validation ID-order hash is recorded in
 the external split manifest. No questions or candidate answers were removed.
+However, this 2026-11-24 split was made from the same publisher training source
+that had already been used in the prior SocialIQA probe; these rows are not a
+new independent validation cohort. Exact context grouping also cannot rule
+out shared paraphrased ATOMIC events.
 
 ## Frozen model and scoring protocol
 
@@ -86,9 +102,16 @@ with epoch 8 selected. L6 stopped after epoch 17 with epoch 14 selected.
 | MiniLM-L3 | 55.37% | 0.9330 | 0.5530 | 0.0250 |
 | MiniLM-L6 | 55.37% | 0.9449 | 0.5612 | 0.0221 |
 
-MiniLM-L3 was selected by the prespecified NLL rule.
+Within this exploratory run, MiniLM-L3 had the lower NLL under the fixed rule.
+Because the source and its earlier validation results were already exposed,
+this does not qualify as a prospective model selection.
 
-### Official publisher development split, one pass per frozen candidate
+### Repeated official publisher-development evaluation (exploratory only)
+
+The split was already evaluated in the prior project audit. Repeating it here
+was a process error. Keep these numbers for transparency, but exclude them from
+future tuning and treat the bootstrap below as descriptive only; it does not
+restore independence or correct for repeated exposure.
 
 | Candidate | Accuracy | NLL | Brier | ECE-10 |
 |---|---:|---:|---:|---:|
@@ -98,14 +121,12 @@ MiniLM-L3 was selected by the prespecified NLL rule.
 | Train class-prior probabilities | 32.91% | 1.0988 | 0.6668 | 0.0084 |
 
 Paired bootstrap over the 1,930 normalized context groups, 10,000 resamples,
-seed 1729, gave L3 minus L6 accuracy `+0.20 pp`, 95% percentile interval
-`[-2.56, +2.83] pp`. This does not establish a meaningful L3/L6 difference.
-Both BERT models beat chance on this development split, but only modestly and
-far below the product target. The roughly 10-point internal-validation to
-publisher-development Accuracy drop and NLL increase indicate a significant
-generalization gap between the two splits. Because the internal and publisher
-splits have different provenance, this should not be described as a clean
-training-set overfit diagnosis without a fixed training prediction comparison.
+seed 1729, gave L3 minus MS-MARCO-L6 accuracy `+0.20 pp`, 95% percentile
+interval `[-2.56, +2.83] pp`. Since this repeats an exposed public split and
+the bootstrap is conditional on these candidates and procedures, it is not
+fresh confirmatory evidence. The internal-to-publisher score gap is
+descriptive, not a clean training-overfit estimate; the training records,
+representations, and protocols differ from the prior readout study.
 
 ## Reproduction and artifacts
 
@@ -147,14 +168,16 @@ tests, the compact manifest and this report are committed.
 
 ## Recommendation
 
-This result supports continued *targeted* BERT-family investigation when the
-task is a text Decision task and an untouched source-group-disjoint validation
-cohort exists. It argues against spending compute on blind depth scaling: L6
-did not improve over L3 here, and both candidates generalized weakly to the
-publisher dev split. Do not tune against this already-consumed dev split.
-The next product-level work should still prioritize admitted multi-input
-tasks, modality-necessity controls, and calibrated fusion. This experiment
-does not justify claiming the text, video, audio, or image 95–98% gate met.
+This repeated run does **not** justify another BERT decision or a depth sweep.
+The prior SocialIQA audit itself had already concluded that the next BERT
+comparison must use a newly admitted source-disjoint task. Do not reopen
+SocialIQA dev or use these repeated metrics for selection. The next
+product-level work should prioritize admitted multi-input tasks,
+modality-necessity controls, and calibrated fusion. This run does not justify
+claiming any 95–98% modality gate met.
 
-Focused tests: 5 passed. Ruff checks passed. No official test or sealed audit
-data was accessed.
+Focused CPU tests: 5 passed; full repository tests: 2,901 passed / 11 skipped;
+Ruff, manifest validation, and the post-fix GitHub Actions run passed. The
+official test and project sealed audit were not accessed. The official public
+dev split was accessed again despite its previous exposure; the results above
+are explicitly marked exploratory and invalid as independent confirmation.

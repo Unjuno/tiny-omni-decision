@@ -1,11 +1,12 @@
-**2026-11-24 R2 compact BERT SocialIQA probe:** On an untouched, CC BY 4.0
-English three-choice task, frozen MiniLM-L3 and L6 with the same shared option
-scorer reached 45.04% / 44.83% Accuracy on the publisher development split;
-their paired context-bootstrap difference included zero. Internal grouped
-validation was about 55%, exposing a large split-generalization gap. Keep BERT
-task-specific; do not launch an unstructured depth sweep. This does not close
-any 95–98% or multimodal gate. No test or sealed audit was accessed. See
-[protocol and results](docs/pretrained_reuse/R2_SOCIALIQA_MINILM_DECISION_PROBE_20261124.md)
+**2026-11-24 R2 SocialIQA MiniLM rerun correction:** The official dev split
+and publisher train source had already been used in the 2026-11-23 MiniLM
+readout/audit. Frozen MiniLM-L3 and MS-MARCO MiniLM-L6 were nevertheless
+evaluated again (45.04% / 44.83% Accuracy). This is repeated, post-exposure
+exploratory evidence and must not guide model selection or support generalizing
+claims; its internal train-derived validation is also not independent of the
+previous project fitting. Do not tune or reopen SocialIQA. The run is preserved
+with an explicit correction in the
+[report](docs/pretrained_reuse/R2_SOCIALIQA_MINILM_DECISION_PROBE_20261124.md)
 and [manifest](manifests/pretrained_reuse/socialiqa-text-decision-probe-20261124.json).
 
 **2026-11-23 R2 BERT-family reconciliation:** Frozen BERT/MiniLM encoders show

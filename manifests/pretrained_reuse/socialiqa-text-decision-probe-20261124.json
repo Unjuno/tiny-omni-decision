@@ -8,6 +8,7 @@
     "dataset_card": "https://huggingface.co/datasets/allenai/social_i_qa",
     "official_source_repository": "https://github.com/allenai/rainbow",
     "source_repository_revision": "ddc370727bb145bbc53c65f5bd39db4beca4115d",
+    "dataset_repository_revision": "8835ceb9141d7896d9d968634a9b21ae440e3ec5",
     "license": "CC-BY-4.0",
     "license_evidence": "Publisher dataset card",
     "archive_url": "https://storage.googleapis.com/ai2-mosaic-public/projects/rainbow/v1.0/data/raw/socialiqa/socialiqa-train-dev.zip",
@@ -37,6 +38,10 @@
     },
     "group_identity": "normalized context",
     "publisher_train_dev_group_overlap": 0,
+    "publisher_dev_previously_evaluated_by_project": true,
+    "publisher_train_previously_used_by_project_probe": true,
+    "previous_evaluation_report": "docs/pretrained_reuse/R2_SOCIAL_IQA_PUBLISHER_DEV_AUDIT_20261123.md",
+    "repeated_publisher_dev_evaluation_is_independent_evidence": false,
     "test_data_accessed": false
   },
   "split": {
@@ -145,9 +150,19 @@
   },
   "result": {
     "selected_by_internal_validation_nll": "sentence-transformers/paraphrase-MiniLM-L3-v2",
+    "selection_status": "exploratory post-exposure only; not valid for prospective candidate selection",
+    "publisher_dev_metrics_status": "repeated public split evaluation; descriptive only",
+    "prior_project_publisher_dev_result": {
+      "model_id": "sentence-transformers/all-MiniLM-L6-v2",
+      "accuracy": 0.434,
+      "nll": 1.0739,
+      "brier": 0.6485,
+      "ece_15": 0.0763
+    },
+    "task_source_has_stable_atomic_event_ids": false,
     "text_task_pass_95_percent": false,
     "other_modality_or_product_claims": false,
-    "recommendation": "Keep BERT-family candidates task-specific; do not run another unfocused depth sweep."
+    "recommendation": "Do not use these rerun metrics for model selection; next BERT-family evaluation requires a newly admitted source-disjoint task."
   },
   "external_artifact_root": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\socialiqa-minilm-decision-20261124-attempt-01"
 }
