@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "experiment_id": "jaqket-source-task-screen-20261124",
+  "status": "candidate_limited_to_cc_by_sa_dev_splits_pending_dev1_integrity_audit",
+  "source": {
+    "official_project": "https://sites.google.com/view/project-aio/dataset",
+    "baseline_repository": "https://github.com/cl-tohoku/JAQKET_baseline",
+    "baseline_code_license": "Apache-2.0",
+    "task": "Japanese 20-choice quiz QA over supplied Wikipedia entity titles",
+    "publisher_dev1_rows": 995,
+    "publisher_dev2_rows": 997,
+    "publisher_train_rows": 13061,
+    "dev_license": "CC-BY-SA-4.0",
+    "train_license": "non-commercial research redistribution only; excluded",
+    "dev1_url": "https://jaqket.s3.ap-northeast-1.amazonaws.com/data/aio_01/dev1_questions.json",
+    "dev2_url": "https://jaqket.s3.ap-northeast-1.amazonaws.com/data/aio_01/dev2_questions.json",
+    "dev2_access": "defer until Dev1-only selection is frozen; one-time pseudo-test"
+  },
+  "use_policy": {
+    "allowed_splits": ["dev1", "dev2 once after candidate selection"],
+    "excluded_assets": ["train_questions.json", "all_entities.json.gz", "competition-private evaluation data"],
+    "input_fields": ["question", "answer_candidates"],
+    "answer_field": "answer_entity"
+  },
+  "candidate_models": [
+    "cl-nagoya/ruri-v3-30m",
+    "line-corporation/line-distilbert-base-japanese:first-four-layers",
+    "cl-tohoku/bert-base-japanese-v3 (reference only)"
+  ],
+  "gates": [
+    "verify Dev1 hash, schema, and row count",
+    "audit normalized question, answer entity, and candidate-set duplicates",
+    "create a deterministic Dev1-only group split and prove no group/content overlap",
+    "measure option-only and answer-position baselines",
+    "freeze validation selection before opening Dev2",
+    "Dev2 is public pseudo-test, not sealed audit; no retuning"
+  ]
+}
