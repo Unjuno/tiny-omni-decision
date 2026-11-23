@@ -384,13 +384,15 @@ def main() -> None:
         "train": split_manifest["train_sha256"],
         "validation": split_manifest["validation_sha256"],
     }
-    if frozen_run["split_manifest"]["frozen_train_sha256"] != expected_split_hashes["train"]:
+    frozen_config = json.loads(
+        (args.frozen_run_dir / "effective-config.json").read_text(encoding="utf-8")
+    )
+    if frozen_config["frozen_train_sha256"] != expected_split_hashes["train"]:
         raise ValueError("training comparison uses a different frozen training split")
-    if (
-        frozen_run["split_manifest"]["frozen_validation_sha256"]
-        != expected_split_hashes["validation"]
-    ):
+    if frozen_config["frozen_validation_sha256"] != expected_split_hashes["validation"]:
         raise ValueError("training comparison uses a different frozen validation split")
+    if frozen_config["split_manifest_sha256"] != sha256_file(args.data_dir / "split-manifest.json"):
+        raise ValueError("training comparison uses a different split manifest")
     adapted_report = json.loads(
         (args.adapted_run_dir / "run-report.json").read_text(encoding="utf-8")
     )
@@ -398,7 +400,9 @@ def main() -> None:
         raise ValueError("adapted run uses a different frozen training split")
     if adapted_report["validation_sha256"] != expected_split_hashes["validation"]:
         raise ValueError("adapted run uses a different frozen validation split")
-    if frozen_run.get("official_test_loaded", True):
+    if frozen_config.get("official_test_loaded", True) or frozen_config.get(
+        "sealed_audit_loaded", True
+    ):
         raise ValueError("frozen training run did not certify publisher test isolation")
     if adapted_report.get("official_test_loaded", True):
         raise ValueError("adapted training run did not certify publisher test isolation")
