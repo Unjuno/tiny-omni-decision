@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "evaluation_id": "kuci-official-dev-one-shot-20261124",
+  "status": "COMPLETE_ONE_SHOT_PUBLIC_DEVELOPMENT_EVALUATION",
+  "source": {
+    "repository": "ku-nlp/KUCI",
+    "revision": "79afa1d63d1f262e6709e9be714d9ad5dae8d6f6",
+    "path": "dataset/dev.jsonl",
+    "url": "https://github.com/ku-nlp/KUCI/blob/79afa1d63d1f262e6709e9be714d9ad5dae8d6f6/dataset/dev.jsonl",
+    "license": "CC-BY-SA-4.0",
+    "rows": 10228,
+    "sha256": "a5205847d0c5a6a7952445a772b858e909d0fd379ea7f5b1a4effa7b1e045aa3",
+    "target_counts": {"a": 2644, "b": 2479, "c": 2497, "d": 2608},
+    "sealed_audit": false
+  },
+  "integrity": {
+    "unique_ids": 10228,
+    "unique_normalized_question_option_rows": 10228,
+    "shared_ids_with_official_train": 0,
+    "shared_question_option_content_with_official_train": 0,
+    "shared_event_pairs_with_official_train": 0,
+    "shared_normalized_contexts_with_official_train": 976,
+    "shared_normalized_contexts_with_internal_validation": 82,
+    "full_split_retained": true,
+    "train_sha256": "810ae90d853925a27a89a4fd23642c3898ea93d809cba0806be0487a9fb5c721",
+    "internal_validation_sha256": "37c1afe8af91d5d8f8b2b2b174117be778f71c69deb82b89b7425776489f639b",
+    "official_train_sha256": "77cd991d35cdc5cba23d0e2208cdc66e3173577449dffdf1503bf49e0624b076"
+  },
+  "protocol": {
+    "inference_only": true,
+    "training_on_publisher_dev": false,
+    "calibration_on_publisher_dev": false,
+    "checkpoint_selection": "previous seed-17 grouped internal validation NLL only",
+    "option_pair_encoding": "context and candidate continuation; attention-mask mean pooling",
+    "readout": "shared hidden-to-128-tanh-to-1 scorer",
+    "option_order_equivariance_max_abs_delta": 0.0,
+    "max_length": 512,
+    "truncated_candidate_pairs": 0
+  },
+  "models": {
+    "ruri-v3-30m": {
+      "revision": "24899e5de370b56d179604a007c0d727bf144504",
+      "encoder_parameters": 36705536,
+      "readout_parameters": 33025,
+      "readout_sha256": "43d4e19f2bed1645c1e67d87af99d24b82e1633d949e485fa92999029580f3e8",
+      "metrics": {
+        "count": 10228,
+        "accuracy": 0.40858426690101624,
+        "nll": 1.277255654335022,
+        "brier": 0.695817232131958,
+        "ece_15_bins": 0.02434188151119461,
+        "mean_confidence": 0.427370846271515
+      },
+      "prediction_sha256": "0d1957d5d8e7e7e9d053d86afc4ffababcb159f267bd378935fa4fcf29e73ef4",
+      "feature_sha256": "2444de6ea514df7171fc2d5b4ca3876b740f9f682a216ee1d8a637655fd4d62b",
+      "peak_allocated_vram_bytes": 2092326400,
+      "elapsed_seconds": 28.1659564999864
+    },
+    "line-distilbert-ja-first4": {
+      "revision": "c32d05753d0d4be0f60482291a9452ec7e6f7d68",
+      "encoder_parameters": 53912064,
+      "readout_parameters": 98561,
+      "trainable_encoder_parameters": 0,
+      "encoder_weight_sha256": "9d8b678bd9ce14363d5e6e3dc53c7dd7c76f8ad11394ccffd200f15e9f6819eb",
+      "readout_sha256": "3164b38c54bd18b73ebddbf5c2b0edde379f7b700dbc9cf376b8a660cc28ec2a",
+      "metrics": {
+        "count": 10228,
+        "accuracy": 0.7245795726776123,
+        "nll": 0.6970798969268799,
+        "brier": 0.38518258929252625,
+        "ece_15_bins": 0.01754040279202411,
+        "mean_confidence": 0.729706704616547
+      },
+      "prediction_sha256": "bcdca5cad244fa4b9aa46fdde1d95a2994091769740bd45d313da39f609395bf",
+      "feature_sha256": "1ef12242421e03bab688db247a5e8f989b0de2a501857688885c10eb0877fb96",
+      "peak_allocated_vram_bytes": 1864725504,
+      "elapsed_seconds": 36.61337449995335
+    }
+  },
+  "paired_group_bootstrap": {
+    "candidate_minus_baseline": "LINE first-four-layer DistilBERT minus Ruri",
+    "groups": 8857,
+    "replicates": 10000,
+    "seed": 1729,
+    "accuracy_delta": 0.3159953070003911,
+    "accuracy_percentile_95_ci": [0.30399530348776127, 0.328225468147724],
+    "nll_delta": -0.5801757195940095,
+    "nll_percentile_95_ci": [-0.5977509483827718, -0.5626508590655154],
+    "brier_delta": -0.3106346028529838,
+    "brier_percentile_95_ci": [-0.32056839677071525, -0.30093289691765884],
+    "confidence_intervals_are_blind": false
+  },
+  "environment": {
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU, 16 GiB",
+    "python": "3.11.9",
+    "torch": "2.6.0+cu124",
+    "transformers": "5.6.2",
+    "cloud_compute": false,
+    "training_performed": false
+  },
+  "provenance": {
+    "source_commit": "87702a0bdfeca30bbc9b0fea5f8d8ae44985f3fb",
+    "evaluator_sha256_at_inference": "62bd516d94a66bb3e86f47baca66a58883ed9f5817b06a20836c613b8efacfea",
+    "evaluator_sha256_after_metadata_correction": "66cb18c184a4a5f5522d46c3e2ba9239d82d949fcf3f65c66b1fcaf8fa822170",
+    "training_effective_config_sha256": "78c52c92e91b1aa92608603a59e9de170437070ef48ee48947d6ec12e87835c5",
+    "raw_evaluation_report_sha256": "d6f0b490ebdd3ba9b9c94c60adb42003a97163d6422bb9c4562dc2abc1bf4f2e",
+    "corrected_evaluation_report_sha256": "1533e389337fb8061b3fe880d35a2ddca8262bd7d8ceab9550394e1a42bee2a0",
+    "output_root": "C:/CodexArtifacts/pretrained-reuse-r2-local/kuci-temporal-decision-20261123-attempt-01/publisher-dev-once-20261124-attempt-01/evaluation-attempt-04"
+  },
+  "disposition": {
+    "text_candidate": "strong task-specific candidate; not promoted",
+    "95_to_98_percent_goal_met": false,
+    "multimodal_quality_measured": false,
+    "use_for_further_tuning_on_this_dev": false,
+    "limitations": [
+      "same normalized contexts appear in official train and Dev although exact content and event-pair overlap are zero",
+      "public developer split, not blind or sealed audit",
+      "one Japanese temporal/commonsense text task only",
+      "potential pretraining exposure was not ruled out",
+      "integrated four-modality runtime and package size remain unmeasured"
+    ]
+  },
+  "nonzero_attempts": [
+    "Attempt 01: default Python lacked SentencePiece; no predictions produced",
+    "Attempt 02: partial local Ruri model folder lacked tokenizer assets; no predictions produced",
+    "Attempt 03: inference-only scorer guard rejected default requires_grad flags after feature extraction; no predictions produced",
+    "Attempt 04: completed one-shot evaluation with pinned cached Ruri tokenizer and existing isolated ML environment"
+  ]
+}
