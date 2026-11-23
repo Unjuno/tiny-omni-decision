@@ -4,8 +4,9 @@ development tasks, MiniLM-L6 reaches 91.44% on BANKING77, while JCoLA collapses
 to majority-class prediction and other internal/validation results remain
 selection-affected. Keep BERT as a text-path reference, stop tuning exposed
 cohorts, and require an independent grouped task; this does not close the
-multimodal fusion or product-quality gates. No model/GPU was run for this
-reconciliation. See [evidence and receipts](docs/pretrained_reuse/R2_BERT_FAMILY_RECONCILIATION_20261123.md).
+multimodal fusion or product-quality gates. A CPU-only raw-text JSON replay
+matched 2,033 saved development predictions exactly; no training or GPU was
+used. See [evidence and receipts](docs/pretrained_reuse/R2_BERT_FAMILY_RECONCILIATION_20261123.md).
 
 **2026-11-22 R2 public-source refresh:** A metadata-only review of pinned CALVIN and Seeing Sound repositories found no new admitted multimodal task: CALVIN's code is MIT but its dataset-specific license is unstated; its smallest debug download is 1.3 GB. Seeing Sound is 60 audio soundscapes with annotations and no released video stream. The already-exposed Perception Test remains ineligible for another validation-guided iteration. No payload, model, or test/audit data was opened. See [candidate refresh](docs/pretrained_reuse/R2_PUBLIC_SOURCE_REFRESH_20261122.md).
 **2026-11-13 R2 Localized Narratives source screen:** A metadata-only screen found a plausible synchronized audio+image region-grounding task, but the available COCO image metadata lacks creator attribution, the 100 official validation annotators all overlap train shard 0, and voice-recording rights / consent scope remain unverified. Keep the candidate `REVIEW_NOT_ADMITTED`; no media, model, or evaluation data were loaded. See [source screen](docs/pretrained_reuse/R2_LOCALIZED_NARRATIVES_SOURCE_SCREEN_20261113.md).

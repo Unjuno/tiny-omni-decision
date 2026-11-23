@@ -39,6 +39,49 @@ revision `65243d6e5629b969c77309f217bd7b1a79d43c7e` (Apache-2.0), with
 target. No quantization, latency-qualified runtime, or full multimodal
 integration was verified in these BERT comparisons.
 
+## Raw-text JSON runtime replay
+
+The pinned model and selected readout were then loaded on CPU through the
+raw-text runtime. This was deterministic inference replay, not a new fit or
+checkpoint-selection pass:
+
+- Model revision: `65243d6e5629b969c77309f217bd7b1a79d43c7e`, Apache-2.0.
+- Model weights: 447,406,217 bytes, SHA-256
+  `e172862e0674054d65e0ba40d67df2a4687982f589db44aa27091c386e5450a4`.
+- Selected readout: 426,616 bytes, SHA-256
+  `49d22f13ac6a4b4f3f31798d70d986d815950eb4e4460cb30cc34ab7e012254b`.
+- Runtime script SHA-256:
+  `b5e91c28b1fcf4ae040d93bebb18d6e68bfd293c8ecb2ea02cf5a29789da7412`.
+- Feature encoder helper SHA-256:
+  `e2e7a51d90c2f308528b23c3ccf6c10bcc1c809118b0a773e330701d9441131e`.
+- Fixed validation JSONL SHA-256:
+  `aa42d55cb8afcf7170483322e6a129acd4657a9acf3ea3530fea265a36679707`.
+- Saved predictions SHA-256:
+  `8c675c3afe1893bec47b53214678935964d4e06931e4a3698a3abc2772319040`.
+
+The exact Python module invocation used was:
+
+```powershell
+python -m scripts.runtime_massive_ja_bert_json `
+  --model C:\CodexArtifacts\pretrained-reuse-r2-local\tohoku-bertbase-v3-runtime-20261123-attempt-01 `
+  --checkpoint C:\CodexArtifacts\pretrained-reuse-r2-local\massive-ja-jp-bert-readout-20261123-attempt-01\best-readout.pt `
+  --validation-jsonl C:\CodexArtifacts\pretrained-reuse-r2-local\massive-ja-jp-grouped-split-v1-attempt-01\validation.jsonl `
+  --expected-predictions C:\CodexArtifacts\pretrained-reuse-r2-local\massive-ja-jp-bert-readout-20261123-attempt-01\validation-predictions.jsonl `
+  --receipt C:\CodexArtifacts\pretrained-reuse-r2-local\massive-ja-jp-bert-json-runtime-replay-20261123-attempt-01\replay-verification.json
+```
+
+The replay passed on CPU: **2,033/2,033 argmaxes matched**, maximum probability
+absolute difference `0.0` (tolerance `1e-7`, relative tolerance `0`). It took
+27.7 seconds with four threads under Python 3.11.9, PyTorch 2.6.0+cu124, and
+Transformers 5.6.2. The receipt SHA-256 is
+`c2b1d04a0c7e21e0743e6d495a3019c88394e276c8c7fbdef86f3d58376daa2d`.
+
+This confirms one fixed Japanese intent taxonomy from raw text to normalized
+probability JSON and reproducible development predictions. It does not support
+arbitrary supplied options, another modality, an independent quality estimate,
+or a product-level accuracy claim. The validation cohort remains selection-
+affected and must not be used for further model selection.
+
 ## Reproducibility receipts
 
 These large artifacts remain outside Git; the hashes below identify the exact
@@ -73,5 +116,6 @@ copy corpora, model weights, predictions, or checkpoints into Git.
 4. In parallel, continue the roadmap's R2 multi-input admission gate. A text
    result cannot close audio/image/video/sensor quality or fusion requirements.
 
-No model was loaded or trained for this reconciliation, and no GPU, sealed
-audit, or publisher test was used.
+No model was trained and no GPU was used for this reconciliation. One pinned
+CPU-only raw-text inference and a fixed development-prediction replay were run;
+no sealed audit or publisher test was used.
