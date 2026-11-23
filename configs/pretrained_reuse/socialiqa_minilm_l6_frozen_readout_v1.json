@@ -1,0 +1,50 @@
+{
+  "experiment_id": "socialiqa-minilm-l6-frozen-readout-v1",
+  "source": {
+    "dataset": "allenai/social_i_qa",
+    "revision": "8835ceb9141d7896d9d968634a9b21ae440e3ec5",
+    "train_file_sha256": "b197d0f9069aa3317e6c05d41129e3c60dbe1d9cc3131db69df6d36cb4e585f9",
+    "validation_file_sha256": "242ada6fad51fea726e8f222a0b52bda80179bf50daa6a96c047685f588adcfd",
+    "grouping": "NFKC-normalized exact context; event-source identity unavailable",
+    "official_dev_test_or_project_sealed_audit_opened": false
+  },
+  "model": {
+    "id": "sentence-transformers/all-MiniLM-L6-v2",
+    "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "weights_sha256": "53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db",
+    "encoder_parameters": 22713216,
+    "max_sequence_length": 256,
+    "encoder_frozen": true
+  },
+  "serialization": {
+    "first_sequence": "context",
+    "second_sequence": "{question} Answer option: {option}",
+    "truncation": "only_first",
+    "option_count": 3
+  },
+  "readout": {
+    "hidden_size": 128,
+    "activation": "tanh",
+    "dropout": 0.1,
+    "output_size": 1,
+    "trainable_parameters": 49409
+  },
+  "training": {
+    "seed": 17,
+    "max_epochs": 8,
+    "patience": 3,
+    "selection_metric": "validation_nll",
+    "batch_size_questions": 128,
+    "optimizer": "AdamW",
+    "learning_rate": 0.002,
+    "weight_decay": 0.0001,
+    "device": "cpu",
+    "cpu_threads": 2,
+    "encoder_batch_size_questions": 32
+  },
+  "evaluation": {
+    "metrics": ["accuracy", "macro_accuracy_by_correct_option_position", "nll", "brier", "ece_15", "mean_confidence"],
+    "save_per_example_probabilities": true,
+    "option_order_equivariance_check": true
+  }
+}
