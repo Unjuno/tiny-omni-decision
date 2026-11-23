@@ -17,16 +17,17 @@ streams are needed and that fusion improves on matched unimodal controls.
 ## Evidence reviewed
 
 The following were checked against the machine-readable receipts in
-`C:\CodexArtifacts\pretrained-reuse-r2-local\`. All results below are
-development or internal-validation results. Publisher test sets and the
-project sealed audit were not opened.
+`C:\CodexArtifacts\pretrained-reuse-r2-local\`. Results are development or
+internal-validation evidence except for the explicitly marked one-time
+BANKING77 publisher-test evaluation below. That test is now consumed. The
+project sealed audit and all other publisher test sets remain unopened.
 
 | Task | Candidate/result | What it supports | Limit |
 |---|---|---|---|
 | Japanese MASSIVE intent, 2,033 validation rows / 2,015 normalized-text groups | Frozen Tohoku Japanese BERT-base: 81.65% Accuracy, 0.6872 NLL, 0.2730 Brier; frozen Ruri-v3-70m: 75.50%, 0.8983, 0.3483 | BERT-base is a stronger representation on this independent-source Japanese intent task. Group-paired bootstrap favored BERT on Accuracy, NLL and Brier. | Checkpoints were selected on this same validation split; 59 intents are represented, support is uneven, and this is text intent classification rather than arbitrary-option reasoning. |
 | Japanese JCommonsenseQA, same grouped 2,004-row validation | Tohoku BERT-base plus option scorer: 70.96%; Ruri-v3-70m: 50.70% | A promising Japanese five-choice signal beyond intent classification. | The readout/feature construction differed between systems, so this is not an encoder-only causal comparison. The pinned release has no publisher test. |
 | Japanese JNLI, grouped validation | Tohoku BERT-base: 78.10% overall | The same encoder can support paired-sentence classification. | Entailment accuracy was only 24.18% (contradiction 78.44%, neutral 91.00%); overall accuracy hides severe class weakness. |
-| BANKING77 | Frozen MiniLM-L3: 89.69%; L6: 91.44%; L12: 90.69% | Small BERT-derived encoders can produce compact, executable text classifiers. L6 was the best balanced fixed candidate in this comparison. | Narrow English intent labels; publisher test was not opened and source person/conversation groups are unavailable. L12 did not improve Accuracy over L6. |
+| BANKING77 | Frozen MiniLM-L3: 89.69%; L6: 91.44%; L12: 90.69% on validation; the frozen L6 candidate later scored 91.82% on the one-time official test | Small BERT-derived encoders can produce compact, executable text classifiers. | Narrow English intent labels; source person/conversation groups are unavailable, and L6 was selected using validation. L12 did not improve validation Accuracy over L6. The official test is now consumed and must not be used for further selection. |
 | CLINC150 | Frozen MiniLM-L6 and L12: 95.72% overall Accuracy | High accuracy is possible on a bounded intent taxonomy. | Only 24 validation examples represented OOS; this does not establish robust open-set behavior or broad text Decision quality. |
 | Japanese JCoLA OOD-development subset, 685 rows | Tohoku BERT-base and LINE 4-layer DistilBERT both: 73.28% Accuracy, 50% macro Accuracy, MCC 0; both predicted the majority class for every row. | The same family can fail on a different Japanese decision task; reducing depth alone did not solve it. | The run used a CUDA feature path and CC BY-SA data kept local. The official test and sealed audit were not loaded. |
 | Japanese JCoLA train-only, 10-source grouped out-of-fold evaluation, 6,919 rows | LINE Japanese DistilBERT frozen four-layer readout: 83.38% Accuracy / 50.00% macro Accuracy / 0.4560 NLL / 0.0316 ECE; adapting the upper two layers: 82.08% / 56.32% / 0.5188 / 0.0977. | Upper-layer adaptation recovered some minority-class discrimination (MCC 0.182; unacceptable recall 17.74%) from a majority-class collapse. | Accuracy fell 1.30 pp, NLL worsened 0.0627, ECE worsened 0.0661; paired source bootstrap intervals favored the frozen arm for Accuracy and NLL, while the macro-accuracy interval included zero. Only ten source clusters were available. This does not justify further tuning on JCoLA or a broad BERT sweep. |
@@ -118,6 +119,46 @@ by this branch. The runtime source and external model/readout files still need
 to be carried into a tracked, product-scoped implementation before this is
 counted as a completed runtime deliverable.
 
+## One-time BANKING77 publisher-test evaluation
+
+After the MiniLM-L6 readout had already been selected by minimum validation
+NLL, a protocol was frozen before fetching the publisher test payload. The
+exact pinned test parquet was then evaluated once through the fixed raw-text
+runtime. There was no training, calibration, checkpoint choice, candidate
+comparison, filtering, or retry based on test outcomes. All 3,080 publisher
+rows were retained.
+
+| Measure | Result |
+|---|---:|
+| Accuracy | 91.82% |
+| Macro recall | 91.82% |
+| Macro F1 | 91.83% |
+| NLL | 0.34276 |
+| Brier | 0.12861 |
+| ECE-15 | 0.02826 |
+
+The test file is `PolyAI/banking77@1846984189f2bc0ac51c6fc3a600fa9e1714e0c6`,
+`data/test-00000-of-00001.parquet`, 92,409 bytes, SHA-256
+`1f40f777c33f0edfa6c530ff84fe2878db6490838c12d22d036f626948905341`. Its
+class counts covered all 77 intents. Exact normalized-text auditing found 7
+test rows overlapping text in the original TRAIN file (0.23%) and one
+duplicate group within the test set; all were retained under the frozen rule.
+No speaker, customer, or conversation IDs are provided, so this result has no
+source-group confidence interval and does not establish independent-person
+generalization. This official test is now spent: do not use it for any further
+model selection or calibration.
+
+The run was CPU-only and took 31.95 seconds for inference. Outputs remain
+outside Git at
+`C:\\CodexArtifacts\\pretrained-reuse-r2-local\\banking77-minilm-l6-publisher-test-20261123-attempt-01\\`.
+Hashes: frozen protocol `066e6b3c8290f1f5a2d98c9ceb42d119ee80b8e867671b12d997d1d0e09dcb53`,
+runner `857efda23ca8a9f854ef24d1d96492fd918b7987a99febf8ee64474ba0f2933b`,
+predictions `ce30d175c127daa28f42a01adf84f3de2bcfdd6f11ac986dab26cc80191caf12`,
+and receipt `b9ffe942b194dd6014762780ce1332c9ba46d2f23fea7d61fff5022869469019`.
+This is a narrow, closed-set English intent benchmark, not arbitrary-option
+reasoning or multimodal quality. It remains below the 95% project target and
+does not justify promoting MiniLM-L6 as the Omni text encoder.
+
 ## Reproducibility receipts
 
 These large artifacts remain outside Git; the hashes below identify the exact
@@ -153,6 +194,7 @@ copy corpora, model weights, predictions, or checkpoints into Git.
 4. In parallel, continue the roadmap's R2 multi-input admission gate. A text
    result cannot close audio/image/video/sensor quality or fusion requirements.
 
-No model was trained and no GPU was used for this reconciliation. One pinned
-CPU-only raw-text inference and a fixed development-prediction replay were run;
-no sealed audit or publisher test was used.
+No model was trained and no GPU was used for this reconciliation. Pinned
+CPU-only raw-text inference, a fixed development-prediction replay, and the
+single pre-registered publisher-test evaluation above were run. No sealed audit
+was used.
