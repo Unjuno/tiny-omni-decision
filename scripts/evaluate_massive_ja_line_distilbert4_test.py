@@ -18,7 +18,7 @@ from importlib import metadata
 from pathlib import Path
 from typing import Any
 
-os.environ["CUDA_VISIBLE_DEVICES"] = ""
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 os.environ["HF_HUB_OFFLINE"] = "1"
 os.environ["TRANSFORMERS_OFFLINE"] = "1"
 
@@ -126,6 +126,7 @@ def check_model(model_dir: Path) -> tuple[Any, Any, dict[str, Any]]:
         use_safetensors=False,
         output_loading_info=True,
     )
+    model.to("cpu")
     model.requires_grad_(False)
     model.eval()
     missing = sorted(str(key) for key in loading_info["missing_keys"])
@@ -148,6 +149,8 @@ def check_model(model_dir: Path) -> tuple[Any, Any, dict[str, Any]]:
         for parameter in model.parameters()
     ):
         raise ValueError("encoder is not completely frozen")
+    if any(parameter.device.type != "cpu" for parameter in model.parameters()):
+        raise ValueError("encoder parameters must remain on CPU")
     info = {
         "revision": MODEL_REVISION,
         "source_weight_sha256": MODEL_SHA256,
@@ -264,7 +267,8 @@ def group_bootstrap_accuracy(
 
 def run(args: argparse.Namespace, output: Path) -> dict[str, Any]:
     if torch.cuda.is_available():
-        raise RuntimeError("CUDA must remain hidden; this protocol is CPU-only")
+        raise RuntimeError("CUDA is visible; refusing to run CPU-only protocol")
+    torch.set_default_device("cpu")
     torch.set_num_threads(4)
     if sha256_file(args.train_jsonl) != TRAIN_SHA256:
         raise ValueError("frozen training JSONL hash mismatch")
@@ -510,6 +514,7 @@ def run(args: argparse.Namespace, output: Path) -> dict[str, Any]:
             "sentencepiece": metadata.version("sentencepiece"),
             "unidic_lite": metadata.version("unidic-lite"),
             "device": "cpu",
+            "cuda_available": torch.cuda.is_available(),
             "cpu_threads": torch.get_num_threads(),
             "peak_process_memory_bytes": process_peak_memory_bytes(),
         },
