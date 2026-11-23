@@ -1,12 +1,89 @@
 """Read-only feature transport for the common native model; no labels in inputs."""
 
+import hashlib
+import json
 from collections import OrderedDict
+from pathlib import Path
 
 import numpy as np
 import torch
 
 from scripts.native_candidate_inputs import positions
 from tiny_omni_decision.native_candidate import NativeTokenBlock
+
+
+def _sha256(path):
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def apply_text_feature_overlay(observations, banks, query_map, cache_root, expected_receipt_sha256):
+    """Return copied Path A metadata pointing at a verified 768-D BERT cache."""
+    root = Path(cache_root)
+    result_path = root / "result.json"
+    if _sha256(result_path) != expected_receipt_sha256:
+        raise ValueError("BERT cache receipt SHA-256 differs")
+    receipt = json.loads(result_path.read_text(encoding="utf-8"))
+    if receipt.get("status") != "PASS_NATIVE_BERT_FEATURES_CACHE":
+        raise ValueError("complete BERT feature cache required")
+    for name, digest in receipt.get("artifact_hashes", {}).items():
+        if _sha256(root / name) != digest:
+            raise ValueError("BERT cache artifact changed: " + name)
+    index = json.loads((root / "index.json").read_text(encoding="utf-8"))
+    query_order = json.loads((root / "query-order.json").read_text(encoding="utf-8"))
+    states = index.get("states", {})
+    queries = index.get("queries", {})
+    if (
+        receipt.get("unique_text_states") != len(states)
+        or receipt.get("unique_query_pairs") != len(queries)
+        or len(query_order) != len(queries)
+        or len(set(query_order)) != len(query_order)
+        or set(query_order) != set(queries)
+        or set(queries) != set(query_map)
+    ):
+        raise ValueError("BERT feature order or source identity coverage differs")
+
+    replacement_banks = dict(banks)
+    for name, shape in index["shapes"].items():
+        overlay_name = "bert/" + name
+        replacement_banks[overlay_name] = {
+            "path": str(root / name),
+            "sha256": receipt["artifact_hashes"][name],
+            "shape": shape,
+        }
+    replacement_observations = {}
+    text_ids = set()
+    for ident, entry in observations.items():
+        if entry.get("source") != "text":
+            replacement_observations[ident] = entry
+            continue
+        text_ids.add(ident)
+        key = ident.removeprefix("text:")
+        if key not in states:
+            raise ValueError("BERT cache omitted text observation: " + ident)
+        meta = states[key]
+        replacement_observations[ident] = {
+            **entry,
+            "features": [
+                {
+                    "kind": "text",
+                    "bank": "bert/" + meta["file"],
+                    "offset": meta["offset"],
+                    "tokens": meta["tokens"],
+                }
+            ],
+        }
+    if text_ids != {"text:" + key for key in states}:
+        raise ValueError("BERT state cache and text observations do not match exactly")
+
+    replacement_queries = {
+        key: {"bank": "bert/queries.npy", "offset": offset}
+        for offset, key in enumerate(query_order)
+    }
+    return replacement_observations, replacement_banks, replacement_queries, 768
 
 
 class FeatureStore:

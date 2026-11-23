@@ -59,8 +59,34 @@ produced window lengths `[512, 36]`, retaining all 516 positions.
   `78330026a1ff78d17829475f428da64f38b6982931a5d57ff2a4859d4fee51e3`;
   query-order SHA-256 is
   `e5009121b18d4d92c06c22f4e4d6b3774953c25a4713d039257b5ed47f483622`.
-- These are storage/tokenization preflight figures only. The full frozen
-  feature arrays have not yet been captured and no quality result exists.
+- The storage/tokenization counts were first checked before capture. The later
+  full capture outcome is recorded below; neither phase produces quality
+  metrics.
+
+## Full frozen feature-cache capture
+
+The source/config/cache runner was committed and pushed as `b6c64baf` before
+execution. Its smoke receipt matched the exact commit, model, corpus, tokenizer
+runtime, and environment. The full cache then completed:
+
+- 4,382 / 4,382 text states and 24,950 / 24,950 query pairs encoded.
+- Train state bank `[497588,768]`, validation state bank `[321770,768]`, and
+  query bank `[24950,768]`; total 2,593,714,176 FP32 bytes.
+- GPU: RTX 3080 Laptop, peak allocated 291,699,712 bytes and peak reserved
+  312,475,648 bytes. State encoding 26.77 seconds, query encoding 109.49
+  seconds, total run 155.32 seconds.
+- Model parameter digest before and after was identical:
+  `26a50f8980f2724ebd7e40b24f6996e5ab1332bd26a0eda888b17bac196c18c0`.
+- Cache result receipt SHA-256:
+  `0d30d3a05b43918456233044229075a234f685527b31590c9609818bbc9d6f84`.
+- Output directory:
+  `C:\CodexArtifacts\pretrained-reuse-r2-local\path-a-line-distilbert-bert-features-cache-20261124-attempt-01\`.
+
+A separate CPU `FeatureStore` overlay smoke validated the new text states and
+all 24,950 query vectors while preserving the existing image, video, speech,
+and event-audio feature banks. One training row per modality returned finite
+query features with the expected option counts. This proves feature-overlay
+transport only; no readout training or quality evaluation has happened yet.
 - A 768-wide BERT cache and same-protocol Path A comparison remain necessary.
   Existing common-corpus validation is already exposed, so a result there is
   development evidence, not blind confirmation.

@@ -1,0 +1,39 @@
+{
+  "id": "path-a-line-distilbert-common-fit-v1",
+  "corpus": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02",
+  "queries": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-queries-cache-01",
+  "initial_readout": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-conditional-candidate-smoke-02\\readout.pt",
+  "input_pins": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02\\result.json": "47a6d2f3495810bac58f57dec1a962f8b490fa409c75671b46bb2999fde87d49",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-queries-cache-01\\result.json": "7f5ffd7362e84770b864a189d50bc29f43be3738f54a07f6dbdc21f1ef7d909e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-conditional-candidate-smoke-02\\readout.pt": "77a45ce55b5b17eb787ca649d2affbd6a8c72118f8953967eab41a02c2b2646b",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\path-a-line-distilbert-bert-features-cache-20261124-attempt-01\\effective-config.json": "17437e17c44b2be3505f6e4043dc3ed8f9456470741b8573809d334094d95d91",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\path-a-line-distilbert-bert-features-cache-20261124-attempt-01\\index.json": "e21dd904a5fa4398c78d47b99385ed19898ce662677d0087077665adeee31b10",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\path-a-line-distilbert-bert-features-cache-20261124-attempt-01\\queries.npy": "43c32aad9756429b8e945e92b93a143522a36f59e425495011daae4552d60ea1",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\path-a-line-distilbert-bert-features-cache-20261124-attempt-01\\query-order.json": "1c8f9433f2f9aadbde9c2300c34eaf0f3576c564c23c647dffedc483e8f95188",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\path-a-line-distilbert-bert-features-cache-20261124-attempt-01\\segments.json": "06f717dd050150c8d63d1b93d0c88d1f0903c54b61e52ba1f38334a0dfe34c98",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\path-a-line-distilbert-bert-features-cache-20261124-attempt-01\\state-order.json": "bf5f8139754130a6e98a8c200e4824967860c760e15c595c7bd8ef57c6f3206f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\path-a-line-distilbert-bert-features-cache-20261124-attempt-01\\train-states.npy": "2e59f3ab3bedf39857fb7ed466575ee2c6135fd07146d96913d7932501e9e50d",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\path-a-line-distilbert-bert-features-cache-20261124-attempt-01\\validation-states.npy": "0b7b805f3cc8e8bcfa1a7abd36170edfaa0b57b506efc6a45bf94c6955012883"
+  },
+  "training": {
+    "seed": 17,
+    "max_steps": 2048,
+    "microbatches_per_update": 4,
+    "lr": 0.001,
+    "warmup_updates": 62,
+    "scheduler": "cosine",
+    "optimizer": "AdamW",
+    "weight_decay": 0.01,
+    "clip_norm": 1.0,
+    "evaluation_interval": 256
+  },
+  "description": "Exploratory same-schedule Path A fit replacing only text feature inputs with the pinned frozen LINE DistilBERT 4-layer cache; common validation is previously exposed.",
+  "text_input_width": 768,
+  "text_feature_cache": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\path-a-line-distilbert-bert-features-cache-20261124-attempt-01",
+  "text_feature_cache_result_sha256": "0d30d3a05b43918456233044229075a234f685527b31590c9609818bbc9d6f84",
+  "non_readout_parameters": 178446871,
+  "expected_readout_parameters": 1184641,
+  "expected_total_parameters": 179631512,
+  "quality_evidence": "EXPLORATORY_DEVELOPMENT_VALIDATION_ONLY; existing common-corpus validation has already been observed; sealed audit excluded."
+}

@@ -28,7 +28,7 @@ from scripts.native_fit import (
     sample_order,
     summarize,
 )
-from scripts.native_fit_runtime import FeatureStore
+from scripts.native_fit_runtime import FeatureStore, apply_text_feature_overlay
 from scripts.native_video_cache import sha
 from tiny_omni_decision.native_candidate import NativeCandidateReadout
 from tiny_omni_decision.native_temporal import TemporalNativeCandidate
@@ -55,6 +55,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--phase", choices=["smoke", "train", "replay"], required=True)
     parser.add_argument("--variant", choices=["baseline", "lstm"], required=True)
+    parser.add_argument("--config", type=Path, default=CONFIG)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--reference", type=Path)
     parser.add_argument("--reference-sha256")
@@ -83,7 +84,7 @@ def main():
         source_commit=subprocess.check_output(
             ["git", "rev-parse", "HEAD"], cwd=REPO, text=True
         ).strip(),
-        config_sha256=sha(CONFIG),
+        config_sha256=sha(args.config),
         started_utc=datetime.now(UTC).isoformat(),
         step=0,
         best_step=None,
@@ -96,7 +97,7 @@ def main():
     )
     write(args.output / "result.json", result)
     try:
-        config = json.loads(CONFIG.read_text())
+        config = json.loads(args.config.read_text(encoding="utf-8"))
         if config["training"] != {
             "seed": 17,
             "max_steps": 2048,
@@ -111,7 +112,7 @@ def main():
         }:
             raise ValueError("configuration differs from the implemented fixed schedule")
         pins = dict(config["input_pins"])
-        pins[str(CONFIG)] = sha(CONFIG)
+        pins[str(args.config.resolve())] = sha(args.config)
         source_names = subprocess.check_output(
             ["git", "ls-files", "-z", "--", "*.py"], cwd=REPO, text=True
         ).split("\0")
@@ -141,7 +142,7 @@ def main():
             if (
                 reference["status"] != expected
                 or reference["validated_hashes"] != pins
-                or reference["config_sha256"] != sha(CONFIG)
+                or reference["config_sha256"] != sha(args.config)
                 or reference["variant"] != args.variant
             ):
                 raise ValueError("matching completed reference required")
@@ -179,6 +180,29 @@ def main():
             shape=[2622, 384],
         )
         mapping = json.loads((corpus / "query-map.json").read_text())
+        text_width = config.get("text_input_width", 384)
+        if text_width not in (384, 768):
+            raise ValueError("text_input_width must be 384 or 768")
+        if text_width == 768:
+            cache_root = Path(config["text_feature_cache"])
+            observations, banks, mapping, text_width = apply_text_feature_overlay(
+                observations,
+                banks,
+                mapping,
+                cache_root,
+                config["text_feature_cache_result_sha256"],
+            )
+            cache_receipt = json.loads((cache_root / "result.json").read_text(encoding="utf-8"))
+            pins.update(
+                {
+                    str(cache_root / "result.json"): config["text_feature_cache_result_sha256"],
+                    **{
+                        str(cache_root / name): digest
+                        for name, digest in cache_receipt["artifact_hashes"].items()
+                    },
+                }
+            )
+            verify(pins)
         order = sample_order(train, 2048)
         full_sampling = accounting([train[i] for batch in order for i in batch])
         write(
@@ -228,19 +252,35 @@ def main():
         torch.backends.cudnn.benchmark = False
         torch.backends.cudnn.deterministic = True
         torch.cuda.reset_peak_memory_stats()
-        base = NativeCandidateReadout()
-        base.load_state_dict(
-            torch.load(config["initial_readout"], map_location="cpu", weights_only=True)
-        )
+        base = NativeCandidateReadout(text_input_width=text_width)
+        initial = torch.load(config["initial_readout"], map_location="cpu", weights_only=True)
+        if text_width == 384:
+            base.load_state_dict(initial, strict=True)
+        else:
+            loaded = base.load_state_dict(initial, strict=False)
+            if (
+                set(loaded.missing_keys) != {"text_lens.weight", "text_lens.bias"}
+                or loaded.unexpected_keys
+            ):
+                raise ValueError("BERT readout initialization differs beyond the new text lens")
         model = (base if args.variant == "baseline" else TemporalNativeCandidate(base)).cuda()
         parameters = sum(p.numel() for p in model.parameters())
-        if 195365529 + parameters > 200000000:
+        non_readout_parameters = config.get("non_readout_parameters", 195365529)
+        total_parameters = non_readout_parameters + parameters
+        if (
+            total_parameters > 200000000
+            or (config.get("expected_readout_parameters") is not None
+                and parameters != config["expected_readout_parameters"])
+            or (config.get("expected_total_parameters") is not None
+                and total_parameters != config["expected_total_parameters"])
+        ):
             raise ValueError("prequantization cap exceeded")
-        store = FeatureStore(observations, banks, mapping)
+        store = FeatureStore(observations, banks, mapping, text_width=text_width)
         result.update(
             validated_hashes=pins,
             trainable_parameters=parameters,
-            total_parameters=195365529 + parameters,
+            total_parameters=total_parameters,
+            text_input_width=text_width,
             full_planned_accounting=full_sampling,
             train_probe_count=len(probe),
             validation_count=len(validation),
@@ -250,7 +290,11 @@ def main():
             device=torch.cuda.get_device_name(),
             dtype="float32",
             tf32=False,
-            initialization="original native seed17 readout",
+            initialization=(
+                "original native seed17 readout + seed17 768-to-384 BERT text lens"
+                if text_width == 768
+                else "original native seed17 readout"
+            ),
             data_setup_seconds=time.perf_counter() - started,
         )
         if reference and reference["versions"] != result["versions"]:
@@ -288,7 +332,7 @@ def main():
                 python_rng=random.getstate(),
                 numpy_rng=(rng[0], rng[1].tolist(), *rng[2:]),
                 sampler_file_sha256=sha(args.output / "sampling.json"),
-                config_sha256=sha(CONFIG),
+                config_sha256=sha(args.config),
             )
             path = args.output / f"checkpoint-{step:04}.pt"
             torch.save(value, path)
