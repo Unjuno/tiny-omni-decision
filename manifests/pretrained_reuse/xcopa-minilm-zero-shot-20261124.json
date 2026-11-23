@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "status": "complete_xcopa_validation_zero_shot_diagnostic",
+  "experiment_id": "xcopa-minilm-multilingual-zero-shot-20261124",
+  "source_commit": "4dd181712cb931ed5b573fadcd7020be1c3d1177",
+  "config_sha256": "5f45cbb5bc957ad263d9d38a44e973a82f522b4a974963750eda49e18e29c8a6",
+  "script_sha256": "5cd355dce462efa44bdffd36d024778dca8e537f64e85bcdd808a1b505901078",
+  "dataset": {
+    "repository": "cambridgeltl/xcopa",
+    "revision": "e2e9d7f105a758ee869cd13e0fe251ef93a29840",
+    "license": "CC-BY-4.0",
+    "split": "validation",
+    "rows_per_language": 100,
+    "languages": {
+      "et": {
+        "git_blob_sha1": "45bee3404d7dd9c94f4502a24d78eca5a3611034",
+        "sha256": "c6d8f33c11e968fe519d5ddbb61769a73a5ac58ac889060df2fdf5e8a54d6a3c"
+      },
+      "id": {
+        "git_blob_sha1": "4bb559c26c19da9d571e1603b4227d5d2d8e81d8",
+        "sha256": "b3ac8c87c516d64c05ee39becc038ae747b1522010f385796f6c19019f75c77c"
+      },
+      "it": {
+        "git_blob_sha1": "c7da0e9cb7802a0f242ded4e07b27ab5c0e14b7d",
+        "sha256": "f8389021d6595ef994ed8ff163dfddbcc3f5473b4e7b4803745fb98a7ecd1031"
+      },
+      "th": {
+        "git_blob_sha1": "027e94ca4bdeca734b56475e335a501f6acd7e90",
+        "sha256": "b4c8ae4d5392e7e74667a366c5ed2e39729d67522c1bd35d82e6473505236d47"
+      },
+      "tr": {
+        "git_blob_sha1": "206591c6c26ab5f222611962bb8ebfb6fb67bcc2",
+        "sha256": "879848162ac5f614f4569c99d37e03bb66034c27684968643371c6c9662bc812"
+      },
+      "vi": {
+        "git_blob_sha1": "237a41dbc54ad35c2e50ccfc7b3b04ba5fa391b6",
+        "sha256": "6f804ec3c25b12a3d51f58e338b631bc1b45e7223b15481f8593923e0bdb26fa"
+      },
+      "zh": {
+        "git_blob_sha1": "8c940ea5b620eeb3565df47b93a285257ca50efd",
+        "sha256": "8f638466c196342104bdbe9276e7d91fe0abcc044e9a9ad715f30c8ad618bcdd"
+      }
+    },
+    "excluded_languages": ["ht", "qu", "sw", "ta"],
+    "test_split_accessed": false,
+    "training_performed": false
+  },
+  "model": {
+    "repository": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "revision": "e8f8c211226b894fcb81acc59f3b34ba3efd5f42",
+    "license": "Apache-2.0",
+    "architecture": "BertModel",
+    "parameter_count": 117653760,
+    "model_safetensors_bytes": 470641600,
+    "model_safetensors_sha256": "eaa086f0ffee582aeb45b36e34cdd1fe2d6de2bef61f8a559a1bbc9bd955917b",
+    "pooling_config_sha256": "4be450dde3b0273bb9787637cfbd28fe04a7ba6ab9d36ac48e92b11e350ffc23"
+  },
+  "scoring": {
+    "method": "cosine_similarity_between_premise_and_choice",
+    "temperature": 0.05,
+    "question_type_used_by_scorer": false,
+    "training": "none",
+    "checkpoint_selection": "none"
+  },
+  "metrics": {
+    "count": 700,
+    "macro_language": {
+      "accuracy": 0.5942857265472412,
+      "nll": 1.2236652629716056,
+      "brier": 0.620162410395486,
+      "ece_15_bins": 0.2667173836060933,
+      "mean_confidence_from_saved_predictions": 0.836497236234801
+    },
+    "uniform_two_choice_reference": {
+      "expected_accuracy": 0.5,
+      "nll": 0.6931471805599453,
+      "brier": 0.5
+    },
+    "by_language": {
+      "et": {"count": 100, "accuracy": 0.6000000238418579, "nll": 1.1629868745803833, "brier": 0.6077522039413452, "ece_15_bins": 0.2708738625049591},
+      "id": {"count": 100, "accuracy": 0.6399999856948853, "nll": 1.3212242126464844, "brier": 0.5794022083282471, "ece_15_bins": 0.2483639132976532},
+      "it": {"count": 100, "accuracy": 0.5600000023841858, "nll": 1.3599401712417603, "brier": 0.6490731835365295, "ece_15_bins": 0.2726028272509575},
+      "th": {"count": 100, "accuracy": 0.5400000214576721, "nll": 1.2690045833587646, "brier": 0.6668401956558228, "ece_15_bins": 0.3031168010830879},
+      "tr": {"count": 100, "accuracy": 0.6000000238418579, "nll": 1.3013774156570435, "brier": 0.6556509137153625, "ece_15_bins": 0.2891662037372589},
+      "vi": {"count": 100, "accuracy": 0.5400000214576721, "nll": 1.1672511100769043, "brier": 0.6791567206382751, "ece_15_bins": 0.30058962702751163},
+      "zh": {"count": 100, "accuracy": 0.6800000071525574, "nll": 0.9838724732398987, "brier": 0.5032614469528198, "ece_15_bins": 0.18230845034122467}
+    }
+  },
+  "runtime": {
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "inference_seconds": 0.8048406000016257,
+    "peak_cuda_allocated_bytes": 505284608,
+    "python": "3.11.9",
+    "torch": "2.6.0+cu124",
+    "transformers": "5.6.2",
+    "huggingface_hub": "1.29.0",
+    "safetensors": "0.8.0",
+    "PyYAML": "6.0.3"
+  },
+  "result_artifacts": {
+    "path": "C:/CodexArtifacts/xcopa-minilm-zero-shot-20261124-attempt-02/results",
+    "report_sha256": "1deb2368347324c1ed6e76e2a8617938e864f1faef024ec541c6f5d912f7af56",
+    "predictions_sha256": "35d2061f3ed637d497bcc34af52bd72cc1e6189d29ad45fcf16132fddf4dcb08"
+  },
+  "notes": [
+    "Attempt 01 wrote NaN for zero-support cause subgroups; attempt 02 fixed empty-group serialization and reran the unchanged protocol.",
+    "The scorer ignores cause/effect direction; do not interpret this as causal reasoning evaluation.",
+    "Results are validation-only development evidence and must not be reused for model selection."
+  ]
+}

@@ -4,9 +4,15 @@ import json
 from pathlib import Path
 
 import pytest
-import torch
 
-from scripts.evaluate_xcopa_minilm_zero_shot import _git_blob_sha, _load_rows, _metrics
+torch = pytest.importorskip("torch")
+pytest.importorskip("transformers")
+
+from scripts.evaluate_xcopa_minilm_zero_shot import (  # noqa: E402
+    _git_blob_sha,
+    _load_rows,
+    _metrics,
+)
 
 
 def test_git_blob_hash_matches_git_object_formula() -> None:
