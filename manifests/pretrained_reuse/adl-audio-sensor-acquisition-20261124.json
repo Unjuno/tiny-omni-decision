@@ -1,0 +1,83 @@
+{
+  "format": "multimodal_source_acquisition_audit_v1",
+  "dataset_id": "ADL ambient audio, vibration, and environmental sensor dataset",
+  "record_id": 7937591,
+  "doi": "10.5281/zenodo.7937591",
+  "revision": "1.0",
+  "status": "REVIEW_NOT_ADMITTED_FOR_QUALITY_TRAINING",
+  "official_sources": {
+    "record": "https://zenodo.org/records/7937591",
+    "paper": "https://www.mdpi.com/2306-5729/9/12/144"
+  },
+  "license": {
+    "zenodo_api_license_id": "cc-by-4.0",
+    "attribution_required": true
+  },
+  "acquisition": {
+    "artifact_directory": "C:\\CodexArtifacts\\adl-audio-sensor-source-screen-20261124-attempt-01",
+    "archive_count": 25,
+    "archive_bytes": 4572316824,
+    "verified_archive_count": 25,
+    "size_or_md5_mismatches": 0,
+    "partial_archive_count": 0,
+    "hdf5_member_count": 125,
+    "uncompressed_hdf5_bytes": 12288738794,
+    "record_json_sha256": "7a84948e27d6193084973fde5743b591dc0e1b2eb8e633729e929d30684c356a",
+    "readme_sha256": "d5fe3c9097226f00656a65b86d8374a4bf62c42f8c80b156cbe2a69ab33f83ac",
+    "download_receipt_sha256": "e485cc5be38326529c038a6fcfade27f7fd18eaa2e9e8952cd9af15c1c3d621d",
+    "metadata_inventory_sha256": "ddd9b982fa0ad74d98638812a042c1daa0e2402a02c84023ef371eba8964ebcf"
+  },
+  "identity_audit": {
+    "hdf5_files_inspected": 125,
+    "device_files_per_activity": 5,
+    "participant_trial_pairs_match_across_devices": true,
+    "activity_trial_groups_per_device": 8615,
+    "human_participant_count": 14,
+    "human_participant_ids": [0, 1, 2, 4, 7, 8, 9, 10, 12, 13, 14, 15, 16, 17],
+    "nonparticipant_sentinel": {
+      "id": 999,
+      "activity": "00_no-activity",
+      "rows": 231
+    },
+    "split_frozen": false,
+    "signal_payload_read": false
+  },
+  "class_support_trial_groups": {
+    "00_no-activity": 231,
+    "01_walk": 464,
+    "02_walk-to-room": 373,
+    "03_open-door": 448,
+    "04_close-door": 454,
+    "05_open-window": 465,
+    "06_close-window": 465,
+    "07_sit-down": 466,
+    "08_stand-up": 460,
+    "09_light-on": 384,
+    "10_light-off": 369,
+    "11_typing": 14,
+    "12_make-coffee": 72,
+    "13_place-plate": 370,
+    "14_sweep": 9,
+    "15_vacuum-cleaning": 14,
+    "16_start-toaster": 373,
+    "17_stop-toaster": 368,
+    "18_open-fridge": 355,
+    "19_close-fridge": 359,
+    "20_open-dishwasher": 453,
+    "21_close-dishwasher": 453,
+    "22_place-on-stove": 380,
+    "23_take-from-stove": 368,
+    "24_wipe-stove": 448
+  },
+  "scope_limits": [
+    "No video stream",
+    "One kitchen/dining-room recording environment",
+    "Only 14 human participants",
+    "Highly imbalanced class support; typing and sweep have 14 and 9 trial groups",
+    "No valid participant-disjoint train/validation/audit split has been frozen",
+    "Audio plus another input has not been shown to improve over unimodal controls"
+  ],
+  "sealed_audit_accessed": false,
+  "model_training_started": false,
+  "model_evaluation_started": false
+}
