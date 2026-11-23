@@ -29,8 +29,11 @@ The pinned four-tower estimate is approximately 253.29M parameters when Tohoku B
 - JAQKET's developer-created Dev1/Dev2 files were screened separately from its non-commercial competition train and Wikipedia article corpus. The experiment does not authorize use of those excluded sources.
 - Jamp's source is reported as CC BY-SA 4.0 and includes third-party-origin content conditions. Do not treat its result as blanket approval for future ingestion.
 - KUCI and JamC-QA-V2 remain outside the current explicit license allowlist pending policy review; no payload was downloaded in the source screen.
+- A follow-up check of additional English multiple-choice sources found WinoGrande's official repository says its dataset is `CC-BY` without naming a version (outside the exact allowlist), the official AI2 ARC dataset card says CC BY-SA 4.0, and the SciQ card says CC BY-NC 3.0. RACE's official paper/source page did not establish a dataset license. None was admitted or downloaded.
 - The GPQA HF gate includes an additional promise not to publish examples online. No access or evaluation should occur without explicit approval of that specific condition.
 - No sealed audit was opened for this reconciliation, and no model was trained or evaluated in this documentation-only step.
+
+Additional primary sources checked: [WinoGrande dataset terms](https://github.com/allenai/winogrande), [AI2 ARC dataset card](https://huggingface.co/datasets/allenai/ai2_arc), [SciQ dataset card](https://huggingface.co/datasets/allenai/sciq), and the [RACE paper/source reference](https://arxiv.org/abs/1704.04683).
 
 ## Next decision gate
 
