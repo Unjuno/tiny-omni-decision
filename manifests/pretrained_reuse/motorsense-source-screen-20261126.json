@@ -3,7 +3,7 @@
   "screen_date": "2026-11-26",
   "source": "MotorSense",
   "disposition": "REVIEW_NOT_ADMITTED",
-  "inspection_scope": "official project page, code repository metadata/docs/license, and Hugging Face dataset API/card/file listing; no annotations, media, or checkpoints fetched or opened",
+  "inspection_scope": "official project page, pinned arXiv v1 paper/appendix, code repository metadata/docs/license, Hugging Face dataset API/card/README/file listing, and release landing-page shell; no annotation rows, media, or checkpoints fetched or opened",
   "code_repository": {
     "url": "https://github.com/edess442/MotorSense",
     "revision": "536180c611834ae81a8dea14716896284057da77",
@@ -44,13 +44,14 @@
     "action_classes_noun": 180,
     "signal_rate_hz": 500,
     "video_sensor_timestamps_aligned": true,
-    "audio_in_release_schema": "not established",
-    "publisher_count_discrepancy": "project page says 10418 action segments; pinned data docs describe 5209 total (3584 train + 1625 validation)"
+    "audio_in_hub_file_listing": "no audio-named paths; paper says release includes audio, exact payload not established",
+    "count_convention": "project page reports exactly twice the paper/Hub counts (10418 vs 5209 action units; 9400 vs 4700 contact units), consistent with per-hand expansion; row counting unit must be frozen"
   },
   "integrity_and_rights": {
     "dataset_license_clear_for_product_use": false,
-    "human_participant_consent_scope": "unknown",
-    "frames_face_blurred": false,
+    "human_participant_consent_scope": "paper reports IRB approval and written consent covering research use and public release; exact data terms remain unresolved",
+    "deidentification_claims_conflict": "paper reports manual screening and EgoBlur; pinned Hub README says frames are not face-blurred",
+    "dataset_terms": "Hub card license=other; paper says research-use terms are in appendix/release package, but no terms/license file is present in pinned Hub file listing",
     "validation_participant_disjointness": "false for Aria; smartphone participant identity unattributed",
     "released_checkpoint_validation_exposure": "all 370 recordings used for video-sensor contrastive pretraining, including action/contact validation recordings",
     "fit_or_evaluation_admitted": false

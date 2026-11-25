@@ -1,13 +1,14 @@
 **2026-11-26 R2 MotorSense video–EMG source screen:** Pinned metadata
 identifies a scientifically relevant synchronized video + EMG/IMU dataset,
-but the Hub declares the dataset license as `other`, the media is not face
-blurred, and participant/session independence is not established. Its released
-video–sensor checkpoint used all recordings, including the listed validation
-recordings, so it cannot serve as an uncontaminated frozen representation for
-this source's validation. The full release is about 885 GB, and reviewed file
-layout does not establish released audio. Keep `REVIEW_NOT_ADMITTED`; no
-annotation payload, media, or checkpoint was accessed. See the [pinned
-metadata-only screen](docs/pretrained_reuse/R2_MOTORSENSE_VIDEO_EMG_SOURCE_SCREEN_20261126.md).
+but the Hub declares the dataset license as `other`; the paper reports written
+consent and EgoBlur while the pinned Hub card says frames are not face-blurred.
+Participant/session independence is not established. Its released video–sensor
+checkpoint used all recordings, including action-validation recordings, so it
+cannot serve as an uncontaminated frozen representation for this source's
+validation. The full release is about 885 GB, and the Hub file listing does
+not establish released audio despite the paper's release checklist. Keep
+`REVIEW_NOT_ADMITTED`; no annotation payload, media, or checkpoint was
+accessed. See the [pinned metadata-only screen](docs/pretrained_reuse/R2_MOTORSENSE_VIDEO_EMG_SOURCE_SCREEN_20261126.md).
 
 **2026-11-26 R2 expanded RoboPro frozen-feature Path A:** A fixed-seed-17
 CPU-only follow-up expanded the sample to 64 train and 64 exact-prompt-disjoint
