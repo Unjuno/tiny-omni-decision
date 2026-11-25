@@ -1,3 +1,13 @@
+**2026-11-26 R2 Path A RoboPro video/state/text readout:** A fixed seed-17,
+CPU-only development comparison on 64 train and 64 prompt-disjoint development
+episodes (16 prompts per partition) found Text+State at 58.33% macro Accuracy /
+0.8356 NLL; Text+State+Video-GRU was 51.56% / 0.9089. The paired prompt-group
+interval for the joint arm versus State-only includes zero, and the 16-group
+sample does not establish physical-scene independence or semantic action
+uniqueness. Treat this as a bounded pipeline diagnostic, not admitted R2-M or
+product evidence; do not tune again on these predictions. See the [full report
+and artifacts](docs/pretrained_reuse/R2_ROBOPRO_PATH_A_ACTION_READOUT_20261126.md).
+
 **2026-11-24 R2 Path A LINE DistilBERT common-corpus fit:** A pinned frozen
 four-layer Japanese BERT text-feature integration completed 2,048 updates and
 passed exact best/final replay on the same 24,346 validation IDs as the native
