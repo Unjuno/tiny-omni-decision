@@ -181,7 +181,10 @@ def _paired_bootstrap(
         "mean_group_difference": float(differences.mean()),
         "percentile_95_ci": [float(low), float(high)],
         "bootstrap_fraction_right_better": float(np.mean(means > 0)),
-        "caveat": "descriptive project-development evidence; 16 clusters and selector use",
+        "caveat": (
+            f"descriptive project-development evidence; {len(groups)} prompt clusters "
+            "and selector use"
+        ),
     }
 
 
@@ -205,18 +208,37 @@ def _build_examples(feature_path: Path, text_path: Path):
     text_by_hash = {key: text_features[i] for i, key in enumerate(text_hashes)}
     if len(text_by_hash) != len(text_hashes):
         raise ValueError("duplicate text prompt feature hashes")
-    if len(video) != 128 or video.shape[1:] != (3, 8, 768):
+    query_count = len(progress)
+    episode_count = len(video)
+    train_prompt_count = len(set(prompt_hashes[splits == "train"]))
+    development_prompt_count = len(set(prompt_hashes[splits == "development"]))
+    prompt_count = train_prompt_count + development_prompt_count
+    if video.shape[1:] != (query_count, 8, 768):
         raise ValueError(f"unexpected VideoPrism feature shape: {video.shape}")
-    if state.shape != (128, 3, 8, 14) or pooled.shape != (128, 3, 768):
+    if state.shape != (episode_count, query_count, 8, 14) or pooled.shape != (
+        episode_count,
+        query_count,
+        768,
+    ):
         raise ValueError("unexpected state/video feature cache shape")
-    if target_actions.shape != (128, 3, 14):
+    if target_actions.shape != (episode_count, query_count, 14):
         raise ValueError("unexpected target-action feature cache shape")
-    if candidate_options.shape != (32, 3, 4, 14):
+    if candidate_options.shape != (prompt_count, query_count, 4, 14):
         raise ValueError("unexpected four-choice action array shape")
-    if set(text_hashes) != set(prompt_hashes) or len(text_hashes) != 32:
+    if set(text_hashes) != set(prompt_hashes) or len(text_hashes) != prompt_count:
         raise ValueError("MiniLM prompts do not exactly match feature-cache prompts")
-    if not np.array_equal(text_splits, np.asarray(["train"] * 16 + ["development"] * 16)):
+    if not np.array_equal(
+        text_splits,
+        np.asarray(["train"] * train_prompt_count + ["development"] * development_prompt_count),
+    ):
         raise ValueError("MiniLM prompt partition ordering changed")
+    for split, group_count in (
+        ("train", train_prompt_count),
+        ("development", development_prompt_count),
+    ):
+        group_ids = sorted(set(map(int, local_group[splits == split])))
+        if group_ids != list(range(group_count)):
+            raise ValueError(f"{split} prompt group indices are incomplete or non-contiguous")
 
     examples: dict[str, dict[str, np.ndarray]] = {}
     for split in ("train", "development"):
@@ -237,8 +259,8 @@ def _build_examples(feature_path: Path, text_path: Path):
             if splits[episode_index] != split:
                 continue
             group = int(local_group[episode_index])
-            candidate_group = group if split == "train" else 16 + group
-            for progress_index in range(3):
+            candidate_group = group if split == "train" else train_prompt_count + group
+            for progress_index in range(query_count):
                 keys["video"].append(pooled[episode_index, progress_index])
                 keys["video_sequence"].append(video[episode_index, progress_index])
                 keys["state"].append(state[episode_index, progress_index])
@@ -269,13 +291,15 @@ def _build_examples(feature_path: Path, text_path: Path):
             "progress_indices": np.asarray(keys["progress_indices"], dtype=np.int64),
             "candidate_indices": np.asarray(keys["candidate_indices"], dtype=np.int64),
         }
-        if len(examples[split]["labels"]) != 192:
+        expected_query_count = int(np.count_nonzero(splits == split)) * query_count
+        if len(examples[split]["labels"]) != expected_query_count:
             raise ValueError(f"unexpected {split} query count")
     return examples, candidate_options
 
 
 def _fit_normalizers(train: dict[str, np.ndarray], candidate_options: np.ndarray):
-    train_video_groups = candidate_options[:16]
+    train_group_count = len(set(map(str, train["groups"])))
+    train_video_groups = candidate_options[:train_group_count]
     return {
         "text": _normalizer(train["text"], (0,)),
         "state": _normalizer(train["state"], (0, 1)),
