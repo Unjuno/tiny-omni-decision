@@ -1,0 +1,100 @@
+{
+  "schema_version": "robopro-action-probe-experiment-v1",
+  "experiment_id": "robopro-frozen-video-state-text-choice-expanded-v1-seed17",
+  "seed": 17,
+  "sample_manifest": "manifests\\pretrained_reuse\\robopro-action-probe-expanded-sample-20261126.json",
+  "sample_manifest_sha256": "6c78afea26b2c1862b3b6a75b10cf761df2a723456717afd3e1da54369a4039a",
+  "data_contract": {
+    "task": "within-prompt four-choice retrieval of one recorded demonstrator action",
+    "query_progress": [
+      0.25,
+      0.5,
+      0.75
+    ],
+    "candidate_policy": "the four same-prompt episode actions at the same relative progress",
+    "video_history_seconds_max": 2.0,
+    "video_frames": 8,
+    "video_is_causal": true,
+    "max_sample_repeats": 1,
+    "label_semantics": "agreement with a recorded action; not success, safety, or optimality"
+  },
+  "encoders": {
+    "video": {
+      "id": "google/videoprism-base-f16r288",
+      "revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+      "parameters": 114365184,
+      "frozen": true
+    },
+    "text": {
+      "id": "sentence-transformers/paraphrase-MiniLM-L3-v2",
+      "revision": "4ca70771034acceecb2e72475f72050fcdde4ddc",
+      "parameters": 17389824,
+      "frozen": true,
+      "pooling": "attention-mask mean; no L2 normalization"
+    }
+  },
+  "arms": [
+    "text_only",
+    "state_only",
+    "video_mean_only",
+    "video_gru_only",
+    "text_state",
+    "text_video_mean",
+    "text_state_video_mean",
+    "text_state_video_gru"
+  ],
+  "readout": {
+    "stream_projection_width": 64,
+    "fusion_width": 128,
+    "candidate_embedding_width": 64,
+    "scorer_width": 64,
+    "dropout": 0.1,
+    "video_gru_layers": 1,
+    "video_gru_hidden": 64
+  },
+  "training": {
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.0001,
+    "batch_size": 32,
+    "max_epochs": 80,
+    "early_stopping_patience": 12,
+    "min_delta": 0.0001,
+    "gradient_clip_norm": 1.0,
+    "normalization": "feature-wise mean/std fit on train only; apply unchanged to development",
+    "loss": "cross entropy over four shared candidate scores",
+    "checkpoint_selector": "per-arm minimum development macro NLL; min_delta 1e-4"
+  },
+  "evaluation": {
+    "metrics": [
+      "accuracy",
+      "nll",
+      "brier",
+      "ece_15",
+      "mean_confidence"
+    ],
+    "macro_unit": "exact task prompt group",
+    "bootstrap": {
+      "method": "paired prompt-group bootstrap",
+      "replicates": 10000,
+      "seed": 17,
+      "interval": "percentile 95%"
+    },
+    "option_permutation_invariance": true,
+    "joint_stream_controls": [
+      "zero standardized text",
+      "zero standardized video",
+      "zero standardized state",
+      "permute video windows within exact prompt and progress",
+      "permute state windows within exact prompt and progress"
+    ],
+    "sealed_audit": false,
+    "product_promotion": false
+  },
+  "limitations": [
+    "Only 16 prompt groups per partition; uncertainty is large.",
+    "Prompt grouping does not establish physical-scene independence.",
+    "Recorded demonstrator action is not a unique semantic correct answer.",
+    "Development is project-created from publisher TRAIN and may guide this one bounded comparison."
+  ]
+}\n

@@ -1,0 +1,2979 @@
+{
+  "schema_version": "robopro-action-probe-sample-v1",
+  "dataset": "Hoshipu/RoboPro",
+  "revision": "90ec789bf4018eb9c0f75da9f69aab5c185f0fd0",
+  "seed": 17,
+  "selection_method": "sha256 order by partition/prompt/episode; metadata only",
+  "prompts_per_split": 64,
+  "episodes_per_prompt": 4,
+  "excludes_existing_smoke_episodes": [
+    18,
+    77,
+    129,
+    159,
+    456,
+    497,
+    549,
+    551,
+    828,
+    833,
+    865,
+    869,
+    892,
+    938,
+    942,
+    995,
+    1856,
+    1893,
+    1926,
+    1998,
+    2824,
+    2836,
+    2842,
+    2847,
+    3085,
+    3092,
+    3155,
+    3192,
+    3830,
+    3889,
+    3904,
+    3935,
+    5001,
+    5005,
+    5006,
+    5008,
+    5405,
+    5422,
+    5498,
+    5536,
+    6056,
+    6093,
+    6184,
+    6192,
+    6220,
+    6227,
+    6268,
+    6272,
+    6470,
+    6545,
+    6565,
+    6585,
+    7220,
+    7286,
+    7288,
+    7339,
+    7438,
+    7524,
+    7550,
+    7557,
+    7801,
+    7802,
+    7805,
+    7807,
+    8005,
+    8112,
+    8117,
+    8147,
+    9076,
+    9077,
+    9118,
+    9128,
+    9817,
+    9906,
+    9955,
+    9989,
+    10027,
+    10061,
+    10082,
+    10149,
+    10609,
+    10665,
+    10691,
+    10743,
+    11004,
+    11053,
+    11062,
+    11153,
+    11610,
+    11669,
+    11699,
+    11758,
+    11837,
+    11844,
+    11868,
+    11934,
+    12031,
+    12058,
+    12177,
+    12198,
+    12209,
+    12254,
+    12378,
+    12383,
+    12444,
+    12464,
+    12467,
+    12480,
+    12542,
+    12565,
+    12587,
+    12588,
+    13677,
+    13706,
+    13787,
+    13796,
+    14217,
+    14279,
+    14308,
+    14360,
+    14621,
+    14664,
+    14674,
+    14685,
+    15435,
+    15460,
+    15527,
+    15533,
+    15801,
+    15840,
+    15874,
+    15900,
+    15941,
+    15955,
+    15987,
+    15997
+  ],
+  "train": [
+    {
+      "prompt": "put the aluminum can in the cabinet",
+      "prompt_sha256": "589d3bfcfe433cadccad082891c707077e570c9d0d0c845d26e91baa5308317a",
+      "episodes": [
+        {
+          "episode_id": 2686,
+          "length": 205
+        },
+        {
+          "episode_id": 2690,
+          "length": 220
+        },
+        {
+          "episode_id": 2681,
+          "length": 272
+        },
+        {
+          "episode_id": 2799,
+          "length": 195
+        }
+      ]
+    },
+    {
+      "prompt": "set the milk box in the fridge",
+      "prompt_sha256": "7e49553589a74cdd0a121215e4832c54b22a337a3ad63d2e4e3a197eab27607c",
+      "episodes": [
+        {
+          "episode_id": 3310,
+          "length": 195
+        },
+        {
+          "episode_id": 3396,
+          "length": 206
+        },
+        {
+          "episode_id": 3298,
+          "length": 206
+        },
+        {
+          "episode_id": 3382,
+          "length": 208
+        }
+      ]
+    },
+    {
+      "prompt": "could you put the apple from the sink on the plate and the bread on the board?",
+      "prompt_sha256": "17562f22aae0ad4dc4fd82b56edd86b9a0eeb931769d81fbcf734c1895d67cee",
+      "episodes": [
+        {
+          "episode_id": 4361,
+          "length": 386
+        },
+        {
+          "episode_id": 4276,
+          "length": 384
+        },
+        {
+          "episode_id": 4290,
+          "length": 384
+        },
+        {
+          "episode_id": 4283,
+          "length": 374
+        }
+      ]
+    },
+    {
+      "prompt": "the sauce can needs to be put in the cabinet",
+      "prompt_sha256": "6481dc07f72d6d2ef7bd38cf35e96826af93b68d23c9b0070e52e96a19a01e44",
+      "episodes": [
+        {
+          "episode_id": 3696,
+          "length": 204
+        },
+        {
+          "episode_id": 3785,
+          "length": 263
+        },
+        {
+          "episode_id": 3798,
+          "length": 255
+        },
+        {
+          "episode_id": 3643,
+          "length": 218
+        }
+      ]
+    },
+    {
+      "prompt": "get the box drink from the basket",
+      "prompt_sha256": "5eec4ca44210186df74135a167ebbdc9e40d1fbe62fd5e7585145506be6d4559",
+      "episodes": [
+        {
+          "episode_id": 1166,
+          "length": 200
+        },
+        {
+          "episode_id": 1021,
+          "length": 195
+        },
+        {
+          "episode_id": 1154,
+          "length": 213
+        },
+        {
+          "episode_id": 1159,
+          "length": 205
+        }
+      ]
+    },
+    {
+      "prompt": "could you put the pen in the box?",
+      "prompt_sha256": "4391f59acc9d6b0abfb3c8049609b8c876e31042dd308686abb2e9378721a788",
+      "episodes": [
+        {
+          "episode_id": 15511,
+          "length": 158
+        },
+        {
+          "episode_id": 15411,
+          "length": 148
+        },
+        {
+          "episode_id": 15537,
+          "length": 163
+        },
+        {
+          "episode_id": 15514,
+          "length": 192
+        }
+      ]
+    },
+    {
+      "prompt": "pick up the apple from the wash basin",
+      "prompt_sha256": "f9b7d0b9d97cc7d61b4b9c998d65ec914ae006d662118369bc3264ca21290110",
+      "episodes": [
+        {
+          "episode_id": 5802,
+          "length": 180
+        },
+        {
+          "episode_id": 5921,
+          "length": 177
+        },
+        {
+          "episode_id": 5877,
+          "length": 180
+        },
+        {
+          "episode_id": 5843,
+          "length": 181
+        }
+      ]
+    },
+    {
+      "prompt": "place the phone on the support",
+      "prompt_sha256": "c1f63191fcc0c02f7985778b93b7ff5b75ddfa6c2d44c36fdbe3b1c6ba66a5c2",
+      "episodes": [
+        {
+          "episode_id": 10328,
+          "length": 175
+        },
+        {
+          "episode_id": 10399,
+          "length": 172
+        },
+        {
+          "episode_id": 10263,
+          "length": 166
+        },
+        {
+          "episode_id": 10238,
+          "length": 170
+        }
+      ]
+    },
+    {
+      "prompt": "please move the seal onto the book",
+      "prompt_sha256": "07c514a07b3268c1e82900b0b24f25ceb7da35d343a0b25e66b621037b847835",
+      "episodes": [
+        {
+          "episode_id": 14379,
+          "length": 410
+        },
+        {
+          "episode_id": 14289,
+          "length": 377
+        },
+        {
+          "episode_id": 14225,
+          "length": 378
+        },
+        {
+          "episode_id": 14215,
+          "length": 408
+        }
+      ]
+    },
+    {
+      "prompt": "place the phone on the holder",
+      "prompt_sha256": "6e320c51c0685060dbcba89322455e0b5f8df21d4b7945ae113a9217b4f656fb",
+      "episodes": [
+        {
+          "episode_id": 10247,
+          "length": 169
+        },
+        {
+          "episode_id": 10312,
+          "length": 167
+        },
+        {
+          "episode_id": 10293,
+          "length": 173
+        },
+        {
+          "episode_id": 10212,
+          "length": 167
+        }
+      ]
+    },
+    {
+      "prompt": "put the spoon in the wash basin",
+      "prompt_sha256": "466b0763a9a79002643268f282affc07fb1403d0d69181022afd9c7a342e2473",
+      "episodes": [
+        {
+          "episode_id": 7759,
+          "length": 159
+        },
+        {
+          "episode_id": 7781,
+          "length": 155
+        },
+        {
+          "episode_id": 7639,
+          "length": 155
+        },
+        {
+          "episode_id": 7794,
+          "length": 155
+        }
+      ]
+    },
+    {
+      "prompt": "position the apple in the bin, the bowl in the dishrack, and the spoon in the sink",
+      "prompt_sha256": "3bc22037e9d9de7faa5610515b3de827e03b4b5cb46a43c7ec75dd8a6694d313",
+      "episodes": [
+        {
+          "episode_id": 4111,
+          "length": 547
+        },
+        {
+          "episode_id": 4154,
+          "length": 531
+        },
+        {
+          "episode_id": 4052,
+          "length": 544
+        },
+        {
+          "episode_id": 4087,
+          "length": 553
+        }
+      ]
+    },
+    {
+      "prompt": "put the items on the table in order",
+      "prompt_sha256": "f4d65f8bf09e109997279b65a07234c8b412751d78156fdff64afb138c31e990",
+      "episodes": [
+        {
+          "episode_id": 8678,
+          "length": 523
+        },
+        {
+          "episode_id": 8688,
+          "length": 527
+        },
+        {
+          "episode_id": 8734,
+          "length": 484
+        },
+        {
+          "episode_id": 8658,
+          "length": 528
+        }
+      ]
+    },
+    {
+      "prompt": "could you put the plate in the sink?",
+      "prompt_sha256": "46bc0e97e276c818aad61f6856002a6d95a747c4da740a996bcf1e66679944a3",
+      "episodes": [
+        {
+          "episode_id": 7398,
+          "length": 162
+        },
+        {
+          "episode_id": 7352,
+          "length": 172
+        },
+        {
+          "episode_id": 7282,
+          "length": 167
+        },
+        {
+          "episode_id": 7296,
+          "length": 159
+        }
+      ]
+    },
+    {
+      "prompt": "move the cup and put the writing instrument in the cup",
+      "prompt_sha256": "e2d15eb4a82874cda2c2026a919c2d492d61d096d60aa015a7db14b20af0cef0",
+      "episodes": [
+        {
+          "episode_id": 13146,
+          "length": 386
+        },
+        {
+          "episode_id": 13129,
+          "length": 311
+        },
+        {
+          "episode_id": 13060,
+          "length": 311
+        },
+        {
+          "episode_id": 13061,
+          "length": 312
+        }
+      ]
+    },
+    {
+      "prompt": "pick up the sauce can from the cabinet",
+      "prompt_sha256": "cbe3ea37fccf62b1ad1966b4249b7327cd3f0edfb51a372743cf8748261b32f0",
+      "episodes": [
+        {
+          "episode_id": 1850,
+          "length": 201
+        },
+        {
+          "episode_id": 1866,
+          "length": 203
+        },
+        {
+          "episode_id": 1802,
+          "length": 211
+        },
+        {
+          "episode_id": 1816,
+          "length": 204
+        }
+      ]
+    },
+    {
+      "prompt": "organize what's on the table",
+      "prompt_sha256": "fb3df4df31b8ddf5e2d24604e4462ff3e32acbde524cf87f5bc96a95aca23e40",
+      "episodes": [
+        {
+          "episode_id": 8691,
+          "length": 550
+        },
+        {
+          "episode_id": 8735,
+          "length": 506
+        },
+        {
+          "episode_id": 8798,
+          "length": 526
+        },
+        {
+          "episode_id": 8653,
+          "length": 546
+        }
+      ]
+    },
+    {
+      "prompt": "move the bottle from the fridge next to the can please",
+      "prompt_sha256": "d7d8ef2faebaa7e43f0b02048960e428a5a216c5a448336512598408e33bc221",
+      "episodes": [
+        {
+          "episode_id": 286,
+          "length": 327
+        },
+        {
+          "episode_id": 238,
+          "length": 334
+        },
+        {
+          "episode_id": 240,
+          "length": 334
+        },
+        {
+          "episode_id": 234,
+          "length": 329
+        }
+      ]
+    },
+    {
+      "prompt": "put the beaker on the coaster",
+      "prompt_sha256": "12885d095b29c429fcd0c9bcfbcb380cc5372872aa7274a8ab5a23852afadee9",
+      "episodes": [
+        {
+          "episode_id": 14952,
+          "length": 157
+        },
+        {
+          "episode_id": 14884,
+          "length": 147
+        },
+        {
+          "episode_id": 14881,
+          "length": 144
+        },
+        {
+          "episode_id": 14874,
+          "length": 153
+        }
+      ]
+    },
+    {
+      "prompt": "put the round fruit in the bin, the bowl in the dishrack, and the spoon in the sink",
+      "prompt_sha256": "abfbb54faec16e56efda5fd970c319dd2e71643760b24bd28eaa641a214d3532",
+      "episodes": [
+        {
+          "episode_id": 4041,
+          "length": 545
+        },
+        {
+          "episode_id": 4118,
+          "length": 560
+        },
+        {
+          "episode_id": 4021,
+          "length": 532
+        },
+        {
+          "episode_id": 4199,
+          "length": 529
+        }
+      ]
+    },
+    {
+      "prompt": "grab the box drink from the basket",
+      "prompt_sha256": "ade5d30b705e9cee84a88e9286b72a03f20b063e2b65af26610c5afb5ab05a8f",
+      "episodes": [
+        {
+          "episode_id": 1108,
+          "length": 195
+        },
+        {
+          "episode_id": 1070,
+          "length": 196
+        },
+        {
+          "episode_id": 1124,
+          "length": 210
+        },
+        {
+          "episode_id": 1078,
+          "length": 199
+        }
+      ]
+    },
+    {
+      "prompt": "shut the microwave door",
+      "prompt_sha256": "c6e4ea941e6eda5f05f3c3875728a2178128a123a9384b618001e930f9854076",
+      "episodes": [
+        {
+          "episode_id": 5108,
+          "length": 196
+        },
+        {
+          "episode_id": 5092,
+          "length": 152
+        },
+        {
+          "episode_id": 5177,
+          "length": 174
+        },
+        {
+          "episode_id": 5169,
+          "length": 175
+        }
+      ]
+    },
+    {
+      "prompt": "pick up the aluminum can from the cabinet",
+      "prompt_sha256": "d9d9c9e9a3ef51c8fd1100685c3636a6cccec7e727115613485b6a3efc0c83e7",
+      "episodes": [
+        {
+          "episode_id": 1442,
+          "length": 223
+        },
+        {
+          "episode_id": 1480,
+          "length": 198
+        },
+        {
+          "episode_id": 1506,
+          "length": 202
+        },
+        {
+          "episode_id": 1525,
+          "length": 210
+        }
+      ]
+    },
+    {
+      "prompt": "put the bottle into the basket",
+      "prompt_sha256": "8b0fc1cbbfa8d0bee7e053d9e978c68163fb715d0632dc0133ec2a77454303be",
+      "episodes": [
+        {
+          "episode_id": 2157,
+          "length": 191
+        },
+        {
+          "episode_id": 2135,
+          "length": 181
+        },
+        {
+          "episode_id": 2060,
+          "length": 161
+        },
+        {
+          "episode_id": 2138,
+          "length": 140
+        }
+      ]
+    },
+    {
+      "prompt": "put the cooking sauce can in the cabinet",
+      "prompt_sha256": "6476d86980ef55ba54cb32b7b0a2a58b3e2512617bcab7195840112782fc6558",
+      "episodes": [
+        {
+          "episode_id": 3724,
+          "length": 211
+        },
+        {
+          "episode_id": 3795,
+          "length": 205
+        },
+        {
+          "episode_id": 3682,
+          "length": 216
+        },
+        {
+          "episode_id": 3751,
+          "length": 207
+        }
+      ]
+    },
+    {
+      "prompt": "put the pen in the container",
+      "prompt_sha256": "1cd9831f43ab201ba52ceb48158a46777f8aa52f54eae11d30457aad35ce05d4",
+      "episodes": [
+        {
+          "episode_id": 15463,
+          "length": 180
+        },
+        {
+          "episode_id": 15433,
+          "length": 164
+        },
+        {
+          "episode_id": 15540,
+          "length": 156
+        },
+        {
+          "episode_id": 15442,
+          "length": 164
+        }
+      ]
+    },
+    {
+      "prompt": "move the mouse, cube, and stapler to designated spots",
+      "prompt_sha256": "1c6283ecaecca4e4e5168471142a0863c02094403a013d7d96f6e88775a12606",
+      "episodes": [
+        {
+          "episode_id": 8246,
+          "length": 510
+        },
+        {
+          "episode_id": 8343,
+          "length": 517
+        },
+        {
+          "episode_id": 8207,
+          "length": 512
+        },
+        {
+          "episode_id": 8223,
+          "length": 496
+        }
+      ]
+    },
+    {
+      "prompt": "position the cup in the box",
+      "prompt_sha256": "7496c7874b05a8124aa7375bdfabe5cb7ae7b5870d2070ee5757f1dc67133c82",
+      "episodes": [
+        {
+          "episode_id": 14762,
+          "length": 140
+        },
+        {
+          "episode_id": 14722,
+          "length": 139
+        },
+        {
+          "episode_id": 14718,
+          "length": 150
+        },
+        {
+          "episode_id": 14717,
+          "length": 135
+        }
+      ]
+    },
+    {
+      "prompt": "put the table items away neatly",
+      "prompt_sha256": "4e8cf1af10354f4c6212cec882990de9450b12b81d7f87193493066b4f4ae609",
+      "episodes": [
+        {
+          "episode_id": 8719,
+          "length": 516
+        },
+        {
+          "episode_id": 8681,
+          "length": 499
+        },
+        {
+          "episode_id": 8687,
+          "length": 482
+        },
+        {
+          "episode_id": 8612,
+          "length": 523
+        }
+      ]
+    },
+    {
+      "prompt": "transport and put the cup and put the pen in the cup",
+      "prompt_sha256": "1482bd90b6e4e8c678275b2351bde56132f982d82395320fdc2bc20d1fa99dc4",
+      "episodes": [
+        {
+          "episode_id": 13007,
+          "length": 305
+        },
+        {
+          "episode_id": 13077,
+          "length": 298
+        },
+        {
+          "episode_id": 13017,
+          "length": 315
+        },
+        {
+          "episode_id": 13169,
+          "length": 310
+        }
+      ]
+    },
+    {
+      "prompt": "grab the bottle from the fridge",
+      "prompt_sha256": "7950776a93b2c8105b208c563b93c035b5a3c11ed1afcb2ea06ddde318a2ebba",
+      "episodes": [
+        {
+          "episode_id": 999,
+          "length": 224
+        },
+        {
+          "episode_id": 978,
+          "length": 223
+        },
+        {
+          "episode_id": 952,
+          "length": 232
+        },
+        {
+          "episode_id": 921,
+          "length": 222
+        }
+      ]
+    },
+    {
+      "prompt": "move the containers into the box",
+      "prompt_sha256": "af2cded9126fad5dfd7f412a2e9aacc5af3caf1793ff202782a333548a1a5800",
+      "episodes": [
+        {
+          "episode_id": 13222,
+          "length": 344
+        },
+        {
+          "episode_id": 13242,
+          "length": 348
+        },
+        {
+          "episode_id": 13318,
+          "length": 328
+        },
+        {
+          "episode_id": 13261,
+          "length": 354
+        }
+      ]
+    },
+    {
+      "prompt": "phone on holder",
+      "prompt_sha256": "20827ba27450df8bcde3e122a4fca7af82bb409e4143c638036b5815be3c36cf",
+      "episodes": [
+        {
+          "episode_id": 10304,
+          "length": 166
+        },
+        {
+          "episode_id": 10357,
+          "length": 172
+        },
+        {
+          "episode_id": 10325,
+          "length": 175
+        },
+        {
+          "episode_id": 10279,
+          "length": 186
+        }
+      ]
+    },
+    {
+      "prompt": "the can needs to be moved from the cabinet to the basket",
+      "prompt_sha256": "8360352039262e5d790ffc8d5848cfc3570dd8eff7e02727aabd0468d16c2331",
+      "episodes": [
+        {
+          "episode_id": 506,
+          "length": 414
+        },
+        {
+          "episode_id": 515,
+          "length": 409
+        },
+        {
+          "episode_id": 463,
+          "length": 392
+        },
+        {
+          "episode_id": 406,
+          "length": 408
+        }
+      ]
+    },
+    {
+      "prompt": "place the seal next to the pen cup",
+      "prompt_sha256": "a0478d3494184042b80f98c3af0488af3f37ab0ae74764757fea99bf93d7778f",
+      "episodes": [
+        {
+          "episode_id": 14186,
+          "length": 140
+        },
+        {
+          "episode_id": 14085,
+          "length": 138
+        },
+        {
+          "episode_id": 14008,
+          "length": 146
+        },
+        {
+          "episode_id": 14031,
+          "length": 138
+        }
+      ]
+    },
+    {
+      "prompt": "move the seal onto the volume",
+      "prompt_sha256": "5ba4c687a1c0c5cb12d99fc911d7518abe5fd3233d3260e7160714c6e755e5df",
+      "episodes": [
+        {
+          "episode_id": 14361,
+          "length": 432
+        },
+        {
+          "episode_id": 14284,
+          "length": 411
+        },
+        {
+          "episode_id": 14255,
+          "length": 429
+        },
+        {
+          "episode_id": 14207,
+          "length": 403
+        }
+      ]
+    },
+    {
+      "prompt": "put the stapler in the drawer",
+      "prompt_sha256": "479dac8db7f2a86c79eadaa2be3a140c74b1280b27433f487580485ae6e3931f",
+      "episodes": [
+        {
+          "episode_id": 10888,
+          "length": 168
+        },
+        {
+          "episode_id": 11898,
+          "length": 469
+        },
+        {
+          "episode_id": 11968,
+          "length": 488
+        },
+        {
+          "episode_id": 11850,
+          "length": 453
+        }
+      ]
+    },
+    {
+      "prompt": "place the bottle where the can is and vice versa in the basket",
+      "prompt_sha256": "b6eaed885389d8fb8e16d4a99130d5cab2b4c41305b6e6b098698073c0c9c67b",
+      "episodes": [
+        {
+          "episode_id": 3931,
+          "length": 356
+        },
+        {
+          "episode_id": 3897,
+          "length": 417
+        },
+        {
+          "episode_id": 3955,
+          "length": 359
+        },
+        {
+          "episode_id": 3980,
+          "length": 354
+        }
+      ]
+    },
+    {
+      "prompt": "relocate the cups into the box",
+      "prompt_sha256": "3f17b575d9e1eb55f19c4fa97a1dbdd40f0792eab93a6a796936c92c02932af6",
+      "episodes": [
+        {
+          "episode_id": 13315,
+          "length": 329
+        },
+        {
+          "episode_id": 13262,
+          "length": 347
+        },
+        {
+          "episode_id": 13352,
+          "length": 340
+        },
+        {
+          "episode_id": 13210,
+          "length": 354
+        }
+      ]
+    },
+    {
+      "prompt": "relocate the mouse, rubik's cube, and stapler to their destinations",
+      "prompt_sha256": "0c8291c13b408460d51bee425eb688ede8fa0744a20ada4091eb4d3cd7f2fcbe",
+      "episodes": [
+        {
+          "episode_id": 8318,
+          "length": 512
+        },
+        {
+          "episode_id": 8213,
+          "length": 528
+        },
+        {
+          "episode_id": 8355,
+          "length": 514
+        },
+        {
+          "episode_id": 8366,
+          "length": 518
+        }
+      ]
+    },
+    {
+      "prompt": "deposit the apple from the sink on the plate and the bread on the board",
+      "prompt_sha256": "e3f482d979e7ede8022f45e903867d0cb66bcc70cafa1b5997cc5ba5279f5c0e",
+      "episodes": [
+        {
+          "episode_id": 4291,
+          "length": 396
+        },
+        {
+          "episode_id": 4345,
+          "length": 406
+        },
+        {
+          "episode_id": 4284,
+          "length": 404
+        },
+        {
+          "episode_id": 4282,
+          "length": 394
+        }
+      ]
+    },
+    {
+      "prompt": "transport the seal onto the book",
+      "prompt_sha256": "b76d55405d41da63051795f88612cb734ac15143096682f27af9d8fa55f8859c",
+      "episodes": [
+        {
+          "episode_id": 14342,
+          "length": 414
+        },
+        {
+          "episode_id": 14332,
+          "length": 379
+        },
+        {
+          "episode_id": 14242,
+          "length": 402
+        },
+        {
+          "episode_id": 14370,
+          "length": 411
+        }
+      ]
+    },
+    {
+      "prompt": "lay the bottle in the basket",
+      "prompt_sha256": "55092ac3ed6b5f72104d29993c753e71ac9d46cd1538747f26c4d64858bef8a2",
+      "episodes": [
+        {
+          "episode_id": 2160,
+          "length": 165
+        },
+        {
+          "episode_id": 2032,
+          "length": 143
+        },
+        {
+          "episode_id": 2003,
+          "length": 195
+        },
+        {
+          "episode_id": 2151,
+          "length": 132
+        }
+      ]
+    },
+    {
+      "prompt": "put the tomato sauce can in the cabinet",
+      "prompt_sha256": "63879584754f1a409cd23b0f5505fd93717e873ef77985ccb108d4b4743ddabd",
+      "episodes": [
+        {
+          "episode_id": 3625,
+          "length": 232
+        },
+        {
+          "episode_id": 3728,
+          "length": 205
+        },
+        {
+          "episode_id": 3716,
+          "length": 194
+        },
+        {
+          "episode_id": 3689,
+          "length": 247
+        }
+      ]
+    },
+    {
+      "prompt": "drawer open please",
+      "prompt_sha256": "ab05175abfb35c12caccea49e3130db2eb34f45a36dbbed8081c6847aaa6677b",
+      "episodes": [
+        {
+          "episode_id": 8560,
+          "length": 150
+        },
+        {
+          "episode_id": 8404,
+          "length": 152
+        },
+        {
+          "episode_id": 8558,
+          "length": 152
+        },
+        {
+          "episode_id": 8487,
+          "length": 152
+        }
+      ]
+    },
+    {
+      "prompt": "take the milk out and close the fridge",
+      "prompt_sha256": "bd16d777cbdb80358a0f81f17fca1cf422043188ca814b1dc31dbf36cd23c3fb",
+      "episodes": [
+        {
+          "episode_id": 610,
+          "length": 352
+        },
+        {
+          "episode_id": 798,
+          "length": 335
+        },
+        {
+          "episode_id": 770,
+          "length": 356
+        },
+        {
+          "episode_id": 778,
+          "length": 335
+        }
+      ]
+    },
+    {
+      "prompt": "put phone on holder",
+      "prompt_sha256": "de57ddc9a472771ec0e9bb310d9a0bc00ee9af4724e17e9e0acdb8285c08831b",
+      "episodes": [
+        {
+          "episode_id": 10365,
+          "length": 173
+        },
+        {
+          "episode_id": 10397,
+          "length": 161
+        },
+        {
+          "episode_id": 10395,
+          "length": 159
+        },
+        {
+          "episode_id": 10376,
+          "length": 170
+        }
+      ]
+    },
+    {
+      "prompt": "pick up the container from the fridge",
+      "prompt_sha256": "ea657daff9617bcfa1984e562a1d90156e8c17b052518f552ff5890e2d1a26ec",
+      "episodes": [
+        {
+          "episode_id": 826,
+          "length": 226
+        },
+        {
+          "episode_id": 923,
+          "length": 232
+        },
+        {
+          "episode_id": 822,
+          "length": 224
+        },
+        {
+          "episode_id": 900,
+          "length": 221
+        }
+      ]
+    },
+    {
+      "prompt": "go ahead and move the cup",
+      "prompt_sha256": "b2a7c58cadaa8067558733f48834c4551f091e68c78c141fc3f4844d4195d172",
+      "episodes": [
+        {
+          "episode_id": 12405,
+          "length": 123
+        },
+        {
+          "episode_id": 12581,
+          "length": 131
+        },
+        {
+          "episode_id": 12432,
+          "length": 138
+        },
+        {
+          "episode_id": 12474,
+          "length": 127
+        }
+      ]
+    },
+    {
+      "prompt": "take the can out of the cabinet",
+      "prompt_sha256": "9f4c155d14cd87396ab59b33733a6fe6563e194cd54f676bea2c6e6c4f36ae91",
+      "episodes": [
+        {
+          "episode_id": 1514,
+          "length": 199
+        },
+        {
+          "episode_id": 1532,
+          "length": 208
+        },
+        {
+          "episode_id": 1444,
+          "length": 204
+        },
+        {
+          "episode_id": 1415,
+          "length": 200
+        }
+      ]
+    },
+    {
+      "prompt": "sort the items on the table",
+      "prompt_sha256": "e9f58bb30df58ab4284a1ab41fb9de6300569d9ebd3daf47eae99ae07ee38fb1",
+      "episodes": [
+        {
+          "episode_id": 8727,
+          "length": 477
+        },
+        {
+          "episode_id": 8674,
+          "length": 554
+        },
+        {
+          "episode_id": 8788,
+          "length": 490
+        },
+        {
+          "episode_id": 8690,
+          "length": 565
+        }
+      ]
+    },
+    {
+      "prompt": "place device on pad",
+      "prompt_sha256": "9a15effe62306b0b13d17727bf1579c3a08a7555751519866420ff14130232e8",
+      "episodes": [
+        {
+          "episode_id": 9895,
+          "length": 164
+        },
+        {
+          "episode_id": 9820,
+          "length": 180
+        },
+        {
+          "episode_id": 9938,
+          "length": 168
+        },
+        {
+          "episode_id": 9843,
+          "length": 167
+        }
+      ]
+    },
+    {
+      "prompt": "put the cup in the container",
+      "prompt_sha256": "59b84dc68f8c73589ace66e06c8b9f94a7226e12c6e2fb83f07b8a5aff2433c5",
+      "episodes": [
+        {
+          "episode_id": 14670,
+          "length": 157
+        },
+        {
+          "episode_id": 14691,
+          "length": 139
+        },
+        {
+          "episode_id": 14736,
+          "length": 137
+        },
+        {
+          "episode_id": 14791,
+          "length": 148
+        }
+      ]
+    },
+    {
+      "prompt": "place the bowl in the dishrack",
+      "prompt_sha256": "613a0428095602df7b71520dc3da41f8819c8bda2075aa575f19660fb9aa97e0",
+      "episodes": [
+        {
+          "episode_id": 6486,
+          "length": 166
+        },
+        {
+          "episode_id": 6481,
+          "length": 163
+        },
+        {
+          "episode_id": 6499,
+          "length": 163
+        },
+        {
+          "episode_id": 6433,
+          "length": 165
+        }
+      ]
+    },
+    {
+      "prompt": "move the beaker next to the book",
+      "prompt_sha256": "854fea6a4d491e104bd77da3d3f57d998052892d4ebfb2976b620667229cb81d",
+      "episodes": [
+        {
+          "episode_id": 12607,
+          "length": 176
+        },
+        {
+          "episode_id": 12728,
+          "length": 170
+        },
+        {
+          "episode_id": 12747,
+          "length": 160
+        },
+        {
+          "episode_id": 12724,
+          "length": 170
+        }
+      ]
+    },
+    {
+      "prompt": "please close the microwave door",
+      "prompt_sha256": "202fb2a39e1a76c6bd17cad5bfe242cb0d474c0abacbdbb31561f67a1119331a",
+      "episodes": [
+        {
+          "episode_id": 5103,
+          "length": 173
+        },
+        {
+          "episode_id": 5133,
+          "length": 176
+        },
+        {
+          "episode_id": 5134,
+          "length": 176
+        },
+        {
+          "episode_id": 5123,
+          "length": 172
+        }
+      ]
+    },
+    {
+      "prompt": "position the fastening tool in the drawer",
+      "prompt_sha256": "28443147e4c7ebc7b1c1e498cd08b245e8b04b471bee50c12f8208244d686501",
+      "episodes": [
+        {
+          "episode_id": 10836,
+          "length": 159
+        },
+        {
+          "episode_id": 10830,
+          "length": 140
+        },
+        {
+          "episode_id": 10898,
+          "length": 162
+        },
+        {
+          "episode_id": 10853,
+          "length": 151
+        }
+      ]
+    },
+    {
+      "prompt": "transfer the bottle",
+      "prompt_sha256": "2131e52cd97179413450ef121ed21e232bd07889f35e203b853182b17a4ceaf9",
+      "episodes": [
+        {
+          "episode_id": 154,
+          "length": 131
+        },
+        {
+          "episode_id": 144,
+          "length": 132
+        },
+        {
+          "episode_id": 64,
+          "length": 134
+        },
+        {
+          "episode_id": 48,
+          "length": 141
+        }
+      ]
+    },
+    {
+      "prompt": "seize the fork from the sink",
+      "prompt_sha256": "8fc3b88cc73c1c1ddb1725ee69651e7744d5d6fb2a3e51d1453d0f5b86e6b985",
+      "episodes": [
+        {
+          "episode_id": 6004,
+          "length": 181
+        },
+        {
+          "episode_id": 6005,
+          "length": 186
+        },
+        {
+          "episode_id": 6171,
+          "length": 186
+        },
+        {
+          "episode_id": 6077,
+          "length": 176
+        }
+      ]
+    },
+    {
+      "prompt": "put the rubber stamp in the box",
+      "prompt_sha256": "05552da842977fc713b2e376ee02e3020fb2c164ce683ba3647af7044db168d5",
+      "episodes": [
+        {
+          "episode_id": 15975,
+          "length": 145
+        },
+        {
+          "episode_id": 15817,
+          "length": 157
+        },
+        {
+          "episode_id": 15867,
+          "length": 148
+        },
+        {
+          "episode_id": 15890,
+          "length": 149
+        }
+      ]
+    },
+    {
+      "prompt": "position the tool on the book",
+      "prompt_sha256": "165fac1ec27bbf3476cf44af4e5e001032791ff34a97cfef1e30cb9935618552",
+      "episodes": [
+        {
+          "episode_id": 11285,
+          "length": 158
+        },
+        {
+          "episode_id": 11278,
+          "length": 164
+        },
+        {
+          "episode_id": 11343,
+          "length": 159
+        },
+        {
+          "episode_id": 11204,
+          "length": 164
+        }
+      ]
+    },
+    {
+      "prompt": "drop the apple in the waste container",
+      "prompt_sha256": "ff6760847c2c228741569a8a0886691f020e6124e7290abf94fe26e93a43bec9",
+      "episodes": [
+        {
+          "episode_id": 5308,
+          "length": 163
+        },
+        {
+          "episode_id": 5392,
+          "length": 186
+        },
+        {
+          "episode_id": 5317,
+          "length": 156
+        },
+        {
+          "episode_id": 5371,
+          "length": 150
+        }
+      ]
+    },
+    {
+      "prompt": "move the seal stamp and the cup next to the box",
+      "prompt_sha256": "b3110b5d22614042684ae669510bd7b8205cee386a511b736346dd3fe05956e1",
+      "episodes": [
+        {
+          "episode_id": 13747,
+          "length": 379
+        },
+        {
+          "episode_id": 13767,
+          "length": 414
+        },
+        {
+          "episode_id": 13793,
+          "length": 305
+        },
+        {
+          "episode_id": 13670,
+          "length": 326
+        }
+      ]
+    },
+    {
+      "prompt": "swap the can with the bottle in the basket",
+      "prompt_sha256": "57dbe176ddfbb413f6f5e35991c620b166372c1046952728b5b7a53e0ad1c25d",
+      "episodes": [
+        {
+          "episode_id": 3984,
+          "length": 388
+        },
+        {
+          "episode_id": 3910,
+          "length": 347
+        },
+        {
+          "episode_id": 3956,
+          "length": 350
+        },
+        {
+          "episode_id": 3838,
+          "length": 354
+        }
+      ]
+    }
+  ],
+  "development": [
+    {
+      "prompt": "lay the bowl in the dishrack",
+      "prompt_sha256": "c9a5369ba9bf436b30d1ef81fc5032ab71c7158928aa8faf9aa020c9a49eb6bc",
+      "episodes": [
+        {
+          "episode_id": 6522,
+          "length": 163
+        },
+        {
+          "episode_id": 6446,
+          "length": 164
+        },
+        {
+          "episode_id": 6444,
+          "length": 166
+        },
+        {
+          "episode_id": 6475,
+          "length": 163
+        }
+      ]
+    },
+    {
+      "prompt": "place the mouse on the mouse pad",
+      "prompt_sha256": "82c6407832717c8b8a243f3027200875d08416b60aad49aeea1db611b1abaf02",
+      "episodes": [
+        {
+          "episode_id": 9996,
+          "length": 163
+        },
+        {
+          "episode_id": 9833,
+          "length": 161
+        },
+        {
+          "episode_id": 9867,
+          "length": 178
+        },
+        {
+          "episode_id": 9824,
+          "length": 166
+        }
+      ]
+    },
+    {
+      "prompt": "the sauce can needs to be put in the basket",
+      "prompt_sha256": "1d892b2a3e3f45555ca9262f4b830137e5fccf446fcde9685ff5eb944dbc5fc8",
+      "episodes": [
+        {
+          "episode_id": 3556,
+          "length": 151
+        },
+        {
+          "episode_id": 3543,
+          "length": 171
+        },
+        {
+          "episode_id": 3585,
+          "length": 166
+        },
+        {
+          "episode_id": 3524,
+          "length": 129
+        }
+      ]
+    },
+    {
+      "prompt": "please put the can next to the basket",
+      "prompt_sha256": "0fe2b5fbe1cd3fa1aca5a10c0bf9488cfbb79c0b12d44345e144dbd89f0285f3",
+      "episodes": [
+        {
+          "episode_id": 3078,
+          "length": 143
+        },
+        {
+          "episode_id": 3054,
+          "length": 137
+        },
+        {
+          "episode_id": 3016,
+          "length": 142
+        },
+        {
+          "episode_id": 3119,
+          "length": 143
+        }
+      ]
+    },
+    {
+      "prompt": "place the stapler on the book",
+      "prompt_sha256": "fafdca850be3b3c09415efad68e757ad9f2437d53a0b74ec0b24f8042399242e",
+      "episodes": [
+        {
+          "episode_id": 11392,
+          "length": 158
+        },
+        {
+          "episode_id": 11329,
+          "length": 167
+        },
+        {
+          "episode_id": 11260,
+          "length": 170
+        },
+        {
+          "episode_id": 11256,
+          "length": 162
+        }
+      ]
+    },
+    {
+      "prompt": "put the cup on the base",
+      "prompt_sha256": "91bd0ff64a46d250e8bfb672740023a86d3d94ad4641a722b770bca5e0fb6699",
+      "episodes": [
+        {
+          "episode_id": 14852,
+          "length": 153
+        },
+        {
+          "episode_id": 14914,
+          "length": 147
+        },
+        {
+          "episode_id": 14974,
+          "length": 136
+        },
+        {
+          "episode_id": 14849,
+          "length": 145
+        }
+      ]
+    },
+    {
+      "prompt": "the can needs to be picked up from the cabinet",
+      "prompt_sha256": "9c2fd9fabb6f74b4714593305400446b51fa1d9d719007b9c9a33a302ff8ef66",
+      "episodes": [
+        {
+          "episode_id": 1572,
+          "length": 210
+        },
+        {
+          "episode_id": 1585,
+          "length": 222
+        },
+        {
+          "episode_id": 1584,
+          "length": 195
+        },
+        {
+          "episode_id": 1479,
+          "length": 194
+        }
+      ]
+    },
+    {
+      "prompt": "pull open the drawer",
+      "prompt_sha256": "62fd6c2e271a7c2abc27fa05ad5c26457767561ed66ec74f6fddefbc1bf52d91",
+      "episodes": [
+        {
+          "episode_id": 8430,
+          "length": 152
+        },
+        {
+          "episode_id": 8477,
+          "length": 157
+        },
+        {
+          "episode_id": 8429,
+          "length": 150
+        },
+        {
+          "episode_id": 8410,
+          "length": 148
+        }
+      ]
+    },
+    {
+      "prompt": "put the glue in the box please",
+      "prompt_sha256": "2e9fd7afbeaa3760f13a6107dd57eef92a8157d710bb544fad80adc98e0df8c9",
+      "episodes": [
+        {
+          "episode_id": 15214,
+          "length": 190
+        },
+        {
+          "episode_id": 15327,
+          "length": 175
+        },
+        {
+          "episode_id": 15323,
+          "length": 177
+        },
+        {
+          "episode_id": 15254,
+          "length": 167
+        }
+      ]
+    },
+    {
+      "prompt": "take the hamburger out of the microwave, place it on the bowl, and close the door, please",
+      "prompt_sha256": "dea8b29aa40743f40567c0f49923577c77832e42770a86501ac7d9d0ee6b8b42",
+      "episodes": [
+        {
+          "episode_id": 4975,
+          "length": 460
+        },
+        {
+          "episode_id": 4809,
+          "length": 447
+        },
+        {
+          "episode_id": 4851,
+          "length": 457
+        },
+        {
+          "episode_id": 4884,
+          "length": 393
+        }
+      ]
+    },
+    {
+      "prompt": "could you put the glue in the box?",
+      "prompt_sha256": "dda5b841250293cb55200b889227c77b7011f9db269014fd8ad8e76628163666",
+      "episodes": [
+        {
+          "episode_id": 15314,
+          "length": 154
+        },
+        {
+          "episode_id": 15211,
+          "length": 169
+        },
+        {
+          "episode_id": 15202,
+          "length": 180
+        },
+        {
+          "episode_id": 15204,
+          "length": 174
+        }
+      ]
+    },
+    {
+      "prompt": "set the phone on the holder",
+      "prompt_sha256": "1b76806e2e5f33811c801fd2afce89bfe02c9e6a86f224c87253c33c8c38d91a",
+      "episodes": [
+        {
+          "episode_id": 10248,
+          "length": 162
+        },
+        {
+          "episode_id": 10386,
+          "length": 168
+        },
+        {
+          "episode_id": 10200,
+          "length": 174
+        },
+        {
+          "episode_id": 10351,
+          "length": 178
+        }
+      ]
+    },
+    {
+      "prompt": "move the seal and the container next to the box",
+      "prompt_sha256": "5f0c3e28b384065334f23aa16ded5f993d7778a61e56053d0a0554afaf2cb161",
+      "episodes": [
+        {
+          "episode_id": 13613,
+          "length": 331
+        },
+        {
+          "episode_id": 13642,
+          "length": 334
+        },
+        {
+          "episode_id": 13770,
+          "length": 341
+        },
+        {
+          "episode_id": 13740,
+          "length": 316
+        }
+      ]
+    },
+    {
+      "prompt": "please move the bottle",
+      "prompt_sha256": "085cc342af38e37f721f6aab0dbf9f71e72aa7e151c1973f2186b7b4d7d53991",
+      "episodes": [
+        {
+          "episode_id": 67,
+          "length": 137
+        },
+        {
+          "episode_id": 148,
+          "length": 135
+        },
+        {
+          "episode_id": 46,
+          "length": 147
+        },
+        {
+          "episode_id": 199,
+          "length": 140
+        }
+      ]
+    },
+    {
+      "prompt": "deposit the spoon on the plate",
+      "prompt_sha256": "acc3e97771d836f8f64ace96dbfcd637db8d230864d18b30bf060ddd8a7a28b3",
+      "episodes": [
+        {
+          "episode_id": 7837,
+          "length": 181
+        },
+        {
+          "episode_id": 7910,
+          "length": 167
+        },
+        {
+          "episode_id": 7933,
+          "length": 177
+        },
+        {
+          "episode_id": 7831,
+          "length": 182
+        }
+      ]
+    },
+    {
+      "prompt": "the milk tea beside the laptop",
+      "prompt_sha256": "295aed599efe00fecd8b8f019b31bee51834791bbd3f3ace76d98443797d4b17",
+      "episodes": [
+        {
+          "episode_id": 9279,
+          "length": 157
+        },
+        {
+          "episode_id": 9327,
+          "length": 166
+        },
+        {
+          "episode_id": 9209,
+          "length": 173
+        },
+        {
+          "episode_id": 9217,
+          "length": 169
+        }
+      ]
+    },
+    {
+      "prompt": "move the aluminum can from the cabinet to the basket",
+      "prompt_sha256": "632059d1dd1772001909ff7ec6de0cc667c124a83f8f9a2d01ed203b68946afe",
+      "episodes": [
+        {
+          "episode_id": 501,
+          "length": 390
+        },
+        {
+          "episode_id": 416,
+          "length": 571
+        },
+        {
+          "episode_id": 484,
+          "length": 396
+        },
+        {
+          "episode_id": 548,
+          "length": 418
+        }
+      ]
+    },
+    {
+      "prompt": "put the metal can away and close the cabinet",
+      "prompt_sha256": "21b905564e56daddd5c75cb90f0b3f0d4be19363043acebcca9105d3e54bed33",
+      "episodes": [
+        {
+          "episode_id": 2468,
+          "length": 353
+        },
+        {
+          "episode_id": 2594,
+          "length": 338
+        },
+        {
+          "episode_id": 2495,
+          "length": 476
+        },
+        {
+          "episode_id": 2457,
+          "length": 343
+        }
+      ]
+    },
+    {
+      "prompt": "the rubik's cube should go on the shelf",
+      "prompt_sha256": "f9d6a966bf2b2838a83066a92a31b83ad41231520da23633c169093c3da26e11",
+      "episodes": [
+        {
+          "episode_id": 11742,
+          "length": 484
+        },
+        {
+          "episode_id": 11757,
+          "length": 461
+        },
+        {
+          "episode_id": 11720,
+          "length": 506
+        },
+        {
+          "episode_id": 11763,
+          "length": 486
+        }
+      ]
+    },
+    {
+      "prompt": "set the drink on the shelf",
+      "prompt_sha256": "68f8a0427f3e22c7196a52033b34c375aea2340a6a65b2bd82be7e1e460322b0",
+      "episodes": [
+        {
+          "episode_id": 9580,
+          "length": 154
+        },
+        {
+          "episode_id": 9492,
+          "length": 161
+        },
+        {
+          "episode_id": 9484,
+          "length": 174
+        },
+        {
+          "episode_id": 9487,
+          "length": 161
+        }
+      ]
+    },
+    {
+      "prompt": "move the bowl from the sink to the dishrack and the produce into the sink",
+      "prompt_sha256": "1543a7da6b6f81446d16a4c3de17b4ebf877c839e72d1cc4a717b65f3e9ea102",
+      "episodes": [
+        {
+          "episode_id": 4507,
+          "length": 430
+        },
+        {
+          "episode_id": 4486,
+          "length": 434
+        },
+        {
+          "episode_id": 4414,
+          "length": 434
+        },
+        {
+          "episode_id": 4481,
+          "length": 444
+        }
+      ]
+    },
+    {
+      "prompt": "put the cup in the case",
+      "prompt_sha256": "79b431f7ff561416181ec823dc6f5d98d9f9c02956932401c6ad9b1898287cca",
+      "episodes": [
+        {
+          "episode_id": 14680,
+          "length": 141
+        },
+        {
+          "episode_id": 14602,
+          "length": 170
+        },
+        {
+          "episode_id": 14763,
+          "length": 145
+        },
+        {
+          "episode_id": 14745,
+          "length": 133
+        }
+      ]
+    },
+    {
+      "prompt": "shelf storage for milk tea",
+      "prompt_sha256": "c180b4702fc36002918246f177a917a94e5fd38980d0a0cde021a5f73cdd053a",
+      "episodes": [
+        {
+          "episode_id": 9408,
+          "length": 157
+        },
+        {
+          "episode_id": 9597,
+          "length": 149
+        },
+        {
+          "episode_id": 9444,
+          "length": 164
+        },
+        {
+          "episode_id": 9450,
+          "length": 145
+        }
+      ]
+    },
+    {
+      "prompt": "please pick up the can from the cabinet",
+      "prompt_sha256": "d32ddbab7965ee45090b6a0f5f1ee5054e3662a7bff20757058eb36a19ef4d49",
+      "episodes": [
+        {
+          "episode_id": 1566,
+          "length": 205
+        },
+        {
+          "episode_id": 1403,
+          "length": 193
+        },
+        {
+          "episode_id": 1545,
+          "length": 247
+        },
+        {
+          "episode_id": 1500,
+          "length": 221
+        }
+      ]
+    },
+    {
+      "prompt": "the stapler belongs on the book",
+      "prompt_sha256": "1f65e64e9de3a518627580ac0e66f34cbd1fcc4a228d185b654e00f7b86b4c83",
+      "episodes": [
+        {
+          "episode_id": 11344,
+          "length": 164
+        },
+        {
+          "episode_id": 11247,
+          "length": 171
+        },
+        {
+          "episode_id": 11332,
+          "length": 161
+        },
+        {
+          "episode_id": 11203,
+          "length": 158
+        }
+      ]
+    },
+    {
+      "prompt": "pick the milk box up from the fridge",
+      "prompt_sha256": "8bd4744ba8c9be47be56aec90cd4581008d292d913689a96ae5bfdce50fc5aef",
+      "episodes": [
+        {
+          "episode_id": 1685,
+          "length": 223
+        },
+        {
+          "episode_id": 1644,
+          "length": 222
+        },
+        {
+          "episode_id": 1752,
+          "length": 228
+        },
+        {
+          "episode_id": 1703,
+          "length": 222
+        }
+      ]
+    },
+    {
+      "prompt": "could you put the cup in the box?",
+      "prompt_sha256": "2246b43baf259f3bda19546856728e222a0d6717d0dba7a0fe07e8b6acf9a927",
+      "episodes": [
+        {
+          "episode_id": 14723,
+          "length": 141
+        },
+        {
+          "episode_id": 14657,
+          "length": 134
+        },
+        {
+          "episode_id": 14682,
+          "length": 146
+        },
+        {
+          "episode_id": 14787,
+          "length": 133
+        }
+      ]
+    },
+    {
+      "prompt": "put the the bowl itself in the sink",
+      "prompt_sha256": "576f6d5a0065a7ca3caf420f012603720b680031480c1c8273f46c194b799d76",
+      "episodes": [
+        {
+          "episode_id": 6636,
+          "length": 170
+        },
+        {
+          "episode_id": 6655,
+          "length": 169
+        },
+        {
+          "episode_id": 6617,
+          "length": 166
+        },
+        {
+          "episode_id": 6713,
+          "length": 165
+        }
+      ]
+    },
+    {
+      "prompt": "position the pen in the box",
+      "prompt_sha256": "69582d5dc105a358314b2c67e72bb4c8f50121deeab10ea6e06d2a909a0a2ca7",
+      "episodes": [
+        {
+          "episode_id": 15487,
+          "length": 156
+        },
+        {
+          "episode_id": 15552,
+          "length": 186
+        },
+        {
+          "episode_id": 15461,
+          "length": 177
+        },
+        {
+          "episode_id": 15499,
+          "length": 184
+        }
+      ]
+    },
+    {
+      "prompt": "put the beaker in the box",
+      "prompt_sha256": "24c168af64113e034395130bd1901821b1ff021b70ccbf127929ec92690d4899",
+      "episodes": [
+        {
+          "episode_id": 14645,
+          "length": 128
+        },
+        {
+          "episode_id": 14667,
+          "length": 144
+        },
+        {
+          "episode_id": 14661,
+          "length": 139
+        },
+        {
+          "episode_id": 14694,
+          "length": 148
+        }
+      ]
+    },
+    {
+      "prompt": "put the cube in the drawer",
+      "prompt_sha256": "5aee2df8d3eba5302be2faf8c817be889fc29cb25af8c3e9d57f2fbca12e821a",
+      "episodes": [
+        {
+          "episode_id": 10474,
+          "length": 156
+        },
+        {
+          "episode_id": 10546,
+          "length": 153
+        },
+        {
+          "episode_id": 10433,
+          "length": 168
+        },
+        {
+          "episode_id": 10452,
+          "length": 135
+        }
+      ]
+    },
+    {
+      "prompt": "move the bottle to another location",
+      "prompt_sha256": "c590638cb45923dd7c96acc1a5c73959ee970650ae4fcc04c8825198b97938c8",
+      "episodes": [
+        {
+          "episode_id": 117,
+          "length": 139
+        },
+        {
+          "episode_id": 198,
+          "length": 129
+        },
+        {
+          "episode_id": 69,
+          "length": 138
+        },
+        {
+          "episode_id": 172,
+          "length": 131
+        }
+      ]
+    },
+    {
+      "prompt": "would you move the seal next to the box?",
+      "prompt_sha256": "14666765a7f05275fdb5d23ed940077fc14919d5b18d1daebafccf6a92266872",
+      "episodes": [
+        {
+          "episode_id": 13856,
+          "length": 154
+        },
+        {
+          "episode_id": 13939,
+          "length": 152
+        },
+        {
+          "episode_id": 13924,
+          "length": 165
+        },
+        {
+          "episode_id": 13998,
+          "length": 146
+        }
+      ]
+    },
+    {
+      "prompt": "please move the hamburger onto the plate",
+      "prompt_sha256": "536a5645b677b0ff48667b5d95f0c1328760224984f78dd23170c2746c42659b",
+      "episodes": [
+        {
+          "episode_id": 5494,
+          "length": 171
+        },
+        {
+          "episode_id": 5582,
+          "length": 155
+        },
+        {
+          "episode_id": 5527,
+          "length": 148
+        },
+        {
+          "episode_id": 5462,
+          "length": 159
+        }
+      ]
+    },
+    {
+      "prompt": "pick up the drink box from the basket",
+      "prompt_sha256": "f5adfbc96af05832f6155df2a7a978afcc023eab55e9b998b5acde85ac180b3f",
+      "episodes": [
+        {
+          "episode_id": 1114,
+          "length": 190
+        },
+        {
+          "episode_id": 1188,
+          "length": 201
+        },
+        {
+          "episode_id": 1019,
+          "length": 206
+        },
+        {
+          "episode_id": 1032,
+          "length": 192
+        }
+      ]
+    },
+    {
+      "prompt": "please put the spoon in the sink",
+      "prompt_sha256": "bf10210b191ae76c6ed537913e5f1de755651aa7be53e56856fe86784c5cb4ca",
+      "episodes": [
+        {
+          "episode_id": 7787,
+          "length": 155
+        },
+        {
+          "episode_id": 7780,
+          "length": 155
+        },
+        {
+          "episode_id": 7624,
+          "length": 154
+        },
+        {
+          "episode_id": 7680,
+          "length": 156
+        }
+      ]
+    },
+    {
+      "prompt": "get the milk tea next to the laptop",
+      "prompt_sha256": "0ebcc5fd27d1395917ba514798b2659950d497ef213f8748899ad0360e6c6b14",
+      "episodes": [
+        {
+          "episode_id": 9367,
+          "length": 172
+        },
+        {
+          "episode_id": 9332,
+          "length": 161
+        },
+        {
+          "episode_id": 9374,
+          "length": 162
+        },
+        {
+          "episode_id": 9344,
+          "length": 165
+        }
+      ]
+    },
+    {
+      "prompt": "put tool on book",
+      "prompt_sha256": "090e122eee60cf5a5aafd40cb4b1b2c7320baed6880cee7a9575fbb2f374b156",
+      "episodes": [
+        {
+          "episode_id": 11201,
+          "length": 159
+        },
+        {
+          "episode_id": 11225,
+          "length": 159
+        },
+        {
+          "episode_id": 11211,
+          "length": 163
+        },
+        {
+          "episode_id": 11322,
+          "length": 158
+        }
+      ]
+    },
+    {
+      "prompt": "please move the pen to the box",
+      "prompt_sha256": "9029e622a261b911129511b8b9a00ad13e613bcf685f972bd13378bb50151cbf",
+      "episodes": [
+        {
+          "episode_id": 13510,
+          "length": 213
+        },
+        {
+          "episode_id": 13399,
+          "length": 145
+        },
+        {
+          "episode_id": 13450,
+          "length": 145
+        },
+        {
+          "episode_id": 13563,
+          "length": 153
+        }
+      ]
+    },
+    {
+      "prompt": "relocate the seal onto the book",
+      "prompt_sha256": "f4e069fdba35c037483559101063af61944df7e009d79967dd1da151187123eb",
+      "episodes": [
+        {
+          "episode_id": 14218,
+          "length": 370
+        },
+        {
+          "episode_id": 14390,
+          "length": 401
+        },
+        {
+          "episode_id": 14245,
+          "length": 370
+        },
+        {
+          "episode_id": 14238,
+          "length": 406
+        }
+      ]
+    },
+    {
+      "prompt": "reposition the cups into the box",
+      "prompt_sha256": "2bb3a252f2f051cd12f4f761c40402ba62a1e922eba2fceffe422b5977451ec6",
+      "episodes": [
+        {
+          "episode_id": 13247,
+          "length": 334
+        },
+        {
+          "episode_id": 13239,
+          "length": 351
+        },
+        {
+          "episode_id": 13368,
+          "length": 309
+        },
+        {
+          "episode_id": 13364,
+          "length": 322
+        }
+      ]
+    },
+    {
+      "prompt": "put the cup in the receptacle",
+      "prompt_sha256": "900931480f02918b767e782f1c317e881dcf1f55f887d25b7faae2066e28ba25",
+      "episodes": [
+        {
+          "episode_id": 14729,
+          "length": 143
+        },
+        {
+          "episode_id": 14766,
+          "length": 140
+        },
+        {
+          "episode_id": 14608,
+          "length": 135
+        },
+        {
+          "episode_id": 14706,
+          "length": 134
+        }
+      ]
+    },
+    {
+      "prompt": "set the glue in the box",
+      "prompt_sha256": "b1be042fa22e9fd2c91f257fe39b867a7058cb647efecd709beefa6eca224b3e",
+      "episodes": [
+        {
+          "episode_id": 15219,
+          "length": 193
+        },
+        {
+          "episode_id": 15376,
+          "length": 161
+        },
+        {
+          "episode_id": 15398,
+          "length": 162
+        },
+        {
+          "episode_id": 15275,
+          "length": 177
+        }
+      ]
+    },
+    {
+      "prompt": "pick up the condiment can from the cabinet",
+      "prompt_sha256": "6abc3b35c0bf58d9e04c4379583875ffe80b32583249e729dd538d1ae15fc40c",
+      "episodes": [
+        {
+          "episode_id": 1828,
+          "length": 207
+        },
+        {
+          "episode_id": 1995,
+          "length": 199
+        },
+        {
+          "episode_id": 1801,
+          "length": 270
+        },
+        {
+          "episode_id": 1973,
+          "length": 222
+        }
+      ]
+    },
+    {
+      "prompt": "move the soup can from the cabinet to the basket",
+      "prompt_sha256": "6d4506fea50e73568771f79585708153adfcd7682bc105d4af8eedef45176c61",
+      "episodes": [
+        {
+          "episode_id": 478,
+          "length": 400
+        },
+        {
+          "episode_id": 582,
+          "length": 392
+        },
+        {
+          "episode_id": 595,
+          "length": 589
+        },
+        {
+          "episode_id": 585,
+          "length": 406
+        }
+      ]
+    },
+    {
+      "prompt": "move the seal onto the publication",
+      "prompt_sha256": "090793d4bb7eaef76e42fb542e7acd06e363daaa687534b266d98a8cd9df2b0c",
+      "episodes": [
+        {
+          "episode_id": 14337,
+          "length": 415
+        },
+        {
+          "episode_id": 14272,
+          "length": 378
+        },
+        {
+          "episode_id": 14211,
+          "length": 344
+        },
+        {
+          "episode_id": 14371,
+          "length": 413
+        }
+      ]
+    },
+    {
+      "prompt": "pick up the burger from the microwave",
+      "prompt_sha256": "b7011478ae229a3db694277312ebecd282eb53e8ef3b040f44e425403fbce381",
+      "episodes": [
+        {
+          "episode_id": 6367,
+          "length": 181
+        },
+        {
+          "episode_id": 6218,
+          "length": 183
+        },
+        {
+          "episode_id": 6295,
+          "length": 184
+        },
+        {
+          "episode_id": 6300,
+          "length": 181
+        }
+      ]
+    },
+    {
+      "prompt": "position the rubik's cube on the shelf",
+      "prompt_sha256": "c50a6c89cded56db04345cb66eec5a174ee24478ea4fea39231540006ab3051a",
+      "episodes": [
+        {
+          "episode_id": 11793,
+          "length": 455
+        },
+        {
+          "episode_id": 11745,
+          "length": 474
+        },
+        {
+          "episode_id": 11694,
+          "length": 468
+        },
+        {
+          "episode_id": 11744,
+          "length": 478
+        }
+      ]
+    },
+    {
+      "prompt": "put the glue stick in the box",
+      "prompt_sha256": "00187be1900650e7f90e05f4b295b4955828caa78cfb814cc5a7040a97cc2073",
+      "episodes": [
+        {
+          "episode_id": 15220,
+          "length": 187
+        },
+        {
+          "episode_id": 15225,
+          "length": 179
+        },
+        {
+          "episode_id": 15253,
+          "length": 184
+        },
+        {
+          "episode_id": 15287,
+          "length": 172
+        }
+      ]
+    },
+    {
+      "prompt": "put the meat sandwich in the microwave and close the door",
+      "prompt_sha256": "67dc7d9e3bf1e73a1681f53c3cd0d56864bdc352abc3102aebcecee34956ae63",
+      "episodes": [
+        {
+          "episode_id": 4623,
+          "length": 384
+        },
+        {
+          "episode_id": 4760,
+          "length": 385
+        },
+        {
+          "episode_id": 4634,
+          "length": 435
+        },
+        {
+          "episode_id": 4775,
+          "length": 508
+        }
+      ]
+    },
+    {
+      "prompt": "the stapler should go on the book",
+      "prompt_sha256": "6aa3a9b9e706f863f8a9634acf392f003933bd09c41111dc95e7d84c4fd705aa",
+      "episodes": [
+        {
+          "episode_id": 11326,
+          "length": 161
+        },
+        {
+          "episode_id": 11227,
+          "length": 168
+        },
+        {
+          "episode_id": 11304,
+          "length": 166
+        },
+        {
+          "episode_id": 11356,
+          "length": 158
+        }
+      ]
+    },
+    {
+      "prompt": "place the bowl in the dish drainer",
+      "prompt_sha256": "6bb51841b796b55f5b4ae412355938c792a979dd9eb7fc2ab55ad95262037df7",
+      "episodes": [
+        {
+          "episode_id": 6452,
+          "length": 165
+        },
+        {
+          "episode_id": 6456,
+          "length": 162
+        },
+        {
+          "episode_id": 6401,
+          "length": 170
+        },
+        {
+          "episode_id": 6540,
+          "length": 169
+        }
+      ]
+    },
+    {
+      "prompt": "adjust the positions of the mouse, rubik's cube, and stapler",
+      "prompt_sha256": "cb91ee79d31d706216a5a2a200bc9e538b43fb5e03d3448cace4c990e7deeb33",
+      "episodes": [
+        {
+          "episode_id": 8305,
+          "length": 513
+        },
+        {
+          "episode_id": 8385,
+          "length": 542
+        },
+        {
+          "episode_id": 8289,
+          "length": 510
+        },
+        {
+          "episode_id": 8299,
+          "length": 515
+        }
+      ]
+    },
+    {
+      "prompt": "put the bowl in the the sink itself",
+      "prompt_sha256": "9f84a2311e510940e7c8ac4df5edfa0810d977ee234bfd2f72eb7f11a6abce45",
+      "episodes": [
+        {
+          "episode_id": 6626,
+          "length": 167
+        },
+        {
+          "episode_id": 6627,
+          "length": 166
+        },
+        {
+          "episode_id": 6793,
+          "length": 166
+        },
+        {
+          "episode_id": 6694,
+          "length": 170
+        }
+      ]
+    },
+    {
+      "prompt": "put the cup on the tabletop",
+      "prompt_sha256": "5ecde097297802ededdb16c211e3e203ad4701a7da6f18f763f40a9532c74c2f",
+      "episodes": [
+        {
+          "episode_id": 15026,
+          "length": 156
+        },
+        {
+          "episode_id": 15192,
+          "length": 168
+        },
+        {
+          "episode_id": 15088,
+          "length": 140
+        },
+        {
+          "episode_id": 15016,
+          "length": 158
+        }
+      ]
+    },
+    {
+      "prompt": "pick up the boxed drink from the basket",
+      "prompt_sha256": "3eebadbd716bea4e410b762c831f9960f7bed712dd03c90ebf016b8374e5b902",
+      "episodes": [
+        {
+          "episode_id": 1048,
+          "length": 214
+        },
+        {
+          "episode_id": 1178,
+          "length": 194
+        },
+        {
+          "episode_id": 1013,
+          "length": 209
+        },
+        {
+          "episode_id": 1004,
+          "length": 201
+        }
+      ]
+    },
+    {
+      "prompt": "position the spoon in the sink",
+      "prompt_sha256": "ae3af8ebe8c57cad8d4fa61650c6badba573265592bb42ae4793553f249fded0",
+      "episodes": [
+        {
+          "episode_id": 7706,
+          "length": 157
+        },
+        {
+          "episode_id": 7734,
+          "length": 156
+        },
+        {
+          "episode_id": 7747,
+          "length": 155
+        },
+        {
+          "episode_id": 7737,
+          "length": 156
+        }
+      ]
+    },
+    {
+      "prompt": "put the fastening tool on the book",
+      "prompt_sha256": "727ebae4427b7cec83360c0246d480db95791fe7a97b7b73cb698626ee023e24",
+      "episodes": [
+        {
+          "episode_id": 11284,
+          "length": 157
+        },
+        {
+          "episode_id": 11383,
+          "length": 164
+        },
+        {
+          "episode_id": 11350,
+          "length": 156
+        },
+        {
+          "episode_id": 11237,
+          "length": 165
+        }
+      ]
+    },
+    {
+      "prompt": "move the drinking cups into the box",
+      "prompt_sha256": "09f7a918ca5d154a8f7582af3db303974dd9453e0dc53441269305f9418e1027",
+      "episodes": [
+        {
+          "episode_id": 13306,
+          "length": 341
+        },
+        {
+          "episode_id": 13314,
+          "length": 324
+        },
+        {
+          "episode_id": 13287,
+          "length": 337
+        },
+        {
+          "episode_id": 13386,
+          "length": 331
+        }
+      ]
+    },
+    {
+      "prompt": "put the apple in the garbage can, the bowl in the dishrack, and the spoon in the sink",
+      "prompt_sha256": "215ddf698878a1b45d2ef854cc55e146954e6950d7141c98dab83876d7ccbb4e",
+      "episodes": [
+        {
+          "episode_id": 4084,
+          "length": 545
+        },
+        {
+          "episode_id": 4037,
+          "length": 522
+        },
+        {
+          "episode_id": 4086,
+          "length": 544
+        },
+        {
+          "episode_id": 4136,
+          "length": 523
+        }
+      ]
+    },
+    {
+      "prompt": "the sauce can should be picked up from the cabinet",
+      "prompt_sha256": "9e7d62b5e492ed0c11948edc9527c461d19c773fd6b5938285e133eeb14de6bf",
+      "episodes": [
+        {
+          "episode_id": 1975,
+          "length": 203
+        },
+        {
+          "episode_id": 1976,
+          "length": 208
+        },
+        {
+          "episode_id": 1984,
+          "length": 233
+        },
+        {
+          "episode_id": 1875,
+          "length": 227
+        }
+      ]
+    },
+    {
+      "prompt": "move the rubber stamp next to the pen cup",
+      "prompt_sha256": "c31ae3b33f81918c9f9a8b8e22197c070b6d4e9ade0923d1483b44c2c3ff217a",
+      "episodes": [
+        {
+          "episode_id": 14042,
+          "length": 153
+        },
+        {
+          "episode_id": 14107,
+          "length": 140
+        },
+        {
+          "episode_id": 14045,
+          "length": 137
+        },
+        {
+          "episode_id": 14019,
+          "length": 136
+        }
+      ]
+    },
+    {
+      "prompt": "take the apple from the bowl",
+      "prompt_sha256": "31f739555b8c88ce216b1256f554521b40cdaeadc97372e5501170f31ae7bd08",
+      "episodes": [
+        {
+          "episode_id": 5642,
+          "length": 171
+        },
+        {
+          "episode_id": 5771,
+          "length": 166
+        },
+        {
+          "episode_id": 5652,
+          "length": 171
+        },
+        {
+          "episode_id": 5643,
+          "length": 174
+        }
+      ]
+    },
+    {
+      "prompt": "set the can before the microwave",
+      "prompt_sha256": "d597fd0cd51ac6095410e7070f18122433f725d8d90bbf866775a82cc538d648",
+      "episodes": [
+        {
+          "episode_id": 2963,
+          "length": 167
+        },
+        {
+          "episode_id": 2831,
+          "length": 151
+        },
+        {
+          "episode_id": 2981,
+          "length": 157
+        },
+        {
+          "episode_id": 2902,
+          "length": 151
+        }
+      ]
+    }
+  ],
+  "train_episode_count": 256,
+  "development_episode_count": 256,
+  "train_prompt_groups": 64,
+  "development_prompt_groups": 64,
+  "limitations": [
+    "Exact prompts are not verified semantic parent tasks.",
+    "Physical scene identity is absent from the inspected metadata.",
+    "Development is project-created from publisher TRAIN, not a sealed test set.",
+    "Selection uses metadata only and does not establish valid action labels."
+  ],
+  "source_metadata_sha256": "88492784987d483618b5144f37bac8c3036bdaaa11d2df730f7b26a804b68658",
+  "split_manifest_sha256": "b90196fd2963a5eb90f6e41339f71129c6306fbfd7b45fd80326a5ebdd4c60c1"
+}

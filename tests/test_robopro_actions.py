@@ -4,6 +4,7 @@ from tiny_omni_decision.robopro_actions import (
     causal_window_indices,
     numeric_option_separation,
     uniform_indices,
+    validate_probe_feature_shapes,
 )
 
 
@@ -51,3 +52,26 @@ def test_numeric_option_separation_reports_duplicate_choices():
 def test_numeric_option_separation_rejects_invalid_options(options):
     with pytest.raises(ValueError):
         numeric_option_separation(options)
+
+
+def test_probe_feature_shapes_follow_selected_sample_size():
+    validate_probe_feature_shapes(
+        (512, 3, 8, 768),
+        (512, 3, 8, 14),
+        (512, 3, 14),
+        (128, 3, 4, 14),
+        episode_count=512,
+        prompt_group_count=128,
+    )
+
+
+def test_probe_feature_shapes_reject_mismatched_episode_count():
+    with pytest.raises(ValueError, match="unexpected temporal feature shape"):
+        validate_probe_feature_shapes(
+            (128, 3, 8, 768),
+            (512, 3, 8, 14),
+            (512, 3, 14),
+            (128, 3, 4, 14),
+            episode_count=512,
+            prompt_group_count=128,
+        )

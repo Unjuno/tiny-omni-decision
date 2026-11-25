@@ -19,7 +19,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import av
 import numpy as np
 
-from tiny_omni_decision.robopro_actions import causal_window_indices, numeric_option_separation
+from tiny_omni_decision.robopro_actions import (
+    causal_window_indices,
+    numeric_option_separation,
+    validate_probe_feature_shapes,
+)
 
 DATASET_REVISION = "90ec789bf4018eb9c0f75da9f69aab5c185f0fd0"
 VIDEO_MODEL_ID = "google/videoprism-base-f16r288"
@@ -272,12 +276,16 @@ def extract(
     state_array = np.asarray(state_windows, dtype=np.float32)
     target_array = np.asarray(targets, dtype=np.float32)
     options_array = np.asarray(options, dtype=np.float32)
-    if temporal_array.shape != (128, 3, 8, 768):
-        raise ValueError(f"unexpected temporal feature shape: {temporal_array.shape}")
-    if state_array.shape != (128, 3, 8, 14) or target_array.shape != (128, 3, 14):
-        raise ValueError("sensor/action feature cache has an unexpected shape")
-    if options_array.shape != (32, 3, 4, 14):
-        raise ValueError(f"unexpected candidate action shape: {options_array.shape}")
+    validate_probe_feature_shapes(
+        temporal_array.shape,
+        state_array.shape,
+        target_array.shape,
+        options_array.shape,
+        episode_count=len(sample_records),
+        prompt_group_count=sum(len(sample[split]) for split in ("train", "development")),
+        query_count=len(QUERY_PROGRESS),
+        frame_count=FRAME_COUNT,
+    )
 
     output_root.mkdir(parents=True, exist_ok=False)
     cache_path = output_root / "robopro-video-state-features.npz"

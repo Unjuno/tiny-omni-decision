@@ -78,3 +78,30 @@ def numeric_option_separation(
         "max_linf_distance": max(distances),
         "comparison_tolerance": tolerance,
     }
+
+
+def validate_probe_feature_shapes(
+    temporal_shape: tuple[int, ...],
+    state_shape: tuple[int, ...],
+    target_shape: tuple[int, ...],
+    options_shape: tuple[int, ...],
+    *,
+    episode_count: int,
+    prompt_group_count: int,
+    query_count: int = 3,
+    frame_count: int = 8,
+    feature_width: int = 768,
+    state_width: int = 14,
+    action_width: int = 14,
+) -> None:
+    """Validate feature cache dimensions against the selected sample size."""
+    expected_temporal = (episode_count, query_count, frame_count, feature_width)
+    expected_state = (episode_count, query_count, frame_count, state_width)
+    expected_target = (episode_count, query_count, action_width)
+    expected_options = (prompt_group_count, query_count, 4, action_width)
+    if temporal_shape != expected_temporal:
+        raise ValueError(f"unexpected temporal feature shape: {temporal_shape}")
+    if state_shape != expected_state or target_shape != expected_target:
+        raise ValueError("sensor/action feature cache has an unexpected shape")
+    if options_shape != expected_options:
+        raise ValueError(f"unexpected candidate action shape: {options_shape}")
