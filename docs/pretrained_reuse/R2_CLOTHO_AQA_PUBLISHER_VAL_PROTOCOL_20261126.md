@@ -49,10 +49,13 @@ the fixed rules below:
    calibration, or validation partitions, or the audited FSD128 training
    source IDs/uploaders.
 4. Exclude exact media/waveform duplicates of any previously used Clotho or
-   FSD128 item, using canonical decoded mono/32-kHz waveform SHA-256. Also
-   screen normalized question text against previously used Clotho questions;
-   duplicate content is excluded as a whole source group. Preserve every
-   remaining eligible record without difficulty or class-based filtering.
+   FSD128 item, using canonical decoded mono/32-kHz waveform SHA-256. Treat
+   normalized question text as a diagnostic only: repeated generic question
+   wording on a different, non-overlapping audio source is not duplicated
+   observation content. The content identity is the audio source plus its
+   normalized question. Exclude any duplicated source-question identity as a
+   whole source group. Preserve every remaining eligible record without
+   difficulty or class-based filtering.
 5. Require the same included question IDs, source mapping, audio features, and
    order for both checkpoints. Do not open or fetch `clotho_aqa_test.csv`.
 
@@ -96,6 +99,13 @@ accuracy delta included zero. These are development results, not publisher
 validation results.
 
 No publisher-validation CSV, labels, or media have been downloaded or opened
-for this protocol as of its source commit. No model or GPU job is started by
-registering the protocol. The run must not proceed unless the exact rights,
-identity, and minimum-group gates above pass.
+or media have been opened for scoring as of this protocol revision. The
+validation CSV was fetched after the initial protocol was committed, with its
+publisher MD5 verified; only its schema and first row were inspected to confirm
+field names. Before aggregate counts, cohort inclusion, feature extraction, or
+scoring, the normalized-question rule above was corrected to match the prior
+Clotho split audit, which explicitly treats generic wording shared across
+different audio sources as non-overlap. This correction is not based on a
+performance result. No model or GPU job is started by registering the protocol.
+The run must not proceed unless the exact rights, identity, and minimum-group
+gates above pass.
