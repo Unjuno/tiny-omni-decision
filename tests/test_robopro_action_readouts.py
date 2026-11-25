@@ -1,6 +1,7 @@
 import numpy as np
 
 from scripts.fit_robopro_action_readouts import (
+    MODE_STREAMS,
     _build_examples,
     _fit_normalizers,
     _group_metrics,
@@ -121,3 +122,7 @@ def test_action_normalizer_uses_only_train_prompt_groups():
     normalizers = _fit_normalizers(train, options)
 
     assert np.all(normalizers["actions"][0] == 0)
+
+
+def test_state_video_temporal_arm_uses_state_and_video_streams():
+    assert MODE_STREAMS["state_video_gru"] == ["state", "video"]

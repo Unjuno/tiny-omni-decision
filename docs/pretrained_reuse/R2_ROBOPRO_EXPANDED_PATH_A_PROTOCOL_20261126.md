@@ -10,8 +10,9 @@ conclusion. This run uses previously unselected exact prompt groups from the
 same pinned publisher TRAIN release. It is still development evidence, not a
 publisher test or blind audit.
 
-**Status: frozen sample downloaded and audited; CPU VideoPrism extraction is in
-progress. No model-quality result is available yet.**
+**Status: complete as a bounded development comparison.** The eight-arm fixed
+comparison and one focused post-hoc State+Video ablation are reported in
+[`R2_ROBOPRO_EXPANDED_PATH_A_RESULTS_20261126.md`](R2_ROBOPRO_EXPANDED_PATH_A_RESULTS_20261126.md).
 
 ## Frozen sample and exclusions
 
@@ -68,7 +69,10 @@ hit the old extractor's hard-coded `(128, 3, 8, 768)` shape check before saving
 the cache. A sample-size-derived shape validator and regression tests were
 added. The corrected extraction is running in the same new attempt directory.
 
-Current fitted readout result, timings, hashes, software versions, and measured
-peak memory will be appended only after a successful extraction and one fixed
-readout fit. No official test, sealed audit, product promotion, or quantization
-is part of this experiment.
+The corrected frozen feature cache passed shape, provenance, and data-audit
+checks. One fixed eight-arm readout fit completed, followed by one focused
+post-hoc State+Video-GRU arm to distinguish text-fusion effects. The second
+comparison uses the same already exposed development prompts and must not be
+described as independent confirmation. Metrics, uncertainty, exact artifacts,
+runtime, and limits are in the result report. No official test, sealed audit,
+product promotion, or quantization is part of this experiment.

@@ -1,3 +1,15 @@
+**2026-11-26 R2 expanded RoboPro frozen-feature Path A:** A fixed-seed-17
+CPU-only follow-up expanded the sample to 64 train and 64 exact-prompt-disjoint
+development groups (768 queries each). State-only reached 75.65% / 0.5478
+macro Accuracy/NLL; Text+State+Video-GRU reached 61.72% / 0.8017. A focused
+post-hoc State+Video-GRU arm reached 64.58% / 0.7425 on the same exposed
+development set. Video-GRU beats mean-pooled video in the video-only arms and
+the aligned-video controls affect joint predictions, but tested video fusion
+does not beat State-only. This is task-specific retrieval of one recorded robot
+demonstrator action; scenes, success, and alternative valid actions are not
+established. Keep it as development evidence, not a blind result or product
+promotion. See the [expanded comparison](docs/pretrained_reuse/R2_ROBOPRO_EXPANDED_PATH_A_RESULTS_20261126.md).
+
 **2026-11-26 R2 Indoor Action video source screen:** The official Zenodo
 record declares CC BY 4.0 for a 977,124,409-byte, 1,228-clip indoor action
 dataset with 10 classes and a publisher split by original recording video.

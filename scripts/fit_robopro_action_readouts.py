@@ -141,6 +141,7 @@ MODE_STREAMS = {
     "video_mean_only": ["video"],
     "video_gru_only": ["video"],
     "text_state": ["text", "state"],
+    "state_video_gru": ["state", "video"],
     "text_video_mean": ["text", "video"],
     "text_state_video_mean": ["text", "state", "video"],
     "text_state_video_gru": ["text", "state", "video"],
@@ -517,14 +518,22 @@ def run(config_path: Path, feature_path: Path, text_path: Path, output_root: Pat
         for mode, probability in selected_dev_probabilities.items()
     }
     paired_comparisons = {}
-    for right_mode, left_mode in (
+    comparison_pairs = [
         ("text_state_video_gru", "text_only"),
         ("text_state_video_gru", "state_only"),
         ("text_state_video_gru", "video_mean_only"),
         ("text_state_video_gru", "video_gru_only"),
         ("text_state_video_gru", "text_state_video_mean"),
         ("video_gru_only", "video_mean_only"),
-    ):
+    ]
+    if "state_video_gru" in selected_dev_probabilities:
+        comparison_pairs.extend(
+            [
+                ("state_video_gru", "state_only"),
+                ("state_video_gru", "text_state_video_gru"),
+            ]
+        )
+    for right_mode, left_mode in comparison_pairs:
         paired_comparisons[f"{right_mode}_minus_{left_mode}"] = _paired_bootstrap(
             fixed_correctness[left_mode].astype(np.float64),
             fixed_correctness[right_mode].astype(np.float64),
