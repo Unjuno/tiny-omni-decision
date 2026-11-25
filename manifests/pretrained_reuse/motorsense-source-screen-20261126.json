@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "screen_date": "2026-11-26",
+  "source": "MotorSense",
+  "disposition": "REVIEW_NOT_ADMITTED",
+  "inspection_scope": "official project page, code repository metadata/docs/license, and Hugging Face dataset API/card/file listing; no annotations, media, or checkpoints fetched or opened",
+  "code_repository": {
+    "url": "https://github.com/edess442/MotorSense",
+    "revision": "536180c611834ae81a8dea14716896284057da77",
+    "license": "MIT",
+    "license_scope": "code"
+  },
+  "dataset_repository": {
+    "url": "https://huggingface.co/datasets/edessa/motorsense",
+    "revision": "3fec7844694f692a11d2818735aec535a001b7f7",
+    "api_license": "other",
+    "public": true,
+    "gated": false,
+    "listed_file_count": 1864,
+    "reported_total_size": "approximately 885 GB; publisher-reported rounded size, not an exact byte count",
+    "metadata_file_bytes": {
+      "README.md": 4269,
+      "metadata/recordings.csv": 18012,
+      "annotations/actions/MotorSense_train.csv": 527768,
+      "annotations/actions/MotorSense_validation.csv": 239039,
+      "annotations/actions/MotorSense_all.csv": 766558,
+      "annotations/actions/MotorSense_verb_classes.csv": 2041,
+      "annotations/actions/MotorSense_noun_classes.csv": 8666,
+      "annotations/actions/MotorSense_video_info.csv": 2927,
+      "annotations/actions/splits.json": 972,
+      "annotations/contacts/contact_segments.csv": 27587504,
+      "annotations/contacts/split.json": 657
+    }
+  },
+  "task_evidence": {
+    "streams": ["egocentric_video", "bimanual_EMG", "bimanual_IMU"],
+    "video_recordings": 370,
+    "video_hours": 70.4,
+    "action_segments_train": 3584,
+    "action_segments_validation": 1625,
+    "action_recordings_train": 65,
+    "action_recordings_validation": 20,
+    "action_classes_verb": 57,
+    "action_classes_noun": 180,
+    "signal_rate_hz": 500,
+    "video_sensor_timestamps_aligned": true,
+    "audio_in_release_schema": "not established",
+    "publisher_count_discrepancy": "project page says 10418 action segments; pinned data docs describe 5209 total (3584 train + 1625 validation)"
+  },
+  "integrity_and_rights": {
+    "dataset_license_clear_for_product_use": false,
+    "human_participant_consent_scope": "unknown",
+    "frames_face_blurred": false,
+    "validation_participant_disjointness": "false for Aria; smartphone participant identity unattributed",
+    "released_checkpoint_validation_exposure": "all 370 recordings used for video-sensor contrastive pretraining, including action/contact validation recordings",
+    "fit_or_evaluation_admitted": false
+  },
+  "preservation": {
+    "annotation_payload_fetched": false,
+    "media_fetched": false,
+    "checkpoint_fetched_or_loaded": false,
+    "gpu_used": false,
+    "cloud_compute_used": false,
+    "sealed_audit_accessed": false
+  }
+}
