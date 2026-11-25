@@ -1,3 +1,12 @@
+**2026-11-26 R2 Indoor Action video source screen:** The official Zenodo
+record declares CC BY 4.0 for a 977,124,409-byte, 1,228-clip indoor action
+dataset with 10 classes and a publisher split by original recording video.
+However, only five participants appear across train/validation/test, the
+publisher's subject-level counts contain an internal six-clip discrepancy,
+and reviewed official materials do not establish consent scope for identifiable
+home video. Keep it `REVIEW_NOT_ADMITTED`; no archive or labels were accessed.
+See the [metadata-only source screen](docs/pretrained_reuse/R2_INDOOR_ACTION_VIDEO_SOURCE_SCREEN_20261126.md).
+
 **2026-11-26 R2 Path A RoboPro video/state/text readout:** A fixed seed-17,
 CPU-only development comparison on 64 train and 64 prompt-disjoint development
 episodes (16 prompts per partition) found Text+State at 58.33% macro Accuracy /

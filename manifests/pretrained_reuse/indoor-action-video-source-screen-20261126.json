@@ -1,0 +1,58 @@
+{
+  "format": "metadata_only_video_source_screen_v1",
+  "screened_at": "2026-11-26",
+  "dataset": {
+    "name": "Indoor Action Dataset",
+    "version": 1,
+    "zenodo_doi": "10.5281/zenodo.14551902",
+    "zenodo_record_url": "https://zenodo.org/records/14551902",
+    "repository": "https://github.com/DaniDeniz/IndoorActionDataset",
+    "repository_revision": "89b896bba5d6c9b199d927129af0e4205605572d",
+    "download_endpoint": "https://atcdatos.ugr.es/index.php/s/zqPA9ajR78Bn6qB/download",
+    "archive": {
+      "name": "IndoorActionDataset-video.zip",
+      "bytes": 977124409,
+      "md5": "5f5d438335692b32127b0f780d98236f",
+      "head_content_length_verified": true,
+      "payload_accessed": false
+    },
+    "license": {
+      "dataset_record_spdx": "CC-BY-4.0",
+      "repository_license": "BSD-3-Clause",
+      "data_license_basis": "Zenodo record metadata; repository code license is not treated as a data license"
+    },
+    "reported_counts": {
+      "participants": 5,
+      "classes_including_no_action": 10,
+      "clips_by_class_total": 1228,
+      "train": 673,
+      "validation": 187,
+      "test": 368,
+      "clips_by_subject_table_total": 1228,
+      "subject_table_test_total": 362,
+      "subject_table_inconsistency": "S2 subject total 124 conflicts with 70 train + 25 validation + 23 test; subject-table test sum is 362, six below class-table test sum"
+    },
+    "split": {
+      "publisher_claim": "all clips from an original source video are assigned to one split",
+      "participant_disjoint": false,
+      "person_held_out_generalization": false
+    }
+  },
+  "task_fit": {
+    "candidate": "video-only supplied-option action/no-action classification",
+    "supports_multimodal_gate": false,
+    "supports_general_video_quality_claim": false,
+    "official_test_opened": false
+  },
+  "privacy_and_rights": {
+    "identifiable_people_in_indoor_scenes": true,
+    "consent_or_participant_release_found_in_reviewed_official_materials": false,
+    "interpretation": "consent is not established as absent; downstream rights and privacy scope remain unverified"
+  },
+  "disposition": "REVIEW_NOT_ADMITTED",
+  "downloaded": false,
+  "labels_or_media_accessed": false,
+  "model_loaded_or_run": false,
+  "sealed_audit_accessed": false,
+  "reason": "five participants, person overlap across splits, a six-clip subject-table inconsistency, and unresolved consent scope"
+}
