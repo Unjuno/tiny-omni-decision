@@ -29,7 +29,7 @@ progress. No model-quality result is available yet.**
 - Effective config:
   `configs/pretrained_reuse/robopro_action_probe_expanded_v1.json`
   (SHA-256
-  `df022cbb20961c2470d67361b73e51c48aa3268964f59c8b3885c4cb1028193f`).
+  `78efc26f4dc078e84111234f738d71560dc4d15462f474c88d0bf7c801647805`).
 - Frozen feature encoders, readout arms, optimization, seed, query timing, and
   metric selection match the earlier fixed protocol. This is a sample-size
   expansion only; no encoder, arm, hyperparameter, or label definition changed.

@@ -626,7 +626,10 @@ def run(config_path: Path, feature_path: Path, text_path: Path, output_root: Pat
         "official_test_or_sealed_audit_opened": False,
         "product_promotion": False,
         "limitations": [
-            "Only 16 prompt groups in development; intervals are descriptive.",
+            (
+                f"Development has {len(set(map(str, development['groups'])))} prompt groups; "
+                "intervals are descriptive and development is selection-exposed."
+            ),
             "The target is retrieval of one recorded command, not action success or safety.",
             "The prompt-group split does not prove scene-held-out generalization.",
             "This is one seed and one bounded comparison; no hyperparameter search was run.",

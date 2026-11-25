@@ -92,9 +92,9 @@
     "product_promotion": false
   },
   "limitations": [
-    "Only 16 prompt groups per partition; uncertainty is large.",
+    "64 prompt groups per partition; intervals remain descriptive and development is selection-exposed.",
     "Prompt grouping does not establish physical-scene independence.",
     "Recorded demonstrator action is not a unique semantic correct answer.",
     "Development is project-created from publisher TRAIN and may guide this one bounded comparison."
   ]
-}\n
+}
