@@ -1,3 +1,15 @@
+**2026-11-26 R2 TinySYNCR external-evaluation screen:** The pinned 400-item
+subset (`00decf9030eb24ad7df213d014ebc7b17c473188`) has 25 questions per task;
+the card page rendered some question/answer examples during screening, so
+labels are exposed and cannot support tuning or a blind audit. The pinned tree
+lists 43 MP4s (51.3 MB), while repository/UI aggregate size fields disagree.
+Its card says CC BY 4.0 for bundled media, while full SYNCR says clips remain
+subject to upstream simulator/scene-asset terms; that scope conflict is
+unresolved. Do not fetch the approximately 49.1 GB full bundle. TinySYNCR may
+be considered only for public diagnostic evaluation after freezing a candidate;
+it does not close R2's AV-fusion gate. See
+[`TinySYNCR screen`](docs/pretrained_reuse/R2_TINYSYNCR_EXTERNAL_EVAL_SCREEN_20261126.md).
+
 **2026-11-26 R2 SONIC-O1 source screen:** The current pinned dataset revision
 (`71bce84b2686ac63693666966d592964e0690042`) presents custom terms limited to
 non-commercial academic research or Vector Institute sponsors/partners, with a
