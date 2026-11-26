@@ -1,6 +1,10 @@
 import pytest
 
-from scripts.extract_intphys_dev_features import parse_dev_member, validate_audit_summary
+from scripts.extract_intphys_dev_features import (
+    parse_dev_member,
+    sampled_media_label_collision_audit,
+    validate_audit_summary,
+)
 
 
 @pytest.mark.parametrize(
@@ -48,3 +52,19 @@ def test_dev_feature_extraction_requires_the_previously_audited_archive_summary(
     invalid = {**valid, "scene_group_count": 89}
     with pytest.raises(ValueError, match="admitted audit"):
         validate_audit_summary(invalid)
+
+
+def test_sampled_media_collision_audit_reports_opposite_label_duplicates():
+    report = sampled_media_label_collision_audit(
+        ["g1", "g1", "g2", "g2"],
+        [0, 1, 0, 1],
+        ["same", "same", "possible-only", "impossible-only"],
+    )
+    assert report["groups_with_opposite_label_identical_sampled_media"] == 1
+    assert report["opposite_label_identical_sampled_media_signatures_global"] == 1
+    assert report["within_group_collision_group_ids"] == ["g1"]
+
+
+def test_sampled_media_collision_audit_rejects_mismatched_arrays():
+    with pytest.raises(ValueError, match="equal nonzero length"):
+        sampled_media_label_collision_audit(["g1"], [0, 1], ["m1"])

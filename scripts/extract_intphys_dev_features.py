@@ -99,6 +99,42 @@ def validate_audit_summary(audit: dict[str, Any]) -> None:
         raise ValueError("pinned IntPhys dev audit report differs from the admitted audit")
 
 
+def sampled_media_label_collision_audit(
+    group_ids: list[str], labels: list[int], media_hashes: list[str]
+) -> dict[str, Any]:
+    """Report exact sampled-pixel collisions across opposite labels without fitting."""
+    if not group_ids or len(group_ids) != len(labels) or len(labels) != len(media_hashes):
+        raise ValueError("group, label, and sampled-media arrays must have equal nonzero length")
+    if any(label not in {0, 1} for label in labels):
+        raise ValueError("labels must be binary")
+    group_signatures: dict[str, dict[int, set[str]]] = defaultdict(
+        lambda: {0: set(), 1: set()}
+    )
+    global_signature_labels: dict[str, set[int]] = defaultdict(set)
+    for group_id, label, media_hash in zip(group_ids, labels, media_hashes, strict=True):
+        if not group_id or not media_hash:
+            raise ValueError("group IDs and sampled-media hashes must be nonempty")
+        group_signatures[group_id][label].add(media_hash)
+        global_signature_labels[media_hash].add(label)
+    within_group = sorted(
+        group_id
+        for group_id, signatures in group_signatures.items()
+        if signatures[0] & signatures[1]
+    )
+    return {
+        "scene_groups": len(group_signatures),
+        "groups_with_opposite_label_identical_sampled_media": len(within_group),
+        "opposite_label_identical_sampled_media_signatures_global": sum(
+            labels_seen == {0, 1} for labels_seen in global_signature_labels.values()
+        ),
+        "within_group_collision_group_ids": within_group,
+        "interpretation": (
+            "Exact collisions mean the sampled RGB inputs alone cannot distinguish those labels; "
+            "zero collisions does not establish task solvability."
+        ),
+    }
+
+
 def _args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--archive", type=Path, required=True)
@@ -289,6 +325,9 @@ def main() -> None:
         group_labels = [labels[index] for index in indices]
         if len(indices) != 4 or sum(group_labels) != 2:
             raise ValueError(f"dev group {group_id} is not the audited 2/2 quadruplet")
+    sampled_media_audit = sampled_media_label_collision_audit(
+        group_ids, labels, normalized_media_hashes
+    )
     process_memory_after = process.memory_info()
     peak_working_set = getattr(process_memory_after, "peak_wset", process_memory_after.rss)
 
@@ -330,6 +369,7 @@ def main() -> None:
         "channel_frame_counts": dict(channel_counts),
         "videos": len(ids),
         "scene_groups": len(group_rows),
+        "sampled_media_label_collision_audit": sampled_media_audit,
         "labels_loaded_for_fit_or_selection": False,
         "development_label_use": "one fixed evaluation only; no fitting or calibration",
         "sealed_test_accessed": False,
