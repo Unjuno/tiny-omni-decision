@@ -31,11 +31,11 @@ from fit_commonsenseqa_bert_mini import (
 )
 from safetensors.torch import load_file, save_file
 
-DEFAULT_BATCH_SIZE = 32
+DEFAULT_BATCH_SIZE = 64
 DEFAULT_EPOCHS = 3
 DEFAULT_MAX_LENGTH = 128
 ENCODER_LR = 2e-5
-SCORER_LR = 1e-3
+SCORER_LR = 0.01
 WEIGHT_DECAY = 0.01
 
 
@@ -107,15 +107,10 @@ def _forward_batch(
     scorer: torch.nn.Linear,
     encoded: dict[str, torch.Tensor],
     indices: torch.Tensor,
-    permutation: torch.Tensor | None = None,
 ) -> torch.Tensor:
     batch_inputs: dict[str, torch.Tensor] = {}
     for key, tensor in encoded.items():
         selected = tensor[indices]
-        if permutation is not None:
-            selected = selected.gather(
-                1, permutation.unsqueeze(-1).expand(-1, -1, selected.shape[-1])
-            )
         batch_inputs[key] = selected.reshape(-1, selected.shape[-1])
     output = model(**batch_inputs)
     return scorer(output.last_hidden_state[:, 0, :]).reshape(len(indices), 5)
@@ -198,7 +193,6 @@ def run_experiment(
     started_wall = time.perf_counter()
     started_cpu = time.process_time()
     torch.set_num_threads(cpu_threads)
-    torch.manual_seed(seed)
     model_files = _verify_model_files(model_dir)
     data_audit = audit_train_parquet(train_path)
     import pyarrow.parquet as parquet
@@ -237,6 +231,7 @@ def run_experiment(
         raise ValueError(f"unexpected encoder parameter count: {encoder_parameters}")
     trainable_encoder_parameters = configure_last_layer_trainable(model)
     frozen_before_hash = _parameter_hash(model, trainable=False)
+    torch.manual_seed(seed)
     scorer = torch.nn.Linear(256, 1)
     scorer_parameters = sum(parameter.numel() for parameter in scorer.parameters())
     final_layer = model.encoder.layer[-1]
@@ -267,12 +262,8 @@ def run_experiment(
         losses: list[float] = []
         for start in range(0, train_count, batch_size):
             indices = order[start : start + batch_size]
-            permutation = torch.rand(
-                (len(indices), 5), generator=generator
-            ).argsort(dim=-1)
-            logits = _forward_batch(model, scorer, train_encoded, indices, permutation)
-            batch_targets = train_targets[indices].gather(1, permutation)
-            loss = soft_target_nll(logits, batch_targets)
+            logits = _forward_batch(model, scorer, train_encoded, indices)
+            loss = soft_target_nll(logits, train_targets[indices])
             if not torch.isfinite(loss):
                 raise FloatingPointError(f"nonfinite loss at epoch {epoch}")
             optimizer.zero_grad(set_to_none=True)
@@ -421,7 +412,7 @@ def run_experiment(
         "last_encoder_layer_learning_rate": ENCODER_LR,
         "scorer_learning_rate": SCORER_LR,
         "weight_decay": WEIGHT_DECAY,
-        "option_shuffle": "per_question_per_update_seeded_permutation",
+        "option_order": "fixed source order; shared scorer is permutation equivariant",
         "selection": "minimum macro-concept validation NLL across exactly three epochs",
         "target": "uniform mass over labels with text identical to the annotated correct answer",
         "trainable_scope": "BERT encoder final layer and shared scalar scorer only",

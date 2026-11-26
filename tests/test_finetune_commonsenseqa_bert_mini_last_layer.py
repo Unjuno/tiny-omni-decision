@@ -45,6 +45,7 @@ def test_only_final_transformer_layer_is_trainable() -> None:
 
 def test_experiment_has_a_fixed_three_epoch_budget_and_cpu_only_contract() -> None:
     assert MODULE.DEFAULT_EPOCHS == 3
+    assert MODULE.DEFAULT_BATCH_SIZE == 64
     assert MODULE.ENCODER_LR == 2e-5
-    assert MODULE.SCORER_LR == 1e-3
+    assert MODULE.SCORER_LR == 0.01
     assert MODULE.WEIGHT_DECAY == 0.01
