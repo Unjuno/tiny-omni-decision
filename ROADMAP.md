@@ -1,3 +1,13 @@
+**2026-11-26 R2 SONIC-O1 source screen:** The current pinned dataset revision
+(`71bce84b2686ac63693666966d592964e0690042`) presents custom terms limited to
+non-commercial academic research or Vector Institute sponsors/partners, with a
+branding condition for resulting products. Eligibility and full license text
+are unverified, so the product-directed project does not admit the source; no
+question/answer payload or media was opened. The current repository inventory
+is approximately 56.4 GB, so no download was attempted. R2's rights-cleared,
+both-input-required AV gate remains open. See
+[`SONIC-O1 screen`](docs/pretrained_reuse/R2_SONIC_O1_SOURCE_LICENSE_SCREEN_20261126.md).
+
 **2026-11-23 R2 Japanese BERT publisher-test audit:** With both validation-selected readouts frozen, a one-shot evaluation on all 400 previously unopened publisher test states found BERT-base at 52.54% macro teacher-mode Accuracy / 1.0639 NLL / 0.1712 Brier versus the compact 27.6M LightSPLADE-derived encoder at 44.17% / 1.1299 / 0.2025. State-cluster paired intervals favor BERT on Accuracy/NLL/Brier, but ECE is inconclusive; targets are synthetic teacher distributions, and both models truncate 31% of candidate pairs. This supports BERT as a text teacher/reference only, not 95–98% product quality or a multimodal pass. Do not tune or repeat on this now-open test. See [one-shot test audit](docs/pretrained_reuse/R2_TYPED_DECISIONS_JA_PUBLISHER_TEST_AUDIT_20261123.md).
 
 **2026-11-23 R2 Social IQa publisher-dev audit:** The already-selected frozen MiniLM option scorer reached 43.40% Accuracy / 1.0739 NLL on 1,954 official dev questions, versus 53.81% internal validation. Exact text overlap with publisher train was zero; shared underlying ATOMIC event overlap is unknown. This one-shot result weakens the claim that the current compact readout generalizes, but does not test BERT-base or establish a BERT-family ceiling. Preserve these labels from tuning. Given the Japanese BERT-base result above, a targeted BERT-series comparison remains reasonable only on a newly admitted, source-disjoint task with validation fixed before training; avoid a broad sweep on exposed Social IQa. See [audit](docs/pretrained_reuse/R2_SOCIAL_IQA_PUBLISHER_DEV_AUDIT_20261123.md).
