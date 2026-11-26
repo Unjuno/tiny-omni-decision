@@ -5,7 +5,10 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
+import platform
 import random
+import sys
 import time
 from datetime import UTC, datetime
 from pathlib import Path
@@ -236,10 +239,20 @@ def main() -> None:
         "ended_at_utc": datetime.now(UTC).isoformat(),
         "elapsed_seconds": elapsed_seconds,
         "device": "cpu",
+        "platform": platform.platform(),
+        "python_version": platform.python_version(),
+        "torch_version": torch.__version__,
+        "command": sys.argv,
         "seed": args.seed,
         "max_epochs": args.max_epochs,
         "epochs_completed": len(history),
+        "optimizer_updates": len(history) * math.ceil(len(train) / args.batch_size),
         "selected_epoch": best_epoch,
+        "stop_reason": (
+            "early_stopping_patience_exhausted"
+            if len(history) < args.max_epochs
+            else "max_epochs_reached"
+        ),
         "selection": "minimum internal train-source validation cosine prediction loss",
         "optimizer": "AdamW",
         "learning_rate": 1e-3,
@@ -249,6 +262,8 @@ def main() -> None:
         "min_delta": args.min_delta,
         "train_examples": len(train),
         "validation_examples": len(validation),
+        "train_features_path": str(train_path),
+        "validation_features_path": str(validation_path),
         "train_unique_groups": len(set(train_groups)),
         "validation_unique_groups": len(set(validation_groups)),
         "train_features_sha256": sha256_file(train_path),

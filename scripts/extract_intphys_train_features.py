@@ -4,8 +4,10 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.metadata
 import json
 import os
+import platform
 import re
 import subprocess
 import sys
@@ -21,6 +23,7 @@ import numpy as np
 from scripts.audit_videoprism_checkpoint import CHECKPOINT_SHA256, MODEL_REVISION
 from scripts.extract_frozen_videoprism_features import (
     FRAME_COUNT,
+    FRAME_SIZE,
     _preprocess,
 )
 from scripts.extract_frozen_videoprism_features import (
@@ -132,16 +135,20 @@ def deterministic_group_split(
     return sorted(train_indices), sorted(validation_indices), group_ids
 
 
-def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
+def file_digests(path: Path) -> tuple[str, str, int]:
+    md5 = hashlib.md5()
+    sha256 = hashlib.sha256()
+    byte_count = 0
     with path.open("rb") as stream:
         for chunk in iter(lambda: stream.read(8 * 1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+            byte_count += len(chunk)
+            md5.update(chunk)
+            sha256.update(chunk)
+    return md5.hexdigest(), sha256.hexdigest(), byte_count
 
 
-def md5_file(path: Path) -> str:
-    digest = hashlib.md5()
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
     with path.open("rb") as stream:
         for chunk in iter(lambda: stream.read(8 * 1024 * 1024), b""):
             digest.update(chunk)
@@ -159,6 +166,8 @@ def _args() -> argparse.Namespace:
 
 
 def main() -> None:
+    run_started_at = datetime.now(UTC).isoformat()
+    run_started = time.perf_counter()
     args = _args()
     archive_path = args.archive.resolve(strict=True)
     checkpoint = args.checkpoint.resolve(strict=True)
@@ -166,12 +175,15 @@ def main() -> None:
     output_dir = args.output_dir.resolve()
     if output_dir.exists():
         raise FileExistsError(f"refusing to overwrite existing feature directory: {output_dir}")
+    archive_hash_started = time.perf_counter()
     if archive_path.stat().st_size != EXPECTED_ARCHIVE_BYTES:
         raise ValueError("train shard byte size differs from the official published size")
-    archive_md5 = md5_file(archive_path)
+    archive_md5, archive_sha256, archive_bytes = file_digests(archive_path)
+    archive_hash_seconds = time.perf_counter() - archive_hash_started
     if archive_md5 != EXPECTED_ARCHIVE_MD5:
         raise ValueError(f"train shard MD5 mismatch: {archive_md5}")
-    archive_sha256 = sha256_file(archive_path)
+    if archive_bytes != EXPECTED_ARCHIVE_BYTES:
+        raise ValueError("train shard changed while hashes were being computed")
     checkpoint_sha256 = sha256_file(checkpoint)
     if checkpoint_sha256 != CHECKPOINT_SHA256:
         raise ValueError("VideoPrism checkpoint SHA-256 differs from the pinned R1 artifact")
@@ -189,6 +201,7 @@ def main() -> None:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
     import jax
     import jax.numpy as jnp
+    import psutil
     import tensorflow as tf
     from videoprism import models as vp
 
@@ -197,13 +210,17 @@ def main() -> None:
     devices = jax.devices()
     if not devices or any(device.platform != "cpu" for device in devices):
         raise RuntimeError(f"CPU-only feature extraction required, found devices: {devices}")
+    process = psutil.Process()
+    host_memory_before = psutil.virtual_memory()
+    process_memory_before = process.memory_info()
+    model_load_started = time.perf_counter()
     model = vp.get_model("videoprism_public_v1_base")
     variables = vp.load_pretrained_weights(
         "videoprism_public_v1_base", checkpoint_path=str(checkpoint)
     )
     encode = jax.jit(lambda video: model.apply(variables, video, train=False))
+    model_load_seconds = time.perf_counter() - model_load_started
 
-    started_at = datetime.now(UTC).isoformat()
     extraction_started = time.perf_counter()
     feature_rows: list[np.ndarray] = []
     sample_ids: list[str] = []
@@ -304,6 +321,8 @@ def main() -> None:
                 active["selected_frames"][frame_number] = np.asarray(decoded)
     if active_video_id is not None and active is not None:
         finish_video(active_video_id, active)
+    process_memory_after = process.memory_info()
+    peak_working_set = getattr(process_memory_after, "peak_wset", process_memory_after.rss)
 
     if not feature_rows:
         raise ValueError("training shard contains no videos")
@@ -347,10 +366,25 @@ def main() -> None:
         split_file_hashes[split_name] = sha256_file(feature_path)
     metadata = {
         "status": "complete_intphys_train_frozen_feature_extraction",
-        "started_at_utc": started_at,
+        "started_at_utc": run_started_at,
         "ended_at_utc": datetime.now(UTC).isoformat(),
-        "elapsed_seconds": time.perf_counter() - extraction_started,
-        "archive_bytes": archive_path.stat().st_size,
+        "elapsed_seconds_total": time.perf_counter() - run_started,
+        "archive_hashing_seconds": archive_hash_seconds,
+        "model_load_seconds": model_load_seconds,
+        "feature_extraction_seconds": time.perf_counter() - extraction_started,
+        "command": sys.argv,
+        "python_version": platform.python_version(),
+        "numpy_version": np.__version__,
+        "jax_version": importlib.metadata.version("jax"),
+        "tensorflow_version": importlib.metadata.version("tensorflow"),
+        "cpu_model": platform.processor(),
+        "logical_cpu_count": os.cpu_count(),
+        "host_ram_total_bytes": host_memory_before.total,
+        "host_ram_available_at_start_bytes": host_memory_before.available,
+        "process_rss_at_start_bytes": process_memory_before.rss,
+        "process_rss_at_end_bytes": process_memory_after.rss,
+        "process_peak_working_set_bytes": peak_working_set,
+        "archive_bytes": archive_bytes,
         "archive_md5": archive_md5,
         "archive_sha256": archive_sha256,
         "archive_source": "https://download-intphys.cognitive-ml.fr/train.1.tar.gz",
@@ -365,6 +399,8 @@ def main() -> None:
         "cross_split_normalized_media_identity_overlap": 0,
         "channel_frame_counts": dict(channel_counts),
         "selected_frame_numbers_1_based": list(SELECTED_FRAME_NUMBERS),
+        "input_frame_size": FRAME_SIZE,
+        "input_color_order": "RGB",
         "frames_per_video": EXPECTED_FRAMES,
         "feature_shape": list(features.shape[1:]),
         "feature_layout": "mean pooled spatial tokens per sampled frame; temporal order retained",
