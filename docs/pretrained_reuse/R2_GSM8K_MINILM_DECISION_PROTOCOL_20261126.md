@@ -86,11 +86,16 @@ generalization gap.
 
 ## Pre-fit artifacts
 
-- Effective generated split: `C:\CodexArtifacts\pretrained-reuse-r2-local\gsm8k-bert-source-audit-20261126-attempt-01\seed17-four-choice-split-v2`.
+- A first generated split was rejected before any model load because raw U+2028
+  line separators made some question strings unsafe for physical JSONL lines.
+  The builder was fixed to JSON-escape these separators; that first split is
+  preserved and was never read by the trainer. The corrected split was
+  regenerated and all 7,473 records pass `DecisionExample` validation.
+- Effective generated split: `C:\CodexArtifacts\pretrained-reuse-r2-local\gsm8k-bert-source-audit-20261126-attempt-01\seed17-four-choice-split-v3`.
 - Train JSONL SHA-256:
-  `17f4155ceb3763b1d6e97ca8e810d843a66c3b30053baaf1cf8e42c875eb95a1`.
+  `611766b764ce7040a3d5f0efa2ee85588e337c440af0dc680c203e52d6736e00`.
 - Validation JSONL SHA-256:
-  `e35df851ee67fbb4b2bcfc63df6cb1516731275e75a866ef56cb996de2914340`.
+  `5487eb941816d1e8c827a4f35189a1638baaf668fa183bc1d13378bb6c1140b5`.
 - Split manifest records the builder and train-source hashes. The full raw
   data, predictions, and weights remain outside Git.
 
