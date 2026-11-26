@@ -1,3 +1,56 @@
+**2026-11-26 R2 OpenLKA/LKAlert source screen:** The video+CAN warning task is
+a strong product-aligned lead, but the dataset lacks explicit product-training
+terms and the published row-level validation does not establish independent
+routes/drivers. Failure examples are labeled Yes and Normal examples No,
+creating a source-label shortcut risk. Keep `REVIEW_NOT_ADMITTED`; no data or
+weights were accessed and no request was sent. See the
+[source screen](docs/pretrained_reuse/R2_OPENLKA_LKALERT_SOURCE_SCREEN_20261126.md).
+
+**2026-11-26 R2 CANdid vehicle CAN/video source screen:** The provider's
+metadata record is listed as CC BY 4.0, but its ten vehicle captures are too few
+independent top-level groups for the provisional quality gate, and the reviewed
+source does not establish a Decision target requiring both video and CAN.
+Provider-side license details and route/GPS privacy also need direct review.
+Keep `REVIEW_NOT_ADMITTED`; no payload or model was accessed. See the
+[source screen](docs/pretrained_reuse/R2_CANDID_VEHICLE_CAN_VIDEO_SOURCE_SCREEN_20261126.md).
+
+**2026-11-26 R2 BANKING77 text-data quality screen:** The pinned CC BY 4.0
+English intent dataset has 13,083 rows and 77 classes, but its source-producer
+and speaker/group provenance is undocumented. A published study flags over
+1,400 train labels as potentially noisy, and the 77-way task exceeds the current
+20-option contract. Keep `REVIEW_NOT_ADMITTED` for model selection until label
+quality and the task contract are resolved; the official test remains unopened.
+See the [source-quality screen](docs/pretrained_reuse/R2_BANKING77_SOURCE_QUALITY_SCREEN_20261126.md).
+
+**2026-11-26 R2 sub-SEVIR frozen-feature Path A:** On a fixed event-disjoint
+project-created five-minute forecast split, pinned frozen DINOv2-small features
+plus a small temporal LSTM reached 89.62% validation Accuracy (NLL 0.2380,
+Brier 0.1485), below the per-task 95% target. Joint satellite+radar did not
+significantly beat radar-only; all three readouts overfit after early best
+epochs. Best-checkpoint reload parity and the full two-stream split audit pass,
+with repeated normalized radar-only encodings retained as a limitation. This
+sensor task does not establish text/image/audio/video product quality or close
+R2. See the [protocol](docs/pretrained_reuse/R2_SUBSEVIR_PATHA_PROTOCOL_20261126.md)
+and [results](docs/pretrained_reuse/R2_SUBSEVIR_PATHA_RESULTS_20261126.md).
+
+**2026-11-26 R1 V-JEPA 2.1 rights recheck:** The current official repository
+still lists the ViT-B/16 checkpoint and documents MIT / Apache source licenses,
+but does not expressly grant terms for the externally hosted checkpoint file.
+The official release page's community-use statement does not settle that exact
+weight grant. Keep it `REVIEW`; existing load/forward evidence is technical,
+not product-rights clearance. See the [updated audit](docs/pretrained_reuse/R1_AUDIT.md).
+
+**2026-11-26 R2 fresh multimodal source screen:** Metadata-only review found
+HWU-USP (synchronized RGB-D, IMU, and ambient sensors) has 16 subject groups /
+144 recordings, below the provisional quality-evidence floor; its official
+Dryad file endpoint returned HTTP 403 in three small probes, and no media was
+retrieved. Meta MMCSG requires submitting organization details and accepting a
+non-transferable agreement that prohibits product incorporation. The KAIST
+rotating-machine source is CC BY 4.0, but its acoustic track covers only five
+listed 0-Nm conditions and does not establish independent group support.
+None is admitted for a quality run. No model, media, or validation set was
+accessed. See the [source screen](docs/pretrained_reuse/R2_FRESH_MULTIMODAL_SOURCE_SCREEN_20261126.md).
+
 **2026-11-23 R2 Japanese BERT publisher-test audit:** With both validation-selected readouts frozen, a one-shot evaluation on all 400 previously unopened publisher test states found BERT-base at 52.54% macro teacher-mode Accuracy / 1.0639 NLL / 0.1712 Brier versus the compact 27.6M LightSPLADE-derived encoder at 44.17% / 1.1299 / 0.2025. State-cluster paired intervals favor BERT on Accuracy/NLL/Brier, but ECE is inconclusive; targets are synthetic teacher distributions, and both models truncate 31% of candidate pairs. This supports BERT as a text teacher/reference only, not 95–98% product quality or a multimodal pass. Do not tune or repeat on this now-open test. See [one-shot test audit](docs/pretrained_reuse/R2_TYPED_DECISIONS_JA_PUBLISHER_TEST_AUDIT_20261123.md).
 
 **2026-11-23 R2 Social IQa publisher-dev audit:** The already-selected frozen MiniLM option scorer reached 43.40% Accuracy / 1.0739 NLL on 1,954 official dev questions, versus 53.81% internal validation. Exact text overlap with publisher train was zero; shared underlying ATOMIC event overlap is unknown. This one-shot result weakens the claim that the current compact readout generalizes, but does not test BERT-base or establish a BERT-family ceiling. Preserve these labels from tuning. Given the Japanese BERT-base result above, a targeted BERT-series comparison remains reasonable only on a newly admitted, source-disjoint task with validation fixed before training; avoid a broad sweep on exposed Social IQa. See [audit](docs/pretrained_reuse/R2_SOCIAL_IQA_PUBLISHER_DEV_AUDIT_20261123.md).
@@ -4033,3 +4086,5 @@ readout. See [full protocol and outputs](docs/pretrained_reuse/R2_PHYSICALAI_FRE
 **2026-11-26 R2 Clotho-AQA publisher-validation transfer:** The one-shot, frozen question-only versus audio+question comparison completed on 244 exact-CC0 questions (61 audio assets, 59 uploader groups). Audio+question reached 65.98% Accuracy / 0.6171 NLL versus question-only 65.16% / 0.6226, but all paired uploader-bootstrap intervals include zero and the pre-registered 200-group floor was not met. Treat results as descriptive only; no training, fitting, checkpoint selection, or sealed-test access occurred. This does not establish reliable audio benefit or close R2. [Protocol](docs/pretrained_reuse/R2_CLOTHO_AQA_PUBLISHER_VAL_PROTOCOL_20261126.md), [results](docs/pretrained_reuse/R2_CLOTHO_AQA_PUBLISHER_VAL_RESULTS_20261126.md).
 
 **2026-11-26 R2 Clotho-AQA Path A runtime smoke:** Added a CPU-only WAV+question-to-typed-JSON runtime using the same pinned frozen MiniLM, EfficientAT, calibration and readout. On six fixed existing internal-validation clips, maximum saved-probability difference was `8.94e-8`; reversing `[No, Yes]` produced exact probability permutation. The task-only runtime has 19.40M parameters and 77.86 MB in its four checkpoint/normalization files, excluding tokenizer and runtime; its 6.03-second cold load and six-request mean latency are smoke measurements, not deployment guarantees. This is not four-modality quality or a product candidate; the underpowered external transfer remains inconclusive. [Runtime report](docs/pretrained_reuse/R2_CLOTHO_AQA_PATH_A_RUNTIME_20261126.md).
+
+**2026-11-26 R2 sub-SEVIR data audit and input baseline:** Across all 60,000 local training rows, `label_1d_class` exactly matches positive GLM flash-count/lightning-map labels; the source generator is still untraced. On the exposed 998-event validation, the 8-frame LSTM and a fixed last-frame DINO linear readout achieved 89.62% and 88.72% Accuracy; event-paired Accuracy uncertainty includes zero, while the LSTM improves NLL/Brier. The linear baseline has a 6.26-point train/validation Accuracy gap and higher validation ECE, so this does not justify broader quality claims or additional fusion capacity. The data subset has 5,000 events × 12 five-minute rows; its project split is event-ID-disjoint but not chronological/geographic, and source-neighborhood overlap remains unknown. Treat the task as next-frame GLM lightning-presence prediction, not general storm recognition. [Label audit](docs/pretrained_reuse/R2_SUBSEVIR_LABEL_DATA_AUDIT_20261126.md), [single-frame baseline](docs/pretrained_reuse/R2_SUBSEVIR_FRAME_LINEAR_BASELINE_20261126.md).

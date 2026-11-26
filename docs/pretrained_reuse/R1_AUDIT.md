@@ -19,6 +19,26 @@ An additional primary-source check found that Meta's June 2025 V-JEPA 2 announce
 
 Sources: [pinned V-JEPA 2.1 repository README](https://github.com/facebookresearch/vjepa2/blob/204698b45b3712590f06245fbfba32d3be539812/README.md), [Meta's June 2025 V-JEPA 2 announcement](https://ai.meta.com/blog/v-jepa-2-world-model-benchmarks/), and [Meta's V-JEPA project page](https://ai.meta.com/vjepa/).
 
+### Exact-weight rights recheck, 2026-11-26
+
+The current official README still lists the exact V-JEPA 2.1 ViT-B/16 384
+checkpoint in its pretrained checkpoint table and the PyTorch Hub loader maps
+the model name to `vjepa2_1_vitb_dist_vitG_384.pt`. The same README's license
+section says the majority of V-JEPA 2 is MIT and enumerates three Apache-2.0
+source files; it does not expressly identify the separately hosted `.pt` file
+or state that the repository license covers those weights. Meta's official
+release page says V-JEPA 2 is being released for the community to build on, but
+does not specify this V-JEPA 2.1 file's downstream or redistribution terms.
+This recheck therefore leaves the exact checkpoint grant **REVIEW**. The
+existing strict-load and finite-forward evidence remains valid; do not package,
+redistribute, or select the checkpoint for product use based only on this
+recheck.
+
+Sources checked: [current official repository README](https://github.com/facebookresearch/vjepa2),
+[pinned README](https://github.com/facebookresearch/vjepa2/blob/204698b45b3712590f06245fbfba32d3be539812/README.md),
+[pinned loader](https://github.com/facebookresearch/vjepa2/blob/204698b45b3712590f06245fbfba32d3be539812/src/hub/backbones.py),
+and [official Meta release page](https://ai.meta.com/research/vjepa/).
+
 Command (report saved outside Git at C:\CodexArtifacts\pretrained-reuse-r1\vjepa21-audit.json):
 
     $env:PYTHONPATH='C:\CodexArtifacts\pretrained-reuse-r1\python-deps'
