@@ -1,3 +1,5 @@
+import hashlib
+
 import numpy as np
 
 from tiny_omni_decision.subsevir_features import (
@@ -5,7 +7,11 @@ from tiny_omni_decision.subsevir_features import (
     frame_to_rgb,
     required_frame_indices,
 )
-from tiny_omni_decision.subsevir_task import build_forecast_windows
+from tiny_omni_decision.subsevir_task import (
+    build_forecast_windows,
+    build_fresh_training_manifest,
+    fresh_training_event_split,
+)
 
 
 def _rows(event_id: str, start: int, labels: list[int], *, gap_at: int | None = None):
@@ -52,6 +58,63 @@ def test_event_split_is_deterministic_and_never_splits_one_event():
         by_event.setdefault(window.event_id, set()).add(window.split)
     assert all(len(splits) == 1 for splits in by_event.values())
     assert {window.split for window in first} == {"train", "validation"}
+
+
+def test_fresh_training_split_is_deterministic_and_namespaced():
+    payload = b"subsevir-gated-fresh-train-split-v1\0" + b"17\0storm-a"
+    digest = hashlib.sha256(payload).digest()
+    expected = "validation" if int.from_bytes(digest[:8], "big") / 2**64 < 0.2 else "train"
+    assert fresh_training_event_split("storm-a", seed=17) == expected
+    assert fresh_training_event_split("storm-a", seed=17) == fresh_training_event_split(
+        "storm-a", seed=17
+    )
+
+
+def test_fresh_manifest_uses_only_source_train_events_and_groups_windows():
+    train_ids = [f"train-storm-{index:03d}" for index in range(100)]
+    old_validation_ids = [f"old-validation-storm-{index:03d}" for index in range(12)]
+    windows = []
+    for event_id in train_ids + old_validation_ids:
+        source_split = "train" if event_id in train_ids else "validation"
+        for offset in (8, 9):
+            target_index = offset
+            windows.append({
+                "event_id": event_id,
+                "split": source_split,
+                "input_indices": list(range(offset - 8, offset)),
+                "target_index": target_index,
+                "target": offset % 2,
+                "sample_id": f"{event_id}:target-{target_index}",
+            })
+    parent = {
+        "split_group_ids": {
+            "train": train_ids,
+            "validation": old_validation_ids,
+        },
+        "windows": windows,
+    }
+
+    first = build_fresh_training_manifest(parent, parent_manifest_sha256="a" * 64)
+    second = build_fresh_training_manifest(parent, parent_manifest_sha256="a" * 64)
+
+    assert first == second
+    assert first["source_train_group_count"] == len(train_ids)
+    assert first["source_validation_group_count_excluded"] == len(old_validation_ids)
+    assert first["split_window_counts"]["train"] + first["split_window_counts"]["validation"] == 200
+    assert set(first["split_group_ids"]["train"]).isdisjoint(
+        first["split_group_ids"]["validation"]
+    )
+    assert set(first["split_group_ids"]["train"]) | set(
+        first["split_group_ids"]["validation"]
+    ) == set(train_ids)
+    new_validation = set(first["split_group_ids"]["validation"])
+    assert new_validation.isdisjoint(old_validation_ids)
+    by_event = {}
+    for window in first["windows"]:
+        by_event.setdefault(window["event_id"], set()).add(window["split"])
+        assert window["event_id"] in train_ids
+    assert all(len(splits) == 1 for splits in by_event.values())
+    assert len(first["windows"]) == len(windows) - 2 * len(old_validation_ids)
 
 
 def test_rejects_noncontiguous_rows_for_same_event():
