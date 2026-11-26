@@ -152,6 +152,29 @@ def _distractors(gold: Decimal, bank: list[Decimal], key: str) -> list[Decimal]:
     return selected
 
 
+def _target_positions(
+    groups: list[list[int]], rows: list[dict[str, Any]], seed: int
+) -> dict[int, int]:
+    ranked = sorted(
+        groups,
+        key=lambda members: hashlib.sha256(
+            f"target-position-v1:{seed}:{_group_id(rows, members)}".encode()
+        ).hexdigest(),
+    )
+    return {
+        index: rank % 4
+        for rank, members in enumerate(ranked)
+        for index in members
+    }
+
+
+def _position_counts(examples: list[DecisionExample]) -> list[int]:
+    counts = [0, 0, 0, 0]
+    for example in examples:
+        counts[example.options.index(example.target)] += 1
+    return counts
+
+
 def _jsonl_line(example: DecisionExample) -> str:
     # ensure_ascii escapes U+2028/U+2029 so they cannot split one JSON record.
     return json.dumps(example.model_dump(mode="json"), ensure_ascii=True, separators=(",", ":"))
@@ -176,6 +199,7 @@ def build_examples(
         duplicate_answers[question_id] = answer
     groups = _group_indices(rows)
     validation_indices = _split_groups(groups, rows, seed, validation_fraction)
+    target_positions = _target_positions(groups, rows, seed)
     group_identity = {index: _group_id(rows, members) for members in groups for index in members}
     train_indices = [index for index in range(len(rows)) if index not in validation_indices]
     answer_bank = sorted({answers[index] for index in train_indices})
@@ -198,11 +222,17 @@ def build_examples(
         for index in indices:
             gold = answers[index]
             rid = record_ids[index]
-            candidates = [gold, *_distractors(gold, answer_bank, f"seed={seed}:{rid}")]
-            option_values = sorted(
-                candidates,
-                key=lambda value: hashlib.sha256(f"seed={seed}:{rid}:{value}".encode()).hexdigest(),
+            distractors = _distractors(
+                gold, answer_bank, f"distractor-selection-v1:seed={seed}:{rid}"
             )
+            distractors.sort(
+                key=lambda value: hashlib.sha256(
+                    f"option-order-v1:seed={seed}:{rid}:{value}".encode()
+                ).hexdigest()
+            )
+            position = target_positions[index]
+            option_values = [*distractors]
+            option_values.insert(position, gold)
             options = [_format_number(value) for value in option_values]
             target = _format_number(gold)
             examples.append(
@@ -235,6 +265,17 @@ def build_examples(
             raise ValueError("generated choice set is not four unique options")
         if example.target not in example.options:
             raise ValueError("target missing from generated options")
+    train_position_counts = _position_counts(train)
+    validation_position_counts = _position_counts(validation)
+    for name, examples, counts in (
+        ("train", train, train_position_counts),
+        ("validation", validation, validation_position_counts),
+    ):
+        if len(examples) >= 100 and any(
+            count < 0.15 * len(examples) or count > 0.35 * len(examples)
+            for count in counts
+        ):
+            raise ValueError(f"target option positions are imbalanced in {name}")
     split_info = {
         "seed": seed,
         "validation_fraction": validation_fraction,
@@ -246,14 +287,17 @@ def build_examples(
         "validation_groups": round(len(groups) * validation_fraction),
         "training_answer_bank_unique_values": len(answer_bank),
         "near_duplicate_group_count": sum(len(group) > 1 for group in groups),
+        "train_target_option_position_counts": train_position_counts,
+        "validation_target_option_position_counts": validation_position_counts,
         "grouping": (
             "exact normalized question plus word-trigram SimHash candidate pairs; "
             "Hamming <=6 and Jaccard >=0.75"
         ),
         "distractor_policy": (
             "three closest-relative numeric answers selected deterministically from "
-            "a training-only bank of up to 32 nearest values; options use a "
-            "deterministic hash shuffle"
+            "a training-only bank of up to 32 nearest values; distractor selection, "
+            "distractor ordering, and balanced target-position assignment use "
+            "domain-separated hashes"
         ),
         "official_test_read": False,
     }

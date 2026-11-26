@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from scripts.build_gsm8k_choice_split import _jsonl_line, build_examples
+from scripts.build_gsm8k_choice_split import _jsonl_line, _position_counts, build_examples
 
 
 def _row(question: str, answer: int) -> dict[str, str]:
@@ -89,3 +89,14 @@ def test_jsonl_escapes_unicode_line_separator() -> None:
 
     assert "\\u2028" in serialized
     assert json.loads(serialized)["question"] == example.question
+
+
+def test_target_position_assignment_is_balanced_and_not_reused_for_distractors() -> None:
+    rows = [
+        _row(f"Unique arithmetic problem {index}: compute {index} plus one.", index + 1)
+        for index in range(120)
+    ]
+    train, validation, _ = build_examples(rows, seed=17)
+    counts = _position_counts(train + validation)
+
+    assert counts == [30, 30, 30, 30]
