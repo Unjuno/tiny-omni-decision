@@ -1,3 +1,11 @@
+**2026-11-26 R2 Social IQa grouping clarification:** The publisher paper says
+official partitions keep contexts from each ATOMIC event together. The prior
+seed-17 split within publisher-train grouped exact contexts only, so its
+internal validation is not proven event-disjoint; the already-opened official
+dev result remains a separate one-shot source-split audit and must not be
+retuned. The advertised supplemental event-dimension release has not been
+inspected. See [clarification](docs/pretrained_reuse/R2_SOCIAL_IQA_SOURCE_GROUPING_CORRECTION_20261126.md).
+
 **2026-11-26 R2 OpenBookQA source screen:** The four-choice science task has
 useful human quality/group metadata in its expanded schema, but the pinned
 dataset card declares its license `unknown`; the upstream Apache-2.0 grant is
