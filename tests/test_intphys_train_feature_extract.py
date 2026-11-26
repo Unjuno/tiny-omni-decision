@@ -70,6 +70,26 @@ def test_deterministic_split_groups_duplicate_status_or_rgb_sequences():
     ) == (train, validation, group_ids)
 
 
+def test_deterministic_split_also_groups_equal_sampled_inputs():
+    sample_ids = [f"sample-{index}" for index in range(30)]
+    status_hashes = [f"status-{index}" for index in range(30)]
+    full_rgb_hashes = [f"full-rgb-{index}" for index in range(30)]
+    sampled_rgb_hashes = [f"sampled-rgb-{index}" for index in range(30)]
+    sampled_rgb_hashes[1] = sampled_rgb_hashes[0]
+
+    train, validation, group_ids = deterministic_group_split(
+        sample_ids,
+        status_hashes,
+        full_rgb_hashes,
+        sampled_media_hashes=sampled_rgb_hashes,
+        seed=17,
+    )
+    train_groups = {group_ids[index] for index in train}
+    validation_groups = {group_ids[index] for index in validation}
+    assert group_ids[0] == group_ids[1]
+    assert not train_groups & validation_groups
+
+
 def test_rgb_sequence_hash_requires_and_orders_all_one_hundred_frames():
     import hashlib
 

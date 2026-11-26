@@ -28,9 +28,12 @@ experiment.
   duplicate grouping and split integrity. Only the eight sampled RGB frames
   are decoded for feature extraction; the remaining PNG payloads are byte-
   hashed but not decoded, which remains a data-quality limitation.
-- The deterministic internal holdout groups duplicate full status metadata or
-  identical complete RGB byte sequences before splitting. It is used only for
-  training early stopping and threshold fixation.
+- The deterministic internal holdout groups duplicate full status metadata,
+  identical complete RGB byte sequences, or identical normalized eight-frame
+  model inputs before splitting. Keeping both RGB identities catches exact
+  duplicates even if PNG re-encoding changes bytes, while the sampled-input
+  check avoids leakage between videos indistinguishable to the actual encoder
+  input. It is used only for training early stopping and threshold fixation.
 - IntPhys dev is a fixed development diagnostic, not a blind sealed audit. It
   contains 90 scene groups, each with four renditions and a 2 possible / 2
   impossible label balance. The extractor reports exact cross-label collisions
@@ -56,19 +59,20 @@ probability.
 
 ## Current evidence snapshot
 
-At 2026-11-27 07:04:19 JST, the official train archive download process was
-alive and the partial file was 26,886,806,304 bytes of the expected
+At 2026-11-27 07:08:04 JST, the official train archive download process was
+alive and the partial file was 27,723,160,352 bytes of the expected
 37,016,506,106 bytes. Its expected MD5 is
 `3428bcf398441a489111528634530212`. No model features have been extracted from
 the partial archive; no real-data training or dev scoring has started.
 
 The Path A implementation, data-integrity checks, and CPU tests are on branch
-`codex/r2-intphys-patha-20261127`. The current local full suite reports
-2,995 passed / 11 skipped; `ruff check .`, the synthetic evaluator CLI
-end-to-end test, and CLI `--help` pass. CI #5125 is green for the preceding
-data-audit commit; the evaluator commit is being pushed for its own CI run.
-The training archive, pinned checkpoint, source tree, existing runs, and legacy
-worktrees remain untouched by model training.
+`codex/r2-intphys-patha-20261127`. The local full suite with full-sequence and
+sampled-input grouping reports 2,996 passed / 11 skipped;
+`ruff check .`, the synthetic evaluator CLI end-to-end test, and CLI `--help`
+pass. CI #5126 is green for the evaluator commit; the grouping change is being
+pushed for its own CI run. The training
+archive, pinned checkpoint, source tree, existing runs, and legacy worktrees
+remain untouched by model training.
 
 ## Required next steps
 

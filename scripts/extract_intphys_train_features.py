@@ -95,14 +95,17 @@ def deterministic_group_split(
     status_hashes: list[str],
     media_hashes: list[str],
     *,
+    sampled_media_hashes: list[str] | None = None,
     seed: int = 17,
     validation_buckets: int = 5,
 ) -> tuple[list[int], list[int], list[str]]:
-    """Group duplicate scene metadata or complete RGB sequences before a 20% holdout."""
+    """Group duplicate metadata, full RGB sequences, or sampled model inputs."""
     if not sample_ids or len(set(sample_ids)) != len(sample_ids):
         raise ValueError("sample IDs must be nonempty and unique")
     if len(status_hashes) != len(sample_ids) or len(media_hashes) != len(sample_ids):
         raise ValueError("identity hashes must match sample ID count")
+    if sampled_media_hashes is not None and len(sampled_media_hashes) != len(sample_ids):
+        raise ValueError("sampled-media identity hashes must match sample ID count")
     if validation_buckets < 2:
         raise ValueError("validation_buckets must be at least two")
 
@@ -121,8 +124,12 @@ def deterministic_group_split(
             parent[max(left_root, right_root)] = min(left_root, right_root)
 
     first_seen: dict[tuple[str, str], int] = {}
-    for index, identities in enumerate(zip(status_hashes, media_hashes, strict=True)):
-        for identity_kind, identity in zip(("status", "media"), identities, strict=True):
+    identities_by_video = zip(status_hashes, media_hashes, strict=True)
+    for index, (status_hash, full_rgb_hash) in enumerate(identities_by_video):
+        identities = [("status", status_hash), ("full-rgb", full_rgb_hash)]
+        if sampled_media_hashes is not None:
+            identities.append(("sampled-rgb", sampled_media_hashes[index]))
+        for identity_kind, identity in identities:
             key = (identity_kind, identity)
             previous = first_seen.setdefault(key, index)
             union(index, previous)
@@ -243,6 +250,7 @@ def main() -> None:
     sample_ids: list[str] = []
     status_hashes: list[str] = []
     media_hashes: list[str] = []
+    sampled_media_hashes: list[str] = []
     forward_seconds: list[float] = []
     channel_counts: dict[str, int] = defaultdict(int)
     seen_video_ids: set[str] = set()
@@ -284,6 +292,9 @@ def main() -> None:
         sample_ids.append(video_id)
         status_hashes.append(row["status_hash"])
         media_hashes.append(rgb_sequence_hash)
+        sampled_media_hashes.append(
+            hashlib.sha256(np.ascontiguousarray(normalized_frames).tobytes()).hexdigest()
+        )
         feature_rows.append(per_frame.astype(np.float32))
 
     with tarfile.open(archive_path, mode="r|gz") as archive:
@@ -349,7 +360,11 @@ def main() -> None:
         raise ValueError("training shard contains no videos")
     features = np.stack(feature_rows)
     train_indices, validation_indices, group_ids = deterministic_group_split(
-        sample_ids, status_hashes, media_hashes, seed=args.seed
+        sample_ids,
+        status_hashes,
+        media_hashes,
+        sampled_media_hashes=sampled_media_hashes,
+        seed=args.seed,
     )
     if set(train_indices) & set(validation_indices):
         raise RuntimeError("index split overlap")
@@ -361,8 +376,14 @@ def main() -> None:
     validation_status_ids = {status_hashes[index] for index in validation_indices}
     train_media_ids = {media_hashes[index] for index in train_indices}
     validation_media_ids = {media_hashes[index] for index in validation_indices}
-    if train_status_ids & validation_status_ids or train_media_ids & validation_media_ids:
-        raise RuntimeError("scene metadata or normalized media identities cross the split")
+    train_sampled_media_ids = {sampled_media_hashes[index] for index in train_indices}
+    validation_sampled_media_ids = {sampled_media_hashes[index] for index in validation_indices}
+    if (
+        train_status_ids & validation_status_ids
+        or train_media_ids & validation_media_ids
+        or train_sampled_media_ids & validation_sampled_media_ids
+    ):
+        raise RuntimeError("scene metadata or RGB media identities cross the split")
 
     output_dir.mkdir(parents=True, exist_ok=False)
     split_payloads = {
@@ -383,6 +404,9 @@ def main() -> None:
             group_ids=np.asarray(groups),
             status_identity_sha256=np.asarray([status_hashes[index] for index in indices]),
             rgb_sequence_sha256=np.asarray([media_hashes[index] for index in indices]),
+            sampled_rgb_pixels_sha256=np.asarray(
+                [sampled_media_hashes[index] for index in indices]
+            ),
         )
         split_file_hashes[split_name] = sha256_file(feature_path)
     metadata = {
@@ -418,6 +442,7 @@ def main() -> None:
         "cross_split_group_overlap": 0,
         "cross_split_status_identity_overlap": 0,
         "cross_split_rgb_sequence_identity_overlap": 0,
+        "cross_split_sampled_rgb_pixels_identity_overlap": 0,
         "channel_frame_counts": dict(channel_counts),
         "selected_frame_numbers_1_based": list(SELECTED_FRAME_NUMBERS),
         "input_frame_size": FRAME_SIZE,
@@ -426,6 +451,7 @@ def main() -> None:
         "feature_shape": list(features.shape[1:]),
         "feature_layout": "mean pooled spatial tokens per sampled frame; temporal order retained",
         "rgb_identity": "SHA-256 of ordered SHA-256 digests of all 100 original RGB PNG payloads",
+        "sampled_rgb_identity": "SHA-256 of normalized 8-frame VideoPrism input tensor bytes",
         "model_revision": MODEL_REVISION,
         "videoprism_source_commit": source_commit,
         "checkpoint_sha256": checkpoint_sha256,
