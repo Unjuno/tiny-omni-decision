@@ -13,13 +13,22 @@ existing split manifest SHA-256 is
 ## What the source actually represents
 
 The official sub-SEVIR description calls this a tutorial subset for detecting
-whether satellite/radar images contain lightning. It reduces the original
-SEVIR data to 48×48 pixels and retains one continuous hour (12 five-minute
-frames) from each four-hour event. The subset is therefore useful for a
-narrow weather-sensor task, but it is not a general video corpus or a
-representative sample of the product's image/audio/text/video decision tasks.
-See the [AI2ES source description](https://backup.ai2es.org/data/dataset-details-sub-sevir/),
+whether satellite/radar images contain lightning. The publisher tutorial's
+Notebook 07 defines the `label_1d_class` classification task as “Does this
+image contain a thunderstorm?”; Notebook 02 displays that class label
+separately from `label_1d_reg` (flash count) and `label_2d_reg` (GLM lightning
+map). Thus the project target is more precisely the next-frame
+**thunderstorm-presence class**, not a direct prediction of lightning-flash
+count. The exact source-side rule that generated `label_1d_class` has not yet
+been traced. The tutorial subset reduces the original SEVIR data to 48×48
+pixels and retains one continuous hour (12 five-minute frames) from each
+four-hour event. It is useful for a narrow weather-sensor task, but it is not
+a general video corpus or representative of the product's
+image/audio/text/video decision tasks. See the [AI2ES source description](https://backup.ai2es.org/data/dataset-details-sub-sevir/),
 the [tutorial repository](https://github.com/ai2es/WAF_ML_Tutorial_Part2),
+its pinned [Notebook 07 at `e903c7c3`](https://github.com/ai2es/WAF_ML_Tutorial_Part2/blob/e903c7c3c22d8bc8c0a6058394bee21ae7eddca7/colab_notebooks/Notebook07_CNNs.ipynb)
+(Git blob `80cbb958f68ccb27006d66b3369b2194d187804a`, SHA-256
+`30fc6207d45ffe5dfe0da9cc79985d3f60e233985d49da2b819321db2c12c7be`),
 and the [SEVIR source paper](https://papers.nips.cc/paper/2020/hash/fa78a16157fed00d7a80515818432169-Abstract.html).
 
 The extracted training Zarr has 60,000 rows, four channels (`ir069`, `ir107`,
@@ -52,10 +61,10 @@ same validation) does not establish that the representation beats a
 task-appropriate sensor-only baseline, nor does the oracle label-history
 score establish an achievable model ceiling.
 
-The official dataset description explains the tutorial use case, but the
-exact temporal construction/semantics of `label_1d_class` in this particular
-Zarr still needs to be traced through the publisher's data-generation code
-before this project treats it as a five-minute lightning-observation target.
+The tutorial confirms the intended classification question but not the exact
+source-side rule used to generate `label_1d_class` or how that class is
+assigned over each five-minute row. Trace that data-generation rule before
+interpreting this as a physical five-minute thunderstorm transition target.
 That semantic check is a data gate, not a reason to adjust the model.
 
 ## Split and generalization limits

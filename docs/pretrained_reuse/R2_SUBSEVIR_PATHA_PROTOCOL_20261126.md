@@ -15,8 +15,11 @@ This is a narrow sensor/weather Decision experiment, not an Omni quality claim.
   archive members have not been extracted or read.
 - Task adaptation: given eight consecutive 5-minute frames from a storm event,
   predict whether `label_1d_class` is positive on the immediately following
-  frame. This is a project-created five-minute forecast, not the publisher's
-  original per-frame classification task.
+  frame. The publisher tutorial defines this scalar class as the question
+  “Does this image contain a thunderstorm?”; the exact rule used to generate
+  the class and assign it at each row remains unverified. This is a
+  project-created next-frame class forecast, not the publisher's original
+  per-frame classification task.
 - A candidate target is retained only when all eight inputs and the target are
   exactly five minutes apart. This excludes irregular-cadence windows without
   looking at labels.
@@ -89,8 +92,9 @@ conditions for seed 17:
   unproven unless Accuracy and NLL both improve under paired event-group
   uncertainty.
 
-This task can establish only five-minute lightning prediction from these
-GOES/NEXRAD-derived fields. It cannot establish natural-image, general video,
+This task can establish only next-frame thunderstorm-class prediction from
+these GOES/NEXRAD-derived fields, subject to the unresolved label-generation
+rule. It cannot establish natural-image, general video,
 audio, language, synchronized cross-modal reasoning, or 95–98% product quality.
 The source's label distribution is near balanced, so majority baseline and
 proper scores remain necessary.
