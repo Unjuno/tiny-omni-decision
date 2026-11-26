@@ -1,3 +1,11 @@
+**2026-11-26 R2 OpenLKA/LKAlert source screen:** The video+CAN warning task is
+a strong product-aligned lead, but the dataset lacks explicit product-training
+terms and the published row-level validation does not establish independent
+routes/drivers. Failure examples are labeled Yes and Normal examples No,
+creating a source-label shortcut risk. Keep `REVIEW_NOT_ADMITTED`; no data or
+weights were accessed and no request was sent. See the
+[source screen](docs/pretrained_reuse/R2_OPENLKA_LKALERT_SOURCE_SCREEN_20261126.md).
+
 **2026-11-26 R2 sub-SEVIR frozen-feature Path A:** On a fixed event-disjoint
 project-created five-minute forecast split, pinned frozen DINOv2-small features
 plus a small temporal LSTM reached 89.62% validation Accuracy (NLL 0.2380,
