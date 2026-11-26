@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "dataset": "IntPhys 2019 development",
+  "component": "dev.tar.gz",
+  "source_url": "https://download-intphys.cognitive-ml.fr/dev.tar.gz",
+  "publisher_page": "https://intphys.cognitive-ml.fr/download.html",
+  "license": "CC-BY-4.0",
+  "publisher_md5": "6a72715007f2f3b0e9546bfa8d8fc39b",
+  "observed_archive_bytes": 3203229667,
+  "observed_md5": "6a72715007f2f3b0e9546bfa8d8fc39b",
+  "observed_sha256": "441eebe09f6583a18dbcd9d2b6c6b5667c66bac99e3875622e0768dc22e16a0a",
+  "local_payload_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\intphys-patha-data-quality-20261127-attempt-01\\dev.tar.gz",
+  "payload_in_git": false,
+  "test_data_downloaded_or_opened": false,
+  "training_data_downloaded": false,
+  "observed_video_count": 360,
+  "observed_videos_per_block": {
+    "O1": 120,
+    "O2": 120,
+    "O3": 120
+  },
+  "observed_groups_per_block": 30,
+  "videos_per_group": 4,
+  "labels_per_group": {
+    "possible": 2,
+    "impossible": 2
+  },
+  "frames_per_video": 100,
+  "channels": [
+    "scene",
+    "depth",
+    "masks"
+  ],
+  "cross_label_video_pairs": 360,
+  "same_index_equal_scene_frame_hashes": 18000,
+  "same_index_scene_frame_hash_fraction": 0.5,
+  "cross_label_pairs_with_shared_scene_frame": 360,
+  "dev_parameter_fitting_permitted": false,
+  "matched_split_group": [
+    "block",
+    "scene_id"
+  ],
+  "source_count_note": "Observed archive count agrees with official IntPhys-Baselines README (360 dev videos total); arXiv v3 describes 360 per block, retained as source-version ambiguity.",
+  "related_report": "docs/pretrained_reuse/R2_INTPHYS_DEV_DATA_QUALITY_SCREEN_20261127.md"
+}
