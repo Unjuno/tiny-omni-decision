@@ -82,14 +82,36 @@ generalization test. The held-out test has no labels and remains untouched.
   readouts, but must not fit weights or calibration parameters.
 - The training set is large (15,000 possible-only videos, split across four
   published archives of about 35G each). Before downloading any training
-  archive, finish the pinned VideoPrism checkpoint, license, processor, and
-  local runtime audit required by R1; then decide whether streaming a bounded
-  official train shard into frozen feature extraction is viable on local
-  hardware and storage.
+  archive, use the pinned VideoPrism runtime smoke below plus the existing R1
+  license/processor records to estimate whether streaming a bounded official
+  train shard into frozen feature extraction is viable on local hardware and
+  storage.
 - Keep all 4 variants of each scene group together. Report matched-group
   metrics and uncertainty; do not treat 360 videos as independent samples.
 - Do not use the benchmark's hidden test or claim this result as a multimodal
   product pass.
+
+## Pinned VideoPrism runtime smoke
+
+The local checkpoint was rehashed on 2026-11-27: 457,475,296 bytes and SHA-256
+`61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29`, matching
+the pinned R1 inventory. Its exact Hub revision is
+`google/videoprism-base-f16r288@be719a406d563b66f0ac969e7c94bab8e997c81a`;
+the pinned source commit is `c6eba0ece3dd49a24ffc44582966997a4a59f1d8`, with
+Apache-2.0 evidence recorded in the R1 inventory. The existing isolated
+environment ran Python 3.11.16, JAX 0.6.2, Flax 0.11.1, and TensorFlow 2.18.1
+on CPU; no packages were changed.
+
+A one-video CPU smoke decoded evenly spaced scene frames 1, 15, 29, 43, 57,
+71, 85, and 100 from `O1/01/1`, yielding input `[1,8,288,288,3]` and finite
+frozen token features `[1,2048,768]`. Forward time was 7.71 s and total time
+including process startup, hash checks, model load, and first JIT compile was
+70.49 s. The sample's feature SHA-256 is
+`574afede7e87282a1841c273082597ff3726fd92f5b5d05e4396062d9d2c3c41`; the
+smoke script and result are retained outside Git beside the dev archive. No
+labels were read, no weights were fitted, and no GPU task was started. This
+validates media decode and the pinned CPU path for one sample; it is not a
+throughput projection or task-quality result.
 
 ## Verification
 
@@ -98,8 +120,10 @@ generalization test. The held-out test has no labels and remains untouched.
   label imbalance rejection, and checksum mismatch rejection.
 - Full CPU suite: 2,944 passed, 11 skipped.
 - Ruff passed for the complete repository.
-- No model training, checkpoint creation, GPU process, or test-set access was
-  performed in this data-screen stage.
+- The full data audit's machine-readable receipt is retained outside Git beside
+  the payload; the one-video runtime smoke is also hash-recorded there.
+- No model training, checkpoint creation, new GPU task, or test-set access was
+  started in this data-screen stage.
 
 References: [official IntPhys download and license page](https://intphys.cognitive-ml.fr/download.html),
 [IntPhys paper](https://arxiv.org/abs/1803.07616),

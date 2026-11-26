@@ -9,6 +9,7 @@
   "observed_archive_bytes": 3203229667,
   "observed_md5": "6a72715007f2f3b0e9546bfa8d8fc39b",
   "observed_sha256": "441eebe09f6583a18dbcd9d2b6c6b5667c66bac99e3875622e0768dc22e16a0a",
+  "audit_receipt_sha256": "05ba84451263165b36bc8fc21a10aec7af08252806f510c67116f6d58cba1c00",
   "local_payload_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\intphys-patha-data-quality-20261127-attempt-01\\dev.tar.gz",
   "payload_in_git": false,
   "test_data_downloaded_or_opened": false,
@@ -36,6 +37,31 @@
   "same_index_scene_frame_hash_fraction": 0.5,
   "cross_label_pairs_with_shared_scene_frame": 360,
   "dev_parameter_fitting_permitted": false,
+  "runtime_smoke": {
+    "status": "pass",
+    "local_result_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\intphys-patha-data-quality-20261127-attempt-01\\videoprism-intphys-cpu-smoke.json",
+    "result_sha256": "154a5ef7a7d75003370c78a1e41a91aa02c8fadcdc5a910c870a8446ea16dc50",
+    "script_sha256": "c88313b4622a93ba61777528ac8265f8ecbd1cc3cbda180802cd37b43bf6ce42",
+    "model": "google/videoprism-base-f16r288@be719a406d563b66f0ac969e7c94bab8e997c81a",
+    "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "device": "CPU",
+    "input_shape": [
+      1,
+      8,
+      288,
+      288,
+      3
+    ],
+    "output_shape": [
+      1,
+      2048,
+      768
+    ],
+    "forward_seconds": 7.70678649994079,
+    "total_seconds": 70.49274529994,
+    "labels_loaded": false,
+    "weights_fit": false
+  },
   "matched_split_group": [
     "block",
     "scene_id"
