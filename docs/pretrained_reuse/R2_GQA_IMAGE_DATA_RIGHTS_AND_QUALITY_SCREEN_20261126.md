@@ -36,6 +36,12 @@ used Visual Genome data has not been measured.
   crowdsourced scene graphs. This provides structured audit signals, but it
   does not mean each answer has independent human adjudication. Potential
   annotation errors and question-generation artifacts need measurement.
+- The authors' [GQA paper](https://arxiv.org/abs/1902.09506) reports 89.3%
+  human accuracy, 42.1% for a question-only blind LSTM, and 54.1% for a strong
+  VQA model on its reported benchmark. Thus GQA can be a useful structured
+  image-reasoning stress task, but not a standalone 95% acceptance benchmark
+  for the product target. These published results are task-specific context,
+  not this project's model measurements.
 
 ## Why the data may help, and what must be checked
 
