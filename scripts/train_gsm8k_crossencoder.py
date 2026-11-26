@@ -330,6 +330,7 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--dataset-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--smoke", action="store_true")
+    parser.add_argument("--force-cpu", action="store_true")
     return parser.parse_args()
 
 
@@ -361,7 +362,8 @@ def main() -> None:
     random.seed(SEED)
     torch.manual_seed(SEED)
     torch.set_num_threads(4)
-    if torch.cuda.is_available():
+    has_visible_cuda = torch.cuda.is_available() and torch.cuda.device_count() > 0
+    if has_visible_cuda and not args.force_cpu:
         torch.cuda.manual_seed_all(SEED)
         device = torch.device("cuda")
         torch.cuda.reset_peak_memory_stats(device)
@@ -431,6 +433,7 @@ def main() -> None:
         ),
         "epochs": 1 if args.smoke else EPOCHS,
         "smoke": args.smoke,
+        "force_cpu": args.force_cpu,
         "batch_questions": BATCH_QUESTIONS,
         "updates_per_epoch": updates_per_epoch,
         "max_length": MAX_LENGTH,
