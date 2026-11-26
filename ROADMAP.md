@@ -1,3 +1,10 @@
+**2026-11-26 R2 OpenBookQA source screen:** The four-choice science task has
+useful human quality/group metadata in its expanded schema, but the pinned
+dataset card declares its license `unknown`; the upstream Apache-2.0 grant is
+for code, not proof of data rights. Core-fact rights and official split-group
+independence also remain unresolved. Keep `REVIEW_NOT_ADMITTED`; Hub preview
+rows are exposed and no Parquet data was acquired. See [the source screen](docs/pretrained_reuse/R2_OPENBOOKQA_SOURCE_SCREEN_20261126.md).
+
 **2026-11-26 R2 BoolQ source screen:** BoolQ is a promising BERT-shaped
 natural yes/no question-plus-passage task with human evidence annotations, but
 the pinned Hub card declares CC BY-SA 3.0, outside the repository's explicit
