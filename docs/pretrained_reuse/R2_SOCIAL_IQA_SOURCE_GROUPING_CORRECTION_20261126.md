@@ -43,3 +43,11 @@ Interactions](https://aclanthology.org/D19-1454/), especially §3.4–3.5.
 
 This correction narrows the source-overlap uncertainty; it does not improve the
 existing model result or close any R2 quality gate.
+
+### Follow-up train-only artifact check
+
+The later [train-data integrity audit](R2_SOCIAL_IQA_TRAIN_DATA_INTEGRITY_AUDIT_20261126.md)
+inspected the author-provided v1.4 supplemental **train member only**. It
+contains prompt dimensions and answer provenance, but still no stable event
+identifier. It also reveals duplicate-target conflicts, so it cannot be used as
+an automatic relabeling source. No supplemental dev/test member was opened.

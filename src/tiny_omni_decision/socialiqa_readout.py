@@ -36,7 +36,7 @@ def validate_source_content_disjoint(
                 raise ValueError("Social IQa examples must have exactly three options")
             context = normalize_text(str(row["context"]))
             question = normalize_text(str(row["question"]))
-            normalized_options = tuple(normalize_text(str(option)) for option in options)
+            normalized_options = tuple(sorted(normalize_text(str(option)) for option in options))
             contexts.add(context)
             examples.add((context, question, *normalized_options))
             question_options.add((question, *normalized_options))
@@ -63,12 +63,15 @@ def validate_splits(
     groups_by_split: dict[str, set[str]] = {}
     examples_by_split: dict[str, set[tuple[str, ...]]] = {}
     qoptions_by_split: dict[str, set[tuple[str, ...]]] = {}
+    duplicate_question_counts: dict[str, tuple[int, int]] = {}
     targets: dict[str, Counter[int]] = {}
     for split, rows in splits.items():
         ids: set[str] = set()
         groups: set[str] = set()
         examples: set[tuple[str, ...]] = set()
         qoptions: set[tuple[str, ...]] = set()
+        targets_by_question: dict[tuple[str, ...], set[str]] = {}
+        question_counts: Counter[tuple[str, ...]] = Counter()
         counts: Counter[int] = Counter()
         for row in rows:
             required = {
@@ -102,10 +105,26 @@ def validate_splits(
                 raise ValueError(f"{split} context hash mismatch")
             groups.add(expected_hash)
             normalized_question = normalize_text(question)
-            normalized_options = tuple(normalize_text(option) for option in options)
-            examples.add((normalize_text(context), normalized_question, *normalized_options))
+            normalized_options = tuple(sorted(normalize_text(option) for option in options))
+            question_identity = (normalize_text(context), normalized_question, *normalized_options)
+            target_identity = normalize_text(options[target])
+            targets_by_question.setdefault(question_identity, set()).add(target_identity)
+            question_counts[question_identity] += 1
+            examples.add(question_identity)
             qoptions.add((normalized_question, *normalized_options))
             counts[target] += 1
+        conflicting_targets = sum(
+            len(target_values) > 1 for target_values in targets_by_question.values()
+        )
+        if conflicting_targets:
+            raise ValueError(
+                f"conflicting targets for duplicate normalized question/options in {split}: "
+                f"{conflicting_targets} groups"
+            )
+        duplicate_question_counts[split] = (
+            sum(count > 1 for count in question_counts.values()),
+            sum(count - 1 for count in question_counts.values() if count > 1),
+        )
         ids_by_split[split] = ids
         groups_by_split[split] = groups
         examples_by_split[split] = examples
@@ -125,6 +144,12 @@ def validate_splits(
         "context_group_overlap": 0,
         "normalized_full_example_overlap": 0,
         "normalized_question_options_overlap": 0,
+        "duplicate_question_groups": {
+            split: values[0] for split, values in duplicate_question_counts.items()
+        },
+        "duplicate_question_excess_rows": {
+            split: values[1] for split, values in duplicate_question_counts.items()
+        },
         "target_counts": {split: dict(sorted(count.items())) for split, count in targets.items()},
     }
 

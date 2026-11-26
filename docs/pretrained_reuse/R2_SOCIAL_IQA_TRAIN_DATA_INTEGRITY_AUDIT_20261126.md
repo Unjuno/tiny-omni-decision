@@ -36,20 +36,27 @@ audit was accessed.
 | Check | Result |
 |---|---:|
 | Publisher train records in each release | 33,410 |
-| Unique normalized context/question/options keys | 33,381 |
-| Exact duplicate excess rows | 29 |
-| Duplicate-key groups with cross-release target-multiset disagreement | 5 groups / 10 rows |
-| Conflicting groups in existing custom train / validation | 4 / 1 |
+| Unique exact-order context/question/options keys | 33,381 |
+| Exact-order duplicate excess rows | 29 |
+| Unique option-order-invariant question identities | 33,221 |
+| Repeated option-order-invariant excess rows | 189 |
+| Conflicting-target groups in baseline / supplemental release | 28 / 23 |
+| Rows inside baseline conflicting groups | 56 |
+| Groups whose target multisets differ between releases | 5 groups / 10 rows |
+| Baseline conflicting groups in custom train / validation | 25 / 3 |
 | Exact context overlap in existing custom split | 0 |
 | Answer-source annotation arrays shorter than 3 choices | 31 rows (12 length 1, 19 length 2) |
 | Stable ATOMIC event ID in supplemental schema | absent |
 
-The five conflicting duplicate groups each have two identical text-and-option
-rows. In the baseline release those copies carry different target labels; in
-the supplemental release both copies carry the same target. One such group is
-in the existing validation split, so its two identical inputs have opposing
-targets there. The correct resolution is unknown; neither release was silently
-preferred.
+The audit canonicalizes the three options as an unordered set when checking
+duplicate questions, so option-order permutations cannot hide a repeated
+decision. Of 189 repeated identities, 28 groups (56 baseline rows) have
+different correct answer text across copies. Twenty-five groups fall in the
+existing custom train split and three in its validation split; none crosses
+the split boundary. The supplemental release still has conflicting labels in
+23 groups. Five groups have different target multisets between the two
+releases; the supplemental version is therefore not a safe automatic
+relabeling source. Neither release was silently preferred.
 
 The supplemental file adds `promptDim`, `answerSourcesOrigins`,
 `answerSourcesWithCor`, and character mapping fields. The nine prompt
@@ -67,9 +74,24 @@ custom random split within publisher train ([paper, §3.5](https://aclanthology.
 The external attempt directory is
 `C:\CodexArtifacts\pretrained-reuse-r2-local\socialiqa-source-group-audit-20261126-attempt-01\`.
 It contains the pinned archive, train-only extracted members, the audit script,
-and `source-group-audit.json`. The receipt hashes the input and split files;
-the script compares normalized row-key target multisets so repeated identical
+and `source-group-audit.json`. The audit script SHA-256 is
+`e7e90ca13b776043baaa726f36dda53a155290775d18b5773f8d1863cd94882ee`; the
+result JSON SHA-256 is
+`00f7b79d800a9c4dc5f5c24e4e775f4ab06b9f3c21b707a85fe10e8f5cf03167`. The
+receipt hashes the input and split files; the script compares normalized
+candidate-order-invariant keys and target-answer text so repeated identical
 questions are not accidentally collapsed.
 
 This is a data-quality diagnostic only. It does not revise prior scores, select
 a model, or close an R2 task-quality gate.
+
+## Fail-closed implementation
+
+The Social IQa split validator now canonicalizes option order when comparing
+cross-split question/options content and rejects repeated normalized
+context/question/option sets whose target answer text conflicts. Added tests
+cover option-order leakage, contradictory duplicate targets, and consistent
+duplicates with reordered options. Running the new gate against preserved
+historical artifacts correctly fails closed on 25 train and 3 validation
+conflict groups. Those artifacts were not edited and the old score remains a
+historical result, not a revalidated clean-benchmark score.

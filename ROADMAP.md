@@ -1,17 +1,21 @@
-**2026-11-26 R2 Social IQa train-data integrity audit:** The publisher's
-supplemental train release matches all 33,410 records but reveals five
-duplicate-question groups whose repeated labels conflict with the baseline
-release, plus 31 incomplete answer-origin annotations. It provides task strata
-but no stable ATOMIC event ID. No labels were changed or records filtered; no
-dev/test or sealed-audit payload was opened. See [integrity audit](docs/pretrained_reuse/R2_SOCIAL_IQA_TRAIN_DATA_INTEGRITY_AUDIT_20261126.md).
+**2026-11-26 R2 Social IQa train-data integrity audit:** The supplemental train
+release matches all 33,410 records but has no stable ATOMIC event ID. Under
+option-order-invariant identity, 28 baseline duplicate-question groups have
+conflicting targets (25 train / 3 validation); the supplemental release still
+conflicts in 23 and differs across releases in five. Thirty-one answer-origin
+arrays are incomplete. A fail-closed validator now catches these conflicts;
+11 focused tests and the 2,948-test CPU suite pass. No labels or artifacts were
+changed, and no dev/test or sealed-audit payload was opened. See [integrity
+audit](docs/pretrained_reuse/R2_SOCIAL_IQA_TRAIN_DATA_INTEGRITY_AUDIT_20261126.md).
 
 **2026-11-26 R2 Social IQa grouping clarification:** The publisher paper says
 official partitions keep contexts from each ATOMIC event together. The prior
 seed-17 split within publisher-train grouped exact contexts only, so its
 internal validation is not proven event-disjoint; the already-opened official
 dev result remains a separate one-shot source-split audit and must not be
-retuned. The advertised supplemental event-dimension release has not been
-inspected. See [clarification](docs/pretrained_reuse/R2_SOCIAL_IQA_SOURCE_GROUPING_CORRECTION_20261126.md).
+retuned. A later train-only supplemental-release audit found task dimensions
+but no stable event ID. See [clarification](docs/pretrained_reuse/R2_SOCIAL_IQA_SOURCE_GROUPING_CORRECTION_20261126.md)
+and [train-data audit](docs/pretrained_reuse/R2_SOCIAL_IQA_TRAIN_DATA_INTEGRITY_AUDIT_20261126.md).
 
 **2026-11-26 R2 OpenBookQA source screen:** The four-choice science task has
 useful human quality/group metadata in its expanded schema, but the pinned

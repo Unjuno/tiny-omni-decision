@@ -45,6 +45,33 @@ def test_validate_splits_rejects_question_options_leakage_without_context_overla
         validate_splits(train, validation)
 
 
+def test_validate_splits_rejects_option_permuted_question_overlap() -> None:
+    train = [example("a", "Context one", "Why?", ["x", "y", "z"], 0)]
+    validation = [example("b", "Context two", "WHY?", ["z", "x", "y"], 1)]
+    with pytest.raises(ValueError, match="question/options"):
+        validate_splits(train, validation)
+
+
+def test_validate_splits_rejects_conflicting_targets_for_duplicate_question() -> None:
+    train = [
+        example("a", "Same context", "Why?", ["x", "y", "z"], 0),
+        example("b", "same   context", "WHY?", ["z", "x", "y"], 0),
+        example("c", "SAME CONTEXT", "why?", ["y", "x", "z"], 1),
+    ]
+    with pytest.raises(ValueError, match="conflicting targets.*train: 1 groups"):
+        validate_splits(train, [])
+
+
+def test_validate_splits_reports_consistent_duplicate_questions() -> None:
+    train = [
+        example("a", "Same context", "Why?", ["x", "y", "z"], 0),
+        example("b", "same   context", "WHY?", ["z", "x", "y"], 1),
+    ]
+    report = validate_splits(train, [])
+    assert report["duplicate_question_groups"] == {"train": 1, "validation": 0}
+    assert report["duplicate_question_excess_rows"] == {"train": 1, "validation": 0}
+
+
 def test_validate_splits_rejects_forged_context_hash() -> None:
     row = example("a", "Context", "Why?", ["x", "y", "z"], 0)
     row["source_context_sha256"] = hashlib.sha256(b"different").hexdigest()
@@ -101,6 +128,30 @@ def test_source_content_audit_rejects_context_overlap_without_labels() -> None:
 
     with pytest.raises(ValueError, match="source content overlap"):
         validate_source_content_disjoint(train, dev)
+
+
+def test_source_content_audit_rejects_option_permuted_duplicate() -> None:
+    train = [
+        {
+            "context": "A person cooks.",
+            "question": "Why?",
+            "answerA": "Hungry",
+            "answerB": "Cold",
+            "answerC": "Sleep",
+        }
+    ]
+    source = [
+        {
+            "context": "Another person cooks.",
+            "question": "WHY?",
+            "answerA": "Sleep",
+            "answerB": "Hungry",
+            "answerC": "Cold",
+        }
+    ]
+
+    with pytest.raises(ValueError, match="source content overlap"):
+        validate_source_content_disjoint(train, source)
 
 
 def test_metrics_on_uniform_logits_are_finite_and_calibrated() -> None:
