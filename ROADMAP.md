@@ -1,3 +1,13 @@
+**2026-11-26 R3 gate review:** Path A already shares the 114.4M VideoPrism
+backbone between image and video, with a 170.5M total parameter count. Its
+687.3MB FP32 package has a storage-only 182.0MB group-wise INT8 estimate, not
+yet measured after conversion. The recent matched four-modality integration
+did not improve macro Accuracy over baseline, and the candidate V-JEPA 2.1
+checkpoint remains license-review-only. Current evidence does not isolate a
+shared-backbone/Lens bottleneck; do not begin R3 until R2 identifies one and a
+licensed checkpoint is available. See
+[`R3 gate review`](docs/pretrained_reuse/R3_SHARED_BACKBONE_GATE_REVIEW_20261126.md).
+
 **2026-11-26 R2 Path A CPU runtime contract check:** Focused tests for the
 video/audio runtime interfaces, probability JSON contract, and native-feature
 Decision readout pass (`43 passed`, CPU-only). This is interface evidence only:
