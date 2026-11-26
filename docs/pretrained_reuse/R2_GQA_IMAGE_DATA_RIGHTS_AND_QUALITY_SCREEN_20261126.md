@@ -25,6 +25,12 @@ used Visual Genome data has not been measured.
   page inspected contains no license statement. A third-party TensorFlow
   Datasets request lists CC BY 4.0, but that is not the publisher's grant and
   does not independently clear the underlying COCO/Flickr image rights.
+- The Hugging Face [`lmms-lab-encoder/GQA` mirror](https://huggingface.co/datasets/lmms-lab-encoder/GQA)
+  declares MIT and describes itself as a formatted GQA version for the
+  `lmms-eval` evaluation pipeline. The page reports 24,206,801 rows and 30.1
+  GB total. This is a downstream mirror, not the publisher's original
+  dataset-specific grant; its MIT metadata cannot settle rights for the
+  underlying COCO/Flickr images. The full mirror was not downloaded.
 - The official [About page](https://cs.stanford.edu/people/dorarad/gqa/about.html)
   says questions were automatically generated from natural-language,
   crowdsourced scene graphs. This provides structured audit signals, but it
