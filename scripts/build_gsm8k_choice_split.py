@@ -152,6 +152,11 @@ def _distractors(gold: Decimal, bank: list[Decimal], key: str) -> list[Decimal]:
     return selected
 
 
+def _jsonl_line(example: DecisionExample) -> str:
+    # ensure_ascii escapes U+2028/U+2029 so they cannot split one JSON record.
+    return json.dumps(example.model_dump(mode="json"), ensure_ascii=True, separators=(",", ":"))
+
+
 def build_examples(
     rows: list[dict[str, Any]], *, seed: int = 17, validation_fraction: float = 0.10
 ) -> tuple[list[DecisionExample], list[DecisionExample], dict[str, Any]]:
@@ -171,11 +176,7 @@ def build_examples(
         duplicate_answers[question_id] = answer
     groups = _group_indices(rows)
     validation_indices = _split_groups(groups, rows, seed, validation_fraction)
-    group_identity = {
-        index: _group_id(rows, members)
-        for members in groups
-        for index in members
-    }
+    group_identity = {index: _group_id(rows, members) for members in groups for index in members}
     train_indices = [index for index in range(len(rows)) if index not in validation_indices]
     answer_bank = sorted({answers[index] for index in train_indices})
     if len(answer_bank) < 4:
@@ -288,15 +289,14 @@ def main() -> None:
         path = args.output_dir / f"{name}.jsonl"
         with path.open("x", encoding="utf-8", newline="\n") as handle:
             for example in examples:
-                handle.write(example.model_dump_json() + "\n")
+                handle.write(_jsonl_line(example) + "\n")
     manifest = {
         "schema_version": 1,
         "source": SOURCE,
         "source_revision": SOURCE_REVISION,
         "train_source_sha256": actual_hash,
         "output_hashes": {
-            name: sha256_file(args.output_dir / f"{name}.jsonl")
-            for name in ("train", "validation")
+            name: sha256_file(args.output_dir / f"{name}.jsonl") for name in ("train", "validation")
         },
         "split": split_info,
         "claim_limit": (

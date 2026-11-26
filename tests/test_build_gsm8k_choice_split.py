@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import json
+
 import pytest
 
-from scripts.build_gsm8k_choice_split import build_examples
+from scripts.build_gsm8k_choice_split import _jsonl_line, build_examples
 
 
 def _row(question: str, answer: int) -> dict[str, str]:
@@ -35,15 +37,11 @@ def test_split_is_deterministic_and_keeps_duplicate_questions_together() -> None
     assert [item.id for item in train_a] == [item.id for item in train_b]
     assert [item.id for item in validation_a] == [item.id for item in validation_b]
     assert info_a == info_b
-    memberships = {
-        item.source_record_id: item.split for item in train_a + validation_a
-    }
+    memberships = {item.source_record_id: item.split for item in train_a + validation_a}
     assert memberships
     # The punctuation-normalized duplicates each retain two row IDs, but one group.
     grouped = [
-        item
-        for item in train_a + validation_a
-        if "question number 0" in item.question.casefold()
+        item for item in train_a + validation_a if "question number 0" in item.question.casefold()
     ]
     assert len(grouped) == 2
     assert len({item.split for item in grouped}) == 1
@@ -80,3 +78,14 @@ def test_missing_official_answer_marker_fails_closed() -> None:
     rows[0]["answer"] = "The answer is 1"
     with pytest.raises(ValueError, match="official final-answer marker"):
         build_examples(rows, seed=17)
+
+
+def test_jsonl_escapes_unicode_line_separator() -> None:
+    rows = _fixture()
+    rows[0]["question"] = "First line.\u2028Second line."
+    train, validation, _ = build_examples(rows, seed=17)
+    example = next(item for item in train + validation if "First line" in item.question)
+    serialized = _jsonl_line(example)
+
+    assert "\\u2028" in serialized
+    assert json.loads(serialized)["question"] == example.question
