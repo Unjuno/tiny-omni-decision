@@ -14,6 +14,14 @@ Provider-side license details and route/GPS privacy also need direct review.
 Keep `REVIEW_NOT_ADMITTED`; no payload or model was accessed. See the
 [source screen](docs/pretrained_reuse/R2_CANDID_VEHICLE_CAN_VIDEO_SOURCE_SCREEN_20261126.md).
 
+**2026-11-26 R2 BANKING77 text-data quality screen:** The pinned CC BY 4.0
+English intent dataset has 13,083 rows and 77 classes, but its source-producer
+and speaker/group provenance is undocumented. A published study flags over
+1,400 train labels as potentially noisy, and the 77-way task exceeds the current
+20-option contract. Keep `REVIEW_NOT_ADMITTED` for model selection until label
+quality and the task contract are resolved; the official test remains unopened.
+See the [source-quality screen](docs/pretrained_reuse/R2_BANKING77_SOURCE_QUALITY_SCREEN_20261126.md).
+
 **2026-11-26 R2 sub-SEVIR frozen-feature Path A:** On a fixed event-disjoint
 project-created five-minute forecast split, pinned frozen DINOv2-small features
 plus a small temporal LSTM reached 89.62% validation Accuracy (NLL 0.2380,
