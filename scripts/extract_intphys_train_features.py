@@ -69,6 +69,23 @@ def canonical_status_hash(status: dict[str, Any]) -> str:
     return hashlib.sha256(raw).hexdigest()
 
 
+def rgb_sequence_sha256(frame_hashes: dict[int, str]) -> str:
+    """Hash all 100 original RGB frame payloads in temporal order."""
+    expected = set(range(1, EXPECTED_FRAMES + 1))
+    if set(frame_hashes) != expected:
+        raise ValueError("RGB sequence identity requires exactly frames 1..100")
+    digest = hashlib.sha256()
+    for frame_number in range(1, EXPECTED_FRAMES + 1):
+        try:
+            frame_digest = bytes.fromhex(frame_hashes[frame_number])
+        except (ValueError, TypeError) as error:
+            raise ValueError("RGB frame identity must be a SHA-256 hex digest") from error
+        if len(frame_digest) != hashlib.sha256().digest_size:
+            raise ValueError("RGB frame identity must be a SHA-256 hex digest")
+        digest.update(frame_digest)
+    return digest.hexdigest()
+
+
 def _reject_nonfinite_json_constant(value: str) -> Any:
     raise ValueError(f"non-finite JSON number: {value}")
 
@@ -81,7 +98,7 @@ def deterministic_group_split(
     seed: int = 17,
     validation_buckets: int = 5,
 ) -> tuple[list[int], list[int], list[str]]:
-    """Group duplicate scene metadata or normalized media before a 20% holdout."""
+    """Group duplicate scene metadata or complete RGB sequences before a 20% holdout."""
     if not sample_ids or len(set(sample_ids)) != len(sample_ids):
         raise ValueError("sample IDs must be nonempty and unique")
     if len(status_hashes) != len(sample_ids) or len(media_hashes) != len(sample_ids):
@@ -244,6 +261,7 @@ def main() -> None:
             raise ValueError(f"{video_id} missing status.json")
         if set(row["selected_frames"]) != set(SELECTED_FRAME_NUMBERS):
             raise ValueError(f"{video_id} missing one or more uniformly sampled RGB frames")
+        rgb_sequence_hash = rgb_sequence_sha256(row["rgb_frame_hashes"])
 
         frames = np.stack([row["selected_frames"][number] for number in SELECTED_FRAME_NUMBERS])
         normalized_frames = _preprocess(frames, tf)
@@ -263,12 +281,9 @@ def main() -> None:
         if per_frame.shape != (FRAME_COUNT, 768) or not np.isfinite(per_frame).all():
             raise ValueError(f"{video_id} produced invalid per-frame features: {per_frame.shape}")
 
-        pixel_digest = hashlib.sha256(
-            np.ascontiguousarray(normalized_frames).tobytes()
-        ).hexdigest()
         sample_ids.append(video_id)
         status_hashes.append(row["status_hash"])
-        media_hashes.append(pixel_digest)
+        media_hashes.append(rgb_sequence_hash)
         feature_rows.append(per_frame.astype(np.float32))
 
     with tarfile.open(archive_path, mode="r|gz") as archive:
@@ -289,6 +304,7 @@ def main() -> None:
                 active = {
                     "frames": {name: set() for name in ("scene", "depth", "masks")},
                     "selected_frames": {},
+                    "rgb_frame_hashes": {},
                     "status_hash": None,
                 }
             if active is None:
@@ -313,12 +329,17 @@ def main() -> None:
                 raise ValueError(f"duplicate frame: {member.name}")
             active["frames"][channel].add(frame_number)
             channel_counts[channel] += 1
-            if channel == "scene" and frame_number in SELECTED_FRAME_NUMBERS:
+            if channel == "scene":
                 extracted = archive.extractfile(member)
                 if extracted is None:
-                    raise ValueError(f"cannot read selected scene frame: {member.name}")
-                decoded = tf.io.decode_png(extracted.read(), channels=3)
-                active["selected_frames"][frame_number] = np.asarray(decoded)
+                    raise ValueError(f"cannot read scene frame: {member.name}")
+                frame_bytes = extracted.read()
+                active["rgb_frame_hashes"][frame_number] = hashlib.sha256(
+                    frame_bytes
+                ).hexdigest()
+                if frame_number in SELECTED_FRAME_NUMBERS:
+                    decoded = tf.io.decode_png(frame_bytes, channels=3)
+                    active["selected_frames"][frame_number] = np.asarray(decoded)
     if active_video_id is not None and active is not None:
         finish_video(active_video_id, active)
     process_memory_after = process.memory_info()
@@ -361,7 +382,7 @@ def main() -> None:
             sample_ids=np.asarray(ids),
             group_ids=np.asarray(groups),
             status_identity_sha256=np.asarray([status_hashes[index] for index in indices]),
-            normalized_media_sha256=np.asarray([media_hashes[index] for index in indices]),
+            rgb_sequence_sha256=np.asarray([media_hashes[index] for index in indices]),
         )
         split_file_hashes[split_name] = sha256_file(feature_path)
     metadata = {
@@ -396,7 +417,7 @@ def main() -> None:
         "duplicate_status_or_media_groups": len(sample_ids) - len(set(group_ids)),
         "cross_split_group_overlap": 0,
         "cross_split_status_identity_overlap": 0,
-        "cross_split_normalized_media_identity_overlap": 0,
+        "cross_split_rgb_sequence_identity_overlap": 0,
         "channel_frame_counts": dict(channel_counts),
         "selected_frame_numbers_1_based": list(SELECTED_FRAME_NUMBERS),
         "input_frame_size": FRAME_SIZE,
@@ -404,6 +425,7 @@ def main() -> None:
         "frames_per_video": EXPECTED_FRAMES,
         "feature_shape": list(features.shape[1:]),
         "feature_layout": "mean pooled spatial tokens per sampled frame; temporal order retained",
+        "rgb_identity": "SHA-256 of ordered SHA-256 digests of all 100 original RGB PNG payloads",
         "model_revision": MODEL_REVISION,
         "videoprism_source_commit": source_commit,
         "checkpoint_sha256": checkpoint_sha256,

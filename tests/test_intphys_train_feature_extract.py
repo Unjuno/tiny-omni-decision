@@ -4,6 +4,7 @@ from scripts.extract_intphys_train_features import (
     canonical_status_hash,
     deterministic_group_split,
     parse_train_member,
+    rgb_sequence_sha256,
 )
 
 
@@ -47,7 +48,7 @@ def test_status_identity_requires_possible_label_and_one_hundred_frames():
         canonical_status_hash(incomplete)
 
 
-def test_deterministic_split_groups_duplicate_status_or_normalized_media():
+def test_deterministic_split_groups_duplicate_status_or_rgb_sequences():
     sample_ids = [f"{index:05d}" for index in range(30)]
     status_hashes = [f"status-{index}" for index in range(30)]
     media_hashes = [f"media-{index}" for index in range(30)]
@@ -67,3 +68,21 @@ def test_deterministic_split_groups_duplicate_status_or_normalized_media():
     assert deterministic_group_split(
         sample_ids, status_hashes, media_hashes, seed=17
     ) == (train, validation, group_ids)
+
+
+def test_rgb_sequence_hash_requires_and_orders_all_one_hundred_frames():
+    import hashlib
+
+    frame_hashes = {
+        frame: hashlib.sha256(str(frame).encode()).hexdigest() for frame in range(1, 101)
+    }
+    ordered = rgb_sequence_sha256(frame_hashes)
+    assert ordered == rgb_sequence_sha256(dict(reversed(list(frame_hashes.items()))))
+
+    changed = dict(frame_hashes)
+    changed[50] = hashlib.sha256(b"different frame").hexdigest()
+    assert ordered != rgb_sequence_sha256(changed)
+    with pytest.raises(ValueError, match="exactly frames 1..100"):
+        rgb_sequence_sha256(
+            {frame: digest for frame, digest in frame_hashes.items() if frame != 50}
+        )
