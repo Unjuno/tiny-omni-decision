@@ -45,6 +45,10 @@ EXPECTED_DIRECTORY_END = (
 MAX_MEMBER_BYTES = 64 * 1024 * 1024
 DISK_RESERVE_BYTES = 2 * 1024**3
 SHORT_RESPONSE_FALLBACK_CHUNK_BYTES = 128 * 1024
+ATTEMPT_08_BUDGET_RUNNER_SHA256 = (
+    "5428a21132b3a5dcad7a9551d6211eec80e237bbf6a330217a5b16236cfbb9c6"
+)
+ATTEMPT_08_BUDGET_ERROR = "ValueError('total FSD50K range-transfer budget exceeded')"
 
 
 class SharedBudget:
@@ -173,6 +177,18 @@ def planned_budget(
     return output_bytes, transfer_budget
 
 
+def transfer_budget_for_resume(
+    planned_transfer_bytes: int, prior_result: dict[str, Any] | None
+) -> int:
+    """Bound the known attempt-08 retry-budget resume by total archive bytes."""
+    if prior_result is not None and (
+        prior_result.get("runner_sha256") == ATTEMPT_08_BUDGET_RUNNER_SHA256
+        and prior_result.get("error") == ATTEMPT_08_BUDGET_ERROR
+    ):
+        return sum(ARCHIVE_SIZES)
+    return planned_transfer_bytes
+
+
 def require_free_space(path: Path, required_bytes: int) -> None:
     if required_bytes > shutil.disk_usage(path).free:
         raise ValueError("insufficient disk space for FSD50K media plus 2 GiB reserve")
@@ -252,7 +268,13 @@ def validate_failed_partial(
         == "8b7f5b08aecb109db6072f5bcc035e42defff57defa875239c1d62568ef0ad4b"
         and attempt_04_match is not None
     )
-    if prior.get("status") != "FAIL" or not (known_attempt_03 or known_attempt_04):
+    known_attempt_08_budget = (
+        prior.get("runner_sha256") == ATTEMPT_08_BUDGET_RUNNER_SHA256
+        and prior.get("error") == ATTEMPT_08_BUDGET_ERROR
+    )
+    if prior.get("status") != "FAIL" or not (
+        known_attempt_03 or known_attempt_04 or known_attempt_08_budget
+    ):
         raise ValueError("resume source is not an identified preserved range-read failure")
     if attempt_04_match is not None:
         range_start, range_end, got, expected_bytes, inner_start, inner_end = map(
@@ -397,7 +419,10 @@ def acquire(
             ):
                 raise ValueError("archive directory hash changed since prior partial attempt")
             index = central_entries(directory, footer[4])
-            output_bytes, transfer_budget = planned_budget(splits, index, footer[5])
+            output_bytes, planned_transfer_bytes = planned_budget(splits, index, footer[5])
+            transfer_budget = transfer_budget_for_resume(
+                planned_transfer_bytes, prior_result
+            )
             if transfer_budget > sum(ARCHIVE_SIZES):
                 raise ValueError("planned FSD50K transfer exceeds source archive size")
             require_free_space(output_dir, output_bytes + DISK_RESERVE_BYTES)
@@ -406,6 +431,7 @@ def acquire(
                 raise ValueError("partial attempt transfer already exceeds the frozen budget")
             shared.limit = transfer_budget - resumed_range_bytes
             result["planned_output_bytes"] = output_bytes
+            result["planned_range_transfer_bytes"] = planned_transfer_bytes
             result["range_transfer_budget_bytes"] = transfer_budget
 
             count = len(prior_records)

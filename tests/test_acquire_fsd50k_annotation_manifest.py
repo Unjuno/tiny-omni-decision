@@ -288,6 +288,16 @@ def test_failed_partial_is_verified_before_fresh_attempt_resume(tmp_path):
     assert prior["downloaded_files"] == 1
     assert records == [receipt]
 
+    attempt_08_result = json.loads((partial / "result.json").read_text(encoding="utf-8"))
+    attempt_08_result.update(
+        runner_sha256=acquisition.ATTEMPT_08_BUDGET_RUNNER_SHA256,
+        error=acquisition.ATTEMPT_08_BUDGET_ERROR,
+    )
+    (partial / "result.json").write_text(json.dumps(attempt_08_result), encoding="utf-8")
+    prior, records = acquisition.validate_failed_partial(preflight, partial)
+    assert prior["downloaded_files"] == 1
+    assert records == [receipt]
+
     attempt_04_result = json.loads((partial / "result.json").read_text(encoding="utf-8"))
     attempt_04_result.update(
         runner_sha256=(
@@ -307,3 +317,15 @@ def test_failed_partial_is_verified_before_fresh_attempt_resume(tmp_path):
     media.write_bytes(b"corrupt")
     with pytest.raises(ValueError, match="failed integrity check"):
         acquisition.validate_failed_partial(preflight, partial)
+
+
+def test_attempt_08_retry_budget_resume_is_bounded_by_archive_size():
+    prior = {
+        "runner_sha256": acquisition.ATTEMPT_08_BUDGET_RUNNER_SHA256,
+        "error": acquisition.ATTEMPT_08_BUDGET_ERROR,
+    }
+    assert acquisition.transfer_budget_for_resume(1000, prior) == sum(
+        acquisition.ARCHIVE_SIZES
+    )
+    prior["error"] = "ValueError('different error')"
+    assert acquisition.transfer_budget_for_resume(1000, prior) == 1000
