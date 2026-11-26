@@ -16,6 +16,23 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
+from scripts.audit_videoprism_checkpoint import CHECKPOINT_SHA256, MODEL_REVISION
+from scripts.extract_frozen_videoprism_features import SOURCE_COMMIT as VIDEOPRISM_SOURCE_COMMIT
+from scripts.extract_intphys_dev_features import (
+    EXPECTED_ARCHIVE_BYTES as EXPECTED_DEV_BYTES,
+)
+from scripts.extract_intphys_dev_features import (
+    EXPECTED_ARCHIVE_MD5 as EXPECTED_DEV_MD5,
+)
+from scripts.extract_intphys_dev_features import (
+    EXPECTED_ARCHIVE_SHA256 as EXPECTED_DEV_SHA256,
+)
+from scripts.extract_intphys_train_features import (
+    EXPECTED_ARCHIVE_BYTES as EXPECTED_TRAIN_BYTES,
+)
+from scripts.extract_intphys_train_features import (
+    EXPECTED_ARCHIVE_MD5 as EXPECTED_TRAIN_MD5,
+)
 from tiny_omni_decision.intphys_metrics import (
     grouped_paired_bootstrap,
     threshold_metrics,
@@ -31,9 +48,18 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def load_dev_features(path: Path) -> tuple[np.ndarray, list[str], list[str], list[str], np.ndarray]:
+def load_dev_features(
+    path: Path,
+) -> tuple[np.ndarray, list[str], list[str], list[str], np.ndarray, list[str]]:
     with np.load(path, allow_pickle=False) as payload:
-        required = {"features", "sample_ids", "group_ids", "blocks", "labels"}
+        required = {
+            "features",
+            "sample_ids",
+            "group_ids",
+            "blocks",
+            "labels",
+            "normalized_media_sha256",
+        }
         if not required.issubset(payload.files):
             raise ValueError(
                 f"dev feature archive missing arrays: {sorted(required - set(payload.files))}"
@@ -43,6 +69,7 @@ def load_dev_features(path: Path) -> tuple[np.ndarray, list[str], list[str], lis
         group_ids = payload["group_ids"].astype(str).tolist()
         blocks = payload["blocks"].astype(str).tolist()
         labels = np.asarray(payload["labels"], dtype=np.int8)
+        media_hashes = payload["normalized_media_sha256"].astype(str).tolist()
     count = len(features) if features.ndim else 0
     if (
         features.ndim != 3
@@ -50,10 +77,13 @@ def load_dev_features(path: Path) -> tuple[np.ndarray, list[str], list[str], lis
         or features.shape[1] < 2
         or features.shape[2] < 1
         or not np.isfinite(features).all()
-        or any(len(items) != count for items in (sample_ids, group_ids, blocks, labels))
+        or any(
+            len(items) != count for items in (sample_ids, group_ids, blocks, labels, media_hashes)
+        )
         or len(set(sample_ids)) != count
         or not np.isin(labels, [0, 1]).all()
         or any(not value for values in (sample_ids, group_ids, blocks) for value in values)
+        or any(not value for value in media_hashes)
     ):
         raise ValueError("invalid finite dev arrays or misaligned sample metadata")
     groups: dict[str, list[int]] = defaultdict(list)
@@ -62,7 +92,56 @@ def load_dev_features(path: Path) -> tuple[np.ndarray, list[str], list[str], lis
     for group_id, indices in groups.items():
         if len(indices) != 4 or int(labels[indices].sum()) != 2:
             raise ValueError(f"dev group {group_id} is not a four-video 2/2 label group")
-    return features, sample_ids, group_ids, blocks, labels
+    return features, sample_ids, group_ids, blocks, labels, media_hashes
+
+
+def load_split_identities(path: Path) -> tuple[list[str], list[str], list[str]]:
+    with np.load(path, allow_pickle=False) as payload:
+        required = {"sample_ids", "group_ids", "sampled_rgb_pixels_sha256"}
+        if not required.issubset(payload.files):
+            missing = sorted(required - set(payload.files))
+            raise ValueError(
+                f"feature cache lacks split identity arrays: {missing}"
+            )
+        sample_ids = payload["sample_ids"].astype(str).tolist()
+        group_ids = payload["group_ids"].astype(str).tolist()
+        media_hashes = payload["sampled_rgb_pixels_sha256"].astype(str).tolist()
+    if (
+        not sample_ids
+        or any(len(values) != len(sample_ids) for values in (group_ids, media_hashes))
+        or len(set(sample_ids)) != len(sample_ids)
+        or any(not value for values in (sample_ids, group_ids, media_hashes) for value in values)
+    ):
+        raise ValueError("invalid split IDs, groups, or sampled-media identities")
+    return sample_ids, group_ids, media_hashes
+
+
+def validate_cross_split_identities(
+    splits: dict[str, tuple[list[str], list[str], list[str]]],
+) -> dict[str, int]:
+    """Reject sample, underlying group, or normalized sampled-media overlap."""
+    if set(splits) != {"train", "validation", "dev"}:
+        raise ValueError("exact train, validation, and dev identity lists are required")
+    overlaps = {"sample_id": 0, "group_id": 0, "sampled_media_sha256": 0}
+    names = ["train", "validation", "dev"]
+    for left_index, left_name in enumerate(names):
+        left_ids, left_groups, left_media = splits[left_name]
+        for right_name in names[left_index + 1 :]:
+            right_ids, right_groups, right_media = splits[right_name]
+            identity_pairs = (
+                ("sample_id", left_ids, right_ids),
+                ("group_id", left_groups, right_groups),
+                ("sampled_media_sha256", left_media, right_media),
+            )
+            for identity_name, left_values, right_values in identity_pairs:
+                overlap = set(left_values) & set(right_values)
+                overlaps[identity_name] += len(overlap)
+                if overlap:
+                    raise ValueError(
+                        f"{identity_name} overlap between {left_name} and {right_name}: "
+                        f"{len(overlap)}"
+                    )
+    return overlaps
 
 
 def anomaly_scores(
@@ -104,6 +183,16 @@ def validate_receipts(
         raise ValueError("Path A requires the audited possible-only training corpus")
     if train_corpus_report.get("status") != "complete_intphys_train_frozen_feature_extraction":
         raise ValueError("training corpus receipt is not a completed pinned extraction")
+    if (
+        train_corpus_report.get("archive_bytes") != EXPECTED_TRAIN_BYTES
+        or train_corpus_report.get("archive_md5") != EXPECTED_TRAIN_MD5
+        or train_corpus_report.get("checkpoint_sha256") != CHECKPOINT_SHA256
+        or train_corpus_report.get("model_revision") != MODEL_REVISION
+        or train_corpus_report.get("videoprism_source_commit") != VIDEOPRISM_SOURCE_COMMIT
+    ):
+        raise ValueError(
+            "training corpus source or frozen encoder does not match pinned R1 receipts"
+        )
     if train_metadata.get("best_checkpoint_sha256") != sha256_file(checkpoint):
         raise ValueError("predictor checkpoint hash does not match training receipt")
     if train_metadata.get("train_features_sha256") != sha256_file(train_features_path):
@@ -117,6 +206,15 @@ def validate_receipts(
         raise ValueError("validation feature hash does not match the pinned corpus receipt")
     if dev_report.get("status") != "complete_intphys_dev_frozen_features_for_one_shot_diagnostic":
         raise ValueError("dev feature receipt has unexpected status")
+    if (
+        dev_report.get("archive_bytes") != EXPECTED_DEV_BYTES
+        or dev_report.get("archive_md5") != EXPECTED_DEV_MD5
+        or dev_report.get("archive_sha256") != EXPECTED_DEV_SHA256
+        or dev_report.get("checkpoint_sha256") != CHECKPOINT_SHA256
+        or dev_report.get("model_revision") != MODEL_REVISION
+        or dev_report.get("videoprism_source_commit") != VIDEOPRISM_SOURCE_COMMIT
+    ):
+        raise ValueError("dev source or frozen encoder does not match pinned R1 receipts")
     if dev_report.get("feature_file_sha256") != sha256_file(dev_features_path):
         raise ValueError("dev feature hash does not match extraction receipt")
     if dev_report.get("sealed_test_accessed") is not False:
@@ -168,26 +266,28 @@ def main() -> None:
     )
     with np.load(validation_path, allow_pickle=False) as payload:
         validation_features = np.asarray(payload["features"], dtype=np.float32)
-        validation_ids = payload["sample_ids"].astype(str).tolist()
-        validation_groups = payload["group_ids"].astype(str).tolist()
-    with np.load(train_path, allow_pickle=False) as payload:
-        train_ids = payload["sample_ids"].astype(str).tolist()
-        train_groups = payload["group_ids"].astype(str).tolist()
+    train_ids, train_groups, train_media_hashes = load_split_identities(train_path)
+    validation_ids, validation_groups, validation_media_hashes = load_split_identities(
+        validation_path
+    )
     if (
         validation_features.ndim != 3
         or len(validation_features) < 2
         or not np.isfinite(validation_features).all()
         or len(validation_ids) != len(validation_features)
         or len(validation_groups) != len(validation_features)
-        or set(train_ids) & set(validation_ids)
-        or set(train_groups) & set(validation_groups)
     ):
         raise ValueError("invalid internal validation features or identities")
-    dev_features, sample_ids, group_ids, blocks, labels = load_dev_features(dev_path)
-    if (set(train_ids) | set(validation_ids)) & set(sample_ids) or (
-        set(train_groups) | set(validation_groups)
-    ) & set(group_ids):
-        raise ValueError("dev examples or scene groups overlap training identities")
+    dev_features, sample_ids, group_ids, blocks, labels, dev_media_hashes = load_dev_features(
+        dev_path
+    )
+    identity_overlap = validate_cross_split_identities(
+        {
+            "train": (train_ids, train_groups, train_media_hashes),
+            "validation": (validation_ids, validation_groups, validation_media_hashes),
+            "dev": (sample_ids, group_ids, dev_media_hashes),
+        }
+    )
     if dev_features.shape[1:] != validation_features.shape[1:]:
         raise ValueError("dev and internal validation feature dimensions differ")
 
@@ -269,6 +369,7 @@ def main() -> None:
         "dev_report_sha256": sha256_file(dev_report_path),
         "dev_scene_groups": len(set(group_ids)),
         "dev_video_count": len(sample_ids),
+        "cross_split_identity_overlap": identity_overlap,
         "dev_prediction_rows_sha256": sha256_file(predictions_path),
         "threshold_rule": (
             "95th percentile (higher order statistic) of internal possible-only "

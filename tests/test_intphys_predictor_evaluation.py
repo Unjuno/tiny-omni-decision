@@ -4,11 +4,30 @@ import sys
 import numpy as np
 import pytest
 
+from scripts.audit_videoprism_checkpoint import CHECKPOINT_SHA256, MODEL_REVISION
 from scripts.evaluate_intphys_next_feature_predictor import (
     load_dev_features,
+    load_split_identities,
     main,
     sha256_file,
+    validate_cross_split_identities,
     validate_receipts,
+)
+from scripts.extract_frozen_videoprism_features import SOURCE_COMMIT as VIDEOPRISM_SOURCE_COMMIT
+from scripts.extract_intphys_dev_features import (
+    EXPECTED_ARCHIVE_BYTES as EXPECTED_DEV_BYTES,
+)
+from scripts.extract_intphys_dev_features import (
+    EXPECTED_ARCHIVE_MD5 as EXPECTED_DEV_MD5,
+)
+from scripts.extract_intphys_dev_features import (
+    EXPECTED_ARCHIVE_SHA256 as EXPECTED_DEV_SHA256,
+)
+from scripts.extract_intphys_train_features import (
+    EXPECTED_ARCHIVE_BYTES as EXPECTED_TRAIN_BYTES,
+)
+from scripts.extract_intphys_train_features import (
+    EXPECTED_ARCHIVE_MD5 as EXPECTED_TRAIN_MD5,
 )
 
 
@@ -21,10 +40,12 @@ def test_load_dev_features_requires_complete_balanced_scene_groups(tmp_path):
         group_ids=np.asarray(["g", "g", "g", "g"]),
         blocks=np.asarray(["O1"] * 4),
         labels=np.asarray([0, 1, 0, 1], dtype=np.int8),
+        normalized_media_sha256=np.asarray([f"media-{i}" for i in range(4)]),
     )
-    features, sample_ids, group_ids, blocks, labels = load_dev_features(path)
+    features, sample_ids, group_ids, blocks, labels, media_hashes = load_dev_features(path)
     assert features.shape == (4, 8, 3)
     assert len(sample_ids) == len(group_ids) == len(blocks) == len(labels) == 4
+    assert len(media_hashes) == 4
 
     np.savez_compressed(
         path,
@@ -33,6 +54,7 @@ def test_load_dev_features_requires_complete_balanced_scene_groups(tmp_path):
         group_ids=np.asarray(["g"] * 4),
         blocks=np.asarray(["O1"] * 4),
         labels=np.asarray([0, 0, 0, 1], dtype=np.int8),
+        normalized_media_sha256=np.asarray([f"media-{i}" for i in range(4)]),
     )
     with pytest.raises(ValueError, match="2/2 label group"):
         load_dev_features(path)
@@ -51,9 +73,40 @@ def test_load_dev_features_rejects_nan_and_duplicate_ids(tmp_path):
             group_ids=np.asarray(["g"] * 4),
             blocks=np.asarray(["O1"] * 4),
             labels=np.asarray([0, 1, 0, 1], dtype=np.int8),
+            normalized_media_sha256=np.asarray([f"media-{i}" for i in range(4)]),
         )
         with pytest.raises(ValueError, match="invalid finite dev arrays"):
             load_dev_features(path)
+
+
+def test_split_identity_loader_requires_normalized_media_hashes(tmp_path):
+    path = tmp_path / "train.npz"
+    np.savez_compressed(
+        path,
+        sample_ids=np.asarray(["a", "b"]),
+        group_ids=np.asarray(["g1", "g2"]),
+        sampled_rgb_pixels_sha256=np.asarray(["m1", "m2"]),
+    )
+    assert load_split_identities(path) == (["a", "b"], ["g1", "g2"], ["m1", "m2"])
+
+
+def test_cross_split_identity_gate_rejects_normalized_media_overlap():
+    no_overlap = {
+        "train": (["t"], ["tg"], ["tm"]),
+        "validation": (["v"], ["vg"], ["vm"]),
+        "dev": (["d"], ["dg"], ["dm"]),
+    }
+    assert validate_cross_split_identities(no_overlap) == {
+        "sample_id": 0,
+        "group_id": 0,
+        "sampled_media_sha256": 0,
+    }
+    overlap = {
+        **no_overlap,
+        "dev": (["d"], ["dg"], ["tm"]),
+    }
+    with pytest.raises(ValueError, match="sampled_media_sha256 overlap between train and dev"):
+        validate_cross_split_identities(overlap)
 
 
 def test_evaluation_receipts_fail_closed_on_checkpoint_or_feature_hash_mismatch(tmp_path):
@@ -85,6 +138,11 @@ def test_evaluation_receipts_fail_closed_on_checkpoint_or_feature_hash_mismatch(
             {
                 "status": "complete_intphys_train_frozen_feature_extraction",
                 "all_train_labels_possible": True,
+                "archive_bytes": EXPECTED_TRAIN_BYTES,
+                "archive_md5": EXPECTED_TRAIN_MD5,
+                "checkpoint_sha256": CHECKPOINT_SHA256,
+                "model_revision": MODEL_REVISION,
+                "videoprism_source_commit": VIDEOPRISM_SOURCE_COMMIT,
                 "feature_archive_sha256": {
                     "train": sha256_file(train_features),
                     "validation": sha256_file(validation_features),
@@ -97,6 +155,12 @@ def test_evaluation_receipts_fail_closed_on_checkpoint_or_feature_hash_mismatch(
         json.dumps(
             {
                 "status": "complete_intphys_dev_frozen_features_for_one_shot_diagnostic",
+                "archive_bytes": EXPECTED_DEV_BYTES,
+                "archive_md5": EXPECTED_DEV_MD5,
+                "archive_sha256": EXPECTED_DEV_SHA256,
+                "checkpoint_sha256": CHECKPOINT_SHA256,
+                "model_revision": MODEL_REVISION,
+                "videoprism_source_commit": VIDEOPRISM_SOURCE_COMMIT,
                 "feature_file_sha256": sha256_file(dev_features),
                 "sealed_test_accessed": False,
             }
@@ -125,6 +189,21 @@ def test_evaluation_receipts_fail_closed_on_checkpoint_or_feature_hash_mismatch(
             dev_report_path=dev_report_path,
         )
 
+    checkpoint.write_bytes(b"best checkpoint")
+    corpus_receipt = json.loads(corpus_report_path.read_text(encoding="utf-8"))
+    corpus_receipt["model_revision"] = "un-pinned-revision"
+    corpus_report_path.write_text(json.dumps(corpus_receipt), encoding="utf-8")
+    with pytest.raises(ValueError, match="frozen encoder"):
+        validate_receipts(
+            checkpoint=checkpoint,
+            train_metadata_path=training_metadata_path,
+            train_corpus_report_path=corpus_report_path,
+            train_features_path=train_features,
+            validation_features_path=validation_features,
+            dev_features_path=dev_features,
+            dev_report_path=dev_report_path,
+        )
+
 
 def test_fixed_evaluation_cli_writes_grouped_scores_without_probability_claims(
     tmp_path, monkeypatch
@@ -141,12 +220,14 @@ def test_fixed_evaluation_cli_writes_grouped_scores_without_probability_claims(
         features=rng.normal(size=(4, 8, 6)).astype(np.float32),
         sample_ids=np.asarray([f"train-{i}" for i in range(4)]),
         group_ids=np.asarray([f"train-group-{i}" for i in range(4)]),
+        sampled_rgb_pixels_sha256=np.asarray([f"train-media-{i}" for i in range(4)]),
     )
     np.savez_compressed(
         validation_features,
         features=rng.normal(size=(4, 8, 6)).astype(np.float32),
         sample_ids=np.asarray([f"validation-{i}" for i in range(4)]),
         group_ids=np.asarray([f"validation-group-{i}" for i in range(4)]),
+        sampled_rgb_pixels_sha256=np.asarray([f"validation-media-{i}" for i in range(4)]),
     )
     dev_count = 16
     np.savez_compressed(
@@ -156,6 +237,7 @@ def test_fixed_evaluation_cli_writes_grouped_scores_without_probability_claims(
         group_ids=np.asarray([f"dev-group-{i // 4}" for i in range(dev_count)]),
         blocks=np.asarray(["O1"] * dev_count),
         labels=np.tile(np.asarray([0, 1, 0, 1], dtype=np.int8), 4),
+        normalized_media_sha256=np.asarray([f"dev-media-{i}" for i in range(dev_count)]),
     )
     checkpoint_path = tmp_path / "best.pt"
     model = NextFrameFeaturePredictor(feature_width=6, hidden_width=4)
@@ -171,6 +253,11 @@ def test_fixed_evaluation_cli_writes_grouped_scores_without_probability_claims(
     corpus_report = {
         "status": "complete_intphys_train_frozen_feature_extraction",
         "all_train_labels_possible": True,
+        "archive_bytes": EXPECTED_TRAIN_BYTES,
+        "archive_md5": EXPECTED_TRAIN_MD5,
+        "checkpoint_sha256": CHECKPOINT_SHA256,
+        "model_revision": MODEL_REVISION,
+        "videoprism_source_commit": VIDEOPRISM_SOURCE_COMMIT,
         "feature_archive_sha256": {
             "train": sha256_file(train_features),
             "validation": sha256_file(validation_features),
@@ -192,6 +279,12 @@ def test_fixed_evaluation_cli_writes_grouped_scores_without_probability_claims(
         json.dumps(
             {
                 "status": "complete_intphys_dev_frozen_features_for_one_shot_diagnostic",
+                "archive_bytes": EXPECTED_DEV_BYTES,
+                "archive_md5": EXPECTED_DEV_MD5,
+                "archive_sha256": EXPECTED_DEV_SHA256,
+                "checkpoint_sha256": CHECKPOINT_SHA256,
+                "model_revision": MODEL_REVISION,
+                "videoprism_source_commit": VIDEOPRISM_SOURCE_COMMIT,
                 "feature_file_sha256": sha256_file(dev_features),
                 "sealed_test_accessed": False,
             }

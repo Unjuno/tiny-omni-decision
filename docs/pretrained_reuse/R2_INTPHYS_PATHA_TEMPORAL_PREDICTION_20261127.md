@@ -44,8 +44,10 @@ experiment.
 ## Model and evaluation protocol
 
 The train-only runner selects the best checkpoint by internal validation
-cosine prediction loss. The evaluator validates the archive, feature, and
-checkpoint receipts before scoring. It compares the learned LSTM against a
+cosine prediction loss. The evaluator validates pinned source, encoder, archive,
+feature, and checkpoint receipts before scoring. It rejects sample-ID,
+scene-group, and normalized sampled-input hash overlap across train, internal
+validation, and dev. It compares the learned LSTM against a
 last-feature persistence baseline. Each model's binary threshold is fixed
 independently at the 95th percentile of its internal possible-only validation
 anomaly scores.
@@ -59,18 +61,18 @@ probability.
 
 ## Current evidence snapshot
 
-At 2026-11-27 07:08:04 JST, the official train archive download process was
-alive and the partial file was 27,723,160,352 bytes of the expected
+At 2026-11-27 07:16:43 JST, the official train archive download process was
+alive and the partial file was 28,967,099,168 bytes of the expected
 37,016,506,106 bytes. Its expected MD5 is
 `3428bcf398441a489111528634530212`. No model features have been extracted from
 the partial archive; no real-data training or dev scoring has started.
 
 The Path A implementation, data-integrity checks, and CPU tests are on branch
-`codex/r2-intphys-patha-20261127`. The local full suite with full-sequence and
-sampled-input grouping reports 2,996 passed / 11 skipped;
-`ruff check .`, the synthetic evaluator CLI end-to-end test, and CLI `--help`
-pass. CI #5126 is green for the evaluator commit; the grouping change is being
-pushed for its own CI run. The training
+`codex/r2-intphys-patha-20261127`. The local full suite reports 2,998 passed /
+11 skipped; after the latest receipt assertion, focused evaluator and metric
+tests report 12 passed. `ruff check .`, the synthetic evaluator CLI end-to-end
+test, and CLI `--help` pass. CI #5126 is green for the preceding evaluator
+commit; the cross-split gate change is being pushed for its own CI run. The training
 archive, pinned checkpoint, source tree, existing runs, and legacy worktrees
 remain untouched by model training.
 
