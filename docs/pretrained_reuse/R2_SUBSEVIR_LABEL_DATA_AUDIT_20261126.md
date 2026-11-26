@@ -91,9 +91,10 @@ accuracy on this task as broad model quality yet. First:
 
 1. Trace the exact scalar label-generation code and establish what one row's
    label means in time and space.
-2. Build a permitted-input baseline from the preceding sensor frames and
-   report it beside the existing model on the already exposed validation,
-   clearly marking the result as diagnostic rather than a new blind test.
+2. A fixed last-frame frozen-DINO linear baseline has now been measured once
+   on the exposed validation. It is close in Accuracy but worse in NLL/Brier
+   than the 8-frame LSTM; see the [separate baseline report](R2_SUBSEVIR_FRAME_LINEAR_BASELINE_20261126.md).
+   This is diagnostic only, not a fresh blind result.
 3. For any new model selection, use a fresh group-disjoint validation carved
    only from the existing train groups; never reuse the exposed validation
    for tuning. Prefer a later, source-catalog-aware temporal/geographic holdout
@@ -102,5 +103,6 @@ accuracy on this task as broad model quality yet. First:
    source-level split metadata, and enough independent groups before further
    architecture work.
 
-No model was trained in this audit. The full Path A result and its limits remain
-in [the original results report](R2_SUBSEVIR_PATHA_RESULTS_20261126.md).
+No model was trained as part of the label-data audit itself. The one-frame
+baseline is a separate, single CPU diagnostic. The full Path A result and its
+limits remain in [the original results report](R2_SUBSEVIR_PATHA_RESULTS_20261126.md).
