@@ -59,9 +59,12 @@ def load_feature_data(
     feature_dir: Path,
 ) -> tuple[np.ndarray, list[dict[str, Any]], dict[str, Any]]:
     preflight, splits = load_frozen_manifest(preflight_dir)
-    if preflight.get("official_eval_labels_read") is not False or preflight.get(
-        "official_eval_media_acquired"
-    ) is not False:
+    # The frozen preflight schema records ``official_eval_labels_read`` and
+    # ``media_downloaded``.  The latter is intentionally false because the
+    # preflight predates all media acquisition; it is not an eval-specific
+    # media flag.  Eval-media isolation is checked in the later acquisition
+    # verification receipt below.
+    if preflight.get("official_eval_labels_read") is not False:
         raise ValueError("official eval must remain unopened")
     verification = json.loads(acquisition_verification.read_text(encoding="utf-8"))
     if (
@@ -168,7 +171,8 @@ def expand_clip_batch(features: Tensor, targets: Tensor, option_features: Tensor
     obs = features[:, None, :].expand(-1, len(TARGET_LABELS), -1).reshape(-1, FEATURE_WIDTH)
     opts = option_features[None].expand(batch, -1, -1, -1).reshape(-1, 2, 6)
     labels = targets.to(torch.long).reshape(-1)
-    return obs, opts, torch.ones((len(obs), 2), dtype=torch.bool), labels
+    mask = torch.ones((len(obs), 2), dtype=torch.bool, device=features.device)
+    return obs, opts, mask, labels
 
 
 def metric_summary(logits: Tensor, targets: Tensor) -> dict[str, float]:
@@ -190,8 +194,8 @@ def metric_summary(logits: Tensor, targets: Tensor) -> dict[str, float]:
     positive_recall = true_positive / (true_positive + false_negative).clamp_min(1.0)
     specificity = true_negative / (true_negative + false_positive).clamp_min(1.0)
     onehot = F.one_hot(targets, num_classes=2).to(torch.float64)
-    edges = torch.linspace(0.0, 1.0, 16, dtype=torch.float64)
-    ece = torch.zeros((), dtype=torch.float64)
+    edges = torch.linspace(0.0, 1.0, 16, dtype=torch.float64, device=logits.device)
+    ece = torch.zeros((), dtype=torch.float64, device=logits.device)
     for index in range(15):
         mask = (confidence > edges[index]) & (confidence <= edges[index + 1])
         if mask.any():

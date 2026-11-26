@@ -56,6 +56,23 @@ def test_expand_clip_batch_encodes_four_binary_questions_without_text():
     assert torch.equal(candidate_options[1], options[1])
 
 
+def test_expand_clip_batch_keeps_validity_mask_on_feature_device():
+    devices = [torch.device("cpu")]
+    if torch.cuda.is_available():
+        devices.append(torch.device("cuda"))
+    for device in devices:
+        features = torch.zeros((2, FEATURE_WIDTH), device=device)
+        targets = torch.tensor([[0, 1, 0, 1], [1, 0, 1, 0]], device=device)
+        options = typed_binary_options().to(device)
+        obs, candidate_options, valid, labels = expand_clip_batch(features, targets, options)
+        expected_device = features.device
+        assert all(
+            tensor.device == expected_device
+            for tensor in (obs, candidate_options, valid, labels)
+        )
+        assert valid.dtype == torch.bool and valid.all()
+
+
 def test_binary_metrics_and_macro_are_finite_and_equal_weighted():
     logits = torch.tensor([[8.0, -8.0], [-8.0, 8.0]])
     targets = torch.tensor([0, 1])
@@ -83,6 +100,19 @@ def test_binary_metrics_and_macro_are_finite_and_equal_weighted():
     assert macro["balanced_accuracy"] == pytest.approx(0.375)
 
 
+def test_binary_metrics_support_cuda_inputs():
+    if not torch.cuda.is_available():
+        pytest.skip("CUDA is not available")
+    logits = torch.tensor([[8.0, -8.0], [-8.0, 8.0]], device="cuda")
+    targets = torch.tensor([0, 1], device="cuda")
+    result = metric_summary(logits, targets)
+    assert result["count"] == 2
+    assert result["accuracy"] == 1.0
+    assert result["nll"] < 1e-5
+    assert result["brier"] < 1e-10
+    assert 0.0 <= result["ece_15"] <= 1.0
+
+
 def test_positive_metrics_expose_majority_class_accuracy_hiding_missed_labels():
     logits = torch.tensor([[8.0, -8.0]] * 9)
     targets = torch.tensor([0] * 8 + [1])
@@ -96,6 +126,7 @@ def test_positive_metrics_expose_majority_class_accuracy_hiding_missed_labels():
 
 
 def _write_feature_fixture(root):
+    root.mkdir(parents=True, exist_ok=True)
     preflight_dir = root / "preflight"
     feature_dir = root / "features"
     preflight_dir.mkdir()
@@ -133,7 +164,7 @@ def _write_feature_fixture(root):
                 "source_sha256": source_sha,
                 "splits": summaries,
                 "official_eval_labels_read": False,
-                "official_eval_media_acquired": False,
+                "media_downloaded": False,
             }
         ),
         encoding="utf-8",
@@ -198,6 +229,23 @@ def test_feature_loader_requires_pinned_complete_contract_and_hashes(tmp_path):
     with (feature_dir / "features.npy").open("ab") as stream:
         stream.write(b"corrupt")
     with pytest.raises(ValueError, match="feature receipt"):
+        load_feature_data(preflight, verification, feature_dir)
+
+
+def test_feature_loader_uses_actual_preflight_and_acquisition_eval_gates(tmp_path):
+    preflight, verification, feature_dir = _write_feature_fixture(tmp_path)
+    with pytest.raises(ValueError, match="official eval"):
+        manifest_path = preflight / "preflight.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest["official_eval_labels_read"] = True
+        manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+        load_feature_data(preflight, verification, feature_dir)
+
+    preflight, verification, feature_dir = _write_feature_fixture(tmp_path / "media")
+    verification_record = json.loads(verification.read_text(encoding="utf-8"))
+    verification_record["official_eval_media_acquired"] = True
+    verification.write_text(json.dumps(verification_record), encoding="utf-8")
+    with pytest.raises(ValueError, match="complete-media verification"):
         load_feature_data(preflight, verification, feature_dir)
 
 
