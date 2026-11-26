@@ -6,6 +6,14 @@ creating a source-label shortcut risk. Keep `REVIEW_NOT_ADMITTED`; no data or
 weights were accessed and no request was sent. See the
 [source screen](docs/pretrained_reuse/R2_OPENLKA_LKALERT_SOURCE_SCREEN_20261126.md).
 
+**2026-11-26 R2 CANdid vehicle CAN/video source screen:** The provider's
+metadata record is listed as CC BY 4.0, but its ten vehicle captures are too few
+independent top-level groups for the provisional quality gate, and the reviewed
+source does not establish a Decision target requiring both video and CAN.
+Provider-side license details and route/GPS privacy also need direct review.
+Keep `REVIEW_NOT_ADMITTED`; no payload or model was accessed. See the
+[source screen](docs/pretrained_reuse/R2_CANDID_VEHICLE_CAN_VIDEO_SOURCE_SCREEN_20261126.md).
+
 **2026-11-26 R2 sub-SEVIR frozen-feature Path A:** On a fixed event-disjoint
 project-created five-minute forecast split, pinned frozen DINOv2-small features
 plus a small temporal LSTM reached 89.62% validation Accuracy (NLL 0.2380,
