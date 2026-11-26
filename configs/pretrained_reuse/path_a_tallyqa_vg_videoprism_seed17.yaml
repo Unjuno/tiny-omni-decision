@@ -1,0 +1,57 @@
+schema_version: 1
+experiment_id: path-a-tallyqa-vg-videoprism-seed17
+seed: 17
+task:
+  id: tallyqa_vg_amt_four_option_counting
+  source_revision: manoja328/TallyQA_dataset@46cdc649ec79c3dcc2720ff227ad07d7ee51da6f
+  train_questions: 3101
+  validation_questions: 801
+  train_images: 2795
+  validation_images: 699
+  option_policy: answer_plus_three_nearest_distinct_counts_deterministically_shuffled
+  official_test_opened: false
+encoder:
+  id: google/videoprism-base-f16r288
+  revision: be719a406d563b66f0ac969e7c94bab8e997c81a
+  source_commit: c6eba0ece3dd49a24ffc44582966997a4a59f1d8
+  checkpoint_sha256: 61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29
+  parameters: 114365184
+  frozen: true
+  frames: 8
+  image_mode: repeat_static_image_across_temporal_slots
+  resolution: 288
+  pooling: mean_spatiotemporal_tokens
+text_encoder:
+  id: sentence-transformers/paraphrase-MiniLM-L3-v2
+  revision: 4ca70771034acceecb2e72475f72050fcdde4ddc
+  parameters: 17389824
+  frozen: true
+readouts:
+  joint:
+    architecture: shared_candidate_mlp
+    hidden_size: 128
+    expected_trainable_parameters: 196865
+    optimizer: AdamW
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    epochs: 16
+    batch_questions: 64
+    checkpoint_selection: minimum_validation_nll
+  question_only:
+    architecture: shared_candidate_mlp
+    hidden_size: 128
+    expected_trainable_parameters: 98561
+    optimizer: AdamW
+    learning_rate: 0.001
+    weight_decay: 0.0001
+    epochs: 16
+    batch_questions: 64
+    checkpoint_selection: minimum_validation_nll
+controls:
+  - joint_checkpoint_on_original_images
+  - joint_checkpoint_zeroed_image_features
+  - joint_checkpoint_seed17_shuffled_validation_images
+  - question_only_checkpoint
+outputs:
+  external_directory_required: true
+  preserve_existing_v1_v2_artifacts: true

@@ -1,0 +1,104 @@
+{
+  "status": "functional_smoke_pass",
+  "quality_measured": false,
+  "source_commit": "1afa8d10124eec83bbe3a240cb1f4eccf334e086",
+  "source_hashes": {
+    "observation-features.npz": "52ee95851ba8dc5128518ba12ec07e04ed61ac83c5a9b5a9c940fb0aa8ccd702",
+    "supervision.npz": "7ed4020b79cacd8eda4512441b54892843be2eb69cde1fe50e2720f7b915af7f",
+    "first-window-request.json": "14821ee1e331ab26084983231c494e67cf8fb67e37c7b0fbb9a408b61eccb8dd"
+  },
+  "seed": 17,
+  "updates": 2,
+  "unique_training_windows": 8,
+  "training_encounters": 16,
+  "parameters": 6700,
+  "optimizer": {
+    "name": "AdamW",
+    "lr": 0.001,
+    "weight_decay": 0.01
+  },
+  "backend": "CPU float32",
+  "python": "3.11.9",
+  "torch": "2.6.0+cu124",
+  "numpy": "2.4.6",
+  "history": [
+    {
+      "step": 1,
+      "loss": 2.4726030826568604,
+      "gradient_norm": 0.7777955532073975
+    },
+    {
+      "step": 2,
+      "loss": 2.451312303543091,
+      "gradient_norm": 0.7628718614578247
+    }
+  ],
+  "prediction": {
+    "schema_version": "1.0",
+    "status": "selected",
+    "selected_option_id": "activity-2",
+    "options": [
+      {
+        "option_id": "activity-0",
+        "probability": 0.0771129570516711
+      },
+      {
+        "option_id": "activity-1",
+        "probability": 0.08218638681191964
+      },
+      {
+        "option_id": "activity-2",
+        "probability": 0.09809921307761185
+      },
+      {
+        "option_id": "activity-3",
+        "probability": 0.08139819882212168
+      },
+      {
+        "option_id": "activity-4",
+        "probability": 0.09454606999084414
+      },
+      {
+        "option_id": "activity-5",
+        "probability": 0.06735108870971183
+      },
+      {
+        "option_id": "activity-6",
+        "probability": 0.07240681861361407
+      },
+      {
+        "option_id": "activity-7",
+        "probability": 0.09038541273333786
+      },
+      {
+        "option_id": "activity-8",
+        "probability": 0.0711080280703677
+      },
+      {
+        "option_id": "activity-9",
+        "probability": 0.07329815719442258
+      },
+      {
+        "option_id": "activity-10",
+        "probability": 0.09535693433925671
+      },
+      {
+        "option_id": "activity-11",
+        "probability": 0.09675073458512076
+      }
+    ]
+  },
+  "exact_reload": true,
+  "exact_option_permutation": true,
+  "seconds": 1.6175418000202626,
+  "artifacts": {
+    "initial.pt": {
+      "sha256": "8b517a52b10af344aa2c5e0502707e7274fdc131f31f526d590ab75a26b4cf9a",
+      "bytes": 29128
+    },
+    "final.pt": {
+      "sha256": "68efa5433358a45912b2acfbe5a755118326b810a44b36b9f0ca2b267b591587",
+      "bytes": 29108
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "status": "INCOMPLETE_PREFIX_GATE_FAILURE",
+  "failed_step": 128,
+  "exit_code": 1,
+  "comparisons": {
+    "original": {
+      "questions": 2540,
+      "max_probability_abs": 2.205371856689453e-06,
+      "changed_argmax": 0,
+      "hashes": {
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-embedding-training-01\\predictions-128-original.json": "3adc4c5da7c1cf39b70b35b7ecbd3237b0f86b4bb28159aef1e79dc698c539db",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-embedding-long-01\\predictions-128-original.json": "9dc3cc4ec4474d597c2c65ac1806146607d1832a29d5f91f20280ac274035028"
+      }
+    },
+    "curriculum": {
+      "questions": 2048,
+      "max_probability_abs": 3.516674041748047e-06,
+      "changed_argmax": 0,
+      "hashes": {
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-embedding-training-01\\predictions-128-curriculum.json": "070562944ae6e2ab11d09ee33abae38ad183299d5b26e1e2e0c7d755c7cce740",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-embedding-long-01\\predictions-128-curriculum.json": "f6f1cd13c177dfa956031e103696f8ce6dbb40f80b0ff8318a048599d5a6a90b"
+      }
+    }
+  },
+  "limit": "Exact numerical divergence cause UNKNOWN; no gate relaxation or automatic retry."
+}

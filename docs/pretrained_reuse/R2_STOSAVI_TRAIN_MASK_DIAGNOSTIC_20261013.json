@@ -1,0 +1,71 @@
+{
+  "exact_replay": true,
+  "protocol_sha256": "63d824fa43918a63bbcb01ccb61fe47116ff89483334b51443634cf0badbff86",
+  "result_sha256": "ec68f75532392c8b6cad573324cf5d301333f4e8db2bbbdd8b06bb3e07db94ab",
+  "per_video": [
+    {
+      "video_id": "video_10103",
+      "points": 15,
+      "fixed_iou": 0.0,
+      "oracle_iou": 0.046429002047252435,
+      "static_iou": 0.5926951242446329,
+      "largest_slot_area": 0.29306640625
+    },
+    {
+      "video_id": "video_10186",
+      "points": 21,
+      "fixed_iou": 0.06344305441026765,
+      "oracle_iou": 0.19923623751027414,
+      "static_iou": 0.171726185068628,
+      "largest_slot_area": 0.25795200892857145
+    },
+    {
+      "video_id": "video_10212",
+      "points": 35,
+      "fixed_iou": 0.0439840758157186,
+      "oracle_iou": 0.19611691673496473,
+      "static_iou": 0.027800479680661908,
+      "largest_slot_area": 0.3297642299107143
+    },
+    {
+      "video_id": "video_10387",
+      "points": 18,
+      "fixed_iou": 0.011908448660764771,
+      "oracle_iou": 0.02494838996871139,
+      "static_iou": 0.26420153920153916,
+      "largest_slot_area": 0.2125515407986111
+    },
+    {
+      "video_id": "video_1087",
+      "points": 19,
+      "fixed_iou": 0.14572862841150827,
+      "oracle_iou": 0.28082383104394,
+      "static_iou": 0.5222530732797477,
+      "largest_slot_area": 0.24010587993421054
+    },
+    {
+      "video_id": "video_10886",
+      "points": 20,
+      "fixed_iou": 0.049419923425471836,
+      "oracle_iou": 0.24874974206305983,
+      "static_iou": 0.26366675113276283,
+      "largest_slot_area": 0.245166015625
+    },
+    {
+      "video_id": "video_10894",
+      "points": 18,
+      "fixed_iou": 0.15554801977430666,
+      "oracle_iou": 0.25290515491312,
+      "static_iou": 0.27587984128967236,
+      "largest_slot_area": 0.2786593967013889
+    },
+    {
+      "video_id": "video_10903",
+      "points": 18,
+      "fixed_iou": 0.022726024486630185,
+      "oracle_iou": 0.08582556000986226,
+      "static_iou": 0.24514526270159248,
+      "largest_slot_area": 0.3261311848958333
+    }
+  ]
+}

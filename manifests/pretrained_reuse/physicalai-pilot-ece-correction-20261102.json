@@ -1,0 +1,204 @@
+{
+  "ece_correction": {
+    "audit_code_sha256": "04a19de90d2d83a90f3bf13e4ae30a4209e82dbc7edc91a7f389d63636d6790a",
+    "audit_result_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\physicalai-pilot-ece-correction-20261102-attempt-02\\result.json",
+    "audit_result_sha256": "b297f417723117e906d477d0f557cfb0eee29fd9980aa92e4dc1f592cd5029b9",
+    "bins": 10,
+    "checkpoint_selection": false,
+    "features_recomputed": false,
+    "final_bin_includes_confidence_one": true,
+    "metrics": {
+      "joint_proprio_missing": {
+        "accuracy": 0.321,
+        "brier": 1.3231906921294525,
+        "confidence_one_rows": 600,
+        "corrected_ece10": 0.6585141015648842,
+        "legacy_ece10": 0.28051409465074545,
+        "legacy_ece_coverage_rows": 400,
+        "nll": 11.092463716607359
+      },
+      "joint_video_episode_misaligned": {
+        "accuracy": 0.548,
+        "brier": 0.8883940104448174,
+        "confidence_one_rows": 816,
+        "corrected_ece10": 0.43844595640897754,
+        "legacy_ece10": 0.10044595915079119,
+        "legacy_ece_coverage_rows": 184,
+        "nll": 7.662847609101474
+      },
+      "joint_video_missing": {
+        "accuracy": 0.632,
+        "brier": 0.7253507622225773,
+        "confidence_one_rows": 790,
+        "corrected_ece10": 0.35846775108575835,
+        "legacy_ece10": 0.11346776390075683,
+        "legacy_ece_coverage_rows": 210,
+        "nll": 5.897198117470909
+      },
+      "joint_video_proprio": {
+        "accuracy": 0.725,
+        "brier": 0.5432230149249995,
+        "confidence_one_rows": 831,
+        "corrected_ece10": 0.2681097491383553,
+        "legacy_ece10": 0.07710974770784379,
+        "legacy_ece_coverage_rows": 169,
+        "nll": 4.489815515074237
+      },
+      "proprio_history": {
+        "accuracy": 0.704,
+        "brier": 0.5910413296566114,
+        "confidence_one_rows": 990,
+        "corrected_ece10": 0.29561145985126497,
+        "legacy_ece10": 0.005611460089683533,
+        "legacy_ece_coverage_rows": 10,
+        "nll": 5.413153255631709
+      },
+      "train_prior_option_only": {
+        "accuracy": 0.356,
+        "brier": 0.8123616326530614,
+        "confidence_one_rows": 0,
+        "corrected_ece10": 0.022928571428571354,
+        "legacy_ece10": 0.022928571428571354,
+        "legacy_ece_coverage_rows": 1000,
+        "nll": 1.8944787428945005
+      },
+      "video_8frame_mean": {
+        "accuracy": 0.584,
+        "brier": 0.8272734933783656,
+        "confidence_one_rows": 917,
+        "corrected_ece10": 0.4127655764818192,
+        "legacy_ece10": 0.05076557976007461,
+        "legacy_ece_coverage_rows": 83,
+        "nll": 7.342163383156466
+      },
+      "video_last_frame": {
+        "accuracy": 0.506,
+        "brier": 0.9823449659537571,
+        "confidence_one_rows": 857,
+        "corrected_ece10": 0.4904394654035569,
+        "legacy_ece10": 0.09343946850299835,
+        "legacy_ece_coverage_rows": 143,
+        "nll": 8.58274529340464
+      }
+    },
+    "model_inference": false,
+    "sealed_audit_loaded": false,
+    "source_metrics_sha256": "e7ce5b7787ac27f7d3809f9d7fb3191368a5292fe115b3c04d819e852b517694",
+    "source_prediction_sha256": "3f69c09963c6515e138b581d35be66002b0362ac770391a6aed7b7c6bf8e21a2"
+  },
+  "fixed_checkpoint_full_validation_correction": {
+    "audit_code_sha256": "8acc0c797df1c6143181047a24b4fd7ca377c2acecf7a01a038ea192981e20d7",
+    "audit_result_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\physicalai-full-validation-ece-correction-20261102-attempt-01\\result.json",
+    "audit_result_sha256": "74c8f58de85cf686f8b615abd35968b884cfe2398dd5934af71c138191209e76",
+    "checkpoint_selection": false,
+    "feature_extraction": false,
+    "historical_results_sha256": "6985057d9703c3ebe6cd6da03456d333089c83544dfd0c525733ada0bd0878b4",
+    "metrics": {
+      "joint_proprio_missing": {
+        "accuracy": 0.7345814977973568,
+        "brier": 0.46534096309916695,
+        "confidence_one_rows": 136,
+        "corrected_ece10": 0.20768546818505296,
+        "legacy_ece10": 0.20658410711435496,
+        "nll": 1.8429882161679632
+      },
+      "joint_video_episode_misaligned": {
+        "accuracy": 0.5055066079295154,
+        "brier": 0.9323462902935765,
+        "confidence_one_rows": 239,
+        "corrected_ece10": 0.4558471131758018,
+        "legacy_ece10": 0.3402083170505872,
+        "nll": 5.850129947424922
+      },
+      "joint_video_missing": {
+        "accuracy": 0.6013215859030837,
+        "brier": 0.6075828932956415,
+        "confidence_one_rows": 6,
+        "corrected_ece10": 0.22088735110828006,
+        "legacy_ece10": 0.22088736170976697,
+        "nll": 1.6114849102938191
+      },
+      "joint_video_proprio": {
+        "accuracy": 0.8138766519823789,
+        "brier": 0.34554625892333757,
+        "confidence_one_rows": 341,
+        "corrected_ece10": 0.1629147354989325,
+        "legacy_ece10": 0.1618134182455256,
+        "nll": 1.5054271262860073
+      },
+      "proprio_history": {
+        "accuracy": 0.8094713656387665,
+        "brier": 0.3748093460280457,
+        "confidence_one_rows": 861,
+        "corrected_ece10": 0.18899934578046926,
+        "legacy_ece10": 0.022699789591297707,
+        "nll": 3.2787005550532617
+      },
+      "train_class_prior": {
+        "accuracy": 0.21916299559471367,
+        "brier": 0.8446303044121696,
+        "confidence_one_rows": 0,
+        "corrected_ece10": 0.011305754405286333,
+        "legacy_ece10": 0.011305754405286333,
+        "nll": 1.943739104847433
+      },
+      "video_8frame_mean": {
+        "accuracy": 0.7819383259911894,
+        "brier": 0.38910196522047974,
+        "confidence_one_rows": 340,
+        "corrected_ece10": 0.1838630897686345,
+        "legacy_ece10": 0.17615383925810785,
+        "nll": 1.6650406858858309
+      },
+      "video_last_frame": {
+        "accuracy": 0.788546255506608,
+        "brier": 0.37416608063594864,
+        "confidence_one_rows": 245,
+        "corrected_ece10": 0.17004002361570686,
+        "legacy_ece10": 0.16783737026909903,
+        "nll": 1.4904644816937094
+      }
+    },
+    "model_inference": false,
+    "predictions_sha256": "103958268b9283f8faa5ccae0ae6d099c3f5df8ec04381c266635c8c658e0995",
+    "sealed_audit_loaded": false,
+    "validation_episodes": 227,
+    "validation_rows": 908
+  },
+  "preservation": {
+    "original_output_artifacts_modified": false,
+    "original_report_modified": false,
+    "reproduction_output_artifacts_modified": false,
+    "training_or_evaluation_rerun": false
+  },
+  "quality_disposition": "UNCERTAIN",
+  "record_type": "saved_prediction_metric_correction",
+  "reproduction": {
+    "classification": "deterministic_reproduction_not_independent",
+    "independent_quality_evidence": false,
+    "matched_files": [
+      "features.npz",
+      "validation-predictions.json",
+      "probe-checkpoints.pt"
+    ],
+    "matched_sha256": {
+      "features.npz": "235660d6a8947f7c0a9908541e5415cc5db36149a334e6baa7d0d32b347d4ef9",
+      "probe-checkpoints.pt": "d8e97f5040001e365b6031a97b471aabb483082cb1284d91d98fc1f3165b9f72",
+      "validation-predictions.json": "3f69c09963c6515e138b581d35be66002b0362ac770391a6aed7b7c6bf8e21a2"
+    },
+    "original_report": "docs/pretrained_reuse/R2_PHYSICALAI_STACK_PLATFORMS_ACTION_PILOT_20261102.md",
+    "original_run_started_jst": "2026-11-02 14:47:50",
+    "original_source_commit": "2c4cf97f0eef3bec3e511fdc0f7452d3b0b9b984",
+    "prior_validation_already_observed": true,
+    "reproduction_start_time": "UNKNOWN"
+  },
+  "schema_version": 1,
+  "source_admission": "REVIEW_NOT_ADMITTED",
+  "storage_policy": {
+    "compliant": false,
+    "free_gib_at_reproduction_start": 1.181,
+    "interpretation": "R0 reserve policy violation; do not repeat expensive run below reserve",
+    "minimum_free_gib": 2.0
+  },
+  "study": "physicalai-stack-platforms-action-pilot"
+}

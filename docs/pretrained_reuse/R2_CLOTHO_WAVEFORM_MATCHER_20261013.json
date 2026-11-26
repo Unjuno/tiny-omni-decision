@@ -1,0 +1,14 @@
+{
+  "pairs": 120,
+  "clips": 16,
+  "normal_seconds": 0.7347240999806672,
+  "preparation_seconds": 0.0589453000575304,
+  "prepared_seconds": 0.22859189996961504,
+  "prepared_total_seconds": 0.28753720002714545,
+  "speedup_including_preparation": 2.555231461916247,
+  "cache_bytes": 45142432,
+  "max_correlation_difference": 6.938893903907228e-18,
+  "offsets_identical": true,
+  "review_flags_identical": true,
+  "scope": "16 training clips,120 waveform pairs; performance/algorithm parity only"
+}

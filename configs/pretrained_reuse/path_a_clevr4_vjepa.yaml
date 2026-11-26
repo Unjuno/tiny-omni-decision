@@ -1,0 +1,44 @@
+schema_version: 1
+experiment_id: path-a-clevr4-vjepa-b16-1k-512-seed17
+modality: image
+source:
+  dataset_id: sgvaze/clevr4
+  revision: cddc78fb2a8359dc958987b2c750bfdd4bfd2c73
+  license: CC-BY-4.0
+  archive_url: https://thor.robots.ox.ac.uk/clevr4/clevr_4_10k_v1.zip
+  archive_sha512_expected: 769465d90b6550a242f6d5940b52f2e0944c65af09e17e6f3f2cb65701af66057ab06485b2194fa9d8932e03a03e87b3fadece43049e1af1ddd9f8e4990ed19a
+  train_images: 1024
+  validation_images: 512
+  split_group: image_id
+  sample_seed: 17
+  selected_asset_sha256: true
+  archive_full_hash_locally_verified: false
+encoder:
+  repo_id: facebookresearch/vjepa2
+  source_revision: 204698b45b3712590f06245fbfba32d3be539812
+  checkpoint_sha256: 848a77c33cc9e6649ed2119c9bea1e2c569bcdab9539ff3e7c02ccc2959ddf4d
+  checkpoint_rights_status: review
+  preprocessing: official_vjepa2_preprocessor_384
+  image_representation: mean_over_576_tokens
+  frozen: true
+candidate_text_encoder:
+  repo_id: sentence-transformers/paraphrase-MiniLM-L3-v2
+  revision: 4ca70771034acceecb2e72475f72050fcdde4ddc
+  frozen: true
+readout:
+  architecture: shared_candidate_mlp
+  input_features: [image_feature, taxonomy_candidate_embedding]
+  hidden_size: 128
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  epochs: 8
+  batch_questions: 64
+  checkpoint_selection: minimum_validation_nll
+seed: 17
+device: cuda
+notes:
+  - Synthetic CLEVR-4 taxonomy task; not a natural-image benchmark.
+  - All four taxonomies/questions from one image stay in the same split.
+  - V-JEPA checkpoint rights remain under review; do not product-package this checkpoint.
+  - Sealed audit data are not loaded.

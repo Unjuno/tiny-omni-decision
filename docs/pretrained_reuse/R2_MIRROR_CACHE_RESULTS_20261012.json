@@ -1,0 +1,16 @@
+{
+  "status": "PASS_EXTRACTION_ONLY",
+  "images": 8424,
+  "unique_original_assets": 8424,
+  "augmented_views": 8424,
+  "new_independent_assets": 0,
+  "first64_exact": true,
+  "feature_sha256": "c4d7c86a5bda8d11e95cdf0927c65e686e962e2010f54585e081a08acf33ea9f",
+  "bytes": 219967488,
+  "seconds": 99.12702290003654,
+  "peak_vram_bytes": 292862464,
+  "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+  "cost_usd": 0,
+  "training": false,
+  "free_disk_after": 1338519552
+}

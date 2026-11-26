@@ -1,0 +1,51 @@
+{
+  "format": "avatar_train_task_support_summary_v1",
+  "dataset_revision": "a7f0146ff704799d044133e61137836cacc1c233",
+  "external_report": "C:\\CodexArtifacts\\pretrained-reuse-r2\\avatar-task-support-20261102-attempt-01\\report.json",
+  "external_report_sha256": "6f98db1103db7640c140dab8e937740179f094bcfab05ab4789a6426ca1df5ac",
+  "train_annotation_tree_sha256": "4c17a0bdbd7d488bced018404ce71be5659d27273efcfdec9e1cdfffd16eb651",
+  "prior_exposed_group_set_sha256": "4f0fbd6dc342c8c485c4c187bc102a988def78fdaeef11879ed11221ab4adf3a",
+  "prior_unexposed_groups": {
+    "Single-Sound": 0,
+    "Mixed-Sound": 635,
+    "Multi-Entity": 452,
+    "Off-Screen": 75
+  },
+  "illustrative_seed17_group_split_not_frozen": {
+    "validation_fraction": 0.2,
+    "Mixed-Sound": {
+      "train_groups": 508,
+      "validation_groups": 127,
+      "unexposed_annotations": 6453,
+      "unexposed_frames": 3386,
+      "categories": 70,
+      "categories_with_four_or_more_groups_in_each_fold": 23,
+      "frames_with_multiple_annotated_categories": 1305
+    },
+    "Multi-Entity": {
+      "train_groups": 362,
+      "validation_groups": 90,
+      "unexposed_annotations": 2517,
+      "unexposed_frames": 2347
+    },
+    "Off-Screen": {
+      "train_groups": 60,
+      "validation_groups": 15,
+      "unexposed_annotations": 213,
+      "unexposed_frames": 213
+    }
+  },
+  "existing_media_cache": {
+    "filename_only_scan": true,
+    "file_count": 3009,
+    "fresh_mixed_sound_group_overlap": 0,
+    "media_bytes_read": false
+  },
+  "official_validation_or_sealed_audit_accessed": false,
+  "model_or_features_loaded": false,
+  "media_acquired_or_processed": false,
+  "quality_result": false,
+  "admitted_for_fitting": false,
+  "decision": "NOT_ADMITTED_TASK_AND_VALIDATION_SUPPORT_GATES",
+  "report": "docs/pretrained_reuse/R2_AVATAR_TASK_SUPPORT_20261102.md"
+}

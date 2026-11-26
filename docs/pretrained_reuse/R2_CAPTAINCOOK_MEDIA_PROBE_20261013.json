@@ -1,0 +1,411 @@
+{
+  "recording": "10_16",
+  "sha256": "c243764b1937aa5cdca29c758dde0cb8f4c7bf24bce84994d0229ef97657ce80",
+  "bytes": 104842046,
+  "streams": [
+    {
+      "type": "video",
+      "codec": "h264",
+      "duration": 29209180,
+      "time_base": "1/30000"
+    },
+    {
+      "type": "audio",
+      "codec": "aac",
+      "duration": 46733312,
+      "time_base": "1/48000"
+    },
+    {
+      "type": "data",
+      "codec": null,
+      "duration": 29209180,
+      "time_base": "1/30000"
+    }
+  ],
+  "audio_decode_first_48_frames": [
+    {
+      "pts": 0,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.0
+    },
+    {
+      "pts": 1024,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.0
+    },
+    {
+      "pts": 2048,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.0
+    },
+    {
+      "pts": 3072,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.0
+    },
+    {
+      "pts": 4096,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.0
+    },
+    {
+      "pts": 5120,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.0
+    },
+    {
+      "pts": 6144,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.00010198992176360383
+    },
+    {
+      "pts": 7168,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.001097270361618582
+    },
+    {
+      "pts": 8192,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.003116311729715256
+    },
+    {
+      "pts": 9216,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.005696992695357058
+    },
+    {
+      "pts": 10240,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.006680720557181731
+    },
+    {
+      "pts": 11264,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.003723999111448202
+    },
+    {
+      "pts": 12288,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.014666853683346515
+    },
+    {
+      "pts": 13312,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.016118402703439873
+    },
+    {
+      "pts": 14336,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.01217536806217385
+    },
+    {
+      "pts": 15360,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.013114869266673245
+    },
+    {
+      "pts": 16384,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.012783365909423954
+    },
+    {
+      "pts": 17408,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.013373121584892456
+    },
+    {
+      "pts": 18432,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.02033820692476375
+    },
+    {
+      "pts": 19456,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.021533427573595287
+    },
+    {
+      "pts": 20480,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.022104338590375947
+    },
+    {
+      "pts": 21504,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.021179463509174202
+    },
+    {
+      "pts": 22528,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.015226862565939634
+    },
+    {
+      "pts": 23552,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.015893117285581522
+    },
+    {
+      "pts": 24576,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.024788005563209987
+    },
+    {
+      "pts": 25600,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.015568456548722954
+    },
+    {
+      "pts": 26624,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.019918866322204312
+    },
+    {
+      "pts": 27648,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.01686094752793718
+    },
+    {
+      "pts": 28672,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.016180315249774133
+    },
+    {
+      "pts": 29696,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.022515670467717963
+    },
+    {
+      "pts": 30720,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.01049318901951305
+    },
+    {
+      "pts": 31744,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.014618643529074065
+    },
+    {
+      "pts": 32768,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.014990982160361155
+    },
+    {
+      "pts": 33792,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.009984606185404872
+    },
+    {
+      "pts": 34816,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.01381169615254514
+    },
+    {
+      "pts": 35840,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.006913576403043776
+    },
+    {
+      "pts": 36864,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.013661043294585302
+    },
+    {
+      "pts": 37888,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.010964093794799727
+    },
+    {
+      "pts": 38912,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.015982732733133116
+    },
+    {
+      "pts": 39936,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.011509596715667359
+    },
+    {
+      "pts": 40960,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.006407888781230779
+    },
+    {
+      "pts": 41984,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.009056493912576628
+    },
+    {
+      "pts": 43008,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.011025886224618116
+    },
+    {
+      "pts": 44032,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.012208565174127895
+    },
+    {
+      "pts": 45056,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.011158683920558726
+    },
+    {
+      "pts": 46080,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.01752610650600904
+    },
+    {
+      "pts": 47104,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.013513882268284264
+    },
+    {
+      "pts": 48128,
+      "time_base": "1/48000",
+      "rate": 48000,
+      "samples": 1024,
+      "finite": true,
+      "rms": 0.016552153182192896
+    }
+  ]
+}

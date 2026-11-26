@@ -1,0 +1,74 @@
+{
+  "status": "PASS_MECHANICAL_FULL_PATH_ONLY",
+  "test_fixture_only": true,
+  "real_quality_evaluated": false,
+  "source_result_sha256": "a4a38f45fce86a9a5cb12446347929f466b064a4708733ee8b1fa7ec90ce11ce",
+  "source_commit": "f7e8c6a79ef0a2fe81967745e495bb5ce898223f",
+  "runner_sha256": "5bfe3a62982dd2a29152a40527d8f697ab21d0c456466494d56971c65a586048",
+  "artifact_directory": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-full-path-test-fixture-01",
+  "seconds": 29.567038799985312,
+  "bootstrap_comparisons": 6,
+  "arms": {
+    "audio": {
+      "status": "PASS_ARM_EXECUTION",
+      "best_epoch": 1,
+      "accounting": {
+        "consumed_assets": 97920,
+        "unique_assets": 4080,
+        "repeated_assets": 93840,
+        "consumed_slot_decisions": 587520,
+        "unique_slot_decisions": 24480,
+        "optimizer_updates": 768,
+        "selected_consumed_assets": 4080,
+        "selected_consumed_slot_decisions": 24480
+      },
+      "seconds": 10.071403400041163,
+      "peak_allocated_bytes": 127351808,
+      "reload_bitwise_equal": true,
+      "json_option_permutation_exact": true
+    },
+    "video": {
+      "status": "PASS_ARM_EXECUTION",
+      "best_epoch": 1,
+      "accounting": {
+        "consumed_assets": 97920,
+        "unique_assets": 4080,
+        "repeated_assets": 93840,
+        "consumed_slot_decisions": 587520,
+        "unique_slot_decisions": 24480,
+        "optimizer_updates": 768,
+        "selected_consumed_assets": 4080,
+        "selected_consumed_slot_decisions": 24480
+      },
+      "seconds": 7.50173190003261,
+      "peak_allocated_bytes": 126405632,
+      "reload_bitwise_equal": true,
+      "json_option_permutation_exact": true
+    },
+    "joint": {
+      "status": "PASS_ARM_EXECUTION",
+      "best_epoch": 1,
+      "accounting": {
+        "consumed_assets": 97920,
+        "unique_assets": 4080,
+        "repeated_assets": 93840,
+        "consumed_slot_decisions": 587520,
+        "unique_slot_decisions": 24480,
+        "optimizer_updates": 768,
+        "selected_consumed_assets": 4080,
+        "selected_consumed_slot_decisions": 24480
+      },
+      "seconds": 7.368572799954563,
+      "peak_allocated_bytes": 126405632,
+      "reload_bitwise_equal": true,
+      "json_option_permutation_exact": true
+    }
+  },
+  "scope_addendum": {
+    "scope": "ARTIFICIAL TEST FIXTURE ONLY; no native corpus/media/encoder quality evaluated",
+    "historical_report_sha256": "8a4fa1839651740a9ae4970803bacb1e4d4693bd62d3483d641da726b8ea7702",
+    "correction": "The original evaluator used the common PASS_FIXED_MODEL_REPORT/native-word scope string even with test_fixture_only=true in provenance. All inputs here are artificial. New code emits PASS_MECHANICAL_FIXTURE_REPORT and explicit artificial scope. Original files preserved.",
+    "real_quality_evaluated": false
+  },
+  "scientific_study_completed": false
+}

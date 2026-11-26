@@ -1,0 +1,73 @@
+{
+  "candidate_samples_2k": 44977,
+  "preview_samples_2k": 45624,
+  "aligned_correlation": 0.02022568693179829,
+  "source_id": "16854",
+  "candidate_member": "audio_files/souffle_me.tallique.wav",
+  "hashes": {
+    "candidate.wav": "5fb420a29ce8fe73fcd035f2b8366d20f32e095deac57f9328d82f2e848c9a0a",
+    "preview.mp3": "62c27e9f4b56726297dd978cbbcc59e7ce7f5f64b8cb126fa725093b77612aef",
+    "source.html": "8df81762aeb0942bf7a4156fc294492158ad6967bb531134fdee137e20755a22"
+  },
+  "full_match": {
+    "absolute_correlation": 0.9345032730372408,
+    "offset_samples": 155
+  },
+  "two_second_segments": [
+    {
+      "start": 0,
+      "absolute_correlation": 0.9218282574700438,
+      "offset_samples": 163
+    },
+    {
+      "start": 4000,
+      "absolute_correlation": 0.930398028934814,
+      "offset_samples": 4155
+    },
+    {
+      "start": 8000,
+      "absolute_correlation": 0.9306342255108656,
+      "offset_samples": 8155
+    },
+    {
+      "start": 12000,
+      "absolute_correlation": 0.952258911091889,
+      "offset_samples": 12155
+    },
+    {
+      "start": 16000,
+      "absolute_correlation": 0.9450648673743645,
+      "offset_samples": 16155
+    },
+    {
+      "start": 20000,
+      "absolute_correlation": 0.9444414286696443,
+      "offset_samples": 20155
+    },
+    {
+      "start": 24000,
+      "absolute_correlation": 0.9405644646380158,
+      "offset_samples": 24155
+    },
+    {
+      "start": 28000,
+      "absolute_correlation": 0.9512455248307642,
+      "offset_samples": 28155
+    },
+    {
+      "start": 32000,
+      "absolute_correlation": 0.9441956102800375,
+      "offset_samples": 32155
+    },
+    {
+      "start": 36000,
+      "absolute_correlation": 0.9573585496731908,
+      "offset_samples": 36155
+    },
+    {
+      "start": 40000,
+      "absolute_correlation": 0.9498076229711265,
+      "offset_samples": 40155
+    }
+  ]
+}

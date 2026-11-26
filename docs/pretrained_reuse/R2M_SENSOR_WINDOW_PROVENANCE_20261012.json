@@ -1,0 +1,15 @@
+{
+  "source_base_commit": "3d6ae55f24c3601845ad7967cf2a06f27542f44e",
+  "new_code_uncommitted_at_execution": true,
+  "source_hashes": {
+    "scripts/prepare_harth_native_smoke.py": "ff20ce8130a14ea0cc58f6522c093406ff23926463f83ecac465611dd89e89c8",
+    "src/tiny_omni_decision/observations.py": "920c7c185eaea9c2cb7c4a5acd8872a079f66658a7c0a5bda0c63648050b6913",
+    "src/tiny_omni_decision/sensor_windows.py": "40ba1d4199ae81d6edeb5fc36672668b59c440ed2c0810da15071c973b2759c5",
+    "scripts/range_generalization.py": "6fa5bd5f6ddf2c844cb969618e5f67ba47ea63a8f9072078aa2113377151f0a4"
+  },
+  "python": "3.11.9",
+  "numpy": "2.4.6",
+  "pydantic": "2.13.5",
+  "platform": "Windows-10-10.0.26300-SP0",
+  "note": "Source snapshots captured after successful execution; no source changes between execution and capture"
+}

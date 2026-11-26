@@ -1,0 +1,235 @@
+{
+  "status": "PASS_DIAGNOSTIC_ONLY",
+  "results": {
+    "independent-original": {
+      "natural": {
+        "count": 2540,
+        "accuracy": 0.6354330778121948,
+        "nll": 0.8366087675094604,
+        "brier": 0.47112080454826355,
+        "ece_15_bins": 0.019318452154792203,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          9,
+          117,
+          208,
+          194,
+          278,
+          334,
+          302,
+          266,
+          207,
+          195,
+          165,
+          265
+        ]
+      },
+      "reverse": {
+        "count": 2540,
+        "accuracy": 0.6354330778121948,
+        "nll": 0.8366087675094604,
+        "brier": 0.47112080454826355,
+        "ece_15_bins": 0.019318452154792203,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          9,
+          117,
+          208,
+          194,
+          278,
+          334,
+          302,
+          266,
+          207,
+          195,
+          165,
+          265
+        ]
+      },
+      "natural_replay_max_abs": 0.0,
+      "changed_predictions": 0,
+      "maximum_probability_change": 0.0,
+      "seconds": 47.75931480003055
+    },
+    "independent-curriculum": {
+      "natural": {
+        "count": 2048,
+        "accuracy": 0.8408203125,
+        "nll": 0.3753695785999298,
+        "brier": 0.21432432532310486,
+        "ece_15_bins": 0.01682296623766888,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          6,
+          53,
+          86,
+          122,
+          114,
+          102,
+          85,
+          86,
+          148,
+          191,
+          1055
+        ]
+      },
+      "reverse": {
+        "count": 2048,
+        "accuracy": 0.8408203125,
+        "nll": 0.3753695785999298,
+        "brier": 0.21432432532310486,
+        "ece_15_bins": 0.01682296623766888,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          6,
+          53,
+          86,
+          122,
+          114,
+          102,
+          85,
+          86,
+          148,
+          191,
+          1055
+        ]
+      },
+      "natural_replay_max_abs": 0.0,
+      "changed_predictions": 0,
+      "maximum_probability_change": 0.0,
+      "seconds": 20.47220620000735
+    },
+    "joint-original": {
+      "natural": {
+        "count": 2540,
+        "accuracy": 0.5830708742141724,
+        "nll": 0.9180068373680115,
+        "brier": 0.5241372585296631,
+        "ece_15_bins": 0.03969507063115676,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          21,
+          179,
+          375,
+          316,
+          289,
+          286,
+          222,
+          207,
+          199,
+          152,
+          135,
+          159
+        ]
+      },
+      "reverse": {
+        "count": 2540,
+        "accuracy": 0.4078740179538727,
+        "nll": 1.246456503868103,
+        "brier": 0.6970583200454712,
+        "ece_15_bins": 0.13390999930932765,
+        "ece_bin_counts": [
+          0,
+          0,
+          1,
+          48,
+          268,
+          438,
+          362,
+          282,
+          255,
+          198,
+          209,
+          161,
+          144,
+          111,
+          63
+        ]
+      },
+      "natural_replay_max_abs": 0.0,
+      "changed_predictions": 1594,
+      "maximum_probability_change": 0.9798741936683655,
+      "seconds": 26.879186299978755
+    },
+    "joint-curriculum": {
+      "natural": {
+        "count": 2048,
+        "accuracy": 0.40087890625,
+        "nll": 1.2877771854400635,
+        "brier": 0.6960368752479553,
+        "ece_15_bins": 0.08032153019303223,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          145,
+          430,
+          359,
+          258,
+          194,
+          145,
+          141,
+          99,
+          83,
+          87,
+          77,
+          30
+        ]
+      },
+      "reverse": {
+        "count": 2048,
+        "accuracy": 0.41259765625,
+        "nll": 1.2461163997650146,
+        "brier": 0.6740596294403076,
+        "ece_15_bins": 0.060356328576745,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          151,
+          436,
+          353,
+          287,
+          206,
+          140,
+          109,
+          89,
+          64,
+          101,
+          84,
+          28
+        ]
+      },
+      "natural_replay_max_abs": 0.0,
+      "changed_predictions": 1285,
+      "maximum_probability_change": 0.9691008925437927,
+      "seconds": 12.220375400036573
+    }
+  },
+  "runner_sha256": "8dca7d16d36f9d1429730cd801ae5eb252c883ac638216be4ebeb4837e71abf0",
+  "selection_changed": false,
+  "training": false,
+  "hashes": {
+    "independent-curriculum-natural.json": "f777697a9c9be1683a0023328176e03db0ef5b78c47112fe8b7801a060eab750",
+    "independent-curriculum-reverse.json": "f777697a9c9be1683a0023328176e03db0ef5b78c47112fe8b7801a060eab750",
+    "independent-original-natural.json": "47876fe2d56874a4c8b5888250579d6b2b20c50eb21135a3e32a0ef50ef083a1",
+    "independent-original-reverse.json": "47876fe2d56874a4c8b5888250579d6b2b20c50eb21135a3e32a0ef50ef083a1",
+    "joint-curriculum-natural.json": "f6b10d3f1e773a0c9be649754261bf0d19134fc713fd1b34122626579678f07f",
+    "joint-curriculum-reverse.json": "9695b87d35076e3520b7f9e915ebd39efc5ef90cc2b07958dca0fd37aca4d3b7",
+    "joint-original-natural.json": "64fc2ab2afe54c2a9a58d73b936b9911315b3e708fbcbd9f4a881a9f23ba01df",
+    "joint-original-reverse.json": "59ddf2cd44449e17083424bdd5ca4db9edeb1c80f577bb124c057b042d3de296",
+    "result.json": "6bc05d21d42c156c89fe5aa9fd262fafdba7552de7711f7e368dba95809cb1ff"
+  }
+}

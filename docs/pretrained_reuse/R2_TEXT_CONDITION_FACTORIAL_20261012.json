@@ -1,0 +1,676 @@
+{
+  "source_commit": "261c108",
+  "artifact_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\text-condition-factorial-01",
+  "conditions": {
+    "adapted-bare": {
+      "result": {
+        "status": "PASS_EXECUTION_ONLY",
+        "weights": "adapted",
+        "candidate_style": "bare",
+        "metrics": {
+          "count": 256,
+          "accuracy": 0.359375,
+          "nll": 1.1588962078094482,
+          "brier": 0.7077219486236572,
+          "ece_15_bins": 0.1574924640590325,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            203,
+            53,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "groups": {
+          "price:lowest": {
+            "count": 64,
+            "accuracy": 0.3125,
+            "nll": 1.2297477722167969,
+            "brier": 0.7511926889419556,
+            "ece_15_bins": 0.2215166101232171,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              33,
+              31,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "price:highest": {
+            "count": 64,
+            "accuracy": 0.359375,
+            "nll": 1.1359248161315918,
+            "brier": 0.695529580116272,
+            "ece_15_bins": 0.15754426317289472,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              63,
+              1,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "risk:lowest": {
+            "count": 64,
+            "accuracy": 0.3125,
+            "nll": 1.1891088485717773,
+            "brier": 0.731848955154419,
+            "ece_15_bins": 0.21620468562468886,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              43,
+              21,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "risk:highest": {
+            "count": 64,
+            "accuracy": 0.453125,
+            "nll": 1.080803394317627,
+            "brier": 0.652316689491272,
+            "ece_15_bins": 0.04925870895385742,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              64,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "both_correct_condition_pairs": 0,
+        "total_condition_pairs": 128,
+        "changed_prediction_pairs": 0,
+        "target_counts": {
+          "0": 78,
+          "1": 92,
+          "2": 86
+        },
+        "max_tokens": 89,
+        "seconds": 1.4767026000190526,
+        "device": "cuda",
+        "torch": "2.6.0+cu124",
+        "dtype": "torch.float32",
+        "peak_vram_bytes": 147825664,
+        "limitation": "Constructed diagnostic; not blind product validation. No tuning follows."
+      },
+      "protocol": {
+        "weights": "adapted",
+        "candidate_style": "bare",
+        "seed": 17,
+        "states": 64,
+        "questions": 256,
+        "options": 3,
+        "training": false,
+        "selection": false,
+        "runner_sha256": "a70e5c396ab2fa00c2cf0a76b5bef8e4f332fa17280ee74b29c8ab8f10d62d3a",
+        "base_revision": "233902d25c440f23af6f7d6e94d2946bac0bee0a",
+        "delta_sha256": "5fa8323a47e72c3796d0da35618b603fa49784cacb670dee0e910e8d5757ed78",
+        "input_sha256": "8737946632cf65dd85b6360e9ed1f7b7b70ed7b59df230a0a7f5c9698233fb74"
+      },
+      "prediction_counts": {
+        "1": 256
+      },
+      "hashes": {
+        "inputs.json": "8737946632cf65dd85b6360e9ed1f7b7b70ed7b59df230a0a7f5c9698233fb74",
+        "predictions.json": "b31c614439de5244b77aa234f212f2df707e3205d747f4102956e3db06457094",
+        "protocol.json": "7df1bdf2cb3a77d93a07d7f9041416b3cb500620906ad5a8e26d55a65ad3fc1e",
+        "result.json": "b15da4ed0299ea206cf0ba2ac15aff734f4a9729ca33c477d859d87955611259"
+      }
+    },
+    "adapted-described": {
+      "result": {
+        "status": "PASS_EXECUTION_ONLY",
+        "weights": "adapted",
+        "candidate_style": "described",
+        "metrics": {
+          "count": 256,
+          "accuracy": 0.359375,
+          "nll": 1.1676247119903564,
+          "brier": 0.7175245881080627,
+          "ece_15_bins": 0.18237160798162222,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            120,
+            134,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "groups": {
+          "price:lowest": {
+            "count": 64,
+            "accuracy": 0.3125,
+            "nll": 1.2162786722183228,
+            "brier": 0.7530732750892639,
+            "ece_15_bins": 0.27423441875725985,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              7,
+              55,
+              2,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "price:highest": {
+            "count": 64,
+            "accuracy": 0.359375,
+            "nll": 1.1775797605514526,
+            "brier": 0.724318265914917,
+            "ece_15_bins": 0.20831809379160404,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              29,
+              35,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "risk:lowest": {
+            "count": 64,
+            "accuracy": 0.3125,
+            "nll": 1.2002146244049072,
+            "brier": 0.7413594722747803,
+            "ece_15_bins": 0.22242124378681183,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              28,
+              36,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "risk:highest": {
+            "count": 64,
+            "accuracy": 0.453125,
+            "nll": 1.0764260292053223,
+            "brier": 0.651347279548645,
+            "ece_15_bins": 0.05881310626864433,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              56,
+              8,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "both_correct_condition_pairs": 0,
+        "total_condition_pairs": 128,
+        "changed_prediction_pairs": 0,
+        "target_counts": {
+          "0": 78,
+          "1": 92,
+          "2": 86
+        },
+        "max_tokens": 93,
+        "seconds": 1.5064052999950945,
+        "device": "cuda",
+        "torch": "2.6.0+cu124",
+        "dtype": "torch.float32",
+        "peak_vram_bytes": 151194112,
+        "limitation": "Constructed diagnostic; not blind product validation. No tuning follows."
+      },
+      "protocol": {
+        "weights": "adapted",
+        "candidate_style": "described",
+        "seed": 17,
+        "states": 64,
+        "questions": 256,
+        "options": 3,
+        "training": false,
+        "selection": false,
+        "runner_sha256": "a70e5c396ab2fa00c2cf0a76b5bef8e4f332fa17280ee74b29c8ab8f10d62d3a",
+        "base_revision": "233902d25c440f23af6f7d6e94d2946bac0bee0a",
+        "delta_sha256": "5fa8323a47e72c3796d0da35618b603fa49784cacb670dee0e910e8d5757ed78",
+        "input_sha256": "8737946632cf65dd85b6360e9ed1f7b7b70ed7b59df230a0a7f5c9698233fb74"
+      },
+      "prediction_counts": {
+        "1": 256
+      },
+      "hashes": {
+        "inputs.json": "8737946632cf65dd85b6360e9ed1f7b7b70ed7b59df230a0a7f5c9698233fb74",
+        "predictions.json": "ac8204692213f05ed3a517ebbd5b9163eed5e8cd7173c0a95919d08018ffff1e",
+        "protocol.json": "4fbcb33d2c2ac078733ca47a1c3ba316b50b2c32e8ed5192ed159fde09554cc5",
+        "result.json": "06eb1c8f128318d77097c24716d5fee41eac26684ab1ad936bef1a1bd1278283"
+      }
+    },
+    "base-bare": {
+      "result": {
+        "status": "PASS_EXECUTION_ONLY",
+        "weights": "base",
+        "candidate_style": "bare",
+        "metrics": {
+          "count": 256,
+          "accuracy": 0.359375,
+          "nll": 1.309769630432129,
+          "brier": 0.7760581970214844,
+          "ece_15_bins": 0.24979837122373283,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            85,
+            171,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "groups": {
+          "price:lowest": {
+            "count": 64,
+            "accuracy": 0.3125,
+            "nll": 1.4559153318405151,
+            "brier": 0.8506960868835449,
+            "ece_15_bins": 0.3155903220176697,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              64,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "price:highest": {
+            "count": 64,
+            "accuracy": 0.359375,
+            "nll": 1.2430263757705688,
+            "brier": 0.7498065829277039,
+            "ece_15_bins": 0.2418206026777625,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              30,
+              34,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "risk:lowest": {
+            "count": 64,
+            "accuracy": 0.3125,
+            "nll": 1.3590545654296875,
+            "brier": 0.8111239671707153,
+            "ece_15_bins": 0.3285335646942258,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              2,
+              62,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "risk:highest": {
+            "count": 64,
+            "accuracy": 0.453125,
+            "nll": 1.1810821294784546,
+            "brier": 0.6926063299179077,
+            "ece_15_bins": 0.13839977141469717,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              53,
+              11,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "both_correct_condition_pairs": 0,
+        "total_condition_pairs": 128,
+        "changed_prediction_pairs": 0,
+        "target_counts": {
+          "0": 78,
+          "1": 92,
+          "2": 86
+        },
+        "max_tokens": 89,
+        "seconds": 1.3696725000627339,
+        "device": "cuda",
+        "torch": "2.6.0+cu124",
+        "dtype": "torch.float32",
+        "peak_vram_bytes": 147825664,
+        "limitation": "Constructed diagnostic; not blind product validation. No tuning follows."
+      },
+      "protocol": {
+        "weights": "base",
+        "candidate_style": "bare",
+        "seed": 17,
+        "states": 64,
+        "questions": 256,
+        "options": 3,
+        "training": false,
+        "selection": false,
+        "runner_sha256": "a70e5c396ab2fa00c2cf0a76b5bef8e4f332fa17280ee74b29c8ab8f10d62d3a",
+        "base_revision": "233902d25c440f23af6f7d6e94d2946bac0bee0a",
+        "delta_sha256": "5fa8323a47e72c3796d0da35618b603fa49784cacb670dee0e910e8d5757ed78",
+        "input_sha256": "8737946632cf65dd85b6360e9ed1f7b7b70ed7b59df230a0a7f5c9698233fb74"
+      },
+      "prediction_counts": {
+        "1": 256
+      },
+      "hashes": {
+        "inputs.json": "8737946632cf65dd85b6360e9ed1f7b7b70ed7b59df230a0a7f5c9698233fb74",
+        "predictions.json": "873b6c55ab50cb387a23ddb1b3a76171a4e37f29b591b19aa069ced3860f154e",
+        "protocol.json": "e3979a0ed6f5892f73b3e3e96b9e890b3ad4d8e15d992dbf41115d41e6a06463",
+        "result.json": "9f3c8d6a63b55e7cf5cd74b6e530ed037ac64faebd571a4666e0d99a756c6582"
+      }
+    },
+    "base-described": {
+      "result": {
+        "status": "PASS_EXECUTION_ONLY",
+        "weights": "base",
+        "candidate_style": "described",
+        "metrics": {
+          "count": 256,
+          "accuracy": 0.359375,
+          "nll": 1.1968653202056885,
+          "brier": 0.7338957786560059,
+          "ece_15_bins": 0.21621576987672597,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            13,
+            237,
+            6,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        "groups": {
+          "price:lowest": {
+            "count": 64,
+            "accuracy": 0.3125,
+            "nll": 1.2717227935791016,
+            "brier": 0.7836691737174988,
+            "ece_15_bins": 0.2843220727518201,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              58,
+              6,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "price:highest": {
+            "count": 64,
+            "accuracy": 0.359375,
+            "nll": 1.181338906288147,
+            "brier": 0.7286413908004761,
+            "ece_15_bins": 0.20565718412399292,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              64,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "risk:lowest": {
+            "count": 64,
+            "accuracy": 0.3125,
+            "nll": 1.2298978567123413,
+            "brier": 0.7569268941879272,
+            "ece_15_bins": 0.24884086847305298,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              64,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "risk:highest": {
+            "count": 64,
+            "accuracy": 0.453125,
+            "nll": 1.1045016050338745,
+            "brier": 0.6663455963134766,
+            "ece_15_bins": 0.12604278372600675,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              13,
+              51,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        "both_correct_condition_pairs": 0,
+        "total_condition_pairs": 128,
+        "changed_prediction_pairs": 0,
+        "target_counts": {
+          "0": 78,
+          "1": 92,
+          "2": 86
+        },
+        "max_tokens": 93,
+        "seconds": 1.5188619999680668,
+        "device": "cuda",
+        "torch": "2.6.0+cu124",
+        "dtype": "torch.float32",
+        "peak_vram_bytes": 151194112,
+        "limitation": "Constructed diagnostic; not blind product validation. No tuning follows."
+      },
+      "protocol": {
+        "weights": "base",
+        "candidate_style": "described",
+        "seed": 17,
+        "states": 64,
+        "questions": 256,
+        "options": 3,
+        "training": false,
+        "selection": false,
+        "runner_sha256": "a70e5c396ab2fa00c2cf0a76b5bef8e4f332fa17280ee74b29c8ab8f10d62d3a",
+        "base_revision": "233902d25c440f23af6f7d6e94d2946bac0bee0a",
+        "delta_sha256": "5fa8323a47e72c3796d0da35618b603fa49784cacb670dee0e910e8d5757ed78",
+        "input_sha256": "8737946632cf65dd85b6360e9ed1f7b7b70ed7b59df230a0a7f5c9698233fb74"
+      },
+      "prediction_counts": {
+        "1": 256
+      },
+      "hashes": {
+        "inputs.json": "8737946632cf65dd85b6360e9ed1f7b7b70ed7b59df230a0a7f5c9698233fb74",
+        "predictions.json": "81d1553dcb3358312567aa34dcb6fd45b047e827f461b252010248ed51c0bd5b",
+        "protocol.json": "c29b66b8b3ff695ba7d9a9daa008b8a16bb33f6b9d4c43e93837a00f7b4463d5",
+        "result.json": "cd4d0719efeed473c4cc42c71d6a4c9705aff6f330b668c57fff7de8ed89d437"
+      }
+    }
+  },
+  "scope": "Approved fixed 2x2 inference control; no training or selection.",
+  "original_adapted_bare_reload_max_error": 0.0
+}

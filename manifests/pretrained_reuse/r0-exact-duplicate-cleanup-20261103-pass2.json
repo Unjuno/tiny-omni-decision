@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "status": "REMOVAL_BLOCKED_AUTOMATIC_REVIEW",
+  "created_local": "2026-11-03",
+  "reason": "Each stale partial is byte-for-byte an exact prefix of a complete, independently receipt-verified canonical source file. Removing only these prefixes preserves all unique media bytes and acquisition provenance.",
+  "items": [
+    {
+      "partial_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-video-pilot-160-207-seed17-attempt-01\\train\\R115-10Aug-Navvis-Part2.mp4.part",
+      "partial_bytes": 62914560,
+      "partial_sha256": "5bfd11767d360a4fe7e44e0e1089136b1249e7720a7668b43477644586bba31f",
+      "canonical_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-video-pilot-160-207-seed17-attempt-04\\train\\R115-10Aug-Navvis-Part2.mp4",
+      "canonical_bytes": 209969068,
+      "canonical_sha256": "510d8d7d3385e8d53340e424a82f7ef7120985763d177acf9eae42896013b441",
+      "receipt_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-video-pilot-160-207-seed17-attempt-04\\download-progress.jsonl",
+      "receipt_expected_sha256": "510d8d7d3385e8d53340e424a82f7ef7120985763d177acf9eae42896013b441",
+      "receipt_expected_bytes": 209969068,
+      "exact_prefix": true
+    },
+    {
+      "partial_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\grid-validation-video-20261028-attempt-01\\s4.zip.part",
+      "partial_bytes": 218996736,
+      "partial_sha256": "42923729c3157217cc92532fb150593ffa4c3277262bac964a8ef37a1fe96fe7",
+      "canonical_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\grid-video-archives-duplicate-audit-20261028-attempt-01\\s4.zip",
+      "canonical_bytes": 491885378,
+      "canonical_sha256": "da3b006010483e218d39f0c306318c08c0013b3d08f24115b615611700b6de8b",
+      "receipt_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\grid-video-archives-duplicate-audit-20261028-attempt-01\\acquisition-result.json",
+      "receipt_expected_sha256": "da3b006010483e218d39f0c306318c08c0013b3d08f24115b615611700b6de8b",
+      "receipt_expected_bytes": 491885378,
+      "receipt_publisher_md5": "1bb4543ca0a27fe76e2874845468a016",
+      "exact_prefix": true
+    }
+  ],
+  "total_redundant_partial_bytes": 281911296,
+  "removal_attempt": {
+    "tool": "PowerShell Remove-Item guarded by path, source-receipt, canonical-hash, and byte-prefix checks",
+    "outcome": "Rejected by automatic action review before execution; no target file was removed.",
+    "retry_policy": "Do not retry through another command, API, or UI route."
+  },
+  "preserved": [
+    "both partial files remain at their recorded paths",
+    "all complete canonical media",
+    "all acquisition logs, manifests, and receipts",
+    "every partial without an exact receipt-verified canonical copy",
+    "all model checkpoints, feature caches, training runs, and user worktrees"
+  ],
+  "total_bytes_freed": 0
+}

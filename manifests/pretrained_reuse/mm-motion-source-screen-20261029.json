@@ -1,0 +1,62 @@
+{
+  "format": "pretrained_reuse_multimodal_source_screen_v1",
+  "dataset_id": "MM-Motion",
+  "recorded_at": "2026-10-29T05:40:38+09:00",
+  "status": "REVIEW_NOT_ADMITTED_FOR_PRODUCT_WORK",
+  "sources": {
+    "zenodo_record": {
+      "url": "https://zenodo.org/records/19951742",
+      "doi": "10.5281/zenodo.19951742",
+      "record_id": 19951742,
+      "published": "2026-05-10",
+      "api_url": "https://zenodo.org/api/records/19951742",
+      "api_response_sha256": "842fc376e108b4fa5a8f5bd1efcb6264e30dffafbfee34255768fb5a71216b63",
+      "access_right": "open",
+      "license_id": "cc-by-4.0",
+      "file_count": 22,
+      "subject_archive_count": 20,
+      "declared_total_file_bytes": 175129648286
+    },
+    "upstream_repository": {
+      "url": "https://github.com/BSU3DVLab/BSU3DVLab.github.io",
+      "commit": "51a26dcf42e38bf326e4434bc34f2aade94c27ca",
+      "agreement_path": "MM-Motion/agreement/MM-Motion Dataset Agreement.docx",
+      "agreement_blob_sha1": "224862bcfc2c01bed9ef74b4c9507190b2d5da2b",
+      "agreement_bytes": 17285,
+      "agreement_sha256": "0d54f57bb333c830daf34b91e27d7391ea3e8ab83a5a3380ed0a8fa802f8c84c",
+      "agreement_url": "https://github.com/BSU3DVLab/BSU3DVLab.github.io/blob/51a26dcf42e38bf326e4434bc34f2aade94c27ca/MM-Motion/agreement/MM-Motion%20Dataset%20Agreement.docx"
+    }
+  },
+  "publisher_agreement": {
+    "signature_required": true,
+    "use_scope": "non-commercial academic research and education only",
+    "commercial_use": "prohibited",
+    "medical_diagnostic_use": "prohibited",
+    "redistribution": "prohibited",
+    "conflicts_with_zenodo_cc_by_metadata": true,
+    "resolution": "UNRESOLVED_DO_NOT_USE_OR_SIGN"
+  },
+  "task_and_split": {
+    "modalities": ["video", "imu", "plantar_pressure"],
+    "described_subjects": 33,
+    "described_actions": 16,
+    "both_input_necessity": "UNKNOWN_NOT_TESTED",
+    "official_grouped_split": "NOT_VERIFIED",
+    "subject_archives_vs_described_subjects": "20_ARCHIVES_VS_33_SUBJECTS_UNRESOLVED"
+  },
+  "integrity_and_use": {
+    "dataset_payload_downloaded": false,
+    "annotation_payload_opened": false,
+    "agreement_signed_or_accepted": false,
+    "access_request_submitted": false,
+    "feature_extraction": false,
+    "model_fit_or_evaluation": false,
+    "sealed_audit_loaded": false
+  },
+  "resource_gate": {
+    "declared_payload_gib": 163.1,
+    "local_free_space_gib_at_screen": 0.482,
+    "required_fit_reserve_gib": 2.0,
+    "action": "NO_PAYLOAD_DOWNLOAD_OR_FIT"
+  }
+}

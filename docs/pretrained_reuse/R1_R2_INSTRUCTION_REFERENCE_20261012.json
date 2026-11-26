@@ -1,0 +1,126 @@
+{
+  "source_commit": "5393a86",
+  "load_audit": {
+    "status": "PASS_LOAD_ONLY",
+    "repo": "HuggingFaceTB/SmolLM2-135M-Instruct",
+    "revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+    "parameters": 134515008,
+    "tied_input_output_storage": true,
+    "files": {
+      "README.md": {
+        "sha256": "4f97533ad95b1b2fea15fbc075c01b94578ebdd7c8138888fa43fa3abd530dc4",
+        "bytes": 6772
+      },
+      "config.json": {
+        "sha256": "8eb740e8bbe4cff95ea7b4588d17a2432deb16e8075bc5828ff7ba9be94d982a",
+        "bytes": 861
+      },
+      "generation_config.json": {
+        "sha256": "87b916edaaab66b3899b9d0dd0752727dff6666686da0504d89ae0a6e055a013",
+        "bytes": 132
+      },
+      "tokenizer.json": {
+        "sha256": "9ca9acddb6525a194ec8ac7a87f24fbba7232a9a15ffa1af0c1224fcd888e47c",
+        "bytes": 2104556
+      },
+      "tokenizer_config.json": {
+        "sha256": "4ec77d44f62efeb38d7e044a1db318f6a939438425312dfa333b8382dbad98df",
+        "bytes": 3764
+      },
+      "special_tokens_map.json": {
+        "sha256": "2b7379f3ae813529281a5c602bc5a11c1d4e0a99107aaa597fe936c1e813ca52",
+        "bytes": 655
+      },
+      "model.safetensors": {
+        "sha256": "5af571cbf074e6d21a03528d2330792e532ca608f24ac70a143f6b369968ab8c",
+        "bytes": 269060552
+      }
+    },
+    "loading_info": {
+      "missing_keys": [],
+      "unexpected_keys": [],
+      "mismatched_keys": [],
+      "error_msgs": []
+    },
+    "device": "cpu",
+    "dtype": "torch.float32",
+    "torch": "2.6.0+cu124",
+    "repeat_exact": true,
+    "load_forward_seconds": 1.0715109000448138,
+    "quality_evaluation": false,
+    "chat_template_prompt": "<|im_start|>system\nYou are a helpful AI assistant named SmolLM, trained by Hugging Face<|im_end|>\n<|im_start|>user\nChoose one option. The sky is blue. What color is the sky? A: blue. B: red. Reply only A or B.<|im_end|>\n<|im_start|>assistant\n",
+    "top_token": "A",
+    "limitations": [
+      "English instruction model; no multimodal alignment or Decision calibration demonstrated.",
+      "Full multimodal model must remain <=200M before quantization."
+    ]
+  },
+  "protocol": {
+    "model_revision": "12fd25f77366fa6b3b4b768ec3050bf629380bac",
+    "runner_sha256": "4ad4110bc0710e56ea9ae266322453307c06fba6c745ba3aec11819968e5f118",
+    "option_token_ids": [
+      49,
+      50,
+      51
+    ],
+    "input_sha256": "8737946632cf65dd85b6360e9ed1f7b7b70ed7b59df230a0a7f5c9698233fb74",
+    "scoring": "next-token A/B/C logits, conditional softmax, temperature1",
+    "training": false,
+    "calibration": false,
+    "selection": false
+  },
+  "result": {
+    "status": "PASS_EXECUTION_ONLY",
+    "metrics": {
+      "count": 256,
+      "accuracy": 0.3046875,
+      "nll": 1.616309404373169,
+      "brier": 0.9741243720054626,
+      "ece_15_bins": 0.45143236010335386,
+      "ece_bin_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        254,
+        0,
+        0,
+        0
+      ]
+    },
+    "condition_pairs_both_correct": 0,
+    "condition_pairs_changed": 0,
+    "pairs": 128,
+    "prediction_counts": {
+      "0": 256,
+      "1": 0,
+      "2": 0
+    },
+    "mean_unconstrained_option_mass": 0.4530053868656978,
+    "max_tokens": 129,
+    "seconds": 3.249834300018847,
+    "device": "cuda",
+    "dtype": "float32",
+    "parameters": 134515008,
+    "peak_vram_bytes": 1373190656,
+    "scope": "Observed constructed diagnostic; no product qualification or tuning."
+  },
+  "artifact_paths": [
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\smollm2-135m-audit-01",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\smollm2-condition-probe-01"
+  ],
+  "hashes": {
+    "inputs.json": "8737946632cf65dd85b6360e9ed1f7b7b70ed7b59df230a0a7f5c9698233fb74",
+    "predictions.json": "b23cb860be6f50895e70b103a198737281078c451af5af733ee94e9e4af2a3a8",
+    "prompts.json": "7e02c0a51d050d8cef17d73d5e5a6404dc125740246cac3aaebf1a6d6d217a98",
+    "protocol.json": "1ed1139830e8e31a4ad8ddac0b2fcb9ab46011affba0d2b66d658e6d58307785",
+    "result.json": "4f0501ba163e2c2b0b16f2f1beb87853b894db3d21a43fa6488d6a14398d46ed"
+  }
+}

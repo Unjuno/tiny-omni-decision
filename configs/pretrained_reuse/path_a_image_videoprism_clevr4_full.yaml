@@ -1,0 +1,55 @@
+schema_version: 1
+experiment_id: path-a-image-videoprism-clevr4-full-seed17
+modality: image
+seed: 17
+task:
+  source: CLEVR-4
+  source_revision: sgvaze/clevr4@cddc78fb2a8359dc958987b2c750bfdd4bfd2c73
+  task: synthetic image taxonomy choice classification
+  taxonomies: [color, texture, count, shape]
+  options_per_taxonomy:
+    color: 10
+    texture: 10
+    count: 10
+    shape: 10
+  training_images: 8424
+  checkpoint_selection_validation_images: 512
+  one_time_reporting_validation_images: 1595
+  sealed_audit_loaded: false
+encoder:
+  repo_id: google/videoprism-base-f16r288
+  revision: be719a406d563b66f0ac969e7c94bab8e997c81a
+  source_commit: c6eba0ece3dd49a24ffc44582966997a4a59f1d8
+  checkpoint_sha256: 61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29
+  parameters: 114365184
+  frozen: true
+  frames: 8
+  image_mode: repeat_one_image_across_all_8_frames
+  resolution: 288
+  pooling: mean_spatiotemporal_tokens
+  device: cpu
+candidate_text_encoder:
+  repo_id: sentence-transformers/paraphrase-MiniLM-L3-v2
+  revision: 4ca70771034acceecb2e72475f72050fcdde4ddc
+  hidden_size: 384
+  frozen: true
+readout:
+  architecture: shared_candidate_mlp
+  hidden_size: 128
+  trainable_parameters_expected: 147713
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  epochs: 8
+  batch_questions: 64
+  checkpoint_selection: minimum_nll_on_prior_512_validation_images
+  final_evaluation: one_time_on_remaining_1595_validation_images_after_selection
+splits:
+  train_and_validation_image_ids_disjoint: true
+  checkpoint_selection_and_reporting_ids_disjoint: true
+  checkpoint_selection_ids_match_previous_clevr4_probe: true
+notes:
+  - This is a synthetic CLEVR-4 image task, not natural-image understanding.
+  - VideoPrism is applied in static image mode; this does not measure temporal reasoning.
+  - The 1595-image reporting subset is existing validation data not used by the prior image probe; it is not called a sealed audit.
+  - Results compare a new encoder and full training coverage, so they are not a data-only causal comparison with the older V-JEPA run.

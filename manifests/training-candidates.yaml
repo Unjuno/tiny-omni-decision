@@ -5,6 +5,15 @@ sources:
   - manifest: candidates/typed-synth-validation.yaml
     include: false
     reason: evaluation split is held out
+  - manifest: candidates/qasc-validation.yaml
+    include: false
+    reason: evaluation split is held out; it is not a training source.
+  - manifest: candidates/qasc.yaml
+    subset: default
+    split: train
+    adapter: generic
+    include: true
+    note: Eight-way text-only science composition Decision task; group by supporting fact pair; facts are not model inputs.
   - manifest: dataset.example.yaml
     subset: default
     split: train

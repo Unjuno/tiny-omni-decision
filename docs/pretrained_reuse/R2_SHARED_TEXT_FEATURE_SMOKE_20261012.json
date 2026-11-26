@@ -1,0 +1,23 @@
+{
+  "status": "PASS_IMPLEMENTATION_ONLY",
+  "device": "cpu",
+  "parameters": 22713601,
+  "added_parameters": 0,
+  "feature_shape": [
+    40,
+    384
+  ],
+  "logits_unchanged": true,
+  "repeated_features_exact": true,
+  "frozen_sha256": "f5875f88083b3a049a7dab0b10382079250eb8291e7640cf5e065159f0d33468",
+  "max_tokens": 15,
+  "seconds": 1.3388799999374896,
+  "source_hashes": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\crossencoder-minilm-l6-audit-01\\model\\model.safetensors": "821d1aa69520101d6e0737f78a042ae25b19e5cb9160701909d10434f4aeb0ae",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-repair-encoder-coverage-01\\best-delta.pt": "4024788b1a9d17735612a98da6acb1a65af5d82a9d440b4fddb4ab62efb9d318"
+  },
+  "checkpoint_role": "existing initialization, not current experiment selection",
+  "training": false,
+  "quality_evaluation": false,
+  "features_sha256": "f9ef28183aa50188f09b5a119ec8c1aab4803cde98af4966c68136d6e6ab75d3"
+}

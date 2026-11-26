@@ -1,0 +1,35 @@
+{
+  "scope": "selected original training rows only; no validation/audit teacher probabilities",
+  "source_sha256": "1f3e0f751b6fdd1115cf6af4ea3ebc13545a1148614eda4f9f56ae8492c80675",
+  "order_sha256": "86dd9a7e003267926c80f317a7ddbddef534a0ed8c6b15e42239774a475e5e09",
+  "types": {
+    "noul": {
+      "count": 633,
+      "soft_count": 561,
+      "argmax_disagreement": 0,
+      "mean_max": 0.9252853080568715,
+      "mean_gold_probability": 0.9252853080568715,
+      "mean_entropy": 0.20391320033068686,
+      "mean_sum_error": 0.0
+    },
+    "choice": {
+      "count": 604,
+      "soft_count": 562,
+      "argmax_disagreement": 0,
+      "mean_max": 0.741020529801324,
+      "mean_gold_probability": 0.741020529801324,
+      "mean_entropy": 0.7282070441037858,
+      "mean_sum_error": 3.1125827814579524e-05
+    },
+    "score": {
+      "count": 299,
+      "soft_count": 280,
+      "argmax_disagreement": 0,
+      "mean_max": 0.6506344481605353,
+      "mean_gold_probability": 0.6506344481605353,
+      "mean_entropy": 0.8740034506368739,
+      "mean_sum_error": 3.1772575250840045e-05
+    }
+  },
+  "rejected": []
+}

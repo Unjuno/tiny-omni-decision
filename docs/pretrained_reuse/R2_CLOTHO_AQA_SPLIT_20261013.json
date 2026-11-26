@@ -1,0 +1,37 @@
+{
+  "seed": 17,
+  "source_sha256": "58d6e585b310a7ebc804761f00cc412aa07aeec58411ee418f4944f9fc069420",
+  "scope": "official train repartitioned for development only",
+  "splits": {
+    "train": {
+      "sha256": "4b3ee6fe483d20e55e32de47d491d946538df82ef7ce45698ec764d6aa0f1df3",
+      "questions": 2312,
+      "sources": 578,
+      "uploaders": 387,
+      "targets": {
+        "0": 997,
+        "1": 1315
+      }
+    },
+    "calibration": {
+      "sha256": "dcdafb80a88999a5e1c401883d8b0a6c520a2e50059b1364769336e500c74291",
+      "questions": 550,
+      "sources": 138,
+      "uploaders": 96,
+      "targets": {
+        "0": 229,
+        "1": 321
+      }
+    },
+    "validation": {
+      "sha256": "9587abbc775e03698f48bd10d45ac8fd8703018689999d3ed8925f7d2bf0527f",
+      "questions": 560,
+      "sources": 140,
+      "uploaders": 81,
+      "targets": {
+        "1": 317,
+        "0": 243
+      }
+    }
+  }
+}

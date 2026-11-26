@@ -1,0 +1,53 @@
+schema_version: 1
+experiment_id: path-a-video-videoprism-clevrer-expanded-v0
+modality: video
+source:
+  dataset_id: MIT-IBM/CLEVRER
+  revision: 98b842082ba4f7c18b6b9e3f39145871782a65ef
+  train_split: train
+  validation_split: validation
+  question_sha256:
+    train: 11181da673d223f41fb596aacfbbd3ff83d39af7f09a3210549e98cb283714b4
+    validation: fdf841678a476655b906165e6ee4b0ed1516785c5ab927c8d0a4614e4e27e10d
+  sample_dir: C:/CodexArtifacts/pretrained-reuse-r2/clevrer-expanded-seed17-256train-200val
+  seed: 17
+  train_scenes: 256
+  validation_scenes: 200
+  questions_per_scene: 2
+  question_types: [temporal_descriptive, static_descriptive]
+  previously_used_scene_ids_excluded: true
+  split_group: video_scene
+  normalized_question_content_overlap: 0
+  sealed_audit_loaded: false
+  development_validation_previously_used_for_vjepa_probe: true
+encoder:
+  repo_id: google/videoprism-base-f16r288
+  revision: be719a406d563b66f0ac969e7c94bab8e997c81a
+  source_commit: c6eba0ece3dd49a24ffc44582966997a4a59f1d8
+  checkpoint: C:/CodexArtifacts/pretrained-reuse-r1/videoprism-base-f16r288.npz
+  checkpoint_sha256: 61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29
+  frozen: true
+  frame_count: 8
+  resolution: 288
+  pooling: mean_spatiotemporal_tokens
+  device: cpu
+  media_decoder: PyAV 18.1.0
+candidate_text_encoder:
+  repo_id: sentence-transformers/paraphrase-MiniLM-L3-v2
+  revision: 4ca70771034acceecb2e72475f72050fcdde4ddc
+  frozen: true
+readout:
+  architecture: shared_candidate_mlp
+  hidden_size: 128
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.001
+  epochs: 24
+  batch_questions: 8
+  checkpoint_selection: minimum_validation_nll
+seed: 17
+notes:
+  - Extended scene coverage run; validation is a reused development split, not a blind test.
+  - Same questions, media identities, and readout settings as the existing expanded V-JEPA probe.
+  - VideoPrism and MiniLM encoders remain frozen; only the candidate scorer is trained.
+  - No sealed audit or legacy final evaluation is loaded.

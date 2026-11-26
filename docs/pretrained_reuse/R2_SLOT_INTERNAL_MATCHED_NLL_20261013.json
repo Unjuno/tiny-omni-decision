@@ -1,0 +1,68 @@
+{
+  "probability_floor": 1e-12,
+  "status": "MATCHED_AGGREGATE_NLL_CONVENTION",
+  "arms": {
+    "baseline": {
+      "bootstrap": {
+        "seed": 17,
+        "replicates": 10000,
+        "unit": "video_pair",
+        "videos": 20,
+        "method": "95% percentile; numpy linear quantile",
+        "direction": "normal-minus-mismatch",
+        "probability_floor": 1e-12,
+        "accuracy": {
+          "difference": -0.05,
+          "interval": [
+            -0.25,
+            0.15
+          ]
+        },
+        "nll": {
+          "difference": -1.4872920367875004,
+          "interval": [
+            -4.887444203990129,
+            1.0267145128025026
+          ]
+        }
+      },
+      "stored_aggregate_nll_difference": -1.487292036787502,
+      "hashes": {
+        "examples.json": "4348fa32e1fb964abc0fd655adc8909dfacb02e1602a017838cba2f3d8a80063",
+        "predictions.json": "ffc18c41701ee1c05a9b216c6cb8bf87e6748d26f8822fc11368f9f2fca9c58d",
+        "result.json": "202462c6ac1089e05b9f2d98fb462c9ff95ee9f0baddb62a2b99ab6393505130"
+      }
+    },
+    "relational": {
+      "bootstrap": {
+        "seed": 17,
+        "replicates": 10000,
+        "unit": "video_pair",
+        "videos": 20,
+        "method": "95% percentile; numpy linear quantile",
+        "direction": "normal-minus-mismatch",
+        "probability_floor": 1e-12,
+        "accuracy": {
+          "difference": -0.1,
+          "interval": [
+            -0.25,
+            0.025
+          ]
+        },
+        "nll": {
+          "difference": -0.3870716884814841,
+          "interval": [
+            -1.5938777359585647,
+            0.8606296291445981
+          ]
+        }
+      },
+      "stored_aggregate_nll_difference": -0.3870716884814849,
+      "hashes": {
+        "examples.json": "4348fa32e1fb964abc0fd655adc8909dfacb02e1602a017838cba2f3d8a80063",
+        "predictions.json": "7221f9c2aa5a52b7e79dba6c066b7937b9d561612e844547082b14470dc70f46",
+        "result.json": "4337f6a0418395d0d4b2d553d937816e2e71f3fcea2ffcfd5c18a752ccbbaa92"
+      }
+    }
+  }
+}

@@ -1,0 +1,230 @@
+{
+  "schema_version": 1,
+  "id": "greatest-hits-development-20261017",
+  "scope": "completed development decode, task construction and physical input probe; no model quality",
+  "source_review": "REVIEW",
+  "training_admission": "NOT_ADMITTED",
+  "source_license_evidence": "https://andrewowens.com/vis/",
+  "license": "CC-BY-4.0",
+  "archive_url": "https://web.eecs.umich.edu/~ahowens/vis/vis-data-256.zip",
+  "archive_etag": "\"4ec327e19-5cc7fa3687c80\"",
+  "central_directory_sha256": "98673a0101020606537d2850f825ebe08219c496928002f2cf09dcaa83b9824a",
+  "source_commits": {
+    "decode": "7de98c5c2117c984d522d932aa63a91adc8aa628",
+    "tasks_and_input": "09f2f6b6785a31973dde9619d5a8ed5600b73d5f"
+  },
+  "artifact_root": "C:\\CodexArtifacts\\pretrained-reuse-r2",
+  "artifacts_sha256": {
+    "greatest-hits-train-inventory-01/partition.json": "6c9ac8eb8e12bd5dc0af77c8d162a40c753d5a215d07eb85dc3a69c3973d9f98",
+    "greatest-hits-train-inventory-01/annotations.json": "24e8df777bee34102591e7b15901b931034ee2df3b549d632fb5b7094322e3dd",
+    "greatest-hits-development-media-01/result.json": "15147261a99ccb1fd81ea934233063f3aebe8288258cc38fa4b5853d5f11c95a",
+    "greatest-hits-development-decode-01/result.json": "fa18ca0958846c6143007c252960239a25e0735267f1a35f48d563ed4cfc7e76",
+    "greatest-hits-development-tasks-01/result.json": "7ef21536a84904df946f96cd774df9694b99027b1f36d6c8221b8b164fe7a831",
+    "greatest-hits-development-tasks-01/train.jsonl": "aa1a1e19d555be19455f422396b9f1fc0ec240208354359148b15659eff0cada",
+    "greatest-hits-development-tasks-01/validation.jsonl": "dc442e9845c986e5aca1cff619d61a91f1ae372448843701a2ed4d7eecc85814",
+    "greatest-hits-input-resampler-01/result.json": "b5f4347f9503bc2eca7c1de4d6689dd64858ee92c2bd71f192588ffc911ef148",
+    "greatest-hits-input-physical-01/result.json": "97c91689effda1e7a080b81ddd4be7738718168493137a565f821371d493c0f6",
+    "greatest-hits-input-physical-replay-01/result.json": "de370f85e5df2ef0eca564aad8c8100ce9346936d335e2434afcb7876e147163",
+    "greatest-hits-development-finish-verification-01/result.json": "5abfd4010d0dcf38b73132ec08baf0e1c621947caee6e181211f686e1ea49652",
+    "greatest-hits-development-finish-verification-01/artifact-hashes.json": "73a02406b30f6e4413f1ca33fcdb8c18911108aee29587fe00e8c3a9456d2e79",
+    "greatest-hits-development-finish-verification-01/audit.py": "e38aa59c236fb57e04390dd58cca7437716c8ab0422d212f7b1fce42c8099a29",
+    "greatest-hits-development-finish-verification-01/publication/checks.json": "4272e07bddd5a321e8beea942b09395a21cce8c332d8d4352a537483f79ab33b"
+  },
+  "decoded_parents": 409,
+  "window_rows": 17932,
+  "invalid_windows": 0,
+  "splits": {
+    "train": {
+      "parents": 308,
+      "events": 13327,
+      "video_seconds": 11693.74873333333,
+      "video_frames": 350462,
+      "audio_samples": 1122732032,
+      "audio_peak": 2.166193723678589,
+      "audio_signatures": {
+        "[96000, 1, 'float32']": 308
+      },
+      "video_signatures": {
+        "[456, 256, 'rgb24']": 308
+      },
+      "questions": 23707,
+      "events_with_labels": 8102,
+      "labels": {
+        "material": [
+          105,
+          213,
+          925,
+          58,
+          381,
+          171,
+          89,
+          49,
+          160,
+          1734,
+          734,
+          933,
+          157,
+          592,
+          87,
+          109,
+          1431
+        ],
+        "action": [
+          5389,
+          2557
+        ],
+        "reaction": [
+          821,
+          853,
+          272,
+          112,
+          5775
+        ]
+      }
+    },
+    "validation": {
+      "parents": 101,
+      "events": 4605,
+      "video_seconds": 3727.2235000000005,
+      "video_frames": 111705,
+      "audio_samples": 357586944,
+      "audio_peak": 2.2168571949005127,
+      "audio_signatures": {
+        "[96000, 1, 'float32']": 101
+      },
+      "video_signatures": {
+        "[456, 256, 'rgb24']": 101
+      },
+      "questions": 8875,
+      "events_with_labels": 3049,
+      "labels": {
+        "material": [
+          0,
+          77,
+          201,
+          310,
+          10,
+          48,
+          180,
+          32,
+          338,
+          307,
+          192,
+          171,
+          42,
+          300,
+          0,
+          486,
+          284
+        ],
+        "action": [
+          1840,
+          1147
+        ],
+        "reaction": [
+          293,
+          286,
+          622,
+          480,
+          1229
+        ]
+      }
+    }
+  },
+  "cross_split_exact_overlap": {
+    "parents": 0,
+    "dates": 0,
+    "raw": 0,
+    "audio": 0,
+    "video": 0,
+    "event": 0,
+    "question": 0
+  },
+  "question_only_train_prior": {
+    "material": {
+      "count": 2978,
+      "probabilities": [
+        0.013244197780020181,
+        0.026866801210898083,
+        0.11667507568113017,
+        0.0073158425832492435,
+        0.048057517658930377,
+        0.02156912209889001,
+        0.01122603430877901,
+        0.006180625630676085,
+        0.020181634712411706,
+        0.21871846619576185,
+        0.0925832492431887,
+        0.11768415741675076,
+        0.019803229061553986,
+        0.07467204843592332,
+        0.010973763874873865,
+        0.013748738647830475,
+        0.1804994954591322
+      ],
+      "selected_index": 9,
+      "accuracy": 0.10308932169241102,
+      "nll": 3.2040093691722134,
+      "brier": 0.976208870856953,
+      "ece": 0.11562914450335084,
+      "ece_method": "constant confidence; exact occupied-bin absolute gap"
+    },
+    "action": {
+      "count": 2987,
+      "probabilities": [
+        0.6782028693682356,
+        0.3217971306317644
+      ],
+      "selected_index": 0,
+      "accuracy": 0.6160026782725142,
+      "nll": 0.6745884764961964,
+      "brier": 0.4808244848118957,
+      "ece": 0.06220019109572139,
+      "ece_method": "constant confidence; exact occupied-bin absolute gap"
+    },
+    "reaction": {
+      "count": 2910,
+      "probabilities": [
+        0.1048129707647134,
+        0.10889825098940381,
+        0.034724881909868506,
+        0.014298480786416443,
+        0.7372654155495979
+      ],
+      "selected_index": 4,
+      "accuracy": 0.42233676975945017,
+      "nll": 1.9926484174688741,
+      "brier": 0.8829928470827317,
+      "ece": 0.31492864579014773,
+      "ece_method": "constant confidence; exact occupied-bin absolute gap"
+    }
+  },
+  "task_rebuild_exact": true,
+  "physical_input_parents": 3,
+  "physical_payloads_replayed_exact": 18,
+  "old_artifacts_rehashed_unchanged": 994,
+  "current_artifact_files_hashed": 7310,
+  "unresolved": [
+    "physical sound/contact offset",
+    "near-duplicate scenes",
+    "actor/site identity across dates",
+    "complementary task/intervention labels",
+    "real encoder input and temporal binding"
+  ],
+  "encoder_loaded": false,
+  "optimizer_updates": 0,
+  "model_quality_evaluated": false,
+  "test_media_or_annotations_opened": false,
+  "sealed_audit_opened": false,
+  "calibration_payloads_opened": false,
+  "product_goal_complete": false,
+  "verification": {
+    "ruff": "PASS",
+    "pytest": "2230 passed, 1 skipped",
+    "manifest_commands": 25
+  },
+  "ci": {
+    "publication_head": "CHECK_AFTER_PUSH",
+    "previous_head_not_substituted": true
+  }
+}

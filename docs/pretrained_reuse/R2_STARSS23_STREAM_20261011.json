@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "id": "fold3_room12_mix001:t0000-0005",
+      "audio_exact": true,
+      "video_exact": true,
+      "timestamps_exact": true
+    },
+    {
+      "id": "fold3_room12_mix001:t0005-0010",
+      "audio_exact": true,
+      "video_exact": true,
+      "timestamps_exact": true
+    },
+    {
+      "id": "fold3_room13_mix001:t0000-0005",
+      "audio_exact": true,
+      "video_exact": true,
+      "timestamps_exact": true
+    },
+    {
+      "id": "fold3_room13_mix001:t0005-0010",
+      "audio_exact": true,
+      "video_exact": true,
+      "timestamps_exact": true
+    }
+  ],
+  "wall_seconds": 2.3367810999625362,
+  "reader_sha256": "a77028b0718f0dd1f77927b7cfcf054c17aa3699332d774fecc946632e262786",
+  "source_result_sha256": "b3807ca4484bc011835dff3fcd46d9ec3330c58d0ad15b36f71efa70c3081513",
+  "reference_result_sha256": "7ed1bf595a36ae9dd334c191806bad8e8d2b9f4574f051c5a40b2f8b79f4c3f1"
+}

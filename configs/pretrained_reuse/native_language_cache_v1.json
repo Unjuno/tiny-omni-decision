@@ -1,0 +1,43 @@
+{
+  "id": "native-language-cache-v1",
+  "seed": 17,
+  "model_path": "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model",
+  "model_revision": "262ae02f29173eec1c250f90804dc7edc677dcff",
+  "parameters": 70830722,
+  "files": {
+    "binding_train": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\binding_train.jsonl",
+    "numeric_train": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\numeric_train.jsonl",
+    "legacy_train": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\legacy_train.jsonl",
+    "validation": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\validation.jsonl",
+    "old_validation": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\old_validation.jsonl",
+    "legacy_validation": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\legacy_validation.jsonl"
+  },
+  "input_pins": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\added_tokens.json": "dc046d04c9b0ada7ae6f1dc89c465801799acdf0c9a6aab8c15a1b2d5ca4e91f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\config.json": "dc6de98193d85d4c45f96724e6dd3672b897af3f1592e02625b9a71be795887b",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\model.safetensors": "56b89067a4e60362f498f39b7067020911618fad37d64fa23a5f959a04fd4080",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\README.md": "07134727f6e5a3f726ee869f7ff3b2700ca9d9f70b462746c73ac7e485eee606",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\special_tokens_map.json": "311de3f4eed9d76a43bf0d71f10e62e086ca65ccce9f15d5da0d2098bf519ecc",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\spm.model": "c679fbf93643d19aab7ee10c0b99e460bdbc02fedf34b92b05af343b4af586fd",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\tokenizer.json": "05402ffae6dd382a8491b1d29bfc139bec5d332662e86a026f433ce54c25c202",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\tokenizer_config.json": "d8d3bb123b99317634d5ee3d1d2d8b2ddb01510a0654687fc2639a5347a7291f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\binding_train.jsonl": "89f1f2dff2a3ea1bdddc8a488fab454889a3a04cc803e34962937597db3b91e1",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\numeric_train.jsonl": "c34b0d5ff04707b5af059f0886117583efd59808f5ec217fd995333aab644f9d",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\legacy_train.jsonl": "a6d363fe4349432ecaf2a29465ee166e7f53ddf577d930884afaa0327df0814c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\validation.jsonl": "ebc458ec4dd0e64aaa8620d4bf5cdf7cb219b3fbf3bce148c479ea84f03532ae",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\old_validation.jsonl": "01cd6c8f55df5e68770408b8825711e9b7f2ea3ec7e9a3022725bbb4e5a0f536",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01\\legacy_validation.jsonl": "265aa8b5d9ee372a02481427bfa1620bc68f6593af1137fb3e000227e4a8774c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-conditional-candidate-smoke-02\\text-tokens.npy": "dd04b673d2022df04ee85d8db25a1f7a4fce0679abe7cc145020b3fc7f268c7b"
+  },
+  "native_text": "Three red cubes are on the left. Two blue spheres are on the right.",
+  "native_tokens": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-conditional-candidate-smoke-02\\text-tokens.npy",
+  "window_content_tokens": 510,
+  "overlap_content_tokens": 32,
+  "batch_size": 1,
+  "dtype": "float32",
+  "attention": "eager",
+  "max_wall_seconds": 3600,
+  "disk_reserve_bytes": 2147483648,
+  "max_vram_bytes": 3221225472,
+  "max_rss_bytes": 6442450944
+}

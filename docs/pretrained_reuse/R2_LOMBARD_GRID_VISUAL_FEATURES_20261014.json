@@ -1,0 +1,117 @@
+{
+  "status": "RUNNING_NOT_COMPLETE",
+  "snapshot": {
+    "status": "RUNNING",
+    "started_utc": "2026-10-13T17:15:09.323829+00:00",
+    "pid": 74692,
+    "completed": 192,
+    "seconds": 444.84425210009795,
+    "source_commit": "bbd194e454bf5191cf2ea189ea61e91a5cbd1788",
+    "runner_sha256": "965099b6b9bef40dd033aaa862f66725bcb2694fddab889aff970edf88ad558d",
+    "effective_config_sha256": "c246c99d8155afe45a4b0e249e25f7c7b003c08306a050b590661702c70f94a4",
+    "peak_working_set_bytes": 4335759360
+  },
+  "full_output_directory": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-grid-videoprism-native-features-01",
+  "effective_config": {
+    "source_revision": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+    "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "frames": 16,
+    "height": 288,
+    "width": 288,
+    "dtype": "float32",
+    "device": "cpu",
+    "sampling": "nearest actual PTS to uniform first-to-last16 positions",
+    "resize": "TF bilinear short-side288 then center crop288",
+    "pool": "spatial mean256 tokens independently per chronological frame; global mean of16 frame means",
+    "labels_transcripts_alignments_as_input": false,
+    "seed": 17,
+    "training": false,
+    "repeat_scope": "all4 native reference sources plus every128th row and first row",
+    "total_rows": 5367,
+    "split_hashes": {
+      "train": "259f3ee36aa956618a89819338c2ecb67b194c82dbf636df70b551e00a5d78b0",
+      "calibration": "22748b0942dfb1e54dcbd1e356b5e25930da46f95f15724a5f0bfd03b546a765",
+      "validation": "98d81114e73dd4924c087df08873d21648a2ae34a9cc289887eb0767ded4658d",
+      "unresolved": "08f7e49af76c693163865ecb178f49a6b4b3084fa5eab6e56c385d90c4c89701"
+    },
+    "media_audit_sha256": "3a29c73421bb695b9179e540ade00484a2ab6e744f90d1a62b078797048a054b",
+    "max_seconds": 21600,
+    "minimum_free_bytes": 3221225472,
+    "command_args": {
+      "smoke": false
+    }
+  },
+  "native_smoke": {
+    "status": "PASS",
+    "started_utc": "2026-10-13T17:13:48.483271+00:00",
+    "pid": 32572,
+    "effective_config_sha256": "2b3e330e11528961b751e733c14a7895abc272987e060432ff6d3f5df85b12be",
+    "config": {
+      "source_revision": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+      "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+      "frames": 16,
+      "height": 288,
+      "width": 288,
+      "dtype": "float32",
+      "device": "cpu",
+      "sampling": "nearest actual PTS to uniform first-to-last16 positions",
+      "resize": "TF bilinear short-side288 then center crop288",
+      "pool": "spatial mean256 tokens independently per chronological frame; global mean of16 frame means",
+      "labels_transcripts_alignments_as_input": false,
+      "seed": 17,
+      "training": false,
+      "repeat_scope": "all4 native reference sources plus every128th row and first row",
+      "total_rows": 4,
+      "split_hashes": {
+        "train": "259f3ee36aa956618a89819338c2ecb67b194c82dbf636df70b551e00a5d78b0",
+        "calibration": "22748b0942dfb1e54dcbd1e356b5e25930da46f95f15724a5f0bfd03b546a765",
+        "validation": "98d81114e73dd4924c087df08873d21648a2ae34a9cc289887eb0767ded4658d",
+        "unresolved": "08f7e49af76c693163865ecb178f49a6b4b3084fa5eab6e56c385d90c4c89701"
+      },
+      "media_audit_sha256": "3a29c73421bb695b9179e540ade00484a2ab6e744f90d1a62b078797048a054b",
+      "max_seconds": 300,
+      "minimum_free_bytes": 3221225472,
+      "command_args": {
+        "smoke": true
+      }
+    },
+    "parameters": 114365184,
+    "parameter_sha256_before": "7aac12c1713a64605e7138bd29329a829c6763b11c2e7146d9988e964827e7f4",
+    "source_commit": "bbd194e454bf5191cf2ea189ea61e91a5cbd1788",
+    "runner_sha256": "965099b6b9bef40dd033aaa862f66725bcb2694fddab889aff970edf88ad558d",
+    "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+    "jax": "0.6.2",
+    "numpy": "1.26.4",
+    "tensorflow": "2.18.1",
+    "av": "18.1.0",
+    "devices": [
+      "TFRT_CPU_0"
+    ],
+    "system_python": "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "training": false,
+    "quality_evaluated": false,
+    "repeat_checks": 4,
+    "native_reference_checks": 4,
+    "forward_seconds": 13.274887500097975,
+    "replay_seconds": 7.984227000037208,
+    "decode_preprocess_seconds": 1.1245177000528201,
+    "local_only": true,
+    "cloud_cost": 0,
+    "seconds": 23.233088799985126,
+    "completed": 4,
+    "peak_working_set_bytes": 4323475456,
+    "feature_hashes": {
+      "framewise.npy": "10002752be86d27391d3abdfe5cac9d4567b04ec0bad3b0d6a2e2a0da426919d",
+      "pooled.npy": "886f718626add7daf6b00639db4dc0170b77337f6090efd9e72ec0013b9db064"
+    },
+    "parameter_sha256_after": "7aac12c1713a64605e7138bd29329a829c6763b11c2e7146d9988e964827e7f4",
+    "parameters_unchanged": true,
+    "all_features_reload_verified": true,
+    "all_media_hashes_verified": true,
+    "all_expected_ids_present": true,
+    "ended_utc": "2026-10-13T17:14:11.717534+00:00"
+  },
+  "prior_smoke_failure": "attempt01: width/height versus array height/width assertion before first forward; failed artifact/runner preserved, no gate loosened",
+  "quality_evaluated": false,
+  "training": false
+}

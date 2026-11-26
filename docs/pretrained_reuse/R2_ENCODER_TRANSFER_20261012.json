@@ -1,0 +1,320 @@
+{
+  "source_commit": "187a088",
+  "artifact_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\encoder-condition-transfer-01",
+  "result": {
+    "status": "PASS_EXECUTION_ONLY",
+    "weights": "adapted",
+    "candidate_style": "bare",
+    "metrics": {
+      "count": 256,
+      "accuracy": 0.3359375,
+      "nll": 1.4277408123016357,
+      "brier": 0.8140655159950256,
+      "ece_15_bins": 0.26840707031078637,
+      "ece_bin_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        13,
+        37,
+        48,
+        53,
+        31,
+        24,
+        13,
+        14,
+        11,
+        12
+      ]
+    },
+    "groups": {
+      "price:lowest": {
+        "count": 64,
+        "accuracy": 0.296875,
+        "nll": 1.3228733539581299,
+        "brier": 0.7884726524353027,
+        "ece_15_bins": 0.27200493519194424,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          4,
+          9,
+          15,
+          12,
+          9,
+          6,
+          8,
+          1,
+          0,
+          0
+        ]
+      },
+      "price:highest": {
+        "count": 64,
+        "accuracy": 0.296875,
+        "nll": 1.9748504161834717,
+        "brier": 1.0310016870498657,
+        "ece_15_bins": 0.39688940811902285,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          4,
+          5,
+          10,
+          10,
+          5,
+          7,
+          2,
+          4,
+          6,
+          11
+        ]
+      },
+      "risk:lowest": {
+        "count": 64,
+        "accuracy": 0.171875,
+        "nll": 1.6452381610870361,
+        "brier": 0.965958833694458,
+        "ece_15_bins": 0.36772609199397266,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5,
+          17,
+          12,
+          16,
+          6,
+          3,
+          2,
+          3,
+          0,
+          0
+        ]
+      },
+      "risk:highest": {
+        "count": 64,
+        "accuracy": 0.578125,
+        "nll": 0.7680014967918396,
+        "brier": 0.47082871198654175,
+        "ece_15_bins": 0.11728829331696033,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          6,
+          11,
+          15,
+          11,
+          8,
+          1,
+          6,
+          5,
+          1
+        ]
+      }
+    },
+    "both_correct_condition_pairs": 10,
+    "total_condition_pairs": 128,
+    "changed_prediction_pairs": 67,
+    "target_counts": {
+      "0": 78,
+      "1": 92,
+      "2": 86
+    },
+    "max_tokens": 89,
+    "seconds": 1.53020869998727,
+    "device": "cuda",
+    "torch": "2.6.0+cu124",
+    "dtype": "torch.float32",
+    "peak_vram_bytes": 147825664,
+    "limitation": "Constructed diagnostic; not blind product validation. No tuning follows."
+  },
+  "protocol": {
+    "weights": "adapted",
+    "checkpoint_reference": "encoder_coverage",
+    "candidate_style": "bare",
+    "seed": 17,
+    "states": 64,
+    "questions": 256,
+    "options": 3,
+    "training": false,
+    "selection": false,
+    "runner_sha256": "09fee216ee007a3469ff9d19025bfd8d9b79eedab12c39d5e9779c1a4c53ca56",
+    "base_revision": "233902d25c440f23af6f7d6e94d2946bac0bee0a",
+    "delta_sha256": "4024788b1a9d17735612a98da6acb1a65af5d82a9d440b4fddb4ab62efb9d318",
+    "input_sha256": "8737946632cf65dd85b6360e9ed1f7b7b70ed7b59df230a0a7f5c9698233fb74"
+  },
+  "original_result": {
+    "status": "PASS_EXECUTION_ONLY",
+    "metrics": {
+      "count": 256,
+      "accuracy": 0.359375,
+      "nll": 1.1588962078094482,
+      "brier": 0.7077219486236572,
+      "ece_15_bins": 0.1574924640590325,
+      "ece_bin_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        203,
+        53,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "groups": {
+      "price:lowest": {
+        "count": 64,
+        "accuracy": 0.3125,
+        "nll": 1.2297477722167969,
+        "brier": 0.7511926889419556,
+        "ece_15_bins": 0.2215166101232171,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          33,
+          31,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "price:highest": {
+        "count": 64,
+        "accuracy": 0.359375,
+        "nll": 1.1359248161315918,
+        "brier": 0.695529580116272,
+        "ece_15_bins": 0.15754426317289472,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          63,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "risk:lowest": {
+        "count": 64,
+        "accuracy": 0.3125,
+        "nll": 1.1891088485717773,
+        "brier": 0.731848955154419,
+        "ece_15_bins": 0.21620468562468886,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          43,
+          21,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "risk:highest": {
+        "count": 64,
+        "accuracy": 0.453125,
+        "nll": 1.080803394317627,
+        "brier": 0.652316689491272,
+        "ece_15_bins": 0.04925870895385742,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          64,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "both_correct_condition_pairs": 0,
+    "total_condition_pairs": 128,
+    "changed_prediction_pairs": 0,
+    "target_counts": {
+      "0": 78,
+      "1": 92,
+      "2": 86
+    },
+    "max_tokens": 89,
+    "seconds": 1.508801699965261,
+    "device": "cuda",
+    "torch": "2.6.0+cu124",
+    "dtype": "torch.float32",
+    "peak_vram_bytes": 147825664,
+    "limitation": "Constructed diagnostic; not blind product validation. No tuning follows."
+  },
+  "identical_input_hash": true,
+  "files": {
+    "inputs.json": {
+      "bytes": 111137,
+      "sha256": "8737946632cf65dd85b6360e9ed1f7b7b70ed7b59df230a0a7f5c9698233fb74"
+    },
+    "predictions.json": {
+      "bytes": 145816,
+      "sha256": "d7aaab223d2507b8f603e7f47cdd23aae3877d3ee717c88f7a2e73436862b3a7"
+    },
+    "protocol.json": {
+      "bytes": 548,
+      "sha256": "84d943bb871e79c3c8a90b6bfa72f77e2a47ccd36cdb2fb601fa17212c61e052"
+    },
+    "result.json": {
+      "bytes": 2558,
+      "sha256": "6388b21303f1e64f1dd9eea6eccb45c557fb0ec59ba11ec47e9f6669f1b5e11f"
+    }
+  }
+}

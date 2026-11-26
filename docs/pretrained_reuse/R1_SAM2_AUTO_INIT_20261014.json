@@ -1,0 +1,718 @@
+{
+  "status": "PASS_AUTO_INIT_EXECUTION_ONLY",
+  "product_goal_complete": false,
+  "product_adopted": false,
+  "source_commit": "f295cd89e7f2cddadeee9b61075466524f8da9f5",
+  "run": {
+    "status": "PASS_AUTO_INIT_EXECUTION_ONLY",
+    "pid": 67912,
+    "started_utc": "2026-10-13T21:55:46.789612+00:00",
+    "config_sha256": "371135a2b4ea735f65038312927a02f29541739dee2c7889a738d5c071578dd3",
+    "config": {
+      "model_id": "facebook/sam2.1-hiera-tiny",
+      "revision": "de431c4043854a71d8101e17995dfe596bf101a5",
+      "weight_sha256": "48c14467e5cf9e51870511feb72c89688e82dd74523142c0538b663e193ac2a7",
+      "grid_side": 32,
+      "grid_cell_centers": true,
+      "chunk_objects": 64,
+      "mask_threshold": 0.0,
+      "box_nms_iou": 0.7,
+      "top_k": 3,
+      "ranking": "model object-presence logit; ties by row-major grid index",
+      "precision": "float32",
+      "attention": "sdpa",
+      "training": false,
+      "seed": 17,
+      "frame_indices": [
+        0,
+        1
+      ],
+      "selection": "all1024proposals retained; no GT thresholds, target prompts, confidence filtering or clip exclusions",
+      "mask_seed": "selected model-produced binary mask, never annotation mask",
+      "max_seconds": 400,
+      "peak_torch_cap_bytes": 6442450944,
+      "validation": false,
+      "decision_quality": false,
+      "gt_available_to_inference": false,
+      "source_manifest_sha256": "469299ad240ff85c47ba44abb8920aae9994b0e3ec15a3fca1373c49b2fa6ee3",
+      "input_plans": [
+        {
+          "video_id": "video_10103",
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10103.mp4",
+          "sha256": "e9914a811679e99f26246ab0c1f89c582914e37433189bf925f06f5793ca38ed",
+          "cut_frame": 459,
+          "split": "train",
+          "frame_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "video_id": "video_10186",
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10186.mp4",
+          "sha256": "6e61d8f411114ef7f052a5bea40bd51b4161274bb0d799cd158658a14b6d4df7",
+          "cut_frame": 651,
+          "split": "train",
+          "frame_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "video_id": "video_10212",
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10212.mp4",
+          "sha256": "344831bfc0e4d6ebf326fe65fcbe371ddbec857bdc62a374dcea3900c06e0d61",
+          "cut_frame": -1,
+          "split": "train",
+          "frame_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "video_id": "video_10387",
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10387.mp4",
+          "sha256": "0eaa054acbb22f0e68c5fea34b76d3b0270f0e9df1e87f83559131d5ab89d532",
+          "cut_frame": 509,
+          "split": "train",
+          "frame_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "video_id": "video_1087",
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_1087.mp4",
+          "sha256": "a5191ecdbd8512c88b13382866a2594e99666ffdb400c2dd6abd8c64b73c73d1",
+          "cut_frame": 575,
+          "split": "train",
+          "frame_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "video_id": "video_10886",
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10886.mp4",
+          "sha256": "1408703d5b36c058b665ad8eaf2f926ea274d849d58403f818a74c81c5cd3c7b",
+          "cut_frame": 632,
+          "split": "train",
+          "frame_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "video_id": "video_10894",
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10894.mp4",
+          "sha256": "5962aca05fd680d3538d17c09e645f9aded8a9043463b272a68f0ef1a25e9677",
+          "cut_frame": 544,
+          "split": "train",
+          "frame_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "video_id": "video_10903",
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10903.mp4",
+          "sha256": "445339a283b2e2d996c6f047afc397909c0edf591e4c3df4941c0c51d70b7ee7",
+          "cut_frame": 558,
+          "split": "train",
+          "frame_indices": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    "source_commit": "f295cd89e7f2cddadeee9b61075466524f8da9f5",
+    "runner_sha256": "b9918adcdf5aceed646b6d404a611618fe3026a9edec822beea382dd37e943c0",
+    "rows": [
+      {
+        "video_id": "video_10103",
+        "input_sha256": "e9914a811679e99f26246ab0c1f89c582914e37433189bf925f06f5793ca38ed",
+        "input_shape": [
+          2,
+          1080,
+          1920,
+          3
+        ],
+        "proposals": 1024,
+        "empty_masks": 0,
+        "nms_kept": 55,
+        "selected_indices": [
+          711,
+          974,
+          888
+        ],
+        "proposal_seconds": 18.70091570005752,
+        "propagation_seconds": 0.4899311999324709,
+        "propagated_frames": 2,
+        "proposal_sha256": "55bdfdd0b04018404abd0fed2afd59f5443106f0d39a30aab0a4393d5ee6983b",
+        "mask_shape": [
+          1024,
+          256,
+          256
+        ],
+        "mask_bitorder": "big",
+        "selected_count": 3
+      },
+      {
+        "video_id": "video_10186",
+        "input_sha256": "6e61d8f411114ef7f052a5bea40bd51b4161274bb0d799cd158658a14b6d4df7",
+        "input_shape": [
+          2,
+          1080,
+          1920,
+          3
+        ],
+        "proposals": 1024,
+        "empty_masks": 0,
+        "nms_kept": 186,
+        "selected_indices": [
+          452,
+          490,
+          565
+        ],
+        "proposal_seconds": 17.731253499980085,
+        "propagation_seconds": 0.4824546000454575,
+        "propagated_frames": 2,
+        "proposal_sha256": "70cc54868dfe90554d9257c98fac8e0064daeb3c911169bbb1d8ad9a55590fd2",
+        "mask_shape": [
+          1024,
+          256,
+          256
+        ],
+        "mask_bitorder": "big",
+        "selected_count": 3
+      },
+      {
+        "video_id": "video_10212",
+        "input_sha256": "344831bfc0e4d6ebf326fe65fcbe371ddbec857bdc62a374dcea3900c06e0d61",
+        "input_shape": [
+          2,
+          1080,
+          1920,
+          3
+        ],
+        "proposals": 1024,
+        "empty_masks": 0,
+        "nms_kept": 43,
+        "selected_indices": [
+          711,
+          367,
+          255
+        ],
+        "proposal_seconds": 17.631593799917027,
+        "propagation_seconds": 0.48451660003047436,
+        "propagated_frames": 2,
+        "proposal_sha256": "347755deddab8ce0c9ca0040e701738dcd4a9190b0fdfd85a138e4e7a451aa46",
+        "mask_shape": [
+          1024,
+          256,
+          256
+        ],
+        "mask_bitorder": "big",
+        "selected_count": 3
+      },
+      {
+        "video_id": "video_10387",
+        "input_sha256": "0eaa054acbb22f0e68c5fea34b76d3b0270f0e9df1e87f83559131d5ab89d532",
+        "input_shape": [
+          2,
+          720,
+          1280,
+          3
+        ],
+        "proposals": 1024,
+        "empty_masks": 0,
+        "nms_kept": 168,
+        "selected_indices": [
+          713,
+          544,
+          559
+        ],
+        "proposal_seconds": 17.56562359991949,
+        "propagation_seconds": 0.49132449994795024,
+        "propagated_frames": 2,
+        "proposal_sha256": "e6c24b0403759a319417f92b0cd29b71ac26a27cc0ff48e3f116e3c52d66a0c0",
+        "mask_shape": [
+          1024,
+          256,
+          256
+        ],
+        "mask_bitorder": "big",
+        "selected_count": 3
+      },
+      {
+        "video_id": "video_1087",
+        "input_sha256": "a5191ecdbd8512c88b13382866a2594e99666ffdb400c2dd6abd8c64b73c73d1",
+        "input_shape": [
+          2,
+          1080,
+          1920,
+          3
+        ],
+        "proposals": 1024,
+        "empty_masks": 0,
+        "nms_kept": 67,
+        "selected_indices": [
+          485,
+          526,
+          500
+        ],
+        "proposal_seconds": 17.648084899992682,
+        "propagation_seconds": 0.48612750007305294,
+        "propagated_frames": 2,
+        "proposal_sha256": "a365493f0673e183d95d1c60a1889ea7dc37dbb857a061a979052ff0e4805ae5",
+        "mask_shape": [
+          1024,
+          256,
+          256
+        ],
+        "mask_bitorder": "big",
+        "selected_count": 3
+      },
+      {
+        "video_id": "video_10886",
+        "input_sha256": "1408703d5b36c058b665ad8eaf2f926ea274d849d58403f818a74c81c5cd3c7b",
+        "input_shape": [
+          2,
+          1080,
+          1920,
+          3
+        ],
+        "proposals": 1024,
+        "empty_masks": 0,
+        "nms_kept": 64,
+        "selected_indices": [
+          284,
+          736,
+          585
+        ],
+        "proposal_seconds": 17.713272399967536,
+        "propagation_seconds": 0.48049170000012964,
+        "propagated_frames": 2,
+        "proposal_sha256": "b257bcf6fb675a39b7c326e82472a36665b14b21016202580093015af2ddf412",
+        "mask_shape": [
+          1024,
+          256,
+          256
+        ],
+        "mask_bitorder": "big",
+        "selected_count": 3
+      },
+      {
+        "video_id": "video_10894",
+        "input_sha256": "5962aca05fd680d3538d17c09e645f9aded8a9043463b272a68f0ef1a25e9677",
+        "input_shape": [
+          2,
+          1080,
+          1920,
+          3
+        ],
+        "proposals": 1024,
+        "empty_masks": 0,
+        "nms_kept": 73,
+        "selected_indices": [
+          679,
+          774,
+          637
+        ],
+        "proposal_seconds": 17.91569489997346,
+        "propagation_seconds": 0.48682150000240654,
+        "propagated_frames": 2,
+        "proposal_sha256": "23226877ff029057c4274c45eb526853a10d4b4c6b9b5fc25aa08f81f270463b",
+        "mask_shape": [
+          1024,
+          256,
+          256
+        ],
+        "mask_bitorder": "big",
+        "selected_count": 3
+      },
+      {
+        "video_id": "video_10903",
+        "input_sha256": "445339a283b2e2d996c6f047afc397909c0edf591e4c3df4941c0c51d70b7ee7",
+        "input_shape": [
+          2,
+          1080,
+          1920,
+          3
+        ],
+        "proposals": 1024,
+        "empty_masks": 0,
+        "nms_kept": 40,
+        "selected_indices": [
+          507,
+          618,
+          725
+        ],
+        "proposal_seconds": 20.17472330003511,
+        "propagation_seconds": 0.48914070008322597,
+        "propagated_frames": 2,
+        "proposal_sha256": "9d4f50c0722a93589d05471f1b94e9c05b72dc7fb49edfc5deb7df63c528f075",
+        "mask_shape": [
+          1024,
+          256,
+          256
+        ],
+        "mask_bitorder": "big",
+        "selected_count": 3
+      }
+    ],
+    "training": false,
+    "cloud_cost": 0,
+    "annotation_data_loaded": false,
+    "decision_quality_evaluated": false,
+    "geometry_self_checks": true,
+    "seconds": 150.97204889997374,
+    "parameters": 38962498,
+    "model_state_sha256_before": "658e3aaff3d08b6cc8337a1f125e5ee55451ed3bfec38f9def601a14bb6912d8",
+    "loading_info": {
+      "missing_keys": [],
+      "unexpected_keys": [],
+      "mismatched_keys": [],
+      "error_msgs": []
+    },
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "torch": "2.6.0+cu124",
+    "first_chunk_repeat_bitwise": true,
+    "model_state_sha256_after": "658e3aaff3d08b6cc8337a1f125e5ee55451ed3bfec38f9def601a14bb6912d8",
+    "parameters_unchanged": true,
+    "peak_allocated_bytes": 1089160192,
+    "peak_reserved_bytes": 1207959552,
+    "ended_utc": "2026-10-13T21:58:17.762311+00:00"
+  },
+  "geometry_diagnosis": {
+    "status": "PASS_AFTER_EXECUTION_GEOMETRY_AUDIT",
+    "scope": "Eight predeclared train clips; initial annotated target-box opportunity/ranking only, not mask IoU, semantic selection, tracking or Decision Accuracy.",
+    "annotation_opened_only_after_complete_inference": true,
+    "inference_after_annotation": false,
+    "result_sha256": "75665a07c986dd0a97bff4854912b7a265e91baf49c0c5d45637886e880fa3d1",
+    "source_annotation_plan_sha256": "977cfcd414db9a34af1f88a9089e2a5e6f1eb65d7e89dc32c57ac7d0199e5b32",
+    "scorer_sha256": "d5e00701b7516d0c4002f4fd1415554e1ad9d77f09c93a70708ca830de9f29d8",
+    "threshold": 0.5,
+    "rows": [
+      {
+        "video_id": "video_10103",
+        "target_box_xyxy": [
+          0.3129410147666931,
+          0.6659479737281799,
+          0.3784100115299225,
+          0.8467320203781128
+        ],
+        "raw_candidate_count": 1024,
+        "nms_candidate_count": 55,
+        "selected_count": 3,
+        "raw_best_bbox_iou": 0.8954660363149423,
+        "nms_best_bbox_iou": 0.7761055182470443,
+        "selected_best_bbox_iou": 0.037456279938871746,
+        "raw_gt_match_index": 842,
+        "gt_match_used_only_for_diagnosis": true
+      },
+      {
+        "video_id": "video_10186",
+        "target_box_xyxy": [
+          0.4410470128059387,
+          0.3345569968223572,
+          0.5657280087471008,
+          0.6326280236244202
+        ],
+        "raw_candidate_count": 1024,
+        "nms_candidate_count": 186,
+        "selected_count": 3,
+        "raw_best_bbox_iou": 0.9748382517689118,
+        "nms_best_bbox_iou": 0.9748382517689118,
+        "selected_best_bbox_iou": 0.0,
+        "raw_gt_match_index": 367,
+        "gt_match_used_only_for_diagnosis": true
+      },
+      {
+        "video_id": "video_10212",
+        "target_box_xyxy": [
+          0.13674399256706238,
+          0.4723989963531494,
+          0.3672400116920471,
+          0.847133994102478
+        ],
+        "raw_candidate_count": 1024,
+        "nms_candidate_count": 43,
+        "selected_count": 3,
+        "raw_best_bbox_iou": 0.8871745878484496,
+        "nms_best_bbox_iou": 0.8776350761511544,
+        "selected_best_bbox_iou": 0.8776350761511544,
+        "raw_gt_match_index": 487,
+        "gt_match_used_only_for_diagnosis": true
+      },
+      {
+        "video_id": "video_10387",
+        "target_box_xyxy": [
+          0.5007529854774475,
+          0.3552890121936798,
+          0.542294979095459,
+          0.4610779881477356
+        ],
+        "raw_candidate_count": 1024,
+        "nms_candidate_count": 168,
+        "selected_count": 3,
+        "raw_best_bbox_iou": 0.9639658620918836,
+        "nms_best_bbox_iou": 0.9294030543328471,
+        "selected_best_bbox_iou": 0.01284325858625327,
+        "raw_gt_match_index": 400,
+        "gt_match_used_only_for_diagnosis": true
+      },
+      {
+        "video_id": "video_1087",
+        "target_box_xyxy": [
+          0.5477439761161804,
+          0.4052479863166809,
+          0.7215790152549744,
+          0.9752190113067627
+        ],
+        "raw_candidate_count": 1024,
+        "nms_candidate_count": 67,
+        "selected_count": 3,
+        "raw_best_bbox_iou": 0.9469661699434485,
+        "nms_best_bbox_iou": 0.9469661699434485,
+        "selected_best_bbox_iou": 0.9469661699434485,
+        "raw_gt_match_index": 435,
+        "gt_match_used_only_for_diagnosis": true
+      },
+      {
+        "video_id": "video_10886",
+        "target_box_xyxy": [
+          0.5758500099182129,
+          0.14780999720096588,
+          0.7770379781723022,
+          0.6569340229034424
+        ],
+        "raw_candidate_count": 1024,
+        "nms_candidate_count": 64,
+        "selected_count": 3,
+        "raw_best_bbox_iou": 0.9152625225459953,
+        "nms_best_bbox_iou": 0.9081120340886046,
+        "selected_best_bbox_iou": 0.30792734376869274,
+        "raw_gt_match_index": 568,
+        "gt_match_used_only_for_diagnosis": true
+      },
+      {
+        "video_id": "video_10894",
+        "target_box_xyxy": [
+          0.33429598808288574,
+          0.41230300068855286,
+          0.6347569823265076,
+          0.9278129935264587
+        ],
+        "raw_candidate_count": 1024,
+        "nms_candidate_count": 73,
+        "selected_count": 3,
+        "raw_best_bbox_iou": 0.9662470644223842,
+        "nms_best_bbox_iou": 0.9457277100814594,
+        "selected_best_bbox_iou": 0.2920861927753996,
+        "raw_gt_match_index": 942,
+        "gt_match_used_only_for_diagnosis": true
+      },
+      {
+        "video_id": "video_10903",
+        "target_box_xyxy": [
+          0.4246380031108856,
+          0.38276100158691406,
+          0.5118460059165955,
+          0.6526319980621338
+        ],
+        "raw_candidate_count": 1024,
+        "nms_candidate_count": 40,
+        "selected_count": 3,
+        "raw_best_bbox_iou": 0.9699271354038772,
+        "nms_best_bbox_iou": 0.9699271354038772,
+        "selected_best_bbox_iou": 0.027929088315935345,
+        "raw_gt_match_index": 398,
+        "gt_match_used_only_for_diagnosis": true
+      }
+    ],
+    "hit_counts": {
+      "raw": 8,
+      "nms": 8,
+      "selected": 2
+    },
+    "all_proposal_arrays_boxes_points_and_ranking_verified": true,
+    "code_review_note": "CPU caller-alias regression used state.clear() as equivalent cleanup; actual model.forward removes each input ID in place.",
+    "ground_truth_input_to_model_or_ranker": false,
+    "quality_gate_passed": false
+  },
+  "scope_addendum": {
+    "scoring_program_opened_annotation_plan_only_after_saved_complete_inference": true,
+    "annotation_plan_was_previously_inspected_in_existing_TAPIR_work_and_context_read": true,
+    "not_blind": true,
+    "correction": "The scorer field annotation_opened_only_after_complete_inference describes that scoring process/data flow; it does not claim the annotated training plan was unknown to the investigator before this probe. Inference and ranking never load annotations; prior plan/context inspection was known and no target box was used as a prompt or rank input.",
+    "geometry_metric": "bbox IoU, not pixel mask IoU, semantic target choice, tracking or Decision Accuracy",
+    "assignment": "best overlap over1024 or NMS proposals is post-hoc GT matching; only the frozen top3 was actually seeded"
+  },
+  "source_hashes": {
+    "run": "75665a07c986dd0a97bff4854912b7a265e91baf49c0c5d45637886e880fa3d1",
+    "score": "d21d20d05f7872faa999f0a20e25deff6aa36063a2204265ac64f8c43f4c847f",
+    "scope_addendum": "815cf4f83271cb8f53745ea2e8e94f50151dbcb50d6f7a2a31c20db85f2f1469",
+    "failed_run": "db38bfc6b1278cb664baba7bb7104339b3209619eaad0b3ba7d27d1c299eca83",
+    "annotation_role_addendum": "c1397b4ddd528a4db399240649e1473a2376547b4e1d79f454c33f19d12c253b"
+  },
+  "failed_attempt": {
+    "status": "FAIL_INCOMPLETE",
+    "pid": 31668,
+    "started_utc": "2026-10-13T21:52:57.827442+00:00",
+    "config_sha256": "371135a2b4ea735f65038312927a02f29541739dee2c7889a738d5c071578dd3",
+    "config": {
+      "model_id": "facebook/sam2.1-hiera-tiny",
+      "revision": "de431c4043854a71d8101e17995dfe596bf101a5",
+      "weight_sha256": "48c14467e5cf9e51870511feb72c89688e82dd74523142c0538b663e193ac2a7",
+      "grid_side": 32,
+      "grid_cell_centers": true,
+      "chunk_objects": 64,
+      "mask_threshold": 0.0,
+      "box_nms_iou": 0.7,
+      "top_k": 3,
+      "ranking": "model object-presence logit; ties by row-major grid index",
+      "precision": "float32",
+      "attention": "sdpa",
+      "training": false,
+      "seed": 17,
+      "frame_indices": [
+        0,
+        1
+      ],
+      "selection": "all1024proposals retained; no GT thresholds, target prompts, confidence filtering or clip exclusions",
+      "mask_seed": "selected model-produced binary mask, never annotation mask",
+      "max_seconds": 400,
+      "peak_torch_cap_bytes": 6442450944,
+      "validation": false,
+      "decision_quality": false,
+      "gt_available_to_inference": false,
+      "source_manifest_sha256": "469299ad240ff85c47ba44abb8920aae9994b0e3ec15a3fca1373c49b2fa6ee3",
+      "input_plans": [
+        {
+          "video_id": "video_10103",
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10103.mp4",
+          "sha256": "e9914a811679e99f26246ab0c1f89c582914e37433189bf925f06f5793ca38ed",
+          "cut_frame": 459,
+          "split": "train",
+          "frame_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "video_id": "video_10186",
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10186.mp4",
+          "sha256": "6e61d8f411114ef7f052a5bea40bd51b4161274bb0d799cd158658a14b6d4df7",
+          "cut_frame": 651,
+          "split": "train",
+          "frame_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "video_id": "video_10212",
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10212.mp4",
+          "sha256": "344831bfc0e4d6ebf326fe65fcbe371ddbec857bdc62a374dcea3900c06e0d61",
+          "cut_frame": -1,
+          "split": "train",
+          "frame_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "video_id": "video_10387",
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10387.mp4",
+          "sha256": "0eaa054acbb22f0e68c5fea34b76d3b0270f0e9df1e87f83559131d5ab89d532",
+          "cut_frame": 509,
+          "split": "train",
+          "frame_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "video_id": "video_1087",
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_1087.mp4",
+          "sha256": "a5191ecdbd8512c88b13382866a2594e99666ffdb400c2dd6abd8c64b73c73d1",
+          "cut_frame": 575,
+          "split": "train",
+          "frame_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "video_id": "video_10886",
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10886.mp4",
+          "sha256": "1408703d5b36c058b665ad8eaf2f926ea274d849d58403f818a74c81c5cd3c7b",
+          "cut_frame": 632,
+          "split": "train",
+          "frame_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "video_id": "video_10894",
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10894.mp4",
+          "sha256": "5962aca05fd680d3538d17c09e645f9aded8a9043463b272a68f0ef1a25e9677",
+          "cut_frame": 544,
+          "split": "train",
+          "frame_indices": [
+            0,
+            1
+          ]
+        },
+        {
+          "video_id": "video_10903",
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10903.mp4",
+          "sha256": "445339a283b2e2d996c6f047afc397909c0edf591e4c3df4941c0c51d70b7ee7",
+          "cut_frame": 558,
+          "split": "train",
+          "frame_indices": [
+            0,
+            1
+          ]
+        }
+      ]
+    },
+    "source_commit": "f295cd89e7f2cddadeee9b61075466524f8da9f5",
+    "runner_sha256": "4508839820c0518b0e23f96c984c88f362dbbff79b695339ac646da556744509",
+    "rows": [],
+    "training": false,
+    "cloud_cost": 0,
+    "annotation_data_loaded": false,
+    "decision_quality_evaluated": false,
+    "geometry_self_checks": true,
+    "seconds": 2.675821000011638,
+    "parameters": 38962498,
+    "model_state_sha256_before": "658e3aaff3d08b6cc8337a1f125e5ee55451ed3bfec38f9def601a14bb6912d8",
+    "loading_info": {
+      "missing_keys": [],
+      "unexpected_keys": [],
+      "mismatched_keys": [],
+      "error_msgs": []
+    },
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "torch": "2.6.0+cu124",
+    "error": "ValueError('Number of object ids (0) does not match number of points (64)')",
+    "traceback": "Traceback (most recent call last):\n  File \"C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\auto_init01.py\", line 138, in <module>\n    processor.add_inputs_to_inference_session(repeat_session,frame_idx=0,obj_ids=ids,\n  File \"C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2_video\\processing_sam2_video.py\", line 616, in add_inputs_to_inference_session\n    return self.process_new_points_or_boxes_for_video_frame(\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2_video\\processing_sam2_video.py\", line 681, in process_new_points_or_boxes_for_video_frame\n    raise ValueError(\nValueError: Number of object ids (0) does not match number of points (64)\n",
+    "ended_utc": "2026-10-13T21:53:00.503197+00:00"
+  },
+  "original_attempt_and_outputs_preserved": true,
+  "candidate_coverage_preserved_in_raw_and_nms": true,
+  "selected_target_coverage_failed": true,
+  "next_gate": "Specify target-identifying observation/criterion and check semantic correspondence before any new fit; do not use GT match as deployed selection.",
+  "record_script_sha256": "184d872ebe3e28622531c1cf1373c9e148fe66b88c2e05aa1976cb130f695492",
+  "annotation_role_addendum": {
+    "role": "annotated is_occluder covering-object track, not the hidden-item track",
+    "evidence": "docs/pretrained_reuse/R2_OCCLUSION_TRACK_ADMISSION_20261013.md and pinned official source3938d2f1ba3a6b502025741cea4cd73c7b3bdfaf",
+    "task_mapping_unresolved": true,
+    "interpretation": "8/8 raw/NMS overlaps only show opportunity for this initial covering-object box. They do not identify the hidden item, bind setup frame0 to question beginning-of-game, resolve actor-relative ordinal/depth answers, or establish semantic QA target correspondence.",
+    "inference_or_metrics_changed": false
+  }
+}

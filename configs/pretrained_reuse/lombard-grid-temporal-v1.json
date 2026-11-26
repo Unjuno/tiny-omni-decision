@@ -1,0 +1,22 @@
+{
+  "experiment_id": "lombard-grid-temporal-v1",
+  "arms": ["audio", "video_broadcast", "video_ordered", "joint_broadcast", "joint_ordered"],
+  "seed": 17,
+  "epochs": 24,
+  "batch_size": 128,
+  "learning_rate": 0.001,
+  "weight_decay": 0.001,
+  "head_parameters": 106355,
+  "frames": 16,
+  "device": "cpu",
+  "threads": 4,
+  "dtype": "float32",
+  "max_body_seconds": 7200,
+  "max_peak_cpu_bytes": 3221225472,
+  "max_output_bytes": 134217728,
+  "minimum_disk_bytes": 1073741824,
+  "selector": "earliest minimum unrounded raw validation macro NLL",
+  "calibration": "independent398 calibration rows,17 geometric temperatures0.25..4 per slot",
+  "full_source_counts": [4080, 398, 889],
+  "scope": "development temporal-information diagnostic; not general Omni or blind audit"
+}

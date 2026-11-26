@@ -1,0 +1,638 @@
+{
+  "status": "PASS_ONE_TRAIN_CLIP_MASK_STATISTICS_INPUT_NOT_QUALITY",
+  "source_commit": "b83012e8b208d170c6402941e9139175f810a0e2",
+  "effective_config": {
+    "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\mask-feature-pool-pilot-01\\effective-config.json",
+    "sha256": "75ebe886edadcb2431f6a0e7bfee460ac24234202e90a8000126555665a67e0c",
+    "config": {
+      "source_hashes": {
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\result.json": "191796c3e85ffea628c55d45f15cd1a09ecdba546551476e57dd55ce09a7ae0e",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\config.json": "303f0582ae0c7d42c181e9070d66f72e73ac4da62701e837f9299d1d451d1c7c",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-temporal-appearance-01\\result.json": "a000672b4500a8b4ae9bfde3f15e06d8103c56e986c2d7d3c17a6a77addf98f4",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-temporal-appearance-01\\effective-config.json": "b86589ce82c5b1bde7657ffa4b1f80abc5464e54f63211a3f2fd728fff774a79",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-temporal-appearance-01\\video_10903.npz": "e79ff7d73ff3b58f04f0d058666768f603823140829141311d63e3cdf18158bb",
+        "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\probe_mask_feature_pool.py": "3a9b88298a6100d5ee3b33498403c05e1e7eef24debd9a4c2f485f1aabc66ea0",
+        "C:\\CodexWorktrees\\pretrained-reuse-omni\\src\\tiny_omni_decision\\mask_feature_pool.py": "1fd3b707b991b8a3bfa69c2678b2d6618ea54f7c476ab95c8f352c97a0a721e8",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10903.mp4": "445339a283b2e2d996c6f047afc397909c0edf591e4c3df4941c0c51d70b7ee7",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0000-proposals.npz": "3ceb2615c9b40a161747032c25d7a16117e4b2daa1485aefb4c9ea3ffffb069b",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0018-proposals.npz": "3085d0dcc6b2e5eb015da6e8c357a76603dde47b4ba5e496870346f47630960e",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0036-proposals.npz": "ef5dc7b41a200e0679a7b2abd33ad12168d862cc7e8bb1e270e3c1a9871e2f0f",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0054-proposals.npz": "9c467f32beda6c7b22b8bbb86515aa7a99bdf91a6606147b5de3124445d7c43b",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0072-proposals.npz": "511b4460b7f58656c82383c738f4185757f3a97fb5adea0dc80ee87bb9c91fed",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0090-proposals.npz": "e1ba45629ce62f2fc8dfe47303e7399431df14bd3f4d84003f3bc5ce3e553188",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0108-proposals.npz": "fcf8cdd69c1b34750de3a58c8e5dbc45e152bb002e92bd01b05edc064d0ec33f",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0126-proposals.npz": "3667703828879d3624324db88204c7a1f3bcb9f6614c4a6832175884016953e3",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0144-proposals.npz": "ea449d35313a2676c7f4e88dbd77dca73d2705c1ce86f786f54153a32672fa46",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0162-proposals.npz": "5379abd041d5cb72d4953116b25df899061ce041fc04ffea4d102b18cc3d0878",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0180-proposals.npz": "28d81791896d7b1575f4b77ba433f0503d10be654ad79ec5f9038d84cad34e68",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0198-proposals.npz": "e173d33d1cf33ba05fd7863a617e9677304c5b5487a3cb9c133d37aaf3d22ac6",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0216-proposals.npz": "c40718bbcf78019aaac4d9af6e91f5bbb2142985d5aa725f3a4619976dcb15b5",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0234-proposals.npz": "e999d0f26e605025524f534b17c8922416498ec50f9363e1efe199d856c9e03b",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0252-proposals.npz": "1c250014f5d093eeaad8fbcfa539db033ffd621b6dc07e9a74226e1eb9130217",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0270-proposals.npz": "c97fac90ee4613b64de10359f27c20067e9e6f63b8aa1c00f9cf59dacde34ef5",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0287-proposals.npz": "682619ba8feb1dc6703b5413797305cb2e7a03c369952ccb8ae5485ab9133ba4",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0305-proposals.npz": "2245506b8c468f7edda537c37880f638e29f5fd37cfae4577150dcd85231afbc",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0323-proposals.npz": "a28ba55cfe81bc55541a8dadabd98e6a8b45271f009f7055bdf4256947fbb0ca",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0341-proposals.npz": "ddf018d3dbcfbdad90fb9f8841d98f4084a9303b931056e247437b31d808abdf",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0359-proposals.npz": "b7fed18483ad769d5c2458bc27b411efb6e248fbca056f346ffc3ab9ff6fdcc1",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0377-proposals.npz": "bf9787ddeb1cf66db9c0fcaec1a11f5d3e6d0599f40e85aea28c323b10d1066f",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0395-proposals.npz": "3243fde2a011d6f2414c828694c777ab78ec865faa2ad20d022e422c09136a11",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0413-proposals.npz": "3a3f93297370bd9a6cf71e126ea2ac952e190a34f9ac449cfa7700d377396e00",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0431-proposals.npz": "dfcf13defe0ad8518dfbabff71c588df746616b57e24d3eefef631ceb2a1e144",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0449-proposals.npz": "0871f28e53f079737461fc91c3aa7ef17a6107e1a1ab96d3d27bc9a500cdb136",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0467-proposals.npz": "9f0312b880e4b1b42c526bf7a1f542392b33e913119172b88a453c616e6a6fea",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0485-proposals.npz": "91d7ff828f5047c670f88251c2a7ce1281fb1ea16a853f867712bfffb29ca50b",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0503-proposals.npz": "a4da472a74dbec2aa5f19a69a1913e74e01ab0ae1b01ba2e2ce6878a923040ee",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0521-proposals.npz": "03e4d3a6ab196ba12332d15447e89aa2370cd0c8393e9ffcb595311b16089b03",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0539-proposals.npz": "e68382d156212ca0332335d7f7ba0930633a0135ad595cdf492b32d6dad8ed06",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0557-proposals.npz": "b36e58ee821ec6bea095df3706265d2eed21fc44f1444cdc6972c59209e7920d"
+      },
+      "input_plan": {
+        "video_id": "video_10903",
+        "split": "train",
+        "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10903.mp4",
+        "media_sha256": "445339a283b2e2d996c6f047afc397909c0edf591e4c3df4941c0c51d70b7ee7",
+        "cut_frame": 558,
+        "frames": 558,
+        "frame_indices": [
+          0,
+          18,
+          36,
+          54,
+          72,
+          90,
+          108,
+          126,
+          144,
+          162,
+          180,
+          198,
+          216,
+          234,
+          252,
+          270,
+          287,
+          305,
+          323,
+          341,
+          359,
+          377,
+          395,
+          413,
+          431,
+          449,
+          467,
+          485,
+          503,
+          521,
+          539,
+          557
+        ]
+      },
+      "frame_records": 32,
+      "expected_survivors": 1070,
+      "grid_channels": [
+        256,
+        128
+      ],
+      "projection": "piecewise-constant cells; foreground area",
+      "stats": "mean and two-pass population std",
+      "accumulation": "float64",
+      "saved_dtype": "float32",
+      "empty_masks": "keep zero descriptors and explicit count",
+      "seed": 17,
+      "golden_prefix_objects": 8,
+      "golden_absolute_tolerance": 1e-05,
+      "golden_relative_tolerance": 0,
+      "max_body_seconds": 300,
+      "training": false,
+      "annotations_loaded": false,
+      "gpu_or_model_loaded": false,
+      "registered_parameters_added": 0
+    }
+  },
+  "artifacts": [
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\mask-feature-pool-pilot-01\\result.json",
+      "sha256": "e39dc4962da48ef28a6646c14e77d47c4c34f9cc63ccb66f5b591db4c1390379",
+      "report": {
+        "status": "PASS_MASK_STATISTICS_INPUT_PROBE_NOT_QUALITY",
+        "source_commit": "b83012e8b208d170c6402941e9139175f810a0e2",
+        "config_sha256": "75ebe886edadcb2431f6a0e7bfee460ac24234202e90a8000126555665a67e0c",
+        "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\mask-feature-pool-pilot-01\\mask-statistics.npz",
+        "sha256": "717c1c02b0ef7c4a7a89104b89cdcc8926149967457e9747295f8112619c476d",
+        "file_bytes": 2976880,
+        "rows": [
+          {
+            "frame_index": 0,
+            "proposals": 40,
+            "empty_masks": 0,
+            "foreground_pixels": 74153
+          },
+          {
+            "frame_index": 18,
+            "proposals": 39,
+            "empty_masks": 0,
+            "foreground_pixels": 69253
+          },
+          {
+            "frame_index": 36,
+            "proposals": 30,
+            "empty_masks": 0,
+            "foreground_pixels": 73708
+          },
+          {
+            "frame_index": 54,
+            "proposals": 44,
+            "empty_masks": 0,
+            "foreground_pixels": 80473
+          },
+          {
+            "frame_index": 72,
+            "proposals": 43,
+            "empty_masks": 0,
+            "foreground_pixels": 74115
+          },
+          {
+            "frame_index": 90,
+            "proposals": 45,
+            "empty_masks": 0,
+            "foreground_pixels": 76267
+          },
+          {
+            "frame_index": 108,
+            "proposals": 36,
+            "empty_masks": 0,
+            "foreground_pixels": 76684
+          },
+          {
+            "frame_index": 126,
+            "proposals": 31,
+            "empty_masks": 0,
+            "foreground_pixels": 70168
+          },
+          {
+            "frame_index": 144,
+            "proposals": 25,
+            "empty_masks": 0,
+            "foreground_pixels": 71867
+          },
+          {
+            "frame_index": 162,
+            "proposals": 38,
+            "empty_masks": 0,
+            "foreground_pixels": 73687
+          },
+          {
+            "frame_index": 180,
+            "proposals": 36,
+            "empty_masks": 0,
+            "foreground_pixels": 78706
+          },
+          {
+            "frame_index": 198,
+            "proposals": 37,
+            "empty_masks": 0,
+            "foreground_pixels": 75846
+          },
+          {
+            "frame_index": 216,
+            "proposals": 34,
+            "empty_masks": 0,
+            "foreground_pixels": 78692
+          },
+          {
+            "frame_index": 234,
+            "proposals": 35,
+            "empty_masks": 0,
+            "foreground_pixels": 71987
+          },
+          {
+            "frame_index": 252,
+            "proposals": 41,
+            "empty_masks": 0,
+            "foreground_pixels": 70877
+          },
+          {
+            "frame_index": 270,
+            "proposals": 35,
+            "empty_masks": 0,
+            "foreground_pixels": 68167
+          },
+          {
+            "frame_index": 287,
+            "proposals": 41,
+            "empty_masks": 0,
+            "foreground_pixels": 82644
+          },
+          {
+            "frame_index": 305,
+            "proposals": 31,
+            "empty_masks": 0,
+            "foreground_pixels": 68546
+          },
+          {
+            "frame_index": 323,
+            "proposals": 36,
+            "empty_masks": 0,
+            "foreground_pixels": 74267
+          },
+          {
+            "frame_index": 341,
+            "proposals": 29,
+            "empty_masks": 0,
+            "foreground_pixels": 71135
+          },
+          {
+            "frame_index": 359,
+            "proposals": 26,
+            "empty_masks": 0,
+            "foreground_pixels": 90801
+          },
+          {
+            "frame_index": 377,
+            "proposals": 32,
+            "empty_masks": 0,
+            "foreground_pixels": 87338
+          },
+          {
+            "frame_index": 395,
+            "proposals": 25,
+            "empty_masks": 0,
+            "foreground_pixels": 73528
+          },
+          {
+            "frame_index": 413,
+            "proposals": 23,
+            "empty_masks": 0,
+            "foreground_pixels": 71842
+          },
+          {
+            "frame_index": 431,
+            "proposals": 33,
+            "empty_masks": 0,
+            "foreground_pixels": 84207
+          },
+          {
+            "frame_index": 449,
+            "proposals": 31,
+            "empty_masks": 0,
+            "foreground_pixels": 76581
+          },
+          {
+            "frame_index": 467,
+            "proposals": 32,
+            "empty_masks": 0,
+            "foreground_pixels": 81910
+          },
+          {
+            "frame_index": 485,
+            "proposals": 21,
+            "empty_masks": 0,
+            "foreground_pixels": 88654
+          },
+          {
+            "frame_index": 503,
+            "proposals": 21,
+            "empty_masks": 0,
+            "foreground_pixels": 74000
+          },
+          {
+            "frame_index": 521,
+            "proposals": 31,
+            "empty_masks": 0,
+            "foreground_pixels": 71927
+          },
+          {
+            "frame_index": 539,
+            "proposals": 34,
+            "empty_masks": 0,
+            "foreground_pixels": 79642
+          },
+          {
+            "frame_index": 557,
+            "proposals": 35,
+            "empty_masks": 0,
+            "foreground_pixels": 79058
+          }
+        ],
+        "proposals": 1070,
+        "observation_times": 32,
+        "feature_channels": 384,
+        "mean_shape": [
+          1070,
+          384
+        ],
+        "std_shape": [
+          1070,
+          384
+        ],
+        "golden_mean_max_abs": 0.0,
+        "golden_std_max_abs": 0.0,
+        "golden_objects_checked": 8,
+        "rng_unchanged": true,
+        "save_reload_bitwise": true,
+        "fresh_replay_bitwise": false,
+        "reference_result_sha256": null,
+        "seconds": 9.742225999943912,
+        "training": false,
+        "quality_evaluated": false,
+        "annotations_loaded": false,
+        "gpu_or_model_loaded": false,
+        "unique_media_assets": 1,
+        "unique_physical_objects_known": false,
+        "main_process_intervened": false,
+        "registered_parameters_added": 0,
+        "cloud_cost": 0
+      }
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\mask-feature-pool-fresh-replay-01\\result.json",
+      "sha256": "e46874554b6b98249f14a643012a631c39a5c3a316d50da00269c4856af83af7",
+      "report": {
+        "status": "PASS_MASK_STATISTICS_INPUT_PROBE_NOT_QUALITY",
+        "source_commit": "b83012e8b208d170c6402941e9139175f810a0e2",
+        "config_sha256": "75ebe886edadcb2431f6a0e7bfee460ac24234202e90a8000126555665a67e0c",
+        "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\mask-feature-pool-fresh-replay-01\\mask-statistics.npz",
+        "sha256": "717c1c02b0ef7c4a7a89104b89cdcc8926149967457e9747295f8112619c476d",
+        "file_bytes": 2976880,
+        "rows": [
+          {
+            "frame_index": 0,
+            "proposals": 40,
+            "empty_masks": 0,
+            "foreground_pixels": 74153
+          },
+          {
+            "frame_index": 18,
+            "proposals": 39,
+            "empty_masks": 0,
+            "foreground_pixels": 69253
+          },
+          {
+            "frame_index": 36,
+            "proposals": 30,
+            "empty_masks": 0,
+            "foreground_pixels": 73708
+          },
+          {
+            "frame_index": 54,
+            "proposals": 44,
+            "empty_masks": 0,
+            "foreground_pixels": 80473
+          },
+          {
+            "frame_index": 72,
+            "proposals": 43,
+            "empty_masks": 0,
+            "foreground_pixels": 74115
+          },
+          {
+            "frame_index": 90,
+            "proposals": 45,
+            "empty_masks": 0,
+            "foreground_pixels": 76267
+          },
+          {
+            "frame_index": 108,
+            "proposals": 36,
+            "empty_masks": 0,
+            "foreground_pixels": 76684
+          },
+          {
+            "frame_index": 126,
+            "proposals": 31,
+            "empty_masks": 0,
+            "foreground_pixels": 70168
+          },
+          {
+            "frame_index": 144,
+            "proposals": 25,
+            "empty_masks": 0,
+            "foreground_pixels": 71867
+          },
+          {
+            "frame_index": 162,
+            "proposals": 38,
+            "empty_masks": 0,
+            "foreground_pixels": 73687
+          },
+          {
+            "frame_index": 180,
+            "proposals": 36,
+            "empty_masks": 0,
+            "foreground_pixels": 78706
+          },
+          {
+            "frame_index": 198,
+            "proposals": 37,
+            "empty_masks": 0,
+            "foreground_pixels": 75846
+          },
+          {
+            "frame_index": 216,
+            "proposals": 34,
+            "empty_masks": 0,
+            "foreground_pixels": 78692
+          },
+          {
+            "frame_index": 234,
+            "proposals": 35,
+            "empty_masks": 0,
+            "foreground_pixels": 71987
+          },
+          {
+            "frame_index": 252,
+            "proposals": 41,
+            "empty_masks": 0,
+            "foreground_pixels": 70877
+          },
+          {
+            "frame_index": 270,
+            "proposals": 35,
+            "empty_masks": 0,
+            "foreground_pixels": 68167
+          },
+          {
+            "frame_index": 287,
+            "proposals": 41,
+            "empty_masks": 0,
+            "foreground_pixels": 82644
+          },
+          {
+            "frame_index": 305,
+            "proposals": 31,
+            "empty_masks": 0,
+            "foreground_pixels": 68546
+          },
+          {
+            "frame_index": 323,
+            "proposals": 36,
+            "empty_masks": 0,
+            "foreground_pixels": 74267
+          },
+          {
+            "frame_index": 341,
+            "proposals": 29,
+            "empty_masks": 0,
+            "foreground_pixels": 71135
+          },
+          {
+            "frame_index": 359,
+            "proposals": 26,
+            "empty_masks": 0,
+            "foreground_pixels": 90801
+          },
+          {
+            "frame_index": 377,
+            "proposals": 32,
+            "empty_masks": 0,
+            "foreground_pixels": 87338
+          },
+          {
+            "frame_index": 395,
+            "proposals": 25,
+            "empty_masks": 0,
+            "foreground_pixels": 73528
+          },
+          {
+            "frame_index": 413,
+            "proposals": 23,
+            "empty_masks": 0,
+            "foreground_pixels": 71842
+          },
+          {
+            "frame_index": 431,
+            "proposals": 33,
+            "empty_masks": 0,
+            "foreground_pixels": 84207
+          },
+          {
+            "frame_index": 449,
+            "proposals": 31,
+            "empty_masks": 0,
+            "foreground_pixels": 76581
+          },
+          {
+            "frame_index": 467,
+            "proposals": 32,
+            "empty_masks": 0,
+            "foreground_pixels": 81910
+          },
+          {
+            "frame_index": 485,
+            "proposals": 21,
+            "empty_masks": 0,
+            "foreground_pixels": 88654
+          },
+          {
+            "frame_index": 503,
+            "proposals": 21,
+            "empty_masks": 0,
+            "foreground_pixels": 74000
+          },
+          {
+            "frame_index": 521,
+            "proposals": 31,
+            "empty_masks": 0,
+            "foreground_pixels": 71927
+          },
+          {
+            "frame_index": 539,
+            "proposals": 34,
+            "empty_masks": 0,
+            "foreground_pixels": 79642
+          },
+          {
+            "frame_index": 557,
+            "proposals": 35,
+            "empty_masks": 0,
+            "foreground_pixels": 79058
+          }
+        ],
+        "proposals": 1070,
+        "observation_times": 32,
+        "feature_channels": 384,
+        "mean_shape": [
+          1070,
+          384
+        ],
+        "std_shape": [
+          1070,
+          384
+        ],
+        "golden_mean_max_abs": 0.0,
+        "golden_std_max_abs": 0.0,
+        "golden_objects_checked": 8,
+        "rng_unchanged": true,
+        "save_reload_bitwise": true,
+        "fresh_replay_bitwise": true,
+        "reference_result_sha256": "e39dc4962da48ef28a6646c14e77d47c4c34f9cc63ccb66f5b591db4c1390379",
+        "seconds": 9.729344799998216,
+        "training": false,
+        "quality_evaluated": false,
+        "annotations_loaded": false,
+        "gpu_or_model_loaded": false,
+        "unique_media_assets": 1,
+        "unique_physical_objects_known": false,
+        "main_process_intervened": false,
+        "registered_parameters_added": 0,
+        "cloud_cost": 0
+      }
+    },
+    {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\mask-feature-pool-independent-audit-01.json",
+      "sha256": "1d76521e7c5fd9e215420a3d7fc5a935f555c320118318040a5489beb76c4d19",
+      "report": {
+        "status": "PASS_INDEPENDENT_MASK_STATISTICS_INPUT_AUDIT_NOT_QUALITY",
+        "script_sha256": "e9b9237bab56b6a264ae999d2b97bc0f39df1ce5e184119d8ec2ea70fb70b68c",
+        "primary_result_sha256": "e39dc4962da48ef28a6646c14e77d47c4c34f9cc63ccb66f5b591db4c1390379",
+        "fresh_result_sha256": "e46874554b6b98249f14a643012a631c39a5c3a316d50da00269c4856af83af7",
+        "arrays_compared": 9,
+        "all_proposal_ids_boxes_scores_counts_times_exact": true,
+        "proposals": 1070,
+        "frames": 32,
+        "numerical_objects_checked": 8,
+        "golden_mean_max_abs": 0.0,
+        "golden_std_max_abs": 0.0,
+        "annotations_loaded": false,
+        "gpu_or_model_loaded": false,
+        "training": false,
+        "quality_evaluated": false,
+        "unique_media_assets": 1,
+        "seconds": 1.5820228999946266
+      }
+    }
+  ],
+  "total_measured_body_seconds": 21.053593699936755,
+  "scope": {
+    "train_media_assets": 1,
+    "observation_times": 32,
+    "proposals": 1070,
+    "independent_numerical_objects_checked": 8,
+    "all_numeric_rows_independently_recomputed": false,
+    "registered_parameters_added": 0,
+    "quality_evaluated": false,
+    "annotations_loaded": false,
+    "sealed_audit_opened": false,
+    "main_process_intervened": false,
+    "cloud_cost": 0
+  },
+  "limitations": [
+    "Piecewise-constant feature-cell representation, not pixelwise CNN activations or former point interpolation.",
+    "CPU bodies overlap native GPU extraction; no isolated throughput or product latency claim.",
+    "1070 mask proposals are not independent examples or unique physical objects.",
+    "Future trainable readout cost and decision quality have not been measured.",
+    "Wider native extraction still requires terminal coverage, fresh-frame replay and full independent audit."
+  ],
+  "local_verification": {
+    "ruff": "PASS",
+    "cpu_tests_passed": 1292,
+    "cpu_tests_skipped": 1,
+    "cpu_test_seconds": 20.25,
+    "model_dataset_manifests": "PASS",
+    "four_catalogs": "PASS",
+    "dataset_policy": "ALLOW",
+    "read_only_publication_review": "no Critical/Important/Minor findings"
+  }
+}

@@ -1,0 +1,816 @@
+{
+  "status": "PASS_TIMED_MODEL_MASK_TRACKING_PRIMITIVE_NOT_QA",
+  "source_commit": "34bda1424450262fd6c80798b8d9602c40809dfa",
+  "publisher_sha256": "c05184803900572296de0ede326e9dabf6da3484b3ae758a789875a1675ea733",
+  "artifacts": {
+    "pre_review_plan": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-timed-mask-plan-01\\result.json",
+      "sha256": "0ce7f05d9441541d8e87590d7df32cfbf0a7b600f9a255a03f42e42cccd22afa"
+    },
+    "plan": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-timed-mask-plan-02\\result.json",
+      "sha256": "a683e5a6f9772ca1cde37eec10419364707b9f2f295bb282ca62cfab4ce2fee0"
+    },
+    "primary": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-timed-mask-tracks-01\\result.json",
+      "sha256": "1ed0d7e4b3114be53fd6df7359d895f04f2e361579d052231f7c95b4e96d1c05"
+    },
+    "fresh_replay": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-timed-mask-fresh-replay-01\\result.json",
+      "sha256": "9d0fee2b733a5773a4e3f9f8b45899d40cc102e09299e88a6350f7b90a581288"
+    },
+    "audit": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-timed-mask-independent-audit-01.json",
+      "sha256": "794beac65fa1e4a3abd05e3ff3e16a0db503ad7a1e2551a4e9637c615e5a49d8"
+    }
+  },
+  "reports": {
+    "pre_review_plan": {
+      "status": "PASS_ALL_TIMED_MODEL_MASK_QUERIES_NOT_TRACKING",
+      "source_commit": "b3697cee69f847445585302aaf808bd0b8a133d9",
+      "input_plan": {
+        "video_id": "video_10903",
+        "split": "train",
+        "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10903.mp4",
+        "media_sha256": "445339a283b2e2d996c6f047afc397909c0edf591e4c3df4941c0c51d70b7ee7",
+        "cut_frame": 558,
+        "frames": 558,
+        "frame_indices": [
+          0,
+          18,
+          36,
+          54,
+          72,
+          90,
+          108,
+          126,
+          144,
+          162,
+          180,
+          198,
+          216,
+          234,
+          252,
+          270,
+          287,
+          305,
+          323,
+          341,
+          359,
+          377,
+          395,
+          413,
+          431,
+          449,
+          467,
+          485,
+          503,
+          521,
+          539,
+          557
+        ]
+      },
+      "source_hashes": {
+        "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\probe_dynamic_discovery.py": "5bc8c15b4a819b7870c55aacc8cadf629895d031eca3306abadf3bf5ccbf3e08",
+        "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\auto_init02.py": "b9918adcdf5aceed646b6d404a611618fe3026a9edec822beea382dd37e943c0",
+        "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\model\\model.safetensors": "48c14467e5cf9e51870511feb72c89688e82dd74523142c0538b663e193ac2a7",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10903.mp4": "445339a283b2e2d996c6f047afc397909c0edf591e4c3df4941c0c51d70b7ee7",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-temporal-appearance-01\\result.json": "a000672b4500a8b4ae9bfde3f15e06d8103c56e986c2d7d3c17a6a77addf98f4",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-temporal-appearance-01\\effective-config.json": "b86589ce82c5b1bde7657ffa4b1f80abc5464e54f63211a3f2fd728fff774a79",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-temporal-appearance-01\\video_10903.npz": "e79ff7d73ff3b58f04f0d058666768f603823140829141311d63e3cdf18158bb",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-sam2-auto-init-02\\result.json": "75665a07c986dd0a97bff4854912b7a265e91baf49c0c5d45637886e880fa3d1",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-sam2-auto-init-02\\effective-config.json": "371135a2b4ea735f65038312927a02f29541739dee2c7889a738d5c071578dd3",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-sam2-auto-init-02\\video_10903-proposals.npz": "9d4f50c0722a93589d05471f1b94e9c05b72dc7fb49edfc5deb7df63c528f075",
+        "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\model\\config.json": "860aff9751b139d83a4ad7df1e5535416fded533e0ead02625edbefcb9953cce",
+        "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\model\\preprocessor_config.json": "6ebf229ee259368ce4a8d4f2fe893a72b053023710853e257253939e601f583d",
+        "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\model\\processor_config.json": "f8a68e865cfad115c1c2763f3d93eca7b1c622da06da2a9273eb437fb2389b6d",
+        "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\model\\video_preprocessor_config.json": "9fccfe5f464ec38c2f236d0e6a68e95511c80c22132fc2fa4b9f7b65f24fad95",
+        "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2_video\\modeling_sam2_video.py": "7dee3aa3e106a7b00c1f08444be62595e7032b2d67c883c96d1adb42dbcfc748",
+        "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2_video\\processing_sam2_video.py": "f3b430f31dce2fd96100a033f39ab84616e2a55b997d2073290a240e9649cd74",
+        "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2\\image_processing_sam2.py": "765a73f0d8b5fcce9ffe3a6c623534b8ab6df5d7bf15cc50a4d468592e4cce69",
+        "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2_video\\video_processing_sam2_video.py": "4d9b7861dd78f62241036c171fc22a9311c4013459240a26e5b13653163ed0c4",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\result.json": "191796c3e85ffea628c55d45f15cd1a09ecdba546551476e57dd55ce09a7ae0e",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\config.json": "303f0582ae0c7d42c181e9070d66f72e73ac4da62701e837f9299d1d451d1c7c",
+        "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\probe_timed_mask_tracking.py": "2cd88386816948f0e78de02be5f95d3c0006f4cc1171a904286848520c77f475",
+        "C:\\CodexWorktrees\\pretrained-reuse-omni\\src\\tiny_omni_decision\\mask_trajectory_features.py": "a7b82f2f81e1809ba9a8640d0823bf66b4acb58f670767a7d3a5dc95f46298d6",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0000-proposals.npz": "3ceb2615c9b40a161747032c25d7a16117e4b2daa1485aefb4c9ea3ffffb069b",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0018-proposals.npz": "3085d0dcc6b2e5eb015da6e8c357a76603dde47b4ba5e496870346f47630960e",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0036-proposals.npz": "ef5dc7b41a200e0679a7b2abd33ad12168d862cc7e8bb1e270e3c1a9871e2f0f",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0054-proposals.npz": "9c467f32beda6c7b22b8bbb86515aa7a99bdf91a6606147b5de3124445d7c43b",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0072-proposals.npz": "511b4460b7f58656c82383c738f4185757f3a97fb5adea0dc80ee87bb9c91fed",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0090-proposals.npz": "e1ba45629ce62f2fc8dfe47303e7399431df14bd3f4d84003f3bc5ce3e553188",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0108-proposals.npz": "fcf8cdd69c1b34750de3a58c8e5dbc45e152bb002e92bd01b05edc064d0ec33f",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0126-proposals.npz": "3667703828879d3624324db88204c7a1f3bcb9f6614c4a6832175884016953e3",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0144-proposals.npz": "ea449d35313a2676c7f4e88dbd77dca73d2705c1ce86f786f54153a32672fa46",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0162-proposals.npz": "5379abd041d5cb72d4953116b25df899061ce041fc04ffea4d102b18cc3d0878",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0180-proposals.npz": "28d81791896d7b1575f4b77ba433f0503d10be654ad79ec5f9038d84cad34e68",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0198-proposals.npz": "e173d33d1cf33ba05fd7863a617e9677304c5b5487a3cb9c133d37aaf3d22ac6",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0216-proposals.npz": "c40718bbcf78019aaac4d9af6e91f5bbb2142985d5aa725f3a4619976dcb15b5",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0234-proposals.npz": "e999d0f26e605025524f534b17c8922416498ec50f9363e1efe199d856c9e03b",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0252-proposals.npz": "1c250014f5d093eeaad8fbcfa539db033ffd621b6dc07e9a74226e1eb9130217",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0270-proposals.npz": "c97fac90ee4613b64de10359f27c20067e9e6f63b8aa1c00f9cf59dacde34ef5",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0287-proposals.npz": "682619ba8feb1dc6703b5413797305cb2e7a03c369952ccb8ae5485ab9133ba4",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0305-proposals.npz": "2245506b8c468f7edda537c37880f638e29f5fd37cfae4577150dcd85231afbc",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0323-proposals.npz": "a28ba55cfe81bc55541a8dadabd98e6a8b45271f009f7055bdf4256947fbb0ca",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0341-proposals.npz": "ddf018d3dbcfbdad90fb9f8841d98f4084a9303b931056e247437b31d808abdf",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0359-proposals.npz": "b7fed18483ad769d5c2458bc27b411efb6e248fbca056f346ffc3ab9ff6fdcc1",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0377-proposals.npz": "bf9787ddeb1cf66db9c0fcaec1a11f5d3e6d0599f40e85aea28c323b10d1066f",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0395-proposals.npz": "3243fde2a011d6f2414c828694c777ab78ec865faa2ad20d022e422c09136a11",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0413-proposals.npz": "3a3f93297370bd9a6cf71e126ea2ac952e190a34f9ac449cfa7700d377396e00",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0431-proposals.npz": "dfcf13defe0ad8518dfbabff71c588df746616b57e24d3eefef631ceb2a1e144",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0449-proposals.npz": "0871f28e53f079737461fc91c3aa7ef17a6107e1a1ab96d3d27bc9a500cdb136",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0467-proposals.npz": "9f0312b880e4b1b42c526bf7a1f542392b33e913119172b88a453c616e6a6fea",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0485-proposals.npz": "91d7ff828f5047c670f88251c2a7ce1281fb1ea16a853f867712bfffb29ca50b",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0503-proposals.npz": "a4da472a74dbec2aa5f19a69a1913e74e01ab0ae1b01ba2e2ce6878a923040ee",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0521-proposals.npz": "03e4d3a6ab196ba12332d15447e89aa2370cd0c8393e9ffcb595311b16089b03",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0539-proposals.npz": "e68382d156212ca0332335d7f7ba0930633a0135ad595cdf492b32d6dad8ed06",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0557-proposals.npz": "b36e58ee821ec6bea095df3706265d2eed21fc44f1444cdc6972c59209e7920d"
+      },
+      "rows": [
+        {
+          "frame_index": 0,
+          "offset": 0,
+          "count": 40,
+          "nonempty": 40,
+          "bank_sha256": "3ceb2615c9b40a161747032c25d7a16117e4b2daa1485aefb4c9ea3ffffb069b"
+        },
+        {
+          "frame_index": 18,
+          "offset": 40,
+          "count": 39,
+          "nonempty": 39,
+          "bank_sha256": "3085d0dcc6b2e5eb015da6e8c357a76603dde47b4ba5e496870346f47630960e"
+        },
+        {
+          "frame_index": 36,
+          "offset": 79,
+          "count": 30,
+          "nonempty": 30,
+          "bank_sha256": "ef5dc7b41a200e0679a7b2abd33ad12168d862cc7e8bb1e270e3c1a9871e2f0f"
+        },
+        {
+          "frame_index": 54,
+          "offset": 109,
+          "count": 44,
+          "nonempty": 44,
+          "bank_sha256": "9c467f32beda6c7b22b8bbb86515aa7a99bdf91a6606147b5de3124445d7c43b"
+        },
+        {
+          "frame_index": 72,
+          "offset": 153,
+          "count": 43,
+          "nonempty": 43,
+          "bank_sha256": "511b4460b7f58656c82383c738f4185757f3a97fb5adea0dc80ee87bb9c91fed"
+        },
+        {
+          "frame_index": 90,
+          "offset": 196,
+          "count": 45,
+          "nonempty": 45,
+          "bank_sha256": "e1ba45629ce62f2fc8dfe47303e7399431df14bd3f4d84003f3bc5ce3e553188"
+        },
+        {
+          "frame_index": 108,
+          "offset": 241,
+          "count": 36,
+          "nonempty": 36,
+          "bank_sha256": "fcf8cdd69c1b34750de3a58c8e5dbc45e152bb002e92bd01b05edc064d0ec33f"
+        },
+        {
+          "frame_index": 126,
+          "offset": 277,
+          "count": 31,
+          "nonempty": 31,
+          "bank_sha256": "3667703828879d3624324db88204c7a1f3bcb9f6614c4a6832175884016953e3"
+        },
+        {
+          "frame_index": 144,
+          "offset": 308,
+          "count": 25,
+          "nonempty": 25,
+          "bank_sha256": "ea449d35313a2676c7f4e88dbd77dca73d2705c1ce86f786f54153a32672fa46"
+        },
+        {
+          "frame_index": 162,
+          "offset": 333,
+          "count": 38,
+          "nonempty": 38,
+          "bank_sha256": "5379abd041d5cb72d4953116b25df899061ce041fc04ffea4d102b18cc3d0878"
+        },
+        {
+          "frame_index": 180,
+          "offset": 371,
+          "count": 36,
+          "nonempty": 36,
+          "bank_sha256": "28d81791896d7b1575f4b77ba433f0503d10be654ad79ec5f9038d84cad34e68"
+        },
+        {
+          "frame_index": 198,
+          "offset": 407,
+          "count": 37,
+          "nonempty": 37,
+          "bank_sha256": "e173d33d1cf33ba05fd7863a617e9677304c5b5487a3cb9c133d37aaf3d22ac6"
+        },
+        {
+          "frame_index": 216,
+          "offset": 444,
+          "count": 34,
+          "nonempty": 34,
+          "bank_sha256": "c40718bbcf78019aaac4d9af6e91f5bbb2142985d5aa725f3a4619976dcb15b5"
+        },
+        {
+          "frame_index": 234,
+          "offset": 478,
+          "count": 35,
+          "nonempty": 35,
+          "bank_sha256": "e999d0f26e605025524f534b17c8922416498ec50f9363e1efe199d856c9e03b"
+        },
+        {
+          "frame_index": 252,
+          "offset": 513,
+          "count": 41,
+          "nonempty": 41,
+          "bank_sha256": "1c250014f5d093eeaad8fbcfa539db033ffd621b6dc07e9a74226e1eb9130217"
+        },
+        {
+          "frame_index": 270,
+          "offset": 554,
+          "count": 35,
+          "nonempty": 35,
+          "bank_sha256": "c97fac90ee4613b64de10359f27c20067e9e6f63b8aa1c00f9cf59dacde34ef5"
+        },
+        {
+          "frame_index": 287,
+          "offset": 589,
+          "count": 41,
+          "nonempty": 41,
+          "bank_sha256": "682619ba8feb1dc6703b5413797305cb2e7a03c369952ccb8ae5485ab9133ba4"
+        },
+        {
+          "frame_index": 305,
+          "offset": 630,
+          "count": 31,
+          "nonempty": 31,
+          "bank_sha256": "2245506b8c468f7edda537c37880f638e29f5fd37cfae4577150dcd85231afbc"
+        },
+        {
+          "frame_index": 323,
+          "offset": 661,
+          "count": 36,
+          "nonempty": 36,
+          "bank_sha256": "a28ba55cfe81bc55541a8dadabd98e6a8b45271f009f7055bdf4256947fbb0ca"
+        },
+        {
+          "frame_index": 341,
+          "offset": 697,
+          "count": 29,
+          "nonempty": 29,
+          "bank_sha256": "ddf018d3dbcfbdad90fb9f8841d98f4084a9303b931056e247437b31d808abdf"
+        },
+        {
+          "frame_index": 359,
+          "offset": 726,
+          "count": 26,
+          "nonempty": 26,
+          "bank_sha256": "b7fed18483ad769d5c2458bc27b411efb6e248fbca056f346ffc3ab9ff6fdcc1"
+        },
+        {
+          "frame_index": 377,
+          "offset": 752,
+          "count": 32,
+          "nonempty": 32,
+          "bank_sha256": "bf9787ddeb1cf66db9c0fcaec1a11f5d3e6d0599f40e85aea28c323b10d1066f"
+        },
+        {
+          "frame_index": 395,
+          "offset": 784,
+          "count": 25,
+          "nonempty": 25,
+          "bank_sha256": "3243fde2a011d6f2414c828694c777ab78ec865faa2ad20d022e422c09136a11"
+        },
+        {
+          "frame_index": 413,
+          "offset": 809,
+          "count": 23,
+          "nonempty": 23,
+          "bank_sha256": "3a3f93297370bd9a6cf71e126ea2ac952e190a34f9ac449cfa7700d377396e00"
+        },
+        {
+          "frame_index": 431,
+          "offset": 832,
+          "count": 33,
+          "nonempty": 33,
+          "bank_sha256": "dfcf13defe0ad8518dfbabff71c588df746616b57e24d3eefef631ceb2a1e144"
+        },
+        {
+          "frame_index": 449,
+          "offset": 865,
+          "count": 31,
+          "nonempty": 31,
+          "bank_sha256": "0871f28e53f079737461fc91c3aa7ef17a6107e1a1ab96d3d27bc9a500cdb136"
+        },
+        {
+          "frame_index": 467,
+          "offset": 896,
+          "count": 32,
+          "nonempty": 32,
+          "bank_sha256": "9f0312b880e4b1b42c526bf7a1f542392b33e913119172b88a453c616e6a6fea"
+        },
+        {
+          "frame_index": 485,
+          "offset": 928,
+          "count": 21,
+          "nonempty": 21,
+          "bank_sha256": "91d7ff828f5047c670f88251c2a7ce1281fb1ea16a853f867712bfffb29ca50b"
+        },
+        {
+          "frame_index": 503,
+          "offset": 949,
+          "count": 21,
+          "nonempty": 21,
+          "bank_sha256": "a4da472a74dbec2aa5f19a69a1913e74e01ab0ae1b01ba2e2ce6878a923040ee"
+        },
+        {
+          "frame_index": 521,
+          "offset": 970,
+          "count": 31,
+          "nonempty": 31,
+          "bank_sha256": "03e4d3a6ab196ba12332d15447e89aa2370cd0c8393e9ffcb595311b16089b03"
+        },
+        {
+          "frame_index": 539,
+          "offset": 1001,
+          "count": 34,
+          "nonempty": 34,
+          "bank_sha256": "e68382d156212ca0332335d7f7ba0930633a0135ad595cdf492b32d6dad8ed06"
+        },
+        {
+          "frame_index": 557,
+          "offset": 1035,
+          "count": 35,
+          "nonempty": 35,
+          "bank_sha256": "b36e58ee821ec6bea095df3706265d2eed21fc44f1444cdc6972c59209e7920d"
+        }
+      ],
+      "queries": 1070,
+      "unique_time_xy": 994,
+      "observations_not_object_birth": true,
+      "no_candidate_dropped": true,
+      "queries_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-timed-mask-plan-01\\queries.npz",
+      "queries_sha256": "6f8329f97b5855111149640b5403302996962c9d100e87e0f2d985146418e417",
+      "annotations_loaded": false,
+      "training": false,
+      "sealed_audit_opened": false,
+      "seconds": 1.7699249000288546
+    },
+    "plan": {
+      "status": "PASS_ALL_TIMED_MODEL_MASK_QUERIES_NOT_TRACKING",
+      "source_commit": "34bda1424450262fd6c80798b8d9602c40809dfa",
+      "input_plan": {
+        "video_id": "video_10903",
+        "split": "train",
+        "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10903.mp4",
+        "media_sha256": "445339a283b2e2d996c6f047afc397909c0edf591e4c3df4941c0c51d70b7ee7",
+        "cut_frame": 558,
+        "frames": 558,
+        "frame_indices": [
+          0,
+          18,
+          36,
+          54,
+          72,
+          90,
+          108,
+          126,
+          144,
+          162,
+          180,
+          198,
+          216,
+          234,
+          252,
+          270,
+          287,
+          305,
+          323,
+          341,
+          359,
+          377,
+          395,
+          413,
+          431,
+          449,
+          467,
+          485,
+          503,
+          521,
+          539,
+          557
+        ]
+      },
+      "source_hashes": {
+        "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\probe_dynamic_discovery.py": "5bc8c15b4a819b7870c55aacc8cadf629895d031eca3306abadf3bf5ccbf3e08",
+        "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\auto_init02.py": "b9918adcdf5aceed646b6d404a611618fe3026a9edec822beea382dd37e943c0",
+        "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\model\\model.safetensors": "48c14467e5cf9e51870511feb72c89688e82dd74523142c0538b663e193ac2a7",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10903.mp4": "445339a283b2e2d996c6f047afc397909c0edf591e4c3df4941c0c51d70b7ee7",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-temporal-appearance-01\\result.json": "a000672b4500a8b4ae9bfde3f15e06d8103c56e986c2d7d3c17a6a77addf98f4",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-temporal-appearance-01\\effective-config.json": "b86589ce82c5b1bde7657ffa4b1f80abc5464e54f63211a3f2fd728fff774a79",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-temporal-appearance-01\\video_10903.npz": "e79ff7d73ff3b58f04f0d058666768f603823140829141311d63e3cdf18158bb",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-sam2-auto-init-02\\result.json": "75665a07c986dd0a97bff4854912b7a265e91baf49c0c5d45637886e880fa3d1",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-sam2-auto-init-02\\effective-config.json": "371135a2b4ea735f65038312927a02f29541739dee2c7889a738d5c071578dd3",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-sam2-auto-init-02\\video_10903-proposals.npz": "9d4f50c0722a93589d05471f1b94e9c05b72dc7fb49edfc5deb7df63c528f075",
+        "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\model\\config.json": "860aff9751b139d83a4ad7df1e5535416fded533e0ead02625edbefcb9953cce",
+        "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\model\\preprocessor_config.json": "6ebf229ee259368ce4a8d4f2fe893a72b053023710853e257253939e601f583d",
+        "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\model\\processor_config.json": "f8a68e865cfad115c1c2763f3d93eca7b1c622da06da2a9273eb437fb2389b6d",
+        "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01\\model\\video_preprocessor_config.json": "9fccfe5f464ec38c2f236d0e6a68e95511c80c22132fc2fa4b9f7b65f24fad95",
+        "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2_video\\modeling_sam2_video.py": "7dee3aa3e106a7b00c1f08444be62595e7032b2d67c883c96d1adb42dbcfc748",
+        "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2_video\\processing_sam2_video.py": "f3b430f31dce2fd96100a033f39ab84616e2a55b997d2073290a240e9649cd74",
+        "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2\\image_processing_sam2.py": "765a73f0d8b5fcce9ffe3a6c623534b8ab6df5d7bf15cc50a4d468592e4cce69",
+        "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2_video\\video_processing_sam2_video.py": "4d9b7861dd78f62241036c171fc22a9311c4013459240a26e5b13653163ed0c4",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\result.json": "191796c3e85ffea628c55d45f15cd1a09ecdba546551476e57dd55ce09a7ae0e",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\config.json": "303f0582ae0c7d42c181e9070d66f72e73ac4da62701e837f9299d1d451d1c7c",
+        "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\probe_timed_mask_tracking.py": "a994806f0592bb06c373d0d22bcaae707e4c02811a6eea547f882a7d29687a63",
+        "C:\\CodexWorktrees\\pretrained-reuse-omni\\src\\tiny_omni_decision\\mask_trajectory_features.py": "a7b82f2f81e1809ba9a8640d0823bf66b4acb58f670767a7d3a5dc95f46298d6",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0000-proposals.npz": "3ceb2615c9b40a161747032c25d7a16117e4b2daa1485aefb4c9ea3ffffb069b",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0018-proposals.npz": "3085d0dcc6b2e5eb015da6e8c357a76603dde47b4ba5e496870346f47630960e",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0036-proposals.npz": "ef5dc7b41a200e0679a7b2abd33ad12168d862cc7e8bb1e270e3c1a9871e2f0f",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0054-proposals.npz": "9c467f32beda6c7b22b8bbb86515aa7a99bdf91a6606147b5de3124445d7c43b",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0072-proposals.npz": "511b4460b7f58656c82383c738f4185757f3a97fb5adea0dc80ee87bb9c91fed",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0090-proposals.npz": "e1ba45629ce62f2fc8dfe47303e7399431df14bd3f4d84003f3bc5ce3e553188",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0108-proposals.npz": "fcf8cdd69c1b34750de3a58c8e5dbc45e152bb002e92bd01b05edc064d0ec33f",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0126-proposals.npz": "3667703828879d3624324db88204c7a1f3bcb9f6614c4a6832175884016953e3",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0144-proposals.npz": "ea449d35313a2676c7f4e88dbd77dca73d2705c1ce86f786f54153a32672fa46",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0162-proposals.npz": "5379abd041d5cb72d4953116b25df899061ce041fc04ffea4d102b18cc3d0878",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0180-proposals.npz": "28d81791896d7b1575f4b77ba433f0503d10be654ad79ec5f9038d84cad34e68",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0198-proposals.npz": "e173d33d1cf33ba05fd7863a617e9677304c5b5487a3cb9c133d37aaf3d22ac6",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0216-proposals.npz": "c40718bbcf78019aaac4d9af6e91f5bbb2142985d5aa725f3a4619976dcb15b5",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0234-proposals.npz": "e999d0f26e605025524f534b17c8922416498ec50f9363e1efe199d856c9e03b",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0252-proposals.npz": "1c250014f5d093eeaad8fbcfa539db033ffd621b6dc07e9a74226e1eb9130217",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0270-proposals.npz": "c97fac90ee4613b64de10359f27c20067e9e6f63b8aa1c00f9cf59dacde34ef5",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0287-proposals.npz": "682619ba8feb1dc6703b5413797305cb2e7a03c369952ccb8ae5485ab9133ba4",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0305-proposals.npz": "2245506b8c468f7edda537c37880f638e29f5fd37cfae4577150dcd85231afbc",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0323-proposals.npz": "a28ba55cfe81bc55541a8dadabd98e6a8b45271f009f7055bdf4256947fbb0ca",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0341-proposals.npz": "ddf018d3dbcfbdad90fb9f8841d98f4084a9303b931056e247437b31d808abdf",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0359-proposals.npz": "b7fed18483ad769d5c2458bc27b411efb6e248fbca056f346ffc3ab9ff6fdcc1",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0377-proposals.npz": "bf9787ddeb1cf66db9c0fcaec1a11f5d3e6d0599f40e85aea28c323b10d1066f",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0395-proposals.npz": "3243fde2a011d6f2414c828694c777ab78ec865faa2ad20d022e422c09136a11",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0413-proposals.npz": "3a3f93297370bd9a6cf71e126ea2ac952e190a34f9ac449cfa7700d377396e00",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0431-proposals.npz": "dfcf13defe0ad8518dfbabff71c588df746616b57e24d3eefef631ceb2a1e144",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0449-proposals.npz": "0871f28e53f079737461fc91c3aa7ef17a6107e1a1ab96d3d27bc9a500cdb136",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0467-proposals.npz": "9f0312b880e4b1b42c526bf7a1f542392b33e913119172b88a453c616e6a6fea",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0485-proposals.npz": "91d7ff828f5047c670f88251c2a7ce1281fb1ea16a853f867712bfffb29ca50b",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0503-proposals.npz": "a4da472a74dbec2aa5f19a69a1913e74e01ab0ae1b01ba2e2ce6878a923040ee",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0521-proposals.npz": "03e4d3a6ab196ba12332d15447e89aa2370cd0c8393e9ffcb595311b16089b03",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0539-proposals.npz": "e68382d156212ca0332335d7f7ba0930633a0135ad595cdf492b32d6dad8ed06",
+        "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0557-proposals.npz": "b36e58ee821ec6bea095df3706265d2eed21fc44f1444cdc6972c59209e7920d"
+      },
+      "rows": [
+        {
+          "frame_index": 0,
+          "offset": 0,
+          "count": 40,
+          "nonempty": 40,
+          "bank_sha256": "3ceb2615c9b40a161747032c25d7a16117e4b2daa1485aefb4c9ea3ffffb069b"
+        },
+        {
+          "frame_index": 18,
+          "offset": 40,
+          "count": 39,
+          "nonempty": 39,
+          "bank_sha256": "3085d0dcc6b2e5eb015da6e8c357a76603dde47b4ba5e496870346f47630960e"
+        },
+        {
+          "frame_index": 36,
+          "offset": 79,
+          "count": 30,
+          "nonempty": 30,
+          "bank_sha256": "ef5dc7b41a200e0679a7b2abd33ad12168d862cc7e8bb1e270e3c1a9871e2f0f"
+        },
+        {
+          "frame_index": 54,
+          "offset": 109,
+          "count": 44,
+          "nonempty": 44,
+          "bank_sha256": "9c467f32beda6c7b22b8bbb86515aa7a99bdf91a6606147b5de3124445d7c43b"
+        },
+        {
+          "frame_index": 72,
+          "offset": 153,
+          "count": 43,
+          "nonempty": 43,
+          "bank_sha256": "511b4460b7f58656c82383c738f4185757f3a97fb5adea0dc80ee87bb9c91fed"
+        },
+        {
+          "frame_index": 90,
+          "offset": 196,
+          "count": 45,
+          "nonempty": 45,
+          "bank_sha256": "e1ba45629ce62f2fc8dfe47303e7399431df14bd3f4d84003f3bc5ce3e553188"
+        },
+        {
+          "frame_index": 108,
+          "offset": 241,
+          "count": 36,
+          "nonempty": 36,
+          "bank_sha256": "fcf8cdd69c1b34750de3a58c8e5dbc45e152bb002e92bd01b05edc064d0ec33f"
+        },
+        {
+          "frame_index": 126,
+          "offset": 277,
+          "count": 31,
+          "nonempty": 31,
+          "bank_sha256": "3667703828879d3624324db88204c7a1f3bcb9f6614c4a6832175884016953e3"
+        },
+        {
+          "frame_index": 144,
+          "offset": 308,
+          "count": 25,
+          "nonempty": 25,
+          "bank_sha256": "ea449d35313a2676c7f4e88dbd77dca73d2705c1ce86f786f54153a32672fa46"
+        },
+        {
+          "frame_index": 162,
+          "offset": 333,
+          "count": 38,
+          "nonempty": 38,
+          "bank_sha256": "5379abd041d5cb72d4953116b25df899061ce041fc04ffea4d102b18cc3d0878"
+        },
+        {
+          "frame_index": 180,
+          "offset": 371,
+          "count": 36,
+          "nonempty": 36,
+          "bank_sha256": "28d81791896d7b1575f4b77ba433f0503d10be654ad79ec5f9038d84cad34e68"
+        },
+        {
+          "frame_index": 198,
+          "offset": 407,
+          "count": 37,
+          "nonempty": 37,
+          "bank_sha256": "e173d33d1cf33ba05fd7863a617e9677304c5b5487a3cb9c133d37aaf3d22ac6"
+        },
+        {
+          "frame_index": 216,
+          "offset": 444,
+          "count": 34,
+          "nonempty": 34,
+          "bank_sha256": "c40718bbcf78019aaac4d9af6e91f5bbb2142985d5aa725f3a4619976dcb15b5"
+        },
+        {
+          "frame_index": 234,
+          "offset": 478,
+          "count": 35,
+          "nonempty": 35,
+          "bank_sha256": "e999d0f26e605025524f534b17c8922416498ec50f9363e1efe199d856c9e03b"
+        },
+        {
+          "frame_index": 252,
+          "offset": 513,
+          "count": 41,
+          "nonempty": 41,
+          "bank_sha256": "1c250014f5d093eeaad8fbcfa539db033ffd621b6dc07e9a74226e1eb9130217"
+        },
+        {
+          "frame_index": 270,
+          "offset": 554,
+          "count": 35,
+          "nonempty": 35,
+          "bank_sha256": "c97fac90ee4613b64de10359f27c20067e9e6f63b8aa1c00f9cf59dacde34ef5"
+        },
+        {
+          "frame_index": 287,
+          "offset": 589,
+          "count": 41,
+          "nonempty": 41,
+          "bank_sha256": "682619ba8feb1dc6703b5413797305cb2e7a03c369952ccb8ae5485ab9133ba4"
+        },
+        {
+          "frame_index": 305,
+          "offset": 630,
+          "count": 31,
+          "nonempty": 31,
+          "bank_sha256": "2245506b8c468f7edda537c37880f638e29f5fd37cfae4577150dcd85231afbc"
+        },
+        {
+          "frame_index": 323,
+          "offset": 661,
+          "count": 36,
+          "nonempty": 36,
+          "bank_sha256": "a28ba55cfe81bc55541a8dadabd98e6a8b45271f009f7055bdf4256947fbb0ca"
+        },
+        {
+          "frame_index": 341,
+          "offset": 697,
+          "count": 29,
+          "nonempty": 29,
+          "bank_sha256": "ddf018d3dbcfbdad90fb9f8841d98f4084a9303b931056e247437b31d808abdf"
+        },
+        {
+          "frame_index": 359,
+          "offset": 726,
+          "count": 26,
+          "nonempty": 26,
+          "bank_sha256": "b7fed18483ad769d5c2458bc27b411efb6e248fbca056f346ffc3ab9ff6fdcc1"
+        },
+        {
+          "frame_index": 377,
+          "offset": 752,
+          "count": 32,
+          "nonempty": 32,
+          "bank_sha256": "bf9787ddeb1cf66db9c0fcaec1a11f5d3e6d0599f40e85aea28c323b10d1066f"
+        },
+        {
+          "frame_index": 395,
+          "offset": 784,
+          "count": 25,
+          "nonempty": 25,
+          "bank_sha256": "3243fde2a011d6f2414c828694c777ab78ec865faa2ad20d022e422c09136a11"
+        },
+        {
+          "frame_index": 413,
+          "offset": 809,
+          "count": 23,
+          "nonempty": 23,
+          "bank_sha256": "3a3f93297370bd9a6cf71e126ea2ac952e190a34f9ac449cfa7700d377396e00"
+        },
+        {
+          "frame_index": 431,
+          "offset": 832,
+          "count": 33,
+          "nonempty": 33,
+          "bank_sha256": "dfcf13defe0ad8518dfbabff71c588df746616b57e24d3eefef631ceb2a1e144"
+        },
+        {
+          "frame_index": 449,
+          "offset": 865,
+          "count": 31,
+          "nonempty": 31,
+          "bank_sha256": "0871f28e53f079737461fc91c3aa7ef17a6107e1a1ab96d3d27bc9a500cdb136"
+        },
+        {
+          "frame_index": 467,
+          "offset": 896,
+          "count": 32,
+          "nonempty": 32,
+          "bank_sha256": "9f0312b880e4b1b42c526bf7a1f542392b33e913119172b88a453c616e6a6fea"
+        },
+        {
+          "frame_index": 485,
+          "offset": 928,
+          "count": 21,
+          "nonempty": 21,
+          "bank_sha256": "91d7ff828f5047c670f88251c2a7ce1281fb1ea16a853f867712bfffb29ca50b"
+        },
+        {
+          "frame_index": 503,
+          "offset": 949,
+          "count": 21,
+          "nonempty": 21,
+          "bank_sha256": "a4da472a74dbec2aa5f19a69a1913e74e01ab0ae1b01ba2e2ce6878a923040ee"
+        },
+        {
+          "frame_index": 521,
+          "offset": 970,
+          "count": 31,
+          "nonempty": 31,
+          "bank_sha256": "03e4d3a6ab196ba12332d15447e89aa2370cd0c8393e9ffcb595311b16089b03"
+        },
+        {
+          "frame_index": 539,
+          "offset": 1001,
+          "count": 34,
+          "nonempty": 34,
+          "bank_sha256": "e68382d156212ca0332335d7f7ba0930633a0135ad595cdf492b32d6dad8ed06"
+        },
+        {
+          "frame_index": 557,
+          "offset": 1035,
+          "count": 35,
+          "nonempty": 35,
+          "bank_sha256": "b36e58ee821ec6bea095df3706265d2eed21fc44f1444cdc6972c59209e7920d"
+        }
+      ],
+      "queries": 1070,
+      "unique_time_xy": 994,
+      "observations_not_object_birth": true,
+      "no_candidate_dropped": true,
+      "queries_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-timed-mask-plan-02\\queries.npz",
+      "queries_sha256": "6f8329f97b5855111149640b5403302996962c9d100e87e0f2d985146418e417",
+      "annotations_loaded": false,
+      "training": false,
+      "sealed_audit_opened": false,
+      "seconds": 2.087001300067641
+    },
+    "primary": {
+      "status": "PASS_ALL_TIMED_TRACKS_NOT_QA",
+      "pid": 51224,
+      "started_utc": "2026-10-14T04:32:23.620678+00:00",
+      "source_commit": "34bda1424450262fd6c80798b8d9602c40809dfa",
+      "annotations_loaded": false,
+      "training": false,
+      "cloud_cost": 0,
+      "config_sha256": "c13d3796889ef52e288ef84fba900cab7be4c85af039f27265564c6c4a710925",
+      "state_before": "3c92ad70854f549bc46fde282f4248e949d733fadffcfa2b060afada2ea6dd4a",
+      "parameters": 31072327,
+      "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+      "torch": "2.6.0+cu124",
+      "cuda": "12.4",
+      "python": "3.11.9",
+      "platform": "Windows-10-10.0.26300-SP0",
+      "numpy": "2.4.6",
+      "av": "18.1.0",
+      "loader_backend": "native PyTorch CUDA on Windows",
+      "preflight_free_bytes": 16008609792,
+      "forward_seconds": 52.15029429993592,
+      "state_after": "3c92ad70854f549bc46fde282f4248e949d733fadffcfa2b060afada2ea6dd4a",
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-timed-mask-tracks-01\\video_10903.npz",
+      "sha256": "8ba21ebd2fa28b7cc13a8bfc2f40846f8854173658186f0a7bf5a23c3c032732",
+      "query_count": 1070,
+      "original_frames": 558,
+      "retained_times": 32,
+      "file_bytes": 11440750,
+      "arrays_readback_bitwise": true,
+      "peak_torch_bytes": 5849186304,
+      "peak_reserved_bytes": 8319401984,
+      "tracker_cpu_rng_consumed": true,
+      "appearance_rng_unchanged": true,
+      "seconds": 63.01539059996139,
+      "ended_utc": "2026-10-14T04:33:26.647260+00:00"
+    },
+    "fresh_replay": {
+      "status": "PASS_ALL_TIMED_TRACKS_NOT_QA",
+      "pid": 49904,
+      "started_utc": "2026-10-14T04:33:51.994225+00:00",
+      "source_commit": "34bda1424450262fd6c80798b8d9602c40809dfa",
+      "annotations_loaded": false,
+      "training": false,
+      "cloud_cost": 0,
+      "config_sha256": "c13d3796889ef52e288ef84fba900cab7be4c85af039f27265564c6c4a710925",
+      "reference_result_sha256": "1ed0d7e4b3114be53fd6df7359d895f04f2e361579d052231f7c95b4e96d1c05",
+      "reference_config_sha256": "c13d3796889ef52e288ef84fba900cab7be4c85af039f27265564c6c4a710925",
+      "reference_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-timed-mask-tracks-01",
+      "state_before": "3c92ad70854f549bc46fde282f4248e949d733fadffcfa2b060afada2ea6dd4a",
+      "parameters": 31072327,
+      "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+      "torch": "2.6.0+cu124",
+      "cuda": "12.4",
+      "python": "3.11.9",
+      "platform": "Windows-10-10.0.26300-SP0",
+      "numpy": "2.4.6",
+      "av": "18.1.0",
+      "loader_backend": "native PyTorch CUDA on Windows",
+      "preflight_free_bytes": 16008609792,
+      "forward_seconds": 52.55600460001733,
+      "fresh_replay_all_arrays_bitwise": true,
+      "state_after": "3c92ad70854f549bc46fde282f4248e949d733fadffcfa2b060afada2ea6dd4a",
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-timed-mask-fresh-replay-01\\video_10903.npz",
+      "sha256": "8ba21ebd2fa28b7cc13a8bfc2f40846f8854173658186f0a7bf5a23c3c032732",
+      "query_count": 1070,
+      "original_frames": 558,
+      "retained_times": 32,
+      "file_bytes": 11440750,
+      "arrays_readback_bitwise": true,
+      "peak_torch_bytes": 5849186304,
+      "peak_reserved_bytes": 8319401984,
+      "tracker_cpu_rng_consumed": true,
+      "appearance_rng_unchanged": true,
+      "seconds": 63.47633269999642,
+      "ended_utc": "2026-10-14T04:34:55.480277+00:00"
+    },
+    "audit": {
+      "status": "PASS_INDEPENDENT_TIMED_TRACKING_AUDIT_NOT_QA",
+      "script_sha256": "3f2f95d18d73d8cdb1caa73bc085a74e01721b988d252cf671c5a19d7d65f869",
+      "query_plan_sha256": "a683e5a6f9772ca1cde37eec10419364707b9f2f295bb282ca62cfab4ce2fee0",
+      "primary_result_sha256": "1ed0d7e4b3114be53fd6df7359d895f04f2e361579d052231f7c95b4e96d1c05",
+      "fresh_result_sha256": "9d0fee2b733a5773a4e3f9f8b45899d40cc102e09299e88a6350f7b90a581288",
+      "queries": 1070,
+      "unique_time_xy": 994,
+      "original_frames": 558,
+      "retained_times": 32,
+      "arrays_compared": 15,
+      "on_or_after_observation_pairs": 18697,
+      "before_observation_pairs": 15543,
+      "max_seed_time_error_pixels": 1.1012382507324219,
+      "max_seed_time_error_not_quality": true,
+      "annotations_loaded": false,
+      "training": false,
+      "gpu_or_model_loaded": false,
+      "seconds": 2.2518600000767037
+    }
+  },
+  "measured_body_seconds_all_attempts": 132.600509500131,
+  "forward_seconds_sum": 104.70629889995325,
+  "training": false,
+  "annotations_loaded": false,
+  "cloud_cost": 0,
+  "model_quality_evaluated": false,
+  "code_review": "both important admission gaps fixed before GPU; no remaining important",
+  "local_checks": {
+    "ruff": "pass",
+    "cpu_passed": 1139,
+    "cpu_skipped": 1,
+    "cpu_seconds": 16.41,
+    "manifests": "pass"
+  },
+  "next_gate": "input-only candidate memory/container association; not a new failed readout fit"
+}

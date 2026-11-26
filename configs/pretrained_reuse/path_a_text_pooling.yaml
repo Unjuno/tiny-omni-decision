@@ -1,0 +1,35 @@
+schema_version: 1
+experiment_id: path-a-text-pooling-seed17-v0
+seed: 17
+dataset:
+  source_id: n4ze3m/typed-decisions-synth
+  revision: 5ece89a225b23c4cd5c4bab5735a0819d61dd7d5
+  train_file: C:/CodexArtifacts/pretrained-reuse-r2/text/train.jsonl
+  validation_file: C:/CodexArtifacts/pretrained-reuse-r2/text/validation.jsonl
+  manifest: manifests/candidates/typed-synth-validation.yaml
+  grouping: upstream state_id and normalized input content
+  sealed_audit_loaded: false
+encoder:
+  repo_id: sentence-transformers/paraphrase-MiniLM-L3-v2
+  revision: 4ca70771034acceecb2e72475f72050fcdde4ddc
+  frozen: true
+  max_length: 256
+  pooling_variants:
+    final_layer_masked_mean: "existing baseline control"
+    middle_layer_masked_mean: "hidden_states[-2], second of three transformer blocks"
+    final_layer_first_token: "raw first-token vector"
+readout:
+  architecture: shared_candidate_mlp
+  input_features: [context, option, absolute_difference, elementwise_product]
+  hidden_size: 128
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  epochs: 8
+  batch_questions: 64
+  checkpoint_selection: minimum_validation_nll
+device: cuda
+notes:
+  - Same split IDs, option lists, targets, seed, readout, optimizer, and budget are used for all pooling variants.
+  - This is a controlled synthetic English text representation probe, not a real-world text quality claim.
+  - Validation is used for checkpoint selection; no sealed or legacy final evaluation is loaded.

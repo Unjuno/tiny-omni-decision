@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-29",
+  "source": "https://groups.inf.ed.ac.uk/ami/AMICorpusMirror/amicorpus/",
+  "source_license_statement": "Official AMI pages state released signals, transcripts, and some annotations are CC BY 4.0; this is not a legal review of individual recordings.",
+  "existing_ami_work_reused": {
+    "pr": 19,
+    "state": "open_draft",
+    "head_sha": "406f003a128a7991ec39dcb15608b381f003add4",
+    "report": "docs/pretrained_reuse/R2_AMI_CROSSMODAL_SPEAKER_MATCH_SCREEN_20261021.md",
+    "external_artifact_root": "C:\\CodexArtifacts\\pretrained-reuse-r2\\ami-av-probe-20261021",
+    "reported_candidates": {"train": 214, "validation": 111},
+    "train_parent_groups": 4,
+    "validation_parent_groups": 5,
+    "reported_multipt_audio_video_observations": 288,
+    "known_train_visibility_failures_in_sample": 2,
+    "train_presence_review": {
+      "artifact": "C:\\CodexArtifacts\\pretrained-reuse-r2\\ami-av-probe-20261021\\train-visual-qa-all-sa-20261021\\train-visual-qa-review-all-sa-20261021.json",
+      "review_sha256": "E344E81BC6B60DA0D65C5A96387225C47C5A0F7AFD6F2BD5DC43E4EF096F971F",
+      "input_manifest_sha256": "5A1BF48D478C889002C2C238E0CED7F376F2494EF490848A54A01C8FA2B61882",
+      "rows": 213,
+      "counts": {"face_visibly_framed": 168, "limited_or_ambiguous": 21, "no_clear_person": 24},
+      "method_limit": "single-reviewer qualitative still-frame presence screen; not speaker identity, speech alignment, synchronization, label validity, or prevalence"
+    },
+    "status": "no_model_quality_run; visibility and validation coverage gates open"
+  },
+  "development_validation_visibility_review": {
+    "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\ami-av-development-visual-review-attempt-03",
+    "source_pr_head": "406f003a128a7991ec39dcb15608b381f003add4",
+    "generator_sha256": "d92bba7a5703aed596629743380b699a7f62d0520cfc079ca64d5278b497a8e0",
+    "test_sha256": "4bf51799abf14d14e50311d1c1d5aa02fcc2d46dca6528b1ff2eb3906c525929",
+    "manifest_sha256": "466975275a3ffeb6f9252ed90d43c26e2f2013a8481eaea8c4cff870cfd6dbdc",
+    "review_sha256": "c1d8775e92374139129a38fd51154278c03229f20f138b8940bc54f7dc26c1a5",
+    "input_manifest_hash_matches": true,
+    "candidate_identity_set_match": {"expected": 111, "actual": 111, "missing": 0, "extra": 0, "key": "meeting, agent, index, start, end"},
+    "sample_count": 111,
+    "unique_sample_ids": 111,
+    "development_meetings": {"ES2003a": 22, "ES2011a": 16, "IS1008a": 16, "TS3004a": 30, "TS3006a": 27},
+    "frames_per_interval": 3,
+    "frames_present_and_decodable": 333,
+    "contact_sheets_hash_valid": 12,
+    "counts": {"clear": 69, "limited": 6, "no_clear_face": 2, "no_clear_person": 34},
+    "review_status": "MANUALLY_ADJUDICATED_DEVELOPMENT_ONLY",
+    "review_scope": "single visual pass over three sparse frames per candidate interval; target-camera visibility only",
+    "limitations": ["does not establish speaking identity", "does not measure audio-video synchronization", "does not check whether another camera shows the speaker"],
+    "rows_filtered": 0,
+    "evaluation_or_sealed_audit_opened": false,
+    "model_predictions_or_quality_metrics": false,
+    "interpretation": "42/111 target-camera intervals lack a clear face, including 34 with no discernible person; preserve all rows and assess task validity with this limitation."
+  },
+  "method": {
+    "directory_listings": true,
+    "media_head_requests": true,
+    "full_media_files_saved": false,
+    "media_streamed_for_cpu_decoder_smoke": [
+      "ES2002a.Closeup1.rm",
+      "ES2002a.Mix-Lapel.rm",
+      "ES2002a.Lapel-0.rm"
+    ],
+    "feature_cache_written": false,
+    "gpu_used": false
+  },
+  "manual_annotations_archive_preflight": {
+    "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\ami-av-probe-20261021\\ami_public_manual_1.6.2.zip",
+    "release": "AMI manual annotations v1.6.2",
+    "bytes": 22887865,
+    "sha256": "b56e5babb2496b8795deeeda7e71178d7fbc9963f94276cf2a3f4b56ebbc9f9d",
+    "opened_partitions": ["train: ES2002a", "development_validation: ES2011a"],
+    "sealed_or_evaluation_annotations_opened": false,
+    "es2011a_validation_segments": {
+      "A": {"channel": 0, "segments": 91, "first_interval_seconds": [33.802, 44.656], "lapel_track": "Lapel-0", "speech_rms": 0.000915, "preceding_1s_rms": 0.001398},
+      "B": {"channel": 1, "segments": 44, "first_interval_seconds": [84.791, 85.572], "lapel_track": "Lapel-1", "speech_rms": 0.003281, "preceding_1s_rms": 0.002297},
+      "C": {"channel": 2, "segments": 67, "first_interval_seconds": [85.808, 86.665], "lapel_track": "Lapel-2", "speech_rms": 0.004194, "preceding_1s_rms": 0.002318},
+      "D": {"channel": 3, "segments": 61, "first_interval_seconds": [64.976, 77.9], "lapel_track": "Lapel-3", "speech_rms": 0.007298, "preceding_1s_rms": 0.000668}
+    },
+    "media_persisted": false,
+    "model_predictions_or_quality_metrics": false,
+    "interpretation": "Validation transcript source exists; this four-interval smoke is not a cohort audit. Preserve the low-energy channel-0 example for review."
+  },
+  "meetings": [
+    {
+      "meeting": "ES2002a",
+      "partition": "train",
+      "media": [
+        {"path": "audio/ES2002a.Mix-Lapel.rm", "content_length_bytes": 2660658, "etag": "\"289932-3f388a94364c0\""},
+        {"path": "video/ES2002a.Closeup1.rm", "content_length_bytes": 7988839, "etag": "\"79e667-3f68dd0246640\""},
+        {"path": "video/ES2002a.Closeup2.rm", "content_length_bytes": 8084050, "etag": "\"7b5a52-3f68e11b51140\""},
+        {"path": "video/ES2002a.Closeup3.rm", "content_length_bytes": 8080447, "etag": "\"7b4c3f-3f68e5308b340\""},
+        {"path": "video/ES2002a.Closeup4.rm", "content_length_bytes": 8092837, "etag": "\"7b7ca5-3f68e95e90fc0\""}
+      ],
+      "media_total_bytes": 34906831,
+      "speakerseg_annotation": {
+        "path": "browsable/ES2002a.speakersegAll.xml",
+        "retrieved_in_memory": true,
+        "saved_to_disk": false,
+        "raw_sha256": "EA6417A3672A4DD1A100FDDB360749FC0D1E27AD52F9A5079AAC2FBA6888B81B",
+        "raw_bytes": 51401,
+        "interval_count": 517,
+        "channels": ["0", "1", "2", "3"],
+        "nonempty_textlabel_count": 0
+      },
+      "decoder_smoke": {
+        "video": {"codec": "rv40", "width": 360, "height": 284, "fps": 15, "duration_seconds": 1230.321, "start_seconds": 0, "decoded_frame_sha256": "a3be406da1cee3ffd175f1a20c2c60f9057cc33e4bf16fe144dd71952d86159f"},
+        "audio": {"codec": "sipr", "sample_rate_hz": 16000, "channels": 1, "duration_seconds": 1272.96, "start_seconds": 0, "decoded_frame_sha256": "5f48b7357acaeef9046a423c6bdebbf3ea62e643a39941bdcebc49626a7e8210"},
+        "individual_audio_track_probe": {"path": "audio/ES2002a.Lapel-0.rm", "http_status": 200, "content_length_bytes": 2660658, "etag": "\"289932-3f389de7dfdc0\"", "codec": "sipr", "sample_rate_hz": 16000, "channels": 1, "first_frame_samples": 160, "first_frame_sha256": "adeecefccf7184a502e0addee766f1d2a8f140cac12591bb1e6e916099ad450d", "full_media_saved": false, "channel_mapping_verified": true, "mapping": "official per-channel naming plus ES2002a meetings.xml/signal table: channel 0 -> MEE006 / Closeup1", "known_issue": "official data-problems table reports MEE006's headset mic was worn incorrectly; lapel mic recording is okay", "turn_label_and_temporal_alignment_verified": false},
+        "all_four_video_durations_seconds": [1230.321, 1248.161, 1248.641, 1248.4]
+      }
+    },
+    {
+      "meeting": "ES2011a",
+      "partition": "validation",
+      "media": [
+        {"path": "audio/ES2011a.Mix-Lapel.rm", "content_length_bytes": 2329668, "etag": "\"238c44-3fc2d115a7240\""},
+        {"path": "video/ES2011a.Closeup1.rm", "content_length_bytes": 7228405, "etag": "\"6e4bf5-3fb62fef57d40\""},
+        {"path": "video/ES2011a.Closeup2.rm", "content_length_bytes": 7233139, "etag": "\"6e5e73-3fb63387a3880\""},
+        {"path": "video/ES2011a.Closeup3.rm", "content_length_bytes": 7224529, "etag": "\"6e3cd1-3fb6373025a00\""},
+        {"path": "video/ES2011a.Closeup4.rm", "content_length_bytes": 7222991, "etag": "\"6e36cf-3fb63acf1e500\""}
+      ],
+      "media_total_bytes": 31238732,
+      "speakerseg_annotation": {
+        "path": "browsable/ES2011a.speakersegAll.xml",
+        "retrieved_in_memory": true,
+        "saved_to_disk": false,
+        "raw_sha256": "11983525D1DBFDBC10F880D1D76A2BEC09CC3BB539D45BB60619C91AB89E47AD",
+        "raw_bytes": 56696,
+        "interval_count": 569,
+        "channels": ["0", "1", "2", "3", "4"],
+        "nonempty_textlabel_count": 0
+      },
+      "manual_transcript_in_browsable_directory": false,
+      "directory_content_length_rounded": {
+        "speakersegAll.xml": "55K"
+      }
+    },
+    {
+      "meeting": "ES2004a",
+      "partition": "evaluation_candidate_unexposed",
+      "media": [
+        {"path": "audio/ES2004a.Mix-Lapel.rm", "content_length_bytes": 2195266, "etag": "\"217f42-3f388ec330380\""},
+        {"path": "video/ES2004a.Closeup1.rm", "content_length_bytes": 7481731, "etag": "\"722983-3f69af9793a40\""},
+        {"path": "video/ES2004a.Closeup2.rm", "content_length_bytes": 7510616, "etag": "\"729a58-3f69b66408480\""},
+        {"path": "video/ES2004a.Closeup3.rm", "content_length_bytes": 7496629, "etag": "\"7263b5-3f69bd3171100\""},
+        {"path": "video/ES2004a.Closeup4.rm", "content_length_bytes": 7502316, "etag": "\"7279ec-3f69c410f8840\""}
+      ],
+      "media_total_bytes": 32186558,
+      "speakerseg_annotation": {
+        "path": "browsable/ES2004a.speakersegAll.xml",
+        "retrieved_in_memory": false,
+        "saved_to_disk": false,
+        "listings_only": true
+      }
+    },
+    {
+      "meeting": "ES2014a",
+      "partition": "evaluation_exposed_quarantine_group",
+      "speakerseg_annotation": {
+        "path": "browsable/ES2014a.speakersegAll.xml",
+        "retrieved_in_memory": true,
+        "saved_to_disk": false,
+        "response_text_utf8_reencoded_bytes": 49529,
+        "raw_transfer_hash": "not_computed",
+        "observed_interval_elements": 496,
+        "model_predictions_or_metrics": false,
+        "selection_used": false,
+        "disposition": "quarantine_entire_ES2014_group_from_future_locked_evaluation"
+      }
+    },
+    {
+      "meeting": "ES2003a",
+      "partition": "validation_candidate_rejected_incomplete_video",
+      "audio_content_length_bytes": 2383830,
+      "video": [
+        {"file": "ES2003a.Closeup1.rm", "status": 404},
+        {"file": "ES2003a.Closeup2.rm", "content_length_bytes": 7292933},
+        {"file": "ES2003a.Closeup3.rm", "content_length_bytes": 7282149},
+        {"file": "ES2003a.Closeup4.rm", "content_length_bytes": 7299548}
+      ],
+      "disposition": "not_selected"
+    }
+  ],
+  "candidate_three_submeeting_total_bytes": 98332121,
+  "r2m_status": "REVIEW_NOT_ADMITTED",
+  "unresolved_gates": [
+    "low-size speakersegAll channel 4 semantics (use manual transcript segments instead)",
+    "full validation-cohort turn-to-audio alignment, speaker identity, and AV synchronization",
+    "target-camera visibility in 42 of 111 reviewed development intervals; preserve rows and assess task validity without filtering",
+    "synchronization within the common stream interval",
+    "suitability of 360x284 15-fps low-size video for mouth/action cues",
+    "audio-only/video-only/joint/mismatched controls demonstrating both-input necessity",
+    "too few independent scenario groups for a robust validation and locked evaluation",
+    "local storage reserve below 2 GiB"
+  ],
+  "runtime_environment": {
+    "python": "3.11",
+    "pyav": "18.1.0",
+    "ffmpeg_cli_available": false,
+    "torch_gpu_used": false
+  }
+}

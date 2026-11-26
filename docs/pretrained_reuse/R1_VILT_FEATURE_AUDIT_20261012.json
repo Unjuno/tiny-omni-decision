@@ -1,0 +1,161 @@
+{
+  "status": "PASS_FEATURE_PATH_ONLY",
+  "source_commit": "a5d3a335c136e79bef4e8cc6e8814c8be2e32c09",
+  "checkpoint_sha256": "4d5f3409947b0369487ece7c5868f0040ceb67d25735dbb4ac5e99e03bab3a19",
+  "questions": {
+    "color": "What color are the objects?",
+    "texture": "What texture do the objects have?",
+    "count": "How many objects are there?",
+    "shape": "What shape are the objects?"
+  },
+  "question_token_lengths": [
+    8,
+    9,
+    8,
+    8
+  ],
+  "answer_coverage": {
+    "color": {
+      "supported": [
+        "gray",
+        "red",
+        "blue",
+        "green",
+        "brown",
+        "purple",
+        "yellow",
+        "pink",
+        "orange"
+      ],
+      "unsupported": [
+        "cyan"
+      ]
+    },
+    "texture": {
+      "supported": [
+        "rubber",
+        "metal",
+        "checkered",
+        "wave",
+        "brick",
+        "star",
+        "circles"
+      ],
+      "unsupported": [
+        "emojis",
+        "zigzag",
+        "chessboard"
+      ]
+    },
+    "count": {
+      "supported": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10"
+      ],
+      "unsupported": []
+    },
+    "shape": {
+      "supported": [
+        "monkey",
+        "cone",
+        "star",
+        "diamond",
+        "cylinder"
+      ],
+      "unsupported": [
+        "cube",
+        "sphere",
+        "torus",
+        "teapot",
+        "gear"
+      ]
+    }
+  },
+  "records": [
+    {
+      "id": "CLEVR_new_000000",
+      "image_sha256": "35124371d35f595370acb4845341cf8481dccba94b406a828a43ea7615ef3b3f",
+      "input_shapes": {
+        "pixel_values": [
+          4,
+          3,
+          384,
+          512
+        ],
+        "pixel_mask": [
+          4,
+          384,
+          512
+        ],
+        "input_ids": [
+          4,
+          9
+        ],
+        "token_type_ids": [
+          4,
+          9
+        ],
+        "attention_mask": [
+          4,
+          9
+        ]
+      },
+      "forward_seconds": 0.29940749995876104,
+      "feature_sha256": "e2bec30276d8d9577cd2ecbb888484b100f045ed813a233721139a28281823cb"
+    },
+    {
+      "id": "CLEVR_new_000001",
+      "image_sha256": "0642dc58a22053cae62b6fe1f01a323eb6d530641cc7c4e929ace976283f1b80",
+      "input_shapes": {
+        "pixel_values": [
+          4,
+          3,
+          384,
+          512
+        ],
+        "pixel_mask": [
+          4,
+          384,
+          512
+        ],
+        "input_ids": [
+          4,
+          9
+        ],
+        "token_type_ids": [
+          4,
+          9
+        ],
+        "attention_mask": [
+          4,
+          9
+        ]
+      },
+      "forward_seconds": 0.02957610005978495,
+      "feature_sha256": "c397860f38ebd583354264f1bb499e3c08bfc5cd8dca942cc4417933498b7d52"
+    }
+  ],
+  "feature_shape": [
+    2,
+    4,
+    768
+  ],
+  "file_sha256": "4137a4ef35ecf65a7198b74c71da200b161a97d22291566b247d0feb445244ee",
+  "total_loaded_parameters": 117588537,
+  "feature_encoder_parameters": 111595008,
+  "peak_vram_bytes": 531295232,
+  "projected_8424_train_512_val_4questions_array_bytes": 109805568,
+  "estimated_full_forward_seconds": 264.2920301342383,
+  "estimation_limitation": "One warm batch; excludes decode/I/O and throughput variation.",
+  "training": false,
+  "quality_evaluation": false,
+  "cost_usd": 0
+}

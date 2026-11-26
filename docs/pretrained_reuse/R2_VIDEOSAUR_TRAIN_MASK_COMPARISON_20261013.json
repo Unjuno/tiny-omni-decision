@@ -1,0 +1,89 @@
+{
+  "videos": 8,
+  "later_points": 164,
+  "frame_alignment_exact": true,
+  "static_geometry_exact": true,
+  "per_video": [
+    {
+      "video_id": "video_10103",
+      "points": 15,
+      "delta": {
+        "fixed_iou": 0.23787459239302775,
+        "oracle_iou": 0.19144559034577535,
+        "static_iou": 0.0
+      }
+    },
+    {
+      "video_id": "video_10186",
+      "points": 21,
+      "delta": {
+        "fixed_iou": 0.03665009409399923,
+        "oracle_iou": 0.14684730412334077,
+        "static_iou": 0.0
+      }
+    },
+    {
+      "video_id": "video_10212",
+      "points": 35,
+      "delta": {
+        "fixed_iou": 0.1222287263697134,
+        "oracle_iou": 0.32947048374225313,
+        "static_iou": 0.0
+      }
+    },
+    {
+      "video_id": "video_10387",
+      "points": 18,
+      "delta": {
+        "fixed_iou": -0.0010519803413178172,
+        "oracle_iou": 0.03906278721658564,
+        "static_iou": 0.0
+      }
+    },
+    {
+      "video_id": "video_1087",
+      "points": 19,
+      "delta": {
+        "fixed_iou": 0.07959333627855898,
+        "oracle_iou": 0.049861605236870145,
+        "static_iou": 0.0
+      }
+    },
+    {
+      "video_id": "video_10886",
+      "points": 20,
+      "delta": {
+        "fixed_iou": 0.04760788941723149,
+        "oracle_iou": 0.1376514340751201,
+        "static_iou": 0.0
+      }
+    },
+    {
+      "video_id": "video_10894",
+      "points": 18,
+      "delta": {
+        "fixed_iou": 0.021709975618089475,
+        "oracle_iou": 0.1686085862215094,
+        "static_iou": 0.0
+      }
+    },
+    {
+      "video_id": "video_10903",
+      "points": 18,
+      "delta": {
+        "fixed_iou": 0.06822113303044129,
+        "oracle_iou": 0.13776300638917088,
+        "static_iou": 0.0
+      }
+    }
+  ],
+  "macro_video_delta": {
+    "fixed_iou": 0.07660422085746797,
+    "oracle_iou": 0.15008884966882818,
+    "static_iou": 0.0
+  },
+  "input_sha256": {
+    "reference": "ec68f75532392c8b6cad573324cf5d301333f4e8db2bbbdd8b06bb3e07db94ab",
+    "candidate": "4e6b245ab64fb803e16c8cc828926764badb094bdc183a75a20d0a1496b73531"
+  }
+}

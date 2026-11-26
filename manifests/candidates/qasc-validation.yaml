@@ -1,0 +1,31 @@
+schema_version: 1
+dataset_id: allenai/qasc
+revision: a34ba204eb9a33b919c10cc08f4f1c8dae5ec070
+subset: default
+split: validation
+modalities: [text]
+upstream_url: https://huggingface.co/datasets/allenai/qasc
+license: CC-BY-4.0
+commercial_use: true
+derivative_model_training_allowed: true
+redistribution_allowed: true
+media_redistribution_allowed: null
+attribution: "AI2 QASC dataset authors; cite Khot et al. (AAAI 2020)."
+source_citation: https://arxiv.org/abs/1910.11473
+usage: evaluation
+trust_status: trusted
+schema:
+  state: empty; QASC fact annotations are excluded from model inputs
+  question: question
+  options: choices.text in source order
+  target: choices.text indexed by answerKey
+notes:
+  official_source_repository: https://github.com/allenai/qasc
+  official_source_revision: c44a320c2bb682d614a675d2ba4be072150db4eb
+  mirror_revision: a34ba204eb9a33b919c10cc08f4f1c8dae5ec070
+  mirror_validation_shard: data/validation-00000-of-00001.parquet
+  mirror_validation_sha256: d1ae34ae13c5fce2c55305372c203c6cdb789728d0d7e5ea2956d55bc33f40ae
+  grouping: unordered normalized fact1/fact2 pair; fact fields are metadata only
+  row_count: 926
+  selector: minimum validation NLL, development only
+  blind_audit: "The official test shard is not downloaded or opened in this experiment."

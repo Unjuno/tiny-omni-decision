@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-11-03T00:25:09.018319+00:00",
+  "status": "COMPLETE",
+  "reason": "Each partial is byte-for-byte an exact prefix of a complete canonical training video whose full SHA-256 matches media_sha256 recorded in recovery-02 temporal-windows-v2/train.jsonl. The original attempt-01 remains represented by its manifests/logs; only redundant .part payloads are removed.",
+  "items": [
+    {
+      "partial_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-attempt-01\\media\\train\\z173-sep-04-22-dslr.mp4.part",
+      "partial_bytes": 4194304,
+      "partial_sha256": "20c16729e3704a427cc51c408b16cdd1e7924310fac3cf21dc2faef20842e53d",
+      "canonical_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-recovery-02\\media\\train\\z173-sep-04-22-dslr.mp4",
+      "canonical_bytes": 46508216,
+      "canonical_sha256": "9bc433e87caef2864ccd7a85d728511fc3ce6ff65ce1e73f95cdd7439564ea14",
+      "expected_sha256_from_temporal_receipts": "9bc433e87caef2864ccd7a85d728511fc3ce6ff65ce1e73f95cdd7439564ea14",
+      "partial_is_exact_canonical_prefix": true,
+      "partial_last_write_utc": "2026-10-19T13:57:11.898314+00:00"
+    },
+    {
+      "partial_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-attempt-01\\media\\train\\z172-sep-03-22-rashult_disassemble.mp4.part",
+      "partial_bytes": 29360128,
+      "partial_sha256": "86fb4d494e428e624dfd0963ea2160cc316bfa64ad3789be4e6f8b90c41c4f66",
+      "canonical_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-recovery-02\\media\\train\\z172-sep-03-22-rashult_disassemble.mp4",
+      "canonical_bytes": 171832931,
+      "canonical_sha256": "81bffc17bd79cdc6712abc070fe7174eb0f239b691301d73685294140cb0a84c",
+      "expected_sha256_from_temporal_receipts": "81bffc17bd79cdc6712abc070fe7174eb0f239b691301d73685294140cb0a84c",
+      "partial_is_exact_canonical_prefix": true,
+      "partial_last_write_utc": "2026-10-19T13:57:17.441630+00:00"
+    },
+    {
+      "partial_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-attempt-01\\media\\train\\z172-sep-03-22-knarrevik_disassemble.mp4.part",
+      "partial_bytes": 96468992,
+      "partial_sha256": "5d5953a58235f5d7bc2c73ec9a323e905255d7814b9edf8ca7f6b05b916b44e7",
+      "canonical_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-recovery-02\\media\\train\\z172-sep-03-22-knarrevik_disassemble.mp4",
+      "canonical_bytes": 118808277,
+      "canonical_sha256": "839e0a48397bf1433bfa31d572cdd41d65768b9560a29fde128aaf98222c3844",
+      "expected_sha256_from_temporal_receipts": "839e0a48397bf1433bfa31d572cdd41d65768b9560a29fde128aaf98222c3844",
+      "partial_is_exact_canonical_prefix": true,
+      "partial_last_write_utc": "2026-10-19T13:57:18.533628+00:00"
+    },
+    {
+      "partial_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-attempt-01\\media\\train\\z169-sep-02-22-rashult_assemble.mp4.part",
+      "partial_bytes": 339738624,
+      "partial_sha256": "70a423eb90b6712d6cb474a45058b81eb80e943ed402e3a1840a7f588f523d50",
+      "canonical_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-recovery-02\\media\\train\\z169-sep-02-22-rashult_assemble.mp4",
+      "canonical_bytes": 390997969,
+      "canonical_sha256": "a4949dd0942a89f5011deccbb0d38f12b9159c6e1644c89ff408c7de2f4df21f",
+      "expected_sha256_from_temporal_receipts": "a4949dd0942a89f5011deccbb0d38f12b9159c6e1644c89ff408c7de2f4df21f",
+      "partial_is_exact_canonical_prefix": true,
+      "partial_last_write_utc": "2026-10-19T13:57:11.998938+00:00"
+    },
+    {
+      "partial_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-attempt-01\\media\\train\\z144-aug-18-22-knarrevik_assemble.mp4.part",
+      "partial_bytes": 25165824,
+      "partial_sha256": "caae3e064b827a2e6b6ac65c5b01443769ecb8f3e2746f291fcc73909b63afdb",
+      "canonical_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-recovery-02\\media\\train\\z144-aug-18-22-knarrevik_assemble.mp4",
+      "canonical_bytes": 170519998,
+      "canonical_sha256": "99b074fa6049c278b784d8ff643d3cd52e671d0d1d3d94bd12ba66b8b9380450",
+      "expected_sha256_from_temporal_receipts": "99b074fa6049c278b784d8ff643d3cd52e671d0d1d3d94bd12ba66b8b9380450",
+      "partial_is_exact_canonical_prefix": true,
+      "partial_last_write_utc": "2026-10-19T12:44:39.274045+00:00"
+    },
+    {
+      "partial_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-attempt-01\\media\\train\\z100-july-13-22-printer_small.mp4.part",
+      "partial_bytes": 37748736,
+      "partial_sha256": "3c4ea502dbd2d8069a54619358079eba3f255d738eead473c202715707c51f87",
+      "canonical_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-recovery-02\\media\\train\\z100-july-13-22-printer_small.mp4",
+      "canonical_bytes": 65826460,
+      "canonical_sha256": "d953952e1792a5060696e07e62be785dd1ae5825ae93bb7fbe20f573b20cf48a",
+      "expected_sha256_from_temporal_receipts": "d953952e1792a5060696e07e62be785dd1ae5825ae93bb7fbe20f573b20cf48a",
+      "partial_is_exact_canonical_prefix": true,
+      "partial_last_write_utc": "2026-10-19T10:40:55.335531+00:00"
+    },
+    {
+      "partial_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-attempt-01\\media\\train\\z090-july-08-22-printer_small.mp4.part",
+      "partial_bytes": 8388608,
+      "partial_sha256": "382da89359d6ba5cd6ddd860c2c8523d71faac143ad7e22b0aaba7cbf9a40d68",
+      "canonical_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-recovery-02\\media\\train\\z090-july-08-22-printer_small.mp4",
+      "canonical_bytes": 65905783,
+      "canonical_sha256": "e36eaad0ecf9131d9b39e2eec6904d3d69ea756da9efd7ecadd159e2586350e9",
+      "expected_sha256_from_temporal_receipts": "e36eaad0ecf9131d9b39e2eec6904d3d69ea756da9efd7ecadd159e2586350e9",
+      "partial_is_exact_canonical_prefix": true,
+      "partial_last_write_utc": "2026-10-19T10:07:32.688404+00:00"
+    }
+  ],
+  "total_partial_bytes": 541065216,
+  "deleted_paths": [
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-attempt-01\\media\\train\\z173-sep-04-22-dslr.mp4.part",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-attempt-01\\media\\train\\z172-sep-03-22-rashult_disassemble.mp4.part",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-attempt-01\\media\\train\\z172-sep-03-22-knarrevik_disassemble.mp4.part",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-attempt-01\\media\\train\\z169-sep-02-22-rashult_assemble.mp4.part",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-attempt-01\\media\\train\\z144-aug-18-22-knarrevik_assemble.mp4.part",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-attempt-01\\media\\train\\z100-july-13-22-printer_small.mp4.part",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\holoassist-textfree-unused-train-attempt-01\\media\\train\\z090-july-08-22-printer_small.mp4.part"
+  ],
+  "deleted_utc": "2026-11-03T00:25:09.075972+00:00"
+}

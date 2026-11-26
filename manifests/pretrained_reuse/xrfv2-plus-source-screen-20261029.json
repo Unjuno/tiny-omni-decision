@@ -1,0 +1,59 @@
+{
+  "format": "pretrained_reuse_multimodal_source_screen_v1",
+  "dataset_id": "XRFv2-Plus",
+  "recorded_at": "2026-10-29T05:42:57+09:00",
+  "status": "REVIEW_NOT_ADMITTED_FOR_PRODUCT_WORK",
+  "sources": {
+    "zenodo": {
+      "url": "https://zenodo.org/records/20564312",
+      "doi": "10.5281/zenodo.20564312",
+      "api_url": "https://zenodo.org/api/records/20564312",
+      "access_right": "open",
+      "license": "cc-by-4.0",
+      "attached_files": [
+        {
+          "name": "main.pdf",
+          "size_bytes": 1152780,
+          "checksum": "md5:c9ce5c0d5f2190a8993d9cca1be15144"
+        }
+      ]
+    },
+    "official_project_repository": {
+      "url": "https://github.com/airslab2020/XRFV2",
+      "license": "MIT",
+      "license_scope": "repository code; does not establish dataset payload rights"
+    },
+    "kaggle_dataset": {
+      "url": "https://www.kaggle.com/datasets/airslab2020/xrfv2-multimodal-tal-caption-qa-no-rgb",
+      "api_url": "https://www.kaggle.com/api/v1/datasets/view/airslab2020/xrfv2-multimodal-tal-caption-qa-no-rgb",
+      "version": 4,
+      "is_private": false,
+      "license_name": "Unknown",
+      "total_bytes": 210794980577,
+      "sample_count": 853
+    }
+  },
+  "task_and_split": {
+    "modalities": ["sensor", "video", "text annotations"],
+    "volunteers": 16,
+    "scenes": 3,
+    "action_classes": 34,
+    "action_segments": 8157,
+    "qa_pairs": 108929,
+    "both_input_necessity": "UNKNOWN_NOT_TESTED",
+    "independent_group_split": "NOT_VERIFIED"
+  },
+  "integrity_and_use": {
+    "dataset_payload_downloaded": false,
+    "annotations_opened": false,
+    "access_request_submitted": false,
+    "model_fit_or_evaluation": false,
+    "sealed_audit_loaded": false
+  },
+  "resource_gate": {
+    "declared_payload_gib": 196.3,
+    "required_local_free_space_gib": 2.0,
+    "action": "NO_PAYLOAD_DOWNLOAD_OR_FIT"
+  },
+  "decision": "DATA_LICENSE_UNKNOWN_AND_PAYLOAD_LARGE; do not use until provider establishes rights and grouped-split details are verified"
+}

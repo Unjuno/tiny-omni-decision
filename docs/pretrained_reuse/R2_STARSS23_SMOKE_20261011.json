@@ -1,0 +1,143 @@
+{
+  "record": "doi:10.5281/zenodo.7880637",
+  "license": "MIT",
+  "source_sha256": {
+    "LICENSE": "af4138d4fe3ccd91970f7ac1f22ae3f513ac570468a26f0f516540b5443b8745",
+    "README.md": "9401015b18d0bbb2214668f0fc5a49f82005124d036808b284ccd27678c21716",
+    "metadata_dev.zip": "2fa848545a520b4a9d490459de7f079aa49ae16daf0affc859c016f5146981d6"
+  },
+  "status": "PASS",
+  "pairs": [
+    {
+      "member": "metadata_dev/dev-train-tau/fold3_room12_mix001.csv",
+      "split": "train",
+      "site": "tau",
+      "clip": "fold3_room12_mix001",
+      "room": "tau:room12",
+      "files": {
+        "audio": {
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-paired-smoke-01\\fold3_room12_mix001.wav",
+          "member": "foa_dev/dev-train-tau/fold3_room12_mix001.wav",
+          "bytes": 48630820,
+          "crc32": 925396801,
+          "sha256": "a507f9f912ab6f28ec83bdedd174d2696206b5d61a69bc965f9ae88d856965e0"
+        },
+        "video": {
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-paired-smoke-01\\fold3_room12_mix001.mp4",
+          "member": "video_dev/dev-train-tau/fold3_room12_mix001.mp4",
+          "bytes": 30682938,
+          "crc32": 824388806,
+          "sha256": "3d5e26322d98c8a2fb104da7873c7af475fc3e88eec9c3993d270a33b7385392"
+        }
+      },
+      "annotation_sha256": "b35a5a2028794743436f8d3fb678233cf494f01b19b4364fc86a2873a9e766d1",
+      "audio_format": {
+        "channels": 4,
+        "sample_rate": 24000,
+        "seconds": 253.28529166666667
+      },
+      "video_format": {
+        "shape": [
+          960,
+          1920,
+          3
+        ],
+        "fps": 29.97,
+        "seconds": 253.28661995328662
+      }
+    },
+    {
+      "member": "metadata_dev/dev-train-tau/fold3_room13_mix001.csv",
+      "split": "train",
+      "site": "tau",
+      "clip": "fold3_room13_mix001",
+      "room": "tau:room13",
+      "files": {
+        "audio": {
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-paired-smoke-01\\fold3_room13_mix001.wav",
+          "member": "foa_dev/dev-train-tau/fold3_room13_mix001.wav",
+          "bytes": 50515492,
+          "crc32": 352051009,
+          "sha256": "6530a0a681e3d702df3489a293f4d66c53ae6f557d8d0b6abc4e9fe53e7322ed"
+        },
+        "video": {
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-paired-smoke-01\\fold3_room13_mix001.mp4",
+          "member": "video_dev/dev-train-tau/fold3_room13_mix001.mp4",
+          "bytes": 48807525,
+          "crc32": 2591224542,
+          "sha256": "fd4a55011563f1c60026aff63219ea672bd3817d2330a57deeea115ed9efe62a"
+        }
+      },
+      "annotation_sha256": "bd917af5fa11415e4d040a25c3c572172d810424e0aac3d052409ef3699ea6d2",
+      "audio_format": {
+        "channels": 4,
+        "sample_rate": 24000,
+        "seconds": 263.10129166666667
+      },
+      "video_format": {
+        "shape": [
+          960,
+          1920,
+          3
+        ],
+        "fps": 29.97,
+        "seconds": 263.06306306306305
+      }
+    }
+  ],
+  "runner_sha256": "e2eea3a24cb9baf74b01f23d0581171c5cffcab16a03c70770948ffb5ae752ed",
+  "dev_test_contents_read": false,
+  "official_eval_accessed": false,
+  "record_counts": {
+    "train": 90,
+    "test": 78
+  },
+  "room_groups": {
+    "train": [
+      "sony:room21",
+      "sony:room22",
+      "tau:room12",
+      "tau:room13",
+      "tau:room14",
+      "tau:room4",
+      "tau:room6",
+      "tau:room7",
+      "tau:room9"
+    ],
+    "test": [
+      "sony:room23",
+      "sony:room24",
+      "tau:room10",
+      "tau:room15",
+      "tau:room16",
+      "tau:room2",
+      "tau:room8"
+    ]
+  },
+  "missing_video_clips": [
+    "fold3_room21_mix001",
+    "fold3_room21_mix002",
+    "fold3_room21_mix003",
+    "fold3_room21_mix004",
+    "fold3_room21_mix005",
+    "fold3_room21_mix006",
+    "fold3_room21_mix007",
+    "fold3_room21_mix008",
+    "fold3_room21_mix009",
+    "fold3_room21_mix010",
+    "fold3_room21_mix011",
+    "fold3_room21_mix012"
+  ],
+  "archive_transfers": {
+    "foa_dev.zip": {
+      "bytes": 64433238,
+      "upstream_md5": "316b834ee6393c22862c314cc3c7ebb0",
+      "whole_archive_md5_verified": false
+    },
+    "video_dev.zip": {
+      "bytes": 79389417,
+      "upstream_md5": "b92295e162600adb545ed99bdc0a9c76",
+      "whole_archive_md5_verified": false
+    }
+  }
+}

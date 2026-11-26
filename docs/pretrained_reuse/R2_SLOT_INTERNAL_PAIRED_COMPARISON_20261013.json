@@ -1,0 +1,30 @@
+{
+  "seed": 17,
+  "replicates": 10000,
+  "unit": "video_pair",
+  "videos": 20,
+  "method": "95% percentile; numpy linear quantile",
+  "direction": "relational-minus-baseline",
+  "probability_floor": 1e-15,
+  "accuracy": {
+    "difference": -0.125,
+    "interval": [
+      -0.3,
+      0.025
+    ]
+  },
+  "nll": {
+    "difference": -0.12930827571426373,
+    "interval": [
+      -1.3307422410765444,
+      1.0898111896528782
+    ]
+  },
+  "scope": "posthoc internal development comparison, single seed, not blind",
+  "input_hashes": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-slot-internal-baseline-eval-01\\predictions.json": "ffc18c41701ee1c05a9b216c6cb8bf87e6748d26f8822fc11368f9f2fca9c58d",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-slot-internal-baseline-eval-01\\examples.json": "4348fa32e1fb964abc0fd655adc8909dfacb02e1602a017838cba2f3d8a80063",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-slot-internal-relational-eval-01\\predictions.json": "7221f9c2aa5a52b7e79dba6c066b7937b9d561612e844547082b14470dc70f46",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-slot-internal-relational-eval-01\\examples.json": "4348fa32e1fb964abc0fd655adc8909dfacb02e1602a017838cba2f3d8a80063"
+  }
+}

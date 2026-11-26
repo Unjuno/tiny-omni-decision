@@ -1,0 +1,38 @@
+schema_version: 1
+dataset_id: openslr/SLR12
+revision: 5a18d4c76b439c4dd182a0576bcd99400558ee7f
+subset: dev-clean
+split: dev-clean
+modalities: [audio, text]
+upstream_url: https://www.openslr.org/12/
+license: CC-BY-4.0
+commercial_use: true
+derivative_model_training_allowed: true
+redistribution_allowed: true
+media_redistribution_allowed: true
+attribution: >
+  LibriSpeech ASR corpus; Vassil Panayotov, Guoguo Chen, Daniel Povey, and
+  Sanjeev Khudanpur; cite the ICASSP 2015 LibriSpeech paper.
+source_citation: https://www.openslr.org/12/
+usage: evaluation
+trust_status: trusted
+schema:
+  state: one 16 kHz mono read-audiobook utterance
+  question: Which exact transcript matches the spoken audio?
+  options: one matching transcript and three transcript distractors
+  target: transcript aligned to the source utterance
+  media: LibriSpeech dev-clean FLAC utterance
+notes:
+  release_id: OpenSLR SLR12
+  revision_kind: content-derived pin; OpenSLR publishes no commit revision for this static archive
+  revision_recipe: SHA-1 of "openslr.org/12/dev-clean.tar.gz|<archive SHA-256>"
+  archive_url: https://openslr.org/resources/12/dev-clean.tar.gz
+  archive_official_md5: 42e2234ba48799c1f50f24a7926300a1
+  archive_sha256: 76f87d090650617fca0cac8f88b9416e0ebf80350acb97b343a85fa903728ab3
+  use_policy: evaluation only; do not add dev-clean media or transcripts to model training
+  task_limit: read English audiobooks; not conversational speech or general audio reasoning
+  distractor_dictionary: cmusphinx/cmudict@74790861f652b15e4ac49015a90074ad62a27690
+  distractor_dictionary_license: permissive CMU terms; retain upstream attribution
+  source_grouping: >
+    Group by speaker and audiobook chapter; no audio identity crosses into
+    model fitting.

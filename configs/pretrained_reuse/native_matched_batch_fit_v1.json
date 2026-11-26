@@ -1,0 +1,36 @@
+{
+  "id": "native-matched-batch-fit-v1",
+  "corpus": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02",
+  "queries": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-queries-cache-01",
+  "initial_readout": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-baseline-fit-01\\initial.pt",
+  "input_pins": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02\\result.json": "47a6d2f3495810bac58f57dec1a962f8b490fa409c75671b46bb2999fde87d49",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-queries-cache-01\\result.json": "7f5ffd7362e84770b864a189d50bc29f43be3738f54a07f6dbdc21f1ef7d909e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-conditional-candidate-smoke-02\\readout.pt": "77a45ce55b5b17eb787ca649d2affbd6a8c72118f8953967eab41a02c2b2646b",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-baseline-fit-01\\initial.pt": "3ce7f72450e16946b1fb113c3fa8793f1d6a59f2b6221564cff7b30feebfba1c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-baseline-fit-01\\sampling.json": "b2647f3a1783fe5909ab4864281522314b694ef9a33851a35cc11b6beabe41fb",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-matched-plan-01\\independent.json": "af0c6de16d497b6f626a7e7e6e58c0d6d10a49d85c87ce4d6b2bf0c9f748e8ed",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-matched-plan-01\\matched.json": "424bd8a517191bb16d2d45b40a01e764d9435dae5f438a214fb7dbd2ebee721f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-matched-plan-01\\permutations.json": "d995ca6288d75358d9805c39066561aed6a9b6dd1382f90c08e28251f6c9e78c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-matched-plan-01\\result.json": "d6c255bf6317e9f822c19c0b6072991afbed5c5209f8ed50ee7de33272349b5c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-state-plan-01\\plan.json": "4e7443dd3a9a7c6ca9f8c3da2ace2dd71adcfe89415a4c6239cd12b4bbd7b114"
+  },
+  "training": {
+    "seed": 17,
+    "max_steps": 1024,
+    "microbatches_per_update": 8,
+    "lr": 0.001,
+    "warmup_updates": 31,
+    "scheduler": "cosine",
+    "optimizer": "AdamW",
+    "weight_decay": 0.01,
+    "clip_norm": 1.0,
+    "evaluation_interval": 128
+  },
+  "parent_sampling": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-baseline-fit-01\\sampling.json",
+  "plans": {
+    "independent": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-matched-plan-01\\independent.json",
+    "matched": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-matched-plan-01\\matched.json"
+  },
+  "state_plan": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-state-plan-01\\plan.json"
+}

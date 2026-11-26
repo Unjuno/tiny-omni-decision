@@ -1,0 +1,16 @@
+{
+  "status": "PASS_TECHNICAL_SMOKE_ONLY",
+  "examples": 1,
+  "optimizer_updates": 1,
+  "initial_logits_exact": true,
+  "base_unchanged": true,
+  "trainable_parameters": 131712,
+  "total_parameters": 22845313,
+  "gradient_norm": 1.9253594875335693,
+  "training_loss": 1.3212685585021973,
+  "adopted": false,
+  "device": "cpu",
+  "quality_evaluation": false,
+  "checkpoint_sha256": "868cc435f3b70ce84d0c49781d80680ba28a1078cbcf6de25f53a58756661b13",
+  "state_id": "f8c8e90a48537901fbec810a84eff9b353d9f4ff6ea6a1bc29e16c409e39987f:0"
+}

@@ -1,0 +1,3461 @@
+{
+  "config": {
+    "source_commit": "0cfb0a3f77c37c3610e1327bd7980980e1855a36",
+    "runner_sha256": "c5325642b1846652a21c969264c2d4ee45f7805e2b052d5213e654e316bc3613",
+    "request_sha256": "a6e7aa6b6fdf9d640ec187177b676cf35c3d98feb06858edeefef6dbbeee1a3c",
+    "weights": {
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-affine-regularized-01\\0.01\\final.pt": "f815496df64ec5e59000d08a22d42b4ecf2b7e78758df129a797321079b8b0d5",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\video-token-readout-01\\attention\\best.pt": "ee4b46156e7e99149a1b8dca2701a786431cf09f0dbafbe9e247104ead16ba62"
+    },
+    "expected_hashes": {
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-affine-regularized-01\\0.01\\validation-predictions.json": "fccb050238ea963a7620dd6468265598a9a0b6c91ee416a2e9fe8873c4bfccf7",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\video-token-readout-01\\attention\\predictions.json": "ff3cd284c456bbc71ef58ca3ce0421fd743687041409360889c181bcbc93bd01"
+    },
+    "probability_atol": 0.0001,
+    "allowed_answer_changes": 0,
+    "feature_atol": 1e-05,
+    "question_ids": [
+      "clevrer-validation-10005-q011-c000",
+      "clevrer-validation-10005-q011-c001",
+      "clevrer-validation-10005-q011-c002",
+      "clevrer-validation-10005-q011-c003",
+      "clevrer-validation-10005-q012-c000",
+      "clevrer-validation-10005-q012-c001",
+      "clevrer-validation-10005-q013-c000",
+      "clevrer-validation-10005-q013-c001"
+    ],
+    "training": false,
+    "sealed_audit": false,
+    "cpu_threads": 2
+  },
+  "result": {
+    "status": "PASS_RAW_SHARED_DECISIONS",
+    "outputs": {
+      "images": {
+        "decisions": [
+          {
+            "id": "CLEVR_new_008427:color",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-3",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 4.543445594568657e-06
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 8.851165621035216e-12
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 6.841329050376983e-09
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 0.9999584301080521
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 1.4202798576896107e-14
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 1.3299096539163335e-10
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 1.3091235454026807e-05
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 2.392822769737032e-05
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.636657563044739e-14
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 1.662447250127609e-16
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008427:texture",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-7",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 3.3027665672787275e-21
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 3.932701938243599e-24
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.4425987511422445e-10
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 5.426713470079513e-10
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 5.290639795323484e-17
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 1.0356114844923619e-14
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 1.8910006128444844e-08
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.9999999798309698
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 5.720824168227024e-10
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 6.653015944884294e-17
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008427:count",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-7",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 7.202153015351875e-25
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 1.1159905013797411e-18
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 3.130933551101933e-11
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 2.8946567047033783e-06
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.0009976588420309682
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 0.08659567844456391
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 0.33467961528840817
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.3487620873265183
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 0.20610118551887557
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 0.02286087989158895
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008427:shape",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-1",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.6024256349139872e-06
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 0.9999554350833529
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 3.3458535010061232e-09
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 2.0785086951440989e-07
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 3.5292392057569766e-05
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 5.0345395985576146e-08
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 6.655871588900123e-06
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 9.855519152491269e-08
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 6.134836005265411e-12
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 6.541239201805436e-07
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008428:color",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-5",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 3.450367295726345e-12
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 2.5871793014204296e-06
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 9.187085658606492e-06
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 4.555032971444223e-10
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 2.1151435765019667e-15
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 0.9999869125787307
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 6.704393173063799e-09
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 1.006346887772125e-09
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.3048516801998837e-06
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 1.3493339246603254e-10
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008428:texture",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-7",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 7.990206447396667e-18
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 2.4617440656909287e-17
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.6753536780387608e-06
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 6.103536894511886e-08
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 2.1172011805721556e-15
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 5.928664459556951e-11
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 3.200156702056057e-08
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.9999982300486959
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.5013974268572515e-09
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 3.9523288051077634e-15
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008428:count",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-2",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 2.1960438645801986e-06
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 0.008740388309965454
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 0.5547252571704486
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 0.399776753979734
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.03633315081521409
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 0.00042130814591017187
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 9.428532607942663e-07
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 2.6770026916688236e-09
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 4.598819564788946e-12
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 8.064368199022106e-16
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008428:shape",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-7",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 2.800942553937305e-07
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 1.5800216506689787e-07
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 9.09003572227384e-09
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 1.5165284334128675e-05
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 2.6094776965860074e-08
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 0.00011572791734589414
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 0.0006652443173427044
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.9991992933058332
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 2.477582175811289e-07
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 3.848135693099518e-06
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008432:color",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-9",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 9.48544236220014e-09
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 6.0413525888485285e-05
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.7491738095502444e-05
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 1.5195053126396028e-08
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.00014163684516232332
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 1.4439849297809413e-08
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 4.821396176058481e-11
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.01872521436738888
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.1859760747819811e-09
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 0.98105520316893
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008432:texture",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-0",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 0.9999999471012452
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 3.357791112255624e-09
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.1061849156161422e-15
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 1.1578615330684882e-14
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 3.622502700235158e-15
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 4.953027569847066e-08
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 1.0550870602449602e-11
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 4.0711807963501414e-26
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 2.3227020997264716e-20
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 1.2078057501828135e-13
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008432:count",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-1",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 2.6605823912912424e-05
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 0.9597192922063228
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 0.04025176122712938
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 2.340723249517496e-06
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 1.938550219812649e-11
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 8.074333972494902e-17
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 2.0679025863917573e-22
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 9.543992773487668e-28
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.7543674831473023e-32
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 4.386006018635989e-38
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008432:shape",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-7",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 6.177589206650289e-07
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 1.1274624954297797e-10
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.3149097238153543e-12
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 2.3258926886616905e-07
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 8.711731888228098e-12
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 2.3504970636810537e-06
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 2.0370698580461199e-07
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.9999965473296027
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 6.977112979830137e-11
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 4.7925614412371086e-08
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008445:color",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-7",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.1486083323284508e-09
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 9.58493043116341e-08
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.273061250389001e-07
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 2.2734618516780349e-07
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 4.119931887880854e-08
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 4.836031125144261e-07
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 1.4350333259057903e-07
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.9985030105634644
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 6.713181663369973e-10
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 0.0014958688092304266
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008445:texture",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-2",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.61198239271794e-18
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 6.866797418230128e-21
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 0.9999998718609722
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 2.351110642691169e-21
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 3.0121191229451946e-17
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 7.215270563460698e-19
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 2.6793244256164907e-09
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 1.8379430507962884e-10
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.1971397350162812e-07
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 5.5619355182718735e-09
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008445:count",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-6",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 6.983219836532621e-25
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 3.010477646521629e-17
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.1881354221686507e-09
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 5.8135757291391906e-05
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.026591756572781514
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 0.20635338663779043
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 0.5027898752584011
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.24411882491048723
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 0.01998710242775971
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 0.00010091724735311727
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008445:shape",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-4",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.4919006810400255e-11
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 3.542592717207543e-09
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 5.3791033790739155e-05
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 2.5014668399492765e-09
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.999946154136731
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 6.898797079404301e-09
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 2.9750590959311805e-12
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 1.46540862275455e-11
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 3.82077945324516e-08
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 3.646279098826647e-09
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008446:color",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-5",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 2.814383887191432e-11
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 2.6669930529583503e-06
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.4386868587521444e-05
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 6.219825568973306e-10
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 2.372178010282115e-14
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 0.9999686771912918
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 3.304275959179298e-08
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 5.461690144346395e-10
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.4234700850481787e-05
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 7.138273900737695e-12
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008446:texture",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-0",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 0.9999999977360574
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 1.4888171608608018e-09
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.1771799671396173e-15
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 7.996940583189621e-13
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 1.347236817717518e-12
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 7.576026360079687e-10
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 1.5374319638755008e-11
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 1.7406429879068505e-21
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.4257022304234327e-22
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 3.7743190304230445e-16
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008446:count",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-4",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 5.693871242797531e-15
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 1.2561615479196e-09
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 0.00018657367634808888
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 0.0753809162849886
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.7784679914809254
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 0.14222480483731756
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 0.0037070651002987626
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 3.249674437746774e-05
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.505981654150956e-07
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 2.1411457730986863e-11
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008446:shape",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-3",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.3291112489428872e-07
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 1.896632058329157e-08
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 5.950255877874507e-11
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 0.9999885109023676
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 1.2058424156202921e-08
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 1.5334306173900627e-06
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 2.437484205566195e-10
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 8.276545426893087e-06
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 8.628474551073448e-13
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 1.5148816046493745e-06
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008454:color",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-3",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.3576403565588577e-05
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 3.5385070523271692e-12
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.6149952029666992e-07
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 0.9997414914131066
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 2.1064913927118005e-14
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 2.4544604270695707e-09
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 0.00017505852164733862
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 6.970970404183567e-05
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 9.842937272994331e-14
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 5.940370044698765e-17
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008454:texture",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-8",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 2.06159242271684e-14
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 2.046771129342662e-15
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 4.753349839285483e-06
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 2.582955216698184e-09
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 1.3973055185185212e-06
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 4.684920649316644e-12
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 8.538019524464732e-07
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 7.593796736579352e-06
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 0.9999850111830798
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 3.8797521038544075e-07
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008454:count",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-2",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.6085351361278832e-09
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 0.004890674847117549
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 0.6781544317134456
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 0.3134197933893909
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.0035274115068603847
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 7.677420920399897e-06
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 9.507984857272141e-09
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 5.74367860077232e-12
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.4920067235813825e-15
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 4.34711801003755e-20
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008454:shape",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-8",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 7.32105988752225e-12
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 1.7507083164459893e-12
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 9.532723236087897e-06
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 1.0714756781187002e-09
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 1.1524251903537577e-06
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 2.9369561063046822e-06
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 3.3406971276102685e-07
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 1.739488367654359e-10
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 0.9999858729921564
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 1.695791014213911e-07
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008459:color",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-6",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.9666744691178688e-08
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 2.114516481053853e-11
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 8.755120942047188e-08
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 4.1501875175225254e-07
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 9.939659793933156e-15
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 8.555754145236146e-08
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 0.9999993886942988
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 2.2007901335341696e-11
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 3.4682909775711682e-09
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 7.969091517416947e-20
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008459:texture",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-0",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 0.9999999633197856
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 3.6676175329470336e-08
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 5.652063557858708e-19
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 4.705504619300829e-16
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 4.799086412876866e-17
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 4.023767177911207e-12
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 1.486299819821316e-14
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 7.413517372397112e-24
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 3.178835172096826e-24
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 3.1259503003038825e-20
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008459:count",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-5",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 3.9600206585763373e-22
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 1.854080768137982e-15
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 2.2404089820285866e-08
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 0.0003478724639244904
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.05679676735853998
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 0.5143832779445613
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 0.33431702451889467
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.08838477995995916
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 0.005735536081358435
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 3.4719268670161345e-05
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008459:shape",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-4",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.1148928022889436e-11
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 1.3859918656796545e-08
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 3.625430533014553e-05
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 5.9787222515959955e-09
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.9999635301103729
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 1.234790315850358e-11
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 5.634467150636384e-13
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 2.324803911802727e-11
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 7.458725052993034e-10
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 1.9495247528254403e-07
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008461:color",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-6",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.0615814729280792e-06
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 6.0483813963325e-08
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 8.206845156033984e-06
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 8.195821178845208e-05
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 1.0659688038097092e-12
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 2.933439019333916e-06
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 0.9999057559790417
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 9.458505819023282e-09
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.4000134115613788e-08
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 1.5967905348030912e-15
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008461:texture",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-7",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.2571574506049936e-18
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 3.972698391368808e-22
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 2.0050046774935097e-07
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 2.156199193195394e-11
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 3.47195457466572e-17
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 1.6435472140562198e-14
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 7.070943344941744e-08
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.9999997233154645
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 5.453055591973395e-09
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 2.194571001139849e-16
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008461:count",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-4",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.671173472776041e-14
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 6.680981129778487e-08
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 0.003675305533588366
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 0.4624759488726381
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.4711188579609065
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 0.06135755203301246
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 0.0013570703071568587
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 1.509049343059997e-05
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.0787739329004889e-07
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 1.1204586829343547e-10
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008461:shape",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-4",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.7606222505531174e-11
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 6.49039599073522e-08
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 6.256364100549255e-05
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 4.116978937329255e-06
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.999933227871266
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 1.8929798928854523e-08
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 4.149167505885031e-09
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 8.625552651489049e-11
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.9219986982788425e-09
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 1.500004185967462e-09
+                }
+              ]
+            }
+          }
+        ],
+        "max_probability_delta": 1.7763568394002505e-15
+      },
+      "video": {
+        "decisions": [
+          {
+            "id": "clevrer-validation-10005-q011-c000",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-0",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 0.6043747663497925
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 0.3956252634525299
+                }
+              ]
+            }
+          },
+          {
+            "id": "clevrer-validation-10005-q011-c001",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-0",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 0.5718485713005066
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 0.4281514286994934
+                }
+              ]
+            }
+          },
+          {
+            "id": "clevrer-validation-10005-q011-c002",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-0",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 0.5936697721481323
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 0.4063302278518677
+                }
+              ]
+            }
+          },
+          {
+            "id": "clevrer-validation-10005-q011-c003",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-0",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 0.5711056590080261
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 0.4288943409919739
+                }
+              ]
+            }
+          },
+          {
+            "id": "clevrer-validation-10005-q012-c000",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-1",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 0.4576999247074127
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 0.5423001050949097
+                }
+              ]
+            }
+          },
+          {
+            "id": "clevrer-validation-10005-q012-c001",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-0",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 0.5221606492996216
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 0.47783932089805603
+                }
+              ]
+            }
+          },
+          {
+            "id": "clevrer-validation-10005-q013-c000",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-0",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 0.5172604918479919
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 0.48273953795433044
+                }
+              ]
+            }
+          },
+          {
+            "id": "clevrer-validation-10005-q013-c001",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-0",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 0.5434437990188599
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 0.4565562605857849
+                }
+              ]
+            }
+          }
+        ],
+        "max_probability_delta": 4.172325134277344e-07
+      },
+      "images-repeat": {
+        "decisions": [
+          {
+            "id": "CLEVR_new_008427:color",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-3",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 4.543445594568657e-06
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 8.851165621035216e-12
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 6.841329050376983e-09
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 0.9999584301080521
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 1.4202798576896107e-14
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 1.3299096539163335e-10
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 1.3091235454026807e-05
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 2.392822769737032e-05
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.636657563044739e-14
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 1.662447250127609e-16
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008427:texture",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-7",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 3.3027665672787275e-21
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 3.932701938243599e-24
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.4425987511422445e-10
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 5.426713470079513e-10
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 5.290639795323484e-17
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 1.0356114844923619e-14
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 1.8910006128444844e-08
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.9999999798309698
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 5.720824168227024e-10
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 6.653015944884294e-17
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008427:count",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-7",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 7.202153015351875e-25
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 1.1159905013797411e-18
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 3.130933551101933e-11
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 2.8946567047033783e-06
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.0009976588420309682
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 0.08659567844456391
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 0.33467961528840817
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.3487620873265183
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 0.20610118551887557
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 0.02286087989158895
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008427:shape",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-1",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.6024256349139872e-06
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 0.9999554350833529
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 3.3458535010061232e-09
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 2.0785086951440989e-07
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 3.5292392057569766e-05
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 5.0345395985576146e-08
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 6.655871588900123e-06
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 9.855519152491269e-08
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 6.134836005265411e-12
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 6.541239201805436e-07
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008428:color",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-5",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 3.450367295726345e-12
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 2.5871793014204296e-06
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 9.187085658606492e-06
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 4.555032971444223e-10
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 2.1151435765019667e-15
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 0.9999869125787307
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 6.704393173063799e-09
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 1.006346887772125e-09
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.3048516801998837e-06
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 1.3493339246603254e-10
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008428:texture",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-7",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 7.990206447396667e-18
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 2.4617440656909287e-17
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.6753536780387608e-06
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 6.103536894511886e-08
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 2.1172011805721556e-15
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 5.928664459556951e-11
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 3.200156702056057e-08
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.9999982300486959
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.5013974268572515e-09
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 3.9523288051077634e-15
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008428:count",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-2",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 2.1960438645801986e-06
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 0.008740388309965454
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 0.5547252571704486
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 0.399776753979734
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.03633315081521409
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 0.00042130814591017187
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 9.428532607942663e-07
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 2.6770026916688236e-09
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 4.598819564788946e-12
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 8.064368199022106e-16
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008428:shape",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-7",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 2.800942553937305e-07
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 1.5800216506689787e-07
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 9.09003572227384e-09
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 1.5165284334128675e-05
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 2.6094776965860074e-08
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 0.00011572791734589414
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 0.0006652443173427044
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.9991992933058332
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 2.477582175811289e-07
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 3.848135693099518e-06
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008432:color",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-9",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 9.48544236220014e-09
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 6.0413525888485285e-05
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.7491738095502444e-05
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 1.5195053126396028e-08
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.00014163684516232332
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 1.4439849297809413e-08
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 4.821396176058481e-11
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.01872521436738888
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.1859760747819811e-09
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 0.98105520316893
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008432:texture",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-0",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 0.9999999471012452
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 3.357791112255624e-09
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.1061849156161422e-15
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 1.1578615330684882e-14
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 3.622502700235158e-15
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 4.953027569847066e-08
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 1.0550870602449602e-11
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 4.0711807963501414e-26
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 2.3227020997264716e-20
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 1.2078057501828135e-13
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008432:count",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-1",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 2.6605823912912424e-05
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 0.9597192922063228
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 0.04025176122712938
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 2.340723249517496e-06
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 1.938550219812649e-11
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 8.074333972494902e-17
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 2.0679025863917573e-22
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 9.543992773487668e-28
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.7543674831473023e-32
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 4.386006018635989e-38
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008432:shape",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-7",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 6.177589206650289e-07
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 1.1274624954297797e-10
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.3149097238153543e-12
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 2.3258926886616905e-07
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 8.711731888228098e-12
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 2.3504970636810537e-06
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 2.0370698580461199e-07
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.9999965473296027
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 6.977112979830137e-11
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 4.7925614412371086e-08
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008445:color",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-7",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.1486083323284508e-09
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 9.58493043116341e-08
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.273061250389001e-07
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 2.2734618516780349e-07
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 4.119931887880854e-08
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 4.836031125144261e-07
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 1.4350333259057903e-07
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.9985030105634644
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 6.713181663369973e-10
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 0.0014958688092304266
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008445:texture",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-2",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.61198239271794e-18
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 6.866797418230128e-21
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 0.9999998718609722
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 2.351110642691169e-21
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 3.0121191229451946e-17
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 7.215270563460698e-19
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 2.6793244256164907e-09
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 1.8379430507962884e-10
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.1971397350162812e-07
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 5.5619355182718735e-09
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008445:count",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-6",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 6.983219836532621e-25
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 3.010477646521629e-17
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.1881354221686507e-09
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 5.8135757291391906e-05
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.026591756572781514
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 0.20635338663779043
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 0.5027898752584011
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.24411882491048723
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 0.01998710242775971
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 0.00010091724735311727
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008445:shape",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-4",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.4919006810400255e-11
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 3.542592717207543e-09
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 5.3791033790739155e-05
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 2.5014668399492765e-09
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.999946154136731
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 6.898797079404301e-09
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 2.9750590959311805e-12
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 1.46540862275455e-11
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 3.82077945324516e-08
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 3.646279098826647e-09
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008446:color",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-5",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 2.814383887191432e-11
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 2.6669930529583503e-06
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.4386868587521444e-05
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 6.219825568973306e-10
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 2.372178010282115e-14
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 0.9999686771912918
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 3.304275959179298e-08
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 5.461690144346395e-10
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.4234700850481787e-05
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 7.138273900737695e-12
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008446:texture",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-0",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 0.9999999977360574
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 1.4888171608608018e-09
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.1771799671396173e-15
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 7.996940583189621e-13
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 1.347236817717518e-12
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 7.576026360079687e-10
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 1.5374319638755008e-11
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 1.7406429879068505e-21
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.4257022304234327e-22
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 3.7743190304230445e-16
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008446:count",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-4",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 5.693871242797531e-15
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 1.2561615479196e-09
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 0.00018657367634808888
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 0.0753809162849886
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.7784679914809254
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 0.14222480483731756
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 0.0037070651002987626
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 3.249674437746774e-05
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.505981654150956e-07
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 2.1411457730986863e-11
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008446:shape",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-3",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.3291112489428872e-07
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 1.896632058329157e-08
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 5.950255877874507e-11
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 0.9999885109023676
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 1.2058424156202921e-08
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 1.5334306173900627e-06
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 2.437484205566195e-10
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 8.276545426893087e-06
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 8.628474551073448e-13
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 1.5148816046493745e-06
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008454:color",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-3",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.3576403565588577e-05
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 3.5385070523271692e-12
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 1.6149952029666992e-07
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 0.9997414914131066
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 2.1064913927118005e-14
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 2.4544604270695707e-09
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 0.00017505852164733862
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 6.970970404183567e-05
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 9.842937272994331e-14
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 5.940370044698765e-17
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008454:texture",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-8",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 2.06159242271684e-14
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 2.046771129342662e-15
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 4.753349839285483e-06
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 2.582955216698184e-09
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 1.3973055185185212e-06
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 4.684920649316644e-12
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 8.538019524464732e-07
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 7.593796736579352e-06
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 0.9999850111830798
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 3.8797521038544075e-07
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008454:count",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-2",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.6085351361278832e-09
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 0.004890674847117549
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 0.6781544317134456
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 0.3134197933893909
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.0035274115068603847
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 7.677420920399897e-06
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 9.507984857272141e-09
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 5.74367860077232e-12
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.4920067235813825e-15
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 4.34711801003755e-20
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008454:shape",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-8",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 7.32105988752225e-12
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 1.7507083164459893e-12
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 9.532723236087897e-06
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 1.0714756781187002e-09
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 1.1524251903537577e-06
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 2.9369561063046822e-06
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 3.3406971276102685e-07
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 1.739488367654359e-10
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 0.9999858729921564
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 1.695791014213911e-07
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008459:color",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-6",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.9666744691178688e-08
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 2.114516481053853e-11
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 8.755120942047188e-08
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 4.1501875175225254e-07
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 9.939659793933156e-15
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 8.555754145236146e-08
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 0.9999993886942988
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 2.2007901335341696e-11
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 3.4682909775711682e-09
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 7.969091517416947e-20
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008459:texture",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-0",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 0.9999999633197856
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 3.6676175329470336e-08
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 5.652063557858708e-19
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 4.705504619300829e-16
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 4.799086412876866e-17
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 4.023767177911207e-12
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 1.486299819821316e-14
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 7.413517372397112e-24
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 3.178835172096826e-24
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 3.1259503003038825e-20
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008459:count",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-5",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 3.9600206585763373e-22
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 1.854080768137982e-15
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 2.2404089820285866e-08
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 0.0003478724639244904
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.05679676735853998
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 0.5143832779445613
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 0.33431702451889467
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.08838477995995916
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 0.005735536081358435
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 3.4719268670161345e-05
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008459:shape",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-4",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.1148928022889436e-11
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 1.3859918656796545e-08
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 3.625430533014553e-05
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 5.9787222515959955e-09
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.9999635301103729
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 1.234790315850358e-11
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 5.634467150636384e-13
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 2.324803911802727e-11
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 7.458725052993034e-10
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 1.9495247528254403e-07
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008461:color",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-6",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.0615814729280792e-06
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 6.0483813963325e-08
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 8.206845156033984e-06
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 8.195821178845208e-05
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 1.0659688038097092e-12
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 2.933439019333916e-06
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 0.9999057559790417
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 9.458505819023282e-09
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.4000134115613788e-08
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 1.5967905348030912e-15
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008461:texture",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-7",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.2571574506049936e-18
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 3.972698391368808e-22
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 2.0050046774935097e-07
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 2.156199193195394e-11
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 3.47195457466572e-17
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 1.6435472140562198e-14
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 7.070943344941744e-08
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 0.9999997233154645
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 5.453055591973395e-09
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 2.194571001139849e-16
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008461:count",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-4",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.671173472776041e-14
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 6.680981129778487e-08
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 0.003675305533588366
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 0.4624759488726381
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.4711188579609065
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 0.06135755203301246
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 0.0013570703071568587
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 1.509049343059997e-05
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.0787739329004889e-07
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 1.1204586829343547e-10
+                }
+              ]
+            }
+          },
+          {
+            "id": "CLEVR_new_008461:shape",
+            "decision": {
+              "schema_version": "1.0",
+              "status": "selected",
+              "selected_option_id": "custom-4",
+              "options": [
+                {
+                  "option_id": "custom-0",
+                  "probability": 1.7606222505531174e-11
+                },
+                {
+                  "option_id": "custom-1",
+                  "probability": 6.49039599073522e-08
+                },
+                {
+                  "option_id": "custom-2",
+                  "probability": 6.256364100549255e-05
+                },
+                {
+                  "option_id": "custom-3",
+                  "probability": 4.116978937329255e-06
+                },
+                {
+                  "option_id": "custom-4",
+                  "probability": 0.999933227871266
+                },
+                {
+                  "option_id": "custom-5",
+                  "probability": 1.8929798928854523e-08
+                },
+                {
+                  "option_id": "custom-6",
+                  "probability": 4.149167505885031e-09
+                },
+                {
+                  "option_id": "custom-7",
+                  "probability": 8.625552651489049e-11
+                },
+                {
+                  "option_id": "custom-8",
+                  "probability": 1.9219986982788425e-09
+                },
+                {
+                  "option_id": "custom-9",
+                  "probability": 1.500004185967462e-09
+                }
+              ]
+            }
+          }
+        ],
+        "max_probability_delta": 1.7763568394002505e-15
+      }
+    },
+    "worker": {
+      "status": "PASS_SHARED_WORKER",
+      "pid": 42016,
+      "parameters": 114365184,
+      "weights_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+      "source": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+      "request_sha256": "a6e7aa6b6fdf9d640ec187177b676cf35c3d98feb06858edeefef6dbbeee1a3c",
+      "records": [
+        {
+          "key": "images",
+          "shape": [
+            8,
+            17,
+            768
+          ],
+          "preprocess_encode_send_seconds": 1.3044146000174806
+        },
+        {
+          "key": "video",
+          "shape": [
+            1,
+            2048,
+            768
+          ],
+          "preprocess_encode_send_seconds": 1.7546791000058874
+        },
+        {
+          "key": "images-repeat",
+          "shape": [
+            8,
+            17,
+            768
+          ],
+          "preprocess_encode_send_seconds": 1.0007838000310585
+        }
+      ],
+      "memory": {
+        "rss": 971001856,
+        "vms": 1577615360,
+        "num_page_faults": 1142406,
+        "peak_wset": 1083531264,
+        "wset": 971001856,
+        "peak_paged_pool": 3098944,
+        "paged_pool": 3098848,
+        "peak_nonpaged_pool": 6409648,
+        "nonpaged_pool": 113824,
+        "pagefile": 1577615360,
+        "peak_pagefile": 1703546880,
+        "private": 1577615360
+      }
+    },
+    "changed_answers": 0,
+    "exact_image_repeat": true,
+    "source_unchanged": true,
+    "full_omni_runtime": false,
+    "parameters": 132210472,
+    "hashes": {
+      "config.json": "0c0b473d704f42ff208457543ebdfd9e9803b76aa48a7582fcf498defb88a9ef",
+      "decisions.json": "8b88be1990a4f3ba6a05e1defbf7804d10ae1e8d2a51eb167c999402947cb267",
+      "images-repeat.npy": "6b8dacf30f815cf91dea26747fe898073973adb52e18867dbbe8b0121d65003d",
+      "images.npy": "6b8dacf30f815cf91dea26747fe898073973adb52e18867dbbe8b0121d65003d",
+      "requests.json": "a6e7aa6b6fdf9d640ec187177b676cf35c3d98feb06858edeefef6dbbeee1a3c",
+      "video.npy": "054c4e246ff06688d15624fa8cd5129d553d83fc77288b61f55be086008a54cf",
+      "worker-report.json": "2d33848f2da7b34e523f1629423bb78f1446177bb58faa54e00fcb67f1bac9ea",
+      "worker.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+}

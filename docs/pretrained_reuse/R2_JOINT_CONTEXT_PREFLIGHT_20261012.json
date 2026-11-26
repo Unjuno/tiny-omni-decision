@@ -1,0 +1,43 @@
+{
+  "result_sha256": "f518d25529b140e0b5095efeda449f7de8c19863023375651432d862ca6223b9",
+  "hashes": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\paired-wording-control-01\\config.json": "b328df0af0141b2b6a37421b3a97ea79c97f79fab4fbba437a665197c591d0b3",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\train.jsonl": "1f3e0f751b6fdd1115cf6af4ea3ebc13545a1148614eda4f9f56ae8492c80675",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\comparison-vocabulary-curriculum-01\\train.jsonl": "41b35f3c2b1161d21ebf123d8ba39b29aa17dc9dc82c5f03ff7f291b9d368c76",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\validation.jsonl": "7be1d1624752938553e13e1eecef5363ca2c56dd264da2915b97ddae8d0b60a8",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-curriculum-01\\validation.jsonl": "6ff01e9af03cf481e875dec643e7824ef9fc61718337c7c18774484dea30a34c"
+  },
+  "source_sha256": "8c46b125a68e94b889f500d5154ff72fee2f0cdf54b43d630da691ebd05f7db2",
+  "groups": {
+    "original-train": {
+      "questions": 4096,
+      "independent_state_truncated": 167,
+      "joint_state_truncated": 260,
+      "joint_unpadded_tokens": 1215735,
+      "failures": 0
+    },
+    "curriculum-train": {
+      "questions": 1024,
+      "independent_state_truncated": 0,
+      "joint_state_truncated": 0,
+      "joint_unpadded_tokens": 161836,
+      "failures": 0
+    },
+    "original-validation": {
+      "questions": 2540,
+      "independent_state_truncated": 66,
+      "joint_state_truncated": 117,
+      "joint_unpadded_tokens": 744112,
+      "failures": 0
+    },
+    "curriculum-validation": {
+      "questions": 2048,
+      "independent_state_truncated": 0,
+      "joint_state_truncated": 0,
+      "joint_unpadded_tokens": 311808,
+      "failures": 0
+    }
+  },
+  "model_loaded": false,
+  "training_started": false
+}

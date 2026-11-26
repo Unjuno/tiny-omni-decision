@@ -1,0 +1,121 @@
+{
+  "format": "local_sha256_pinned_public_corpus_v1",
+  "dataset_id": "Sheffield/Lombard-Grid",
+  "source_url": "https://spandh.dcs.shef.ac.uk/avlombard/",
+  "source_revision_type": "locally hashed release snapshots; no immutable upstream release revision claimed",
+  "license": "CC-BY-4.0",
+  "policy": "ALLOW",
+  "license_evidence_page_sha256": "19534c74e4e18bd3c3069984b9c28b1a2de6a5bac9401a48cf95f17b0521f4bc",
+  "license_evidence_local_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-grid-admission-01\\official-page.html",
+  "attribution": "Najwa Alghamdi, Steve Maddock, Ricard Marxer, Jon Barker and Guy J. Brown; A corpus of audio-visual Lombard speech with frontal and profile views, JASA143 EL523(2018).",
+  "citation": "https://doi.org/10.1121/1.5042758",
+  "modalities": [
+    "audio",
+    "video"
+  ],
+  "archives": {
+    "audio": {
+      "status": "PASS",
+      "url": "https://spandh.dcs.shef.ac.uk/avlombard/data/lombardgrid_audio.zip",
+      "etag": "\"26e61999-568649ce7ab80\"",
+      "bytes": 652614041,
+      "sha256": "e36707602fdbeaa2e2284acb29bba883261d5e86857f694ac40cbb56cdcc5e10",
+      "members": 5390,
+      "all_member_crc_verified": true
+    },
+    "front": {
+      "status": "PASS",
+      "url": "https://spandh.dcs.shef.ac.uk/avlombard/data/lombardgrid_front.zip",
+      "etag": "\"31e7421f-56864af341e40\"",
+      "bytes": 837239327,
+      "sha256": "8c7ff24dffd5acb3b8cd1dceb4bd33463b82b797f66a8ed092ad681a9ffb6313",
+      "members": 5390,
+      "all_member_crc_verified": true
+    }
+  },
+  "split_hashes": {
+    "train": "259f3ee36aa956618a89819338c2ecb67b194c82dbf636df70b551e00a5d78b0",
+    "calibration": "22748b0942dfb1e54dcbd1e356b5e25930da46f95f15724a5f0bfd03b546a765",
+    "validation": "98d81114e73dd4924c087df08873d21648a2ae34a9cc289887eb0767ded4658d",
+    "unresolved": "08f7e49af76c693163865ecb178f49a6b4b3084fa5eab6e56c385d90c4c89701"
+  },
+  "corpus_layout": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-grid-layout-02-media-gated",
+  "train": 4080,
+  "calibration": 398,
+  "validation": 889,
+  "unresolved_labels_retained": 19,
+  "broken_training_media_retained": 4,
+  "sealed_audit": false,
+  "precise_av_offset": "UNKNOWN; no retiming",
+  "native_grammar": {
+    "command": [
+      "bin",
+      "lay",
+      "place",
+      "set"
+    ],
+    "color": [
+      "blue",
+      "green",
+      "red",
+      "white"
+    ],
+    "preposition": [
+      "at",
+      "by",
+      "in",
+      "with"
+    ],
+    "letter": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f",
+      "g",
+      "h",
+      "i",
+      "j",
+      "k",
+      "l",
+      "m",
+      "n",
+      "o",
+      "p",
+      "q",
+      "r",
+      "s",
+      "t",
+      "u",
+      "v",
+      "x",
+      "y",
+      "z"
+    ],
+    "number": [
+      "zero",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "adverb": [
+      "again",
+      "now",
+      "please",
+      "soon"
+    ]
+  },
+  "legacy_dataset_manifest_not_used": "core DatasetManifest requires40-character revisions and max20 options; this native SHA256 snapshot/25-letter research task must not fake a Git revision or reduce vocabulary",
+  "commercial_use": true,
+  "derivative_model_training_allowed": true,
+  "redistribution_allowed": true,
+  "media_redistribution_allowed": true,
+  "trust_status": "trusted"
+}

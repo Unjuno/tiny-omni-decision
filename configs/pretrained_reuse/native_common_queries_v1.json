@@ -1,0 +1,22 @@
+{
+  "id": "native-common-query-alignment-v1",
+  "corpus": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02",
+  "model_path": "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model",
+  "model_revision": "262ae02f29173eec1c250f90804dc7edc677dcff",
+  "language_receipt": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-language-cache-02\\result.json",
+  "language_queries": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-language-cache-02\\queries.npy",
+  "input_pins": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\added_tokens.json": "dc046d04c9b0ada7ae6f1dc89c465801799acdf0c9a6aab8c15a1b2d5ca4e91f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\config.json": "dc6de98193d85d4c45f96724e6dd3672b897af3f1592e02625b9a71be795887b",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\model.safetensors": "56b89067a4e60362f498f39b7067020911618fad37d64fa23a5f959a04fd4080",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\README.md": "07134727f6e5a3f726ee869f7ff3b2700ca9d9f70b462746c73ac7e485eee606",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\special_tokens_map.json": "311de3f4eed9d76a43bf0d71f10e62e086ca65ccce9f15d5da0d2098bf519ecc",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\spm.model": "c679fbf93643d19aab7ee10c0b99e460bdbc02fedf34b92b05af343b4af586fd",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\tokenizer.json": "05402ffae6dd382a8491b1d29bfc139bec5d332662e86a026f433ce54c25c202",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\deberta-xsmall-zeroshot-audit-01\\model\\tokenizer_config.json": "d8d3bb123b99317634d5ee3d1d2d8b2ddb01510a0654687fc2639a5347a7291f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02\\result.json": "47a6d2f3495810bac58f57dec1a962f8b490fa409c75671b46bb2999fde87d49",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-language-cache-02\\result.json": "21d427849547541ff3824843b3c2e5e855a6a958fbc88e21ae9e037ffe405278",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-language-cache-02\\queries.npy": "e123c9c7fdc2af85fa4fa50eb3be9e2de1ce013144561ee6e35c1c95e6185be3"
+  },
+  "expected_new_pairs": 2622
+}

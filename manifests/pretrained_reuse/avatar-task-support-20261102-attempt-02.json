@@ -1,0 +1,81 @@
+{
+  "format": "avatar_train_task_support_summary_v2",
+  "dataset_revision": "a7f0146ff704799d044133e61137836cacc1c233",
+  "attempt_01_preserved": true,
+  "external_report": "C:\\CodexArtifacts\\pretrained-reuse-r2\\avatar-task-support-20261102-attempt-02\\report.json",
+  "external_report_sha256": "6ecce0f7684b3d97a1a1744e94e5d71eca13fb81847fe4f7804b710856097433",
+  "train_annotation_tree_sha256": "4c17a0bdbd7d488bced018404ce71be5659d27273efcfdec9e1cdfffd16eb651",
+  "prior_exposed_group_set_sha256": "4f0fbd6dc342c8c485c4c187bc102a988def78fdaeef11879ed11221ab4adf3a",
+  "global_unexposed_source_group_count": 1015,
+  "global_split": {
+    "seed": 17,
+    "validation_fraction": 0.4,
+    "assignment_unit": "source_group_global_across_tasks",
+    "train_group_count": 609,
+    "validation_group_count": 406,
+    "overlap_count": 0,
+    "train_group_set_sha256": "2ab6aad8eb73e3c85f4529406068187244cf619e1edcddef2a7795739834d9be",
+    "validation_group_set_sha256": "9ee1a810ad8dd7032c2d46c55359fc80f19e7c73a8d8d58851386d4a0b55a65b",
+    "frozen_benchmark_split": false
+  },
+  "task_support": {
+    "Mixed-Sound": {
+      "unexposed_groups": 635,
+      "train_groups": 370,
+      "validation_groups": 265,
+      "categories": 70,
+      "categories_present_in_both_folds": 55,
+      "categories_with_at_least_four_groups_per_fold": 32,
+      "minimum_validation_groups_per_shared_category": 1,
+      "annotations": 6453,
+      "frames": 3386,
+      "annotated_clips": 738
+    },
+    "Multi-Entity": {
+      "unexposed_groups": 452,
+      "train_groups": 283,
+      "validation_groups": 169,
+      "categories_present_in_both_folds": 50,
+      "categories_with_at_least_four_groups_per_fold": 11
+    },
+    "Off-Screen": {
+      "unexposed_groups": 75,
+      "train_groups": 41,
+      "validation_groups": 34,
+      "categories_present_in_both_folds": 11,
+      "categories_with_at_least_four_groups_per_fold": 2
+    },
+    "Single-Sound": {
+      "unexposed_groups": 0,
+      "train_groups": 0,
+      "validation_groups": 0
+    }
+  },
+  "local_media_zip_inventory": {
+    "method": "ZIP central directory only; no member payloads opened",
+    "archive_sha256": null,
+    "archive_sha256_reason": "Hashing the full archive would read media payload bytes",
+    "mixed_sound_annotated_clips_expected": 738,
+    "mixed_sound_annotated_clips_found": 738,
+    "mixed_sound_annotated_clips_missing": 0,
+    "mixed_sound_compressed_bytes": 517372409,
+    "mixed_sound_expanded_bytes": 523793811,
+    "media_payloads_opened": false,
+    "media_decoded": false
+  },
+  "official_validation_annotations_accessed": false,
+  "sealed_audit_accessed": false,
+  "features_or_model_loaded": false,
+  "model_fit_or_quality_evaluation": false,
+  "task_representation": {
+    "candidate": "independent binary Decision per mask-independent spatial point",
+    "options": ["background", "sound source"],
+    "target": "point falls inside official union of visible-source masks",
+    "multi_positive_probabilities_normalized_across_points": false,
+    "point_bank_and_resolution_frozen": false
+  },
+  "source_rights_review_complete": false,
+  "admitted_for_fitting": false,
+  "decision": "SUPPORT_FLOOR_MET_TASK_AND_RIGHTS_GATES_OPEN",
+  "report": "docs/pretrained_reuse/R2_AVATAR_TASK_SUPPORT_20261102.md"
+}

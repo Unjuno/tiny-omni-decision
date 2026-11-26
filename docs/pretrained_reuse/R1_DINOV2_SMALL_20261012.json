@@ -1,0 +1,83 @@
+{
+  "result": {
+    "repo": "facebook/dinov2-small",
+    "revision": "ed25f3a31f01632728cabb09d1542f84ab7b0056",
+    "device": "cpu",
+    "threads": 2,
+    "python": "3.11.9",
+    "torch": "2.6.0+cu124",
+    "transformers": "5.6.2",
+    "parameters": 22056576,
+    "dtype": "torch.float32",
+    "input_shape": [
+      2,
+      3,
+      224,
+      224
+    ],
+    "tokens_shape": [
+      2,
+      257,
+      384
+    ],
+    "finite": true,
+    "repeat_exact": true,
+    "loading_info": {
+      "missing_keys": [],
+      "unexpected_keys": [],
+      "mismatched_keys": [],
+      "error_msgs": []
+    },
+    "seconds": 0.4649708999786526,
+    "fixture": "two generated solid-color RGB 256x256 images; no quality evaluation",
+    "native_temporal_model": false,
+    "processor": {
+      "crop_size": {
+        "height": 224,
+        "width": 224
+      },
+      "do_center_crop": true,
+      "do_convert_rgb": true,
+      "do_normalize": true,
+      "do_rescale": true,
+      "do_resize": true,
+      "image_mean": [
+        0.485,
+        0.456,
+        0.406
+      ],
+      "image_processor_type": "BitImageProcessor",
+      "image_std": [
+        0.229,
+        0.224,
+        0.225
+      ],
+      "resample": 3,
+      "rescale_factor": 0.00392156862745098,
+      "size": {
+        "shortest_edge": 256
+      }
+    },
+    "prior_attempt": "forward checks passed; report serialization failed on loading_info set; reran unchanged CPU fixture with serialization fixed"
+  },
+  "files": {
+    "README.md": {
+      "bytes": 3033,
+      "sha256": "4c20dca454a8e5c670e8de5c7e6040f512aeca5438516f7623eedc4e3b00599c"
+    },
+    "config.json": {
+      "bytes": 547,
+      "sha256": "1809f83e3bdb1609a501a610ad4a742f4fd8ae44d72ca4aa0df52d1f2ac8628d"
+    },
+    "preprocessor_config.json": {
+      "bytes": 436,
+      "sha256": "14e780d86fa1861f8751f868d7f45425b5feb55c38ca26f152ca5097ab30f828"
+    },
+    "model.safetensors": {
+      "bytes": 88249960,
+      "sha256": "ae1e99fcefd534ed978cdeb8326f08030c96e28b7a81ffcbc98a857c84d14be1"
+    }
+  },
+  "artifact_path": "C:\\CodexArtifacts\\pretrained-reuse-r1\\dinov2-small-audit-01",
+  "quality_evaluated": false
+}

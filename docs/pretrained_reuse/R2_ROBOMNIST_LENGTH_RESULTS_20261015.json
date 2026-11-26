@@ -1,0 +1,705 @@
+{
+  "status": "PASS_FRESH_LENGTH_ARRAY_REPLAY_AND_SCALAR_METRICS_ONLY",
+  "main_source_commit": "d171a4f8877adb2e8ef781ae7e5b122d836358fd",
+  "config_sha256": "25a2926a856fa31a5a7a5275720b8bac7728fc74a4d4fc5bfadb5e73b60eacc8",
+  "unique_source_groups": 2135,
+  "split_counts": {
+    "train": 1475,
+    "validation": 660
+  },
+  "group_order_sha256": "4a447e59b5a7c1957767cbbe5de97bfb7f7adaa468ff691e0adf7f446f0dbb9a",
+  "split_assignment_sha256": "0be2a8776029e05c1a53066dfc4d3a719ab783ede0def06b7ac6318cc5ae947b",
+  "arrays_exact": 7,
+  "all_log_probabilities_byte_equal": true,
+  "scalar_metric_checks": 40,
+  "scalar_absolute_tolerance": 1e-12,
+  "results": {
+    "camera_length": {
+      "activity60": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.6488135593220339,
+          "nll": 2.9487157974219205,
+          "brier": 0.9114584955525897,
+          "ece": 0.5768889435558929,
+          "mean_confidence": 0.07761938460505378
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.6545454545454545,
+          "nll": 2.9358727521448738,
+          "brier": 0.9083569538080081,
+          "ece": 0.5820609712295228,
+          "mean_confidence": 0.07722951608569086
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.6378787878787879,
+          "interval_95_percentile": [
+            0.5848484848484848,
+            0.6773106060606058
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      },
+      "robot": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.8440677966101695,
+          "nll": 0.5337825275909376,
+          "brier": 0.3405673746086004,
+          "ece": 0.21925561721362744,
+          "mean_confidence": 0.6300102273113058
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.853030303030303,
+          "nll": 0.5207792910883488,
+          "brier": 0.33605227947443955,
+          "ece": 0.2239004085268551,
+          "mean_confidence": 0.6291298945034479
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.353030303030303,
+          "interval_95_percentile": [
+            0.34393939393939393,
+            0.3621212121212121
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      },
+      "velocity": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.5803389830508474,
+          "nll": 0.9186304290491587,
+          "brier": 0.548212689580886,
+          "ece": 0.1083879692962028,
+          "mean_confidence": 0.4726417749879173
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.5848484848484848,
+          "nll": 0.8995762053884498,
+          "brier": 0.5386552100184965,
+          "ece": 0.1409506213372995,
+          "mean_confidence": 0.4756588609013432
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.2515151515151515,
+          "interval_95_percentile": [
+            0.23636363636363636,
+            0.26666666666666666
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      },
+      "trajectory": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.3383050847457627,
+          "nll": 2.0499485922932723,
+          "brier": 0.8386374643988168,
+          "ece": 0.1673845457213622,
+          "mean_confidence": 0.17663605818516495
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.32727272727272727,
+          "nll": 2.045802494065825,
+          "brier": 0.8356570898528775,
+          "ece": 0.15654623187536104,
+          "mean_confidence": 0.1768699049472343
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.22727272727272727,
+          "interval_95_percentile": [
+            0.21212121212121213,
+            0.2409090909090909
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      }
+    },
+    "microphone_length": {
+      "activity60": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.033220338983050844,
+          "nll": 4.026049002396803,
+          "brier": 0.9810967440551921,
+          "ece": 0.0014844990311300903,
+          "mean_confidence": 0.0322547398246154
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.019696969696969695,
+          "nll": 4.163530667691062,
+          "brier": 0.9859268879086858,
+          "ece": 0.012934184553881466,
+          "mean_confidence": 0.032631154250851176
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.0030303030303030303,
+          "interval_95_percentile": [
+            -0.007575757575757576,
+            0.013636363636363636
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      },
+      "robot": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.5166101694915254,
+          "nll": 0.6921389204477871,
+          "brier": 0.4989955701954579,
+          "ece": 0.006001765651077968,
+          "mean_confidence": 0.5169599553526851
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.5136363636363637,
+          "nll": 0.6967144563631426,
+          "brier": 0.5035248721496173,
+          "ece": 0.0452047064770954,
+          "mean_confidence": 0.5195732265930686
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.013636363636363636,
+          "interval_95_percentile": [
+            -0.02727272727272727,
+            0.048484848484848485
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      },
+      "velocity": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.3708474576271186,
+          "nll": 1.0927529021450813,
+          "brier": 0.6626386970160183,
+          "ece": 0.012411533726003472,
+          "mean_confidence": 0.3693776207943152
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.36666666666666664,
+          "nll": 1.0983441964571823,
+          "brier": 0.666461340769653,
+          "ece": 0.0044045779311157164,
+          "mean_confidence": 0.3710712445977823
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.03333333333333333,
+          "interval_95_percentile": [
+            0.006060606060606061,
+            0.05757575757575758
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      },
+      "trajectory": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.1152542372881356,
+          "nll": 2.293116577864176,
+          "brier": 0.8981274751120506,
+          "ece": 0.010603467206933576,
+          "mean_confidence": 0.12316264920824078
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.11212121212121212,
+          "nll": 2.3096865874626413,
+          "brier": 0.9013363068518253,
+          "ece": 0.012044128563161553,
+          "mean_confidence": 0.12416534068437367
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.012121212121212121,
+          "interval_95_percentile": [
+            -0.0015151515151515152,
+            0.024242424242424242
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      }
+    },
+    "csi_length": {
+      "activity60": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.20677966101694914,
+          "nll": 3.524675105886212,
+          "brier": 0.957358108744185,
+          "ece": 0.1729900055314879,
+          "mean_confidence": 0.03378965548546122
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.22272727272727272,
+          "nll": 3.5229192731228895,
+          "brier": 0.9567143066736439,
+          "ece": 0.18926692650526003,
+          "mean_confidence": 0.03461595485932923
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.20606060606060606,
+          "interval_95_percentile": [
+            0.18787878787878787,
+            0.22424242424242424
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      },
+      "robot": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.6284745762711864,
+          "nll": 0.663807749186945,
+          "brier": 0.4707364843153288,
+          "ece": 0.07522981386426224,
+          "mean_confidence": 0.55446415464266
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.6378787878787879,
+          "nll": 0.6584849308431173,
+          "brier": 0.4658684163630095,
+          "ece": 0.08132106838696843,
+          "mean_confidence": 0.5565577194918193
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.13787878787878788,
+          "interval_95_percentile": [
+            0.1303030303030303,
+            0.14696969696969697
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      },
+      "velocity": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.4935593220338983,
+          "nll": 1.0138822410365191,
+          "brier": 0.6082212005737941,
+          "ece": 0.09331153730345211,
+          "mean_confidence": 0.40146115792163073
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.48333333333333334,
+          "nll": 1.0108306222374233,
+          "brier": 0.6058457101268574,
+          "ece": 0.07944853426100103,
+          "mean_confidence": 0.40388479907233227
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.15,
+          "interval_95_percentile": [
+            0.13636363636363635,
+            0.1621212121212121
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      },
+      "trajectory": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.1511864406779661,
+          "nll": 2.239844511733368,
+          "brier": 0.8852602482114177,
+          "ece": 0.03398330328725688,
+          "mean_confidence": 0.12370013081309868
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.16515151515151516,
+          "nll": 2.2355511596764375,
+          "brier": 0.8845248544960982,
+          "ece": 0.05017156432382602,
+          "mean_confidence": 0.1242672257806024
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.06515151515151515,
+          "interval_95_percentile": [
+            0.0590530303030303,
+            0.07424242424242425
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      }
+    },
+    "all_lengths": {
+      "activity60": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.535593220338983,
+          "nll": 2.3592079526600553,
+          "brier": 0.8283647854559373,
+          "ece": 0.39844858659347865,
+          "mean_confidence": 0.1436013776400196
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.4348484848484849,
+          "nll": 2.46447497529096,
+          "brier": 0.8424203719038303,
+          "ece": 0.2992626676497695,
+          "mean_confidence": 0.13721091812527536
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.41818181818181815,
+          "interval_95_percentile": [
+            0.3908712121212121,
+            0.4484848484848485
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      },
+      "robot": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.8501694915254238,
+          "nll": 0.47882600638386136,
+          "brier": 0.2923270585835807,
+          "ece": 0.1867356786973351,
+          "mean_confidence": 0.6684057613749019
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.8318181818181818,
+          "nll": 0.4732220428658796,
+          "brier": 0.2947618302635816,
+          "ece": 0.1878796891067378,
+          "mean_confidence": 0.6643121069507134
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.33181818181818185,
+          "interval_95_percentile": [
+            0.32272727272727275,
+            0.3393939393939394
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      },
+      "velocity": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.7057627118644068,
+          "nll": 0.7944038141249753,
+          "brier": 0.4647000364727702,
+          "ece": 0.1924477783278506,
+          "mean_confidence": 0.5141177766095529
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.7181818181818181,
+          "nll": 0.7861791467700956,
+          "brier": 0.4639722289079588,
+          "ece": 0.20928549925743545,
+          "mean_confidence": 0.5088963189243827
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.38484848484848483,
+          "interval_95_percentile": [
+            0.36818181818181817,
+            0.4015151515151515
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      },
+      "trajectory": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.43322033898305085,
+          "nll": 1.8370383194297004,
+          "brier": 0.7785052614238857,
+          "ece": 0.22376270019737807,
+          "mean_confidence": 0.2159188425549896
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.34545454545454546,
+          "nll": 1.8824390810867782,
+          "brier": 0.7897881337578004,
+          "ece": 0.13467874802270047,
+          "mean_confidence": 0.2130424373566188
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.24545454545454545,
+          "interval_95_percentile": [
+            0.2196969696969697,
+            0.2697348484848483
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      }
+    },
+    "train_frequency_prior": {
+      "activity60": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.022372881355932205,
+          "nll": 4.091478857909365,
+          "brier": 0.9832328641195172,
+          "ece": 1.161170971051811e-16,
+          "mean_confidence": 0.022372881355932208
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.016666666666666666,
+          "nll": 4.097082943705347,
+          "brier": 0.9834338025471578,
+          "ece": 0.005706214689265476,
+          "mean_confidence": 0.022372881355932208
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.0,
+          "interval_95_percentile": [
+            0.0,
+            0.0
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      },
+      "robot": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.5111864406779661,
+          "nll": 0.6928968867668377,
+          "brier": 0.4997497270899145,
+          "ece": 2.2098330698284725e-15,
+          "mean_confidence": 0.5111864406779658
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.5,
+          "nll": 0.693397516127468,
+          "brier": 0.5002502729100868,
+          "ece": 0.011186440677966975,
+          "mean_confidence": 0.5111864406779658
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.0,
+          "interval_95_percentile": [
+            0.0,
+            0.0
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      },
+      "velocity": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.3376271186440678,
+          "nll": 1.0985705475753944,
+          "brier": 0.6666387819591962,
+          "ece": 3.5899720108133454e-15,
+          "mean_confidence": 0.3376271186440677
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.3333333333333333,
+          "nll": 1.0986539446563628,
+          "brier": 0.666694551374122,
+          "ece": 0.004293785310732148,
+          "mean_confidence": 0.33762711864406775
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.0,
+          "interval_95_percentile": [
+            0.0,
+            0.0
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      },
+      "trajectory": {
+        "train": {
+          "count": 1475,
+          "accuracy": 0.10440677966101695,
+          "nll": 2.30219819706973,
+          "brier": 0.8999225509910935,
+          "ece": 8.639040518735752e-17,
+          "mean_confidence": 0.10440677966101695
+        },
+        "validation": {
+          "count": 660,
+          "accuracy": 0.1,
+          "nll": 2.3029717110038113,
+          "brier": 0.9000774490089064,
+          "ece": 0.0044067796610168745,
+          "mean_confidence": 0.10440677966101693
+        },
+        "paired_validation_vs_prior": {
+          "delta_accuracy": 0.0,
+          "interval_95_percentile": [
+            0.0,
+            0.0
+          ],
+          "draws": 2000,
+          "seed": 17,
+          "repetition_blocks": 11,
+          "method": "paired complete-Rp cluster percentile bootstrap; development only"
+        }
+      }
+    }
+  },
+  "validated_hashes": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-source-audit-01\\article-version-1.json": "18ef8b20c82056747c58572d24f262b2d12c9284e4ffd83c245ae64eca2ab120",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\audit_robomnist_all_directories.py": "7c72808221a95b2d392ce54577b38f60eb37abe0329890b011e2fcae4607ed29",
+    "scripts\\audit_robomnist_source.py": "8fc48b9fecee666643d80b85673ced0a9212c498a213d2f23a69c9c8b80b677a",
+    "scripts\\fetch_starss23_smoke.py": "8d7cdd5331b0174096275c47ff93a9291a8cccee6bea7ab10c4289e2a5951cc6",
+    "docs\\pretrained_reuse\\R2_ROBOMNIST_DIRECTORY_PROTOCOL_20261014.md": "3db87f8d6062ff137b8e20fd1537c03bccdc88a608936c18304e0a32c855d97a",
+    "docs\\superpowers\\plans\\2026-10-14-robomnist-directory-index.md": "c47d8173eab882eb70f557b4e2bca5a92f2662f3f95ee43bd889dd66737e05da",
+    "tests\\test_robomnist_all_directories.py": "7fac30f41f452db67d1c464d2e1391b84e1b496ac96fda1e7d9fd50b1bee1892",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\result.json": "23d4cf7ab084e4924f2f71564f490e57ea05a4f611e06cd483fe45796adce237",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\config.json": "9fd54bd8daa2196d523f515155a1415cd43d66c1afc5ecc28cbc9c5b67025b09",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\execution-source.py": "7c72808221a95b2d392ce54577b38f60eb37abe0329890b011e2fcae4607ed29",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-00.json": "900da2375691904f75477ec312f91c8d60cf9c3fb1eb12f861d57a8228694c08",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-01.json": "ea2a095cf5dfc0246e5f6f746b57f7a09fa872dd2c661bfa72a20cd981da193b",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-02.json": "75933e37499c649c1c765bfbab6b86913df486201075e535676f54799af63880",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-03.json": "52dbe3a547bde4dc4cde70865a4c724c6b8cb2f6703eb4bdbd80b392c384fa66",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-04.json": "e8b8f92fb39240ac1341d28a46fa38e9cbf805d83139b39f77718de238e30d95",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-05.json": "266ca3cf678d9b2c9d14725675909e287f687c16313d8cfe58b2b7bf0741310c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-06.json": "fe9daab79f1070b584b776c7fbd399b1014c3091fb5740911d9427ef89b7ca74",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-07.json": "dadd7b7b576c0a58ea28de9ca4854952196f53fc0d4d711ad36767f2845a1269",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-08.json": "d6415db85244bfc6a5707585f1eeaf5545828c828b1e2a28228300a4cf175d04",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-09.json": "8054129d431f9985c67a490e05a6797102ad5b85def76fba224f600c32f8e8a7",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-10.json": "14d4d2fb34c91e4c5dd52665b31266c4545f5c73479b57758ba833eba7474c3a",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-11.json": "fd169a31b406d44176c1e84b2d0f911ac7405c970eac77a89a27bfb62474937c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-12.json": "0938deb393bc6869b79727814715f452e7c6027302dfbaa905c526e83bf25016",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-13.json": "7fde0f2e9c34e7c4fbed93a01876db36a2e55d2aca7189b9ee696187be4b7eb0",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-14.json": "ecbb47343b422bc7f6ef255df89501944f7502b91862976e3ba4df38e05aebca",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-15.json": "e2319a9d938726acb1ed7cbcc0fae5082a1befafc58ec6f88411c82d1e0e82bc",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-16.json": "f43b51bc09225275208a9e88ee138ea599c793521c06632678effa23a0f4fbaf",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-17.json": "4195f6adb1f57a1732fbde067508fe566df5e1c257f7820386e22468c318f66e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-18.json": "77a8e8b35b355cb5de4cf0d2cc8eb3463c4b8923fc32475df43b566160157099",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-19.json": "2b22ad09a4d7d81e0e746d0a8a7ab46e6d1dde2df7b293f953bbe83d722577a9",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-20.json": "1588b7d0acb8326d6160e0ab52495be37f59d4ca2226df326f441310e922bbea",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-21.json": "853ac7c86b32846558d185a04adea0327d050d3d58bb9de4863dbbafffa7f1b2",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-22.json": "2a9174ca41e2c0cf8fd8be856043dd77c604b0a08b3e4efd4dae47a08dea2776",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-23.json": "e064a5d28c478d8d0ef330d5856241c0bf1e2b59d7ed26d5f600452e84d2d808",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-24.json": "e2e0d69e6c41383f6c8f59b2dda693f16fe5e1cf9c13389f92fc0c79202ad124",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-25.json": "e53a17fcc94b0f5ede8c6b2d8b5c7cc885f6baab0d4659be9371bb32f599290d",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-26.json": "170bbe36074cdbcc783b9cf1604895f91815b95e6436bfec498937623a057ca4",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-27.json": "ace28c841b636efaf9eb0636cb80410b32cf1e2edfe6db24aec003a4f73a1edb",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-28.json": "4c3f76835edce6ea027d39032960e939dff45c0a291cfd9b3cf1cfa09bfda0bf",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-29.json": "137f68d3d05de212deb4a1d7bc61d1037d1fbb3a282284158ae4d43fe2cd3a03",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-30.json": "30df34dca74e8e4118152997fd6bd1a8a0cf387549ae23834bcd440c66735fd1",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-31.json": "4d797ef62ac4440a8f89a8e662c1bd84317db7b13fd755c8c86ef71588cc39d2",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-32.json": "ea668f7d70df74e3898a859d3ee762f27e339fc684563be8b8bd83c5b58ff3d0",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-33.json": "ae0844030c0a84d1dec8b5cf3b2716ddc370dfa5d7509230b1e3843f57071049",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-34.json": "1e7594565cbcd918e46ed259d3a0cd0d21a1345b1c1835eacb897b528752c481",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-35.json": "23ea9d69f0215b45f493c71864f8ec89fe004a0e40d76bd217c89cbfccd1e851",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-36.json": "d55e4a972ed70d91c31cf719969f857c4dee1484c28113d3665cd540227cea3d",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-37.json": "1ac830296c195ea787a5cfe03d16c4c519b3a67d3875c10155cd87a1c2495541",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-38.json": "855ae9493793676f6d9920c1a006b1d00892649b2e11af80dca4d67c1e0cbd0f",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-39.json": "593caafe27a56f3787a616b14fac881e975bae91925c913516a0101c3de81086",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-40.json": "89b2730a584d0039ee53d5133fbab94c383b3f14850265430dd68c88173b3ab3",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-41.json": "db64c3742b71401f2b7fad6763643b22c3b612c684f1e4996bd0fc9840bdbab0",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-42.json": "53ed07e2be381c6092fc414cba3e388a1df18d0d63112890a8780b58e09433d2",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-43.json": "4b6fcac4282815efaaac148cbc29d0ddbe140bc21adafc1f59fb9d77d2664e4d",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-44.json": "2fb0a9b1118947ace08af0313a2cfc326ca2f07b338aa5564f07c5ff6dae803a",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-45.json": "dbd03f1074b8cc87f0039b0f4375257f345b11946e45a93ebc4fb6a64b8adb72",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-46.json": "a147565b43005788d54432c7577157feb80a000fc2099d1e0ae03e13b2a415b6",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-47.json": "705764e26d1c009bd9e1e271a0df81a604ee1ac4df563ee5e7b7400342dda8b2",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-48.json": "787d31314991feb4b201b12874ab96edda3a5ebb48a61af1c590d36666e1ec28",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-49.json": "6ac0c2e63a8cc6674ff2d4b886a2ebf145e2b078fa2a14e373222d5c71817337",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-50.json": "6e2a930f3a616056ad77efa3ecb97f58856048fa67941b333c3785f1564c2aa5",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-51.json": "a3e68ff74a6ebf6d675aa8bae6c8b959520f549d55e3de067554545567693d4c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-52.json": "74cfb417fc6d9c1869547e3b1bfb95459ee127d473c3f36cd4709b9fc0353803",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-53.json": "330a810c4121c720ee3b4d2683ce47f6291e58e9438c09760c1d7b31c329bb01",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-54.json": "b1ac441e11ec0ab0bf003be88d30efc04539ac02c6a8929a0b01edd05b123c34",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-55.json": "0904caee678c2bd32a3b9fb484c43ce004a73908a3746deddf9bbc754080c89c",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-56.json": "b1e99cfcf7e6bf59aa67f19fd9a502f7bfc1eeebcf1d78069cce4c84b65981d8",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-57.json": "b04edc3bdfd7a1712c4056db8d917acd15c18f018311dac97d1e3924996a1764",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-58.json": "27cf60b4ee21e11f5a4292e94f105bbacb35752deb93988b39f165cc43d0176a",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-01\\directory-59.json": "a3fbfeacfc460c7882a3a85439bcf8792c7af2ac7938cabfb56455aabd2669fe",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-all-directories-replay-02.json": "b34bc54f57d3c434947d673ed32cd9a9c6e4f82bfc10f9b02213b397a76a29a4",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\diagnose_robomnist_lengths.py": "7985eb546c110fc4e7b90cfcb3d6250caa0a54404190063ba7f4241ead74ffd6",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\robomnist_length_probe.py": "c4acea3812c53ae62420b098707eeadbf317fa28f21d9a7ca39dab0854d9b738",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\fetch_robomnist_input_smoke.py": "0258575ec06448d412270fb82a7ee1afbb2daa5741d368b00f526c2321a4ad78",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\replay_robomnist_directories.py": "595abe11972bde5afd77afa299803236da7e8ea97c1ca04fc337c209ffeaffe3",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\tests\\test_robomnist_length_probe.py": "33c16cb473f484443e2e272be78d0e48ff64d1f15e38795dc69859327e77faf1",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\docs\\pretrained_reuse\\R2_ROBOMNIST_LENGTH_PROTOCOL_20261015.md": "07fe61725a783e0a85d5f771b52165905585069002f5b6d089c921edd7d13a9a",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\docs\\superpowers\\plans\\2026-10-15-robomnist-source-length-diagnostic.md": "afb07cc3ad4de090da2b9d7d73c76d6b284de6873ab96706be28257da30304dd",
+    "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\numpy\\__init__.py": "65d5e777b6d662ba19cb80800bef3eb999eda7aee51eea62c308feabf679dba4",
+    "C:\\CodexWorktrees\\pretrained-reuse-omni\\src\\tiny_omni_decision\\decision_math.py": "03061b7733a399901e0092c9312b624b21388b1a7d7a591f8b27bcd5090c7073",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-length-diagnostic-01\\config.json": "25a2926a856fa31a5a7a5275720b8bac7728fc74a4d4fc5bfadb5e73b60eacc8",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-length-diagnostic-01\\rows.json": "2584656bb2c917200dce6cf5cb4d8a5d12dfc655fcdb8a087b32ff8df29749ad",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-length-diagnostic-01\\arrays.npz": "f8d4ed11c79faee9643a378545bc94d4bca29a48dbdf39b51b8d5b46a97cd262",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-length-diagnostic-01\\result.json": "05f62ad3b67328a7164a966ba0b8198c03cd41b4e4745e8a0e16d719520a93ea"
+  },
+  "consumer_sha256": "e2cb770c39cdebc3381541d46bb526d38a7c43946277062cc24c4faadffb4b73",
+  "training_corpus_admission": "NOT_ADMITTED",
+  "native_modality_quality_measured": false,
+  "new_payloads_opened": false,
+  "pretrained_models_loaded": false,
+  "gpu_used": false,
+  "position_gt_opened": false,
+  "sealed_audit_opened": false,
+  "cloud_cost": 0,
+  "replay_seconds": 0.8734369999729097,
+  "replay_peak_cpu_bytes": 63717376
+}

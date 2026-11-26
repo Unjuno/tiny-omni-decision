@@ -1,0 +1,248 @@
+{
+  "format": "bounded_train_source_probe_v1",
+  "dataset_id": "Greatest-Hits",
+  "policy": "REVIEW",
+  "license_policy": "ALLOW",
+  "training_admission": "NOT_ADMITTED",
+  "license": "CC-BY-4.0",
+  "source_url": "https://andrewowens.com/vis/",
+  "attribution": "Owens, Isola, McDermott, Torralba, Adelson, Freeman; Visually Indicated Sounds (CVPR 2016)",
+  "citation": "https://arxiv.org/abs/1512.08512",
+  "scope": "fixed official TRAIN physical probe only; no training corpus or quality benchmark",
+  "source_version": {
+    "url": "https://web.eecs.umich.edu/~ahowens/vis/vis-data-256.zip",
+    "bytes": 21142601241,
+    "etag": "\"4ec327e19-5cc7fa3687c80\"",
+    "full_archive_sha256": null,
+    "directory_sha256": "98673a0101020606537d2850f825ebe08219c496928002f2cf09dcaa83b9824a"
+  },
+  "parent_inventory": {
+    "parents": 977,
+    "suffixes": [
+      "denoised.mp4",
+      "denoised.wav",
+      "denoised_thumb.mp4",
+      "mic.mp4",
+      "mic.wav",
+      "times.txt"
+    ],
+    "train": 733,
+    "test": 244,
+    "exact_id_overlap": 0
+  },
+  "grouping": {
+    "timestamp_prefix": {
+      "train": 419,
+      "test": 164,
+      "shared": 55,
+      "identity_semantics": "UNKNOWN"
+    },
+    "date_prefix": {
+      "train": 28,
+      "test": 25,
+      "shared": 25,
+      "identity_semantics": "UNKNOWN"
+    },
+    "shared_timestamp_prefix_train_children": 324,
+    "shared_timestamp_prefix_test_children": 134,
+    "scene_actor_session_identity": "UNKNOWN"
+  },
+  "selected": [
+    "2015-09-29-15-44-54-671",
+    "2015-09-30-20-56-02-304",
+    "2015-03-30-00-26-27"
+  ],
+  "selection": "first3 SHA256('17:' + official TRAIN ID)",
+  "annotations": {
+    "rows": 98,
+    "complete": 54,
+    "missing_fields_histogram": {
+      "3": 37,
+      "0": 54,
+      "1": 6,
+      "2": 1
+    },
+    "raw_label_field_counts": [
+      {
+        "<MISSING>": 39,
+        "leaf": 30,
+        "dirt": 6,
+        "rock": 9,
+        "tile": 14
+      },
+      {
+        "<MISSING>": 39,
+        "scratch": 34,
+        "hit": 25
+      },
+      {
+        "<MISSING>": 41,
+        "scatter": 34,
+        "splash": 1,
+        "static": 20,
+        "rigid-motion": 2
+      }
+    ]
+  },
+  "decoded_streams": [
+    {
+      "index": 0,
+      "type": "video",
+      "codec": "h264",
+      "time_base": "1/30000",
+      "duration": 28.061366666666668,
+      "metadata": {
+        "language": "eng",
+        "handler_name": "VideoHandler"
+      },
+      "width": 456,
+      "height": 256,
+      "average_rate": "30000/1001",
+      "decoded_frames": 841,
+      "first_pts": 0.0,
+      "last_pts": 28.028,
+      "decoded_end": 28.061366666666665,
+      "pts_strictly_increasing": true,
+      "distinct_decoded_frames": 840
+    },
+    {
+      "index": 1,
+      "type": "audio",
+      "codec": "aac",
+      "time_base": "1/96000",
+      "duration": 27.994,
+      "metadata": {
+        "language": "eng",
+        "handler_name": "SoundHandler"
+      },
+      "sample_rate": 96000,
+      "channels": 1,
+      "decoded_dtype": "float32",
+      "decoded_frames": 2625,
+      "first_pts": 0.0,
+      "last_pts": 27.989333333333335,
+      "decoded_end": 28.0,
+      "pts_strictly_increasing": true,
+      "samples_per_channel": 2688000,
+      "all_finite": true,
+      "peak": 1.4588074684143066,
+      "rms": 0.03127060260100593
+    }
+  ],
+  "physical_av_alignment": "UNKNOWN; matching container PTS is insufficient",
+  "first_parent_annotation_times_within_both_streams": true,
+  "semantic_joint_necessity": "UNMEASURED",
+  "material_action_reaction_mapping": "INFERRED from released values and primary paper; no header or impact-location column in these files",
+  "test_id_metadata_read": true,
+  "test_media_or_labels_opened": false,
+  "sealed_audit_opened": false,
+  "model_loaded": false,
+  "optimizer_updates": 0,
+  "cloud_cost": 0,
+  "execution": {
+    "acquisition_source": "f029c7539399e4bc8f927ca78fbce58ec8679ce3",
+    "decode_source": "24e51b61598a283eed55ea3874774b2830575481",
+    "acquisition_command": [
+      "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\probe_greatest_hits_train.py",
+      "--directory",
+      "C:/CodexArtifacts/pretrained-reuse-r2/greatest-hits-directory-01/members.json",
+      "--output",
+      "C:/CodexArtifacts/pretrained-reuse-r2/greatest-hits-train-probe-01"
+    ],
+    "decode_command": [
+      "C:\\CodexArtifacts\\pretrained-reuse-r1\\videoprism-base-r1\\venv\\Scripts\\python.exe",
+      "C:\\CodexWorktrees\\pretrained-reuse-omni\\scripts\\inspect_greatest_hits_train.py",
+      "--probe",
+      "C:/CodexArtifacts/pretrained-reuse-r2/greatest-hits-train-probe-01",
+      "--output",
+      "C:/CodexArtifacts/pretrained-reuse-r2/greatest-hits-train-decode-01"
+    ],
+    "member_transfer_bytes": 2456254,
+    "acquisition_seconds": 23.73499999998603,
+    "decode_seconds": 3.3429999999934807,
+    "python": "3.11.16",
+    "pyav": "18.1.0",
+    "numpy": "1.26.4",
+    "ffmpeg_libraries": {
+      "libavutil": [
+        60,
+        26,
+        102
+      ],
+      "libavcodec": [
+        62,
+        28,
+        102
+      ],
+      "libavformat": [
+        62,
+        12,
+        102
+      ],
+      "libavdevice": [
+        62,
+        3,
+        102
+      ],
+      "libavfilter": [
+        11,
+        14,
+        102
+      ],
+      "libswscale": [
+        9,
+        5,
+        102
+      ],
+      "libswresample": [
+        6,
+        3,
+        102
+      ]
+    }
+  },
+  "fetched_members": {
+    "train.txt": {
+      "sha256": "b01681a47c23f1e3ede19517e566241302ca0bba0df54fd29b16050d781d8088",
+      "bytes": 16136,
+      "crc32": "2357020c"
+    },
+    "test.txt": {
+      "sha256": "162cce800a7cc2d8efe247f2ab1877918772d98542a451c2eac342c795c043eb",
+      "bytes": 5398,
+      "crc32": "83365f26"
+    },
+    "2015-09-29-15-44-54-671_times.txt": {
+      "sha256": "b8c719247ecee162a325e6eb4f2cb1e98974475275de5fb5755824b2b26ec5b5",
+      "bytes": 1102,
+      "crc32": "7ce404e4"
+    },
+    "2015-09-30-20-56-02-304_times.txt": {
+      "sha256": "9a29243e66b631ba843fcf6ae956535f34eabf93023c8a79f6839b315898ff81",
+      "bytes": 799,
+      "crc32": "4ec02998"
+    },
+    "2015-03-30-00-26-27_times.txt": {
+      "sha256": "f591880d4f61c2f4764c8bc0330cfb3247878f466f2cef43c19d7ffa86872750",
+      "bytes": 739,
+      "crc32": "1b1d12b6"
+    },
+    "2015-09-29-15-44-54-671_denoised.mp4": {
+      "sha256": "a856f1bf7ccc6ea960fa7b81512624956dbb6d8f1982d403affe22507159d444",
+      "bytes": 2468320,
+      "crc32": "b46c11c8"
+    }
+  },
+  "artifacts": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-train-probe-01\\result.json": "d725bce12b143b9f4fd9e75b1872f3f244d1f51c473c0b20e5c6381fbc944b02",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-train-decode-01\\result.json": "5fdcefec2ed4e91a6828a4d165f4bf76d0749703c4b9290c48dd69c7fd32b32b",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-directory-01\\members.json": "98673a0101020606537d2850f825ebe08219c496928002f2cf09dcaa83b9824a",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-directory-01\\result.json": "27f731a1dc5676750dc9c862d9bf0e43d2e9c1504ee5176fc0895360e3e9c75b",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\joint-source-admission-20261017-01\\preflight.json": "6d24734fb10d7d9458246e2dc342386186e0b71743321a4b665f3a97b17f1b81",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\joint-source-admission-20261017-01\\avc-page.bin": "22db5b31fb9370ec315dc5ea03eb8a6e736611eecf16df08a9b113d1ea2b8e37",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\joint-source-admission-20261017-01\\avc-record.bin": "73025526985043b34fae8d99fa07387b06c051b1fdff60370be77d6fdc3560dc",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\joint-source-admission-20261017-01\\fairplay-commit.bin": "a2963ffc0f2bda45b2995b4586446d95a97e76399fdf6ef71cdb39b64f28031b",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\joint-source-admission-20261017-01\\greatest-hits-page.bin": "65c75da6de5db2840fe23f59849e0fc439e49ec644d127ec84a2b68e31d969a0"
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "all_included_state_counts": {
+    "calibration": 128,
+    "train": 2626,
+    "transfer": 256,
+    "validation": 1756
+  },
+  "artifacts": {
+    "accounting.json": "ccb075120b0fda5d8c78567c973fe9bb15b9e316b6949423327de186a8503659",
+    "binding_train.jsonl": "89f1f2dff2a3ea1bdddc8a488fab454889a3a04cc803e34962937597db3b91e1",
+    "calibration.jsonl": "bcbee29575ca562f7781665be8b581f92098df009bc953a4b96e7c93e9e917a1",
+    "legacy_train.jsonl": "a6d363fe4349432ecaf2a29465ee166e7f53ddf577d930884afaa0327df0814c",
+    "legacy_validation.jsonl": "265aa8b5d9ee372a02481427bfa1620bc68f6593af1137fb3e000227e4a8774c",
+    "numeric_train.jsonl": "c34b0d5ff04707b5af059f0886117583efd59808f5ec217fd995333aab644f9d",
+    "old_validation.jsonl": "01cd6c8f55df5e68770408b8825711e9b7f2ea3ec7e9a3022725bbb4e5a0f536",
+    "selection-schema.json": "50240594a1a193b04548dce998d930fc7339d153ad3dbe16dcf4fa298300d668",
+    "state-identities.json": "34955beb0fe7de067a747a18c0122dc6704ef96740e8f1a84ae4579f3405aadd",
+    "transfer.jsonl": "0a8772292335c5797394240fa0752ca29a797d4ba3b0b959e7b6434b9650ef81",
+    "validation.jsonl": "ebc458ec4dd0e64aaa8620d4bf5cdf7cb219b3fbf3bce148c479ea84f03532ae"
+  },
+  "available_before_allocation": 1492,
+  "calibration_loaded_for_fit": false,
+  "calibration_scope": "binding_only; not sufficient for all-task calibration",
+  "config": {
+    "counts": {
+      "calibration": 128,
+      "train": 512,
+      "transfer": 256,
+      "validation": 128
+    },
+    "expected_numeric_train_rows": 8192,
+    "expected_unused_states": 1492,
+    "id": "condition-relevance-v1-seed17",
+    "previous_root": "C:/CodexArtifacts/pretrained-reuse-r2/decision-supervision-corpus-01",
+    "seed": 17,
+    "source_pins": {
+      "excluded-state-keys.json": "1f72f817d21fe893b24eb1003033de016e8ea67d69926131d4f5e5f641d5ce2c",
+      "result.json": "f2fac1bb77e762748e9ce49077009bb69a50d7c2869b93c27de6ffbeb7c55d17",
+      "retention_train.jsonl": "a6d363fe4349432ecaf2a29465ee166e7f53ddf577d930884afaa0327df0814c",
+      "retention_validation.jsonl": "265aa8b5d9ee372a02481427bfa1620bc68f6593af1137fb3e000227e4a8774c",
+      "train.jsonl": "ecadf350f1003842703a5f41aeb2eb5ab760b236130c4d1f0543b9b1886a53b3",
+      "validation.jsonl": "01cd6c8f55df5e68770408b8825711e9b7f2ea3ec7e9a3022725bbb4e5a0f536"
+    }
+  },
+  "file_equality": {
+    "accounting.json": true,
+    "binding_train.jsonl": true,
+    "calibration.jsonl": true,
+    "legacy_train.jsonl": true,
+    "legacy_validation.jsonl": true,
+    "numeric_train.jsonl": true,
+    "old_validation.jsonl": true,
+    "result.json": true,
+    "selection-schema.json": true,
+    "state-identities.json": true,
+    "transfer.jsonl": true,
+    "validation.jsonl": true
+  },
+  "manifest_sha256": "7593e36769996d07e3654694013a989a8cdcd8a4b58442a29bde4209feb26964",
+  "model_quality_evaluated": false,
+  "native_assets": 0,
+  "new_normalized_content_overlap": 0,
+  "new_partitions": {
+    "calibration": {
+      "native_assets": 0,
+      "query_count": 8,
+      "rows": 2048,
+      "unique_ids": 2048,
+      "unique_states": 128,
+      "views": {
+        "calibration": 2048
+      }
+    },
+    "train": {
+      "native_assets": 0,
+      "query_count": 24,
+      "rows": 8192,
+      "unique_ids": 8192,
+      "unique_states": 512,
+      "views": {
+        "train": 8192
+      }
+    },
+    "transfer": {
+      "native_assets": 0,
+      "query_count": 32,
+      "rows": 16384,
+      "unique_ids": 16384,
+      "unique_states": 256,
+      "views": {
+        "new_query_new_options": 4096,
+        "new_query_seen_options": 4096,
+        "seen_query_new_options": 4096,
+        "seen_query_seen_options": 4096
+      }
+    },
+    "validation": {
+      "native_assets": 0,
+      "query_count": 8,
+      "rows": 2048,
+      "unique_ids": 2048,
+      "unique_states": 128,
+      "views": {
+        "validation": 2048
+      }
+    }
+  },
+  "new_state_overlap": 0,
+  "new_transfer_model_evaluated": false,
+  "old_state_partitions_opened": false,
+  "old_transfer_payload_opened": false,
+  "old_validation_unchanged": true,
+  "optimizer_updates": 0,
+  "primary": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-01",
+  "remaining_unused_states": 468,
+  "replay": "C:\\CodexArtifacts\\pretrained-reuse-r2\\condition-relevance-corpus-replay-01",
+  "replay_manifest_sha256": "7593e36769996d07e3654694013a989a8cdcd8a4b58442a29bde4209feb26964",
+  "reserved_previous_states": 896,
+  "sealed_audit_loaded": false,
+  "source_commit": "8b23cb5749ecb835721ee0ac8a76bc5654d111be",
+  "status": "PASS_FROZEN_CONDITION_RELEVANCE",
+  "total_bytes_per_copy": 100304025,
+  "training": {
+    "new_binding_rows": 8192,
+    "reused_legacy_rows": 2048,
+    "reused_numeric_rows": 8192,
+    "total_rows": 18432
+  },
+  "validation_slices": 47
+}

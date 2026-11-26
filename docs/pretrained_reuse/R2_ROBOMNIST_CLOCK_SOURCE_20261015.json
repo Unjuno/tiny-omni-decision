@@ -1,0 +1,67 @@
+{
+  "status": "READ_ONLY_SOURCE_TIMING_EVIDENCE_INCOMPLETE",
+  "source_revision": "70f5e6393acf6128a7ceb7afacf4463060626ca3",
+  "tree_sha256": "39f6c3e35b80d7047419a7b9ab39140d724917e1af0dc48295c573c36ed54ccb",
+  "files": [
+    {
+      "source_path": "README.md",
+      "url": "https://raw.githubusercontent.com/SiamiLab/RoboMNIST/70f5e6393acf6128a7ceb7afacf4463060626ca3/README.md",
+      "git_blob_sha1": "d9f0df03c95a3fdd5b3a6f690df889fd23c4d838",
+      "bytes": 9395,
+      "sha256": "c52498df14cdb61fe2eab2ebf5742dc3cb282d15f51347e8b1a587f0a2db6b82",
+      "local": "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-clock-source-inspection-01\\README.md"
+    },
+    {
+      "source_path": "monitor/src/pack_camera/pack_camera/camera_node.py",
+      "url": "https://raw.githubusercontent.com/SiamiLab/RoboMNIST/70f5e6393acf6128a7ceb7afacf4463060626ca3/monitor/src/pack_camera/pack_camera/camera_node.py",
+      "git_blob_sha1": "7185829aa39d3e4ce2193eec5c72a5df7fed5049",
+      "bytes": 5363,
+      "sha256": "78d5252e45870beaa1b14881fe1cda12153466a4d83e79b7d50623e20855be0c",
+      "local": "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-clock-source-inspection-01\\monitor__src__pack_camera__pack_camera__camera_node.py"
+    },
+    {
+      "source_path": "monitor/src/pack_wifi/pack_wifi/csi_node.py",
+      "url": "https://raw.githubusercontent.com/SiamiLab/RoboMNIST/70f5e6393acf6128a7ceb7afacf4463060626ca3/monitor/src/pack_wifi/pack_wifi/csi_node.py",
+      "git_blob_sha1": "4ee3f349a764fa76e0c9235dd2963d3896b06a3b",
+      "bytes": 4669,
+      "sha256": "f34f0a280e61363a1087cbd6d286c357c8e8d001be3fcaf23a02665c68c72300",
+      "local": "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-clock-source-inspection-01\\monitor__src__pack_wifi__pack_wifi__csi_node.py"
+    },
+    {
+      "source_path": "monitor/src/pack_wifi/pack_wifi/heartbeat_node.py",
+      "url": "https://raw.githubusercontent.com/SiamiLab/RoboMNIST/70f5e6393acf6128a7ceb7afacf4463060626ca3/monitor/src/pack_wifi/pack_wifi/heartbeat_node.py",
+      "git_blob_sha1": "edda11709997b74fdb3e85377eb5d825f51fa633",
+      "bytes": 4985,
+      "sha256": "35e19c140bb498555414cbc750cc5c6a8bd234b679c42a14078ff71bc6f12485",
+      "local": "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-clock-source-inspection-01\\monitor__src__pack_wifi__pack_wifi__heartbeat_node.py"
+    },
+    {
+      "source_path": "monitor/src/pack_util/param/params.yaml",
+      "git_blob_sha1": "1fb8daa9450115a31fa4733e2babf4b3d57087dc",
+      "sha256": "e8e1a79a40a4f4ccaef2ad58d73903975ceb1d2a85f3b16871fccab77bbdec97",
+      "bytes": 660,
+      "local": "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-clock-source-inspection-01\\monitor__src__pack_util__param__params.yaml",
+      "url": "https://raw.githubusercontent.com/SiamiLab/RoboMNIST/70f5e6393acf6128a7ceb7afacf4463060626ca3/monitor/src/pack_util/param/params.yaml"
+    },
+    {
+      "source_path": "monitor/src/pack_camera/setup.py",
+      "git_blob_sha1": "b504f0b8c267588e3809b3f049343079b3bb84cb",
+      "sha256": "2769b9e776d9ef6c3183e9627c8b691ae40a3d75e8ccf67a03a43663fba7da38",
+      "bytes": 756,
+      "local": "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-clock-source-inspection-01\\monitor__src__pack_camera__setup.py",
+      "url": "https://raw.githubusercontent.com/SiamiLab/RoboMNIST/70f5e6393acf6128a7ceb7afacf4463060626ca3/monitor/src/pack_camera/setup.py"
+    }
+  ],
+  "total_source_bytes": 25828,
+  "tree_complete": true,
+  "mic_node_in_tree": false,
+  "audio_broadcast_in_tree": false,
+  "raw_to_release_conversion_identified": false,
+  "source_code_executed": false,
+  "additional_media_or_gt_fetched": false,
+  "common_clock_proven": false,
+  "actual_camera_frames": 450,
+  "published_example_packet_num": 360,
+  "training_corpus_admitted": false,
+  "quality_measured": false
+}

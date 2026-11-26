@@ -1,0 +1,31 @@
+{
+  "train_records": 9216,
+  "oracle_verified": 9216,
+  "unknown_histogram": {
+    "8": 9216
+  },
+  "unknown_without_braces_histogram": {
+    "0": 9216
+  },
+  "max_tokens": 175,
+  "truncated_records": 0,
+  "distinct_prompt_count": 9216,
+  "distinct_token_sequences": 9216,
+  "labels": {
+    "A": [
+      71
+    ],
+    "B": [
+      272
+    ],
+    "C": [
+      205
+    ],
+    "D": [
+      309
+    ]
+  },
+  "source_sha256": "a0116e4e2c5024fe39e113461c3b286da3d76b1f8b11940dc195fd5594c2982b",
+  "inference": false,
+  "modification": false
+}

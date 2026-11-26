@@ -1,0 +1,27 @@
+{
+  "id": "native-full-extent-cache-v1",
+  "policy": "full-extent-bilinear-centered-black-pad-288-v1",
+  "corpus": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02",
+  "image_records": "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-spatial-image-cache-01\\records.json",
+  "image_roots": {
+    "train": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17",
+    "val": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-sample-seed17-1024-512"
+  },
+  "video_receipt": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-training-video-cache-01\\result.json",
+  "video_root": "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevrer-expanded-seed17-256train-200val",
+  "visual_source": "C:\\CodexArtifacts\\pretrained-reuse-r1\\videoprism-base-r1\\source",
+  "visual_revision": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+  "checkpoint": "C:\\CodexArtifacts\\pretrained-reuse-r1\\videoprism-base-f16r288.npz",
+  "worker_python": "C:\\CodexArtifacts\\pretrained-reuse-r1\\videoprism-base-r1\\venv\\Scripts\\python.exe",
+  "max_seconds": 5400,
+  "max_rss_bytes": 6442450944,
+  "minimum_disk_bytes": 5368709120,
+  "input_pins": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02\\result.json": "47a6d2f3495810bac58f57dec1a962f8b490fa409c75671b46bb2999fde87d49",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02\\banks.json": "44ef5f26ffb01bd264c7283f82e6a6f37f1a4d3c34f522515ddfc7fc2acb6520",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02\\observations.json": "e82febae93455cc06a2fb31f3dcc83ebcb79328552aff2ec4da507d660186afb",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-spatial-image-cache-01\\records.json": "32944fc822c45a7a93ee06904c9a97acaa5bf6364c33c40525f535c59da55b41",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-training-video-cache-01\\result.json": "11358d26a6628f113caf4407c5297f6c492f8e263ed5eb2c688eab1fe6d1a089",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\videoprism-base-f16r288.npz": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29"
+  }
+}

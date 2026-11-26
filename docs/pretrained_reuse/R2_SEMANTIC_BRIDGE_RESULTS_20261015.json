@@ -1,0 +1,584 @@
+{
+  "status": "PASS_FIXED_TRAIN_DIAGNOSIS_AND_EXACT_FRESH_REPLAY",
+  "run_result_hashes": {
+    "semantic-state-bridge-smoke-01": "7eeecb5ea2e86079561e8d3e51552b7c45a40d16d7396b48cfe7ba72ad915015",
+    "semantic-state-bridge-01": "e497e1139b6ee7660f620f1f1d93bef7c1d502e01327d1e778990123a47a56ea",
+    "semantic-state-bridge-replay-01": "45c162c8873c5d3267a8c52993d730fa867778f40fd5b8098d6ab847a5cf66ab"
+  },
+  "runs": {
+    "semantic-state-bridge-smoke-01": {
+      "status": "PASS_TRAIN_ONLY_SMOKE",
+      "source_commit": "9be76c9496d52ebe4475b1034cd11c7278d6627c",
+      "started_utc": "2026-10-15T03:37:42.310913+00:00",
+      "finished_utc": "2026-10-15T03:37:52.223789+00:00",
+      "seconds": 9.914921100000356,
+      "peak_vram_bytes": 188530688,
+      "peak_vram_reserved_bytes": 236978176,
+      "peak_host_bytes": 1236885504,
+      "unique_train_images": 4,
+      "actual_candidate_pairs": 1600,
+      "forward_batches": 26,
+      "max_tokens": 59,
+      "native_parity_max_abs": 2.842170943040401e-14
+    },
+    "semantic-state-bridge-01": {
+      "status": "PASS_FIXED_TRAIN_DIAGNOSIS",
+      "source_commit": "9be76c9496d52ebe4475b1034cd11c7278d6627c",
+      "started_utc": "2026-10-15T03:38:06.477300+00:00",
+      "finished_utc": "2026-10-15T03:38:45.248688+00:00",
+      "seconds": 38.76197069999762,
+      "peak_vram_bytes": 190711808,
+      "peak_vram_reserved_bytes": 236978176,
+      "peak_host_bytes": 1280765952,
+      "unique_train_images": 256,
+      "actual_candidate_pairs": 92320,
+      "forward_batches": 1443,
+      "max_tokens": 61,
+      "native_parity_max_abs": 0.0
+    },
+    "semantic-state-bridge-replay-01": {
+      "status": "PASS_FIXED_TRAIN_DIAGNOSIS",
+      "source_commit": "9be76c9496d52ebe4475b1034cd11c7278d6627c",
+      "started_utc": "2026-10-15T03:38:56.851312+00:00",
+      "finished_utc": "2026-10-15T03:39:35.974354+00:00",
+      "seconds": 39.12034099999801,
+      "peak_vram_bytes": 190711808,
+      "peak_vram_reserved_bytes": 236978176,
+      "peak_host_bytes": 1281253376,
+      "unique_train_images": 256,
+      "actual_candidate_pairs": 92320,
+      "forward_batches": 1443,
+      "max_tokens": 61,
+      "native_parity_max_abs": 0.0
+    }
+  },
+  "metrics": {
+    "oracle": {
+      "overall": {
+        "count": 1024,
+        "accuracy": 0.2705078125,
+        "nll": 2.25988492305596,
+        "brier": 1.002459438381172,
+        "ece": 0.3479770120808318,
+        "mean_confidence": 0.6169998645735477
+      },
+      "per_question": {
+        "color": {
+          "count": 256,
+          "accuracy": 0.56640625,
+          "nll": 1.0485994422863238,
+          "brier": 0.6032626002536654,
+          "ece": 0.18022468181246395,
+          "mean_confidence": 0.658542766131299
+        },
+        "texture": {
+          "count": 256,
+          "accuracy": 0.109375,
+          "nll": 2.2330545505053747,
+          "brier": 1.0944713378147173,
+          "ece": 0.4628863506410972,
+          "mean_confidence": 0.5722613506410972
+        },
+        "count": {
+          "count": 256,
+          "accuracy": 0.3984375,
+          "nll": 2.248354360636829,
+          "brier": 0.8595486079524407,
+          "ece": 0.17764844039177916,
+          "mean_confidence": 0.5466209219486249
+        },
+        "shape": {
+          "count": 256,
+          "accuracy": 0.0078125,
+          "nll": 3.509531338795314,
+          "brier": 1.4525552075038641,
+          "ece": 0.6827619195731692,
+          "mean_confidence": 0.6905744195731693
+        }
+      },
+      "macro": {
+        "accuracy": 0.2705078125,
+        "nll": 2.2598849230559606,
+        "brier": 1.0024594383811718,
+        "ece": 0.3758803481046274
+      },
+      "all_four_correct": 0.0,
+      "changed_question_pair_both_correct": 0.022135416666666668,
+      "pair_count": 1536,
+      "per_pair_both_correct": {
+        "color+texture": 0.08203125,
+        "color+count": 0.0390625,
+        "color+shape": 0.0,
+        "texture+count": 0.0078125,
+        "texture+shape": 0.00390625,
+        "count+shape": 0.0
+      },
+      "field_routing_accuracy": 0.2705078125,
+      "within_correct_field_accuracy": 1.0
+    },
+    "predicted": {
+      "overall": {
+        "count": 1024,
+        "accuracy": 0.2392578125,
+        "nll": 2.408755258925245,
+        "brier": 1.0332727366916123,
+        "ece": 0.37493987738467865,
+        "mean_confidence": 0.6141976898846787
+      },
+      "per_question": {
+        "color": {
+          "count": 256,
+          "accuracy": 0.578125,
+          "nll": 1.0280220198026608,
+          "brier": 0.5892492578959134,
+          "ece": 0.1745013068607556,
+          "mean_confidence": 0.6563691292799907
+        },
+        "texture": {
+          "count": 256,
+          "accuracy": 0.11328125,
+          "nll": 2.336426268194093,
+          "brier": 1.0917639896758793,
+          "ece": 0.4573065313743031,
+          "mean_confidence": 0.5705877813743031
+        },
+        "count": {
+          "count": 256,
+          "accuracy": 0.2578125,
+          "nll": 2.7952964115018895,
+          "brier": 1.0068874945464057,
+          "ece": 0.28652037379511547,
+          "mean_confidence": 0.5443328737951154
+        },
+        "shape": {
+          "count": 256,
+          "accuracy": 0.0078125,
+          "nll": 3.4752763362023362,
+          "brier": 1.4451902046482514,
+          "ece": 0.6776884750893057,
+          "mean_confidence": 0.6855009750893057
+        }
+      },
+      "macro": {
+        "accuracy": 0.2392578125,
+        "nll": 2.408755258925245,
+        "brier": 1.0332727366916123,
+        "ece": 0.39900417177986996
+      },
+      "all_four_correct": 0.0,
+      "changed_question_pair_both_correct": 0.01953125,
+      "pair_count": 1536,
+      "per_pair_both_correct": {
+        "color+texture": 0.08203125,
+        "color+count": 0.0234375,
+        "color+shape": 0.0,
+        "texture+count": 0.0078125,
+        "texture+shape": 0.00390625,
+        "count+shape": 0.0
+      },
+      "field_routing_accuracy": 0.26953125,
+      "within_correct_field_accuracy": 0.9423828125
+    },
+    "no_evidence": {
+      "overall": {
+        "count": 1024,
+        "accuracy": 0.0517578125,
+        "nll": 3.675709394933073,
+        "brier": 0.9744001775857938,
+        "ece": 0.0036267433144375194,
+        "mean_confidence": 0.04813106918556248
+      },
+      "per_question": {
+        "color": {
+          "count": 256,
+          "accuracy": 0.09765625,
+          "nll": 3.5562995460168754,
+          "brier": 0.9652390481748381,
+          "ece": 0.04027703686137751,
+          "mean_confidence": 0.05737921313862249
+        },
+        "texture": {
+          "count": 256,
+          "accuracy": 0.0,
+          "nll": 3.8767105155895303,
+          "brier": 0.9852311124653597,
+          "ece": 0.044071323206615984,
+          "mean_confidence": 0.044071323206615984
+        },
+        "count": {
+          "count": 256,
+          "accuracy": 0.109375,
+          "nll": 3.4073198687183957,
+          "brier": 0.9601955047621888,
+          "ece": 0.06889510016123057,
+          "mean_confidence": 0.04047989983876943
+        },
+        "shape": {
+          "count": 256,
+          "accuracy": 0.0,
+          "nll": 3.8625076494074904,
+          "brier": 0.9869350449407887,
+          "ece": 0.050593840558242016,
+          "mean_confidence": 0.050593840558242016
+        }
+      },
+      "macro": {
+        "accuracy": 0.0517578125,
+        "nll": 3.675709394933073,
+        "brier": 0.9744001775857938,
+        "ece": 0.05095932519686652
+      },
+      "all_four_correct": 0.0,
+      "changed_question_pair_both_correct": 0.0,
+      "pair_count": 1536,
+      "per_pair_both_correct": {
+        "color+texture": 0.0,
+        "color+count": 0.0,
+        "color+shape": 0.0,
+        "texture+count": 0.0,
+        "texture+shape": 0.0,
+        "count+shape": 0.0
+      },
+      "field_routing_accuracy": 0.5,
+      "within_correct_field_accuracy": 0.1005859375
+    },
+    "no_question": {
+      "overall": {
+        "count": 1024,
+        "accuracy": 0.25,
+        "nll": 2.8045479732035634,
+        "brier": 1.1637594399104427,
+        "ece": 0.5123489227460634,
+        "mean_confidence": 0.7623489227460634
+      },
+      "per_question": {
+        "color": {
+          "count": 256,
+          "accuracy": 0.74609375,
+          "nll": 0.6207020694718555,
+          "brier": 0.3335861281134712,
+          "ece": 0.07004687124948047,
+          "mean_confidence": 0.7623489227460634
+        },
+        "texture": {
+          "count": 256,
+          "accuracy": 0.01953125,
+          "nll": 3.4852474592925606,
+          "brier": 1.5318616066435005,
+          "ece": 0.7459776557423361,
+          "mean_confidence": 0.7623489227460634
+        },
+        "count": {
+          "count": 256,
+          "accuracy": 0.2265625,
+          "nll": 2.771884224538491,
+          "brier": 1.1850023183321876,
+          "ece": 0.5526783935686539,
+          "mean_confidence": 0.7623489227460634
+        },
+        "shape": {
+          "count": 256,
+          "accuracy": 0.0078125,
+          "nll": 4.340358139511347,
+          "brier": 1.604587706552612,
+          "ece": 0.7576964057423361,
+          "mean_confidence": 0.7623489227460634
+        }
+      },
+      "macro": {
+        "accuracy": 0.25,
+        "nll": 2.8045479732035634,
+        "brier": 1.163759439910443,
+        "ece": 0.5315998315757016
+      },
+      "all_four_correct": 0.0,
+      "changed_question_pair_both_correct": 0.0,
+      "pair_count": 1536,
+      "per_pair_both_correct": {
+        "color+texture": 0.0,
+        "color+count": 0.0,
+        "color+shape": 0.0,
+        "texture+count": 0.0,
+        "texture+shape": 0.0,
+        "count+shape": 0.0
+      },
+      "field_routing_accuracy": 0.25,
+      "within_correct_field_accuracy": 1.0
+    },
+    "donor": {
+      "overall": {
+        "count": 1024,
+        "accuracy": 0.044921875,
+        "nll": 8.229509973665426,
+        "brier": 1.4075385086661298,
+        "ece": 0.5720779895735475,
+        "mean_confidence": 0.6169998645735477
+      },
+      "per_question": {
+        "color": {
+          "count": 256,
+          "accuracy": 0.109375,
+          "nll": 9.093680081970199,
+          "brier": 1.3738907719631863,
+          "ece": 0.5491677661312989,
+          "mean_confidence": 0.658542766131299
+        },
+        "texture": {
+          "count": 256,
+          "accuracy": 0.01953125,
+          "nll": 8.131315364119263,
+          "brier": 1.3848350334542414,
+          "ece": 0.5527301006410973,
+          "mean_confidence": 0.5722613506410972
+        },
+        "count": {
+          "count": 256,
+          "accuracy": 0.05078125,
+          "nll": 5.842552007366129,
+          "brier": 1.3144844418917696,
+          "ece": 0.49583967194862494,
+          "mean_confidence": 0.5466209219486249
+        },
+        "shape": {
+          "count": 256,
+          "accuracy": 0.0,
+          "nll": 9.850492441206116,
+          "brier": 1.5569437873553218,
+          "ece": 0.6905744195731692,
+          "mean_confidence": 0.6905744195731693
+        }
+      },
+      "macro": {
+        "accuracy": 0.044921875,
+        "nll": 8.229509973665426,
+        "brier": 1.4075385086661298,
+        "ece": 0.5720779895735476
+      },
+      "all_four_correct": 0.0,
+      "changed_question_pair_both_correct": 0.0013020833333333333,
+      "pair_count": 1536,
+      "per_pair_both_correct": {
+        "color+texture": 0.00390625,
+        "color+count": 0.00390625,
+        "color+shape": 0.0,
+        "texture+count": 0.0,
+        "texture+shape": 0.0,
+        "count+shape": 0.0
+      },
+      "field_routing_accuracy": 0.2705078125,
+      "within_correct_field_accuracy": 0.109375
+    },
+    "donor_corrected": {
+      "overall": {
+        "count": 1024,
+        "accuracy": 0.2705078125,
+        "nll": 2.25988492305596,
+        "brier": 1.0024594383811718,
+        "ece": 0.3479770120808318,
+        "mean_confidence": 0.6169998645735477
+      },
+      "per_question": {
+        "color": {
+          "count": 256,
+          "accuracy": 0.56640625,
+          "nll": 1.0485994422863238,
+          "brier": 0.6032626002536654,
+          "ece": 0.18022468181246395,
+          "mean_confidence": 0.658542766131299
+        },
+        "texture": {
+          "count": 256,
+          "accuracy": 0.109375,
+          "nll": 2.2330545505053747,
+          "brier": 1.094471337814717,
+          "ece": 0.4628863506410972,
+          "mean_confidence": 0.5722613506410972
+        },
+        "count": {
+          "count": 256,
+          "accuracy": 0.3984375,
+          "nll": 2.248354360636829,
+          "brier": 0.8595486079524408,
+          "ece": 0.17764844039177916,
+          "mean_confidence": 0.5466209219486249
+        },
+        "shape": {
+          "count": 256,
+          "accuracy": 0.0078125,
+          "nll": 3.5095313387953144,
+          "brier": 1.452555207503864,
+          "ece": 0.6827619195731692,
+          "mean_confidence": 0.6905744195731693
+        }
+      },
+      "macro": {
+        "accuracy": 0.2705078125,
+        "nll": 2.2598849230559606,
+        "brier": 1.0024594383811718,
+        "ece": 0.3758803481046274
+      },
+      "all_four_correct": 0.0,
+      "changed_question_pair_both_correct": 0.022135416666666668,
+      "pair_count": 1536,
+      "per_pair_both_correct": {
+        "color+texture": 0.08203125,
+        "color+count": 0.0390625,
+        "color+shape": 0.0,
+        "texture+count": 0.0078125,
+        "texture+shape": 0.00390625,
+        "count+shape": 0.0
+      },
+      "field_routing_accuracy": 0.2705078125,
+      "within_correct_field_accuracy": 1.0
+    },
+    "native_ten_option": {
+      "color": {
+        "count": 256,
+        "accuracy": 1.0,
+        "nll": 0.0014846431039579771,
+        "brier": 5.583945191386382e-05,
+        "ece": 0.0014682497297912045,
+        "mean_confidence": 0.9985317502702088
+      },
+      "texture": {
+        "count": 256,
+        "accuracy": 0.98046875,
+        "nll": 0.035241626727455996,
+        "brier": 0.018288218009472078,
+        "ece": 0.012088518911717167,
+        "mean_confidence": 0.9766884976443012
+      },
+      "count": {
+        "count": 256,
+        "accuracy": 0.7890625,
+        "nll": 0.6115300265109144,
+        "brier": 0.33708152551416065,
+        "ece": 0.12923577361415264,
+        "mean_confidence": 0.6774384578996849
+      },
+      "shape": {
+        "count": 256,
+        "accuracy": 1.0,
+        "nll": 0.0012755269129828143,
+        "brier": 0.00012745183169945255,
+        "ece": 0.0012341528875793022,
+        "mean_confidence": 0.9987658471124208
+      }
+    },
+    "error_intersections": {
+      "native=False,oracle=False,predicted=False": 23,
+      "native=False,oracle=False,predicted=True": 0,
+      "native=False,oracle=True,predicted=False": 36,
+      "native=False,oracle=True,predicted=True": 0,
+      "native=True,oracle=False,predicted=False": 714,
+      "native=True,oracle=False,predicted=True": 10,
+      "native=True,oracle=True,predicted=False": 6,
+      "native=True,oracle=True,predicted=True": 235
+    }
+  },
+  "inference_accounting": {
+    "oracle": {
+      "pair_presentations": 40960,
+      "distinct_string_pairs": 40320
+    },
+    "predicted": {
+      "pair_presentations": 40960,
+      "distinct_string_pairs": 40640
+    },
+    "no_evidence": {
+      "pair_presentations": 160,
+      "distinct_string_pairs": 160
+    },
+    "no_question": {
+      "pair_presentations": 10240,
+      "distinct_string_pairs": 10080
+    },
+    "total": {
+      "pair_presentations": 92320,
+      "distinct_string_pairs": 59520,
+      "repeated_string_pair_presentations": 32800
+    }
+  },
+  "selection_sha256": "8a7ac8d6513c48d198d14c4be345d1081f4e1b9be7ff573fa23adf49c44a4b76",
+  "effective_config_sha256": "00ddadcfd175c4fa4ab8ec3f18a189950d865efae52f13f9d372b88e036680a4",
+  "source_input_pins": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train-labels.jsonl": "00f03f27982e2785636e85a50f4ecf258c0ac3ee483d7242e297cee14b50ec2e",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\clevr4-full-coverage-seed17\\train-image-manifest.jsonl": "2c56815beb9d2e9951cd38686eafdbe2ecdee05e69e74b5acfad24fbefbb9010",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-spatial-image-cache-01\\train-cells.npy": "0355ae96cfadf421266452cca5df950ba6d0a09e3bbbfc10d71c356bc556fa5b",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-spatial-image-cache-01\\config.json": "02f1051ad9be39f1dae95d65bff52993d59b06c5d074191a09d695ab646e92f8",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-affine-regularized-01\\config.json": "dec046cee59a4b17188dd2ccd466b7a8148fe452b500813c0d1566084ff258c9",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-affine-regularized-01\\0.01\\final.pt": "f815496df64ec5e59000d08a22d42b4ecf2b7e78758df129a797321079b8b0d5",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\shared-affine-regularized-01\\0.01\\final-training-logits.npy": "96a10d07c144f256b79b8dfb47eb75041d280c5e03d2a795e7bac78d26bb39d0",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text-coverage-training-01\\best-delta.pt": "b063f124e59c8a4c1b09c7bf2a8423846f73489d7ce8cd6649735745bc6cebf5",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\crossencoder-minilm-l6-audit-01\\result-retry.json": "b3ff45ab20ffae8c19bcbe02d206bc8546e5687599aa9635c42c84f5fddf8d6a",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\crossencoder-minilm-l6-audit-01\\model\\config.json": "380e02c93f431831be65d99a4e7e5f67c133985bf2e77d9d4eba46847190bacc",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\crossencoder-minilm-l6-audit-01\\model\\model.safetensors": "821d1aa69520101d6e0737f78a042ae25b19e5cb9160701909d10434f4aeb0ae",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\crossencoder-minilm-l6-audit-01\\model\\README.md": "7c0ec39941d0d1d766ccde671f592971d82fe45b7eea550a80d1ea864ebc3baa",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\crossencoder-minilm-l6-audit-01\\model\\special_tokens_map.json": "3c3507f36dff57bce437223db3b3081d1e2b52ec3e56ee55438193ecb2c94dd6",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\crossencoder-minilm-l6-audit-01\\model\\tokenizer.json": "d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\crossencoder-minilm-l6-audit-01\\model\\tokenizer_config.json": "a5c2e5a7b1a29a0702cd28c08a399b5ecc110c263009d17f7e3b415f25905fd8",
+    "C:\\CodexArtifacts\\pretrained-reuse-r1\\crossencoder-minilm-l6-audit-01\\model\\vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+  },
+  "oracle_field_confusion_rows_question_columns_chosen_field": [
+    [
+      145,
+      7,
+      99,
+      5
+    ],
+    [
+      100,
+      28,
+      113,
+      15
+    ],
+    [
+      135,
+      13,
+      102,
+      6
+    ],
+    [
+      78,
+      23,
+      153,
+      2
+    ]
+  ],
+  "oracle_images_with_any_question_prediction_change": 99,
+  "oracle_predictions_matching_a_fact_in_their_state": 1024,
+  "oracle_pair_both_correct_numerator": 34,
+  "pair_denominator": 1536,
+  "independent_torch_nll_check_max_tolerance": 1e-12,
+  "fresh_replay_exact_files": [
+    "donor-logp.npy",
+    "donor-probabilities.npy",
+    "donor-scores.npy",
+    "donor-targets.npy",
+    "native-logits.npy",
+    "no_evidence-logp.npy",
+    "no_evidence-probabilities.npy",
+    "no_evidence-scores.npy",
+    "no_question-logp.npy",
+    "no_question-probabilities.npy",
+    "no_question-scores.npy",
+    "oracle-logp.npy",
+    "oracle-probabilities.npy",
+    "oracle-scores.npy",
+    "predicted-logp.npy",
+    "predicted-probabilities.npy",
+    "predicted-scores.npy",
+    "targets.npy",
+    "selection.json",
+    "states.json",
+    "metrics.json",
+    "effective-config.json"
+  ],
+  "conclusion": "Prioritize conditional field binding and independent semantic-transfer data. Do not infer a universal encoder or model ceiling.",
+  "limitations": [
+    "TRAIN-only; selected from images used to fit the image head",
+    "40-choice typed interface and serialization are new to the text model",
+    "Top1 fact bridge discards native uncertainty; no native encoder rerun",
+    "No training, calibration, prompt search, validation/audit access or product promotion"
+  ]
+}

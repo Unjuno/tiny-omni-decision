@@ -1,0 +1,38 @@
+{
+  "format": "metadata_only_multimodal_source_screen_v1",
+  "dataset_id": "EgoInertia-MI",
+  "status": "REVIEW_NOT_ADMITTED",
+  "screened_at": "2026-10-29",
+  "official_sources": {
+    "project_page": "https://fatemah-alh.github.io/EgoInertia-MI-Page/",
+    "zenodo_doi": "https://doi.org/10.5281/zenodo.21128233"
+  },
+  "source_scope": "official project-page metadata only; no access request or payload access",
+  "reported": {
+    "activities": 19,
+    "modalities": ["egocentric_video", "wrist_imu", "leg_imu", "chest_imu"],
+    "video_capture": "GoPro HERO12, 30 FPS",
+    "imu_sampling_hz": 25.5,
+    "tasks": ["action_recognition_19_class", "simulated_impairment_severity_3_class"],
+    "evaluation": "5-fold subject-disjoint; 12 train, 2 validation, 3 test subjects per fold",
+    "organization": "participant/session/recording IDs; corresponding video and aligned IMU IDs",
+    "data_access": "restricted Zenodo request"
+  },
+  "license": {
+    "explicit_dataset_license_found": false,
+    "project_page_requires_adherence_to_dataset_license": true,
+    "code_or_paper_license_is_not_assumed_to_cover_payload": true
+  },
+  "limitations": [
+    "Access requires a request with name, affiliation, and intended research use",
+    "Payload license and attribution terms are unspecified on inspected project page",
+    "Participant consent, privacy, retention, and model-training permissions remain unverified",
+    "No immutable release, annotation/split hashes, or payload size captured",
+    "Task labels do not establish video and IMU are jointly necessary",
+    "Impairment states are simulated and benchmark is not for clinical diagnosis"
+  ],
+  "training_admission": "NOT_ADMITTED",
+  "access_request_sent": false,
+  "sealed_audit_accessed": false,
+  "training_started": false
+}

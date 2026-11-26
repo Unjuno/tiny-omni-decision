@@ -1,0 +1,9 @@
+# TAPIR fixed development-validation tracking protocol — 2026-10-13
+
+After the completed eight-train-video screen, freeze the existing checkpoint, constructor(pyramid_level0,extra_convsFalse), full original-frame sampling,256 RGB resize, normalization[-1,1], initial oracle center, four CPU threads and seven evenly indexed unmasked scoring annotations. No training, confidence filtering, seed/model search or calibration. Same eligibility as train. Select first16 eligible clips from the pinned official validation media manifest; zero exclusions before16. No video-ID or file-SHA overlap with the eight train tracks. No source participant-disjoint claim.
+
+Plan: `C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-tapir-valid-plan-01/config.json`, SHA-256 `9dff2387119f36831709f0d73d81aab5ae66b322d1f99a073c1dd6fe62b48d6a`. The official validation archive and media manifest are hashed before routing. These videos belong to development validation already used in Decision probes: this is not sealed or blind evaluation.
+
+Report all16 rows, center error versus initial-position control, point-in-box counts, per-video runtime and failures. The initial point remains oracle-provided; tracker outputs are not option probabilities. Seven observations within a video are dependent; use video-level summaries and uncertainty. Do not exclude hard clips or alter the tracker based on intermediate results. No claim of95% Decision quality is possible from this protocol alone.
+
+Executed runner: `C:/CodexArtifacts/pretrained-reuse-r1/tapir-audit-01/track_valid01.py`. New output: `C:/CodexArtifacts/pretrained-reuse-r2/perception-occlusion-tapir-valid-tracks-01/`. Status at protocol commit: process running, no quality result claimed. All earlier artifacts preserved. No new GPU job or paid compute.

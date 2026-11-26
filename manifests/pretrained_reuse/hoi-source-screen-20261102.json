@@ -1,0 +1,129 @@
+{
+  "format": "pretrained_reuse_multimodal_source_screen_v1",
+  "dataset_id": "Hoi!",
+  "recorded_at": "2026-11-02",
+  "status": "REVIEW_NOT_ADMITTED",
+  "sources": {
+    "official_dataset_page": "https://hoi-dataset.ethz.ch/",
+    "official_challenge_page": "https://hoi-dataset.ethz.ch/workshop.html",
+    "official_data_repository": "https://bonndata.uni-bonn.de/catalog/datasets/10.60507/FK2/QODWTV/",
+    "official_processing_tools": "https://github.com/timengelbracht/hoi-dataset-tools"
+  },
+  "metadata_inventory_snapshot": {
+    "api_url": "https://bonndata.uni-bonn.de/api/datasets/:persistentId/?persistentId=doi%3A10.60507%2FFK2%2FQODWTV",
+    "dataset_version": "1",
+    "retrieved_at": "2026-11-02",
+    "response_bytes": 3769110,
+    "response_sha256": "a7aa8d7f2bb362812ea622c37aeac4192999ce555e91c7679ec555ae5c81a172",
+    "metadata_only": true
+  },
+  "reproduction": {
+    "script": "scripts/audit_hoi_source_metadata.py",
+    "unit_tests": "tests/test_hoi_source_metadata.py",
+    "live_output_matches_pinned_response": true
+  },
+  "source_scope": "Official dataset/challenge pages, Bonn Dataverse API file metadata, the 11,277-byte dataset README, and one 664-byte confirmed session-interaction annotation only; no media, sensor streams, or challenge labels opened.",
+  "readme": {
+    "persistent_id": "doi:10.60507/FK2/QODWTV/1ELBAW",
+    "file_id": 54498,
+    "bytes": 11277,
+    "sha256": "973b02605c7bda0fbe965e3f6ece9b24ebfd7f2263fb63a8a8ab552eac88fac0",
+    "dataset_license_statement": "CC-BY",
+    "quality_assurance_statement": "Anonymization via EgoBlur software",
+    "split_metadata_statement": "One confirmed session-interaction file contains four timestamped open/close windows; it is not a train/validation split and gives no evidence of group-disjointness"
+  },
+  "sample_session_annotation": {
+    "persistent_id": "doi:10.60507/FK2/QODWTV/KBKXAY",
+    "bytes": 664,
+    "md5": "d9cf961d71420e7fb44ebda6831e334d",
+    "sha256": "f46ec180a6f3fd9d4f0ec459e4d7676eff1fabd6fe40177737dcd05ca077f3c4",
+    "observed_windows": 4,
+    "observed_descriptions": ["open", "close"],
+    "use": "Structure-only source preflight; not used for training or evaluation"
+  },
+  "sample_media_archive_metadata": {
+    "persistent_id": "doi:10.60507/FK2/QODWTV/EUSQRS",
+    "filename": "camera_rgb.zip",
+    "path": "bathroom_1/gripper/aria_gripper/bathroom_1_1-2_gripper_vrs/",
+    "reported_size": "1.4 GB",
+    "md5": "d920385292d0803a43f33afe3137ee5e",
+    "scope": "Public file-page metadata only; archive not downloaded"
+  },
+  "reported": {
+    "sequences": 3048,
+    "articulated_objects": 381,
+    "environments": 38,
+    "embodiments": 4,
+    "modalities": ["RGB video", "force/torque", "DIGIT tactile", "spatial registration", "camera metadata"],
+    "challenge_evaluation_interactions": 40,
+    "challenge_evaluation_scenes": ["kitchen_9", "kitchen_16"],
+    "challenge_ground_truth": "Hidden on Codabench",
+    "session_level_interaction_window_annotations_described": true,
+    "train_validation_split_provided_or_verified": false,
+    "group_split_contents_verified": false,
+    "potential_object_group_count": 381,
+    "object_group_independence_and_cross_embodiment_overlap": "UNKNOWN",
+    "dataverse_file_count": 4769,
+    "dataverse_total_bytes": 3186202640224,
+    "zip_file_count": 3181,
+    "zip_total_bytes": 3185687461273,
+    "json_file_count": 1354,
+    "json_total_bytes": 156171537,
+    "camera_rgb_zip_count": 362,
+    "camera_rgb_zip_total_bytes": 855857508336,
+    "force_torque_zip_count": 22,
+    "force_torque_zip_total_bytes": 136626600,
+    "digit_zip_count": 22,
+    "digit_zip_total_bytes": 2858497449,
+    "telemetry_zip_count": 24,
+    "telemetry_zip_total_bytes": 23595019,
+    "odometry_zip_count": 24,
+    "odometry_zip_total_bytes": 139860733262,
+    "interaction_window_json_count": 200,
+    "interaction_window_json_directory_count": 79
+  },
+  "license": {
+    "official_dataset_page": "CC BY 4.0; official page states commercial use is permitted with attribution",
+    "deposited_readme": "CC-BY",
+    "participant_consent_scope": "UNKNOWN; README reviewed but does not state consent/use scope details",
+    "product_compatible": "LICENSE_DECLARATION_COMPATIBLE; participant/source-specific rights review remains open"
+  },
+  "task_and_split": {
+    "challenge_t1": "RGB clips to articulation type and axis estimation",
+    "challenge_t2": "RGB clips to peak force and mechanical work regression; force is the target, not an inference-time input",
+    "challenge_split": "40 interactions from two kitchens; hidden ground truth",
+    "reported_environment_count": 38,
+    "reported_articulated_object_count": 381,
+    "independent_group_count_for_candidate_split": "UNKNOWN",
+    "independent_group_basis": "Environment grouping yields 38 reported groups; 381 objects could yield more groups, but object identities, cross-embodiment/session overlap, and candidate split have not been verified",
+    "metadata_derived_environment_index_keys": {
+      "force_torque": 168,
+      "umi_telemetry": 187,
+      "union_deduplicated": 198,
+      "interpretation": "Parsed from package path index suffixes and deduplicated by environment/index; candidate physical-object independence not established"
+    },
+    "umi_telemetry_with_aria_human_rgb": {
+      "paired_package_count": 24,
+      "camera_rgb_total_bytes": 46809692711,
+      "telemetry_total_bytes": 23595019,
+      "all_media_downloaded": false
+    },
+    "both_input_necessity": "NOT_ESTABLISHED_BY_PUBLISHED_CHALLENGE_TASKS"
+  },
+  "resource_gate": {
+    "full_release_gib": 2967.38,
+    "local_c_free_gib_at_screen": 9.13,
+    "action": "NO_MEDIA_OR_SENSOR_PAYLOAD_DOWNLOAD; one 664-byte interaction annotation was inspected and one 1.4 GB RGB archive is reported for a two-interaction example session; total aligned video+sensor subset size remains unknown"
+  },
+  "decision": "REVIEW_NOT_ADMITTED: the published force challenge predicts sensor targets from video rather than requiring synchronized video and force as joint decision inputs; the challenge has only 40 interactions across two kitchens, no verified independent candidate split, and the full release is about 2967 GiB.",
+  "integrity_and_use": {
+    "dataset_readme_downloaded": true,
+    "media_or_sensor_payload_downloaded": false,
+    "one_interaction_annotation_downloaded": true,
+    "one_sample_interaction_annotation_opened": true,
+    "challenge_ground_truth_accessed": false,
+    "fit_or_evaluation_performed": false,
+    "sealed_audit_accessed": false,
+    "training_started": false
+  }
+}

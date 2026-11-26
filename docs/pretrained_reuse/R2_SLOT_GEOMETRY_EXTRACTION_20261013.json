@@ -1,0 +1,26 @@
+{
+  "status": "PASS_99_TRAIN_GEOMETRY_FEATURES",
+  "seconds": 118.72073599998839,
+  "count": 99,
+  "original_features_exact": true,
+  "weights_unchanged": true,
+  "result_sha256": "a40c7f27c46bb689b1dd23188465e679b65b8c452d3271b220c7afb4ddd6b2ab",
+  "protocol": {
+    "scope": "all 99 train videos only, annotation-free geometry, no validation",
+    "checkpoint_sha256": "8c6881307ec37b952325239103ad37bb542665ed24257e837c9db560502b468f",
+    "source_result_sha256": "0fd52cb4e3de711ef3b09cde2ad1f15798b6e124aca5cba99db876da8121d795",
+    "script_sha256": "82e63b9c23ca326e9c6b589d29fee3c403b0d917548246fcfda6a39dae10950c",
+    "helper_sha256": "db8edfa85b21d725193f43357fd27ca256a6abfe7e060d699a50b066694a10d2",
+    "geometry": [
+      "centroid_x",
+      "centroid_y",
+      "std_x",
+      "std_y",
+      "mean_soft_mass"
+    ],
+    "coordinates": "normalized 0..1, native 37x37 masks, no threshold",
+    "layout": "128 slot features, normalized time, 5 geometry values; 224x134",
+    "device": "cpu",
+    "dtype": "float32 decoder, float64 geometry reductions"
+  }
+}

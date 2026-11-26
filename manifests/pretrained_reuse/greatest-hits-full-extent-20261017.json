@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "experiment": "greatest-hits-full-extent-20261017",
+  "probe_source_commit": "bc80ecb29a6d5ef6eb670b8772cd10357cd26dbd",
+  "cache_source_commit": "857edcf6f243fb23cd2d34d812036e8b43205dfb",
+  "review_receipt_sha256": "7f68821211c364cb84eaa24d82e41ca3a5a25d9cafb6a30e9e365dcbdfcee2be",
+  "audit_receipt_sha256": "6dd75dcd634f779bc2712a04b2f7408f9d66c0f0777c0453e620a7160a05dd0f",
+  "audit_script_sha256": "02da59bba89e41619b7cd1bcea6847f1e94c32217039d8af06a5b2fd3478c1bc",
+  "artifact_ledger_sha256": "00537ef275238fa7263e0270059ff1d7079b0e6d10507d56e9d6de359ab2a785",
+  "status": "PASS_FULL_EXTENT_AND_CACHE_SMOKE_AUDIT",
+  "completed_utc": "2026-10-16T18:28:36.514724+00:00",
+  "source_sha256": "02da59bba89e41619b7cd1bcea6847f1e94c32217039d8af06a5b2fd3478c1bc",
+  "preserved_previous_files": 8437,
+  "verified_new_files": 277,
+  "exact_fresh_process_payload_pairs": 105,
+  "exact_decoder_to_bank_events": 21,
+  "receipts": {
+    "greatest-hits-full-extent-01": {
+      "receipt_sha256": "1ad1b239fd8ffcf561f287e63b88f50c4e66025a437e2e8bcd4b19b7fb3a5f2f",
+      "seconds": 35.50986339998781,
+      "load_seconds": 4.554119399981573,
+      "peak_working_set_bytes": 4123754496,
+      "started_utc": "2026-10-16T18:16:58.165930+00:00",
+      "finished_utc": "2026-10-16T18:17:33.648755+00:00"
+    },
+    "greatest-hits-full-extent-replay-01": {
+      "receipt_sha256": "debb229d6d5902be88db0652d649d1910f43c1f72b7c3a7d0e4733b03f56521f",
+      "seconds": 35.678142200020375,
+      "load_seconds": 4.3935918000061065,
+      "peak_working_set_bytes": 4120547328,
+      "started_utc": "2026-10-16T18:18:13.190613+00:00",
+      "finished_utc": "2026-10-16T18:18:48.841314+00:00"
+    }
+  },
+  "cache_smoke_receipt_sha256": "d0ee01083f70a98be68b3a71c0a9abd68ac9b4b82759cc089e0232ff32bd38db",
+  "cache_smoke_seconds": 43.11285500001395,
+  "cache_smoke_peak_bytes": 4285804544,
+  "visual_inspection": "prepared contact sheets 3, 6 and 18: full width retained; smaller detail",
+  "optimization_steps": 0,
+  "quality_evaluated": false,
+  "product_goal_complete": false,
+  "input_geometry": {
+    "raw": [
+      8,
+      256,
+      456,
+      3
+    ],
+    "resized": [
+      8,
+      162,
+      288,
+      3
+    ],
+    "output": [
+      8,
+      288,
+      288,
+      3
+    ],
+    "pad_top": 63,
+    "pad_bottom": 63
+  },
+  "model_parameters": 114365184,
+  "model_versions": {
+    "jax": "0.6.2",
+    "jaxlib": "0.6.2",
+    "numpy": "1.26.4",
+    "av": "18.1.0",
+    "psutil": "7.2.2",
+    "tensorflow_cpu": "2.18.1"
+  },
+  "full_cache": {
+    "output": "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-video-cache-01",
+    "completion": "NOT_ESTABLISHED; inspect live process/result",
+    "expected_events": 11151,
+    "expected_questions": 32582,
+    "expected_parents": 409
+  },
+  "verification": {
+    "ruff": "PASS",
+    "cpu_tests": "2267 passed, 1 skipped",
+    "manifest_commands": 25
+  },
+  "ci_receipt": "C:\\CodexArtifacts\\pretrained-reuse-r2\\greatest-hits-full-extent-verification-01\\publication\\ci.json"
+}

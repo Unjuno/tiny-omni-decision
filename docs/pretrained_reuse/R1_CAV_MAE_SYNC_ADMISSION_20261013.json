@@ -1,0 +1,23 @@
+{
+  "repository": "edsonroteia/cav-mae-sync",
+  "revision": "0add2e7cbfcb2ff0315456b9db7ad347893ba54b",
+  "files": {
+    "LICENSE": "be9e515194eeeb1b9ab4c712a9e59d5f9fd333fe4de0479bbf0ffe2aaff64f8a",
+    "pretrained_models__get_pretrained_model.sh": "0e9e4d3861c5b5bb3a17c0ff178414dc007bcfa2e07f57d3b9085df72ec4c49c",
+    "README.md": "2887f7f94eacbe9141a19fa25e969abb535959c6dcfe0402710de77e75176a42",
+    "src__models__cav_mae_sync.py": "e3d3008c9874ce5e654a0dd83bd99b54a5f1f0f2cd001c990adb441957fa89d7",
+    "src__retrieval.py": "d39d3744a029fa09ed608ec9cd9a884a7d95e73160c6a04cb12da66e8fb4b07a"
+  },
+  "status": "REVIEW",
+  "checkpoint_downloaded": false,
+  "runtime_parameter_count": null,
+  "retrieval_contrastive_heads": false,
+  "encoder_matrix_only_lower_bound": 162791424,
+  "encoder_plus_existing_text_matrix_lower_bound": 185505025,
+  "notes": [
+    "Source-derived lower bound excludes biases, norms, patch/position embeddings and reconstruction decoder. Not an actual loaded parameter count.",
+    "Default retrieval name disables optional four contrastive blocks. Constructor default True must not be mistaken for retrieval configuration.",
+    "BSD-2-Clause repository license observed; external checkpoint-specific grant not established.",
+    "No download script executed; its --no-check-certificate is not acceptable for acquisition."
+  ]
+}

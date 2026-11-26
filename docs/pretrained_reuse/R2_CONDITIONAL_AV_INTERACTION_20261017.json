@@ -1,0 +1,86 @@
+{
+  "status": "PASS_CPU_PARAMETER_AND_METADATA_AUDIT",
+  "source_commit": "e31cb35d5c56b99584e2b0146287c44d4766357e",
+  "command": [
+    "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\python.exe",
+    "-m",
+    "scripts.audit_native_av_interaction",
+    "--observations",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02\\observations.json",
+    "--observations-sha256",
+    "e82febae93455cc06a2fb31f3dcc83ebcb79328552aff2ec4da507d660186afb",
+    "--output",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\conditional-av-interaction-audit-01"
+  ],
+  "finished_utc": "2026-10-16T15:59:55.790703+00:00",
+  "source_hashes": {
+    "src/tiny_omni_decision/native_candidate.py": "cd2ab4e45de5c5e3e037531bf8a9e967365f8ef2a60b5b20cddd0ba3e336a974",
+    "src/tiny_omni_decision/native_av_interaction.py": "76b963004fa071dd5673916abccccb529f546cb4c2c4aea6dc83fb73c581853a",
+    "scripts/audit_native_av_interaction.py": "3687e959fe399843db1609bc577341a8eb3e22dbe3c9d61b9b2f0e690c092ee3"
+  },
+  "observations_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-common-corpus-02\\observations.json",
+  "observations_sha256": "e82febae93455cc06a2fb31f3dcc83ebcb79328552aff2ec4da507d660186afb",
+  "observation_counts": {
+    "train": {
+      "observations": 17341,
+      "audio_video_present": 0,
+      "kind_combinations": {
+        "text": 2626,
+        "image": 8424,
+        "event_audio+speech": 6035,
+        "video": 256
+      }
+    },
+    "validation": {
+      "observations": 3843,
+      "audio_video_present": 0,
+      "kind_combinations": {
+        "text": 1756,
+        "image": 512,
+        "event_audio+speech": 1375,
+        "video": 200
+      }
+    },
+    "joint_training_admitted": false
+  },
+  "parameter_ledgers": {
+    "exchange=False,gated=False": {
+      "allocated_readout_parameters": 1732420,
+      "active_joint_parameters": 1373570,
+      "requires_grad_parameters": 1732420,
+      "reference_frozen_encoder_parameters": 195365529,
+      "reference_total_parameters": 197097949
+    },
+    "exchange=False,gated=True": {
+      "allocated_readout_parameters": 1732420,
+      "active_joint_parameters": 1435204,
+      "requires_grad_parameters": 1732420,
+      "reference_frozen_encoder_parameters": 195365529,
+      "reference_total_parameters": 197097949
+    },
+    "exchange=True,gated=False": {
+      "allocated_readout_parameters": 1732420,
+      "active_joint_parameters": 1670786,
+      "requires_grad_parameters": 1732420,
+      "reference_frozen_encoder_parameters": 195365529,
+      "reference_total_parameters": 197097949
+    },
+    "exchange=True,gated=True": {
+      "allocated_readout_parameters": 1732420,
+      "active_joint_parameters": 1732420,
+      "requires_grad_parameters": 1732420,
+      "reference_frozen_encoder_parameters": 195365529,
+      "reference_total_parameters": 197097949
+    }
+  },
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "torch": "2.6.0+cu124",
+  "platform": "Windows-10-10.0.26300-SP0",
+  "device": "cpu",
+  "training_updates": 0,
+  "media_loaded": false,
+  "sealed_audit_loaded": false,
+  "quality_evaluated": false,
+  "cloud_cost": 0,
+  "encoder_count_scope": "existing frozen reference ledger; encoders not loaded here"
+}

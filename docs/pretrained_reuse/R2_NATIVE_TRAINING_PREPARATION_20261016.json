@@ -1,0 +1,239 @@
+{
+  "status": "VIDEO_CACHE_COMPLETE_COMMON_TRAINING_PREPARATION_INCOMPLETE",
+  "source_commits": {
+    "cache": "4a9823ce7d6a3987a241a872ae8d0ce5d2d714fc",
+    "source_audit": "7042a4a7c6e76f179ecdc368aa1c361c4e174aea"
+  },
+  "result_hashes": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-training-video-cache-01\\result.json": "11358d26a6628f113caf4407c5297f6c492f8e263ed5eb2c688eab1fe6d1a089",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-training-source-audit-01\\result.json": "9f202bdbfad5660fedc95c71bcc5891bac00f1967a695051c981691877b342b8"
+  },
+  "video": {
+    "counts": {
+      "train": 256,
+      "validation": 200
+    },
+    "completed": 456,
+    "config_sha256": "82fc5d8b123bab7ae5e00509b5cf7dd6f4438c3316609741e5c7780d49661a35",
+    "seconds": 568.0424006999965,
+    "started_utc": "2026-10-16T04:10:26.915538+00:00",
+    "finished_utc": "2026-10-16T04:19:54.942727+00:00",
+    "total_token_file_bytes": 2868962304,
+    "observed_peak_process_tree_rss_bytes": 2356662272,
+    "memory_measurement": "process tree sampled on token receipt or5s timeout; may miss short peaks",
+    "worker_command": [
+      "C:\\CodexArtifacts\\pretrained-reuse-r1\\videoprism-base-r1\\venv\\Scripts\\python.exe",
+      "-m",
+      "scripts.audit_token_ram_transport",
+      "--audit",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-token-audit-02",
+      "--request",
+      "C:\\CodexArtifacts\\pretrained-reuse-r2\\video-token-readout-01\\request.json",
+      "--worker",
+      "--live"
+    ],
+    "all_historical_token_hashes_exact": true
+  },
+  "worker_environment": {
+    "parameters": 114365184,
+    "versions": {
+      "jax": "0.6.2",
+      "jaxlib": "0.6.2",
+      "numpy": "1.26.4",
+      "av": "18.1.0",
+      "tensorflow": "2.18.1"
+    },
+    "backend": "cpu",
+    "process_memory": {
+      "rss": 1888751616,
+      "vms": 1958408192,
+      "num_page_faults": 90629184,
+      "peak_wset": 4153794560,
+      "wset": 1888751616,
+      "peak_paged_pool": 3097896,
+      "paged_pool": 3097800,
+      "peak_nonpaged_pool": 6402712,
+      "nonpaged_pool": 106480,
+      "pagefile": 1958408192,
+      "peak_pagefile": 4234911744,
+      "private": 1958408192
+    }
+  },
+  "source_audit": {
+    "status": "PASS_READINESS_AUDIT_TRAINING_NOT_ADMITTED",
+    "counts": {
+      "binding_train": {
+        "questions": 8192,
+        "states": 512,
+        "token_lengths": {
+          "count": 512,
+          "max_tokens": 38,
+          "over_512": 0,
+          "over_8192": 0
+        }
+      },
+      "numeric_train": {
+        "questions": 8192,
+        "states": 1024,
+        "token_lengths": {
+          "count": 1024,
+          "max_tokens": 115,
+          "over_512": 0,
+          "over_8192": 0
+        }
+      },
+      "legacy_train": {
+        "questions": 2048,
+        "states": 1090,
+        "token_lengths": {
+          "count": 1090,
+          "max_tokens": 753,
+          "over_512": 28,
+          "over_8192": 0
+        }
+      },
+      "validation": {
+        "questions": 2048,
+        "states": 128,
+        "token_lengths": {
+          "count": 128,
+          "max_tokens": 38,
+          "over_512": 0,
+          "over_8192": 0
+        }
+      },
+      "old_validation": {
+        "questions": 3072,
+        "states": 384,
+        "token_lengths": {
+          "count": 384,
+          "max_tokens": 115,
+          "over_512": 0,
+          "over_8192": 0
+        }
+      },
+      "legacy_validation": {
+        "questions": 5612,
+        "states": 1244,
+        "token_lengths": {
+          "count": 1244,
+          "max_tokens": 824,
+          "over_512": 10,
+          "over_8192": 0
+        }
+      },
+      "image_train": {
+        "assets": 8424,
+        "attribute_signatures": 5636
+      },
+      "image_validation": {
+        "assets": 512,
+        "attribute_signatures": 498
+      },
+      "speech_train": {
+        "utterances": 4080,
+        "speaker_groups": 36,
+        "phrases": 1968
+      },
+      "events_train": {
+        "windows": 1955,
+        "recordings": 49,
+        "rooms": 6,
+        "positive_events": {
+          "bell": 0,
+          "clapping": 9,
+          "domestic sounds": 249,
+          "door": 60,
+          "footsteps": 105,
+          "instrument": 73,
+          "knock": 10,
+          "laughter": 273,
+          "music": 339,
+          "speech": 1631,
+          "telephone": 27,
+          "water tap": 28
+        }
+      },
+      "speech_validation": {
+        "utterances": 889,
+        "speaker_groups": 9,
+        "phrases": 454
+      },
+      "events_validation": {
+        "windows": 486,
+        "recordings": 21,
+        "rooms": 2,
+        "positive_events": {
+          "bell": 32,
+          "clapping": 10,
+          "domestic sounds": 267,
+          "door": 17,
+          "footsteps": 19,
+          "instrument": 5,
+          "knock": 4,
+          "laughter": 56,
+          "music": 229,
+          "speech": 311,
+          "telephone": 19,
+          "water tap": 0
+        }
+      }
+    },
+    "query_candidate_lengths": {
+      "count": 22328,
+      "max_tokens": 316,
+      "over_512": 0,
+      "over_8192": 0
+    },
+    "signature_overlap": {
+      "shared_attribute_or_state_signatures": 317,
+      "source_pairs": {
+        "image -> image": 301,
+        "text -> image": 16
+      },
+      "does_not_by_itself_establish_media_leakage": true
+    },
+    "text_normalized_state_overlap": 0,
+    "image_media_hash_overlap": 0,
+    "image_native_max_abs": 0.0,
+    "speech_native_max_abs": 4.9591064453125e-05,
+    "fresh_parity_scope": "one existing TRAIN input per kind",
+    "video_cache": {
+      "counts": {
+        "train": 256,
+        "validation": 200
+      },
+      "completed": 456,
+      "total_token_file_bytes": 2868962304
+    },
+    "missing_before_fit": [
+      "lossless handling of long text states and language token/query cache",
+      "unified speech/event feature profile; current speech cache is not exact eager parity",
+      "complementary audio features: speech for event clips, event features for speech clips",
+      "joint task contract and eight-frame native paired-video coverage",
+      "common sampler/budget/selector/retention and source-held-out evaluation contract"
+    ],
+    "calibration_labels_or_feature_slices_loaded": false,
+    "shared_speech_cache_including_reserved_bytes_hashed_only": true,
+    "sealed_audit_loaded": false,
+    "model_loaded": false,
+    "tokenizer_loaded": true,
+    "optimizer_updates": 0,
+    "native_quality_evaluated": false,
+    "corpus_modified": false,
+    "seconds": 13.238970100006554
+  },
+  "tests": "1929 passed, 1 skipped",
+  "ruff": "pass",
+  "manifest_commands": 25,
+  "independent_cache_audit": {
+    "files": 456,
+    "raw_hashes_exact": true,
+    "npy_hashes_exact": true,
+    "all_finite": true,
+    "shapes_dtype_correct": true
+  },
+  "training_updates": 0,
+  "sealed_audit_loaded": false,
+  "cloud_cost": 0
+}

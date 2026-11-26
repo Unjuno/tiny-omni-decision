@@ -1,0 +1,99 @@
+{
+  "models": {
+    "dinov2": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r1\\dinov2-small-audit-01\\model",
+      "parameters": 22056576,
+      "expected_parameters": 22056576,
+      "count_matches": true,
+      "config_differences": {},
+      "loaded_config_differences": {},
+      "load_diagnostics": {},
+      "dtype": "torch.float32",
+      "seconds": 0.07885839999653399,
+      "config_sha256": "1809f83e3bdb1609a501a610ad4a742f4fd8ae44d72ca4aa0df52d1f2ac8628d",
+      "weights_sha256": "ae1e99fcefd534ed978cdeb8326f08030c96e28b7a81ffcbc98a857c84d14be1"
+    },
+    "minilm": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\path-a-audio-multiquery-runtime-bundle-v2\\models\\text-minilm-en",
+      "parameters": 17389824,
+      "expected_parameters": 17389824,
+      "count_matches": true,
+      "config_differences": {},
+      "loaded_config_differences": {},
+      "load_diagnostics": {},
+      "dtype": "torch.float32",
+      "seconds": 0.037464500055648386,
+      "config_sha256": "fc00f0ca1c3380f17937a4050908dd2cf743c36bebe437cf448b8aa4e7ddfe4d",
+      "weights_sha256": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433"
+    },
+    "crossencoder": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r1\\crossencoder-minilm-l6-audit-01\\model",
+      "parameters": 22713601,
+      "expected_parameters": 22713601,
+      "count_matches": true,
+      "config_differences": {},
+      "loaded_config_differences": {},
+      "load_diagnostics": {},
+      "dtype": "torch.float32",
+      "seconds": 0.03342080011498183,
+      "config_sha256": "380e02c93f431831be65d99a4e7e5f67c133985bf2e77d9d4eba46847190bacc",
+      "weights_sha256": "821d1aa69520101d6e0737f78a042ae25b19e5cb9160701909d10434f4aeb0ae"
+    },
+    "smollm2": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r1\\smollm2-135m-audit-01\\model",
+      "parameters": 134515008,
+      "expected_parameters": 134515008,
+      "count_matches": true,
+      "config_differences": {
+        "rope_theta": {
+          "published": 100000,
+          "effective": null
+        },
+        "rope_scaling": {
+          "published": null,
+          "effective": {
+            "rope_theta": 100000,
+            "rope_type": "default"
+          }
+        }
+      },
+      "loaded_config_differences": {
+        "rope_theta": {
+          "published": 100000,
+          "effective": null
+        },
+        "rope_scaling": {
+          "published": null,
+          "effective": {
+            "rope_theta": 100000,
+            "rope_type": "default"
+          }
+        }
+      },
+      "load_diagnostics": {},
+      "dtype": "torch.float32",
+      "seconds": 0.14507820003200322,
+      "config_sha256": "8eb740e8bbe4cff95ea7b4588d17a2432deb16e8075bc5828ff7ba9be94d982a",
+      "weights_sha256": "5af571cbf074e6d21a03528d2330792e532ca608f24ac70a143f6b369968ab8c"
+    },
+    "whisper": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\path-a-audio-multiquery-runtime-bundle-v2\\models\\audio-whisper-tiny",
+      "parameters": 37760640,
+      "expected_parameters": 37760640,
+      "count_matches": true,
+      "config_differences": {},
+      "loaded_config_differences": {},
+      "load_diagnostics": {},
+      "dtype": "torch.float32",
+      "seconds": 0.050911500002257526,
+      "config_sha256": "ffdccec4f3211f4c63310f2b7098f309fe70f3952cedc5e4d11e43f5b2379b98",
+      "weights_sha256": "7ebd0e69e78190ffe1438491fa05cc1f5c1aa3a4c4db3bc1723adbb551ea2395"
+    }
+  },
+  "torch": "2.6.0+cu124",
+  "transformers": "5.6.2",
+  "device": "cpu",
+  "training": false,
+  "inference": false,
+  "all_counts_match": true
+}

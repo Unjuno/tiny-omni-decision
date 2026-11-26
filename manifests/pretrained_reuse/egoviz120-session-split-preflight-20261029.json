@@ -1,0 +1,27 @@
+{
+  "format": "metadata_group_split_preflight_reference_v1",
+  "recorded_at": "2026-10-29",
+  "source_commit": "52e57b662a9b947ec7ec55f1b6153f8b45057175",
+  "source_index_sha256": "c83126637cc24a7ac2b3600724b50cf9c53966b9b098acc57d5534e14ade1074",
+  "external_report": "C:/CodexArtifacts/pretrained-reuse-r2/egoviz-session-split-preflight-20261029-attempt-01/report.json",
+  "external_report_sha256": "d2e2869dcce0a7d96cddc7dee639794a7cf253c3f922637ab9c9699cb5e6d7d2",
+  "algorithm": "sort group_id by SHA256(seed17:egoviz-session-split-v1:<group_id>); first round(20% of groups) development; remainder train",
+  "train_groups": 144,
+  "train_clips": 4335,
+  "development_groups": 36,
+  "development_clips": 1057,
+  "group_overlap": 0,
+  "sequence_ids_crossing_groups": 0,
+  "all_12_categories_in_both_splits": true,
+  "raw_payload_loaded": false,
+  "model_training_or_evaluation": false,
+  "sealed_audit_created": false,
+  "source_admitted": false,
+  "limitations": [
+    "group_id is a session identifier; participant independence is unknown",
+    "labels are model-generated and not human-verified",
+    "some development categories have only 2 or 3 session groups",
+    "both-input necessity and raw stream timestamp alignment are unverified",
+    "local storage is insufficient for a safe media download and replay"
+  ]
+}

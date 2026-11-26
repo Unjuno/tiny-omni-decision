@@ -1,0 +1,58 @@
+{
+  "member": "IMU/INFO/Timestamps.xlsx",
+  "sha256": "ee594ac0b35ee574fb6619363977468bf418c579aa0dbbf2d154f9b9fb068307",
+  "sheets": [
+    {
+      "sheet": "Volunteer 1",
+      "dimension": "A1:D51",
+      "header": [
+        "N",
+        "Sign",
+        "Time Start (s)",
+        "Time End (s)"
+      ]
+    },
+    {
+      "sheet": "Volunteer 2",
+      "dimension": "A1:D51",
+      "header": [
+        "N",
+        "Sign",
+        "Time Start (s)",
+        "Time End (s)"
+      ]
+    },
+    {
+      "sheet": "Volunteer 3",
+      "dimension": "A1:D51",
+      "header": [
+        "N",
+        "Sign",
+        "Time Start (s)",
+        "Time End (s)"
+      ]
+    },
+    {
+      "sheet": "Volunteer  4",
+      "dimension": "A1:D51",
+      "header": [
+        "N",
+        "Sign",
+        "Time Start (s)",
+        "Time End (s)"
+      ]
+    },
+    {
+      "sheet": "Volunteer 5",
+      "dimension": "A1:D51",
+      "header": [
+        "N",
+        "Sign",
+        "Time Start (s)",
+        "Time End (s)"
+      ]
+    }
+  ],
+  "sensor_or_video_read": false,
+  "timing_rows_inspected": false
+}

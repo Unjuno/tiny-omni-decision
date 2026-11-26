@@ -1,0 +1,66 @@
+{
+  "repo": "ServiceNow/GroundCUA",
+  "revision": "5d6845b0116029d46ec762e734701c5b8ce207c3",
+  "declared_license": "MIT",
+  "readme_sha256": "fe18179d2a2de962e29b9cb7efbad79add481c65840d235163af0b8cb88d72da",
+  "samples": [
+    {
+      "annotation_path": "data/7-Zip/001f0079a489909eb94e47c2374b7bf36ab1842e314592ce30a34d18a54eb1df.json",
+      "annotation_sha256": "e421e609ad0345d6cc390c4b2242b9a36e646288d24bdf841309b2d3c438e985",
+      "image_path": "images/7-Zip/001f0079a489909eb94e47c2374b7bf36ab1842e314592ce30a34d18a54eb1df.png",
+      "image_sha256": "00c630883539931f243cf3e690f607cad74fe8837e6277dd878575280b2b45ec",
+      "filename_matches_byte_sha256": false,
+      "size": [
+        1366,
+        720
+      ],
+      "annotations": 56,
+      "category_counts": {
+        "Others": 26,
+        "Button": 11,
+        "Information Display": 12,
+        "Menu": 7
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "annotation_path": "data/Anki/003d96821b9e89aebcd9eba7148be878208dc0999c9156b5bf66666ebe4cab96.json",
+      "annotation_sha256": "7251b848ba6c61448d04646ee26d15a79a7f7d9f3937d7d6b581c7bd840a9656",
+      "image_path": "images/Anki/003d96821b9e89aebcd9eba7148be878208dc0999c9156b5bf66666ebe4cab96.png",
+      "image_sha256": "de78b8831a31c71a8b08b67be15c377733249ec46d3c03c7cf91bd54762e29b3",
+      "filename_matches_byte_sha256": false,
+      "size": [
+        1920,
+        990
+      ],
+      "annotations": 56,
+      "category_counts": {
+        "": 47,
+        "Others": 9
+      },
+      "invalid_bbox_ids": []
+    },
+    {
+      "annotation_path": "data/Audacity/00c48e3451f03dedc6e160d75733617edaa9eb2ba360095d291a53384477c42f.json",
+      "annotation_sha256": "b567ca4ac5caeb3b82f27db95d3eb2d93e618620a17d14cb5e421aefbc44ad8e",
+      "image_path": "images/Audacity/00c48e3451f03dedc6e160d75733617edaa9eb2ba360095d291a53384477c42f.png",
+      "image_sha256": "35e8545326b98b3f4b66692488685a2f6f8c057178751a3539f1af552255c4aa",
+      "filename_matches_byte_sha256": false,
+      "size": [
+        1920,
+        1080
+      ],
+      "annotations": 69,
+      "category_counts": {
+        "Menu": 18,
+        "Button": 38,
+        "Navigation": 3,
+        "Visual Elements": 1,
+        "Information Display": 9
+      },
+      "invalid_bbox_ids": []
+    }
+  ],
+  "training_or_evaluation_performed": false,
+  "exclusion": "All three inspected screenshots must be development-only"
+}

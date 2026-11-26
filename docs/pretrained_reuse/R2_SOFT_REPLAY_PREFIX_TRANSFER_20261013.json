@@ -1,0 +1,218 @@
+{
+  "result": {
+    "status": "COMPLETE_FIXED_FACTORIAL",
+    "metrics": {
+      "family0-prefix0": {
+        "count": 768,
+        "accuracy": 0.9361979365348816,
+        "nll": 0.16748102009296417,
+        "brier": 0.09570292383432388,
+        "ece_15_bins": 0.025074630859307948,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          7,
+          20,
+          19,
+          17,
+          17,
+          27,
+          43,
+          616
+        ]
+      },
+      "family0-prefix1": {
+        "count": 768,
+        "accuracy": 0.8098958134651184,
+        "nll": 0.524212658405304,
+        "brier": 0.274443119764328,
+        "ece_15_bins": 0.08297476882580668,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          4,
+          20,
+          35,
+          38,
+          42,
+          41,
+          42,
+          60,
+          484
+        ]
+      },
+      "family4-prefix0": {
+        "count": 768,
+        "accuracy": 0.4296875,
+        "nll": 1.3347190618515015,
+        "brier": 0.6831049919128418,
+        "ece_15_bins": 0.08012591508061936,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          14,
+          267,
+          189,
+          61,
+          42,
+          26,
+          32,
+          32,
+          18,
+          27,
+          22,
+          38
+        ]
+      },
+      "family4-prefix1": {
+        "count": 768,
+        "accuracy": 0.2734375,
+        "nll": 1.6797481775283813,
+        "brier": 0.8581058979034424,
+        "ece_15_bins": 0.25605648474690196,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          37,
+          129,
+          158,
+          129,
+          96,
+          74,
+          54,
+          37,
+          20,
+          21,
+          13
+        ]
+      }
+    },
+    "seconds": 11.566297100041993,
+    "peak_vram": 181681664,
+    "source_checkpoint_unchanged": true,
+    "artifacts": {
+      "family0-prefix0-predictions.json": "91a4670077ef225e9abdf24b5b7b835055cf9200d6929d432101dd5be1b289f4",
+      "family0-prefix1-predictions.json": "ae49a9e087edc6732bc7e2784454c5ca68beea2376e2fc53dd830068680be088",
+      "family4-prefix0-predictions.json": "389d436f4062c4bf44106e00777a078b33c0f6851bbfb19b6cc7092aed1e0d1c",
+      "family4-prefix1-predictions.json": "634c4e6d7258ee9281e62f47f248090cfc1aafe4b26a4695f73bcb29f9e3197a",
+      "protocol.json": "698b1fc0b5d7e9175e46a06f84d07dfc10945187cd3c2ca694b887c96a3ee500"
+    }
+  },
+  "protocol": {
+    "input_sha256": "ebd762bdae9ff43b3f4f45d16c370d16a6f0550fd5aa5fba9111ff17e138f159",
+    "checkpoint_sha256": "f42842256697769d03ec5a35f7127b36bd852405408aaba23d8baa6a1962c457",
+    "scope": "fixed observed-development transfer; no training or selection",
+    "script_sha256": "2a5b22e0e4dab1b9666e7e410f32d6b07e16ee0f19bf7e919644291975419850"
+  },
+  "parent_metrics": {
+    "family0-prefix0": {
+      "count": 768,
+      "accuracy": 0.9010416865348816,
+      "nll": 0.24805641174316406,
+      "brier": 0.1445707529783249,
+      "ece_15_bins": 0.04148328370259454,
+      "ece_bin_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        10,
+        31,
+        25,
+        50,
+        45,
+        39,
+        50,
+        83,
+        434
+      ]
+    },
+    "family0-prefix1": {
+      "count": 768,
+      "accuracy": 0.5130208134651184,
+      "nll": 1.3596445322036743,
+      "brier": 0.7024850249290466,
+      "ece_15_bins": 0.2041258437481398,
+      "ece_bin_counts": [
+        0,
+        0,
+        0,
+        0,
+        4,
+        29,
+        61,
+        100,
+        80,
+        79,
+        74,
+        89,
+        76,
+        82,
+        94
+      ]
+    },
+    "family4-prefix0": {
+      "count": 768,
+      "accuracy": 0.4309895932674408,
+      "nll": 1.168390154838562,
+      "brier": 0.6293363571166992,
+      "ece_15_bins": 0.10605566933130224,
+      "ece_bin_counts": [
+        0,
+        0,
+        0,
+        2,
+        165,
+        199,
+        87,
+        77,
+        47,
+        58,
+        29,
+        38,
+        32,
+        14,
+        20
+      ]
+    },
+    "family4-prefix1": {
+      "count": 768,
+      "accuracy": 0.3255208432674408,
+      "nll": 1.4635065793991089,
+      "brier": 0.7782206535339355,
+      "ece_15_bins": 0.158759705547709,
+      "ece_bin_counts": [
+        0,
+        0,
+        0,
+        0,
+        78,
+        149,
+        183,
+        131,
+        88,
+        58,
+        31,
+        26,
+        16,
+        8,
+        0
+      ]
+    }
+  },
+  "executed_script": "C:\\CodexArtifacts\\pretrained-reuse-r2\\soft-replay-prefix-factorial-01\\executed-script.py"
+}

@@ -1,0 +1,115 @@
+{
+  "status": "NOT_ADOPTED_FULL_TOKEN_PARITY_FAILED",
+  "source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+  "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+  "parameters": 114365184,
+  "dtype": "float32",
+  "frames": 16,
+  "torch": "2.6.0+cu124",
+  "seed": 17,
+  "tf32": false,
+  "autocast": false,
+  "tiny_max_abs_difference": 3.5762786865234375e-07,
+  "original_gate": {
+    "status": "FAIL",
+    "parameters": 114365184,
+    "dtype": "float32",
+    "seed": 17,
+    "atol": 0.0001,
+    "rtol": 0.0001,
+    "pool_atol": 0.0001,
+    "training": false,
+    "rows": [
+      {
+        "device": "cpu",
+        "source_id": "s16_l_bgah2n",
+        "full_token_max_abs_difference": 0.00666654109954834,
+        "framewise_max_abs_difference": 4.900246858596802e-05,
+        "full_allclose": false,
+        "forward_seconds": 2.6160434000194073,
+        "repeat_bitwise_equal": true
+      }
+    ],
+    "runner_sha256": "7e1825fbb9dd5020a11b5b68f97074e2aeab98095f892bb51b21bc7438613275",
+    "error": "ValueError('predeclared native parity gate failed')"
+  },
+  "cuda_diagnostic": {
+    "status": "DIAGNOSTIC_ONLY_ORIGINAL_CPU_GATE_REMAINS_FAILED",
+    "rows": [
+      {
+        "id": "s16_l_bgah2n",
+        "max": 0.005050629377365112,
+        "q99": 5.3480947826756164e-05,
+        "framewise_max": 2.22623348236084e-05,
+        "allclose_1e4": false,
+        "seconds": 0.39908140001352876,
+        "repeat_bitwise_equal": true
+      },
+      {
+        "id": "s16_p_bgah2n",
+        "max": 0.00366055965423584,
+        "q99": 4.152953624725342e-05,
+        "framewise_max": 1.5236437320709229e-05,
+        "allclose_1e4": false,
+        "seconds": 0.2401225999929011,
+        "repeat_bitwise_equal": true
+      },
+      {
+        "id": "s22_l_sgbe5s",
+        "max": 0.0025368332862854004,
+        "q99": 4.120171070098877e-05,
+        "framewise_max": 1.823902130126953e-05,
+        "allclose_1e4": false,
+        "seconds": 0.23868259997107089,
+        "repeat_bitwise_equal": true
+      },
+      {
+        "id": "s22_p_sgbe5s",
+        "max": 0.013354256749153137,
+        "q99": 4.7147274017333984e-05,
+        "framewise_max": 5.165673792362213e-05,
+        "allclose_1e4": false,
+        "seconds": 0.23985310003627092,
+        "repeat_bitwise_equal": true
+      }
+    ],
+    "peak_allocated_bytes": 839142400,
+    "peak_reserved_bytes": 903872512,
+    "thresholds_unchanged": true,
+    "training": false
+  },
+  "thresholds_changed": false,
+  "full_port_extraction_launched": false,
+  "quality_evaluated": false,
+  "training": false,
+  "old_artifacts_modified": false,
+  "artifacts": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-torch-native-reference-01\\result.json": {
+      "sha256": "6f67b725cea544113ed2606a1e1c170349abc22049e9429e630933649d2bf6cc"
+    },
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-torch-real-parity-01\\result.json": {
+      "sha256": "c06c1fa588c4135e97c38a6fc41666fe715cd2fb158fb007f205e24376e26fe4"
+    },
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism-torch-cuda-diagnostic-01\\result.json": {
+      "sha256": "a7a301773770c7aabf45b45b3ca3ec671384584cdd3262adc81b97b96aea4bdd"
+    },
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism_torch_native_reference.py": {
+      "sha256": "a157b72af2ce0268d76400b52be42ff5c873341908fba1e2d118a135b5dcbc03"
+    },
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism_torch_real_parity.py": {
+      "sha256": "7e1825fbb9dd5020a11b5b68f97074e2aeab98095f892bb51b21bc7438613275"
+    },
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism_torch_cuda_diagnostic.py": {
+      "sha256": "5137194c878d15d6d1061c3e96f361fee09ac50a08262e1fedfe18a17058c48a"
+    },
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism_torch_stage_reference.py": {
+      "sha256": "3eadf2c44e54333a3e55790404f04ec1459064013dc668b12f3cce58b0d92a77"
+    },
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism_torch_patch_reference.py": {
+      "sha256": "68511051f2977095a7cadae6a63417e1106b5f9ae8ff58f598e93d395e20d7b2"
+    },
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\videoprism_torch_weight_parity.py": {
+      "sha256": "6efaacf06f25a675d20002399b31a263daf1005e8ac4a45ef3dff501d9cc6f6f"
+    }
+  }
+}

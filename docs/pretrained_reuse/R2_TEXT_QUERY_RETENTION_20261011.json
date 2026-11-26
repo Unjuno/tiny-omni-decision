@@ -1,0 +1,28 @@
+{
+  "status": "PASS",
+  "truncation_side": "right",
+  "max_length": 256,
+  "counts": {
+    "no_question": 926,
+    "full_question": 1535,
+    "partial_question": 79
+  },
+  "saved_prediction_metrics": {
+    "no_question": {
+      "count": 926,
+      "accuracy": 0.46436285097192226,
+      "nll": 1.0773866158181093
+    },
+    "full_question": {
+      "count": 1535,
+      "accuracy": 0.50814332247557,
+      "nll": 1.005476276814805
+    },
+    "partial_question": {
+      "count": 79,
+      "accuracy": 0.5569620253164557,
+      "nll": 0.959968221275289
+    }
+  },
+  "causal_claim": false
+}

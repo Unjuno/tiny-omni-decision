@@ -1,0 +1,304 @@
+{
+  "status": "PASS_MAPPING_ONLY",
+  "checked_score_questions": {
+    "train": 4943,
+    "validation": 545
+  },
+  "validation_distance_counts": {
+    "0": 257,
+    "1": 183,
+    "2": 67,
+    "3": 34,
+    "4": 4
+  },
+  "validation_mean_absolute_index_error": 0.7981651376146789,
+  "validation_mean_normalized_index_error": 0.218623853211009,
+  "confusion_by_scale": [
+    {
+      "options": 3,
+      "target": 1,
+      "prediction": 1,
+      "count": 2
+    },
+    {
+      "options": 3,
+      "target": 1,
+      "prediction": 2,
+      "count": 2
+    },
+    {
+      "options": 3,
+      "target": 2,
+      "prediction": 1,
+      "count": 2
+    },
+    {
+      "options": 3,
+      "target": 2,
+      "prediction": 2,
+      "count": 4
+    },
+    {
+      "options": 4,
+      "target": 0,
+      "prediction": 0,
+      "count": 4
+    },
+    {
+      "options": 4,
+      "target": 0,
+      "prediction": 1,
+      "count": 3
+    },
+    {
+      "options": 4,
+      "target": 0,
+      "prediction": 2,
+      "count": 4
+    },
+    {
+      "options": 4,
+      "target": 0,
+      "prediction": 3,
+      "count": 2
+    },
+    {
+      "options": 4,
+      "target": 1,
+      "prediction": 0,
+      "count": 3
+    },
+    {
+      "options": 4,
+      "target": 1,
+      "prediction": 1,
+      "count": 10
+    },
+    {
+      "options": 4,
+      "target": 1,
+      "prediction": 2,
+      "count": 14
+    },
+    {
+      "options": 4,
+      "target": 1,
+      "prediction": 3,
+      "count": 7
+    },
+    {
+      "options": 4,
+      "target": 2,
+      "prediction": 0,
+      "count": 2
+    },
+    {
+      "options": 4,
+      "target": 2,
+      "prediction": 1,
+      "count": 13
+    },
+    {
+      "options": 4,
+      "target": 2,
+      "prediction": 2,
+      "count": 50
+    },
+    {
+      "options": 4,
+      "target": 2,
+      "prediction": 3,
+      "count": 24
+    },
+    {
+      "options": 4,
+      "target": 3,
+      "prediction": 0,
+      "count": 2
+    },
+    {
+      "options": 4,
+      "target": 3,
+      "prediction": 1,
+      "count": 5
+    },
+    {
+      "options": 4,
+      "target": 3,
+      "prediction": 2,
+      "count": 9
+    },
+    {
+      "options": 4,
+      "target": 3,
+      "prediction": 3,
+      "count": 29
+    },
+    {
+      "options": 5,
+      "target": 0,
+      "prediction": 0,
+      "count": 6
+    },
+    {
+      "options": 5,
+      "target": 0,
+      "prediction": 1,
+      "count": 2
+    },
+    {
+      "options": 5,
+      "target": 0,
+      "prediction": 2,
+      "count": 2
+    },
+    {
+      "options": 5,
+      "target": 0,
+      "prediction": 3,
+      "count": 13
+    },
+    {
+      "options": 5,
+      "target": 0,
+      "prediction": 4,
+      "count": 2
+    },
+    {
+      "options": 5,
+      "target": 1,
+      "prediction": 0,
+      "count": 8
+    },
+    {
+      "options": 5,
+      "target": 1,
+      "prediction": 1,
+      "count": 13
+    },
+    {
+      "options": 5,
+      "target": 1,
+      "prediction": 2,
+      "count": 8
+    },
+    {
+      "options": 5,
+      "target": 1,
+      "prediction": 3,
+      "count": 9
+    },
+    {
+      "options": 5,
+      "target": 1,
+      "prediction": 4,
+      "count": 9
+    },
+    {
+      "options": 5,
+      "target": 2,
+      "prediction": 0,
+      "count": 5
+    },
+    {
+      "options": 5,
+      "target": 2,
+      "prediction": 1,
+      "count": 1
+    },
+    {
+      "options": 5,
+      "target": 2,
+      "prediction": 2,
+      "count": 38
+    },
+    {
+      "options": 5,
+      "target": 2,
+      "prediction": 3,
+      "count": 19
+    },
+    {
+      "options": 5,
+      "target": 2,
+      "prediction": 4,
+      "count": 14
+    },
+    {
+      "options": 5,
+      "target": 3,
+      "prediction": 0,
+      "count": 4
+    },
+    {
+      "options": 5,
+      "target": 3,
+      "prediction": 1,
+      "count": 8
+    },
+    {
+      "options": 5,
+      "target": 3,
+      "prediction": 2,
+      "count": 27
+    },
+    {
+      "options": 5,
+      "target": 3,
+      "prediction": 3,
+      "count": 81
+    },
+    {
+      "options": 5,
+      "target": 3,
+      "prediction": 4,
+      "count": 35
+    },
+    {
+      "options": 5,
+      "target": 4,
+      "prediction": 0,
+      "count": 2
+    },
+    {
+      "options": 5,
+      "target": 4,
+      "prediction": 1,
+      "count": 4
+    },
+    {
+      "options": 5,
+      "target": 4,
+      "prediction": 2,
+      "count": 10
+    },
+    {
+      "options": 5,
+      "target": 4,
+      "prediction": 3,
+      "count": 13
+    },
+    {
+      "options": 5,
+      "target": 4,
+      "prediction": 4,
+      "count": 20
+    },
+    {
+      "options": 6,
+      "target": 5,
+      "prediction": 3,
+      "count": 1
+    }
+  ],
+  "hashes": {
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\train.jsonl": "1f3e0f751b6fdd1115cf6af4ea3ebc13545a1148614eda4f9f56ae8492c80675",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text\\validation.jsonl": "7be1d1624752938553e13e1eecef5363ca2c56dd264da2915b97ddae8d0b60a8",
+    "C:\\CodexArtifacts\\pretrained-reuse-r2\\text-crossencoder-adapt-v1\\predictions.json": "2abd122adba3fbf9161d76d0546f230cf5c760fa7f50046eb5ff0f956e64d6c4"
+  },
+  "limitations": [
+    "Checks label transformation, not upstream label truth.",
+    "Ordinal distance is descriptive; equal spacing is not guaranteed.",
+    "No new inference, training or model selection."
+  ]
+}

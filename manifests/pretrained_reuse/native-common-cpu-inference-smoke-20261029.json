@@ -1,0 +1,24 @@
+{
+  "format": "native_common_cached_feature_inference_smoke_ref_v1",
+  "recorded_at": "2026-10-29",
+  "source_commit": "b8b2e559fd388b1697064af4ef02ad3a2176fbb4",
+  "external_report": "C:/CodexArtifacts/pretrained-reuse-r2/native-common-cpu-inference-smoke-01/report.json",
+  "external_report_sha256": "7c9960f96240dbaae6bd4cfc6428b52e2837002eab1dbfeccce7e09e60a5bc3b",
+  "checkpoint_sha256": "3eed6558731de60da82e75e38e599699f29663dd601f942505fec26a48b8dc1d",
+  "checkpoint_selected_step": 1792,
+  "query_cache_receipt_sha256": "7f5ffd7362e84770b864a189d50bc29f43be3738f54a07f6dbdc21f1ef7d909e",
+  "examples_by_modality": {
+    "text": 1,
+    "image": 1,
+    "audio": 1,
+    "video": 1
+  },
+  "inference_elapsed_seconds": 0.10041279997676611,
+  "finite_probabilities": true,
+  "probability_sum_tolerance": 1e-9,
+  "quality_metrics_computed": false,
+  "training_performed": false,
+  "cuda_used": false,
+  "sealed_audit_loaded": false,
+  "interpretation": "Execution-path smoke only; not quality evidence or runtime-package parity."
+}

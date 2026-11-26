@@ -1,0 +1,37 @@
+{
+  "model_revision": "4ca70771034acceecb2e72475f72050fcdde4ddc",
+  "weight_sha256": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433",
+  "parameters": 17389824,
+  "device": "cpu",
+  "training": false,
+  "splits": {
+    "train": {
+      "shape": [
+        2312,
+        384
+      ],
+      "max_tokens": 19,
+      "input_sha256": "4b3ee6fe483d20e55e32de47d491d946538df82ef7ce45698ec764d6aa0f1df3",
+      "feature_sha256": "de5350436373fae94872afe58f33909d5e8408ec700828c162831a6583c74296"
+    },
+    "calibration": {
+      "shape": [
+        550,
+        384
+      ],
+      "max_tokens": 17,
+      "input_sha256": "dcdafb80a88999a5e1c401883d8b0a6c520a2e50059b1364769336e500c74291",
+      "feature_sha256": "e1faae16340830712a4dd8ed0e9fd1bc88a64237b10016459938921f88243a44"
+    },
+    "validation": {
+      "shape": [
+        560,
+        384
+      ],
+      "max_tokens": 24,
+      "input_sha256": "9587abbc775e03698f48bd10d45ac8fd8703018689999d3ed8925f7d2bf0527f",
+      "feature_sha256": "4e840220747452814ccd76fe00fbf2f604af935937ee90a993d9e1896a85374d"
+    }
+  },
+  "seconds": 1.9391944999806583
+}

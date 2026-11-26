@@ -1,0 +1,77 @@
+{
+  "format": "path_a_parameter_accounting_v1",
+  "recorded_at": "2026-10-29",
+  "native_common_fit": {
+    "run_receipt": "C:/CodexArtifacts/pretrained-reuse-r2/native-common-baseline-fit-01/result.json",
+    "run_receipt_sha256": "aaa1fe96a4be85a71ce146981c6b2e8b58e1308d91fc110e1ece6804b4d8048c",
+    "source_commit": "72c1eb47dde0c81e503d3a4d783aa5528660186e",
+    "effective_config_sha256": "45954a7240ee8da32e4b5b5dc3283994c40c4849451f27ff4fce13d3cc118f75",
+    "selected_step": 1792,
+    "selected_readout": {
+      "path": "C:/CodexArtifacts/pretrained-reuse-r2/native-common-baseline-fit-01/best.pt",
+      "sha256": "3eed6558731de60da82e75e38e599699f29663dd601f942505fec26a48b8dc1d",
+      "parameters": 889345
+    },
+    "frozen_backbones": [
+      {
+        "path": "text",
+        "model": "microsoft/deberta-v3-xsmall",
+        "revision": "262ae02f29173eec1c250f90804dc7edc677dcff",
+        "parameters": 70830722,
+        "bytes": 141685964,
+        "weights_sha256": "56b89067a4e60362f498f39b7067020911618fad37d64fa23a5f959a04fd4080",
+        "license": "MIT"
+      },
+      {
+        "path": "audio_speech_encoder",
+        "model": "openai/whisper-tiny encoder-only runtime artifact",
+        "revision": "169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
+        "parameters": 8208384,
+        "bytes": 32839984,
+        "weights_sha256": "d7f4b75d10f8ec4af79a32cc6dd20160f0c669c67bd104c1f1ab3f9d5d36a2a8"
+      },
+      {
+        "path": "audio_events",
+        "model": "EfficientAT DyMN-0.4 AS",
+        "revision": "a425fdce92572e602a1d5634799bd9f1f2efa806",
+        "parameters": 1961239,
+        "bytes": 8086973,
+        "weights_sha256": "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e"
+      },
+      {
+        "path": "image_and_video_shared",
+        "model": "google/videoprism-base-f16r288",
+        "revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+        "parameters": 114365184,
+        "bytes": 457475296,
+        "weights_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29"
+      }
+    ],
+    "frozen_parameter_total": 195365529,
+    "trainable_parameter_total": 889345,
+    "total_pre_quantization_parameters": 196254874,
+    "hard_limit_parameters": 200000000,
+    "limit_passed": true,
+    "native_corpus_result_sha256": "47a6d2f3495810bac58f57dec1a962f8b490fa409c75671b46bb2999fde87d49",
+    "source_feature_hashes_rechecked": true
+  },
+  "modular_runtime_assembly_v4": {
+    "manifest_path": "C:/CodexArtifacts/pretrained-reuse-r2/path-a-modular-runtime-assembly-v4-integrity-copy-01/package-manifest.json",
+    "manifest_sha256": "79fbca05e6062b66fe6ffb8a831d6c635edffe361c76ea4ce1574f0736ae9519",
+    "unique_runtime_parameters": 170499716,
+    "component_parameter_sum_with_repeated_shared_refs": 319644548,
+    "package_bytes_excluding_manifest": 687254772,
+    "provisional_package_limit_bytes": 200000000,
+    "package_limit_passed": false,
+    "same_model_as_native_common_fit": false,
+    "inventory": [
+      "openai/whisper-tiny full model",
+      "paraphrase-MiniLM-L3-v2",
+      "google/videoprism-base-f16r288",
+      "task-specific readouts"
+    ]
+  },
+  "interpretation": "The 25,755,158 parameter difference is due to different frozen model inventories, not a reconciliation arithmetic error. Do not present the modular bundle as the packaged native common fit.",
+  "sealed_audit_accessed": false,
+  "training_performed": false
+}

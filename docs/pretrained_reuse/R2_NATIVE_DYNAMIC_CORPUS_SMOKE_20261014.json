@@ -1,0 +1,1621 @@
+{
+  "status": "PASS_NATIVE_CORPUS_SMOKE_MAIN_NOT_COMPLETE",
+  "source_commit": "566af2fafd5895711e2cf206615ff067014e8fa9",
+  "artifacts": {
+    "plan": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-dynamic-corpus-plan-01.json",
+      "sha256": "cff23b5f8a5df1650f50b854869e65fa102ef557b25895796714b12a000de2c5"
+    },
+    "smoke": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-dynamic-corpus-smoke-01\\result.json",
+      "sha256": "d981602a7f032048468a74e6d59416425d4f375eff482d006afc6ce8ca695681"
+    },
+    "audit": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-dynamic-corpus-smoke-audit-01.json",
+      "sha256": "5455dc4ebea4c9526cd8791feb9a44d79c53fb6528bd34c205625b4880f04ff0"
+    }
+  },
+  "reports": {
+    "plan": {
+      "status": "PASS_NATIVE_CORPUS_CPU_INPUT_PLAN_NOT_GPU_COMPLETION",
+      "plans": [
+        {
+          "video_id": "video_10103",
+          "split": "train",
+          "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10103.mp4",
+          "media_sha256": "e9914a811679e99f26246ab0c1f89c582914e37433189bf925f06f5793ca38ed",
+          "cut_frame": 459,
+          "frames": 459,
+          "frame_indices": [
+            0,
+            15,
+            30,
+            44,
+            59,
+            74,
+            89,
+            103,
+            118,
+            133,
+            148,
+            163,
+            177,
+            192,
+            207,
+            222,
+            236,
+            251,
+            266,
+            281,
+            295,
+            310,
+            325,
+            340,
+            355,
+            369,
+            384,
+            399,
+            414,
+            428,
+            443,
+            458
+          ]
+        },
+        {
+          "video_id": "video_10186",
+          "split": "train",
+          "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10186.mp4",
+          "media_sha256": "6e61d8f411114ef7f052a5bea40bd51b4161274bb0d799cd158658a14b6d4df7",
+          "cut_frame": 651,
+          "frames": 651,
+          "frame_indices": [
+            0,
+            21,
+            42,
+            63,
+            84,
+            105,
+            126,
+            147,
+            168,
+            189,
+            210,
+            231,
+            252,
+            273,
+            294,
+            315,
+            335,
+            356,
+            377,
+            398,
+            419,
+            440,
+            461,
+            482,
+            503,
+            524,
+            545,
+            566,
+            587,
+            608,
+            629,
+            650
+          ]
+        },
+        {
+          "video_id": "video_10212",
+          "split": "train",
+          "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10212.mp4",
+          "media_sha256": "344831bfc0e4d6ebf326fe65fcbe371ddbec857bdc62a374dcea3900c06e0d61",
+          "cut_frame": -1,
+          "frames": 1051,
+          "frame_indices": [
+            0,
+            34,
+            68,
+            102,
+            135,
+            169,
+            203,
+            237,
+            271,
+            305,
+            339,
+            373,
+            406,
+            440,
+            474,
+            508,
+            542,
+            576,
+            610,
+            644,
+            677,
+            711,
+            745,
+            779,
+            813,
+            847,
+            881,
+            915,
+            948,
+            982,
+            1016,
+            1050
+          ]
+        },
+        {
+          "video_id": "video_10387",
+          "split": "train",
+          "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10387.mp4",
+          "media_sha256": "0eaa054acbb22f0e68c5fea34b76d3b0270f0e9df1e87f83559131d5ab89d532",
+          "cut_frame": 509,
+          "frames": 509,
+          "frame_indices": [
+            0,
+            16,
+            33,
+            49,
+            66,
+            82,
+            98,
+            115,
+            131,
+            147,
+            164,
+            180,
+            197,
+            213,
+            229,
+            246,
+            262,
+            279,
+            295,
+            311,
+            328,
+            344,
+            361,
+            377,
+            393,
+            410,
+            426,
+            442,
+            459,
+            475,
+            492,
+            508
+          ]
+        },
+        {
+          "video_id": "video_1087",
+          "split": "train",
+          "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_1087.mp4",
+          "media_sha256": "a5191ecdbd8512c88b13382866a2594e99666ffdb400c2dd6abd8c64b73c73d1",
+          "cut_frame": 575,
+          "frames": 575,
+          "frame_indices": [
+            0,
+            19,
+            37,
+            56,
+            74,
+            93,
+            111,
+            130,
+            148,
+            167,
+            185,
+            204,
+            222,
+            241,
+            259,
+            278,
+            296,
+            315,
+            333,
+            352,
+            370,
+            389,
+            407,
+            426,
+            444,
+            463,
+            481,
+            500,
+            518,
+            537,
+            555,
+            574
+          ]
+        },
+        {
+          "video_id": "video_10886",
+          "split": "train",
+          "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10886.mp4",
+          "media_sha256": "1408703d5b36c058b665ad8eaf2f926ea274d849d58403f818a74c81c5cd3c7b",
+          "cut_frame": 632,
+          "frames": 632,
+          "frame_indices": [
+            0,
+            20,
+            41,
+            61,
+            81,
+            102,
+            122,
+            142,
+            163,
+            183,
+            204,
+            224,
+            244,
+            265,
+            285,
+            305,
+            326,
+            346,
+            366,
+            387,
+            407,
+            427,
+            448,
+            468,
+            489,
+            509,
+            529,
+            550,
+            570,
+            590,
+            611,
+            631
+          ]
+        },
+        {
+          "video_id": "video_10894",
+          "split": "train",
+          "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10894.mp4",
+          "media_sha256": "5962aca05fd680d3538d17c09e645f9aded8a9043463b272a68f0ef1a25e9677",
+          "cut_frame": 544,
+          "frames": 544,
+          "frame_indices": [
+            0,
+            18,
+            35,
+            53,
+            70,
+            88,
+            105,
+            123,
+            140,
+            158,
+            175,
+            193,
+            210,
+            228,
+            245,
+            263,
+            280,
+            298,
+            315,
+            333,
+            350,
+            368,
+            385,
+            403,
+            420,
+            438,
+            455,
+            473,
+            490,
+            508,
+            525,
+            543
+          ]
+        },
+        {
+          "video_id": "video_10903",
+          "split": "train",
+          "media_path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-occlusion-train-media-01\\video_10903.mp4",
+          "media_sha256": "445339a283b2e2d996c6f047afc397909c0edf591e4c3df4941c0c51d70b7ee7",
+          "cut_frame": 558,
+          "frames": 558,
+          "frame_indices": [
+            0,
+            18,
+            36,
+            54,
+            72,
+            90,
+            108,
+            126,
+            144,
+            162,
+            180,
+            198,
+            216,
+            234,
+            252,
+            270,
+            287,
+            305,
+            323,
+            341,
+            359,
+            377,
+            395,
+            413,
+            431,
+            449,
+            467,
+            485,
+            503,
+            521,
+            539,
+            557
+          ]
+        }
+      ],
+      "reused": [
+        {
+          "video_id": "video_10103",
+          "frame_index": 0,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-sam2-auto-init-02\\video_10103-proposals.npz",
+          "sha256": "55bdfdd0b04018404abd0fed2afd59f5443106f0d39a30aab0a4393d5ee6983b",
+          "kind": "initial_parent"
+        },
+        {
+          "video_id": "video_10186",
+          "frame_index": 0,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-sam2-auto-init-02\\video_10186-proposals.npz",
+          "sha256": "70cc54868dfe90554d9257c98fac8e0064daeb3c911169bbb1d8ad9a55590fd2",
+          "kind": "initial_parent"
+        },
+        {
+          "video_id": "video_10212",
+          "frame_index": 0,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-sam2-auto-init-02\\video_10212-proposals.npz",
+          "sha256": "347755deddab8ce0c9ca0040e701738dcd4a9190b0fdfd85a138e4e7a451aa46",
+          "kind": "initial_parent"
+        },
+        {
+          "video_id": "video_10387",
+          "frame_index": 0,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-sam2-auto-init-02\\video_10387-proposals.npz",
+          "sha256": "e6c24b0403759a319417f92b0cd29b71ac26a27cc0ff48e3f116e3c52d66a0c0",
+          "kind": "initial_parent"
+        },
+        {
+          "video_id": "video_1087",
+          "frame_index": 0,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-sam2-auto-init-02\\video_1087-proposals.npz",
+          "sha256": "a365493f0673e183d95d1c60a1889ea7dc37dbb857a061a979052ff0e4805ae5",
+          "kind": "initial_parent"
+        },
+        {
+          "video_id": "video_10886",
+          "frame_index": 0,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-sam2-auto-init-02\\video_10886-proposals.npz",
+          "sha256": "b257bcf6fb675a39b7c326e82472a36665b14b21016202580093015af2ddf412",
+          "kind": "initial_parent"
+        },
+        {
+          "video_id": "video_10894",
+          "frame_index": 0,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\perception-sam2-auto-init-02\\video_10894-proposals.npz",
+          "sha256": "23226877ff029057c4274c45eb526853a10d4b4c6b9b5fc25aa08f81f270463b",
+          "kind": "initial_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 0,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0000-proposals.npz",
+          "sha256": "3ceb2615c9b40a161747032c25d7a16117e4b2daa1485aefb4c9ea3ffffb069b",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 18,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0018-proposals.npz",
+          "sha256": "3085d0dcc6b2e5eb015da6e8c357a76603dde47b4ba5e496870346f47630960e",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 36,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0036-proposals.npz",
+          "sha256": "ef5dc7b41a200e0679a7b2abd33ad12168d862cc7e8bb1e270e3c1a9871e2f0f",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 54,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0054-proposals.npz",
+          "sha256": "9c467f32beda6c7b22b8bbb86515aa7a99bdf91a6606147b5de3124445d7c43b",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 72,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0072-proposals.npz",
+          "sha256": "511b4460b7f58656c82383c738f4185757f3a97fb5adea0dc80ee87bb9c91fed",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 90,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0090-proposals.npz",
+          "sha256": "e1ba45629ce62f2fc8dfe47303e7399431df14bd3f4d84003f3bc5ce3e553188",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 108,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0108-proposals.npz",
+          "sha256": "fcf8cdd69c1b34750de3a58c8e5dbc45e152bb002e92bd01b05edc064d0ec33f",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 126,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0126-proposals.npz",
+          "sha256": "3667703828879d3624324db88204c7a1f3bcb9f6614c4a6832175884016953e3",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 144,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0144-proposals.npz",
+          "sha256": "ea449d35313a2676c7f4e88dbd77dca73d2705c1ce86f786f54153a32672fa46",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 162,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0162-proposals.npz",
+          "sha256": "5379abd041d5cb72d4953116b25df899061ce041fc04ffea4d102b18cc3d0878",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 180,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0180-proposals.npz",
+          "sha256": "28d81791896d7b1575f4b77ba433f0503d10be654ad79ec5f9038d84cad34e68",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 198,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0198-proposals.npz",
+          "sha256": "e173d33d1cf33ba05fd7863a617e9677304c5b5487a3cb9c133d37aaf3d22ac6",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 216,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0216-proposals.npz",
+          "sha256": "c40718bbcf78019aaac4d9af6e91f5bbb2142985d5aa725f3a4619976dcb15b5",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 234,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0234-proposals.npz",
+          "sha256": "e999d0f26e605025524f534b17c8922416498ec50f9363e1efe199d856c9e03b",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 252,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0252-proposals.npz",
+          "sha256": "1c250014f5d093eeaad8fbcfa539db033ffd621b6dc07e9a74226e1eb9130217",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 270,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0270-proposals.npz",
+          "sha256": "c97fac90ee4613b64de10359f27c20067e9e6f63b8aa1c00f9cf59dacde34ef5",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 287,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0287-proposals.npz",
+          "sha256": "682619ba8feb1dc6703b5413797305cb2e7a03c369952ccb8ae5485ab9133ba4",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 305,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0305-proposals.npz",
+          "sha256": "2245506b8c468f7edda537c37880f638e29f5fd37cfae4577150dcd85231afbc",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 323,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0323-proposals.npz",
+          "sha256": "a28ba55cfe81bc55541a8dadabd98e6a8b45271f009f7055bdf4256947fbb0ca",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 341,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0341-proposals.npz",
+          "sha256": "ddf018d3dbcfbdad90fb9f8841d98f4084a9303b931056e247437b31d808abdf",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 359,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0359-proposals.npz",
+          "sha256": "b7fed18483ad769d5c2458bc27b411efb6e248fbca056f346ffc3ab9ff6fdcc1",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 377,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0377-proposals.npz",
+          "sha256": "bf9787ddeb1cf66db9c0fcaec1a11f5d3e6d0599f40e85aea28c323b10d1066f",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 395,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0395-proposals.npz",
+          "sha256": "3243fde2a011d6f2414c828694c777ab78ec865faa2ad20d022e422c09136a11",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 413,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0413-proposals.npz",
+          "sha256": "3a3f93297370bd9a6cf71e126ea2ac952e190a34f9ac449cfa7700d377396e00",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 431,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0431-proposals.npz",
+          "sha256": "dfcf13defe0ad8518dfbabff71c588df746616b57e24d3eefef631ceb2a1e144",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 449,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0449-proposals.npz",
+          "sha256": "0871f28e53f079737461fc91c3aa7ef17a6107e1a1ab96d3d27bc9a500cdb136",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 467,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0467-proposals.npz",
+          "sha256": "9f0312b880e4b1b42c526bf7a1f542392b33e913119172b88a453c616e6a6fea",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 485,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0485-proposals.npz",
+          "sha256": "91d7ff828f5047c670f88251c2a7ce1281fb1ea16a853f867712bfffb29ca50b",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 503,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0503-proposals.npz",
+          "sha256": "a4da472a74dbec2aa5f19a69a1913e74e01ab0ae1b01ba2e2ce6878a923040ee",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 521,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0521-proposals.npz",
+          "sha256": "03e4d3a6ab196ba12332d15447e89aa2370cd0c8393e9ffcb595311b16089b03",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 539,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0539-proposals.npz",
+          "sha256": "e68382d156212ca0332335d7f7ba0930633a0135ad595cdf492b32d6dad8ed06",
+          "kind": "dynamic_parent"
+        },
+        {
+          "video_id": "video_10903",
+          "frame_index": 557,
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dynamic-discovery-fixed32-01\\0557-proposals.npz",
+          "sha256": "b36e58ee821ec6bea095df3706265d2eed21fc44f1444cdc6972c59209e7920d",
+          "kind": "dynamic_parent"
+        }
+      ],
+      "new_tasks": [
+        [
+          "video_10103",
+          15
+        ],
+        [
+          "video_10103",
+          30
+        ],
+        [
+          "video_10103",
+          44
+        ],
+        [
+          "video_10103",
+          59
+        ],
+        [
+          "video_10103",
+          74
+        ],
+        [
+          "video_10103",
+          89
+        ],
+        [
+          "video_10103",
+          103
+        ],
+        [
+          "video_10103",
+          118
+        ],
+        [
+          "video_10103",
+          133
+        ],
+        [
+          "video_10103",
+          148
+        ],
+        [
+          "video_10103",
+          163
+        ],
+        [
+          "video_10103",
+          177
+        ],
+        [
+          "video_10103",
+          192
+        ],
+        [
+          "video_10103",
+          207
+        ],
+        [
+          "video_10103",
+          222
+        ],
+        [
+          "video_10103",
+          236
+        ],
+        [
+          "video_10103",
+          251
+        ],
+        [
+          "video_10103",
+          266
+        ],
+        [
+          "video_10103",
+          281
+        ],
+        [
+          "video_10103",
+          295
+        ],
+        [
+          "video_10103",
+          310
+        ],
+        [
+          "video_10103",
+          325
+        ],
+        [
+          "video_10103",
+          340
+        ],
+        [
+          "video_10103",
+          355
+        ],
+        [
+          "video_10103",
+          369
+        ],
+        [
+          "video_10103",
+          384
+        ],
+        [
+          "video_10103",
+          399
+        ],
+        [
+          "video_10103",
+          414
+        ],
+        [
+          "video_10103",
+          428
+        ],
+        [
+          "video_10103",
+          443
+        ],
+        [
+          "video_10103",
+          458
+        ],
+        [
+          "video_10186",
+          21
+        ],
+        [
+          "video_10186",
+          42
+        ],
+        [
+          "video_10186",
+          63
+        ],
+        [
+          "video_10186",
+          84
+        ],
+        [
+          "video_10186",
+          105
+        ],
+        [
+          "video_10186",
+          126
+        ],
+        [
+          "video_10186",
+          147
+        ],
+        [
+          "video_10186",
+          168
+        ],
+        [
+          "video_10186",
+          189
+        ],
+        [
+          "video_10186",
+          210
+        ],
+        [
+          "video_10186",
+          231
+        ],
+        [
+          "video_10186",
+          252
+        ],
+        [
+          "video_10186",
+          273
+        ],
+        [
+          "video_10186",
+          294
+        ],
+        [
+          "video_10186",
+          315
+        ],
+        [
+          "video_10186",
+          335
+        ],
+        [
+          "video_10186",
+          356
+        ],
+        [
+          "video_10186",
+          377
+        ],
+        [
+          "video_10186",
+          398
+        ],
+        [
+          "video_10186",
+          419
+        ],
+        [
+          "video_10186",
+          440
+        ],
+        [
+          "video_10186",
+          461
+        ],
+        [
+          "video_10186",
+          482
+        ],
+        [
+          "video_10186",
+          503
+        ],
+        [
+          "video_10186",
+          524
+        ],
+        [
+          "video_10186",
+          545
+        ],
+        [
+          "video_10186",
+          566
+        ],
+        [
+          "video_10186",
+          587
+        ],
+        [
+          "video_10186",
+          608
+        ],
+        [
+          "video_10186",
+          629
+        ],
+        [
+          "video_10186",
+          650
+        ],
+        [
+          "video_10212",
+          34
+        ],
+        [
+          "video_10212",
+          68
+        ],
+        [
+          "video_10212",
+          102
+        ],
+        [
+          "video_10212",
+          135
+        ],
+        [
+          "video_10212",
+          169
+        ],
+        [
+          "video_10212",
+          203
+        ],
+        [
+          "video_10212",
+          237
+        ],
+        [
+          "video_10212",
+          271
+        ],
+        [
+          "video_10212",
+          305
+        ],
+        [
+          "video_10212",
+          339
+        ],
+        [
+          "video_10212",
+          373
+        ],
+        [
+          "video_10212",
+          406
+        ],
+        [
+          "video_10212",
+          440
+        ],
+        [
+          "video_10212",
+          474
+        ],
+        [
+          "video_10212",
+          508
+        ],
+        [
+          "video_10212",
+          542
+        ],
+        [
+          "video_10212",
+          576
+        ],
+        [
+          "video_10212",
+          610
+        ],
+        [
+          "video_10212",
+          644
+        ],
+        [
+          "video_10212",
+          677
+        ],
+        [
+          "video_10212",
+          711
+        ],
+        [
+          "video_10212",
+          745
+        ],
+        [
+          "video_10212",
+          779
+        ],
+        [
+          "video_10212",
+          813
+        ],
+        [
+          "video_10212",
+          847
+        ],
+        [
+          "video_10212",
+          881
+        ],
+        [
+          "video_10212",
+          915
+        ],
+        [
+          "video_10212",
+          948
+        ],
+        [
+          "video_10212",
+          982
+        ],
+        [
+          "video_10212",
+          1016
+        ],
+        [
+          "video_10212",
+          1050
+        ],
+        [
+          "video_10387",
+          16
+        ],
+        [
+          "video_10387",
+          33
+        ],
+        [
+          "video_10387",
+          49
+        ],
+        [
+          "video_10387",
+          66
+        ],
+        [
+          "video_10387",
+          82
+        ],
+        [
+          "video_10387",
+          98
+        ],
+        [
+          "video_10387",
+          115
+        ],
+        [
+          "video_10387",
+          131
+        ],
+        [
+          "video_10387",
+          147
+        ],
+        [
+          "video_10387",
+          164
+        ],
+        [
+          "video_10387",
+          180
+        ],
+        [
+          "video_10387",
+          197
+        ],
+        [
+          "video_10387",
+          213
+        ],
+        [
+          "video_10387",
+          229
+        ],
+        [
+          "video_10387",
+          246
+        ],
+        [
+          "video_10387",
+          262
+        ],
+        [
+          "video_10387",
+          279
+        ],
+        [
+          "video_10387",
+          295
+        ],
+        [
+          "video_10387",
+          311
+        ],
+        [
+          "video_10387",
+          328
+        ],
+        [
+          "video_10387",
+          344
+        ],
+        [
+          "video_10387",
+          361
+        ],
+        [
+          "video_10387",
+          377
+        ],
+        [
+          "video_10387",
+          393
+        ],
+        [
+          "video_10387",
+          410
+        ],
+        [
+          "video_10387",
+          426
+        ],
+        [
+          "video_10387",
+          442
+        ],
+        [
+          "video_10387",
+          459
+        ],
+        [
+          "video_10387",
+          475
+        ],
+        [
+          "video_10387",
+          492
+        ],
+        [
+          "video_10387",
+          508
+        ],
+        [
+          "video_1087",
+          19
+        ],
+        [
+          "video_1087",
+          37
+        ],
+        [
+          "video_1087",
+          56
+        ],
+        [
+          "video_1087",
+          74
+        ],
+        [
+          "video_1087",
+          93
+        ],
+        [
+          "video_1087",
+          111
+        ],
+        [
+          "video_1087",
+          130
+        ],
+        [
+          "video_1087",
+          148
+        ],
+        [
+          "video_1087",
+          167
+        ],
+        [
+          "video_1087",
+          185
+        ],
+        [
+          "video_1087",
+          204
+        ],
+        [
+          "video_1087",
+          222
+        ],
+        [
+          "video_1087",
+          241
+        ],
+        [
+          "video_1087",
+          259
+        ],
+        [
+          "video_1087",
+          278
+        ],
+        [
+          "video_1087",
+          296
+        ],
+        [
+          "video_1087",
+          315
+        ],
+        [
+          "video_1087",
+          333
+        ],
+        [
+          "video_1087",
+          352
+        ],
+        [
+          "video_1087",
+          370
+        ],
+        [
+          "video_1087",
+          389
+        ],
+        [
+          "video_1087",
+          407
+        ],
+        [
+          "video_1087",
+          426
+        ],
+        [
+          "video_1087",
+          444
+        ],
+        [
+          "video_1087",
+          463
+        ],
+        [
+          "video_1087",
+          481
+        ],
+        [
+          "video_1087",
+          500
+        ],
+        [
+          "video_1087",
+          518
+        ],
+        [
+          "video_1087",
+          537
+        ],
+        [
+          "video_1087",
+          555
+        ],
+        [
+          "video_1087",
+          574
+        ],
+        [
+          "video_10886",
+          20
+        ],
+        [
+          "video_10886",
+          41
+        ],
+        [
+          "video_10886",
+          61
+        ],
+        [
+          "video_10886",
+          81
+        ],
+        [
+          "video_10886",
+          102
+        ],
+        [
+          "video_10886",
+          122
+        ],
+        [
+          "video_10886",
+          142
+        ],
+        [
+          "video_10886",
+          163
+        ],
+        [
+          "video_10886",
+          183
+        ],
+        [
+          "video_10886",
+          204
+        ],
+        [
+          "video_10886",
+          224
+        ],
+        [
+          "video_10886",
+          244
+        ],
+        [
+          "video_10886",
+          265
+        ],
+        [
+          "video_10886",
+          285
+        ],
+        [
+          "video_10886",
+          305
+        ],
+        [
+          "video_10886",
+          326
+        ],
+        [
+          "video_10886",
+          346
+        ],
+        [
+          "video_10886",
+          366
+        ],
+        [
+          "video_10886",
+          387
+        ],
+        [
+          "video_10886",
+          407
+        ],
+        [
+          "video_10886",
+          427
+        ],
+        [
+          "video_10886",
+          448
+        ],
+        [
+          "video_10886",
+          468
+        ],
+        [
+          "video_10886",
+          489
+        ],
+        [
+          "video_10886",
+          509
+        ],
+        [
+          "video_10886",
+          529
+        ],
+        [
+          "video_10886",
+          550
+        ],
+        [
+          "video_10886",
+          570
+        ],
+        [
+          "video_10886",
+          590
+        ],
+        [
+          "video_10886",
+          611
+        ],
+        [
+          "video_10886",
+          631
+        ],
+        [
+          "video_10894",
+          18
+        ],
+        [
+          "video_10894",
+          35
+        ],
+        [
+          "video_10894",
+          53
+        ],
+        [
+          "video_10894",
+          70
+        ],
+        [
+          "video_10894",
+          88
+        ],
+        [
+          "video_10894",
+          105
+        ],
+        [
+          "video_10894",
+          123
+        ],
+        [
+          "video_10894",
+          140
+        ],
+        [
+          "video_10894",
+          158
+        ],
+        [
+          "video_10894",
+          175
+        ],
+        [
+          "video_10894",
+          193
+        ],
+        [
+          "video_10894",
+          210
+        ],
+        [
+          "video_10894",
+          228
+        ],
+        [
+          "video_10894",
+          245
+        ],
+        [
+          "video_10894",
+          263
+        ],
+        [
+          "video_10894",
+          280
+        ],
+        [
+          "video_10894",
+          298
+        ],
+        [
+          "video_10894",
+          315
+        ],
+        [
+          "video_10894",
+          333
+        ],
+        [
+          "video_10894",
+          350
+        ],
+        [
+          "video_10894",
+          368
+        ],
+        [
+          "video_10894",
+          385
+        ],
+        [
+          "video_10894",
+          403
+        ],
+        [
+          "video_10894",
+          420
+        ],
+        [
+          "video_10894",
+          438
+        ],
+        [
+          "video_10894",
+          455
+        ],
+        [
+          "video_10894",
+          473
+        ],
+        [
+          "video_10894",
+          490
+        ],
+        [
+          "video_10894",
+          508
+        ],
+        [
+          "video_10894",
+          525
+        ],
+        [
+          "video_10894",
+          543
+        ]
+      ],
+      "total_frame_records": 256,
+      "reused_frame_records": 39,
+      "new_inference_tasks": 217,
+      "unique_media_assets": 8,
+      "annotations_loaded": false,
+      "gpu_or_model_loaded": false,
+      "training": false,
+      "seconds": 1.6262660000938922
+    },
+    "smoke": {
+      "status": "PASS_NATIVE_CORPUS_CACHE_SMOKE",
+      "pid": 65660,
+      "started_at": "2026-10-14T06:44:27.286237+00:00",
+      "rows": [
+        {
+          "video_id": "video_10103",
+          "frame_index": 0,
+          "rgb_sha256": "bbf8508bd3a27cd6d7e5d8005678460d9449381b4221a8f80858fb6a412afb94",
+          "input_shape": [
+            1080,
+            1920,
+            3
+          ],
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-dynamic-corpus-smoke-01\\video_10103\\0000-proposals.npz",
+          "sha256": "dd6fbb8775f5713dc759c08c743a3030ea8f4bdc9acb4ff07f810f5ccad6ccf1",
+          "file_bytes": 428867,
+          "raw_proposals": 1024,
+          "nms_count": 55,
+          "encoder_calls": 2,
+          "cached_forward_seconds": 15.587499499553815,
+          "parent": null,
+          "readback_bitwise": true,
+          "cache_prefix": {
+            "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-dynamic-corpus-smoke-01\\video_10103\\0000-cache-prefix.npz",
+            "sha256": "2957cb1ba5bb14bcc5c5100d174823da4fc99e232dcfee204a427098ac5dde5c"
+          },
+          "frame_seconds": 18.644180600065738
+        },
+        {
+          "video_id": "video_10103",
+          "frame_index": 15,
+          "rgb_sha256": "12684af439dfcbe60a026b7171ba2e7a93a2b196e5d0ceb6ebae8d9f0a6ce1f4",
+          "input_shape": [
+            1080,
+            1920,
+            3
+          ],
+          "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-dynamic-corpus-smoke-01\\video_10103\\0015-proposals.npz",
+          "sha256": "3bd40aa97fef86925b14f69f65a8bd55bdcad7c9dee9ec4ba5f14bb82b9874d6",
+          "file_bytes": 419040,
+          "raw_proposals": 1024,
+          "nms_count": 44,
+          "encoder_calls": 2,
+          "cached_forward_seconds": 15.75043950008694,
+          "parent": null,
+          "readback_bitwise": true,
+          "cache_prefix": {
+            "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\native-dynamic-corpus-smoke-01\\video_10103\\0015-cache-prefix.npz",
+            "sha256": "4f7ef4b6ae694ff1c5b1825e7206fc7215cada6ec028906d4d85712be073a69c"
+          },
+          "frame_seconds": 18.875225000083447
+        }
+      ],
+      "training": false,
+      "annotations_loaded": false,
+      "validation_opened": false,
+      "sealed_audit_opened": false,
+      "cloud_cost": 0,
+      "smoke": true,
+      "replay": false,
+      "config_sha256": "5d4417e13d8c2a4f27593d3149ac4167e7d8ee13ff9c87a076ff9780f60aa79f",
+      "source_commit": "566af2fafd5895711e2cf206615ff067014e8fa9",
+      "model_state_before": "658e3aaff3d08b6cc8337a1f125e5ee55451ed3bfec38f9def601a14bb6912d8",
+      "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+      "torch": "2.6.0+cu124",
+      "transformers": "5.6.2",
+      "parameters": 38962498,
+      "cached_fresh_raw_exact": true,
+      "initial_parent_byte_exact": true,
+      "seconds": 44.73441979999188,
+      "encoder_calls_total": 4,
+      "model_state_after": "658e3aaff3d08b6cc8337a1f125e5ee55451ed3bfec38f9def601a14bb6912d8",
+      "frozen_state_unchanged": true,
+      "cpu_cuda_rng_unchanged": true,
+      "sources_unchanged": true,
+      "peak_allocated_bytes": 1090208768,
+      "peak_reserved_bytes": 1207959552,
+      "ended_at": "2026-10-14T06:45:12.020620+00:00"
+    },
+    "audit": {
+      "status": "PASS_SMOKE_AND_FIRST_NEW_ROW_INPUT_AUDIT_NOT_FULL_CORPUS_COMPLETE",
+      "smoke_result_sha256": "d981602a7f032048468a74e6d59416425d4f375eff482d006afc6ce8ca695681",
+      "config_sha256": "5d4417e13d8c2a4f27593d3149ac4167e7d8ee13ff9c87a076ff9780f60aa79f",
+      "smoke_frames": 2,
+      "cached_fresh_prefix_arrays": 8,
+      "old_frame0_full_five_arrays_exact": true,
+      "main_first_new_frame_full_five_arrays_exact": true,
+      "annotations_loaded": false,
+      "gpu_or_model_loaded": false,
+      "training": false,
+      "full_corpus_complete": false,
+      "seconds": 1.7977489000186324
+    }
+  },
+  "local_checks": {
+    "ruff": "pass",
+    "cpu_passed": 1255,
+    "cpu_skipped": 1,
+    "cpu_seconds": 16.35,
+    "manifest_catalog_policy": "pass"
+  },
+  "native_main_output": "C:/CodexArtifacts/pretrained-reuse-r2/native-dynamic-corpus-eight-01",
+  "training": false,
+  "quality_evaluated": false,
+  "full_corpus_complete": false,
+  "old_artifacts_changed": false,
+  "cloud_cost": 0
+}

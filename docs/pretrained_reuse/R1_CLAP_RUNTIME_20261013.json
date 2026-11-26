@@ -1,0 +1,78 @@
+{
+  "runtime": {
+    "status": "PASS",
+    "revision": "8fa0f1c6d0433df6e97c127f64b2a1d6c0dcda8a",
+    "parts": {
+      "text_model": 124645632,
+      "text_projection": 656384,
+      "audio_model": 27534488,
+      "audio_projection": 656384
+    },
+    "own_parameters": 2,
+    "parameters": 153492890,
+    "loading_info": {
+      "missing_keys": [],
+      "unexpected_keys": [],
+      "mismatched_keys": [],
+      "error_msgs": []
+    },
+    "audio_shape": [
+      1,
+      512
+    ],
+    "text_shape": [
+      3,
+      512
+    ],
+    "repeat_bitwise_equal": true,
+    "seconds_excluding_load": 0.3110073999268934,
+    "scope": "first8s of one approved training source; no question labels or QA scores",
+    "source_id": "155281",
+    "media_sha256": "28ed6d57e46fe3da60e712bbdb300f3e8fa96b92f1960a6a05f6b13b4d639aa6",
+    "weight_sha256": "1cd3c601bc4afe0fa87be3de4c13dd2cfadd249fac1e29acf74a9b296c3219bb",
+    "processor_sha256": "9739f58296aa6f9ac18008fd0150fb2649bc554985fbde86d0a4041c882ac753",
+    "python": "3.11.9",
+    "torch": "2.6.0+cu124",
+    "transformers": "5.6.2",
+    "device": "cpu",
+    "dtype": "torch.float32",
+    "script_sha256": "8f7dbbccff0077f6047ce7294f98826d20ed1bd28420ffd073e3d53c9f1353dc"
+  },
+  "audio_export": {
+    "status": "PASS",
+    "parameters": 28190872,
+    "artifact_bytes": 113223978,
+    "artifact_sha256": "d190141ffd119b9096d9f3e096b2285f8ce6fa401cdb666d6f53911a2517fee3",
+    "config_sha256": "f7a374a0dc4907b3a30a4e9964286055929c42d932d5abd0619f7b1a20438dd3",
+    "source_weight_sha256": "1cd3c601bc4afe0fa87be3de4c13dd2cfadd249fac1e29acf74a9b296c3219bb",
+    "bitwise_equal_to_full_model": true,
+    "bitwise_equal_to_prior_smoke": true,
+    "maximum_difference": 0.0,
+    "loading_missing_keys": [],
+    "loading_unexpected_keys": [],
+    "normalization": "F.normalize(audio_embeds,dim=-1) matches full get_audio_features",
+    "seconds_pair_excluding_load": 0.24163709999993443,
+    "device": "cpu",
+    "dtype": "float32",
+    "scope": "one8s training-media prefix, load/export parity only",
+    "script_sha256": "3afb626f9cc5d80b34b245f048faf91080c158beab486ee0d4bea5f8db3c7ba2"
+  },
+  "license_provenance": {
+    "model_license": "Apache-2.0 per LAION Hub card",
+    "upstream_code_license": "CC0-1.0, distinct from model repository label",
+    "source_revision": "8fa0f1c6d0433df6e97c127f64b2a1d6c0dcda8a",
+    "files": {
+      "MODEL_CARD.md": "3542c5c4ce25e7868f2c9c97c16229d876bd8d02049e1e0f4d7675da0e5b5db6",
+      "UPSTREAM_CODE_LICENSE": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499",
+      "MODEL_LICENSE_APACHE_2.txt": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    }
+  },
+  "source": {
+    "repo": "LAION-AI/CLAP",
+    "revision": "1fd4c37df5ffbfcfbad5415c170bc66cf94c9994",
+    "files": {
+      "README.md": "5e168ab0512160e5e9e461c17a74988b6d32b14f2a54f6dcbf61268166b70ad9",
+      "LICENSE": "a2010f343487d3f7618affe54f789f5487602331c0a8d03f49e9a7c547cf0499"
+    }
+  }
+}

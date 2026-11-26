@@ -1,0 +1,32 @@
+{
+  "scope": "train only; no model evaluation",
+  "corpus_sha256": "8869bb903591af3a0995eeca0eeae1b50b990c8b08752a6e5d4d549f8a356fd7",
+  "videos": 99,
+  "questions": 198,
+  "unique_question_strings": 2,
+  "unique_option_sets": 3,
+  "target_pairs": {
+    "(1, 1)": 24,
+    "(0, 1)": 15,
+    "(1, 0)": 12,
+    "(0, 0)": 10,
+    "(2, 2)": 12,
+    "(0, 2)": 8,
+    "(2, 1)": 7,
+    "(1, 2)": 7,
+    "(2, 0)": 4
+  },
+  "condition_target_counts": {
+    "initial": {
+      "1": 43,
+      "0": 33,
+      "2": 23
+    },
+    "final": {
+      "1": 46,
+      "0": 26,
+      "2": 27
+    }
+  },
+  "condition_only_train_majority_accuracy": 0.4494949494949495
+}

@@ -1,0 +1,70 @@
+{
+  "status": "PASS_INDEPENDENT_NUMPY_METRIC_AND_OUTPUT_HASH_RECHECK",
+  "checks": [
+    {
+      "head": "final",
+      "control": "normal",
+      "metrics": {
+        "accuracy": 0.36186770428015563,
+        "nll": 2.733248564974344,
+        "brier": 1.0009048650129055,
+        "ece": 0.43615718841088885
+      }
+    },
+    {
+      "head": "final",
+      "control": "mismatch",
+      "metrics": {
+        "accuracy": 0.3540856031128405,
+        "nll": 3.2125611111015133,
+        "brier": 1.0160373467056643,
+        "ece": 0.4387917591671999
+      }
+    },
+    {
+      "head": "final",
+      "control": "zero",
+      "metrics": {
+        "accuracy": 0.2587548638132296,
+        "nll": 1.1057440830963634,
+        "brier": 0.6714830632349377,
+        "ece": 0.0943116531181892
+      }
+    },
+    {
+      "head": "untrained",
+      "control": "normal",
+      "metrics": {
+        "accuracy": 0.30544747081712065,
+        "nll": 1.099096816292869,
+        "brier": 0.6669913384591812,
+        "ece": 0.031791893540653274
+      }
+    },
+    {
+      "head": "untrained",
+      "control": "mismatch",
+      "metrics": {
+        "accuracy": 0.30544747081712065,
+        "nll": 1.099028789643632,
+        "brier": 0.6669460820661076,
+        "ece": 0.03181074640862209
+      }
+    },
+    {
+      "head": "untrained",
+      "control": "zero",
+      "metrics": {
+        "accuracy": 0.2587548638132296,
+        "nll": 1.0988555126009274,
+        "brier": 0.666828873600539,
+        "ece": 0.07517936640212508
+      }
+    }
+  ],
+  "questions": 514,
+  "extraction_seconds": 11902.759252200602,
+  "frames": 122973,
+  "peak_allocated_bytes": 705276928,
+  "peak_reserved_bytes": 893386752
+}

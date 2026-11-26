@@ -1,0 +1,628 @@
+{
+  "status": "PASS",
+  "source_result_sha256": "b3807ca4484bc011835dff3fcd46d9ec3330c58d0ad15b36f71efa70c3081513",
+  "runner_sha256": "d2819aa077c6dcb966cddb502262372543e171ac0639e666faca5a3d9f3dc0e8",
+  "windows": [
+    {
+      "id": "fold3_room12_mix001:t0000-0005",
+      "room": "tau:room12",
+      "recording": "fold3_room12_mix001",
+      "split": "dev-train",
+      "start_seconds": 0,
+      "end_seconds": 5,
+      "audio_shape": [
+        120000,
+        4
+      ],
+      "video_shape": [
+        8,
+        960,
+        1920,
+        3
+      ],
+      "video_seconds": [
+        0.333667000333667,
+        0.9676343009676343,
+        1.5682349015682349,
+        2.2022022022022023,
+        2.8361695028361695,
+        3.4701368034701368,
+        4.070737404070737,
+        4.704704704704705
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-window-smoke-01\\fold3_room12_mix001-0000.npz",
+      "sha256": "05f4be05373f280c4cbff0e0cb1d4ed9d50d33752cf97b7ff04376954e616c55",
+      "bytes": 14054085,
+      "queries": [
+        {
+          "event": "speech",
+          "question": "Is speech annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 1,
+          "active_annotation_frames": 17
+        },
+        {
+          "event": "clapping",
+          "question": "Is clapping annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "telephone",
+          "question": "Is telephone annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "laughter",
+          "question": "Is laughter annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "domestic sounds",
+          "question": "Is domestic sounds annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "footsteps",
+          "question": "Is footsteps annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "door",
+          "question": "Is door annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "music",
+          "question": "Is music annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "instrument",
+          "question": "Is instrument annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "water tap",
+          "question": "Is water tap annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "bell",
+          "question": "Is bell annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "knock",
+          "question": "Is knock annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        }
+      ]
+    },
+    {
+      "id": "fold3_room12_mix001:t0005-0010",
+      "room": "tau:room12",
+      "recording": "fold3_room12_mix001",
+      "split": "dev-train",
+      "start_seconds": 5,
+      "end_seconds": 10,
+      "audio_shape": [
+        120000,
+        4
+      ],
+      "video_shape": [
+        8,
+        960,
+        1920,
+        3
+      ],
+      "video_seconds": [
+        5.338672005338672,
+        5.939272605939273,
+        6.57323990657324,
+        7.207207207207207,
+        7.841174507841174,
+        8.441775108441774,
+        9.075742409075742,
+        9.70970970970971
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-window-smoke-01\\fold3_room12_mix001-0005.npz",
+      "sha256": "cb61846555e861094211f98bf4ab9fe82bf9f5d7e3011758386007e4a25ac837",
+      "bytes": 14323860,
+      "queries": [
+        {
+          "event": "speech",
+          "question": "Is speech annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 1,
+          "active_annotation_frames": 31
+        },
+        {
+          "event": "clapping",
+          "question": "Is clapping annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "telephone",
+          "question": "Is telephone annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "laughter",
+          "question": "Is laughter annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 1,
+          "active_annotation_frames": 3
+        },
+        {
+          "event": "domestic sounds",
+          "question": "Is domestic sounds annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "footsteps",
+          "question": "Is footsteps annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "door",
+          "question": "Is door annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "music",
+          "question": "Is music annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "instrument",
+          "question": "Is instrument annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "water tap",
+          "question": "Is water tap annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "bell",
+          "question": "Is bell annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "knock",
+          "question": "Is knock annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        }
+      ]
+    },
+    {
+      "id": "fold3_room13_mix001:t0000-0005",
+      "room": "tau:room13",
+      "recording": "fold3_room13_mix001",
+      "split": "dev-train",
+      "start_seconds": 0,
+      "end_seconds": 5,
+      "audio_shape": [
+        120000,
+        4
+      ],
+      "video_shape": [
+        8,
+        960,
+        1920,
+        3
+      ],
+      "video_seconds": [
+        0.333667000333667,
+        0.9676343009676343,
+        1.5682349015682349,
+        2.2022022022022023,
+        2.8361695028361695,
+        3.4701368034701368,
+        4.070737404070737,
+        4.704704704704705
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-window-smoke-01\\fold3_room13_mix001-0000.npz",
+      "sha256": "4f78afbb57497df7a3f193c84c8282b4c84fece91d24be9a69759193880a85bf",
+      "bytes": 20111354,
+      "queries": [
+        {
+          "event": "speech",
+          "question": "Is speech annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 1,
+          "active_annotation_frames": 22
+        },
+        {
+          "event": "clapping",
+          "question": "Is clapping annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "telephone",
+          "question": "Is telephone annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "laughter",
+          "question": "Is laughter annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "domestic sounds",
+          "question": "Is domestic sounds annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "footsteps",
+          "question": "Is footsteps annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "door",
+          "question": "Is door annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "music",
+          "question": "Is music annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "instrument",
+          "question": "Is instrument annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "water tap",
+          "question": "Is water tap annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "bell",
+          "question": "Is bell annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "knock",
+          "question": "Is knock annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        }
+      ]
+    },
+    {
+      "id": "fold3_room13_mix001:t0005-0010",
+      "room": "tau:room13",
+      "recording": "fold3_room13_mix001",
+      "split": "dev-train",
+      "start_seconds": 5,
+      "end_seconds": 10,
+      "audio_shape": [
+        120000,
+        4
+      ],
+      "video_shape": [
+        8,
+        960,
+        1920,
+        3
+      ],
+      "video_seconds": [
+        5.338672005338672,
+        5.939272605939273,
+        6.57323990657324,
+        7.207207207207207,
+        7.841174507841174,
+        8.441775108441774,
+        9.075742409075742,
+        9.70970970970971
+      ],
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\starss23-window-smoke-01\\fold3_room13_mix001-0005.npz",
+      "sha256": "4d432d73787e38256908f97c726fe6e16c39ac1cfc3f26a5cd85c7eca3c04cb8",
+      "bytes": 20508793,
+      "queries": [
+        {
+          "event": "speech",
+          "question": "Is speech annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 1,
+          "active_annotation_frames": 41
+        },
+        {
+          "event": "clapping",
+          "question": "Is clapping annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "telephone",
+          "question": "Is telephone annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "laughter",
+          "question": "Is laughter annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "domestic sounds",
+          "question": "Is domestic sounds annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "footsteps",
+          "question": "Is footsteps annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "door",
+          "question": "Is door annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "music",
+          "question": "Is music annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "instrument",
+          "question": "Is instrument annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "water tap",
+          "question": "Is water tap annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "bell",
+          "question": "Is bell annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        },
+        {
+          "event": "knock",
+          "question": "Is knock annotated in this time interval?",
+          "options": [
+            "no",
+            "yes"
+          ],
+          "target": 0,
+          "active_annotation_frames": 0
+        }
+      ]
+    }
+  ],
+  "annotation_tick_seconds": 0.1,
+  "window_seconds": 5,
+  "windows_per_recording": 2,
+  "frames_per_window": 8,
+  "video_selection": "first presentation timestamp at/after each bin midpoint",
+  "audio_preprocessing": "all four original PCM16 channels, float32 / 32768",
+  "task_scope": "annotated prominent-event presence; not exhaustive audible presence",
+  "dev_test_accessed": false,
+  "models_loaded": false
+}

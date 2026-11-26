@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "experiment_id": "clevrer-videoprism-unique-scene-coverage-v2",
+  "hypothesis": "At a fixed 2048-update budget, adding 512 previously unused CLEVRER training scenes to the existing 256-scene pool improves validation decisions on the same 256 previously unused validation scenes.",
+  "seed": 17,
+  "data": {
+    "dataset": "MIT-IBM/CLEVRER",
+    "revision": "98b842082ba4f7c18b6b9e3f39145871782a65ef",
+    "license": "CC0-1.0",
+    "questions_per_scene": 2,
+    "question_types": ["temporal_descriptive", "static_descriptive"],
+    "baseline_train_scenes": 256,
+    "additional_train_scenes": 512,
+    "candidate_total_train_scenes": 768,
+    "fresh_validation_scenes": 256,
+    "scene_and_media_identity_overlap": 0,
+    "normalized_question_template_overlap": "allowed_and_reported",
+    "official_test_or_sealed_audit_loaded": false
+  },
+  "model": {
+    "video_encoder": "google/videoprism-base-f16r288",
+    "video_revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+    "video_source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+    "video_checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+    "video_frames": 8,
+    "video_resolution": 288,
+    "video_pooling": "mean_spatiotemporal_tokens",
+    "text_encoder": "sentence-transformers/paraphrase-MiniLM-L3-v2",
+    "text_revision": "4ca70771034acceecb2e72475f72050fcdde4ddc",
+    "text_checkpoint_sha256": "cf1e4e2d420c664973037c3c73125d7a8fc69952495093ef8f50596f8943a433",
+    "encoder_updates": 0,
+    "readout": "shared_candidate_mlp"
+  },
+  "training": {
+    "arms": ["existing_256_scene_pool", "expanded_768_scene_pool"],
+    "initialization": "same seed-17 initialization for both arms",
+    "optimizer": "AdamW",
+    "learning_rate": 0.001,
+    "weight_decay": 0.001,
+    "batch_questions": 8,
+    "optimizer_updates": 2048,
+    "evaluation_interval_updates": 128,
+    "learning_rate_schedule": "constant",
+    "early_stopping": false,
+    "min_delta": 1e-5,
+    "selection": "minimum macro NLL over temporal_descriptive and static_descriptive; earliest tie; min_delta=1e-5",
+    "checkpoint_policy": "preserve best and final separately",
+    "sampler": "shuffle the full unique question pool at each pass; cycle passes until the fixed update budget is consumed"
+  },
+  "comparison": {
+    "primary_metrics": ["macro_accuracy", "macro_nll", "macro_brier", "macro_ece_15"],
+    "report_per_question_type": true,
+    "uncertainty": "paired scene-cluster bootstrap; seed 17; 10000 resamples; percentile 95% interval",
+    "validation_is_development_and_used_for_checkpoint_selection": true,
+    "claim_scope": "single-seed development comparison; no product promotion or general CLEVRER capability claim"
+  },
+  "runtime": {
+    "local_compute_only": true,
+    "cloud_cost_usd": 0,
+    "preflight_output_directory": "C:/CodexArtifacts/pretrained-reuse-r2/clevrer-coverage-512train-256val-v2-attempt-05",
+    "existing_samples_caches_and_checkpoints_read_only": true
+  }
+}

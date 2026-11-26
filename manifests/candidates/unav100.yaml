@@ -1,0 +1,65 @@
+schema_version: 1
+dataset_id: ttgeng233/UnAV-100
+revision: 1609deba4fbaf25222c6ee6c7d43b0d0ddfab20d
+subset: candidate-screen-only-no-local-assets
+split: official-train-validation-test-unverified
+modalities: [audio, video]
+upstream_url: https://unav100.github.io/
+license: CC-BY-4.0
+commercial_use: true
+derivative_model_training_allowed: true
+redistribution_allowed: true
+media_redistribution_allowed: null
+attribution: "Tiantian Geng et al.; cite Dense-Localizing Audio-Visual Events in Untrimmed Videos (CVPR 2023)."
+source_citation: https://openaccess.thecvf.com/content/CVPR2023/html/Geng_Dense-Localizing_Audio-Visual_Events_in_Untrimmed_Videos_A_Large-Scale_Benchmark_CVPR_2023_paper.html
+usage: evaluation
+trust_status: review
+source_components:
+  - component_id: event-annotations-and-released-features
+    url: https://unav100.github.io/
+    license: CC-BY-4.0
+    commercial_use: true
+    derivative_model_training_allowed: true
+    redistribution_allowed: true
+    media_redistribution_allowed: true
+    attribution: "UnAV-100 authors; cite CVPR 2023 paper and preserve CC BY 4.0 notice."
+    modalities: [audio, video, text]
+    trust_status: review
+  - component_id: original-youtube-audio-video-assets
+    url: https://unav100.github.io/
+    license: PER-SOURCE
+    commercial_use: null
+    derivative_model_training_allowed: null
+    redistribution_allowed: null
+    media_redistribution_allowed: null
+    modalities: [audio, video]
+    trust_status: review
+notes:
+  upstream_code_commit: 1609deba4fbaf25222c6ee6c7d43b0d0ddfab20d
+  upstream_data_revision: UNKNOWN
+  official_page_snapshot_date: "2026-10-11"
+  official_page_describes: >-
+    More than 10K untrimmed videos, more than 30K audio-visual events, 100
+    categories, and event temporal boundaries. Raw-video CSV rows contain
+    YouTube ID, start/end seconds, and train/validation/test split.
+  license_limitation: >-
+    Official page states the dataset is CC BY 4.0 for commercial/research use,
+    while also stating copyright remains with original video owners. The
+    Hugging Face mirror advertises CC BY-NC-SA 4.0, a conflicting grant; that
+    mirror is excluded. No per-source YouTube license audit was performed, so
+    source media remains REVIEW and must not be fetched or used until its
+    rights and source identity are checked.
+  excluded_mirror:
+    url: https://huggingface.co/datasets/ttgeng233/UnAV-100
+    advertised_license: CC-BY-NC-SA-4.0
+    used: false
+  availability_limitation: >-
+    Official annotations/features are linked through Baidu Drive; this audit
+    did not fetch them. No archive hash, file-level revision, media, or
+    annotations were verified locally. The code repository commit is not a
+    data revision.
+  proposed_task_scope: >-
+    Candidate for audio-video event-presence or temporal-localization decisions;
+    not a general free-form audiovisual QA benchmark. Do not include in a
+    training/evaluation catalog while source rights and split identity remain
+    unresolved.

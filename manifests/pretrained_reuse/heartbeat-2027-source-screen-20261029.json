@@ -1,0 +1,82 @@
+{
+  "format": "metadata_only_multimodal_source_screen_v1",
+  "dataset_id": "HEARTBEAT Challenge 2027",
+  "status": "REVIEW_NOT_ADMITTED",
+  "screened_at": "2026-10-29",
+  "official_sources": {
+    "challenge_website": "https://heartbeat-challenge.github.io/",
+    "related_system_paper": "https://arxiv.org/abs/2609.13814",
+    "baseline_repository": "https://github.com/heartbeat-challenge/HEARTBEAT_challenge_baseline",
+    "baseline_commit": "53cf8aa4d55ed522facd8083d56bc998668dc847",
+    "data_model_repository": "https://huggingface.co/inclusionAI/Realtime-Venus",
+    "model_repository_revision": "a1d95d3ac61416c8db34736b152241396850a6ed",
+    "data_pack_commit": "007097ab5d304ff1fff154bedf415b088717ec8d"
+  },
+  "source_scope": "official challenge page, pinned Apache-2.0 baseline repository, HF repository metadata, dataset README/field schema, and pack index; no data pack, record, audio, video, or checkpoint payload fetched",
+  "task_fit": {
+    "track1_task1": "audio prefix plus assistant instructions; choose one of four actions and submit JSON; Top-1 evaluation",
+    "track2": "separate online audio-visual and audio-only proactive understanding subtracks; JSON output for every stream chunk, including no-response chunks",
+    "decision_relevance": "high for action selection, abstain/wait, and response timing; AV track is not a fixed-option offline probability benchmark",
+    "both_input_necessity_proven": false
+  },
+  "reported": {
+    "records_total": 132571,
+    "training_records": 127371,
+    "development_records": 5200,
+    "total_packed_size": "599.83 GB",
+    "track1_task1_train": {"records": 18000, "packed_bytes": 11116885630, "pack_files": 2},
+    "track1_task1_dev": {
+      "records": 1000,
+      "bytes": 590237305,
+      "sha256": "83ebe3a0676fb84cf53fb482ff5d551f3ef34b75cc40573c2442c73343d7e483"
+    },
+    "track2_av_train": {"records": 30000, "packed_bytes": 294312334593, "pack_files": 30},
+    "track2_av_dev": {
+      "records": 1000,
+      "bytes": 9282733388,
+      "sha256": "2e2cd9087c99754fcfb6636b79bbf3636cfd32122f176ba4725c51c282013619"
+    },
+    "track2_audio_only_train": {"records": 29371, "packed_bytes": 84119377831, "pack_files": 9},
+    "track2_audio_only_dev": {"records": 1200, "packed_bytes": 3532286215, "pack_files": 1}
+  },
+  "license": {
+    "baseline_code": "Apache-2.0",
+    "linked_model_repository_card": "Apache-2.0",
+    "dataset_specific_terms": "not separately stated in the inspected challenge dataset README or challenge page",
+    "underlying_media_provenance_and_rights": "not independently established",
+    "speaker_consent_and_privacy_terms": "not established in the inspected materials",
+    "product_compatible": false
+  },
+  "provenance_followup": {
+    "challenge_relation": "The pinned Realtime-Venus model README says HEARTBEAT grew out of Realtime-Venus; identity between the challenge partitions and the paper's full training corpus is not established",
+    "related_paper_pipeline": "scenario/interaction planning, speech realization, temporal alignment, and audiovisual instances combining composed audio with associated video",
+    "natural_vs_composed_media_fraction": "unknown for the released HEARTBEAT partitions",
+    "distribution_overlap_risk": "challenge data may share lineage with the related Realtime-Venus system; exact source/session overlap is unverified",
+    "natural_av_quality_gate_substitute": false
+  },
+  "split_and_evaluation": {
+    "official_splits_seen": ["train", "dev"],
+    "track2_av_dev_source_shards": 1,
+    "independent_speaker_or_conversation_grouping": "not verified",
+    "untouched_final_audit": "not identified in inspected materials"
+  },
+  "resource_snapshot": {
+    "captured_at_local": "2026-10-29T03:58:57+09:00",
+    "c_drive_free_bytes": 778063872,
+    "track2_av_dev_bytes": 9282733388,
+    "new_fit_storage_reserve_satisfied": false,
+    "gpu_fit_started": false
+  },
+  "limitations": [
+    "The task shape is unusually close to typed Decision JSON, but dataset and underlying media usage rights are unresolved",
+    "The challenge website's requirement to use open-source datasets/models is not a dataset-specific license grant",
+    "The Apache-2.0 code/model-repository labels were not treated as independent proof of source-media rights or consent",
+    "The AV track is online event-response evaluation and does not itself define a calibrated fixed-option probability task",
+    "Source-level independence, speaker overlap, and label provenance were not verified from data records",
+    "The AV development partition is one 9.28 GB shard, larger than available local storage; the full release is about 599.83 GB"
+  ],
+  "training_admission": "NOT_ADMITTED_PENDING_DATA_RIGHTS_GROUP_SPLIT_AND_STORAGE_REVIEW",
+  "payload_downloaded": false,
+  "sealed_audit_accessed": false,
+  "training_started": false
+}

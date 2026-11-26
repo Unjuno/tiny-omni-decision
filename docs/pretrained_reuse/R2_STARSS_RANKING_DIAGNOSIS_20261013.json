@@ -1,0 +1,183 @@
+{
+  "selection_or_threshold_tuning": false,
+  "blind_audit": false,
+  "conditions": {
+    "pooled": {
+      "speech": {
+        "positive": 311,
+        "negative": 175,
+        "prevalence": 0.6399176954732511,
+        "auroc": 0.9326412494258154,
+        "average_precision": 0.9625715508590567
+      },
+      "clapping": {
+        "positive": 10,
+        "negative": 476,
+        "prevalence": 0.0205761316872428,
+        "auroc": 0.653781512605042,
+        "average_precision": 0.0505163902829972
+      },
+      "telephone": {
+        "positive": 19,
+        "negative": 467,
+        "prevalence": 0.03909465020576132,
+        "auroc": 0.7732446748563057,
+        "average_precision": 0.191451318082918
+      },
+      "laughter": {
+        "positive": 56,
+        "negative": 430,
+        "prevalence": 0.11522633744855967,
+        "auroc": 0.8229235880398671,
+        "average_precision": 0.46317993716937156
+      },
+      "domestic sounds": {
+        "positive": 267,
+        "negative": 219,
+        "prevalence": 0.5493827160493827,
+        "auroc": 0.8342482855334941,
+        "average_precision": 0.8696393381056879
+      },
+      "footsteps": {
+        "positive": 19,
+        "negative": 467,
+        "prevalence": 0.03909465020576132,
+        "auroc": 0.4131635298095345,
+        "average_precision": 0.040962000332021006
+      },
+      "door": {
+        "positive": 17,
+        "negative": 469,
+        "prevalence": 0.03497942386831276,
+        "auroc": 0.8187633262260128,
+        "average_precision": 0.15820068108962548
+      },
+      "music": {
+        "positive": 229,
+        "negative": 257,
+        "prevalence": 0.4711934156378601,
+        "auroc": 0.9722698927837153,
+        "average_precision": 0.9738868775242079
+      },
+      "instrument": {
+        "positive": 5,
+        "negative": 481,
+        "prevalence": 0.0102880658436214,
+        "auroc": 0.5135135135135135,
+        "average_precision": 0.01589675145764655
+      },
+      "water tap": {
+        "positive": 0,
+        "negative": 486,
+        "prevalence": 0.0,
+        "auroc": null,
+        "average_precision": null
+      },
+      "bell": {
+        "positive": 32,
+        "negative": 454,
+        "prevalence": 0.06584362139917696,
+        "auroc": 0.6099256607929515,
+        "average_precision": 0.07817013425123856
+      },
+      "knock": {
+        "positive": 4,
+        "negative": 482,
+        "prevalence": 0.00823045267489712,
+        "auroc": 0.9470954356846473,
+        "average_precision": 0.3482142857142857
+      }
+    },
+    "pretrained_logits": {
+      "speech": {
+        "positive": 311,
+        "negative": 175,
+        "prevalence": 0.6399176954732511,
+        "auroc": 0.9302893890675241,
+        "average_precision": 0.9545974295828341
+      },
+      "clapping": {
+        "positive": 10,
+        "negative": 476,
+        "prevalence": 0.0205761316872428,
+        "auroc": 0.42815126050420166,
+        "average_precision": 0.019039740375128393
+      },
+      "telephone": {
+        "positive": 19,
+        "negative": 467,
+        "prevalence": 0.03909465020576132,
+        "auroc": 0.702806266200834,
+        "average_precision": 0.0721241330223934
+      },
+      "laughter": {
+        "positive": 56,
+        "negative": 430,
+        "prevalence": 0.11522633744855967,
+        "auroc": 0.8438953488372093,
+        "average_precision": 0.48584846810387816
+      },
+      "domestic sounds": {
+        "positive": 267,
+        "negative": 219,
+        "prevalence": 0.5493827160493827,
+        "auroc": 0.6528654250679801,
+        "average_precision": 0.7093051922118947
+      },
+      "footsteps": {
+        "positive": 19,
+        "negative": 467,
+        "prevalence": 0.03909465020576132,
+        "auroc": 0.17626507381945228,
+        "average_precision": 0.023574640771024565
+      },
+      "door": {
+        "positive": 17,
+        "negative": 469,
+        "prevalence": 0.03497942386831276,
+        "auroc": 0.639282578703123,
+        "average_precision": 0.06021997046817651
+      },
+      "music": {
+        "positive": 229,
+        "negative": 257,
+        "prevalence": 0.4711934156378601,
+        "auroc": 0.9226207669957351,
+        "average_precision": 0.9185443968804181
+      },
+      "instrument": {
+        "positive": 5,
+        "negative": 481,
+        "prevalence": 0.0102880658436214,
+        "auroc": 0.6586278586278587,
+        "average_precision": 0.028299226717949044
+      },
+      "water tap": {
+        "positive": 0,
+        "negative": 486,
+        "prevalence": 0.0,
+        "auroc": null,
+        "average_precision": null
+      },
+      "bell": {
+        "positive": 32,
+        "negative": 454,
+        "prevalence": 0.06584362139917696,
+        "auroc": 0.47604625550660795,
+        "average_precision": 0.058651024919655154
+      },
+      "knock": {
+        "positive": 4,
+        "negative": 482,
+        "prevalence": 0.00823045267489712,
+        "auroc": 0.6602697095435685,
+        "average_precision": 0.01634995323825111
+      }
+    }
+  },
+  "input_hashes": {
+    "pooled": "5e98c64d8ccbb21298667ed4fec6e5d77147c536d7d08921926512cf07545c8d",
+    "pretrained_logits": "d42f473ca2f534463c5f5d80f8d31cbb37949112cabd4c46153b55801723cfb9"
+  },
+  "limitation": "Repeated development data, selected checkpoints, two rooms."
+}

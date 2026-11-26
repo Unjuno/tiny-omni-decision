@@ -1,0 +1,112 @@
+{
+  "status": "COMPLETE_FIXED_FACTORIAL",
+  "metrics": {
+    "family0-prefix0": {
+      "count": 768,
+      "accuracy": 0.9010416865348816,
+      "nll": 0.24805641174316406,
+      "brier": 0.1445707529783249,
+      "ece_15_bins": 0.04148328370259454,
+      "ece_bin_counts": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        10,
+        31,
+        25,
+        50,
+        45,
+        39,
+        50,
+        83,
+        434
+      ]
+    },
+    "family0-prefix1": {
+      "count": 768,
+      "accuracy": 0.5130208134651184,
+      "nll": 1.3596445322036743,
+      "brier": 0.7024850249290466,
+      "ece_15_bins": 0.2041258437481398,
+      "ece_bin_counts": [
+        0,
+        0,
+        0,
+        0,
+        4,
+        29,
+        61,
+        100,
+        80,
+        79,
+        74,
+        89,
+        76,
+        82,
+        94
+      ]
+    },
+    "family4-prefix0": {
+      "count": 768,
+      "accuracy": 0.4309895932674408,
+      "nll": 1.168390154838562,
+      "brier": 0.6293363571166992,
+      "ece_15_bins": 0.10605566933130224,
+      "ece_bin_counts": [
+        0,
+        0,
+        0,
+        2,
+        165,
+        199,
+        87,
+        77,
+        47,
+        58,
+        29,
+        38,
+        32,
+        14,
+        20
+      ]
+    },
+    "family4-prefix1": {
+      "count": 768,
+      "accuracy": 0.3255208432674408,
+      "nll": 1.4635065793991089,
+      "brier": 0.7782206535339355,
+      "ece_15_bins": 0.158759705547709,
+      "ece_bin_counts": [
+        0,
+        0,
+        0,
+        0,
+        78,
+        149,
+        183,
+        131,
+        88,
+        58,
+        31,
+        26,
+        16,
+        8,
+        0
+      ]
+    }
+  },
+  "seconds": 11.380128299933858,
+  "peak_vram": 181681664,
+  "source_checkpoint_unchanged": true,
+  "artifacts": {
+    "family0-prefix0-predictions.json": "bdac942c90db53f47094cd96859e5174136b42cbf5b83068a2f846b10d003bb7",
+    "family0-prefix1-predictions.json": "13a260c9d7018246137e3c9d29688cf1a2ce850092641afdb1e768a557437c98",
+    "family4-prefix0-predictions.json": "0a4193502c947f78e3637b7beb5f477c4b7b34a18776db81de6f5ac27f4bdebe",
+    "family4-prefix1-predictions.json": "1be93f4a4a9c8f08f7b7c7a3b8a61a431414c294354a7c6ebde1adfbe21cbbac",
+    "inputs.jsonl": "ebd762bdae9ff43b3f4f45d16c370d16a6f0550fd5aa5fba9111ff17e138f159",
+    "protocol.json": "6c71ef9400264d2563fb4c2b2d68b5e3d9450455e93a00800250c31f95c8743f"
+  }
+}

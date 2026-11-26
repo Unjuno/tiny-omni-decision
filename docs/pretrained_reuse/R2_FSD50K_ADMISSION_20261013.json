@@ -1,0 +1,65 @@
+{
+  "doi": "10.5281/zenodo.4060432",
+  "downloads": {
+    "FSD50K.doc.zip": {
+      "sha256": "a5c314ad2bf93d01b5921aa4270c70c90e28ac9a283ba9f08167490e728deb85",
+      "md5": "3516162b82dc2945d3e7feba0904e800",
+      "bytes": 6984
+    },
+    "FSD50K.metadata.zip": {
+      "sha256": "9a738e032546f9a2c6e3d04566928d04a65fb79b422cc9d78bb781723537bd19",
+      "md5": "b9ea0c829a411c1d42adb9da539ed237",
+      "bytes": 6700838
+    },
+    "FSD50K.ground_truth.zip": {
+      "sha256": "db2396260a7b1fb06feb6ccac71685794fc89917d71c3a8d64a1de85c2cc0ebf",
+      "md5": "ca27382c195e37d2269c4c866dd73485",
+      "bytes": 334701
+    }
+  },
+  "dev_license_counts": {
+    "http://creativecommons.org/licenses/by/3.0/": 20017,
+    "http://creativecommons.org/licenses/by-nc/3.0/": 4616,
+    "http://creativecommons.org/publicdomain/zero/1.0/": 14959,
+    "http://creativecommons.org/licenses/sampling+/1.0/": 1374
+  },
+  "allowed_official_train_clips": 31566,
+  "event_positive_counts": {
+    "Bell": {
+      "clips": 598,
+      "uploaders": 155
+    },
+    "Clapping": {
+      "clips": 305,
+      "uploaders": 88
+    },
+    "Telephone": {
+      "clips": 425,
+      "uploaders": 192
+    },
+    "Walk_and_footsteps": {
+      "clips": 277,
+      "uploaders": 150
+    },
+    "Musical_instrument": {
+      "clips": 10431,
+      "uploaders": 404
+    },
+    "Knock": {
+      "clips": 211,
+      "uploaders": 52
+    },
+    "Door": {
+      "clips": 817,
+      "uploaders": 287
+    },
+    "Water_tap_and_faucet": {
+      "clips": 189,
+      "uploaders": 114
+    }
+  },
+  "eval_members_opened": false,
+  "media_downloaded": false,
+  "negative_labels_validated": false,
+  "limitation": "Dev labels may be incomplete. Absence is not verified negative; label names require ontology mapping."
+}

@@ -1,0 +1,207 @@
+{
+  "scope": "fixed known-train acoustic cue diagnosis, not Decision quality",
+  "source_commit": "e1d1cb57f55b02c849d76baccc3928011b3186f4",
+  "model_id": "openai/whisper-tiny",
+  "model_revision": "169d4a4341b33bc18d8881c4b69c2e104e1cc0af",
+  "parameters": 37760640,
+  "parameter_bytes": 151042560,
+  "state_before": "e133c077072cfa2636a82db2fb1fae31e26cb4fd7d40d497db77b0667609224a",
+  "state_after": "e133c077072cfa2636a82db2fb1fae31e26cb4fd7d40d497db77b0667609224a",
+  "trainable_parameters": 0,
+  "model_generation_config_unchanged": true,
+  "cpu_rng_unchanged": true,
+  "gpu_used": false,
+  "cloud_cost": 0,
+  "main_root": "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-audio-cue-01",
+  "replay_root": "C:\\CodexArtifacts\\pretrained-reuse-r2\\robomnist-audio-cue-replay-01",
+  "main_report_sha256": "884feba63bf1e203a588356c53b5ed3e12e5d26d8a846b90dbb490724f274cc4",
+  "replay_report_sha256": "2a0efaf08b486aed0326365bf8d3853ea670b78aa90fc9c0f0b3c7aac7455135",
+  "main_artifacts": {
+    "config.json": "52f1c712cd94f4ad5c19809ae1d1b5e4d973c1e44c13dc2126d472209e124e2d",
+    "transcripts.json": "46da41e1b68b8dd588952dd4a68255ccf3fbaaad5e4b1e0b85449a83ad48d6ff",
+    "arrays.npz": "63c71c32a318ec75d659f7f29a1f05803bc0d4f601364e2e766ab4b326ec85b1"
+  },
+  "replay_artifacts": {
+    "config.json": "4f52635fa3d5286a9b0d0542eadac058ef23f7fd634506127b5d6a4e171ab63f",
+    "transcripts.json": "7497d1dbd37ff770be67ecaf85e5619493f0e6c0ea24350c98d2cfc9da80e86e",
+    "arrays.npz": "63c71c32a318ec75d659f7f29a1f05803bc0d4f601364e2e766ab4b326ec85b1"
+  },
+  "main_seconds": 8.269711400032975,
+  "replay_seconds": 8.641818200005218,
+  "main_peak_cpu_bytes": 934744064,
+  "replay_peak_cpu_bytes": 933564416,
+  "main_pins": 133,
+  "replay_pins": 137,
+  "arrays": 21,
+  "transcripts": [
+    {
+      "receiver": 1,
+      "condition": "real",
+      "native_sample_frames": 658432,
+      "native_sample_rate": 44100,
+      "resampled_samples": 238887,
+      "resampled_rate": 16000,
+      "pcm_peak_abs": 0.009578211233019829,
+      "text": " you",
+      "token_ids": [
+        50258,
+        50259,
+        50359,
+        50363,
+        291,
+        50257
+      ],
+      "number_observations": {
+        "observations_0_to_20": [],
+        "speech_ground_truth": "UNVERIFIED",
+        "collection_counter_active": "UNKNOWN",
+        "common_clock": "UNVERIFIED"
+      },
+      "decoder_forward_calls": 2,
+      "generation_seconds": 0.2783677999395877
+    },
+    {
+      "receiver": 1,
+      "condition": "silence",
+      "native_sample_frames": 658432,
+      "native_sample_rate": 44100,
+      "resampled_samples": 238887,
+      "resampled_rate": 16000,
+      "pcm_peak_abs": 0.0,
+      "text": " you",
+      "token_ids": [
+        50258,
+        50259,
+        50359,
+        50363,
+        291,
+        50257
+      ],
+      "number_observations": {
+        "observations_0_to_20": [],
+        "speech_ground_truth": "UNVERIFIED",
+        "collection_counter_active": "UNKNOWN",
+        "common_clock": "UNVERIFIED"
+      },
+      "decoder_forward_calls": 2,
+      "generation_seconds": 0.25739749998319894
+    },
+    {
+      "receiver": 2,
+      "condition": "real",
+      "native_sample_frames": 659456,
+      "native_sample_rate": 44100,
+      "resampled_samples": 239259,
+      "resampled_rate": 16000,
+      "pcm_peak_abs": 0.0074328891932964325,
+      "text": " you",
+      "token_ids": [
+        50258,
+        50259,
+        50359,
+        50363,
+        291,
+        50257
+      ],
+      "number_observations": {
+        "observations_0_to_20": [],
+        "speech_ground_truth": "UNVERIFIED",
+        "collection_counter_active": "UNKNOWN",
+        "common_clock": "UNVERIFIED"
+      },
+      "decoder_forward_calls": 2,
+      "generation_seconds": 0.25655369996093214
+    },
+    {
+      "receiver": 2,
+      "condition": "silence",
+      "native_sample_frames": 659456,
+      "native_sample_rate": 44100,
+      "resampled_samples": 239259,
+      "resampled_rate": 16000,
+      "pcm_peak_abs": 0.0,
+      "text": " you",
+      "token_ids": [
+        50258,
+        50259,
+        50359,
+        50363,
+        291,
+        50257
+      ],
+      "number_observations": {
+        "observations_0_to_20": [],
+        "speech_ground_truth": "UNVERIFIED",
+        "collection_counter_active": "UNKNOWN",
+        "common_clock": "UNVERIFIED"
+      },
+      "decoder_forward_calls": 2,
+      "generation_seconds": 0.25962319993413985
+    },
+    {
+      "receiver": 3,
+      "condition": "real",
+      "native_sample_frames": 660480,
+      "native_sample_rate": 44100,
+      "resampled_samples": 239630,
+      "resampled_rate": 16000,
+      "pcm_peak_abs": 0.00889895111322403,
+      "text": " you",
+      "token_ids": [
+        50258,
+        50259,
+        50359,
+        50363,
+        291,
+        50257
+      ],
+      "number_observations": {
+        "observations_0_to_20": [],
+        "speech_ground_truth": "UNVERIFIED",
+        "collection_counter_active": "UNKNOWN",
+        "common_clock": "UNVERIFIED"
+      },
+      "decoder_forward_calls": 2,
+      "generation_seconds": 0.2579421999398619
+    },
+    {
+      "receiver": 3,
+      "condition": "silence",
+      "native_sample_frames": 660480,
+      "native_sample_rate": 44100,
+      "resampled_samples": 239630,
+      "resampled_rate": 16000,
+      "pcm_peak_abs": 0.0,
+      "text": " you",
+      "token_ids": [
+        50258,
+        50259,
+        50359,
+        50363,
+        291,
+        50257
+      ],
+      "number_observations": {
+        "observations_0_to_20": [],
+        "speech_ground_truth": "UNVERIFIED",
+        "collection_counter_active": "UNKNOWN",
+        "common_clock": "UNVERIFIED"
+      },
+      "decoder_forward_calls": 2,
+      "generation_seconds": 0.25556319998577237
+    }
+  ],
+  "started_utc": "2026-10-14T17:45:11.250584+00:00",
+  "ended_utc": "2026-10-14T17:45:19.520153+00:00",
+  "speech_ground_truth": "UNVERIFIED",
+  "collection_counter_active": "UNKNOWN",
+  "common_clock": "UNVERIFIED",
+  "decision_quality_measured": false,
+  "product_goal_achieved": false,
+  "interpretation": "All six outputs identical to silence. This ASR diagnostic is uninformative about counter presence; neither presence nor absence established.",
+  "console_warnings": [
+    "Mixed generation_config plus explicit generation kwargs deprecated in current library; both are recorded and unchanged.",
+    "max_new_tokens128 takes precedence over native max_length448.",
+    "Custom native suppression processors take precedence over duplicates."
+  ]
+}

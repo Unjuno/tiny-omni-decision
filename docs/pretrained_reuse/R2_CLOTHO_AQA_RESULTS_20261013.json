@@ -1,0 +1,1180 @@
+{
+  "source_commit": "c3d2d2840fe4713bc6c136f40a34ebd4dcfd55ed",
+  "status": "completed fixed development comparison; mixed quality, not adopted",
+  "media": {
+    "files": 856,
+    "reused": 216,
+    "transferred": 1026806109,
+    "wall_seconds": 3721.3697624206543,
+    "transient_http_errors": 24
+  },
+  "waveform_screen": {
+    "status": "COMPLETE",
+    "scope": "all cross-split whole-template pairs",
+    "review_threshold": 0.99,
+    "expected_pairs": 180004,
+    "pairs": 180004,
+    "flagged_pairs": 0,
+    "maximum_correlation": 0.5444923190775058,
+    "media_report_sha256": "184fb0c965b6d3fae0f035d7faf80092c3eec9156dce5675b02068b5e691ab9b",
+    "decoded_report_sha256": "d15291ff2050430d4be04131eb094104258e4b3111035260c7aa7da3ce32d8cc",
+    "workers": 4,
+    "prepared_cache_bytes": 2411883392,
+    "cache_limit_bytes": 3221225472,
+    "preparation_seconds": 3.776218799990602,
+    "limitation": "Does not exclude edits, mixing, time-stretch or shorter reuse",
+    "seconds": 130.70990200003143,
+    "pairs_sha256": "1f46015f1348ebd273025de449ef0b7f73674a8f0237fbfaee720ed32b9cabf5"
+  },
+  "audio_features": {
+    "status": "PASS",
+    "seconds": 143.95355390000623,
+    "checkpoint_sha256": "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e",
+    "source_commit": "a425fdce92572e602a1d5634799bd9f1f2efa806",
+    "feature_sha256": "fe0b7adafb4841a107015a9f7ac014490bccec0f61d23b49f56fc9d6e18fc0b4",
+    "media_report_sha256": "184fb0c965b6d3fae0f035d7faf80092c3eec9156dce5675b02068b5e691ab9b",
+    "reference_features_sha256": "7b633d8316d6a3c9e7cd6305072dc492036276fad35fb937d63aa96ea7cac860",
+    "script_sha256": "adcc010c92bbeea94adaa4a2ca809e636532ee4acfb91f0e191604f1316e9439",
+    "parameters": 1961239,
+    "device": "cpu",
+    "training": false,
+    "torch": "2.6.0+cu124",
+    "preprocessing": "native mono float; torchaudio native->32k; official eval mel",
+    "limitation": "Whole clips versus 5s windows. Cosine is not a duplication test."
+  },
+  "conditions": {
+    "question": {
+      "best_epoch": 8,
+      "temperature": 1.4142135623730951,
+      "metrics": {
+        "count": 560,
+        "positive_count": 317,
+        "negative_count": 243,
+        "accuracy": 0.6482142857142857,
+        "nll": 0.6230791169034264,
+        "brier": 0.43314195701323127,
+        "ece": 0.02833104511456829,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          65,
+          114,
+          139,
+          131,
+          111,
+          0,
+          0,
+          0
+        ],
+        "balanced_accuracy": 0.6398008593942699,
+        "sensitivity": 0.7034700315457413,
+        "specificity": 0.5761316872427984
+      },
+      "train_prior": {
+        "count": 560,
+        "positive_count": 317,
+        "negative_count": 243,
+        "accuracy": 0.5660714285714286,
+        "nll": 0.6844055803273489,
+        "brier": 0.49128371451236036,
+        "ece": 0.002700172151838043,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          560,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "balanced_accuracy": 0.5,
+        "sensitivity": 1.0,
+        "specificity": 0.0
+      },
+      "parameters": 49409,
+      "seconds": 0.6534843000117689,
+      "best_sha256": "fa98ddcebc3c0175d17794ccaabb820b03d5fc600740cb3c4deaa77419af4df3",
+      "unique_train_questions": 2312,
+      "consumed_train_questions": 55488,
+      "hashes": {
+        "best.pt": "fa98ddcebc3c0175d17794ccaabb820b03d5fc600740cb3c4deaa77419af4df3",
+        "final.pt": "d8d137167ceb3c243b12d56f1a24c320791d4f001af0b5928c73fe3a01a45c2d",
+        "protocol.json": "1fb20aa86c4a4a5d6f195e85dec4d5add1bf4ac3eb9fdbf15faec3ffe0621b91",
+        "normalization.npz": "9c7b39b9945baaa091aa39f512b3a68d099ed0d68237bc2e89eba04df7a96850",
+        "validation_probabilities.npy": "37ab0c530d2b7a6b05d42dedfea60508b0012be8c5f2e06e7bd705ad14a24203",
+        "validation_ids.json": "273197786d3eba4b88b8394d5ac807e08243ad74f1912858123ee7a6db2868a6"
+      }
+    },
+    "audio": {
+      "condition": "audio",
+      "best_epoch": 3,
+      "temperature": 0.8408964152537145,
+      "metrics": {
+        "count": 560,
+        "positive_count": 317,
+        "negative_count": 243,
+        "accuracy": 0.5660714285714286,
+        "nll": 0.6866264588520804,
+        "brier": 0.49343081893702345,
+        "ece": 0.026661226685558013,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          16,
+          436,
+          108,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "balanced_accuracy": 0.5,
+        "sensitivity": 1.0,
+        "specificity": 0.0
+      },
+      "parameters": 49409,
+      "seconds": 0.7006378999212757,
+      "consumed_train_questions": 55488,
+      "unique_train_questions": 2312,
+      "best_sha256": "04d6577f28996e54db730920b638d41f89382df0e7d9c20da4f64046766eb218",
+      "hashes": {
+        "best.pt": "04d6577f28996e54db730920b638d41f89382df0e7d9c20da4f64046766eb218",
+        "final.pt": "113727419190ee6f6a5b75e92ee7306c76d2376c52e4b0afb89b7dcc4877bdec",
+        "protocol.json": "93949645630c68839bd27336281972c721dcc6d74799d541f8643e184a4a9e80",
+        "normalization.npz": "f152042f1f1ff03a4affb3381b5419dfe390edf64420dbd1ed178e835bbe1791",
+        "validation_probabilities.npy": "240de3189631ad7092ce305f091e8d6ba80cdb9a7453e3b1fed71853266e1566",
+        "validation_ids.json": "273197786d3eba4b88b8394d5ac807e08243ad74f1912858123ee7a6db2868a6"
+      }
+    },
+    "joint": {
+      "condition": "joint",
+      "best_epoch": 7,
+      "temperature": 1.4142135623730951,
+      "metrics": {
+        "count": 560,
+        "positive_count": 317,
+        "negative_count": 243,
+        "accuracy": 0.6696428571428571,
+        "nll": 0.6246607034950549,
+        "brier": 0.434000985602373,
+        "ece": 0.025451059160488017,
+        "ece_bin_counts": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          52,
+          114,
+          155,
+          104,
+          135,
+          0,
+          0,
+          0
+        ],
+        "balanced_accuracy": 0.6582479780867443,
+        "sensitivity": 0.7444794952681388,
+        "specificity": 0.5720164609053497
+      },
+      "parameters": 49409,
+      "seconds": 0.6569962000939995,
+      "consumed_train_questions": 55488,
+      "unique_train_questions": 2312,
+      "best_sha256": "ac3fc2012c146538537a293e007a386fd1c738ba6ee0a7452cc89ccf05daab4e",
+      "inference_controls": {
+        "source_deranged": {
+          "count": 560,
+          "positive_count": 317,
+          "negative_count": 243,
+          "accuracy": 0.6232142857142857,
+          "nll": 0.6515047062619371,
+          "brier": 0.45954639614106124,
+          "ece": 0.0366993062198162,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            44,
+            105,
+            159,
+            111,
+            141,
+            0,
+            0,
+            0
+          ],
+          "balanced_accuracy": 0.6129155794420429,
+          "sensitivity": 0.6908517350157729,
+          "specificity": 0.5349794238683128
+        },
+        "audio_zero_mean": {
+          "count": 560,
+          "positive_count": 317,
+          "negative_count": 243,
+          "accuracy": 0.6142857142857143,
+          "nll": 0.6423920344431894,
+          "brier": 0.4510312975780699,
+          "ece": 0.04963378900928159,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            63,
+            82,
+            121,
+            143,
+            151,
+            0,
+            0,
+            0
+          ],
+          "balanced_accuracy": 0.610312731238073,
+          "sensitivity": 0.6403785488958991,
+          "specificity": 0.5802469135802469
+        }
+      },
+      "inference_control_seconds": 0.004731999943032861,
+      "hashes": {
+        "best.pt": "ac3fc2012c146538537a293e007a386fd1c738ba6ee0a7452cc89ccf05daab4e",
+        "final.pt": "e381c39b545b80766afb0f0eb9d78ba4f7ede478e3818c050fa53be41f9f0114",
+        "protocol.json": "44b07492d694a4365aea37fcd144b8729e3697d6764cd0f63de0661843dfe1c3",
+        "normalization.npz": "f152042f1f1ff03a4affb3381b5419dfe390edf64420dbd1ed178e835bbe1791",
+        "validation_probabilities.npy": "4d4f16f47f5bd08f9718c07d8642a6e18c77b60c7cb9da5c3381ea354a61c26c",
+        "validation_ids.json": "273197786d3eba4b88b8394d5ac807e08243ad74f1912858123ee7a6db2868a6"
+      }
+    }
+  },
+  "independent_reload_and_uncertainty": {
+    "source_commit": "c3d2d2840fe4713bc6c136f40a34ebd4dcfd55ed",
+    "scope": "fixed development comparison, no blind audit",
+    "reload": {
+      "question": {
+        "bitwise_equal": true,
+        "count": 560,
+        "metrics": {
+          "count": 560,
+          "positive_count": 317,
+          "negative_count": 243,
+          "accuracy": 0.6482142857142857,
+          "nll": 0.6230791169034264,
+          "brier": 0.43314195701323127,
+          "ece": 0.02833104511456829,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            65,
+            114,
+            139,
+            131,
+            111,
+            0,
+            0,
+            0
+          ],
+          "balanced_accuracy": 0.6398008593942699,
+          "sensitivity": 0.7034700315457413,
+          "specificity": 0.5761316872427984
+        },
+        "best_epoch": 8,
+        "best_sha256": "fa98ddcebc3c0175d17794ccaabb820b03d5fc600740cb3c4deaa77419af4df3",
+        "final_sha256": "d8d137167ceb3c243b12d56f1a24c320791d4f001af0b5928c73fe3a01a45c2d",
+        "best_learning_point": {
+          "epoch": 8,
+          "train_ce": 0.553175236939559,
+          "count": 560,
+          "positive_count": 317,
+          "negative_count": 243,
+          "accuracy": 0.6482142857142857,
+          "nll": 0.6273096829063544,
+          "brier": 0.4364449470156003,
+          "ece": 0.04860408034707817,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            53,
+            79,
+            80,
+            130,
+            90,
+            125,
+            3,
+            0
+          ],
+          "balanced_accuracy": 0.6398008593942699,
+          "sensitivity": 0.7034700315457413,
+          "specificity": 0.5761316872427984
+        },
+        "final_learning_point": {
+          "epoch": 24,
+          "train_ce": 0.42857705061823437,
+          "count": 560,
+          "positive_count": 317,
+          "negative_count": 243,
+          "accuracy": 0.6553571428571429,
+          "nll": 0.6703539996772735,
+          "brier": 0.4568007562033955,
+          "ece": 0.11832154681906107,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            30,
+            67,
+            53,
+            77,
+            70,
+            96,
+            93,
+            74
+          ],
+          "balanced_accuracy": 0.6523542469914709,
+          "sensitivity": 0.6750788643533123,
+          "specificity": 0.6296296296296297
+        }
+      },
+      "audio": {
+        "bitwise_equal": true,
+        "count": 560,
+        "metrics": {
+          "count": 560,
+          "positive_count": 317,
+          "negative_count": 243,
+          "accuracy": 0.5660714285714286,
+          "nll": 0.6866264588520804,
+          "brier": 0.49343081893702345,
+          "ece": 0.026661226685558013,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            16,
+            436,
+            108,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "balanced_accuracy": 0.5,
+          "sensitivity": 1.0,
+          "specificity": 0.0
+        },
+        "best_epoch": 3,
+        "best_sha256": "04d6577f28996e54db730920b638d41f89382df0e7d9c20da4f64046766eb218",
+        "final_sha256": "113727419190ee6f6a5b75e92ee7306c76d2376c52e4b0afb89b7dcc4877bdec",
+        "best_learning_point": {
+          "epoch": 3,
+          "train_ce": 0.6815728741121128,
+          "count": 560,
+          "positive_count": 317,
+          "negative_count": 243,
+          "accuracy": 0.5660714285714286,
+          "nll": 0.685995378614748,
+          "brier": 0.4928392609275899,
+          "ece": 0.004513666885239811,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            44,
+            500,
+            16,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "balanced_accuracy": 0.5,
+          "sensitivity": 1.0,
+          "specificity": 0.0
+        },
+        "final_learning_point": {
+          "epoch": 24,
+          "train_ce": 0.645621331505297,
+          "count": 560,
+          "positive_count": 317,
+          "negative_count": 243,
+          "accuracy": 0.5589285714285714,
+          "nll": 0.70272689975669,
+          "brier": 0.5075934277702824,
+          "ece": 0.06192240267992019,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            116,
+            168,
+            132,
+            100,
+            44,
+            0,
+            0,
+            0
+          ],
+          "balanced_accuracy": 0.515785852449014,
+          "sensitivity": 0.8422712933753943,
+          "specificity": 0.18930041152263374
+        }
+      },
+      "joint": {
+        "bitwise_equal": true,
+        "count": 560,
+        "metrics": {
+          "count": 560,
+          "positive_count": 317,
+          "negative_count": 243,
+          "accuracy": 0.6696428571428571,
+          "nll": 0.6246607034950549,
+          "brier": 0.434000985602373,
+          "ece": 0.025451059160488017,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            52,
+            114,
+            155,
+            104,
+            135,
+            0,
+            0,
+            0
+          ],
+          "balanced_accuracy": 0.6582479780867443,
+          "sensitivity": 0.7444794952681388,
+          "specificity": 0.5720164609053497
+        },
+        "best_epoch": 7,
+        "best_sha256": "ac3fc2012c146538537a293e007a386fd1c738ba6ee0a7452cc89ccf05daab4e",
+        "final_sha256": "e381c39b545b80766afb0f0eb9d78ba4f7ede478e3818c050fa53be41f9f0114",
+        "best_learning_point": {
+          "epoch": 7,
+          "train_ce": 0.5239868271309611,
+          "count": 560,
+          "positive_count": 317,
+          "negative_count": 243,
+          "accuracy": 0.6696428571428571,
+          "nll": 0.6324541943208953,
+          "brier": 0.43883619687544806,
+          "ece": 0.05874884517065118,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            38,
+            71,
+            97,
+            135,
+            76,
+            127,
+            16,
+            0
+          ],
+          "balanced_accuracy": 0.6582479780867443,
+          "sensitivity": 0.7444794952681388,
+          "specificity": 0.5720164609053497
+        },
+        "final_learning_point": {
+          "epoch": 24,
+          "train_ce": 0.23758352003914263,
+          "count": 560,
+          "positive_count": 317,
+          "negative_count": 243,
+          "accuracy": 0.6553571428571429,
+          "nll": 0.770890071940409,
+          "brier": 0.4864295291589966,
+          "ece": 0.17516565159062983,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            26,
+            32,
+            41,
+            44,
+            58,
+            71,
+            101,
+            187
+          ],
+          "balanced_accuracy": 0.6475509859666888,
+          "sensitivity": 0.7066246056782335,
+          "specificity": 0.588477366255144
+        }
+      },
+      "source_deranged": {
+        "bitwise_equal": true,
+        "count": 560,
+        "metrics": {
+          "count": 560,
+          "positive_count": 317,
+          "negative_count": 243,
+          "accuracy": 0.6232142857142857,
+          "nll": 0.6515047062619371,
+          "brier": 0.45954639614106124,
+          "ece": 0.0366993062198162,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            44,
+            105,
+            159,
+            111,
+            141,
+            0,
+            0,
+            0
+          ],
+          "balanced_accuracy": 0.6129155794420429,
+          "sensitivity": 0.6908517350157729,
+          "specificity": 0.5349794238683128
+        }
+      },
+      "audio_zero_mean": {
+        "bitwise_equal": true,
+        "count": 560,
+        "metrics": {
+          "count": 560,
+          "positive_count": 317,
+          "negative_count": 243,
+          "accuracy": 0.6142857142857143,
+          "nll": 0.6423920344431894,
+          "brier": 0.4510312975780699,
+          "ece": 0.04963378900928159,
+          "ece_bin_counts": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            63,
+            82,
+            121,
+            143,
+            151,
+            0,
+            0,
+            0
+          ],
+          "balanced_accuracy": 0.610312731238073,
+          "sensitivity": 0.6403785488958991,
+          "specificity": 0.5802469135802469
+        }
+      }
+    },
+    "comparisons": {
+      "joint_minus_question": {
+        "point": [
+          0.02142857142857143,
+          0.0015815848484635354,
+          0.0008590285891417272
+        ],
+        "percentile_95_intervals": [
+          [
+            -0.005138769977168948,
+            0.05
+          ],
+          [
+            -0.010595048574542066,
+            0.01326775127848648
+          ],
+          [
+            -0.01070206403761636,
+            0.012004834821491837
+          ]
+        ],
+        "metrics": [
+          "accuracy",
+          "nll",
+          "brier"
+        ]
+      },
+      "joint_minus_audio": {
+        "point": [
+          0.10357142857142858,
+          -0.06196575736893075,
+          -0.0594298333346505
+        ],
+        "percentile_95_intervals": [
+          [
+            0.052238215567730964,
+            0.15318035614394926
+          ],
+          [
+            -0.08771705717092292,
+            -0.03479667255514685
+          ],
+          [
+            -0.08335491258018668,
+            -0.03428452070610651
+          ]
+        ],
+        "metrics": [
+          "accuracy",
+          "nll",
+          "brier"
+        ]
+      },
+      "joint_minus_source_deranged": {
+        "point": [
+          0.04642857142857143,
+          -0.02684400323778391,
+          -0.025545410538688258
+        ],
+        "percentile_95_intervals": [
+          [
+            0.016053669724770646,
+            0.07639032369146004
+          ],
+          [
+            -0.04195423743374492,
+            -0.012987663612271879
+          ],
+          [
+            -0.040000271611720005,
+            -0.01224695661906213
+          ]
+        ],
+        "metrics": [
+          "accuracy",
+          "nll",
+          "brier"
+        ]
+      },
+      "joint_minus_audio_zero_mean": {
+        "point": [
+          0.055357142857142855,
+          -0.017731330623584136,
+          -0.017030311975696964
+        ],
+        "percentile_95_intervals": [
+          [
+            0.02857142857142857,
+            0.08561643835616438
+          ],
+          [
+            -0.03185210062164902,
+            -0.005742839437456214
+          ],
+          [
+            -0.030335700060157567,
+            -0.005663685817660227
+          ]
+        ],
+        "metrics": [
+          "accuracy",
+          "nll",
+          "brier"
+        ]
+      }
+    },
+    "bootstrap": {
+      "unit": "uploader",
+      "groups": 81,
+      "replicates": 10000,
+      "seed": 17,
+      "method": "paired cluster resampling, question-weighted metrics, percentile 2.5/97.5",
+      "selection_limitation": "same validation selected checkpoints; descriptive, not blind or selection-adjusted"
+    }
+  },
+  "fixed_gap": {
+    "scope": "fixed complete train/validation examples, raw probabilities, inference only",
+    "conditions": {
+      "question": {
+        "best": {
+          "epoch": 8,
+          "weight_sha256": "fa98ddcebc3c0175d17794ccaabb820b03d5fc600740cb3c4deaa77419af4df3",
+          "train": {
+            "count": 2312,
+            "positive_count": 1315,
+            "negative_count": 997,
+            "accuracy": 0.7339965397923875,
+            "nll": 0.5427903003867149,
+            "brier": 0.3618025820862143,
+            "ece": 0.03021508793001769,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              196,
+              293,
+              289,
+              509,
+              397,
+              610,
+              18,
+              0
+            ],
+            "balanced_accuracy": 0.7233491348570427,
+            "sensitivity": 0.8007604562737642,
+            "specificity": 0.645937813440321
+          },
+          "validation": {
+            "count": 560,
+            "positive_count": 317,
+            "negative_count": 243,
+            "accuracy": 0.6482142857142857,
+            "nll": 0.6273096829063544,
+            "brier": 0.4364449470156003,
+            "ece": 0.04860408034707817,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              53,
+              79,
+              80,
+              130,
+              90,
+              125,
+              3,
+              0
+            ],
+            "balanced_accuracy": 0.6398008593942699,
+            "sensitivity": 0.7034700315457413,
+            "specificity": 0.5761316872427984
+          },
+          "accuracy_gap_train_minus_validation": 0.0857822540781018,
+          "nll_gap_validation_minus_train": 0.08451938251963942
+        },
+        "final": {
+          "epoch": 24,
+          "weight_sha256": "d8d137167ceb3c243b12d56f1a24c320791d4f001af0b5928c73fe3a01a45c2d",
+          "train": {
+            "count": 2312,
+            "positive_count": 1315,
+            "negative_count": 997,
+            "accuracy": 0.8261245674740484,
+            "nll": 0.4142956415386151,
+            "brier": 0.2594356983526405,
+            "ece": 0.04177621333895313,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              97,
+              217,
+              232,
+              268,
+              287,
+              360,
+              517,
+              334
+            ],
+            "balanced_accuracy": 0.8198611042252232,
+            "sensitivity": 0.8653992395437262,
+            "specificity": 0.7743229689067201
+          },
+          "validation": {
+            "count": 560,
+            "positive_count": 317,
+            "negative_count": 243,
+            "accuracy": 0.6553571428571429,
+            "nll": 0.6703539996772735,
+            "brier": 0.4568007562033955,
+            "ece": 0.11832154681906107,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              30,
+              67,
+              53,
+              77,
+              70,
+              96,
+              93,
+              74
+            ],
+            "balanced_accuracy": 0.6523542469914709,
+            "sensitivity": 0.6750788643533123,
+            "specificity": 0.6296296296296297
+          },
+          "accuracy_gap_train_minus_validation": 0.17076742461690553,
+          "nll_gap_validation_minus_train": 0.2560583581386584
+        }
+      },
+      "audio": {
+        "best": {
+          "epoch": 3,
+          "weight_sha256": "04d6577f28996e54db730920b638d41f89382df0e7d9c20da4f64046766eb218",
+          "train": {
+            "count": 2312,
+            "positive_count": 1315,
+            "negative_count": 997,
+            "accuracy": 0.5705017301038062,
+            "nll": 0.6775375874879856,
+            "brier": 0.4845217996607395,
+            "ece": 0.03292307066876171,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              368,
+              1856,
+              88,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "balanced_accuracy": 0.5022485708074794,
+            "sensitivity": 0.9984790874524715,
+            "specificity": 0.006018054162487462
+          },
+          "validation": {
+            "count": 560,
+            "positive_count": 317,
+            "negative_count": 243,
+            "accuracy": 0.5660714285714286,
+            "nll": 0.685995378614748,
+            "brier": 0.4928392609275899,
+            "ece": 0.004513666885239811,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              44,
+              500,
+              16,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "balanced_accuracy": 0.5,
+            "sensitivity": 1.0,
+            "specificity": 0.0
+          },
+          "accuracy_gap_train_minus_validation": 0.004430301532377667,
+          "nll_gap_validation_minus_train": 0.00845779112676237
+        },
+        "final": {
+          "epoch": 24,
+          "weight_sha256": "113727419190ee6f6a5b75e92ee7306c76d2376c52e4b0afb89b7dcc4877bdec",
+          "train": {
+            "count": 2312,
+            "positive_count": 1315,
+            "negative_count": 997,
+            "accuracy": 0.6163494809688581,
+            "nll": 0.6412522278060243,
+            "brier": 0.4510202072690279,
+            "ece": 0.019380567292441146,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              500,
+              812,
+              516,
+              292,
+              152,
+              40,
+              0,
+              0
+            ],
+            "balanced_accuracy": 0.5812399174710443,
+            "sensitivity": 0.8365019011406845,
+            "specificity": 0.3259779338014042
+          },
+          "validation": {
+            "count": 560,
+            "positive_count": 317,
+            "negative_count": 243,
+            "accuracy": 0.5589285714285714,
+            "nll": 0.70272689975669,
+            "brier": 0.5075934277702824,
+            "ece": 0.06192240267992019,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              116,
+              168,
+              132,
+              100,
+              44,
+              0,
+              0,
+              0
+            ],
+            "balanced_accuracy": 0.515785852449014,
+            "sensitivity": 0.8422712933753943,
+            "specificity": 0.18930041152263374
+          },
+          "accuracy_gap_train_minus_validation": 0.05742090954028667,
+          "nll_gap_validation_minus_train": 0.061474671950665694
+        }
+      },
+      "joint": {
+        "best": {
+          "epoch": 7,
+          "weight_sha256": "ac3fc2012c146538537a293e007a386fd1c738ba6ee0a7452cc89ccf05daab4e",
+          "train": {
+            "count": 2312,
+            "positive_count": 1315,
+            "negative_count": 997,
+            "accuracy": 0.7742214532871973,
+            "nll": 0.5014957313417628,
+            "brier": 0.32525628757563696,
+            "ece": 0.06323978668368813,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              135,
+              293,
+              336,
+              514,
+              375,
+              574,
+              85,
+              0
+            ],
+            "balanced_accuracy": 0.7623486428868353,
+            "sensitivity": 0.8486692015209125,
+            "specificity": 0.6760280842527583
+          },
+          "validation": {
+            "count": 560,
+            "positive_count": 317,
+            "negative_count": 243,
+            "accuracy": 0.6696428571428571,
+            "nll": 0.6324541943208953,
+            "brier": 0.43883619687544806,
+            "ece": 0.05874884517065118,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              38,
+              71,
+              97,
+              135,
+              76,
+              127,
+              16,
+              0
+            ],
+            "balanced_accuracy": 0.6582479780867443,
+            "sensitivity": 0.7444794952681388,
+            "specificity": 0.5720164609053497
+          },
+          "accuracy_gap_train_minus_validation": 0.10457859614434017,
+          "nll_gap_validation_minus_train": 0.1309584629791325
+        },
+        "final": {
+          "epoch": 24,
+          "weight_sha256": "e381c39b545b80766afb0f0eb9d78ba4f7ede478e3818c050fa53be41f9f0114",
+          "train": {
+            "count": 2312,
+            "positive_count": 1315,
+            "negative_count": 997,
+            "accuracy": 0.9364186851211073,
+            "nll": 0.22141355124928444,
+            "brier": 0.11666228244630135,
+            "ece": 0.05846076717827413,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              30,
+              77,
+              82,
+              107,
+              192,
+              305,
+              500,
+              1019
+            ],
+            "balanced_accuracy": 0.9334341427323796,
+            "sensitivity": 0.9551330798479087,
+            "specificity": 0.9117352056168505
+          },
+          "validation": {
+            "count": 560,
+            "positive_count": 317,
+            "negative_count": 243,
+            "accuracy": 0.6553571428571429,
+            "nll": 0.770890071940409,
+            "brier": 0.4864295291589966,
+            "ece": 0.17516565159062983,
+            "ece_bin_counts": [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              26,
+              32,
+              41,
+              44,
+              58,
+              71,
+              101,
+              187
+            ],
+            "balanced_accuracy": 0.6475509859666888,
+            "sensitivity": 0.7066246056782335,
+            "specificity": 0.588477366255144
+          },
+          "accuracy_gap_train_minus_validation": 0.2810615422639644,
+          "nll_gap_validation_minus_train": 0.5494765206911246
+        }
+      }
+    }
+  },
+  "environment": {
+    "python": "3.11.9",
+    "torch": "2.6.0+cu124",
+    "numpy": "2.4.6",
+    "transformers": "5.6.2",
+    "av": "18.1.0",
+    "torchaudio": "2.6.0+cu124",
+    "device": "cpu",
+    "gpu_training": false,
+    "cloud_compute_cost": 0,
+    "cpu": "Intel Core i7-12700H",
+    "host_ram_gib": 32,
+    "available_gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "available_vram_mib": 16384,
+    "model_precision": "float32",
+    "waveform_precision": "float64"
+  },
+  "verification": {
+    "ruff": "passed",
+    "cpu_tests_passed": 793,
+    "cpu_tests_skipped": 1,
+    "manifest_commands_passed": 25,
+    "ci_verified_commit": "577d5f47443842b44d0cc86a85c9ca4478feef6a",
+    "ci_checks": [
+      "success",
+      "success"
+    ]
+  }
+}

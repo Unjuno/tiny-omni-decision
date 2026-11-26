@@ -1,0 +1,41 @@
+{
+  "components": {
+    "videoprism": 114365184,
+    "dinov2": 22056576,
+    "whisper": 37760640,
+    "crossencoder": 22713601,
+    "numeric_delta": 131712,
+    "minilm": 17389824,
+    "image_readout": 884992,
+    "video_readout": 393984
+  },
+  "independent_stack_parameters": 215696513,
+  "shared_text_hypothetical_parameters": 198306689,
+  "shared_text_remaining_budget": 1693311,
+  "sources": {
+    "loaded_models": {
+      "path": "docs\\pretrained_reuse\\R1_EXISTING_CONFIG_RECONCILIATION_20261012.json",
+      "sha256": "a768bdccb9edf7af2aa28369b1ec8d5c75ad6f6f969ab24cf9b87ea346eb6127"
+    },
+    "video_encoder": {
+      "path": "docs\\pretrained_reuse\\R2_VIDEO_TOKEN_AUDIT_RESULTS_20261012.json",
+      "sha256": "f98bff41244e4d44d86426049c1137c0387316ea2a42cd6982e3762a1dccadcf"
+    },
+    "image_head": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\dinov2-spatial-bilinear-01\\result.json",
+      "sha256": "0d1014077034e75530c24accd60717227cdf14cbe0c8ea24522782060fc5d203"
+    },
+    "video_head": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\video-token-readout-01\\result.json",
+      "sha256": "ad3c97cecc10efd76d002819cf41622243f602a5b30941934e6fd2275e2ecfda"
+    },
+    "numeric_delta": {
+      "path": "C:\\CodexArtifacts\\pretrained-reuse-r2\\numeric-deterministic-control-01\\config.json",
+      "sha256": "2133891170ef237f29128cde55124f686a529ca880d338ed0f2ae724bd212657"
+    }
+  },
+  "implemented_combined_runtime": false,
+  "shared_text_quality_verified": false,
+  "numeric_condition_selected": false,
+  "final_product_gate_passed": false
+}

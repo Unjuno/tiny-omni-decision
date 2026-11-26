@@ -1,0 +1,17 @@
+{
+  "id": "native-temporal-residual-lstm-plumbing-v1",
+  "seed": 17,
+  "feature_directory": "C:/CodexArtifacts/pretrained-reuse-r2/native-conditional-candidate-smoke-02",
+  "feature_receipt_sha256": "fc2251c2f845953791a0265f059f3b5b7cd15f9e2d5f4e4bb0d3081f1c477ed8",
+  "frozen_encoder_parameters": 195365529,
+  "hidden_size": 192,
+  "layers": 1,
+  "bidirectional": false,
+  "zero_output_initialization": true,
+  "warmup_calls": 2,
+  "timed_calls": 10,
+  "diagnostic_lr": 0.1,
+  "artificial_target_updates": 2,
+  "quality_evaluation": false,
+  "task_training": false
+}

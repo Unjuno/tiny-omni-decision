@@ -1,0 +1,40 @@
+{
+  "model_id": "google/flan-t5-small",
+  "revision": "0fc9ddf78a1e988dac52e2dac162b0ede4fd74ab",
+  "license": "apache-2.0",
+  "parameters_from_config_meta": 60511616,
+  "parameters_from_checkpoint_header": 76961152,
+  "config_compatibility": "FAIL: published untied output becomes tied; use checkpoint count",
+  "meta_embeddings_tied": true,
+  "checkpoint_output_separate": true,
+  "loaded_pretrained_weights": false,
+  "quality_evaluated": false,
+  "current_video_audio_plus_text": 229086976,
+  "current_video_audio_remaining_text_budget": 47874176,
+  "static_image_audio_plus_text": 136778368,
+  "caveat": "Static DINO arithmetic omits a proven temporal model and fusion/head parameters.",
+  "files": {
+    "model.safetensors": {
+      "size": 307867048,
+      "lfs": {
+        "sha256": "495fa51e204676f1a857a9fc13c4c89f3f5ba9f480b898cebca02add25e6d749",
+        "size": 307867048,
+        "pointerSize": 134
+      }
+    },
+    "pytorch_model.bin": {
+      "size": 307905733,
+      "lfs": {
+        "sha256": "4a8c0174fa3ee6fe2ffd0f6e21992d4ca4ad1e9b12bd14155b57479e27f56292",
+        "size": 307905733,
+        "pointerSize": 134
+      }
+    }
+  },
+  "hashes": {
+    "config.json": "439aa0fecf5a5546a1def68b1fc45e538e2c94528ce805378daf091e2bf6e4de",
+    "header.json": "2791c5d542ec1f548ea0eaea461166e946ac626b751a1f228006bea6b7e5fe2d",
+    "README.md": "6cc6dc3d056aaeda9549dc685ca51600d600ab5b87c73c12e7165d8eff6b0c51"
+  },
+  "source_commit": "8b5592a5abfc8359af76d9f4802637bc0e0ae14c"
+}

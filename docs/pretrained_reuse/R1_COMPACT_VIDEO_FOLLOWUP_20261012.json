@@ -1,0 +1,34 @@
+{
+  "pytorchvideo": {
+    "commit": "f3142bb05cdb56af0704ab6f0adfb0c7bbafe4a0",
+    "sources": {
+      "readme": {
+        "url": "https://raw.githubusercontent.com/facebookresearch/pytorchvideo/f3142bb05cdb56af0704ab6f0adfb0c7bbafe4a0/README.md",
+        "sha256": "9499c5f365912d49115ae63b59b46bb8d0a548811ea96da4ac9cbc75d7d3ccc8"
+      },
+      "license": {
+        "url": "https://raw.githubusercontent.com/facebookresearch/pytorchvideo/f3142bb05cdb56af0704ab6f0adfb0c7bbafe4a0/LICENSE",
+        "sha256": "eb2e7c520ac305e46ca8345c4efa1f77669a77779fd6f53acd3a9616f2144518"
+      },
+      "model_zoo": {
+        "url": "https://raw.githubusercontent.com/facebookresearch/pytorchvideo/f3142bb05cdb56af0704ab6f0adfb0c7bbafe4a0/docs/source/model_zoo.md",
+        "sha256": "222ee046ea1f211836f485f2ee9f5c239e105f069c5ece69fa3d45017606259c"
+      }
+    },
+    "code_license": "Apache-2.0",
+    "x3d_s_reported_parameters": 3790000,
+    "actual_loaded_parameters": null,
+    "weight_license_explicitly_verified": false,
+    "policy": "REVIEW",
+    "weights_downloaded": false
+  },
+  "videomae_small": {
+    "revision": "1bf2b82c809609f5df1ea7648aee577e2e486b63",
+    "card_license": "cc-by-nc-4.0",
+    "url": "https://huggingface.co/MCG-NJU/videomae-small-finetuned-kinetics/tree/1bf2b82c809609f5df1ea7648aee577e2e486b63",
+    "policy": "DENY_COMMERCIAL_PATH",
+    "weights_downloaded": false
+  },
+  "gpu_execution": false,
+  "training": false
+}

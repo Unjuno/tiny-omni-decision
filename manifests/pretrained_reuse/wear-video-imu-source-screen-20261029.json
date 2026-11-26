@@ -1,0 +1,34 @@
+{
+  "format": "metadata_only_multimodal_source_screen_v1",
+  "dataset_id": "WEAR",
+  "status": "NOT_ADMITTED_PRODUCT",
+  "screened_at": "2026-10-29",
+  "official_source": "https://mariusbock.github.io/wear/",
+  "source_scope": "official dataset-page metadata only; no dataset payload or media fetched",
+  "reported": {
+    "participants": 22,
+    "activities": 18,
+    "locations": 11,
+    "modalities": ["egocentric_video", "inertial_sensor"],
+    "payload_sizes": {
+      "annotations": "over 1 MB",
+      "processed_features": "about 15 GB",
+      "raw_video_and_imu": "about 130 GB"
+    }
+  },
+  "license": {
+    "spdx": "CC-BY-NC-SA-4.0",
+    "commercial_use_allowed": false,
+    "share_alike_required": true
+  },
+  "limitations": [
+    "Non-commercial license is incompatible with product-directed training",
+    "Large payload exceeds current available storage",
+    "Independent participant-held-out split was not verified on the official page",
+    "Class labels do not prove both video and sensor modalities are necessary"
+  ],
+  "training_admission": "NOT_ADMITTED_PRODUCT",
+  "payload_downloaded": false,
+  "sealed_audit_accessed": false,
+  "training_started": false
+}

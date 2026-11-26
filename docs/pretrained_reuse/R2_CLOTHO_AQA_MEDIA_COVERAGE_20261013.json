@@ -1,0 +1,28 @@
+{
+  "train": {
+    "clips": 578,
+    "missing": [
+      "souffle_me_tallique.wav"
+    ],
+    "compressed_bytes": 906694543,
+    "uncompressed_bytes": 1148566436
+  },
+  "calibration": {
+    "clips": 138,
+    "missing": [],
+    "compressed_bytes": 222034215,
+    "uncompressed_bytes": 278290140
+  },
+  "validation": {
+    "clips": 140,
+    "missing": [],
+    "compressed_bytes": 220881758,
+    "uncompressed_bytes": 270910108
+  },
+  "total": {
+    "members": 855,
+    "compressed_bytes": 1349610516,
+    "uncompressed_bytes": 1697766684,
+    "index_sha256": "350695a20be8990b1d11e9aab4b418e54e69de2ceb6f50d9280b6617f43feaf9"
+  }
+}

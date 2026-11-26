@@ -1,0 +1,535 @@
+{
+  "status": "PASS_TRAIN_ONLY_SMOKE_FULL_STUDY_PENDING",
+  "artifact_directory": "C:\\CodexArtifacts\\pretrained-reuse-r2\\lombard-grid-pooled-readouts-smoke-01",
+  "source_result_sha256": "475528ed990992421d4c0448fcf12f1d48807e20ccb17942e0ff7af1060ce22a",
+  "command": "python -m scripts.train_lombard_grid_readouts --smoke",
+  "smoke_training_assets": 4,
+  "updates_per_arm": 2,
+  "independent_initialization_per_arm": true,
+  "same_initial_tensor_hash": true,
+  "same_sampler_hash": true,
+  "arms": {
+    "audio": {
+      "status": "PASS_TRAIN_ONLY_SMOKE",
+      "condition": "audio",
+      "seconds": 2.7396580999484286,
+      "started_utc": "2026-10-13T17:56:25.050664+00:00",
+      "ended_utc": "2026-10-13T17:56:27.789596+00:00",
+      "source_commit": "9a9a7493f92d5f64763d2fade14c501ff120fddd",
+      "script_sha256": "818bc282de57cb074344c1183a8d68f2975a4568bf007e84b75011a9a3657b76",
+      "head_parameters": 77235,
+      "initial_tensor_sha256": "d6c42d7cfaafe9ebb2f5a9f57951904153f7cb8e78425ac9b1e4cb78d17782bd",
+      "sampling_order_sha256": "d59667eb87ae195659da0602ba6682fa33670519d4be9bc4b1afb34f008a479f",
+      "accounting": {
+        "consumed_assets": 8,
+        "unique_assets": 4,
+        "repeated_assets": 4,
+        "consumed_slot_decisions": 48,
+        "unique_slot_decisions": 24,
+        "optimizer_updates": 2,
+        "selected_consumed_assets": null,
+        "selected_consumed_slot_decisions": null
+      },
+      "normalization_coefficients": 2304,
+      "resident_parameters_and_normalization_coefficients": 8287923,
+      "peak_allocated_bytes": 69730304,
+      "peak_reserved_bytes": 71303168,
+      "validation_evaluated": false,
+      "calibration_evaluated": false,
+      "reload_bitwise_equal": true,
+      "json_option_permutation_exact": true,
+      "final_sha256": "675ac96bc340c7dd6517de603cf6edef4aeb4b5b14cf1f10c99146439d538d03",
+      "normalizer_sha256": "239e3cd164e6a0c33205134ef483bc094ca1dfa5bf274ef795e482ecbf510f08",
+      "gpu_peak_scope": "readout on cached features; excludes encoder extraction",
+      "provenance": {
+        "protocol": {
+          "experiment_id": "lombard-grid-pooled-slot-v1",
+          "status": "FROZEN_BEFORE_ANY_READOUT_QUALITY_METRICS",
+          "source_manifest": "manifests/pretrained_reuse/lombard-grid-source-20261014.json",
+          "source_manifest_sha256": "5876e57a4c71108fe3483fde6e18f3977121942c9208567488f042247626577d",
+          "split_hashes": {
+            "train": "259f3ee36aa956618a89819338c2ecb67b194c82dbf636df70b551e00a5d78b0",
+            "calibration": "22748b0942dfb1e54dcbd1e356b5e25930da46f95f15724a5f0bfd03b546a765",
+            "validation": "98d81114e73dd4924c087df08873d21648a2ae34a9cc289887eb0767ded4658d",
+            "unresolved": "08f7e49af76c693163865ecb178f49a6b4b3084fa5eab6e56c385d90c4c89701"
+          },
+          "arms": [
+            "audio",
+            "video",
+            "joint"
+          ],
+          "seed": 17,
+          "epochs": 24,
+          "batch_size": 128,
+          "optimizer": "AdamW",
+          "learning_rate": 0.001,
+          "weight_decay": 0.001,
+          "lr_schedule": "fixed",
+          "hidden_size": 64,
+          "activation": "GELU",
+          "input_features": {
+            "audio": "mean complete physical frozen Whisper Encoder tokens(384)",
+            "video": "mean native16 chronological VideoPrism framewise spatial means(768)"
+          },
+          "input_dimensions": 1154,
+          "presence_mask_dimensions": 2,
+          "absent_stream": "zero standardized feature vector with absent mask bit",
+          "encoder_training": false,
+          "head": "Linear1154->64,GELU,Linear64->51; split into6 native slot option-logit vectors",
+          "head_parameters": 77235,
+          "options": {
+            "command": [
+              "bin",
+              "lay",
+              "place",
+              "set"
+            ],
+            "color": [
+              "blue",
+              "green",
+              "red",
+              "white"
+            ],
+            "preposition": [
+              "at",
+              "by",
+              "in",
+              "with"
+            ],
+            "letter": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g",
+              "h",
+              "i",
+              "j",
+              "k",
+              "l",
+              "m",
+              "n",
+              "o",
+              "p",
+              "q",
+              "r",
+              "s",
+              "t",
+              "u",
+              "v",
+              "x",
+              "y",
+              "z"
+            ],
+            "number": [
+              "zero",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9"
+            ],
+            "adverb": [
+              "again",
+              "now",
+              "please",
+              "soon"
+            ]
+          },
+          "loss": "mean of6 unweighted full-vocabulary slot cross-entropies; all native options preserved",
+          "normalization": "per-feature train-only mean/std; std<=1e-6 replaced with1; no heldout fitting",
+          "selector": "earliest minimum unrounded raw validation macro NLL across6 slots",
+          "checkpoint_policy": "retain best and final separately; no automatic last selection",
+          "calibration": "independent calibration split; per-slot earliest minimum NLL over17 geometric temperatures0.25..4",
+          "report": [
+            "each-slot Accuracy/NLL/Brier/ECE15/mean confidence",
+            "macro6-slot Accuracy/NLL/Brier/ECE",
+            "minimum slot Accuracy",
+            "all6-slots-correct utterance Accuracy",
+            "plain/Lombard and each validation speaker results",
+            "train/validation curves at every epoch",
+            "best/final metrics and train/validation gaps",
+            "unique assets/examples and repeated-example count, total versus selected",
+            "parameter count, normalization coefficients, wall time, VRAM, hashes/reload checks"
+          ],
+          "controls": "selected joint weights/temperature frozen; label-independent different-speaker-group bijective audio mismatch and video mismatch; missing stream with mask unset; no contrived noise/degradation",
+          "paired_uncertainty": "10000 bootstrap resamples of whole validation speaker groups, seed17, percentile95% interval; all observations per sampled group, pooled metrics recomputed; development selector/calibration caveats explicit",
+          "json": "native probabilities for all options under6 named slots; exact option permutation, no text generation; no claim of open vocabulary or legacy DecisionExample25-letter compatibility",
+          "stopping": "fixed24 epochs; safe stop for nonfinite loss/gradients, hash/integrity, frozen-feature failure or resource issues; no extra seed/epoch/policy search",
+          "outputs": "new separate per-arm directories; no weight overwrite of older artifacts",
+          "quality_scope": "native closed-vocabulary spoken-command slots; generic pooled visual representation may miss fine lip motion; pooling removes time order and cannot validate temporal reasoning; not general4-modality95\u201398% product",
+          "extra_trials": "none before fixed three-arm comparison; poor result is retained, not made easier"
+        },
+        "protocol_sha256": "047e98485298c5ff26900e20335aa49a1aa8cbf0581772482edc2dad3c19afe4",
+        "source_manifest_sha256": "5876e57a4c71108fe3483fde6e18f3977121942c9208567488f042247626577d",
+        "media_report_sha256": "3a29c73421bb695b9179e540ade00484a2ab6e744f90d1a62b078797048a054b",
+        "audio_report_sha256": "d72ae9cd299419feecc307d00dc30bd26fad9907a04ee4ffaf82d31a361c8bed",
+        "audio_features": {
+          "tokens.npy": "c8bec22068bf089b71c4e4ec31174e1a0a68d53f453bdf81228d3d27488a2763",
+          "pooled.npy": "e09aab88f31957c53c2e48f38a7e79971739efc916547cd5fd3dd6a1bca0a509"
+        },
+        "video_report_sha256": "3d1a4c45f4d191b314af4ba0950a4fd7d819ff5afa3c714ec941d37f2f5f2ae6",
+        "video_features": {
+          "framewise.npy": "10002752be86d27391d3abdfe5cac9d4567b04ec0bad3b0d6a2e2a0da426919d",
+          "pooled.npy": "886f718626add7daf6b00639db4dc0170b77337f6090efd9e72ec0013b9db064"
+        },
+        "training_only_smoke": true
+      }
+    },
+    "video": {
+      "status": "PASS_TRAIN_ONLY_SMOKE",
+      "condition": "video",
+      "seconds": 0.1304441998945549,
+      "started_utc": "2026-10-13T17:56:27.796595+00:00",
+      "ended_utc": "2026-10-13T17:56:27.927306+00:00",
+      "source_commit": "9a9a7493f92d5f64763d2fade14c501ff120fddd",
+      "script_sha256": "818bc282de57cb074344c1183a8d68f2975a4568bf007e84b75011a9a3657b76",
+      "head_parameters": 77235,
+      "initial_tensor_sha256": "d6c42d7cfaafe9ebb2f5a9f57951904153f7cb8e78425ac9b1e4cb78d17782bd",
+      "sampling_order_sha256": "d59667eb87ae195659da0602ba6682fa33670519d4be9bc4b1afb34f008a479f",
+      "accounting": {
+        "consumed_assets": 8,
+        "unique_assets": 4,
+        "repeated_assets": 4,
+        "consumed_slot_decisions": 48,
+        "unique_slot_decisions": 24,
+        "optimizer_updates": 2,
+        "selected_consumed_assets": null,
+        "selected_consumed_slot_decisions": null
+      },
+      "normalization_coefficients": 2304,
+      "resident_parameters_and_normalization_coefficients": 114444723,
+      "peak_allocated_bytes": 69730304,
+      "peak_reserved_bytes": 71303168,
+      "validation_evaluated": false,
+      "calibration_evaluated": false,
+      "reload_bitwise_equal": true,
+      "json_option_permutation_exact": true,
+      "final_sha256": "b2b2199e1a9216ac898981895f4ab632a7405eabda56a1de9e2e40f21e912b14",
+      "normalizer_sha256": "239e3cd164e6a0c33205134ef483bc094ca1dfa5bf274ef795e482ecbf510f08",
+      "gpu_peak_scope": "readout on cached features; excludes encoder extraction",
+      "provenance": {
+        "protocol": {
+          "experiment_id": "lombard-grid-pooled-slot-v1",
+          "status": "FROZEN_BEFORE_ANY_READOUT_QUALITY_METRICS",
+          "source_manifest": "manifests/pretrained_reuse/lombard-grid-source-20261014.json",
+          "source_manifest_sha256": "5876e57a4c71108fe3483fde6e18f3977121942c9208567488f042247626577d",
+          "split_hashes": {
+            "train": "259f3ee36aa956618a89819338c2ecb67b194c82dbf636df70b551e00a5d78b0",
+            "calibration": "22748b0942dfb1e54dcbd1e356b5e25930da46f95f15724a5f0bfd03b546a765",
+            "validation": "98d81114e73dd4924c087df08873d21648a2ae34a9cc289887eb0767ded4658d",
+            "unresolved": "08f7e49af76c693163865ecb178f49a6b4b3084fa5eab6e56c385d90c4c89701"
+          },
+          "arms": [
+            "audio",
+            "video",
+            "joint"
+          ],
+          "seed": 17,
+          "epochs": 24,
+          "batch_size": 128,
+          "optimizer": "AdamW",
+          "learning_rate": 0.001,
+          "weight_decay": 0.001,
+          "lr_schedule": "fixed",
+          "hidden_size": 64,
+          "activation": "GELU",
+          "input_features": {
+            "audio": "mean complete physical frozen Whisper Encoder tokens(384)",
+            "video": "mean native16 chronological VideoPrism framewise spatial means(768)"
+          },
+          "input_dimensions": 1154,
+          "presence_mask_dimensions": 2,
+          "absent_stream": "zero standardized feature vector with absent mask bit",
+          "encoder_training": false,
+          "head": "Linear1154->64,GELU,Linear64->51; split into6 native slot option-logit vectors",
+          "head_parameters": 77235,
+          "options": {
+            "command": [
+              "bin",
+              "lay",
+              "place",
+              "set"
+            ],
+            "color": [
+              "blue",
+              "green",
+              "red",
+              "white"
+            ],
+            "preposition": [
+              "at",
+              "by",
+              "in",
+              "with"
+            ],
+            "letter": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g",
+              "h",
+              "i",
+              "j",
+              "k",
+              "l",
+              "m",
+              "n",
+              "o",
+              "p",
+              "q",
+              "r",
+              "s",
+              "t",
+              "u",
+              "v",
+              "x",
+              "y",
+              "z"
+            ],
+            "number": [
+              "zero",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9"
+            ],
+            "adverb": [
+              "again",
+              "now",
+              "please",
+              "soon"
+            ]
+          },
+          "loss": "mean of6 unweighted full-vocabulary slot cross-entropies; all native options preserved",
+          "normalization": "per-feature train-only mean/std; std<=1e-6 replaced with1; no heldout fitting",
+          "selector": "earliest minimum unrounded raw validation macro NLL across6 slots",
+          "checkpoint_policy": "retain best and final separately; no automatic last selection",
+          "calibration": "independent calibration split; per-slot earliest minimum NLL over17 geometric temperatures0.25..4",
+          "report": [
+            "each-slot Accuracy/NLL/Brier/ECE15/mean confidence",
+            "macro6-slot Accuracy/NLL/Brier/ECE",
+            "minimum slot Accuracy",
+            "all6-slots-correct utterance Accuracy",
+            "plain/Lombard and each validation speaker results",
+            "train/validation curves at every epoch",
+            "best/final metrics and train/validation gaps",
+            "unique assets/examples and repeated-example count, total versus selected",
+            "parameter count, normalization coefficients, wall time, VRAM, hashes/reload checks"
+          ],
+          "controls": "selected joint weights/temperature frozen; label-independent different-speaker-group bijective audio mismatch and video mismatch; missing stream with mask unset; no contrived noise/degradation",
+          "paired_uncertainty": "10000 bootstrap resamples of whole validation speaker groups, seed17, percentile95% interval; all observations per sampled group, pooled metrics recomputed; development selector/calibration caveats explicit",
+          "json": "native probabilities for all options under6 named slots; exact option permutation, no text generation; no claim of open vocabulary or legacy DecisionExample25-letter compatibility",
+          "stopping": "fixed24 epochs; safe stop for nonfinite loss/gradients, hash/integrity, frozen-feature failure or resource issues; no extra seed/epoch/policy search",
+          "outputs": "new separate per-arm directories; no weight overwrite of older artifacts",
+          "quality_scope": "native closed-vocabulary spoken-command slots; generic pooled visual representation may miss fine lip motion; pooling removes time order and cannot validate temporal reasoning; not general4-modality95\u201398% product",
+          "extra_trials": "none before fixed three-arm comparison; poor result is retained, not made easier"
+        },
+        "protocol_sha256": "047e98485298c5ff26900e20335aa49a1aa8cbf0581772482edc2dad3c19afe4",
+        "source_manifest_sha256": "5876e57a4c71108fe3483fde6e18f3977121942c9208567488f042247626577d",
+        "media_report_sha256": "3a29c73421bb695b9179e540ade00484a2ab6e744f90d1a62b078797048a054b",
+        "audio_report_sha256": "d72ae9cd299419feecc307d00dc30bd26fad9907a04ee4ffaf82d31a361c8bed",
+        "audio_features": {
+          "tokens.npy": "c8bec22068bf089b71c4e4ec31174e1a0a68d53f453bdf81228d3d27488a2763",
+          "pooled.npy": "e09aab88f31957c53c2e48f38a7e79971739efc916547cd5fd3dd6a1bca0a509"
+        },
+        "video_report_sha256": "3d1a4c45f4d191b314af4ba0950a4fd7d819ff5afa3c714ec941d37f2f5f2ae6",
+        "video_features": {
+          "framewise.npy": "10002752be86d27391d3abdfe5cac9d4567b04ec0bad3b0d6a2e2a0da426919d",
+          "pooled.npy": "886f718626add7daf6b00639db4dc0170b77337f6090efd9e72ec0013b9db064"
+        },
+        "training_only_smoke": true
+      }
+    },
+    "joint": {
+      "status": "PASS_TRAIN_ONLY_SMOKE",
+      "condition": "joint",
+      "seconds": 0.13913839997258037,
+      "started_utc": "2026-10-13T17:56:27.935313+00:00",
+      "ended_utc": "2026-10-13T17:56:28.074585+00:00",
+      "source_commit": "9a9a7493f92d5f64763d2fade14c501ff120fddd",
+      "script_sha256": "818bc282de57cb074344c1183a8d68f2975a4568bf007e84b75011a9a3657b76",
+      "head_parameters": 77235,
+      "initial_tensor_sha256": "d6c42d7cfaafe9ebb2f5a9f57951904153f7cb8e78425ac9b1e4cb78d17782bd",
+      "sampling_order_sha256": "d59667eb87ae195659da0602ba6682fa33670519d4be9bc4b1afb34f008a479f",
+      "accounting": {
+        "consumed_assets": 8,
+        "unique_assets": 4,
+        "repeated_assets": 4,
+        "consumed_slot_decisions": 48,
+        "unique_slot_decisions": 24,
+        "optimizer_updates": 2,
+        "selected_consumed_assets": null,
+        "selected_consumed_slot_decisions": null
+      },
+      "normalization_coefficients": 2304,
+      "resident_parameters_and_normalization_coefficients": 122653107,
+      "peak_allocated_bytes": 70040064,
+      "peak_reserved_bytes": 71303168,
+      "validation_evaluated": false,
+      "calibration_evaluated": false,
+      "reload_bitwise_equal": true,
+      "json_option_permutation_exact": true,
+      "final_sha256": "386fe4b9e2d85351780e3d326a23ae9a76748dd2c52106bb289fb5cc25fcb1a1",
+      "normalizer_sha256": "239e3cd164e6a0c33205134ef483bc094ca1dfa5bf274ef795e482ecbf510f08",
+      "gpu_peak_scope": "readout on cached features; excludes encoder extraction",
+      "provenance": {
+        "protocol": {
+          "experiment_id": "lombard-grid-pooled-slot-v1",
+          "status": "FROZEN_BEFORE_ANY_READOUT_QUALITY_METRICS",
+          "source_manifest": "manifests/pretrained_reuse/lombard-grid-source-20261014.json",
+          "source_manifest_sha256": "5876e57a4c71108fe3483fde6e18f3977121942c9208567488f042247626577d",
+          "split_hashes": {
+            "train": "259f3ee36aa956618a89819338c2ecb67b194c82dbf636df70b551e00a5d78b0",
+            "calibration": "22748b0942dfb1e54dcbd1e356b5e25930da46f95f15724a5f0bfd03b546a765",
+            "validation": "98d81114e73dd4924c087df08873d21648a2ae34a9cc289887eb0767ded4658d",
+            "unresolved": "08f7e49af76c693163865ecb178f49a6b4b3084fa5eab6e56c385d90c4c89701"
+          },
+          "arms": [
+            "audio",
+            "video",
+            "joint"
+          ],
+          "seed": 17,
+          "epochs": 24,
+          "batch_size": 128,
+          "optimizer": "AdamW",
+          "learning_rate": 0.001,
+          "weight_decay": 0.001,
+          "lr_schedule": "fixed",
+          "hidden_size": 64,
+          "activation": "GELU",
+          "input_features": {
+            "audio": "mean complete physical frozen Whisper Encoder tokens(384)",
+            "video": "mean native16 chronological VideoPrism framewise spatial means(768)"
+          },
+          "input_dimensions": 1154,
+          "presence_mask_dimensions": 2,
+          "absent_stream": "zero standardized feature vector with absent mask bit",
+          "encoder_training": false,
+          "head": "Linear1154->64,GELU,Linear64->51; split into6 native slot option-logit vectors",
+          "head_parameters": 77235,
+          "options": {
+            "command": [
+              "bin",
+              "lay",
+              "place",
+              "set"
+            ],
+            "color": [
+              "blue",
+              "green",
+              "red",
+              "white"
+            ],
+            "preposition": [
+              "at",
+              "by",
+              "in",
+              "with"
+            ],
+            "letter": [
+              "a",
+              "b",
+              "c",
+              "d",
+              "e",
+              "f",
+              "g",
+              "h",
+              "i",
+              "j",
+              "k",
+              "l",
+              "m",
+              "n",
+              "o",
+              "p",
+              "q",
+              "r",
+              "s",
+              "t",
+              "u",
+              "v",
+              "x",
+              "y",
+              "z"
+            ],
+            "number": [
+              "zero",
+              "1",
+              "2",
+              "3",
+              "4",
+              "5",
+              "6",
+              "7",
+              "8",
+              "9"
+            ],
+            "adverb": [
+              "again",
+              "now",
+              "please",
+              "soon"
+            ]
+          },
+          "loss": "mean of6 unweighted full-vocabulary slot cross-entropies; all native options preserved",
+          "normalization": "per-feature train-only mean/std; std<=1e-6 replaced with1; no heldout fitting",
+          "selector": "earliest minimum unrounded raw validation macro NLL across6 slots",
+          "checkpoint_policy": "retain best and final separately; no automatic last selection",
+          "calibration": "independent calibration split; per-slot earliest minimum NLL over17 geometric temperatures0.25..4",
+          "report": [
+            "each-slot Accuracy/NLL/Brier/ECE15/mean confidence",
+            "macro6-slot Accuracy/NLL/Brier/ECE",
+            "minimum slot Accuracy",
+            "all6-slots-correct utterance Accuracy",
+            "plain/Lombard and each validation speaker results",
+            "train/validation curves at every epoch",
+            "best/final metrics and train/validation gaps",
+            "unique assets/examples and repeated-example count, total versus selected",
+            "parameter count, normalization coefficients, wall time, VRAM, hashes/reload checks"
+          ],
+          "controls": "selected joint weights/temperature frozen; label-independent different-speaker-group bijective audio mismatch and video mismatch; missing stream with mask unset; no contrived noise/degradation",
+          "paired_uncertainty": "10000 bootstrap resamples of whole validation speaker groups, seed17, percentile95% interval; all observations per sampled group, pooled metrics recomputed; development selector/calibration caveats explicit",
+          "json": "native probabilities for all options under6 named slots; exact option permutation, no text generation; no claim of open vocabulary or legacy DecisionExample25-letter compatibility",
+          "stopping": "fixed24 epochs; safe stop for nonfinite loss/gradients, hash/integrity, frozen-feature failure or resource issues; no extra seed/epoch/policy search",
+          "outputs": "new separate per-arm directories; no weight overwrite of older artifacts",
+          "quality_scope": "native closed-vocabulary spoken-command slots; generic pooled visual representation may miss fine lip motion; pooling removes time order and cannot validate temporal reasoning; not general4-modality95\u201398% product",
+          "extra_trials": "none before fixed three-arm comparison; poor result is retained, not made easier"
+        },
+        "protocol_sha256": "047e98485298c5ff26900e20335aa49a1aa8cbf0581772482edc2dad3c19afe4",
+        "source_manifest_sha256": "5876e57a4c71108fe3483fde6e18f3977121942c9208567488f042247626577d",
+        "media_report_sha256": "3a29c73421bb695b9179e540ade00484a2ab6e744f90d1a62b078797048a054b",
+        "audio_report_sha256": "d72ae9cd299419feecc307d00dc30bd26fad9907a04ee4ffaf82d31a361c8bed",
+        "audio_features": {
+          "tokens.npy": "c8bec22068bf089b71c4e4ec31174e1a0a68d53f453bdf81228d3d27488a2763",
+          "pooled.npy": "e09aab88f31957c53c2e48f38a7e79971739efc916547cd5fd3dd6a1bca0a509"
+        },
+        "video_report_sha256": "3d1a4c45f4d191b314af4ba0950a4fd7d819ff5afa3c714ec941d37f2f5f2ae6",
+        "video_features": {
+          "framewise.npy": "10002752be86d27391d3abdfe5cac9d4567b04ec0bad3b0d6a2e2a0da426919d",
+          "pooled.npy": "886f718626add7daf6b00639db4dc0170b77337f6090efd9e72ec0013b9db064"
+        },
+        "training_only_smoke": true
+      }
+    }
+  },
+  "heldout_quality_evaluated": false,
+  "full24_epoch_study_executed": false,
+  "cloud_cost": 0
+}

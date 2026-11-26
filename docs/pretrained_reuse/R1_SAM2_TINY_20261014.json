@@ -1,0 +1,1378 @@
+{
+  "status": "PASS_R1_FUNCTIONAL_ONLY",
+  "functional_only": true,
+  "product_adopted": false,
+  "decision_quality_evaluated": false,
+  "automatic_object_discovery_evaluated": false,
+  "artifact_directory": "C:\\CodexArtifacts\\pretrained-reuse-r1\\sam2.1-hiera-tiny-audit-01",
+  "admission": {
+    "model_id": "facebook/sam2.1-hiera-tiny",
+    "revision": "de431c4043854a71d8101e17995dfe596bf101a5",
+    "gated": false,
+    "license": "Apache-2.0",
+    "license_basis": "official Facebook Hub card at pinned revision and official SAM2 checkpoint license statement",
+    "rights_statement_url": "https://github.com/facebookresearch/sam2#license",
+    "library": "existing Transformers5.6.2 converted published checkpoint; not claimed native-code parity",
+    "project_model_policy": "ALLOW",
+    "unique_registered_parameters": 38962498,
+    "checkpoint_tensor_elements": 38963010,
+    "persistent_buffer_elements": 512,
+    "nonpersistent_buffer_elements": 2097152,
+    "buffer_bytes": 8390656,
+    "buffers": [
+      {
+        "name": "shared_image_embedding.positional_embedding",
+        "shape": [
+          2,
+          128
+        ],
+        "elements": 256,
+        "dtype": "torch.float32",
+        "bytes": 1024,
+        "persistent": true
+      },
+      {
+        "name": "prompt_encoder.shared_embedding.positional_embedding",
+        "shape": [
+          2,
+          128
+        ],
+        "elements": 256,
+        "dtype": "torch.float32",
+        "bytes": 1024,
+        "persistent": true
+      },
+      {
+        "name": "memory_attention.rotary_emb.rope_embeddings_cos",
+        "shape": [
+          4096,
+          256
+        ],
+        "elements": 1048576,
+        "dtype": "torch.float32",
+        "bytes": 4194304,
+        "persistent": false
+      },
+      {
+        "name": "memory_attention.rotary_emb.rope_embeddings_sin",
+        "shape": [
+          4096,
+          256
+        ],
+        "elements": 1048576,
+        "dtype": "torch.float32",
+        "bytes": 4194304,
+        "persistent": false
+      }
+    ],
+    "files": {
+      "config.json": {
+        "bytes": 5695,
+        "sha256": "860aff9751b139d83a4ad7df1e5535416fded533e0ead02625edbefcb9953cce"
+      },
+      "model.safetensors": {
+        "bytes": 155908064,
+        "sha256": "48c14467e5cf9e51870511feb72c89688e82dd74523142c0538b663e193ac2a7"
+      },
+      "preprocessor_config.json": {
+        "bytes": 683,
+        "sha256": "6ebf229ee259368ce4a8d4f2fe893a72b053023710853e257253939e601f583d"
+      },
+      "processor_config.json": {
+        "bytes": 95,
+        "sha256": "f8a68e865cfad115c1c2763f3d93eca7b1c622da06da2a9273eb437fb2389b6d"
+      },
+      "README.md": {
+        "bytes": 19965,
+        "sha256": "dfa401b1b9358b9650ae487dd2f2bb336fd745c3609e3244adf2e97a22343857"
+      },
+      "video_preprocessor_config.json": {
+        "bytes": 705,
+        "sha256": "9fccfe5f464ec38c2f236d0e6a68e95511c80c22132fc2fa4b9f7b65f24fad95"
+      }
+    },
+    "installed_source_sha256": {
+      "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2_video\\modeling_sam2_video.py": "7dee3aa3e106a7b00c1f08444be62595e7032b2d67c883c96d1adb42dbcfc748",
+      "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2_video\\processing_sam2_video.py": "f3b430f31dce2fd96100a033f39ab84616e2a55b997d2073290a240e9649cd74",
+      "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2_video\\video_processing_sam2_video.py": "4d9b7861dd78f62241036c171fc22a9311c4013459240a26e5b13653163ed0c4",
+      "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2\\modeling_sam2.py": "63ad3562e92b0a1a220954e9d631ec0788370c9dfbf84d9ff6d323e6e9a872f4",
+      "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2\\processing_sam2.py": "dc1e77fb37162187ba5f5f56643c71dbe1d0b89c441c9497766cd46635f7e61b",
+      "C:\\Users\\junny\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\transformers\\models\\sam2\\image_processing_sam2.py": "765a73f0d8b5fcce9ffe3a6c623534b8ab6df5d7bf15cc50a4d468592e4cce69"
+    },
+    "published_weight_sha256": "48c14467e5cf9e51870511feb72c89688e82dd74523142c0538b663e193ac2a7",
+    "inspect_script_sha256": "02796e6ac27d27bcde9cb885298f0d40fd22d194f06ac02ce3d8fc5c4e8b436f",
+    "inference_or_training": false
+  },
+  "runtime": {
+    "status": "PASS_R1_FUNCTIONAL_ONLY",
+    "pid": 59788,
+    "started_utc": "2026-10-13T21:15:46.814770+00:00",
+    "model_id": "facebook/sam2.1-hiera-tiny",
+    "revision": "de431c4043854a71d8101e17995dfe596bf101a5",
+    "training": false,
+    "validation_evaluated": false,
+    "decision_quality_evaluated": false,
+    "cloud_cost": 0,
+    "source_commit": "4b14ea0cc9085deb6ee979b847eab1471499f7aa",
+    "python": "3.11.9",
+    "torch": "2.6.0+cu124",
+    "cuda": "12.4",
+    "transformers": "5.6.2",
+    "numpy": "2.4.6",
+    "av": "18.1.0",
+    "dtype": "float32",
+    "attention": "sdpa",
+    "compilation": false,
+    "input_prompt": "fixed geometric center point; no annotation input, not semantic automatic discovery",
+    "point_count": 1,
+    "object_count": 1,
+    "real_source_ids": [
+      "s16_l_bgah2n",
+      "s16_p_bgah2n",
+      "s22_l_sgbe5s",
+      "s22_p_sgbe5s"
+    ],
+    "real_video_frames": 16,
+    "artifacts": {
+      "s16_l_bgah2n-endpoints.npz": "04e8eead7be0b1ae6d9f85ca8fbc1e6917d99dc22c55a3525c1e1e25b0cd8448",
+      "s16_p_bgah2n-endpoints.npz": "1c80b1ef30645108831f5ec1cf3ff2dea869a778e2eb96a21b7e701e4ac0421c",
+      "s22_l_sgbe5s-endpoints.npz": "725a6145d09ea23576de58fb971a6fd955e6b89dbe6ec154b226934a7f5b72f4",
+      "s22_p_sgbe5s-endpoints.npz": "0b7a4376d79aa843363aadfb6837b3666e0367e7b7283a72dbe5babbf532fea0",
+      "synthetic-masks.npz": "15ab1c275ba559bcebb5dd9814e60707fb956fac968e006aba9396fc9835b297"
+    },
+    "rows": [
+      {
+        "source_id": "s16_l_bgah2n",
+        "split": "train",
+        "input_sha256": "5f33283c865b2b6769f179fc0bb9c8ec42506661891b0e1ecd6dedd0ba575317",
+        "selected_indices": [
+          0,
+          4,
+          8,
+          12,
+          16,
+          20,
+          24,
+          28,
+          33,
+          37,
+          41,
+          45,
+          49,
+          53,
+          57,
+          61
+        ],
+        "frames": [
+          {
+            "frame_idx": 0,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                22.0914306640625
+              ]
+            ],
+            "positive_fraction": 0.41400146484375
+          },
+          {
+            "frame_idx": 1,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                9.283122062683105
+              ]
+            ],
+            "positive_fraction": 0.414947509765625
+          },
+          {
+            "frame_idx": 2,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                9.371917724609375
+              ]
+            ],
+            "positive_fraction": 0.4147796630859375
+          },
+          {
+            "frame_idx": 3,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                9.232169151306152
+              ]
+            ],
+            "positive_fraction": 0.411041259765625
+          },
+          {
+            "frame_idx": 4,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                9.283051490783691
+              ]
+            ],
+            "positive_fraction": 0.4138031005859375
+          },
+          {
+            "frame_idx": 5,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                9.815271377563477
+              ]
+            ],
+            "positive_fraction": 0.41607666015625
+          },
+          {
+            "frame_idx": 6,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                9.29252815246582
+              ]
+            ],
+            "positive_fraction": 0.4160003662109375
+          },
+          {
+            "frame_idx": 7,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                9.335256576538086
+              ]
+            ],
+            "positive_fraction": 0.41680908203125
+          },
+          {
+            "frame_idx": 8,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                9.283018112182617
+              ]
+            ],
+            "positive_fraction": 0.415283203125
+          },
+          {
+            "frame_idx": 9,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                9.249533653259277
+              ]
+            ],
+            "positive_fraction": 0.4133758544921875
+          },
+          {
+            "frame_idx": 10,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                9.234416961669922
+              ]
+            ],
+            "positive_fraction": 0.4132843017578125
+          },
+          {
+            "frame_idx": 11,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                9.222909927368164
+              ]
+            ],
+            "positive_fraction": 0.4116973876953125
+          },
+          {
+            "frame_idx": 12,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                9.322622299194336
+              ]
+            ],
+            "positive_fraction": 0.41241455078125
+          },
+          {
+            "frame_idx": 13,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                9.330609321594238
+              ]
+            ],
+            "positive_fraction": 0.4105987548828125
+          },
+          {
+            "frame_idx": 14,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                9.325477600097656
+              ]
+            ],
+            "positive_fraction": 0.4113311767578125
+          },
+          {
+            "frame_idx": 15,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                9.658880233764648
+              ]
+            ],
+            "positive_fraction": 0.4134521484375
+          }
+        ],
+        "seconds": 3.863483600085601,
+        "input_geometry": [
+          16,
+          480,
+          720,
+          3
+        ],
+        "processor_resolution": {
+          "height": 1024,
+          "width": 1024,
+          "longest_edge": null,
+          "shortest_edge": null,
+          "max_height": null,
+          "max_width": null
+        }
+      },
+      {
+        "source_id": "s16_p_bgah2n",
+        "split": "train",
+        "input_sha256": "32cee400742d84948838b5eede83ddde55c6ad80698ee6a5643f87e7aacc0941",
+        "selected_indices": [
+          0,
+          4,
+          8,
+          12,
+          15,
+          19,
+          23,
+          27,
+          31,
+          35,
+          39,
+          43,
+          46,
+          50,
+          54,
+          58
+        ],
+        "frames": [
+          {
+            "frame_idx": 0,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                22.489337921142578
+              ]
+            ],
+            "positive_fraction": 0.417694091796875
+          },
+          {
+            "frame_idx": 1,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                8.01087760925293
+              ]
+            ],
+            "positive_fraction": 0.417144775390625
+          },
+          {
+            "frame_idx": 2,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                8.073530197143555
+              ]
+            ],
+            "positive_fraction": 0.416717529296875
+          },
+          {
+            "frame_idx": 3,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.939746856689453
+              ]
+            ],
+            "positive_fraction": 0.413482666015625
+          },
+          {
+            "frame_idx": 4,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.984934329986572
+              ]
+            ],
+            "positive_fraction": 0.416656494140625
+          },
+          {
+            "frame_idx": 5,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.958518028259277
+              ]
+            ],
+            "positive_fraction": 0.416168212890625
+          },
+          {
+            "frame_idx": 6,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.854509353637695
+              ]
+            ],
+            "positive_fraction": 0.419830322265625
+          },
+          {
+            "frame_idx": 7,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.929275989532471
+              ]
+            ],
+            "positive_fraction": 0.418701171875
+          },
+          {
+            "frame_idx": 8,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.697742938995361
+              ]
+            ],
+            "positive_fraction": 0.417236328125
+          },
+          {
+            "frame_idx": 9,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.671734809875488
+              ]
+            ],
+            "positive_fraction": 0.4163360595703125
+          },
+          {
+            "frame_idx": 10,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.713404655456543
+              ]
+            ],
+            "positive_fraction": 0.414642333984375
+          },
+          {
+            "frame_idx": 11,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.730631351470947
+              ]
+            ],
+            "positive_fraction": 0.415740966796875
+          },
+          {
+            "frame_idx": 12,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.791772365570068
+              ]
+            ],
+            "positive_fraction": 0.4154205322265625
+          },
+          {
+            "frame_idx": 13,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.653485298156738
+              ]
+            ],
+            "positive_fraction": 0.4125823974609375
+          },
+          {
+            "frame_idx": 14,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.679063320159912
+              ]
+            ],
+            "positive_fraction": 0.413787841796875
+          },
+          {
+            "frame_idx": 15,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.577549457550049
+              ]
+            ],
+            "positive_fraction": 0.4140625
+          }
+        ],
+        "seconds": 3.8352935999864712,
+        "input_geometry": [
+          16,
+          480,
+          720,
+          3
+        ],
+        "processor_resolution": {
+          "height": 1024,
+          "width": 1024,
+          "longest_edge": null,
+          "shortest_edge": null,
+          "max_height": null,
+          "max_width": null
+        }
+      },
+      {
+        "source_id": "s22_l_sgbe5s",
+        "split": "train",
+        "input_sha256": "71ffbbb539f9a1a72c34f0e49b1f9039e0a113b5affb0bc4772b5a4e073a379a",
+        "selected_indices": [
+          0,
+          4,
+          9,
+          13,
+          17,
+          21,
+          26,
+          30,
+          34,
+          38,
+          43,
+          47,
+          51,
+          55,
+          60,
+          64
+        ],
+        "frames": [
+          {
+            "frame_idx": 0,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                21.25255012512207
+              ]
+            ],
+            "positive_fraction": 0.61907958984375
+          },
+          {
+            "frame_idx": 1,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.488223552703857
+              ]
+            ],
+            "positive_fraction": 0.6378326416015625
+          },
+          {
+            "frame_idx": 2,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                6.579901218414307
+              ]
+            ],
+            "positive_fraction": 0.636932373046875
+          },
+          {
+            "frame_idx": 3,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                6.40726900100708
+              ]
+            ],
+            "positive_fraction": 0.6375885009765625
+          },
+          {
+            "frame_idx": 4,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                6.441207408905029
+              ]
+            ],
+            "positive_fraction": 0.6362457275390625
+          },
+          {
+            "frame_idx": 5,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                6.433700084686279
+              ]
+            ],
+            "positive_fraction": 0.6360321044921875
+          },
+          {
+            "frame_idx": 6,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                6.644528865814209
+              ]
+            ],
+            "positive_fraction": 0.63665771484375
+          },
+          {
+            "frame_idx": 7,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                6.764340877532959
+              ]
+            ],
+            "positive_fraction": 0.6401214599609375
+          },
+          {
+            "frame_idx": 8,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                6.801562786102295
+              ]
+            ],
+            "positive_fraction": 0.6399993896484375
+          },
+          {
+            "frame_idx": 9,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                6.830315113067627
+              ]
+            ],
+            "positive_fraction": 0.6395416259765625
+          },
+          {
+            "frame_idx": 10,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                6.775506019592285
+              ]
+            ],
+            "positive_fraction": 0.6389617919921875
+          },
+          {
+            "frame_idx": 11,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                6.8138861656188965
+              ]
+            ],
+            "positive_fraction": 0.6386566162109375
+          },
+          {
+            "frame_idx": 12,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                6.831161975860596
+              ]
+            ],
+            "positive_fraction": 0.6363372802734375
+          },
+          {
+            "frame_idx": 13,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                6.8464765548706055
+              ]
+            ],
+            "positive_fraction": 0.6349029541015625
+          },
+          {
+            "frame_idx": 14,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                6.872702598571777
+              ]
+            ],
+            "positive_fraction": 0.6356964111328125
+          },
+          {
+            "frame_idx": 15,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                6.852978229522705
+              ]
+            ],
+            "positive_fraction": 0.636871337890625
+          }
+        ],
+        "seconds": 3.852145400014706,
+        "input_geometry": [
+          16,
+          480,
+          720,
+          3
+        ],
+        "processor_resolution": {
+          "height": 1024,
+          "width": 1024,
+          "longest_edge": null,
+          "shortest_edge": null,
+          "max_height": null,
+          "max_width": null
+        }
+      },
+      {
+        "source_id": "s22_p_sgbe5s",
+        "split": "train",
+        "input_sha256": "0ce9649d60bb2214155c47a9b74af527cd614f457340b72a3747497ffe77cba9",
+        "selected_indices": [
+          0,
+          4,
+          8,
+          12,
+          15,
+          19,
+          23,
+          27,
+          31,
+          35,
+          39,
+          43,
+          46,
+          50,
+          54,
+          58
+        ],
+        "frames": [
+          {
+            "frame_idx": 0,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                21.754714965820312
+              ]
+            ],
+            "positive_fraction": 0.6319427490234375
+          },
+          {
+            "frame_idx": 1,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.778017997741699
+              ]
+            ],
+            "positive_fraction": 0.6483001708984375
+          },
+          {
+            "frame_idx": 2,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.4589972496032715
+              ]
+            ],
+            "positive_fraction": 0.647216796875
+          },
+          {
+            "frame_idx": 3,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.252562999725342
+              ]
+            ],
+            "positive_fraction": 0.647705078125
+          },
+          {
+            "frame_idx": 4,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.048077583312988
+              ]
+            ],
+            "positive_fraction": 0.647796630859375
+          },
+          {
+            "frame_idx": 5,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.155069828033447
+              ]
+            ],
+            "positive_fraction": 0.6474151611328125
+          },
+          {
+            "frame_idx": 6,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.071308612823486
+              ]
+            ],
+            "positive_fraction": 0.64886474609375
+          },
+          {
+            "frame_idx": 7,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.276151657104492
+              ]
+            ],
+            "positive_fraction": 0.648773193359375
+          },
+          {
+            "frame_idx": 8,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.25210428237915
+              ]
+            ],
+            "positive_fraction": 0.64776611328125
+          },
+          {
+            "frame_idx": 9,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.223729133605957
+              ]
+            ],
+            "positive_fraction": 0.6482391357421875
+          },
+          {
+            "frame_idx": 10,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.235286235809326
+              ]
+            ],
+            "positive_fraction": 0.6475677490234375
+          },
+          {
+            "frame_idx": 11,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.228424549102783
+              ]
+            ],
+            "positive_fraction": 0.648101806640625
+          },
+          {
+            "frame_idx": 12,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.2583231925964355
+              ]
+            ],
+            "positive_fraction": 0.64678955078125
+          },
+          {
+            "frame_idx": 13,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.082313060760498
+              ]
+            ],
+            "positive_fraction": 0.6461181640625
+          },
+          {
+            "frame_idx": 14,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.100259304046631
+              ]
+            ],
+            "positive_fraction": 0.64727783203125
+          },
+          {
+            "frame_idx": 15,
+            "shape": [
+              1,
+              1,
+              256,
+              256
+            ],
+            "score": [
+              [
+                7.136824131011963
+              ]
+            ],
+            "positive_fraction": 0.6470489501953125
+          }
+        ],
+        "seconds": 3.856992800021544,
+        "input_geometry": [
+          16,
+          480,
+          720,
+          3
+        ],
+        "processor_resolution": {
+          "height": 1024,
+          "width": 1024,
+          "longest_edge": null,
+          "shortest_edge": null,
+          "max_height": null,
+          "max_width": null
+        }
+      }
+    ],
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "model_files": {
+      "config.json": "860aff9751b139d83a4ad7df1e5535416fded533e0ead02625edbefcb9953cce",
+      "model.safetensors": "48c14467e5cf9e51870511feb72c89688e82dd74523142c0538b663e193ac2a7",
+      "preprocessor_config.json": "6ebf229ee259368ce4a8d4f2fe893a72b053023710853e257253939e601f583d",
+      "processor_config.json": "f8a68e865cfad115c1c2763f3d93eca7b1c622da06da2a9273eb437fb2389b6d",
+      "README.md": "dfa401b1b9358b9650ae487dd2f2bb336fd745c3609e3244adf2e97a22343857",
+      "video_preprocessor_config.json": "9fccfe5f464ec38c2f236d0e6a68e95511c80c22132fc2fa4b9f7b65f24fad95"
+    },
+    "released_tensor_elements": 38963010,
+    "loading_info": {
+      "missing_keys": [],
+      "unexpected_keys": [],
+      "mismatched_keys": [],
+      "error_msgs": []
+    },
+    "unique_registered_parameters": 38962498,
+    "unique_registered_buffers": 2097664,
+    "parameter_groups": {
+      "mask_decoder": 4215109,
+      "mask_downsample": 17,
+      "memory_attention": 5922304,
+      "memory_encoder": 1384608,
+      "memory_temporal_positional_encoding": 448,
+      "no_memory_embedding": 256,
+      "no_memory_positional_encoding": 256,
+      "no_object_pointer": 256,
+      "object_pointer_proj": 197376,
+      "occlusion_spatial_embedding_parameter": 64,
+      "prompt_encoder": 6220,
+      "temporal_positional_encoding_projection_layer": 16448,
+      "vision_encoder": 27219136
+    },
+    "model_state_sha256_before": "658e3aaff3d08b6cc8337a1f125e5ee55451ed3bfec38f9def601a14bb6912d8",
+    "synthetic": {
+      "frames": [
+        {
+          "frame_idx": 0,
+          "shape": [
+            1,
+            1,
+            256,
+            256
+          ],
+          "score": [
+            [
+              24.201745986938477
+            ]
+          ],
+          "positive_fraction": 0.2453460693359375
+        },
+        {
+          "frame_idx": 1,
+          "shape": [
+            1,
+            1,
+            256,
+            256
+          ],
+          "score": [
+            [
+              9.03302001953125
+            ]
+          ],
+          "positive_fraction": 0.247039794921875
+        }
+      ],
+      "seconds": 0.6029518001014367,
+      "repeat_seconds": 0.26488479995168746,
+      "repeat_bitwise": true
+    },
+    "seconds": 21.347079800092615,
+    "native_frame_plan_sha256": "3cbf602dcb9e659f65e4c1562724072c80f6d94f0093d2e543ab61cd2e8d7f07",
+    "model_state_sha256_after": "658e3aaff3d08b6cc8337a1f125e5ee55451ed3bfec38f9def601a14bb6912d8",
+    "parameters_unchanged": true,
+    "synthetic_reload_bitwise": true,
+    "reload_seconds": 0.26882120000664145,
+    "peak_allocated_bytes": 695322624,
+    "peak_reserved_bytes": 1065353216,
+    "automatic_discovery_tested": false,
+    "semantic_tracking_accuracy_measured": false,
+    "ended_utc": "2026-10-13T21:16:08.154483+00:00",
+    "runner_sha256": "96f9f3d3d5696111b13151e4db52924e0c4817bcc1c15dab2778057227f11fb2"
+  },
+  "failed_inference_attempts": [
+    {
+      "status": "FAIL_R1_INCOMPLETE",
+      "exit_code": 1,
+      "failure": "TypeError: Object of type set is not JSON serializable in progress/final report writer",
+      "completed_before_failure": "strict load and synthetic2frame repeat reached progress publication; real clips and reload not executed",
+      "runtime_statistics": "UNKNOWN: original JSON writer failed",
+      "runner_sha256": "73c3304dbab55ccc5c85ec5f408feb1f0af2bd755ad966fc612000e443f46545",
+      "synthetic_masks_sha256": "15ab1c275ba559bcebb5dd9814e60707fb956fac968e006aba9396fc9835b297",
+      "original_outputs_preserved": true
+    },
+    {
+      "status": "FAIL_R1_INCOMPLETE",
+      "exit_code": 1,
+      "failure": "TypeError: Object of type SizeDict is not JSON serializable after first real clip",
+      "completed_before_failure": "strict load; synthetic2frame repeat; first real16frame clip endpoints saved; full4clips/reload not executed",
+      "original_outputs_preserved": true,
+      "runner_sha256": "c8fdca70435c9b6040d0a37b22ab98e707a987751bb919f6524cb689b89d0be6",
+      "prior_progress_sha256": "b6c0cfcb627ae6b6df0204879c9d28d05ec4f237058924c74eaedf3dacb50cd7"
+    }
+  ],
+  "metadata_reader_preflight_failure": "cp932 decoding of UTF-8 Hub README; failed source preserved as inspect_metadata_failed_cp932.py, corrected before metadata model construction",
+  "failed_preparation_command": "PowerShell quoting parse error; no process or artifact mutation; replaced by explicit external preparation file",
+  "saved_mask_hash_shape_finite_fraction_reload_verified": true,
+  "source_record_sha256": {
+    "admission": "557b0cd53cf828f2f117f7bfecdbf4b540fc771e9eed0b6ba27e02449e81b398",
+    "runtime": "2753ad4edaf48522645c4438321a9ec6328f1169c1cf4406aa55726b79aef087"
+  },
+  "record_script_sha256": "5b813bf989a79e1e06c531ca1aec6bac30d0c603dc358f4aa4d8c526e6729be4"
+}

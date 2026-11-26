@@ -1,0 +1,988 @@
+"""Train and evaluate one tiny readout on frozen Perception Test AV features."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import math
+import platform
+import random
+import time
+from datetime import UTC, datetime
+from pathlib import Path
+
+import numpy as np
+import torch
+from torch import nn
+
+from tiny_omni_decision.perception_source_candidate_readout import (
+    build_feature_examples,
+    pool_audio_features,
+    pool_video_candidate_features,
+)
+
+SEED = 17
+EPOCHS = 80
+BATCH_SIZE = 32
+HIDDEN_SIZE = 128
+LEARNING_RATE = 1e-3
+WEIGHT_DECAY = 1e-4
+MIN_DELTA = 1e-4
+VIDEOPRISM_CHECKPOINT_SHA256 = "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29"
+VIDEOPRISM_SOURCE_COMMIT = "c6eba0ece3dd49a24ffc44582966997a4a59f1d8"
+EFFICIENTAT_WEIGHTS_SHA256 = "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e"
+EFFICIENTAT_SOURCE_COMMIT = "a425fdce92572e602a1d5634799bd9f1f2efa806"
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(8 << 20), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def read_jsonl(path: Path) -> list[dict]:
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+
+
+def input_artifact_hashes(args):
+    repository = Path(__file__).resolve().parents[1]
+    return {
+        "feature_plan": sha256_file(args.plan),
+        "train_labels": sha256_file(args.train_labels),
+        "development_labels": sha256_file(args.development_labels),
+        "train_video_features": sha256_file(
+            args.train_video_features / "candidate_frame_roi_features.npy"
+        ),
+        "train_video_feature_index": sha256_file(
+            args.train_video_features / "feature_index.jsonl"
+        ),
+        "train_video_feature_run": sha256_file(args.train_video_features / "run.json"),
+        "train_video_feature_result": sha256_file(args.train_video_features / "result.json"),
+        "train_audio_features": sha256_file(
+            args.train_audio_features / "audio_window_features.npy"
+        ),
+        "train_audio_window_index": sha256_file(
+            args.train_audio_features / "unique_window_index.jsonl"
+        ),
+        "train_audio_record_references": sha256_file(
+            args.train_audio_features / "record_window_references.jsonl"
+        ),
+        "train_audio_feature_result": sha256_file(args.train_audio_features / "result.json"),
+        "train_audio_feature_run": sha256_file(args.train_audio_features / "run.json"),
+        "development_video_features": sha256_file(
+            args.development_video_features / "candidate_frame_roi_features.npy"
+        ),
+        "development_video_feature_index": sha256_file(
+            args.development_video_features / "feature_index.jsonl"
+        ),
+        "development_video_feature_result": sha256_file(
+            args.development_video_features / "result.json"
+        ),
+        "development_video_feature_run": sha256_file(
+            args.development_video_features / "run.json"
+        ),
+        "development_audio_features": sha256_file(
+            args.development_audio_features / "audio_window_features.npy"
+        ),
+        "development_audio_window_index": sha256_file(
+            args.development_audio_features / "unique_window_index.jsonl"
+        ),
+        "development_audio_record_references": sha256_file(
+            args.development_audio_features / "record_window_references.jsonl"
+        ),
+        "development_audio_feature_result": sha256_file(
+            args.development_audio_features / "result.json"
+        ),
+        "development_audio_feature_run": sha256_file(
+            args.development_audio_features / "run.json"
+        ),
+        "video_feature_extractor": sha256_file(
+            repository / "scripts" / "extract_perception_source_candidate_video_features.py"
+        ),
+        "audio_feature_extractor": sha256_file(
+            repository / "scripts" / "extract_perception_source_candidate_audio_features.py"
+        ),
+        "feature_readout_helpers": sha256_file(
+            repository / "src" / "tiny_omni_decision" / "perception_source_candidate_readout.py"
+        ),
+        "video_preprocessing_helpers": sha256_file(
+            repository / "src" / "tiny_omni_decision" / "perception_video_preprocessing.py"
+        ),
+        "audio_window_helpers": sha256_file(
+            repository / "src" / "tiny_omni_decision" / "perception_source_candidate_audio.py"
+        ),
+        "runner": sha256_file(Path(__file__).resolve()),
+    }
+
+
+def atomic_json(path: Path, value: object) -> None:
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    temporary.replace(path)
+
+
+def load_examples(plan_path: Path, corpus_split_path: Path, video_root: Path, audio_root: Path):
+    plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    split_name = "train" if corpus_split_path.name == "train.jsonl" else "development"
+    plan_rows = plan[split_name]["records"]
+    labels = read_jsonl(corpus_split_path)
+    labels_by_id = {row["record_id"]: row for row in labels}
+    if len(labels_by_id) != len(labels):
+        raise ValueError(f"duplicate split label IDs in {corpus_split_path}")
+    if any(row.get("status") != "candidate" or "supervision" not in row for row in labels):
+        raise ValueError("fixed split contains a non-candidate or unlabeled row")
+    video_index = read_jsonl(video_root / "feature_index.jsonl")
+    video_values = np.load(video_root / "candidate_frame_roi_features.npy", mmap_mode="r")
+    audio_index = read_jsonl(audio_root / "record_window_references.jsonl")
+    audio_values = np.load(audio_root / "audio_window_features.npy", mmap_mode="r")
+    video_result = json.loads((video_root / "run.json").read_text(encoding="utf-8"))
+    audio_result = json.loads((audio_root / "run.json").read_text(encoding="utf-8"))
+    video_features_path = video_root / "candidate_frame_roi_features.npy"
+    audio_features_path = audio_root / "audio_window_features.npy"
+    if (
+        video_result.get("status") != "PASS_SOURCE_CANDIDATE_VIDEO_FEATURES"
+        or not video_result.get("complete_split")
+        or video_result.get("split") != split_name
+        or video_result.get("plan_sha256") != sha256_file(plan_path)
+        or video_result.get("acquisition_manifest_sha256")
+        != plan.get("acquisition_manifest_sha256")
+        or video_result.get("media_report_sha256")
+        != plan.get(f"{split_name}_media_report_sha256")
+        or video_result.get("record_count") != len(plan_rows)
+        or video_result.get("feature_sha256") != sha256_file(video_features_path)
+        or video_result.get("feature_shape") != list(video_values.shape)
+        or video_result.get("checkpoint_sha256") != VIDEOPRISM_CHECKPOINT_SHA256
+        or video_result.get("source_commit") != VIDEOPRISM_SOURCE_COMMIT
+        or video_result.get("model_parameters") != 114_365_184
+        or video_result.get("feature_index_sha256")
+        != sha256_file(video_root / "feature_index.jsonl")
+        or video_result.get("labels_loaded")
+        or video_result.get("metrics_computed")
+        or video_result.get("gpu_used")
+    ):
+        raise ValueError(f"VideoPrism feature result failed provenance checks: {video_root}")
+    if (
+        audio_result.get("status") != "PASS_SOURCE_CANDIDATE_AUDIO_FEATURES"
+        or audio_result.get("split") != split_name
+        or audio_result.get("plan_sha256") != sha256_file(plan_path)
+        or audio_result.get("acquisition_manifest_sha256")
+        != plan.get("acquisition_manifest_sha256")
+        or audio_result.get("media_report_sha256")
+        != plan.get(f"{split_name}_media_report_sha256")
+        or audio_result.get("records") != len(plan_rows)
+        or audio_result.get("feature_sha256") != sha256_file(audio_features_path)
+        or audio_result.get("feature_shape") != list(audio_values.shape)
+        or audio_result.get("weights_sha256") != EFFICIENTAT_WEIGHTS_SHA256
+        or audio_result.get("source_commit") != EFFICIENTAT_SOURCE_COMMIT
+        or audio_result.get("model_parameters") != 1_961_239
+        or audio_result.get("unique_index_sha256")
+        != sha256_file(audio_root / "unique_window_index.jsonl")
+        or audio_result.get("reference_index_sha256")
+        != sha256_file(audio_root / "record_window_references.jsonl")
+        or audio_result.get("model_state_sha256_before")
+        != audio_result.get("model_state_sha256_after")
+        or audio_result.get("labels_loaded")
+        or audio_result.get("metrics_computed")
+        or not audio_result.get("gpu_gate", {}).get("TINY_OMNI_GPU_GATE_RESERVED_MIB")
+    ):
+        raise ValueError(f"EfficientAT feature result failed provenance checks: {audio_root}")
+    if len(video_index) != len(video_values) or len(audio_index) != audio_result.get(
+        "audio_references"
+    ):
+        raise ValueError("feature arrays and their index files differ in length")
+    if len(read_jsonl(audio_root / "unique_window_index.jsonl")) != len(audio_values):
+        raise ValueError("audio feature array and unique-window index differ in length")
+    visual = pool_video_candidate_features(plan_rows, video_index, video_values)
+    source_audio = pool_audio_features(audio_index, audio_values, variant="source")
+    offset_audio = pool_audio_features(audio_index, audio_values, variant="offset")
+    examples = build_feature_examples(
+        plan_rows, labels_by_id, visual, source_audio, offset_audio
+    )
+    video_ids = {example.video_id for example in examples}
+    if len(video_ids) != plan[split_name]["video_group_count"]:
+        raise ValueError("feature examples do not cover the frozen video groups")
+    return examples, plan
+
+
+class CrossModalCandidateScorer(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.video_projection = nn.Linear(1536, HIDDEN_SIZE)
+        self.audio_projection = nn.Linear(384, HIDDEN_SIZE)
+        self.scorer = nn.Sequential(
+            nn.Linear(HIDDEN_SIZE * 4, HIDDEN_SIZE),
+            nn.GELU(),
+            nn.Linear(HIDDEN_SIZE, 1),
+        )
+
+    def forward(self, video, audio):
+        video_hidden = torch.tanh(self.video_projection(video))
+        audio_hidden = torch.tanh(self.audio_projection(audio))
+        fused = torch.cat(
+            (
+                video_hidden,
+                audio_hidden,
+                video_hidden * audio_hidden,
+                torch.abs(video_hidden - audio_hidden),
+            ),
+            dim=-1,
+        )
+        return self.scorer(fused).squeeze(-1)
+
+
+def collate_examples(examples, indices, *, audio_variant="source", donor_audio=None):
+    batch = [examples[index] for index in indices]
+    max_candidates = max(len(row.candidate_ids) for row in batch)
+    visual_dim = batch[0].visual_mean_delta.shape[-1]
+    audio_dim = batch[0].audio.shape[-1]
+    video = np.zeros((len(batch), max_candidates, visual_dim), dtype=np.float32)
+    targets = np.zeros((len(batch), max_candidates + 1), dtype=np.bool_)
+    candidate_mask = np.zeros((len(batch), max_candidates), dtype=np.bool_)
+    audio = np.zeros((len(batch), audio_dim), dtype=np.float32)
+    for row_index, example in enumerate(batch):
+        candidate_count = len(example.candidate_ids)
+        video[row_index, :candidate_count] = example.visual_mean_delta
+        candidate_mask[row_index, :candidate_count] = True
+        if example.none_visible:
+            targets[row_index, max_candidates] = True
+        else:
+            positions = {candidate_id: i for i, candidate_id in enumerate(example.candidate_ids)}
+            for candidate_id in example.target_candidate_ids:
+                targets[row_index, positions[candidate_id]] = True
+        if audio_variant == "source":
+            audio[row_index] = example.audio
+        elif audio_variant == "offset":
+            if example.offset_audio is None:
+                raise ValueError(f"offset audio missing for fixed control row: {example.record_id}")
+            audio[row_index] = example.offset_audio
+        elif audio_variant == "shuffle":
+            if donor_audio is None or example.donor_record_id not in donor_audio:
+                raise ValueError(f"shuffle donor missing in fixed split: {example.donor_record_id}")
+            audio[row_index] = donor_audio[example.donor_record_id]
+        elif audio_variant != "zero":
+            raise ValueError(f"unsupported audio variant: {audio_variant}")
+    return (
+        torch.from_numpy(video),
+        torch.from_numpy(audio),
+        torch.from_numpy(targets),
+        torch.from_numpy(candidate_mask),
+        batch,
+    )
+
+
+def score_batch(model, video, audio, candidate_mask, *, video_mode="joint"):
+    if video_mode == "zero":
+        video = torch.zeros_like(video)
+    elif video_mode == "reverse_temporal":
+        video = video.clone()
+        video[..., 768:] *= -1
+    elif video_mode != "joint":
+        raise ValueError(f"unsupported video mode: {video_mode}")
+    expanded_audio = audio[:, None, :].expand(-1, video.shape[1], -1)
+    candidate_logits = model(video, expanded_audio)
+    none_video = torch.zeros((video.shape[0], 1, video.shape[-1]), dtype=video.dtype)
+    none_logits = model(none_video, audio[:, None, :])
+    candidate_logits = candidate_logits.masked_fill(~candidate_mask, -1e9)
+    return torch.cat((candidate_logits, none_logits), dim=1)
+
+
+def candidate_order_delta(model, example, *, seed=SEED):
+    permutation = np.random.default_rng(seed).permutation(len(example.candidate_ids))
+    if len(permutation) < 2:
+        return 0.0
+    video = torch.from_numpy(example.visual_mean_delta[None, :, :])
+    audio = torch.from_numpy(example.audio[None, :])
+    mask = torch.ones((1, len(permutation)), dtype=torch.bool)
+    with torch.inference_mode():
+        base_scores = (
+            score_batch(model, video, audio, mask)[0, : len(permutation)]
+            .detach()
+            .cpu()
+            .numpy()
+        )
+        permuted_scores = (
+            score_batch(model, video[:, permutation], audio, mask)[0, : len(permutation)]
+            .detach()
+            .cpu()
+            .numpy()
+        )
+    aligned_scores = base_scores[permutation]
+    if not np.allclose(aligned_scores, permuted_scores, rtol=1e-6, atol=2e-6):
+        raise AssertionError("candidate scores changed beyond FP32 reorder tolerance")
+    return float(np.max(np.abs(aligned_scores - permuted_scores)))
+
+
+def assert_prediction_replay_matches(saved_rows, replay_rows):
+    if len(saved_rows) != len(replay_rows):
+        raise ValueError("saved prediction count differs from checkpoint replay")
+    max_probability_delta = 0.0
+    max_scalar_delta = 0.0
+    changed_decisions = 0
+    float_fields = (
+        "top1_confidence",
+        "target_probability_mass",
+        "nll",
+        "none_visible_probability",
+    )
+    for saved, replay in zip(saved_rows, replay_rows, strict=True):
+        identity_fields = (
+            "record_id",
+            "video_id",
+            "candidate_ids",
+            "target_candidate_ids",
+            "none_visible",
+        )
+        for field in identity_fields:
+            if saved[field] != replay[field]:
+                raise ValueError(f"checkpoint replay changed discrete prediction field: {field}")
+        changed_decisions += int(
+            saved["predicted"] != replay["predicted"]
+            or saved["top1_correct"] != replay["top1_correct"]
+        )
+        if saved["candidate_probabilities"].keys() != replay["candidate_probabilities"].keys():
+            raise ValueError("checkpoint replay changed candidate probability identities")
+        probability_deltas = [
+            abs(
+                saved["candidate_probabilities"][candidate_id]
+                - replay["candidate_probabilities"][candidate_id]
+            )
+            for candidate_id in saved["candidate_probabilities"]
+        ]
+        max_probability_delta = max(max_probability_delta, *probability_deltas)
+        if not np.allclose(
+            [saved["candidate_probabilities"][key] for key in saved["candidate_probabilities"]],
+            [replay["candidate_probabilities"][key] for key in saved["candidate_probabilities"]],
+            rtol=1e-6,
+            atol=5e-7,
+        ):
+            raise ValueError("saved candidate probabilities differ beyond FP32 replay tolerance")
+        for field in float_fields:
+            delta = abs(saved[field] - replay[field])
+            max_scalar_delta = max(max_scalar_delta, delta)
+            if not math.isclose(saved[field], replay[field], rel_tol=1e-6, abs_tol=1e-6):
+                raise ValueError(
+                    f"saved prediction scalar differs beyond FP32 replay tolerance: {field}"
+                )
+    return max_probability_delta, max_scalar_delta, changed_decisions
+
+
+def metrics_from_predictions(rows):
+    if not rows:
+        raise ValueError("prediction artifact is empty")
+    correctness = [bool(row["top1_correct"]) for row in rows]
+    confidence = [float(row["top1_confidence"]) for row in rows]
+    nlls = [float(row["nll"]) for row in rows]
+    briers = []
+    uniform_hit_probabilities = []
+    aps = []
+    visible = 0
+    visible_hits = 0
+    none_count = 0
+    none_hits = 0
+    for row in rows:
+        candidate_ids = row["candidate_ids"]
+        targets = set(row["target_candidate_ids"])
+        probabilities = [row["candidate_probabilities"][key] for key in candidate_ids]
+        probabilities.append(row["none_visible_probability"])
+        positive = [key in targets for key in candidate_ids] + [row["none_visible"]]
+        positives = sum(positive)
+        if positives == 0:
+            raise ValueError(f"saved prediction has no target class: {row['record_id']}")
+        target_distribution = np.asarray(positive, dtype=np.float64) / positives
+        briers.append(float(np.square(np.asarray(probabilities) - target_distribution).sum()))
+        uniform_hit_probabilities.append(positives / (len(candidate_ids) + 1))
+        if targets:
+            visible += 1
+            visible_hits += int(row["top1_correct"])
+            scores = np.asarray([row["candidate_probabilities"][key] for key in candidate_ids])
+            is_positive = np.asarray([key in targets for key in candidate_ids])
+            aps.append(average_precision(scores, is_positive))
+        else:
+            none_count += 1
+            none_hits += int(row["predicted"] == "none_visible")
+    return {
+        "records": len(rows),
+        "none_visible_records": none_count,
+        "visible_source_records": visible,
+        "top1_set_accuracy": float(np.mean(correctness)),
+        "uniform_random_expected_top1_set_accuracy": float(np.mean(uniform_hit_probabilities)),
+        "none_visible_accuracy": none_hits / none_count if none_count else None,
+        "visible_source_hit_at_1": visible_hits / visible if visible else None,
+        "mean_set_nll": float(np.mean(nlls)),
+        "mean_multiclass_brier": float(np.mean(briers)),
+        "top1_ece_10_bins": expected_calibration_error(confidence, correctness),
+        "visible_source_candidate_macro_average_precision": float(np.mean(aps)) if aps else None,
+    }
+
+
+def load_model_state(path):
+    model = CrossModalCandidateScorer().eval()
+    model.load_state_dict(torch.load(path, map_location="cpu", weights_only=True))
+    return model
+
+
+def grouped_nll(logits, targets):
+    log_probabilities = torch.log_softmax(logits, dim=1)
+    return -torch.logsumexp(log_probabilities.masked_fill(~targets, -torch.inf), dim=1)
+
+
+def expected_calibration_error(confidences, outcomes, bins=10):
+    if not confidences:
+        return 0.0
+    confidence = np.asarray(confidences, dtype=np.float64)
+    outcome = np.asarray(outcomes, dtype=np.float64)
+    error = 0.0
+    for bin_index in range(bins):
+        lower = bin_index / bins
+        upper = (bin_index + 1) / bins
+        selected = (confidence >= lower) & (
+            confidence < upper if bin_index < bins - 1 else confidence <= upper
+        )
+        if selected.any():
+            error += selected.mean() * abs(confidence[selected].mean() - outcome[selected].mean())
+    return float(error)
+
+
+def average_precision(scores, positives):
+    positive_count = int(positives.sum())
+    if positive_count == 0:
+        return None
+    order = np.argsort(-scores, kind="stable")
+    ranked_positive = positives[order]
+    precision = np.cumsum(ranked_positive) / (np.arange(len(order)) + 1)
+    return float(precision[ranked_positive].mean())
+
+
+def evaluate(model, examples, *, audio_mode="source", video_mode="joint", donor_audio=None):
+    model.eval()
+    per_record = []
+    nlls, briers, confidences, correctness, aps = [], [], [], [], []
+    uniform_hit_probabilities = []
+    visible_correct, visible_total, none_correct, none_total = 0, 0, 0, 0
+    with torch.inference_mode():
+        for start in range(0, len(examples), BATCH_SIZE):
+            indices = list(range(start, min(start + BATCH_SIZE, len(examples))))
+            video, audio, targets, mask, batch = collate_examples(
+                examples, indices, audio_variant=audio_mode, donor_audio=donor_audio
+            )
+            logits = score_batch(model, video, audio, mask, video_mode=video_mode)
+            probs = torch.softmax(logits, dim=1).cpu().numpy()
+            nll_values = grouped_nll(logits, targets).cpu().numpy()
+            target_array = targets.numpy()
+            for local, example in enumerate(batch):
+                positive = target_array[local]
+                probability = probs[local]
+                pred_index = int(np.argmax(probability))
+                is_correct = bool(positive[pred_index])
+                positive_mass = float(probability[positive].sum())
+                uniform_hit_probabilities.append(
+                    float(positive.sum()) / (len(example.candidate_ids) + 1)
+                )
+                target_distribution = positive.astype(np.float64) / int(positive.sum())
+                nlls.append(float(nll_values[local]))
+                briers.append(float(np.square(probability - target_distribution).sum()))
+                confidences.append(float(probability[pred_index]))
+                correctness.append(is_correct)
+                candidate_scores = probability[: len(example.candidate_ids)]
+                candidate_positive = np.asarray(
+                    [
+                        candidate_id in example.target_candidate_ids
+                        for candidate_id in example.candidate_ids
+                    ]
+                )
+                if candidate_positive.any():
+                    aps.append(average_precision(candidate_scores, candidate_positive))
+                    visible_total += 1
+                    visible_correct += int(is_correct)
+                else:
+                    none_total += 1
+                    none_correct += int(pred_index == len(probability) - 1)
+                predicted = (
+                    "none_visible"
+                    if pred_index == len(probability) - 1
+                    else example.candidate_ids[pred_index]
+                )
+                per_record.append(
+                    {
+                        "record_id": example.record_id,
+                        "video_id": example.video_id,
+                        "candidate_ids": list(example.candidate_ids),
+                        "target_candidate_ids": sorted(example.target_candidate_ids),
+                        "none_visible": example.none_visible,
+                        "predicted": predicted,
+                        "top1_correct": is_correct,
+                        "top1_confidence": float(probability[pred_index]),
+                        "target_probability_mass": positive_mass,
+                        "nll": float(nll_values[local]),
+                        "candidate_probabilities": {
+                            candidate_id: float(probability[index])
+                            for index, candidate_id in enumerate(example.candidate_ids)
+                        },
+                        "none_visible_probability": float(probability[-1]),
+                    }
+                )
+    if len(per_record) != len(examples):
+        raise ValueError("evaluation did not produce one prediction per record")
+    return {
+        "records": len(examples),
+        "none_visible_records": none_total,
+        "visible_source_records": visible_total,
+        "top1_set_accuracy": float(np.mean(correctness)),
+        "uniform_random_expected_top1_set_accuracy": float(
+            np.mean(uniform_hit_probabilities)
+        ),
+        "none_visible_accuracy": none_correct / none_total if none_total else None,
+        "visible_source_hit_at_1": visible_correct / visible_total if visible_total else None,
+        "mean_set_nll": float(np.mean(nlls)),
+        "mean_multiclass_brier": float(np.mean(briers)),
+        "top1_ece_10_bins": expected_calibration_error(confidences, correctness),
+        "visible_source_candidate_macro_average_precision": float(np.mean(aps)) if aps else None,
+        "predictions": per_record,
+    }
+
+
+def train_epoch(model, examples, order, optimizer):
+    model.train()
+    weighted_loss = 0.0
+    consumed = 0
+    for start in range(0, len(order), BATCH_SIZE):
+        indices = order[start : start + BATCH_SIZE]
+        video, audio, targets, mask, _ = collate_examples(examples, indices)
+        logits = score_batch(model, video, audio, mask)
+        loss = grouped_nll(logits, targets).mean()
+        if not torch.isfinite(loss):
+            raise FloatingPointError("nonfinite grouped training loss")
+        optimizer.zero_grad(set_to_none=True)
+        loss.backward()
+        norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=5.0)
+        if not torch.isfinite(norm):
+            raise FloatingPointError("nonfinite readout gradient norm")
+        optimizer.step()
+        weighted_loss += float(loss.detach()) * len(indices)
+        consumed += len(indices)
+    return weighted_loss / consumed
+
+
+def run(args: argparse.Namespace):
+    if args.output.exists():
+        raise FileExistsError(f"refusing to overwrite readout output: {args.output}")
+    if args.epochs != EPOCHS:
+        raise ValueError(f"this frozen experiment requires exactly {EPOCHS} epochs")
+    torch.set_num_threads(4)
+    torch.manual_seed(SEED)
+    random.seed(SEED)
+    np.random.seed(SEED)
+    if torch.cuda.is_initialized():
+        raise RuntimeError("readout experiment must be CPU-only")
+
+    train_examples, plan = load_examples(
+        args.plan, args.train_labels, args.train_video_features, args.train_audio_features
+    )
+    development_examples, _ = load_examples(
+        args.plan,
+        args.development_labels,
+        args.development_video_features,
+        args.development_audio_features,
+    )
+    train_ids = {row.record_id for row in train_examples}
+    development_ids = {row.record_id for row in development_examples}
+    train_videos = {row.video_id for row in train_examples}
+    development_videos = {row.video_id for row in development_examples}
+    if train_ids & development_ids or train_videos & development_videos:
+        raise ValueError("frozen train/development split overlaps by record or video")
+    if not train_examples or not development_examples:
+        raise ValueError("fixed split is empty")
+    train_audio = {row.record_id: row.audio for row in train_examples}
+    development_audio = {row.record_id: row.audio for row in development_examples}
+    offset_examples = [row for row in development_examples if row.offset_audio is not None]
+    if not offset_examples:
+        raise ValueError("fixed development split has no offset-audio control rows")
+    if any(row.donor_record_id not in train_audio for row in train_examples):
+        raise ValueError("training audio-shuffle donor crosses or escapes the frozen split")
+    if any(row.donor_record_id not in development_audio for row in development_examples):
+        raise ValueError("development audio-shuffle donor crosses or escapes the frozen split")
+
+    input_hashes = input_artifact_hashes(args)
+    effective_config = {
+        "seed": SEED,
+        "epochs": EPOCHS,
+        "batch_size": BATCH_SIZE,
+        "hidden_size": HIDDEN_SIZE,
+        "optimizer": "AdamW",
+        "learning_rate": LEARNING_RATE,
+        "weight_decay": WEIGHT_DECAY,
+        "selector": "lowest development grouped set-NLL; min_delta=1e-4; no early stop",
+        "cross_entropy": (
+            "negative log probability mass assigned to any valid candidate "
+            "or the none-visible choice"
+        ),
+        "features": (
+            "frozen VideoPrism ROI mean plus chronological last-minus-first; "
+            "frozen EfficientAT source-audio mean"
+        ),
+        "controls": [
+            "zero_audio",
+            "zero_video",
+            "shuffled_audio",
+            "joint_offset_eligible",
+            "offset_audio",
+            "reverse_temporal_delta",
+        ],
+        "train_records": len(train_examples),
+        "development_records": len(development_examples),
+        "development_offset_control_records": len(offset_examples),
+        "train_video_groups": len(train_videos),
+        "development_video_groups": len(development_videos),
+        "input_artifact_hashes": input_hashes,
+    }
+    config_hash = hashlib.sha256(
+        json.dumps(effective_config, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+    started = datetime.now(UTC).isoformat()
+    timer = time.perf_counter()
+    args.output.mkdir(parents=True, exist_ok=False)
+    run_path = args.output / "run.json"
+    history_path = args.output / "training-history.jsonl"
+    best_state_path = args.output / "best-readout-state.pt"
+    atomic_json(
+        run_path,
+        {
+            "status": "RUNNING",
+            "effective_config": effective_config,
+            "config_sha256": config_hash,
+            "started_at_utc": started,
+        },
+    )
+    history_path.write_text("", encoding="utf-8")
+    model = CrossModalCandidateScorer()
+    trainable_parameters = sum(
+        parameter.numel() for parameter in model.parameters() if parameter.requires_grad
+    )
+    optimizer = torch.optim.AdamW(
+        model.parameters(), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY
+    )
+    history = []
+    best_nll = math.inf
+    best_epoch = None
+    best_state = None
+    for epoch in range(1, EPOCHS + 1):
+        order = np.random.default_rng(SEED + epoch).permutation(len(train_examples)).tolist()
+        train_nll = train_epoch(model, train_examples, order, optimizer)
+        validation = evaluate(model, development_examples)
+        row = {
+            "epoch": epoch,
+            "train_grouped_nll": train_nll,
+            "development_grouped_nll": validation["mean_set_nll"],
+            "development_top1_set_accuracy": validation["top1_set_accuracy"],
+            "development_visible_source_map": validation[
+                "visible_source_candidate_macro_average_precision"
+            ],
+            "elapsed_seconds": time.perf_counter() - timer,
+        }
+        history.append(row)
+        print(json.dumps(row), flush=True)
+        current_nll = validation["mean_set_nll"]
+        if current_nll < best_nll - MIN_DELTA:
+            best_nll = current_nll
+            best_epoch = epoch
+            best_state = {
+                name: value.detach().cpu().clone()
+                for name, value in model.state_dict().items()
+            }
+            temporary_best = best_state_path.with_suffix(".pt.tmp")
+            torch.save(best_state, temporary_best)
+            temporary_best.replace(best_state_path)
+        with history_path.open("a", encoding="utf-8", newline="\n") as stream:
+            stream.write(json.dumps(row, sort_keys=True) + "\n")
+            stream.flush()
+        atomic_json(
+            run_path,
+            {
+                "status": "RUNNING",
+                "effective_config": effective_config,
+                "config_sha256": config_hash,
+                "started_at_utc": started,
+                "last_completed_epoch": epoch,
+                "best_epoch": best_epoch,
+                "best_development_nll": best_nll,
+            },
+        )
+    if best_state is None:
+        raise RuntimeError("validation selector did not retain a checkpoint")
+    final_state = {name: value.detach().cpu().clone() for name, value in model.state_dict().items()}
+    final_state_path = args.output / "final-readout-state.pt"
+    torch.save(final_state, final_state_path)
+    model.load_state_dict(best_state)
+
+    evaluation = {}
+    for name, audio_mode, video_mode, donor, examples_for_control in (
+        ("joint", "source", "joint", development_audio, development_examples),
+        ("zero_audio", "zero", "joint", development_audio, development_examples),
+        ("zero_video", "source", "zero", development_audio, development_examples),
+        ("shuffled_audio", "shuffle", "joint", development_audio, development_examples),
+        ("joint_offset_eligible", "source", "joint", development_audio, offset_examples),
+        ("offset_audio", "offset", "joint", development_audio, offset_examples),
+        (
+            "reverse_temporal_delta",
+            "source",
+            "reverse_temporal",
+            development_audio,
+            development_examples,
+        ),
+    ):
+        metrics = evaluate(
+            model,
+            examples_for_control,
+            audio_mode=audio_mode,
+            video_mode=video_mode,
+            donor_audio=donor,
+        )
+        predictions = metrics.pop("predictions")
+        args.output.mkdir(parents=True, exist_ok=True)
+        prediction_path = args.output / f"predictions-{name}.jsonl"
+        with prediction_path.open(
+            "x", encoding="utf-8", newline="\n"
+        ) as stream:
+            for row in predictions:
+                stream.write(json.dumps(row, sort_keys=True) + "\n")
+        evaluation[name] = {
+            **metrics,
+            "predictions_sha256": sha256_file(prediction_path),
+        }
+
+    # Separate batched GEMM layouts can differ by a few FP32 ulps.
+    order_invariance_delta = candidate_order_delta(model, development_examples[0])
+
+    model_config = {
+        **effective_config,
+        "config_sha256": config_hash,
+        "trainable_parameters": trainable_parameters,
+        "best_epoch": best_epoch,
+        "best_development_nll": best_nll,
+        "candidate_order_max_abs_score_delta": order_invariance_delta,
+        "best_readout_state_sha256": sha256_file(args.output / "best-readout-state.pt"),
+        "final_readout_state_sha256": sha256_file(args.output / "final-readout-state.pt"),
+        "training_history_sha256": sha256_file(args.output / "training-history.jsonl"),
+        "started_at_utc": started,
+        "ended_at_utc": datetime.now(UTC).isoformat(),
+        "elapsed_seconds": time.perf_counter() - timer,
+        "python": platform.python_version(),
+        "torch": torch.__version__,
+        "numpy": np.__version__,
+        "device": "CPU",
+        "cuda_initialized": torch.cuda.is_initialized(),
+        "video_group_split_overlap": 0,
+        "sealed_audit_read": False,
+        "validation_is_blind": False,
+        "status": "PASS_FROZEN_FEATURE_READOUT_DIAGNOSTIC",
+        "evaluation": evaluation,
+    }
+    atomic_json(args.output / "result.json", model_config)
+    atomic_json(args.output / "input-hashes.json", input_hashes)
+    atomic_json(
+        run_path,
+        {
+            "status": model_config["status"],
+            "effective_config": effective_config,
+            "config_sha256": config_hash,
+            "started_at_utc": started,
+            "ended_at_utc": model_config["ended_at_utc"],
+            "last_completed_epoch": EPOCHS,
+            "best_epoch": best_epoch,
+            "best_development_nll": best_nll,
+            "result_sha256": sha256_file(args.output / "result.json"),
+        },
+    )
+    return model_config
+
+
+def finalize_existing(args: argparse.Namespace):
+    """Finalize a completed training attempt from its saved states and predictions."""
+    run_path = args.output / "run.json"
+    if not args.output.is_dir() or not run_path.is_file():
+        raise FileNotFoundError(f"readout attempt metadata not found: {args.output}")
+    if (args.output / "result.json").exists():
+        raise FileExistsError(
+            f"refusing to overwrite finalized result: {args.output / 'result.json'}"
+        )
+    run_record = json.loads(run_path.read_text(encoding="utf-8"))
+    if run_record.get("status") != "RUNNING" or run_record.get("last_completed_epoch") != EPOCHS:
+        raise ValueError("saved attempt is not a complete, unfinalized 80-epoch run")
+    effective_config = run_record["effective_config"]
+    recorded_hashes = effective_config["input_artifact_hashes"]
+    current_hashes = input_artifact_hashes(args)
+    # This recovery finalizer is a new source file revision; all data/model helper inputs
+    # must still match the hashes recorded when the trained checkpoints were produced.
+    for name, recorded_hash in recorded_hashes.items():
+        if name == "runner":
+            continue
+        if current_hashes.get(name) != recorded_hash:
+            raise ValueError(f"fixed training input changed since run: {name}")
+
+    train_examples, _ = load_examples(
+        args.plan, args.train_labels, args.train_video_features, args.train_audio_features
+    )
+    development_examples, _ = load_examples(
+        args.plan,
+        args.development_labels,
+        args.development_video_features,
+        args.development_audio_features,
+    )
+    train_ids = {row.record_id for row in train_examples}
+    development_ids = {row.record_id for row in development_examples}
+    train_videos = {row.video_id for row in train_examples}
+    development_videos = {row.video_id for row in development_examples}
+    if train_ids & development_ids or train_videos & development_videos:
+        raise ValueError("fixed train/development split now overlaps")
+    offset_examples = [row for row in development_examples if row.offset_audio is not None]
+    development_audio = {row.record_id: row.audio for row in development_examples}
+    controls = (
+        ("joint", "source", "joint", development_audio, development_examples),
+        ("zero_audio", "zero", "joint", development_audio, development_examples),
+        ("zero_video", "source", "zero", development_audio, development_examples),
+        ("shuffled_audio", "shuffle", "joint", development_audio, development_examples),
+        ("joint_offset_eligible", "source", "joint", development_audio, offset_examples),
+        ("offset_audio", "offset", "joint", development_audio, offset_examples),
+        (
+            "reverse_temporal_delta",
+            "source",
+            "reverse_temporal",
+            development_audio,
+            development_examples,
+        ),
+    )
+    history_path = args.output / "training-history.jsonl"
+    history = read_jsonl(history_path)
+    if len(history) != EPOCHS or [row["epoch"] for row in history] != list(range(1, EPOCHS + 1)):
+        raise ValueError("saved training history is incomplete or out of order")
+    best_epoch = run_record.get("best_epoch")
+    if not isinstance(best_epoch, int) or not 1 <= best_epoch <= EPOCHS:
+        raise ValueError("saved best epoch is invalid")
+    if min(history, key=lambda row: row["development_grouped_nll"])["epoch"] != best_epoch:
+        raise ValueError("saved best epoch does not match validation history minimum")
+
+    best_path = args.output / "best-readout-state.pt"
+    final_path = args.output / "final-readout-state.pt"
+    if not best_path.is_file() or not final_path.is_file():
+        raise FileNotFoundError("saved best/final readout checkpoint is missing")
+    model = load_model_state(best_path)
+    evaluation = {}
+    replay_max_probability_delta = 0.0
+    replay_max_scalar_delta = 0.0
+    replay_changed_decisions = {}
+    for name, audio_mode, video_mode, donor, examples_for_control in controls:
+        metrics = evaluate(
+            model,
+            examples_for_control,
+            audio_mode=audio_mode,
+            video_mode=video_mode,
+            donor_audio=donor,
+        )
+        predictions = metrics.pop("predictions")
+        prediction_path = args.output / f"predictions-{name}.jsonl"
+        saved_predictions = read_jsonl(prediction_path)
+        probability_delta, scalar_delta, changed_decisions = assert_prediction_replay_matches(
+            saved_predictions, predictions
+        )
+        replay_max_probability_delta = max(replay_max_probability_delta, probability_delta)
+        replay_max_scalar_delta = max(replay_max_scalar_delta, scalar_delta)
+        evaluation[name] = {
+            **metrics_from_predictions(saved_predictions),
+            "predictions_sha256": sha256_file(prediction_path),
+        }
+        replay_changed_decisions[name] = changed_decisions
+    best_nll = float(evaluation["joint"]["mean_set_nll"])
+    if not math.isclose(
+        best_nll,
+        float(run_record["best_development_nll"]),
+        rel_tol=0,
+        abs_tol=1e-12,
+    ):
+        raise ValueError("best checkpoint NLL differs from the recorded selector value")
+    order_delta = candidate_order_delta(model, development_examples[0])
+    final_model = load_model_state(final_path)
+    final_metrics = evaluate(final_model, development_examples)
+    final_metrics.pop("predictions")
+    trainable_parameters = sum(
+        parameter.numel() for parameter in model.parameters() if parameter.requires_grad
+    )
+    latest_prediction_mtime = max(
+        (args.output / f"predictions-{name}.jsonl").stat().st_mtime for name, *_ in controls
+    )
+    training_completed_at = datetime.fromtimestamp(latest_prediction_mtime, UTC).isoformat()
+    finalization_completed_at = datetime.now(UTC).isoformat()
+    model_config = {
+        **effective_config,
+        "config_sha256": run_record["config_sha256"],
+        "trainable_parameters": trainable_parameters,
+        "best_epoch": best_epoch,
+        "best_development_nll": best_nll,
+        "candidate_order_max_abs_score_delta": order_delta,
+        "candidate_order_fp32_tolerance": {"rtol": 1e-6, "atol": 2e-6},
+        "saved_prediction_replay_max_probability_delta": replay_max_probability_delta,
+        "saved_prediction_replay_max_scalar_delta": replay_max_scalar_delta,
+        "saved_prediction_replay_fp32_tolerance": {"rtol": 1e-6, "atol": 5e-7},
+        "saved_prediction_replay_changed_decisions_by_control": replay_changed_decisions,
+        "best_readout_state_sha256": sha256_file(best_path),
+        "final_readout_state_sha256": sha256_file(final_path),
+        "training_history_sha256": sha256_file(history_path),
+        "training_runner_sha256": recorded_hashes["runner"],
+        "finalization_runner_sha256": current_hashes["runner"],
+        "started_at_utc": run_record["started_at_utc"],
+        "training_completed_at_utc": training_completed_at,
+        "finalization_completed_at_utc": finalization_completed_at,
+        "training_elapsed_seconds": history[-1]["elapsed_seconds"],
+        "python": platform.python_version(),
+        "torch": torch.__version__,
+        "numpy": np.__version__,
+        "device": "CPU",
+        "cuda_initialized": torch.cuda.is_initialized(),
+        "video_group_split_overlap": 0,
+        "sealed_audit_read": False,
+        "validation_is_blind": False,
+        "status": "PASS_FROZEN_FEATURE_READOUT_DIAGNOSTIC",
+        "evaluation": evaluation,
+        "final_checkpoint_joint_validation": final_metrics,
+    }
+    atomic_json(args.output / "result.json", model_config)
+    atomic_json(args.output / "input-hashes.json", recorded_hashes)
+    atomic_json(
+        run_path,
+        {
+            "status": model_config["status"],
+            "effective_config": effective_config,
+            "config_sha256": run_record["config_sha256"],
+            "started_at_utc": run_record["started_at_utc"],
+            "training_completed_at_utc": training_completed_at,
+            "finalization_completed_at_utc": finalization_completed_at,
+            "last_completed_epoch": EPOCHS,
+            "best_epoch": best_epoch,
+            "best_development_nll": best_nll,
+            "result_sha256": sha256_file(args.output / "result.json"),
+        },
+    )
+    return model_config
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--plan", type=Path, required=True)
+    parser.add_argument("--train-labels", type=Path, required=True)
+    parser.add_argument("--development-labels", type=Path, required=True)
+    parser.add_argument("--train-video-features", type=Path, required=True)
+    parser.add_argument("--train-audio-features", type=Path, required=True)
+    parser.add_argument("--development-video-features", type=Path, required=True)
+    parser.add_argument("--development-audio-features", type=Path, required=True)
+    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--epochs", type=int, default=EPOCHS)
+    parser.add_argument("--finalize-existing", action="store_true")
+    args = parser.parse_args()
+    result = finalize_existing(args) if args.finalize_existing else run(args)
+    print(json.dumps(result, indent=2), flush=True)
+
+
+if __name__ == "__main__":
+    main()

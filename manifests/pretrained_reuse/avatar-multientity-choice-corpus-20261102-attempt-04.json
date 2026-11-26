@@ -1,0 +1,140 @@
+{
+  "format": "pretrained_reuse_avatar_multientity_choice_corpus_v1",
+  "status": "METADATA_ONLY_NOT_ADMITTED_INSUFFICIENT_VALIDATION_SUPPORT",
+  "recorded_at": "2026-11-02",
+  "source": {
+    "dataset_id": "mipal/AVATAR",
+    "revision": "a7f0146ff704799d044133e61137836cacc1c233",
+    "train_annotation_tree_sha256": "4c17a0bdbd7d488bced018404ce71be5659d27273efcfdec9e1cdfffd16eb651",
+    "train_annotation_json_count": 19159,
+    "prior_exposed_groups_removed": true,
+    "candidate_source_group_count": 452,
+    "candidate_source_group_set_sha256": "41155016616901005e9fc98aee5a160797ec2c9c5ad4b9921ede55a832799a2a",
+    "prior_fit_or_evaluation_group_set_sha256": "4f0fbd6dc342c8c485c4c187bc102a988def78fdaeef11879ed11221ab4adf3a"
+  },
+  "task": {
+    "name": "cross-source AV category match over AVATAR Multi-Entity TRAIN groups",
+    "query": "2-second audio window",
+    "options": "four timestamped video frames from distinct source groups",
+    "target": "same single annotated category as query group",
+    "question_is_constant_and_not_a_scorer_feature": true,
+    "scorer_feature_contract": "frozen audio/video tensors only; identifiers, timestamps, targets, category labels, and sidecars are excluded",
+    "native_localization_task": false
+  },
+  "split": {
+    "method": "SHA-256 rank of prior-unexposed TRAIN source-group identities",
+    "hash_prefix": "avatar-multientity-dev-v1:17:",
+    "train_fraction": 0.8,
+    "validation_fraction": 0.2,
+    "train_source_groups": 362,
+    "validation_source_groups": 90,
+    "source_group_overlap": 0,
+    "query_and_candidate_source_group_cross_split_overlap": 0,
+    "query_and_candidate_asset_cross_split_overlap": 0,
+    "official_validation_annotations_or_media_accessed": false,
+    "sealed_audit_accessed": false
+  },
+  "counts": {
+    "train": {
+      "single_category_groups": 350,
+      "queries": 341,
+      "categories": 53,
+      "target_position_counts": [86, 85, 85, 85],
+      "skipped_ambiguous_groups": 12,
+      "skipped_without_positive": 9
+    },
+    "validation": {
+      "single_category_groups": 87,
+      "queries": 68,
+      "categories": 22,
+      "target_position_counts": [17, 17, 17, 17],
+      "skipped_ambiguous_groups": 3,
+      "skipped_without_positive": 19
+    }
+  },
+  "target_schedule": {
+    "method": "balanced positions assigned in query-hash order after a split-specific seed-17 PRNG shuffle",
+    "serialization_order_modulo_four_train_accuracy": 0.2287390029325513,
+    "serialization_order_modulo_four_validation_accuracy": 0.25,
+    "constant_position_train_selected_accuracy": 0.25219941348973607,
+    "constant_position_validation_accuracy": 0.25,
+    "previous_attempt03_serialization_order_modulo_four_train_accuracy": 1.0,
+    "previous_attempt03_serialization_order_modulo_four_validation_accuracy": 1.0
+  },
+  "dependency_diagnostics": {
+    "train": {
+      "query_source_group_count": 341,
+      "distinct_query_and_candidate_source_group_count": 350,
+      "connected_dependency_component_count": 1,
+      "largest_component_query_count": 341,
+      "largest_component_source_group_count": 350,
+      "maximum_candidate_source_group_reuse_count": 24
+    },
+    "validation": {
+      "query_source_group_count": 68,
+      "distinct_query_and_candidate_source_group_count": 87,
+      "connected_dependency_component_count": 1,
+      "largest_component_query_count": 68,
+      "largest_component_source_group_count": 87,
+      "maximum_candidate_source_group_reuse_count": 12,
+      "resampling_note": "query-only bootstrap omits shared candidate-source dependence"
+    }
+  },
+  "acceptance_gate": {
+    "minimum_quality_evaluation_examples": 1000,
+    "minimum_independent_source_groups": 200,
+    "observed_validation_examples": 68,
+    "observed_validation_dependency_components": 1,
+    "eligible_for_quality_evaluation": false,
+    "decision": "do not acquire media or fit this corpus"
+  },
+  "artifacts": {
+    "external_output_directory": "C:/CodexArtifacts/pretrained-reuse-r2/avatar-multientity-choice-corpus-20261102-attempt-04",
+    "corpus_manifest_sha256": "161181e339745f4eac67579cf24ff82b1dcfb3a009a0f9313064ddac61f23d6e",
+    "files": {
+      "train_model_input.jsonl": {
+        "rows": 341,
+        "bytes": 302543,
+        "sha256": "c2204a8a56c7f27df470da532469755a29d191a82fbbf64b9dee882a46dd51dd"
+      },
+      "train_analysis_sidecar.jsonl": {
+        "rows": 341,
+        "bytes": 175240,
+        "sha256": "fb24bf221cc971fa59bf1f150d1b41f3a9dca7def16074bd34da6f9f777febc8"
+      },
+      "validation_model_input.jsonl": {
+        "rows": 68,
+        "bytes": 60553,
+        "sha256": "32365e0abf33e6f8d48536e752efd10d24004dfaa5ccfca142c2dd7122b6821f"
+      },
+      "validation_analysis_sidecar.jsonl": {
+        "rows": 68,
+        "bytes": 35079,
+        "sha256": "437c2c806660359951ca47af3049617a42d1b232175d83dc4dcd29dc44b6f302"
+      }
+    },
+    "previous_attempt03_preserved_and_invalidated": true
+  },
+  "implementation": {
+    "base_commit": "a4b6841a7509e3fc54cca18431e07e90ff119cba",
+    "scripts/build_avatar_multientity_choice_corpus.py": "ff9ba94e9b5e3f918889a537e99ea4b0d3cafb6f32833f2b94877e990ce33e60",
+    "scripts/audit_avatar_multientity_exposure.py": "a14fc268f6033f7adb569214db910b86e3d68d6471d7b7531779f4201c761cd8",
+    "tests/test_build_avatar_multientity_choice_corpus.py": "dc841a70cabb53f388d5610b2ab0236061429b97b4fe4869e2fb64e81df4c760",
+    "targeted_pytest": "9 passed",
+    "focused_ruff": "passed"
+  },
+  "integrity": {
+    "media_bytes_read": false,
+    "official_validation_or_audit_accessed": false,
+    "feature_extraction_started": false,
+    "model_loaded_or_trained": false,
+    "raw_group_ids_emitted_to_repository": false,
+    "product_promotion": false
+  },
+  "resource_gate": {
+    "free_c_gib_at_latest_check_approx": 1.26,
+    "required_reserve_gib": 2,
+    "media_or_gpu_work_started": false
+  },
+  "report": "docs/pretrained_reuse/R2_AVATAR_MULTIENTITY_CHOICE_CORPUS_20261102.md"
+}
