@@ -1,6 +1,5 @@
 import numpy as np
 import pytest
-import torch
 
 from scripts.score_clotho_publisher_val import build_features, paired_cluster_bootstrap
 
@@ -12,9 +11,9 @@ def test_question_only_features_zero_audio_and_append_option_identity():
     features = build_features(audio, question, "question_only")
 
     assert features.shape == (2, 2, 770)
-    assert torch.count_nonzero(features[:, :, :384]) == 0
-    assert torch.equal(features[0, 0, 384:768], features[0, 1, 384:768])
-    assert torch.equal(features[0, :, 768:], torch.eye(2))
+    assert np.count_nonzero(features[:, :, :384]) == 0
+    assert np.array_equal(features[0, 0, 384:768], features[0, 1, 384:768])
+    assert np.array_equal(features[0, :, 768:], np.eye(2))
 
 
 def test_joint_features_preserve_audio_question_and_option_identity():
@@ -23,9 +22,9 @@ def test_joint_features_preserve_audio_question_and_option_identity():
 
     features = build_features(audio, question, "audio_question")
 
-    assert torch.all(features[0, :, :384] == 1)
-    assert torch.all(features[0, :, 384:768] == 2)
-    assert torch.equal(features[0, :, 768:], torch.eye(2))
+    assert np.all(features[0, :, :384] == 1)
+    assert np.all(features[0, :, 384:768] == 2)
+    assert np.array_equal(features[0, :, 768:], np.eye(2))
 
 
 def test_paired_bootstrap_keeps_clusters_and_is_deterministic():

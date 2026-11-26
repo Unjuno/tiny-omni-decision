@@ -7,7 +7,6 @@ import json
 import time
 from pathlib import Path
 
-import av
 import numpy as np
 
 from scripts.audio_overlap_probe import PreparedWaveformMatcher
@@ -26,6 +25,8 @@ REFERENCE_BLOCK = 16
 
 
 def decode_mono(path: Path) -> np.ndarray:
+    import av
+
     with av.open(str(path)) as container:
         stream = container.streams.audio[0]
         converter = av.AudioResampler(format="fltp", layout="mono", rate=RATE)

@@ -10,10 +10,8 @@ import time
 from pathlib import Path
 
 import numpy as np
-import torch
 
 from scripts.starss23_readout_common import binary_metrics
-from tiny_omni_decision.decision import FrozenFeatureCandidateScorer
 
 ROOT = Path("C:/CodexArtifacts/pretrained-reuse-r2")
 ATTEMPT = ROOT / "clotho-aqa-publisher-val-20261126-attempt-01"
@@ -99,7 +97,7 @@ def paired_cluster_bootstrap(
     }
 
 
-def build_features(audio: np.ndarray, question: np.ndarray, condition: str) -> torch.Tensor:
+def build_features(audio: np.ndarray, question: np.ndarray, condition: str) -> np.ndarray:
     if audio.shape != question.shape or audio.ndim != 2 or audio.shape[1] != 384:
         raise ValueError("aligned 384-dimensional feature matrices required")
     if condition == "question_only":
@@ -109,7 +107,7 @@ def build_features(audio: np.ndarray, question: np.ndarray, condition: str) -> t
     shared = np.concatenate((audio, question), axis=1)
     options = np.repeat(shared[:, None, :], 2, axis=1)
     ids = np.broadcast_to(np.eye(2, dtype=np.float32), (len(shared), 2, 2))
-    return torch.from_numpy(np.concatenate((options, ids), axis=-1).astype(np.float32))
+    return np.concatenate((options, ids), axis=-1).astype(np.float32)
 
 
 def main() -> dict:
@@ -151,6 +149,10 @@ def main() -> dict:
     conditions: dict[str, np.ndarray] = {}
     prediction_records: dict[str, list[dict]] = {}
     model_provenance = {}
+    import torch
+
+    from tiny_omni_decision.decision import FrozenFeatureCandidateScorer
+
     torch.set_num_threads(4)
     for condition, directory in CHECKPOINTS.items():
         result = json.loads((directory / "result.json").read_text(encoding="utf-8"))
@@ -179,7 +181,7 @@ def main() -> dict:
         )
         model.eval().requires_grad_(False)
         with torch.inference_mode():
-            raw_logits = model(candidate_features).float()
+            raw_logits = model(torch.from_numpy(candidate_features)).float()
             scaled_logits = raw_logits / float(result["temperature"])
             probabilities = scaled_logits.softmax(dim=-1).numpy()
         if probabilities.shape != (244, 2) or not np.isfinite(probabilities).all():
