@@ -20,7 +20,6 @@ import transformers
 from torch.nn import functional as F
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
-from scripts.train_frozen_text_probe import _metrics
 from tiny_omni_decision.dataset import sha256_file
 from tiny_omni_decision.schema import DecisionExample
 
@@ -76,6 +75,54 @@ def grouped_choice_loss(scores: torch.Tensor, targets: torch.Tensor) -> torch.Te
     if targets.shape != (scores.shape[0],):
         raise ValueError("targets must contain one option index per question")
     return F.cross_entropy(scores, targets)
+
+
+def _metrics(logits: list[torch.Tensor], targets: list[int], bins: int = 15) -> dict[str, Any]:
+    probabilities = [scores.float().softmax(-1) for scores in logits]
+    correct = torch.tensor(
+        [
+            int(int(probability.argmax()) == target)
+            for probability, target in zip(probabilities, targets, strict=True)
+        ],
+        dtype=torch.float32,
+    )
+    nll = torch.tensor(
+        [
+            -float(probability[target].clamp_min(1e-12).log())
+            for probability, target in zip(probabilities, targets, strict=True)
+        ],
+        dtype=torch.float32,
+    )
+    brier = torch.tensor(
+        [
+            float(
+                (probability - F.one_hot(torch.tensor(target), num_classes=probability.numel()))
+                .square()
+                .sum()
+            )
+            for probability, target in zip(probabilities, targets, strict=True)
+        ],
+        dtype=torch.float32,
+    )
+    confidence = torch.tensor([float(probability.max()) for probability in probabilities])
+    ece = 0.0
+    bin_counts = []
+    for index in range(bins):
+        low, high = index / bins, (index + 1) / bins
+        mask = (confidence >= low) & (confidence < high if index < bins - 1 else confidence <= high)
+        count = int(mask.sum())
+        bin_counts.append(count)
+        if count:
+            ece += count / len(targets) * abs(float(correct[mask].mean() - confidence[mask].mean()))
+    return {
+        "count": len(targets),
+        "accuracy": float(correct.mean()),
+        "nll": float(nll.mean()),
+        "brier": float(brier.mean()),
+        "ece_15_bins": ece,
+        "mean_confidence": float(confidence.mean()),
+        "ece_bin_counts": bin_counts,
+    }
 
 
 def _load_examples(path: Path, expected_split: str) -> list[DecisionExample]:
