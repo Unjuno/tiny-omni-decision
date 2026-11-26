@@ -1,3 +1,10 @@
+**2026-11-26 R2 Social IQa train-data integrity audit:** The publisher's
+supplemental train release matches all 33,410 records but reveals five
+duplicate-question groups whose repeated labels conflict with the baseline
+release, plus 31 incomplete answer-origin annotations. It provides task strata
+but no stable ATOMIC event ID. No labels were changed or records filtered; no
+dev/test or sealed-audit payload was opened. See [integrity audit](docs/pretrained_reuse/R2_SOCIAL_IQA_TRAIN_DATA_INTEGRITY_AUDIT_20261126.md).
+
 **2026-11-26 R2 Social IQa grouping clarification:** The publisher paper says
 official partitions keep contexts from each ATOMIC event together. The prior
 seed-17 split within publisher-train grouped exact contexts only, so its
