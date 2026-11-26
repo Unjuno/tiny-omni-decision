@@ -4,6 +4,11 @@ import importlib.util
 import sys
 from pathlib import Path
 
+import pytest
+
+pytest.importorskip("torch")
+pytest.importorskip("safetensors")
+
 import torch
 
 MODULE_PATH = Path(__file__).parents[1] / "scripts" / "fit_commonsenseqa_bert_mini.py"

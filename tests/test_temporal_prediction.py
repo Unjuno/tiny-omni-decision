@@ -1,11 +1,12 @@
-import pytest
-import torch
+from importlib import import_module
 
-from tiny_omni_decision.temporal_prediction import (
-    NextFrameFeaturePredictor,
-    cosine_prediction_loss,
-    per_sequence_cosine_error,
-)
+import pytest
+
+torch = pytest.importorskip("torch")
+temporal_prediction = import_module("tiny_omni_decision.temporal_prediction")
+NextFrameFeaturePredictor = temporal_prediction.NextFrameFeaturePredictor
+cosine_prediction_loss = temporal_prediction.cosine_prediction_loss
+per_sequence_cosine_error = temporal_prediction.per_sequence_cosine_error
 
 
 def test_next_frame_predictor_is_causal_and_returns_one_prediction_per_transition():

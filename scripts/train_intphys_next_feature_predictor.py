@@ -12,12 +12,6 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-import torch
-
-from tiny_omni_decision.temporal_prediction import (
-    NextFrameFeaturePredictor,
-    cosine_prediction_loss,
-)
 
 
 def sha256_file(path: Path) -> str:
@@ -66,10 +60,14 @@ def validate_group_disjointness(
 
 
 def _mean_loss(
-    model: NextFrameFeaturePredictor,
-    features: torch.Tensor,
+    model: Any,
+    features: Any,
     batch_size: int,
 ) -> float:
+    import torch
+
+    from tiny_omni_decision.temporal_prediction import cosine_prediction_loss
+
     model.eval()
     total = 0.0
     count = 0
@@ -93,7 +91,14 @@ def fit_predictor(
     batch_size: int = 64,
     patience: int = 8,
     min_delta: float = 1e-4,
-) -> tuple[NextFrameFeaturePredictor, list[dict[str, float]], int]:
+) -> tuple[Any, list[dict[str, float]], int]:
+    import torch
+
+    from tiny_omni_decision.temporal_prediction import (
+        NextFrameFeaturePredictor,
+        cosine_prediction_loss,
+    )
+
     if max_epochs < 1 or batch_size < 1 or patience < 1 or min_delta < 0:
         raise ValueError("epochs, batch size and patience must be positive; min_delta nonnegative")
     if train_features.ndim != 3 or validation_features.ndim != 3:
@@ -181,6 +186,8 @@ def _args() -> argparse.Namespace:
 
 
 def main() -> None:
+    import torch
+
     args = _args()
     train_path = args.train_features.resolve(strict=True)
     validation_path = args.validation_features.resolve(strict=True)

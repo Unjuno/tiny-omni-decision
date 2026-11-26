@@ -4,6 +4,12 @@ import importlib.util
 import sys
 from pathlib import Path
 
+import pytest
+
+pytest.importorskip("torch")
+pytest.importorskip("transformers")
+pytest.importorskip("safetensors")
+
 import torch
 
 SCRIPT_DIR = Path(__file__).parents[1] / "scripts"
