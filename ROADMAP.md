@@ -1,3 +1,14 @@
+**2026-11-26 R2 sub-SEVIR frozen-feature Path A:** On a fixed event-disjoint
+project-created five-minute forecast split, pinned frozen DINOv2-small features
+plus a small temporal LSTM reached 89.62% validation Accuracy (NLL 0.2380,
+Brier 0.1485), below the per-task 95% target. Joint satellite+radar did not
+significantly beat radar-only; all three readouts overfit after early best
+epochs. Best-checkpoint reload parity and the full two-stream split audit pass,
+with repeated normalized radar-only encodings retained as a limitation. This
+sensor task does not establish text/image/audio/video product quality or close
+R2. See the [protocol](docs/pretrained_reuse/R2_SUBSEVIR_PATHA_PROTOCOL_20261126.md)
+and [results](docs/pretrained_reuse/R2_SUBSEVIR_PATHA_RESULTS_20261126.md).
+
 **2026-11-23 R2 Japanese BERT publisher-test audit:** With both validation-selected readouts frozen, a one-shot evaluation on all 400 previously unopened publisher test states found BERT-base at 52.54% macro teacher-mode Accuracy / 1.0639 NLL / 0.1712 Brier versus the compact 27.6M LightSPLADE-derived encoder at 44.17% / 1.1299 / 0.2025. State-cluster paired intervals favor BERT on Accuracy/NLL/Brier, but ECE is inconclusive; targets are synthetic teacher distributions, and both models truncate 31% of candidate pairs. This supports BERT as a text teacher/reference only, not 95–98% product quality or a multimodal pass. Do not tune or repeat on this now-open test. See [one-shot test audit](docs/pretrained_reuse/R2_TYPED_DECISIONS_JA_PUBLISHER_TEST_AUDIT_20261123.md).
 
 **2026-11-23 R2 Social IQa publisher-dev audit:** The already-selected frozen MiniLM option scorer reached 43.40% Accuracy / 1.0739 NLL on 1,954 official dev questions, versus 53.81% internal validation. Exact text overlap with publisher train was zero; shared underlying ATOMIC event overlap is unknown. This one-shot result weakens the claim that the current compact readout generalizes, but does not test BERT-base or establish a BERT-family ceiling. Preserve these labels from tuning. Given the Japanese BERT-base result above, a targeted BERT-series comparison remains reasonable only on a newly admitted, source-disjoint task with validation fixed before training; avoid a broad sweep on exposed Social IQa. See [audit](docs/pretrained_reuse/R2_SOCIAL_IQA_PUBLISHER_DEV_AUDIT_20261123.md).
