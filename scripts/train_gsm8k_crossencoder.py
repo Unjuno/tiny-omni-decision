@@ -537,6 +537,21 @@ def main() -> None:
             batch_size = len(indices)
             total_loss += float(loss.detach()) * batch_size
             seen += batch_size
+            optimizer_step = (epoch - 1) * updates_per_epoch + start // BATCH_QUESTIONS + 1
+            if optimizer_step % 128 == 0 or optimizer_step == run_epochs * updates_per_epoch:
+                print(
+                    json.dumps(
+                        {
+                            "epoch": epoch,
+                            "step": optimizer_step,
+                            "step_loss": float(loss.detach()),
+                            "gradient_norm": last_norm,
+                            "elapsed_seconds": time.perf_counter() - started,
+                        },
+                        sort_keys=True,
+                    ),
+                    flush=True,
+                )
 
         step = epoch * updates_per_epoch
         validation_logits, validation_targets = _evaluate(model, validation, tokenizer, device)
