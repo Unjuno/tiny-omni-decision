@@ -16,6 +16,17 @@ The official release page's community-use statement does not settle that exact
 weight grant. Keep it `REVIEW`; existing load/forward evidence is technical,
 not product-rights clearance. See the [updated audit](docs/pretrained_reuse/R1_AUDIT.md).
 
+**2026-11-26 R2 fresh multimodal source screen:** Metadata-only review found
+HWU-USP (synchronized RGB-D, IMU, and ambient sensors) has 16 subject groups /
+144 recordings, below the provisional quality-evidence floor; its official
+Dryad file endpoint returned HTTP 403 in three small probes, and no media was
+retrieved. Meta MMCSG requires submitting organization details and accepting a
+non-transferable agreement that prohibits product incorporation. The KAIST
+rotating-machine source is CC BY 4.0, but its acoustic track covers only five
+listed 0-Nm conditions and does not establish independent group support.
+None is admitted for a quality run. No model, media, or validation set was
+accessed. See the [source screen](docs/pretrained_reuse/R2_FRESH_MULTIMODAL_SOURCE_SCREEN_20261126.md).
+
 **2026-11-23 R2 Japanese BERT publisher-test audit:** With both validation-selected readouts frozen, a one-shot evaluation on all 400 previously unopened publisher test states found BERT-base at 52.54% macro teacher-mode Accuracy / 1.0639 NLL / 0.1712 Brier versus the compact 27.6M LightSPLADE-derived encoder at 44.17% / 1.1299 / 0.2025. State-cluster paired intervals favor BERT on Accuracy/NLL/Brier, but ECE is inconclusive; targets are synthetic teacher distributions, and both models truncate 31% of candidate pairs. This supports BERT as a text teacher/reference only, not 95–98% product quality or a multimodal pass. Do not tune or repeat on this now-open test. See [one-shot test audit](docs/pretrained_reuse/R2_TYPED_DECISIONS_JA_PUBLISHER_TEST_AUDIT_20261123.md).
 
 **2026-11-23 R2 Social IQa publisher-dev audit:** The already-selected frozen MiniLM option scorer reached 43.40% Accuracy / 1.0739 NLL on 1,954 official dev questions, versus 53.81% internal validation. Exact text overlap with publisher train was zero; shared underlying ATOMIC event overlap is unknown. This one-shot result weakens the claim that the current compact readout generalizes, but does not test BERT-base or establish a BERT-family ceiling. Preserve these labels from tuning. Given the Japanese BERT-base result above, a targeted BERT-series comparison remains reasonable only on a newly admitted, source-disjoint task with validation fixed before training; avoid a broad sweep on exposed Social IQa. See [audit](docs/pretrained_reuse/R2_SOCIAL_IQA_PUBLISHER_DEV_AUDIT_20261123.md).
