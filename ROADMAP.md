@@ -1,3 +1,10 @@
+**2026-11-26 R2 Path A CPU runtime contract check:** Focused tests for the
+video/audio runtime interfaces, probability JSON contract, and native-feature
+Decision readout pass (`43 passed`, CPU-only). This is interface evidence only:
+no weights or media were loaded, and no quality or real-media parity claim is
+made. The R2 quality gate remains open. See
+[`CPU check`](docs/pretrained_reuse/R2_PATH_A_CPU_RUNTIME_CONTRACT_CHECK_20261126.md).
+
 **2026-11-26 R2 TinySYNCR external-evaluation screen:** The pinned 400-item
 subset (`00decf9030eb24ad7df213d014ebc7b17c473188`) has 25 questions per task;
 the card page rendered some question/answer examples during screening, so
