@@ -20,6 +20,7 @@ from typing import Any
 
 import numpy as np
 
+from scripts.audit_intphys_temporal_sampling_coverage import uniform_frame_numbers
 from scripts.audit_videoprism_checkpoint import CHECKPOINT_SHA256, MODEL_REVISION
 from scripts.extract_frozen_videoprism_features import (
     FRAME_COUNT,
@@ -155,15 +156,46 @@ def get_or_create_dev_video_record(
     return records[key]
 
 
-def validate_dev_video_record(key: tuple[str, str, str], row: dict[str, Any]) -> None:
+def validate_dev_video_record(
+    key: tuple[str, str, str],
+    row: dict[str, Any],
+    selected_frame_numbers: tuple[int, ...] = SELECTED_FRAME_NUMBERS,
+) -> None:
     expected = set(range(1, EXPECTED_FRAMES + 1))
     for channel in ("scene", "depth", "masks"):
         if row["frames"][channel] != expected:
             raise ValueError(f"{key} has {len(row['frames'][channel])}/100 {channel} frames")
     if row["label"] not in {0, 1}:
         raise ValueError(f"{key} lacks a binary physical-plausibility label")
-    if set(row["selected_png"]) != set(SELECTED_FRAME_NUMBERS):
+    if set(row["selected_png"]) != set(selected_frame_numbers):
         raise ValueError(f"{key} lacks a selected RGB frame")
+
+
+def validate_reference_dev_rows(
+    reference_path: Path,
+    sample_ids: list[str],
+    group_ids: list[str],
+    blocks: list[str],
+    labels: list[int],
+) -> str:
+    """Require exact ID/order/group/label parity with the prior fixed dev sample."""
+    with np.load(reference_path, allow_pickle=False) as reference:
+        required = {"sample_ids", "group_ids", "labels", "blocks"}
+        if not required.issubset(reference.files):
+            raise ValueError("reference dev cache lacks ID/group/label/block arrays")
+        reference_ids = reference["sample_ids"].astype(str).tolist()
+        reference_groups = reference["group_ids"].astype(str).tolist()
+        reference_labels = np.asarray(reference["labels"], dtype=np.int8).tolist()
+        reference_blocks = reference["blocks"].astype(str).tolist()
+    if (sample_ids, group_ids, labels, blocks) != (
+        reference_ids, reference_groups, reference_labels, reference_blocks
+    ):
+        raise ValueError("dev IDs/order/groups/labels differ from frozen reference cache")
+    digest = hashlib.sha256()
+    with reference_path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(8 * 1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def _args() -> argparse.Namespace:
@@ -173,6 +205,8 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--source-root", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--frame-count", type=int, default=FRAME_COUNT)
+    parser.add_argument("--reference-dev-features", type=Path)
     return parser.parse_args()
 
 
@@ -180,6 +214,9 @@ def main() -> None:
     run_started_at = datetime.now(UTC).isoformat()
     run_started = time.perf_counter()
     args = _args()
+    if not 2 <= args.frame_count <= EXPECTED_FRAMES:
+        raise ValueError(f"frame count must be between 2 and {EXPECTED_FRAMES}")
+    selected_frame_numbers = uniform_frame_numbers(EXPECTED_FRAMES, args.frame_count)
     archive_path = args.archive.resolve(strict=True)
     audit_path = args.audit_report.resolve(strict=True)
     checkpoint = args.checkpoint.resolve(strict=True)
@@ -255,11 +292,11 @@ def main() -> None:
 
     def finish_video(key: tuple[str, str, str], row: dict[str, Any]) -> None:
         block, scene, rendition = key
-        validate_dev_video_record(key, row)
+        validate_dev_video_record(key, row, selected_frame_numbers)
         frame_array = np.stack(
             [
                 np.asarray(tf.io.decode_png(row["selected_png"][number], channels=3))
-                for number in SELECTED_FRAME_NUMBERS
+                for number in selected_frame_numbers
             ]
         )
         normalized = _preprocess(frame_array, tf)
@@ -275,8 +312,8 @@ def main() -> None:
         forward_seconds.append(time.perf_counter() - forward_started)
         tokens = result[0] if isinstance(result, tuple) else result
         token_array = np.asarray(tokens)
-        per_frame = pool_spatial_tokens_per_frame(token_array, FRAME_COUNT).squeeze(0)
-        if per_frame.shape != (FRAME_COUNT, 768) or not np.isfinite(per_frame).all():
+        per_frame = pool_spatial_tokens_per_frame(token_array, args.frame_count).squeeze(0)
+        if per_frame.shape != (args.frame_count, 768) or not np.isfinite(per_frame).all():
             raise ValueError(f"{key} produced invalid frozen features: {per_frame.shape}")
         sample_id = f"{block}/{scene}/{rendition}"
         if sample_id in seen_ids:
@@ -328,7 +365,7 @@ def main() -> None:
                 raise ValueError(f"duplicate {channel} frame: {member.name}")
             active["frames"][channel].add(frame_number)
             if channel == "scene":
-                if frame_number in SELECTED_FRAME_NUMBERS:
+                if frame_number in selected_frame_numbers:
                     extracted = archive.extractfile(member)
                     if extracted is None:
                         raise ValueError(f"cannot read selected frame: {member.name}")
@@ -347,6 +384,12 @@ def main() -> None:
     sampled_media_audit = sampled_media_label_collision_audit(
         group_ids, labels, normalized_media_hashes
     )
+    reference_dev_hash = None
+    if args.reference_dev_features:
+        reference_path = args.reference_dev_features.resolve(strict=True)
+        reference_dev_hash = validate_reference_dev_rows(
+            reference_path, ids, group_ids, blocks, labels
+        )
     process_memory_after = process.memory_info()
     peak_working_set = getattr(process_memory_after, "peak_wset", process_memory_after.rss)
 
@@ -390,9 +433,13 @@ def main() -> None:
         "scene_groups": len(group_rows),
         "sampled_media_label_collision_audit": sampled_media_audit,
         "labels_loaded_for_fit_or_selection": False,
-        "development_label_use": "one fixed evaluation only; no fitting or calibration",
+        "development_label_use": (
+            "repeated fixed development diagnostic after candidate freeze; no fitting or "
+            "calibration; not blind evidence"
+        ),
         "sealed_test_accessed": False,
-        "selected_frame_numbers_1_based": list(SELECTED_FRAME_NUMBERS),
+        "frame_count": args.frame_count,
+        "selected_frame_numbers_1_based": list(selected_frame_numbers),
         "input_frame_size": FRAME_SIZE,
         "feature_shape": list(feature_matrix.shape[1:]),
         "feature_layout": "mean pooled spatial tokens per sampled frame; temporal order retained",
@@ -403,6 +450,7 @@ def main() -> None:
         "forward_seconds_median": float(np.median(forward_seconds)),
         "forward_seconds_p95": float(np.quantile(forward_seconds, 0.95)),
         "feature_file_sha256": hashlib.sha256(features_path.read_bytes()).hexdigest(),
+        "reference_dev_features_sha256": reference_dev_hash,
     }
     (output_dir / "extract-report.json").write_text(
         json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8"

@@ -6,6 +6,7 @@ from scripts.extract_intphys_dev_features import (
     sampled_media_label_collision_audit,
     validate_audit_summary,
     validate_dev_video_record,
+    validate_reference_dev_rows,
 )
 
 
@@ -102,3 +103,39 @@ def test_dev_record_requires_complete_frames_for_every_modality():
     row["frames"]["masks"].remove(100)
     with pytest.raises(ValueError, match="masks frames"):
         validate_dev_video_record(key, row)
+
+
+def test_dev_record_accepts_requested_sixteen_frame_policy():
+    from scripts.audit_intphys_temporal_sampling_coverage import uniform_frame_numbers
+
+    key = ("O1", "01", "1")
+    selected = uniform_frame_numbers(100, 16)
+    row = {
+        "frames": {
+            channel: set(range(1, 101)) for channel in ("scene", "depth", "masks")
+        },
+        "selected_png": {frame: b"png" for frame in selected},
+        "label": 1,
+    }
+    validate_dev_video_record(key, row, selected)
+
+
+def test_reference_dev_validation_requires_exact_order_and_labels(tmp_path):
+    import numpy as np
+
+    path = tmp_path / "reference.npz"
+    np.savez_compressed(
+        path,
+        sample_ids=np.asarray(["a", "b", "c", "d"]),
+        group_ids=np.asarray(["g"] * 4),
+        labels=np.asarray([1, 1, 0, 0], dtype=np.int8),
+        blocks=np.asarray(["O1"] * 4),
+    )
+    digest = validate_reference_dev_rows(
+        path, ["a", "b", "c", "d"], ["g"] * 4, ["O1"] * 4, [1, 1, 0, 0]
+    )
+    assert len(digest) == 64
+    with pytest.raises(ValueError, match="IDs/order/groups/labels"):
+        validate_reference_dev_rows(
+            path, ["b", "a", "c", "d"], ["g"] * 4, ["O1"] * 4, [1, 1, 0, 0]
+        )

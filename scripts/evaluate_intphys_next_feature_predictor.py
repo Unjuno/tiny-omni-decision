@@ -193,6 +193,22 @@ def validate_receipts(
         raise ValueError(
             "training corpus source or frozen encoder does not match pinned R1 receipts"
         )
+    corpus_feature_shape = train_corpus_report.get("feature_shape", [])
+    dev_feature_shape = dev_report.get("feature_shape", [])
+    train_frame_count = train_corpus_report.get(
+        "frame_count", corpus_feature_shape[0] if corpus_feature_shape else None
+    )
+    dev_frame_count = dev_report.get(
+        "frame_count", dev_feature_shape[0] if dev_feature_shape else None
+    )
+    metadata_frame_count = train_metadata.get("sequence_length", train_frame_count)
+    if (
+        not isinstance(train_frame_count, int)
+        or train_frame_count < 2
+        or dev_frame_count != train_frame_count
+        or metadata_frame_count != train_frame_count
+    ):
+        raise ValueError("train, validation, and dev frame counts do not match")
     if train_metadata.get("best_checkpoint_sha256") != sha256_file(checkpoint):
         raise ValueError("predictor checkpoint hash does not match training receipt")
     if train_metadata.get("train_features_sha256") != sha256_file(train_features_path):

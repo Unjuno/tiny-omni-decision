@@ -168,6 +168,8 @@ def main() -> None:
         "min_delta": args.min_delta,
         "train_examples": len(train),
         "validation_examples": len(validation),
+        "sequence_length": int(train.shape[1]),
+        "feature_width": int(train.shape[2]),
         "train_unique_groups": len(set(train_groups)),
         "validation_unique_groups": len(set(validation_groups)),
         "train_sample_ids_sha256": hashlib.sha256("\n".join(train_ids).encode()).hexdigest(),

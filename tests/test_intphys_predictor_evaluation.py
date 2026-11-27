@@ -126,6 +126,7 @@ def test_evaluation_receipts_fail_closed_on_checkpoint_or_feature_hash_mismatch(
         json.dumps(
             {
                 "status": "complete_train_only_next_feature_predictor",
+                "sequence_length": 8,
                 "best_checkpoint_sha256": sha256_file(checkpoint),
                 "train_features_sha256": sha256_file(train_features),
                 "validation_features_sha256": sha256_file(validation_features),
@@ -143,6 +144,7 @@ def test_evaluation_receipts_fail_closed_on_checkpoint_or_feature_hash_mismatch(
                 "checkpoint_sha256": CHECKPOINT_SHA256,
                 "model_revision": MODEL_REVISION,
                 "videoprism_source_commit": VIDEOPRISM_SOURCE_COMMIT,
+                "feature_shape": [8, 768],
                 "feature_archive_sha256": {
                     "train": sha256_file(train_features),
                     "validation": sha256_file(validation_features),
@@ -161,6 +163,7 @@ def test_evaluation_receipts_fail_closed_on_checkpoint_or_feature_hash_mismatch(
                 "checkpoint_sha256": CHECKPOINT_SHA256,
                 "model_revision": MODEL_REVISION,
                 "videoprism_source_commit": VIDEOPRISM_SOURCE_COMMIT,
+                "feature_shape": [8, 768],
                 "feature_file_sha256": sha256_file(dev_features),
                 "sealed_test_accessed": False,
             }
@@ -258,6 +261,7 @@ def test_fixed_evaluation_cli_writes_grouped_scores_without_probability_claims(
         "checkpoint_sha256": CHECKPOINT_SHA256,
         "model_revision": MODEL_REVISION,
         "videoprism_source_commit": VIDEOPRISM_SOURCE_COMMIT,
+            "feature_shape": [8, 6],
         "feature_archive_sha256": {
             "train": sha256_file(train_features),
             "validation": sha256_file(validation_features),
@@ -267,6 +271,7 @@ def test_fixed_evaluation_cli_writes_grouped_scores_without_probability_claims(
     corpus_report_path.write_text(json.dumps(corpus_report), encoding="utf-8")
     training_metadata = {
         "status": "complete_train_only_next_feature_predictor",
+            "sequence_length": 8,
         "best_checkpoint_sha256": sha256_file(checkpoint_path),
         "train_features_sha256": sha256_file(train_features),
         "validation_features_sha256": sha256_file(validation_features),
@@ -285,6 +290,7 @@ def test_fixed_evaluation_cli_writes_grouped_scores_without_probability_claims(
                 "checkpoint_sha256": CHECKPOINT_SHA256,
                 "model_revision": MODEL_REVISION,
                 "videoprism_source_commit": VIDEOPRISM_SOURCE_COMMIT,
+                    "feature_shape": [8, 6],
                 "feature_file_sha256": sha256_file(dev_features),
                 "sealed_test_accessed": False,
             }

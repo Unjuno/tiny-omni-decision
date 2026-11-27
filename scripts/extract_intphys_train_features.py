@@ -20,6 +20,7 @@ from typing import Any
 
 import numpy as np
 
+from scripts.audit_intphys_temporal_sampling_coverage import uniform_frame_numbers
 from scripts.audit_videoprism_checkpoint import CHECKPOINT_SHA256, MODEL_REVISION
 from scripts.extract_frozen_videoprism_features import (
     FRAME_COUNT,
@@ -33,7 +34,6 @@ from scripts.extract_frozen_videoprism_features import (
 EXPECTED_ARCHIVE_BYTES = 37_016_506_106
 EXPECTED_ARCHIVE_MD5 = "3428bcf398441a489111528634530212"
 EXPECTED_FRAMES = 100
-SELECTED_FRAME_NUMBERS = (1, 15, 29, 43, 57, 71, 85, 100)
 _FRAME = re.compile(r"^(scene|depth|masks)_(\d{3})\.png$")
 
 
@@ -159,6 +159,79 @@ def deterministic_group_split(
     return sorted(train_indices), sorted(validation_indices), group_ids
 
 
+def load_reference_split_assignments(
+    train_features_path: Path, validation_features_path: Path
+) -> tuple[dict[str, tuple[str, str]], dict[str, list[str]], dict[str, str]]:
+    """Load immutable train/validation membership from a prior feature split."""
+    assignments: dict[str, tuple[str, str]] = {}
+    ordered_ids: dict[str, list[str]] = {}
+    path_hashes: dict[str, str] = {}
+    for split_name, path in (
+        ("train", train_features_path),
+        ("validation", validation_features_path),
+    ):
+        with np.load(path, allow_pickle=False) as payload:
+            required = {"sample_ids", "group_ids"}
+            if not required.issubset(payload.files):
+                raise ValueError(f"reference {split_name} cache lacks sample/group identities")
+            sample_ids = payload["sample_ids"].astype(str).tolist()
+            group_ids = payload["group_ids"].astype(str).tolist()
+        if (
+            not sample_ids
+            or len(sample_ids) != len(group_ids)
+            or len(set(sample_ids)) != len(sample_ids)
+            or any(not value for value in (*sample_ids, *group_ids))
+        ):
+            raise ValueError(f"reference {split_name} cache has invalid identities")
+        ordered_ids[split_name] = sample_ids
+        path_hashes[split_name] = sha256_file(path)
+        for sample_id, group_id in zip(sample_ids, group_ids, strict=True):
+            if sample_id in assignments:
+                raise ValueError(f"reference split repeats sample ID: {sample_id}")
+            assignments[sample_id] = (split_name, group_id)
+    train_groups = {assignments[sample_id][1] for sample_id in ordered_ids["train"]}
+    validation_groups = {
+        assignments[sample_id][1] for sample_id in ordered_ids["validation"]
+    }
+    if train_groups & validation_groups:
+        raise ValueError("reference split has cross-split group overlap")
+    return assignments, ordered_ids, path_hashes
+
+
+def apply_reference_split(
+    sample_ids: list[str],
+    reference_train_path: Path,
+    reference_validation_path: Path,
+) -> tuple[list[int], list[int], list[str], dict[str, str]]:
+    """Reuse exact sample IDs, source order, and group assignment from a frozen split."""
+    assignments, ordered_ids, path_hashes = load_reference_split_assignments(
+        reference_train_path, reference_validation_path
+    )
+    if len(sample_ids) != len(set(sample_ids)) or set(sample_ids) != set(assignments):
+        missing = sorted(set(assignments) - set(sample_ids))[:5]
+        unexpected = sorted(set(sample_ids) - set(assignments))[:5]
+        raise ValueError(
+            f"current archive IDs differ from reference split; missing={missing}, "
+            f"unexpected={unexpected}"
+        )
+    train_indices = [
+        index for index, sample_id in enumerate(sample_ids)
+        if assignments[sample_id][0] == "train"
+    ]
+    validation_indices = [
+        index for index, sample_id in enumerate(sample_ids)
+        if assignments[sample_id][0] == "validation"
+    ]
+    actual_order = {
+        "train": [sample_ids[index] for index in train_indices],
+        "validation": [sample_ids[index] for index in validation_indices],
+    }
+    if actual_order != ordered_ids:
+        raise ValueError("archive sample order differs from frozen reference split ordering")
+    group_ids = [assignments[sample_id][1] for sample_id in sample_ids]
+    return train_indices, validation_indices, group_ids, path_hashes
+
+
 def file_digests(path: Path) -> tuple[str, str, int]:
     md5 = hashlib.md5()
     sha256 = hashlib.sha256()
@@ -194,6 +267,9 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--source-root", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--seed", type=int, default=17)
+    parser.add_argument("--frame-count", type=int, default=FRAME_COUNT)
+    parser.add_argument("--reference-train-features", type=Path)
+    parser.add_argument("--reference-validation-features", type=Path)
     return parser.parse_args()
 
 
@@ -201,6 +277,11 @@ def main() -> None:
     run_started_at = datetime.now(UTC).isoformat()
     run_started = time.perf_counter()
     args = _args()
+    if not 2 <= args.frame_count <= EXPECTED_FRAMES:
+        raise ValueError(f"frame count must be between 2 and {EXPECTED_FRAMES}")
+    if bool(args.reference_train_features) != bool(args.reference_validation_features):
+        raise ValueError("both reference train and validation feature paths are required together")
+    selected_frame_numbers = uniform_frame_numbers(EXPECTED_FRAMES, args.frame_count)
     archive_path = args.archive.resolve(strict=True)
     checkpoint = args.checkpoint.resolve(strict=True)
     source_root = args.source_root.resolve(strict=True)
@@ -275,11 +356,11 @@ def main() -> None:
                 )
         if row["status_hash"] is None:
             raise ValueError(f"{video_id} missing status.json")
-        if set(row["selected_frames"]) != set(SELECTED_FRAME_NUMBERS):
+        if set(row["selected_frames"]) != set(selected_frame_numbers):
             raise ValueError(f"{video_id} missing one or more uniformly sampled RGB frames")
         rgb_sequence_hash = rgb_sequence_sha256(row["rgb_frame_hashes"])
 
-        frames = np.stack([row["selected_frames"][number] for number in SELECTED_FRAME_NUMBERS])
+        frames = np.stack([row["selected_frames"][number] for number in selected_frame_numbers])
         normalized_frames = _preprocess(frames, tf)
         video = jnp.asarray(normalized_frames[None, ...])
         forward_started = time.perf_counter()
@@ -293,8 +374,8 @@ def main() -> None:
         forward_seconds.append(time.perf_counter() - forward_started)
         tokens = result[0] if isinstance(result, tuple) else result
         token_array = np.asarray(tokens)
-        per_frame = pool_spatial_tokens_per_frame(token_array, FRAME_COUNT).squeeze(0)
-        if per_frame.shape != (FRAME_COUNT, 768) or not np.isfinite(per_frame).all():
+        per_frame = pool_spatial_tokens_per_frame(token_array, args.frame_count).squeeze(0)
+        if per_frame.shape != (args.frame_count, 768) or not np.isfinite(per_frame).all():
             raise ValueError(f"{video_id} produced invalid per-frame features: {per_frame.shape}")
 
         sample_ids.append(video_id)
@@ -356,7 +437,7 @@ def main() -> None:
                 active["rgb_frame_hashes"][frame_number] = hashlib.sha256(
                     frame_bytes
                 ).hexdigest()
-                if frame_number in SELECTED_FRAME_NUMBERS:
+                if frame_number in selected_frame_numbers:
                     decoded = tf.io.decode_png(frame_bytes, channels=3)
                     active["selected_frames"][frame_number] = np.asarray(decoded)
     if active_video_id is not None and active is not None:
@@ -367,13 +448,23 @@ def main() -> None:
     if not feature_rows:
         raise ValueError("training shard contains no videos")
     features = np.stack(feature_rows)
-    train_indices, validation_indices, group_ids = deterministic_group_split(
-        sample_ids,
-        status_hashes,
-        media_hashes,
-        sampled_media_hashes=sampled_media_hashes,
-        seed=args.seed,
-    )
+    reference_split_hashes: dict[str, str] = {}
+    if args.reference_train_features:
+        train_indices, validation_indices, group_ids, reference_split_hashes = (
+            apply_reference_split(
+                sample_ids,
+                args.reference_train_features.resolve(strict=True),
+                args.reference_validation_features.resolve(strict=True),
+            )
+        )
+    else:
+        train_indices, validation_indices, group_ids = deterministic_group_split(
+            sample_ids,
+            status_hashes,
+            media_hashes,
+            sampled_media_hashes=sampled_media_hashes,
+            seed=args.seed,
+        )
     if set(train_indices) & set(validation_indices):
         raise RuntimeError("index split overlap")
     train_groups = {group_ids[index] for index in train_indices}
@@ -452,14 +543,17 @@ def main() -> None:
         "cross_split_rgb_sequence_identity_overlap": 0,
         "cross_split_sampled_rgb_pixels_identity_overlap": 0,
         "channel_frame_counts": dict(channel_counts),
-        "selected_frame_numbers_1_based": list(SELECTED_FRAME_NUMBERS),
+        "frame_count": args.frame_count,
+        "selected_frame_numbers_1_based": list(selected_frame_numbers),
         "input_frame_size": FRAME_SIZE,
         "input_color_order": "RGB",
         "frames_per_video": EXPECTED_FRAMES,
         "feature_shape": list(features.shape[1:]),
         "feature_layout": "mean pooled spatial tokens per sampled frame; temporal order retained",
         "rgb_identity": "SHA-256 of ordered SHA-256 digests of all 100 original RGB PNG payloads",
-        "sampled_rgb_identity": "SHA-256 of normalized 8-frame VideoPrism input tensor bytes",
+        "sampled_rgb_identity": (
+            f"SHA-256 of normalized {args.frame_count}-frame VideoPrism input tensor bytes"
+        ),
         "model_revision": MODEL_REVISION,
         "videoprism_source_commit": source_commit,
         "checkpoint_sha256": checkpoint_sha256,
@@ -467,7 +561,12 @@ def main() -> None:
         "forward_seconds_median": float(np.median(forward_seconds)),
         "forward_seconds_p95": float(np.quantile(forward_seconds, 0.95)),
         "split_seed": args.seed,
-        "split_policy": "SHA-256(group identity) modulo 5; bucket 0 held for internal validation",
+        "split_policy": (
+            "reused exact IDs, order, and group assignment from reference feature caches"
+            if reference_split_hashes
+            else "SHA-256(group identity) modulo 5; bucket 0 held for internal validation"
+        ),
+        "reference_split_feature_sha256": reference_split_hashes,
         "sample_id_order_sha256": split_hashes,
         "feature_archive_sha256": split_file_hashes,
         "train_examples": len(train_indices),

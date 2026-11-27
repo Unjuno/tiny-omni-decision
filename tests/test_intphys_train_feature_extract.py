@@ -1,6 +1,7 @@
 import pytest
 
 from scripts.extract_intphys_train_features import (
+    apply_reference_split,
     canonical_status_hash,
     deterministic_group_split,
     module_version,
@@ -89,6 +90,52 @@ def test_deterministic_split_also_groups_equal_sampled_inputs():
     validation_groups = {group_ids[index] for index in validation}
     assert group_ids[0] == group_ids[1]
     assert not train_groups & validation_groups
+
+
+def test_reference_split_reuses_exact_membership_order_and_groups(tmp_path):
+    import numpy as np
+
+    train_path = tmp_path / "train.npz"
+    validation_path = tmp_path / "validation.npz"
+    np.savez_compressed(
+        train_path,
+        sample_ids=np.asarray(["a", "c"]),
+        group_ids=np.asarray(["ga", "gc"]),
+    )
+    np.savez_compressed(
+        validation_path,
+        sample_ids=np.asarray(["b", "d"]),
+        group_ids=np.asarray(["gb", "gd"]),
+    )
+
+    train, validation, groups, hashes = apply_reference_split(
+        ["a", "b", "c", "d"], train_path, validation_path
+    )
+    assert train == [0, 2]
+    assert validation == [1, 3]
+    assert groups == ["ga", "gb", "gc", "gd"]
+    assert set(hashes) == {"train", "validation"}
+
+
+def test_reference_split_rejects_id_or_archive_order_changes(tmp_path):
+    import numpy as np
+
+    train_path = tmp_path / "train.npz"
+    validation_path = tmp_path / "validation.npz"
+    np.savez_compressed(
+        train_path,
+        sample_ids=np.asarray(["a", "c"]),
+        group_ids=np.asarray(["ga", "gc"]),
+    )
+    np.savez_compressed(
+        validation_path,
+        sample_ids=np.asarray(["b", "d"]),
+        group_ids=np.asarray(["gb", "gd"]),
+    )
+    with pytest.raises(ValueError, match="archive sample order"):
+        apply_reference_split(["c", "b", "a", "d"], train_path, validation_path)
+    with pytest.raises(ValueError, match="current archive IDs differ"):
+        apply_reference_split(["a", "b", "c", "unexpected"], train_path, validation_path)
 
 
 def test_rgb_sequence_hash_requires_and_orders_all_one_hundred_frames():
