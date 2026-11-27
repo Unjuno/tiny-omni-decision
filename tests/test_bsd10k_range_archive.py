@@ -1,13 +1,16 @@
 from __future__ import annotations
 
 import zipfile
+from types import SimpleNamespace
 
 import pytest
 
+import scripts.fetch_bsd10k_allowed_audio as fetch_audio
 from scripts.fetch_bsd10k_allowed_audio import (
     _extract_member_bytes,
     _normalize_ranges,
     _parse_multipart_ranges,
+    _read_range_batch,
 )
 
 
@@ -56,3 +59,32 @@ def test_range_normalization_only_merges_adjacent_ranges() -> None:
     ]
     with pytest.raises(ValueError, match="overlapping"):
         _normalize_ranges([(0, 4), (4, 8)])
+
+
+def test_transient_server_error_retries_the_same_exact_range(monkeypatch) -> None:
+    monkeypatch.setattr(fetch_audio.time, "sleep", lambda _: None)
+
+    class Session:
+        calls = 0
+
+        def get(self, url, *, headers, timeout):
+            self.calls += 1
+            if self.calls == 1:
+                return SimpleNamespace(
+                    status_code=500,
+                    headers={},
+                    content=b"temporary error",
+                    close=lambda: None,
+                )
+            return SimpleNamespace(
+                status_code=206,
+                headers={"Content-Range": "bytes 0-0/10"},
+                content=b"x",
+                close=lambda: None,
+            )
+
+    session = Session()
+    assert _read_range_batch(session, "https://example.invalid/audio.zip", 10, [(0, 0)]) == {
+        (0, 0): b"x"
+    }
+    assert session.calls == 2

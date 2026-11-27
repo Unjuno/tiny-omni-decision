@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import os
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -39,6 +40,48 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _load_encoder(device: str, weights: Path, source: Path):
+    if device == "cuda":
+        if not os.environ.get("TINY_OMNI_GPU_GATE_RESERVED_MIB"):
+            raise RuntimeError("CUDA feature extraction requires the HotGPU guard")
+        torch, model, mel, parameters, source_commit = _load_model(weights, source)
+        return torch, model, mel, parameters, source_commit
+
+    if sha256_file(weights) != WEIGHTS_SHA256:
+        raise ValueError("EfficientAT checkpoint SHA-256 mismatch")
+    source_commit = subprocess.check_output(
+        ["git", "-C", str(source), "rev-parse", "HEAD"], text=True
+    ).strip()
+    dirty = subprocess.check_output(
+        ["git", "-C", str(source), "status", "--porcelain", "--untracked-files=no"],
+        text=True,
+    ).strip()
+    if source_commit != SOURCE_COMMIT or dirty:
+        raise ValueError("EfficientAT source differs from pinned pristine revision")
+
+    import contextlib
+    import io
+
+    import torch
+
+    sys.path.insert(0, str(source))
+    with contextlib.redirect_stdout(io.StringIO()):
+        from models.dymn.model import get_model
+        from models.preprocess import AugmentMelSTFT
+
+    torch.set_num_threads(4)
+    torch.set_num_interop_threads(1)
+    model = get_model(width_mult=0.4, pretrained_name=None, T_max=1.0)
+    state = torch.load(weights, map_location="cpu", weights_only=True)
+    model.load_state_dict(state, strict=True)
+    parameter_count = sum(parameter.numel() for parameter in model.parameters())
+    if parameter_count != MODEL_PARAMETERS:
+        raise ValueError(f"unexpected EfficientAT parameter count: {parameter_count}")
+    model.eval().requires_grad_(False)
+    mel = AugmentMelSTFT(freqm=0, timem=0).eval().requires_grad_(False)
+    return torch, model, mel, parameter_count, source_commit
+
+
 def fixed_audio_windows(waveform: np.ndarray) -> np.ndarray:
     """Make complete two-second windows at a one-second hop, right-padding only the tail."""
     values = np.asarray(waveform, dtype=np.float32)
@@ -63,9 +106,8 @@ def extract_split(
     source: Path,
     batch_size: int = 24,
     limit: int | None = None,
+    device: str = "cuda",
 ) -> dict:
-    if not os.environ.get("TINY_OMNI_GPU_GATE_RESERVED_MIB"):
-        raise RuntimeError("feature extraction must be run under run_with_hotgpu_guard.py")
     if not 1 <= batch_size <= 64:
         raise ValueError("batch size must be between 1 and 64")
     if output_dir.exists():
@@ -104,7 +146,12 @@ def extract_split(
         if path.stat().st_size != row["bytes"] or sha256_file(path) != row["sha256"]:
             raise ValueError(f"downloaded media hash mismatch for sound {sound_id}")
 
-    torch, model, mel, parameter_count, source_commit = _load_model(weights, source)
+    if device not in {"cuda", "cpu"}:
+        raise ValueError("device must be cuda or cpu")
+    torch, model, mel, parameter_count, source_commit = _load_encoder(device, weights, source)
+    device_object = torch.device(device)
+    model.to(device_object)
+    mel.to(device_object)
     if parameter_count != MODEL_PARAMETERS or source_commit != SOURCE_COMMIT:
         raise ValueError("EfficientAT source or parameter count differs from pinned audit")
     before_state = _state_sha(model)
@@ -123,7 +170,7 @@ def extract_split(
             windows = fixed_audio_windows(waveform)
             embeddings = []
             for start in range(0, len(windows), batch_size):
-                batch = torch.from_numpy(windows[start : start + batch_size]).cuda()
+                batch = torch.from_numpy(windows[start : start + batch_size]).to(device_object)
                 mel_input = mel(batch).unsqueeze(1)
                 logits, output_features = model(mel_input)
                 if (
@@ -133,9 +180,10 @@ def extract_split(
                 ):
                     raise ValueError(f"EfficientAT produced invalid features for sound {sound_id}")
                 embeddings.extend(output_features.float().cpu().numpy())
-                torch.cuda.synchronize()
-                peak_allocated = max(peak_allocated, torch.cuda.max_memory_allocated())
-                peak_reserved = max(peak_reserved, torch.cuda.max_memory_reserved())
+                if device == "cuda":
+                    torch.cuda.synchronize()
+                    peak_allocated = max(peak_allocated, torch.cuda.max_memory_allocated())
+                    peak_reserved = max(peak_reserved, torch.cuda.max_memory_reserved())
             pooled = np.mean(np.stack(embeddings), axis=0, dtype=np.float64).astype(np.float32)
             norm = float(np.linalg.norm(pooled))
             if not np.isfinite(norm) or norm <= 1e-12:
@@ -190,7 +238,12 @@ def extract_split(
         "feature_sha256": sha256_file(feature_path),
         "sample_index_sha256": sha256_file(index_path),
         "dtype": str(next(model.parameters()).dtype),
-        "device": torch.cuda.get_device_name(0),
+        "device": torch.cuda.get_device_name(0) if device == "cuda" else "cpu",
+        "gpu_gate": {
+            key: value for key, value in os.environ.items() if key.startswith("TINY_OMNI_GPU_GATE_")
+        }
+        if device == "cuda"
+        else None,
         "peak_allocated_bytes": peak_allocated,
         "peak_reserved_bytes": peak_reserved,
         "elapsed_seconds": time.perf_counter() - started,
@@ -214,6 +267,7 @@ def main() -> int:
     parser.add_argument("--source", type=Path, required=True)
     parser.add_argument("--batch-size", type=int, default=24)
     parser.add_argument("--limit", type=int)
+    parser.add_argument("--device", choices=("cpu", "cuda"), default="cuda")
     args = parser.parse_args()
     report = extract_split(
         args.split_manifest.resolve(strict=True),
@@ -224,6 +278,7 @@ def main() -> int:
         args.source.resolve(strict=True),
         args.batch_size,
         args.limit,
+        args.device,
     )
     print(json.dumps(report, indent=2))
     return 0

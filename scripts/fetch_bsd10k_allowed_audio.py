@@ -182,13 +182,16 @@ def _read_range_batch(
             headers={"Range": range_header, "Accept-Encoding": "identity"},
             timeout=timeout,
         )
-        if response.status_code == 429 and attempt < 5:
-            retry_after = response.headers.get("Retry-After", "5")
+        if response.status_code in {429, 500, 502, 503, 504} and attempt < 5:
+            retry_after = response.headers.get("Retry-After", "")
             response.close()
-            try:
-                delay = min(max(float(retry_after), 1.0), 120.0)
-            except ValueError:
-                delay = 5.0
+            if response.status_code == 429:
+                try:
+                    delay = min(max(float(retry_after), 1.0), 120.0)
+                except ValueError:
+                    delay = min(2**attempt, 30)
+            else:
+                delay = min(2**attempt, 30)
             time.sleep(delay)
             continue
         try:
