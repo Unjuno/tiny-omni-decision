@@ -184,8 +184,11 @@ the receipt SHA-256 is
 
 Full extraction for train and validation is a separate CPU-only run in a new
 attempt directory. The frozen features feed the existing small next-feature
-predictor; its model and validation rule remain fixed. No probe data or labels
-have been opened.
+predictor (seed 17, hidden width 64, AdamW at 1e-3, maximum 100 epochs, batch
+64, patience 8, min-delta 1e-4); selection is minimum validation cosine loss.
+The report will compare that selected loss with the no-training persistence
+baseline on the exact same validation features. No probe data or labels have
+been opened.
 
 ## Outstanding gates
 
