@@ -18,6 +18,8 @@ The BSD10k custom test, DCASE evaluation set, and sealed audit remain unopened.
 - Inputs: existing `run-report.json` class metrics and `data_support_by_class`
   counts from
   `C:\CodexArtifacts\pretrained-reuse-r2-local\bsd10k-v1.2-source-audit-20261128-attempt-01`.
+- Saved `validation-predictions.jsonl` from that same readout run for a
+  descriptive confusion tally. No predictions were regenerated.
 - Class observations: all 23 fixed BSD10k classes; predictor metrics are the
   saved temperature-scaled validation accuracies. Support is the frozen train
   count and number of distinct uploader groups. No raw validation media or
@@ -38,6 +40,15 @@ The direction is consistent with better coverage supporting better class
 performance. It does not show that merely adding more clips will cause the
 observed differences: class difficulty, taxonomy overlap, annotation ambiguity,
 and source acoustics are confounded with support.
+
+The saved validation predictions contain 645 errors among 1,436 records. Using
+the class-code prefix as a coarse family grouping, 350 errors (54.3%) remain
+within the same prefix and 295 cross prefixes. The most frequent directed
+confusions include `is-w → is-p` (44), `fx-o → fx-n` (42), `is-s → is-p` (27),
+and `fx-o → fx-m` (26). This pattern is compatible with neighboring or
+overlapping sound categories; it does not prove that any annotation is wrong.
+The prefixes are used only for this diagnostic and were not added to the model
+input or scoring contract.
 
 Examples make that limitation visible:
 
@@ -79,6 +90,8 @@ the model was not reloaded and no predictions were regenerated:
 ```text
 Spearman(23 class train-example counts, saved validation Accuracy) = 0.775
 Spearman(23 class distinct train-uploader counts, saved validation Accuracy) = 0.691
+Saved validation errors = 645 / 1436; same-prefix errors = 350; cross-prefix errors = 295
+Most frequent directed confusion = is-w -> is-p (44)
 ```
 
 Original run hashes, data receipts, model configuration, full per-class metrics,
