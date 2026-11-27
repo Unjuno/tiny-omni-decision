@@ -122,6 +122,27 @@ def _quantiles(values: Any, np: Any) -> dict[str, float]:
     }
 
 
+def _group_nearest(train: Any, validation: Any, np: Any) -> dict[str, Any]:
+    train_norm = train / np.maximum(np.linalg.norm(train, axis=1, keepdims=True), 1e-12)
+    validation_norm = validation / np.maximum(
+        np.linalg.norm(validation, axis=1, keepdims=True), 1e-12
+    )
+    similarity = train_norm @ validation_norm.T
+    train_max = similarity.max(axis=1)
+    validation_max = similarity.max(axis=0)
+    return {
+        "train_to_validation_nearest": _quantiles(train_max, np),
+        "validation_to_train_nearest": _quantiles(validation_max, np),
+        "nearest_counts": {
+            str(threshold): {
+                "train_to_validation": int((train_max >= threshold).sum()),
+                "validation_to_train": int((validation_max >= threshold).sum()),
+            }
+            for threshold in (0.99, 0.995)
+        },
+    }
+
+
 def screen_split(
     train_ids: list[str],
     train_signatures: Any,
@@ -134,6 +155,13 @@ def screen_split(
     """Report nearest cross-split coarse descriptors without filtering examples."""
     if not train_ids or not validation_ids or top_k < 1:
         raise ValueError("non-empty splits and positive top_k are required")
+    if (
+        train_signatures.ndim != 2
+        or validation_signatures.ndim != 2
+        or train_signatures.shape[1] != 524
+        or validation_signatures.shape[1] != 524
+    ):
+        raise ValueError("scene signatures must have the expected 524D layout")
     train_norms = np.linalg.norm(train_signatures, axis=1)
     validation_norms = np.linalg.norm(validation_signatures, axis=1)
     if not np.allclose(train_norms, 1.0, atol=1e-5) or not np.allclose(
@@ -169,6 +197,17 @@ def screen_split(
         ),
         "train_to_validation_nearest_cosine": _quantiles(train_max, np),
         "validation_to_train_nearest_cosine": _quantiles(validation_max, np),
+        "feature_group_nearest_cosine": {
+            "coarse_rgb_appearance": _group_nearest(
+                train_signatures[:, :384], validation_signatures[:, :384], np
+            ),
+            "mask_occupancy": _group_nearest(
+                train_signatures[:, 384:512], validation_signatures[:, 384:512], np
+            ),
+            "camera_pose": _group_nearest(
+                train_signatures[:, 512:524], validation_signatures[:, 512:524], np
+            ),
+        },
         "nearest_counts": {
             str(threshold): {
                 "train_to_validation": int((train_max >= threshold).sum()),

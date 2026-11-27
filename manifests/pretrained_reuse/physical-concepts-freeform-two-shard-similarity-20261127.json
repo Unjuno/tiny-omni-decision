@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "screen_id": "physical-concepts-freeform-two-shard-label-blind-similarity-v3",
+  "source_split_manifest": "physical-concepts-freeform-two-shard-split-20261127.json",
+  "source_split_manifest_sha256": "03e7348c2144d5e2037d53692b8961a5f6376425dba23832b6f32122cd26e679",
+  "script": "scripts/audit_physical_concepts_scene_similarity.py",
+  "script_sha256": "3573e9c45c750bd687aaf82eaee5af8ca668fe14ab3ba3fc175eabaebe9a2333",
+  "descriptor": "unit-normalized 524D vector from 8x8 RGB block mean/std over time, 8x8 mask occupancy mean/std, and camera-pose mean/std; compared by cosine",
+  "combined_nearest_cosine": {
+    "train_to_validation": {
+      "p50": 0.9755982160568237,
+      "p90": 0.9883240759372711,
+      "p95": 0.9905800223350525,
+      "p99": 0.9939401686191559,
+      "max": 0.9977253079414368,
+      "at_least_0_99": 186,
+      "at_least_0_995": 15
+    },
+    "validation_to_train": {
+      "p50": 0.9750587940216064,
+      "p90": 0.9884080290794373,
+      "p95": 0.9905882120132447,
+      "p99": 0.9934882748126984,
+      "max": 0.9977253079414368,
+      "at_least_0_99": 186,
+      "at_least_0_995": 14
+    }
+  },
+  "feature_group_nearest_cosine": {
+    "coarse_rgb_appearance": {
+      "train_to_validation_p50": 0.9961206912994385,
+      "train_records_at_least_0_99": 2596,
+      "validation_records_at_least_0_99": 2648,
+      "train_records_at_least_0_995": 1871,
+      "validation_records_at_least_0_995": 1893
+    },
+    "mask_occupancy": {
+      "train_to_validation_p50": 0.9597514569759369,
+      "train_records_at_least_0_99": 264,
+      "validation_records_at_least_0_99": 261,
+      "train_records_at_least_0_995": 85,
+      "validation_records_at_least_0_995": 88
+    },
+    "camera_pose": {
+      "train_to_validation_p50": 0.999989926815033,
+      "train_records_at_least_0_99": 3046,
+      "validation_records_at_least_0_99": 3099,
+      "train_records_at_least_0_995": 3046,
+      "validation_records_at_least_0_995": 3099
+    }
+  },
+  "outputs": {
+    "report_path_outside_git": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\physical-concepts-patha-20261127-attempt-02\\scene-similarity-v3.json",
+    "report_sha256": "ca8c6051be94be4cbbb5924674ad5436329c6cce0e4b50d38788e482a1521055",
+    "contact_sheet_path_outside_git": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\physical-concepts-patha-20261127-attempt-02\\top-neighbor-pairs-contact-sheet.bmp",
+    "contact_sheet_sha256": "085c3d3ebba250c299fbd853c5ee997b3e908abe2dd52ca0ad51495ec542823a",
+    "previous_corrected_v2_report_sha256": "785d4ba783c8c61a603ab6a495be6857d1fe12d61262176a73ca01dd9f359ac7",
+    "invalid_v1_report_preserved_outside_git": true
+  },
+  "visual_review": {
+    "pairs": 8,
+    "frames_per_video": [0, 7, 14],
+    "observation": "Nearest examples share procedural checkerboard-like layouts; object and color details vary.",
+    "identity_conclusion": "No exact or near-duplicate identity conclusion; source provides no explicit scene IDs."
+  },
+  "decision": {
+    "examples_removed_or_reassigned": 0,
+    "validation_use": "within-domain freeform prediction loss only",
+    "scene_ood_claim_permitted": false,
+    "quality_claim": "none; model not trained or evaluated",
+    "interpretation": "Coarse RGB and camera descriptors are nearly constant across this procedural source; mask occupancy is more discriminative. The screen does not justify filtering records."
+  }
+}

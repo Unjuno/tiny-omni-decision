@@ -19,8 +19,10 @@ def test_scene_signature_is_finite_and_fixed_size() -> None:
 def test_split_screen_reports_nearest_pairs_without_filtering() -> None:
     train_ids = ["train-a", "train-b"]
     validation_ids = ["validation-a", "validation-b"]
-    train = np.asarray([[1.0, 0.0], [0.0, 1.0]], dtype=np.float32)
-    validation = np.asarray([[1.0, 0.0], [0.0, 1.0]], dtype=np.float32)
+    train = np.zeros((2, 524), dtype=np.float32)
+    validation = np.zeros((2, 524), dtype=np.float32)
+    train[0, 0] = train[1, 1] = 1.0
+    validation[0, 0] = validation[1, 1] = 1.0
 
     result = screen_split(train_ids, train, validation_ids, validation, np=np, top_k=2)
 
@@ -31,19 +33,24 @@ def test_split_screen_reports_nearest_pairs_without_filtering() -> None:
     assert result["examples_removed_or_reassigned"] == 0
     assert len(result["top_pairs"]) == 2
     assert all(pair["similarity"] <= 1.0 for pair in result["top_pairs"])
+    assert set(result["feature_group_nearest_cosine"]) == {
+        "coarse_rgb_appearance",
+        "mask_occupancy",
+        "camera_pose",
+    }
 
 
 def test_split_screen_rejects_empty_split() -> None:
     with pytest.raises(ValueError, match="non-empty splits"):
-        screen_split([], np.zeros((0, 2)), ["validation"], np.ones((1, 2)), np=np)
+        screen_split([], np.zeros((0, 524)), ["validation"], np.ones((1, 524)), np=np)
 
 
 def test_split_screen_rejects_non_normalized_signatures() -> None:
     with pytest.raises(ValueError, match="unit normalized"):
         screen_split(
             ["train"],
-            np.asarray([[2.0, 0.0]]),
+            np.asarray([[2.0] + [0.0] * 523]),
             ["validation"],
-            np.asarray([[1.0, 0.0]]),
+            np.asarray([[1.0] + [0.0] * 523]),
             np=np,
         )

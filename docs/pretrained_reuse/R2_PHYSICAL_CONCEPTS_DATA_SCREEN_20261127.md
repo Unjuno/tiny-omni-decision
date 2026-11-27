@@ -40,6 +40,8 @@ also recorded in
 [`physical-concepts-freeform-shard-00000-20261127.json`](../../manifests/pretrained_reuse/physical-concepts-freeform-shard-00000-20261127.json).
 The provisional whole-shard split and zero-overlap audit are in
 [`physical-concepts-freeform-two-shard-split-20261127.json`](../../manifests/pretrained_reuse/physical-concepts-freeform-two-shard-split-20261127.json).
+The label-blind similarity report summary is separately pinned in
+[`physical-concepts-freeform-two-shard-similarity-20261127.json`](../../manifests/pretrained_reuse/physical-concepts-freeform-two-shard-similarity-20261127.json).
 
 ## Actual data audit
 
@@ -68,9 +70,11 @@ within- or cross-shard duplicate sequences. The provisional split assigns
 shard 00000 to train and shard 00001 to validation; the tested cross-shard
 auditor records zero exact row/RGB/mask overlaps. The source records do not
 expose explicit scene or procedural-generation IDs, so related or near-duplicate
-scenes may still cross the split. A label-blind appearance screen found many
-nearby coarse scene signatures, so do not use this provisional split for
-checkpoint selection until group structure is better understood.
+scenes may still cross the split. The label-blind appearance screen found many
+nearby coarse signatures, but its group breakdown suggests repeated generator
+background/camera structure rather than verified duplicate videos. Use this
+split only for in-distribution freeform validation; do not present it as a
+scene-OOD split.
 
 ## Label-blind scene-similarity screen
 
@@ -90,18 +94,35 @@ computed across train and validation; no examples were removed or reassigned.
 | Records with nearest cosine >= 0.99 | 186 | 186 |
 | Records with nearest cosine >= 0.995 | 15 | 14 |
 
+The feature groups explain the combined score:
+
+| Descriptor group | Train -> validation nearest p50 | Count >= 0.99 | Count >= 0.995 |
+| --- | ---: | ---: | ---: |
+| Coarse RGB appearance | 0.9961 | 2,596 / 3,046 | 1,871 / 3,046 |
+| Mask occupancy | 0.9598 | 264 / 3,046 | 85 / 3,046 |
+| Camera pose | 0.99999 | 3,046 / 3,046 | 3,046 / 3,046 |
+
+RGB and camera-pose descriptors are nearly constant across the split, so they
+are weak identity signals here; the top pairs visually share the procedural
+checkerboard setting while object/color details differ. Mask occupancy is more
+discriminative. These signatures do not justify dropping examples or making a
+new group split. They show the source has a shared visual domain and that the
+current holdout measures within-domain transfer. Exact sequence hashes still
+show no clip-level duplication.
+
 The top eight train/validation pairs were visually reviewed using first,
 middle, and last frames. They share procedural checkerboard-like layouts, but
 colors and object details vary. This does not prove duplicate scene identity;
-the descriptor is a coarse heuristic and the source exposes no scene ID. The
-screen is a warning that whole-shard assignment alone may not isolate
-procedural scene families. Preserve the pairs and investigate grouping before
-using this validation split for model selection. The initial v1 screen output
-was invalid because it omitted final-vector normalization; it is retained
-outside Git and superseded by the corrected v2 output.
+the descriptor is a coarse heuristic and the source exposes no scene ID.
+Preserve the split for within-domain freeform prediction-loss selection, but do
+not treat it as a scene-family OOD test. The initial v1 screen output was
+invalid because it omitted final-vector normalization; it is retained outside
+Git and superseded by corrected v2, then the feature-group breakdown in v3.
 
 Corrected v2 report SHA-256:
 `785d4ba783c8c61a603ab6a495be6857d1fe12d61262176a73ca01dd9f359ac7`.
+Feature-group breakdown v3 SHA-256:
+`ca8c6051be94be4cbbb5924674ad5436329c6cce0e4b50d38788e482a1521055`.
 Contact sheet SHA-256:
 `085c3d3ebba250c299fbd853c5ee997b3e908abe2dd52ca0ad51495ec542823a`.
 
@@ -148,8 +169,8 @@ the higher-priority move than increasing text-model capacity.
 - Run a separate-process smoke on actual decoded source frames, record
   throughput and memory, and estimate the cost of feature extraction before
   deciding how many shards to use.
-- Resolve or bound the high near-neighbor rates with a data-driven grouping
-  strategy before using validation for checkpoint selection.
+- Keep validation use in-domain: select against the shard-held-out freeform
+  prediction loss only, and report that it does not test new scene families.
 - Freeze the Path A scorer and validation selection rule before any probe
   evaluation.
 - Report task-level accuracy and uncertainty honestly; do not generalize a
