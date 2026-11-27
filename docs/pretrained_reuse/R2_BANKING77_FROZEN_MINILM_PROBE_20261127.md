@@ -7,7 +7,9 @@ split derived from the publisher's train partition. It asks whether a compact
 BERT-family representation can separate BANKING77's 77 English banking intents
 with a small readout. It does **not** establish arbitrary-option Decision
 quality, general language quality, multimodal quality, or the project's 95–98%
-product target. The publisher test and project sealed audit remain unopened.
+product target. At the time of this run, the publisher test and project sealed
+audit were unopened; the publisher test was subsequently evaluated once under
+the separate [one-shot report](R2_BANKING77_MINILM_OFFICIAL_TEST_20261127.md).
 
 The source is CC BY 4.0 according to the pinned dataset card and repository
 license; attribution is required. The card reports expert-generated categories,
@@ -116,9 +118,11 @@ sweep. The project already has mixed BERT-family findings on other tasks; this
 new narrow result complements them without overriding them.
 
 The 95–98% aspiration was not reached, and this validation is now exposed by
-model selection. Do not tune further on it or promote this checkpoint. Before
-another model comparison, resolve the task/data question with an independently
-reviewed source-grouped task or an independently adjudicated label subset.
-Preserve the known conflicting pair, report ambiguity explicitly, and do not
-repair labels by model-driven filtering. The official public test remains
-closed. No bootstrap confidence interval or second seed was run.
+model selection. Do not tune further on it or promote this checkpoint. The
+publisher test has since been scored once, with no selection or tuning; its
+result and now-exposed status are documented separately. The project's sealed
+audit remains closed. Before another model comparison, resolve the task/data
+question with an independently reviewed source-grouped task or an independently
+adjudicated label subset. Preserve the known conflicting pair, report ambiguity
+explicitly, and do not repair labels by model-driven filtering. No bootstrap
+confidence interval or second seed was run.

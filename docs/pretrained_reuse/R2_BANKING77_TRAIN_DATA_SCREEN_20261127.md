@@ -104,10 +104,13 @@ whole-component train/validation split was frozen, and one CPU-only frozen
 MiniLM readout probe was run. See the [probe report](R2_BANKING77_FROZEN_MINILM_PROBE_20261127.md).
 The internal validation reached 92.23% macro Accuracy but was used for
 checkpoint selection and is now exposed. Do not retune on it or treat it as a
-blind test. The source's missing user/session provenance and known label
-ambiguity still prevent broad or product claims. Any next quality comparison
-needs new, independently reviewed source groups or an adjudicated label set;
-keep the publisher test and project sealed audit closed.
+blind test. The selected checkpoint was subsequently evaluated once on all
+3,080 official publisher-test rows; it reached 89.94% macro Accuracy and is
+now exposed. See the [one-shot test report](R2_BANKING77_MINILM_OFFICIAL_TEST_20261127.md).
+Do not tune on either split. The source's missing user/session provenance and
+known label ambiguity still prevent broad or product claims. Any next quality
+comparison needs new, independently reviewed source groups or an adjudicated
+label set. The project sealed audit remains closed.
 
 ## Reproduction and boundary
 

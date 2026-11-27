@@ -1,23 +1,35 @@
+**2026-11-27 R2 BANKING77 frozen MiniLM publisher-test evaluation:** After
+freezing the MiniLM-L3 readout from train-derived validation, one CPU-only
+inference evaluated the full official 3,080-row publisher test. Macro Accuracy
+was 89.94%, NLL 0.3735, Brier 0.1514, top-label ECE 0.0095, and macro classwise
+ECE 0.1506. This is 2.29 pp below grouped validation; 25 exact normalized
+train/test texts were retained in the full test result. No tuning or filtering;
+the publisher test is now exposed and must not be reused. Project sealed audit
+remains closed. This is only English banking-intent classification, not
+arbitrary-option or multimodal evidence. See [one-shot report](docs/pretrained_reuse/R2_BANKING77_MINILM_OFFICIAL_TEST_20261127.md).
+
 **2026-11-27 R2 BANKING77 grouped MiniLM probe:** After reading all 57
 cross-intent near-duplicate candidates without modifying labels, froze a
 deterministic whole-component split (7,903 train / 2,100 validation, all 77
 intents represented, zero candidate-component overlap). A frozen 17.39M
 MiniLM-L3 encoder plus 29,645-parameter readout reached 92.23% macro Accuracy,
 0.3172 macro NLL and 0.1179 macro Brier on this train-derived validation.
-Train macro Accuracy was 98.40%, showing a 6.17-point generalization gap.
-CPU-only; no publisher test or sealed audit was opened. This is a narrow
-English banking-intent result, below the 95–98% aspiration and not arbitrary
+Train macro Accuracy was 98.40%, showing a 6.17-point gap to grouped validation.
+CPU-only; during this probe the publisher test and sealed audit remained
+closed. This is a narrow English banking-intent result, below the 95–98%
+aspiration and not arbitrary
 option or multimodal evidence. Validation is selection-exposed; do not retune
 on it. See [grouped probe report](docs/pretrained_reuse/R2_BANKING77_FROZEN_MINILM_PROBE_20261127.md).
 
 **2026-11-27 R2 BANKING77 train-only data screen:** The pinned CC BY 4.0
 candidate has 10,003 train queries across 77 intents. A train-only audit found
 31 punctuation/case-normalized duplicate groups, one conflicting intent pair,
-and 57 cross-intent pairs among 786 lexical near-duplicate candidates; the
-source provides no stable user/session groups and limited annotation
-provenance. Keep it `REVIEW_NOT_ADMITTED` for fitting pending near-duplicate
-and label review. No publisher test, sealed audit, model or GPU was used. See
-[data screen](docs/pretrained_reuse/R2_BANKING77_TRAIN_DATA_SCREEN_20261127.md).
+and 57 cross-intent pairs among 786 lexical near-duplicate candidates. The
+source lacks stable user/session groups and detailed label provenance. A later
+grouped MiniLM development fit and one-shot publisher-test evaluation are
+recorded above; labels and rows were retained. Keep findings limited to this
+English banking-intent task; do not tune on its now-exposed validation or test.
+See [data screen](docs/pretrained_reuse/R2_BANKING77_TRAIN_DATA_SCREEN_20261127.md).
 
 **2026-11-23 R2 Japanese BERT publisher-test audit:** With both validation-selected readouts frozen, a one-shot evaluation on all 400 previously unopened publisher test states found BERT-base at 52.54% macro teacher-mode Accuracy / 1.0639 NLL / 0.1712 Brier versus the compact 27.6M LightSPLADE-derived encoder at 44.17% / 1.1299 / 0.2025. State-cluster paired intervals favor BERT on Accuracy/NLL/Brier, but ECE is inconclusive; targets are synthetic teacher distributions, and both models truncate 31% of candidate pairs. This supports BERT as a text teacher/reference only, not 95–98% product quality or a multimodal pass. Do not tune or repeat on this now-open test. See [one-shot test audit](docs/pretrained_reuse/R2_TYPED_DECISIONS_JA_PUBLISHER_TEST_AUDIT_20261123.md).
 
