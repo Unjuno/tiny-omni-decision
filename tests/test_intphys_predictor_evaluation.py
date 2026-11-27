@@ -109,7 +109,16 @@ def test_cross_split_identity_gate_rejects_normalized_media_overlap():
         validate_cross_split_identities(overlap)
 
 
-def test_evaluation_receipts_fail_closed_on_checkpoint_or_feature_hash_mismatch(tmp_path):
+@pytest.mark.parametrize(
+    "training_status",
+    [
+        "complete_train_only_next_feature_predictor",
+        "complete_physical_concepts_frozen_feature_next_step_fit",
+    ],
+)
+def test_evaluation_receipts_fail_closed_on_checkpoint_or_feature_hash_mismatch(
+    tmp_path, training_status
+):
     checkpoint = tmp_path / "best.pt"
     training_metadata_path = tmp_path / "training.json"
     corpus_report_path = tmp_path / "corpus.json"
@@ -125,7 +134,7 @@ def test_evaluation_receipts_fail_closed_on_checkpoint_or_feature_hash_mismatch(
     training_metadata_path.write_text(
         json.dumps(
             {
-                "status": "complete_train_only_next_feature_predictor",
+                "status": training_status,
                 "sequence_length": 8,
                 "best_checkpoint_sha256": sha256_file(checkpoint),
                 "train_features_sha256": sha256_file(train_features),
@@ -208,8 +217,9 @@ def test_evaluation_receipts_fail_closed_on_checkpoint_or_feature_hash_mismatch(
         )
 
 
+@pytest.mark.parametrize("checkpoint_epoch_key", ["best_epoch", "selected_epoch"])
 def test_fixed_evaluation_cli_writes_grouped_scores_without_probability_claims(
-    tmp_path, monkeypatch
+    tmp_path, monkeypatch, checkpoint_epoch_key
 ):
     torch = pytest.importorskip("torch")
     from tiny_omni_decision.temporal_prediction import NextFrameFeaturePredictor
@@ -244,15 +254,13 @@ def test_fixed_evaluation_cli_writes_grouped_scores_without_probability_claims(
     )
     checkpoint_path = tmp_path / "best.pt"
     model = NextFrameFeaturePredictor(feature_width=6, hidden_width=4)
-    torch.save(
-        {
-            "state_dict": model.state_dict(),
-            "feature_width": 6,
-            "hidden_width": 4,
-            "best_epoch": 1,
-        },
-        checkpoint_path,
-    )
+    checkpoint_payload = {
+        "state_dict": model.state_dict(),
+        "feature_width": 6,
+        "hidden_width": 4,
+        checkpoint_epoch_key: 1,
+    }
+    torch.save(checkpoint_payload, checkpoint_path)
     corpus_report = {
         "status": "complete_intphys_train_frozen_feature_extraction",
         "all_train_labels_possible": True,

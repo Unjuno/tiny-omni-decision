@@ -177,7 +177,11 @@ def validate_receipts(
     train_metadata = json.loads(train_metadata_path.read_text(encoding="utf-8"))
     train_corpus_report = json.loads(train_corpus_report_path.read_text(encoding="utf-8"))
     dev_report = json.loads(dev_report_path.read_text(encoding="utf-8"))
-    if train_metadata.get("status") != "complete_train_only_next_feature_predictor":
+    accepted_training_statuses = {
+        "complete_train_only_next_feature_predictor",
+        "complete_physical_concepts_frozen_feature_next_step_fit",
+    }
+    if train_metadata.get("status") not in accepted_training_statuses:
         raise ValueError("training receipt is not a completed train-only Path A run")
     if train_corpus_report.get("all_train_labels_possible") is not True:
         raise ValueError("Path A requires the audited possible-only training corpus")
@@ -310,8 +314,11 @@ def main() -> None:
     payload = torch.load(checkpoint, map_location="cpu", weights_only=True)
     width = int(payload["feature_width"])
     hidden = int(payload["hidden_width"])
-    if width != validation_features.shape[-1] or int(payload["best_epoch"]) != int(
-        training_metadata["selected_epoch"]
+    checkpoint_epoch = payload.get("best_epoch", payload.get("selected_epoch"))
+    if (
+        width != validation_features.shape[-1]
+        or checkpoint_epoch is None
+        or int(checkpoint_epoch) != int(training_metadata["selected_epoch"])
     ):
         raise ValueError("checkpoint architecture or selected epoch disagrees with receipt")
     model = NextFrameFeaturePredictor(feature_width=width, hidden_width=hidden)
