@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "candidate_id": "google-deepmind-physical-concepts-freeform",
+  "status": "PROVISIONAL_TRAIN_VALIDATION_SPLIT_EXACT_OVERLAP_CLEAR",
+  "source_revision": "baa2776017ea3cc8c873ce682bb6646860e12cae",
+  "license": "CC-BY-4.0",
+  "group_assignment": "whole pinned GCS shard",
+  "train": {
+    "object_name": "freeform/train/data.tfrecord-00000-of-00100",
+    "generation": "1600878343269200",
+    "compressed_bytes": 171007593,
+    "md5_base64": "LRni2RcBPHxV7wjo7fToRA==",
+    "sha256": "49d17f80766659c1d6e5ca760c34609e6f09f4746045740a0e669a39c123826b",
+    "local_payload_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\physical-concepts-patha-20261127-attempt-01\\data.tfrecord-00000-of-00100.gz",
+    "local_audit_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\physical-concepts-patha-20261127-attempt-01\\train-shard-00000-audit.json",
+    "records": 3046,
+    "unique_records": 3046,
+    "unique_rgb_sequences": 3046,
+    "unique_mask_sequences": 3046
+  },
+  "validation": {
+    "object_name": "freeform/train/data.tfrecord-00001-of-00100",
+    "generation": "1600878343249041",
+    "compressed_bytes": 174870282,
+    "md5_base64": "XPwige0GtlYz7vDseopMBw==",
+    "sha256": "97659a1c78e922aef880f84c123856b39ab98261fcace7f2ae052bee0e6f2ade",
+    "local_payload_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\physical-concepts-patha-20261127-attempt-02\\data.tfrecord-00001-of-00100.gz",
+    "local_audit_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\physical-concepts-patha-20261127-attempt-02\\train-shard-00001-audit.json",
+    "records": 3099,
+    "unique_records": 3099,
+    "unique_rgb_sequences": 3099,
+    "unique_mask_sequences": 3099
+  },
+  "combined": {
+    "records": 6145,
+    "unique_records": 6145,
+    "cross_shard_exact_overlaps": {
+      "serialized_records": 0,
+      "rgb_sequences": 0,
+      "mask_sequences": 0
+    }
+  },
+  "audit_receipt": {
+    "path_outside_git": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\physical-concepts-patha-20261127-attempt-02\\two-shard-crosscheck-v2.json",
+    "sha256": "81a5fb26c32494738666be0181db3ecd8591faf6f099b2928e6e3c15e0580478"
+  },
+  "probe_data_opened": false,
+  "model_quality_evaluated": false,
+  "limitations": [
+    "This split covers only two of 100 training shards.",
+    "No explicit scene or procedural-generation identity is present in audited rows.",
+    "Exact hashes do not rule out near-duplicate or same-generation-condition examples across splits.",
+    "Training labels and model-quality results are not available in freeform records."
+  ]
+}

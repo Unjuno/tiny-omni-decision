@@ -3,10 +3,10 @@
 ## Decision
 
 Admit the official `freeform/train` component for a bounded Path A training
-pilot after the frozen-feature runtime is available. Do not treat this source
-screen as a model-quality result. The one downloaded shard has 3,046 records;
-the pinned publisher documentation describes 100 training shards and 300,000
-videos in the complete freeform training split.
+pilot after input-specific frozen-feature runtime checks. Do not treat this
+source screen as a model-quality result. Two downloaded shards have 6,145
+records; the pinned publisher documentation describes 100 training shards and
+300,000 videos in the complete freeform training split.
 
 This is a stronger next data candidate for a temporal physical-reasoning
 experiment than repeating another IntPhys dev analysis. It provides 15-frame
@@ -28,42 +28,49 @@ frozen representation can learn the target task.
   `LRni2RcBPHxV7wjo7fToRA==`.
 - Observed SHA-256:
   `49d17f80766659c1d6e5ca760c34609e6f09f4746045740a0e669a39c123826b`.
+- Second pinned object: `freeform/train/data.tfrecord-00001-of-00100`,
+  generation `1600878343249041`, 174,870,282 compressed bytes, GCS MD5
+  `XPwige0GtlYz7vDseopMBw==`, SHA-256
+  `97659a1c78e922aef880f84c123856b39ab98261fcace7f2ae052bee0e6f2ade`.
 - Local payload is outside Git at
   `C:/CodexArtifacts/pretrained-reuse-r2-local/physical-concepts-patha-20261127-attempt-01/data.tfrecord-00000-of-00100.gz`.
 
 The exact pin, object receipt, observed counts, and audit output location are
 also recorded in
 [`physical-concepts-freeform-shard-00000-20261127.json`](../../manifests/pretrained_reuse/physical-concepts-freeform-shard-00000-20261127.json).
+The provisional whole-shard split and zero-overlap audit are in
+[`physical-concepts-freeform-two-shard-split-20261127.json`](../../manifests/pretrained_reuse/physical-concepts-freeform-two-shard-split-20261127.json).
 
 ## Actual data audit
 
 The standard-library auditor checked the compressed object size and GCS MD5,
 all TFRecord framing CRC32C values, protobuf feature schema, and all decoded
-row shapes. The shard contains:
+row shapes. The two shards contain:
 
-| Measure | Observed |
-| --- | ---: |
-| Records | 3,046 |
-| Unique serialized rows | 3,046 |
-| Duplicate serialized rows | 0 |
-| Unique complete RGB sequences | 3,046 |
-| Duplicate complete RGB sequences | 0 |
-| Unique complete mask sequences | 3,046 |
-| Frames per sequence | 15 |
-| RGB shape | 64 x 64 x 3 uint8 |
-| Mask shape | 64 x 64 uint8 per frame |
-| Camera pose | 6 finite float32 values per frame |
+| Measure | Shard 00000 (train) | Shard 00001 (validation) | Combined |
+| --- | ---: | ---: | ---: |
+| Records | 3,046 | 3,099 | 6,145 |
+| Unique serialized rows | 3,046 | 3,099 | 6,145 |
+| Duplicate serialized rows | 0 | 0 | 0 across shards |
+| Unique complete RGB sequences | 3,046 | 3,099 | 6,145 |
+| Duplicate complete RGB sequences | 0 | 0 | 0 across shards |
+| Unique complete mask sequences | 3,046 | 3,099 | 6,145 |
+| Frames per sequence | 15 | 15 | 15 |
+| RGB shape | 64 x 64 x 3 uint8 | 64 x 64 x 3 uint8 | 64 x 64 x 3 uint8 |
+| Mask shape | 64 x 64 uint8 per frame | same | same |
+| Camera pose | 6 finite float32 values per frame | same | same |
 
 The full record-level SHA-256 and media-sequence hashes are in the local audit
 JSON outside Git. They are deliberately not copied into the repository.
 
 These checks establish parseability, pinned provenance, and no exact
-within-shard duplicate sequences. They do not establish source independence,
-semantic quality, sufficient temporal change, a correct Decision target, or
-generalization. No train/validation split or model selection should be made by
-sampling clips randomly across shards until cross-shard identities have been
-audited. A future pilot must assign whole records and keep its validation
-identities out of training.
+within- or cross-shard duplicate sequences. The provisional split assigns
+shard 00000 to train and shard 00001 to validation; the tested cross-shard
+auditor records zero exact row/RGB/mask overlaps. The source records do not
+expose explicit scene or procedural-generation IDs, so related or near-duplicate
+scenes may still cross the split. This is suitable for a bounded pilot only
+with that limitation stated; it is not evidence of independent scene-level
+generalization.
 
 ## Task and split plan
 
@@ -108,8 +115,9 @@ the higher-priority move than increasing text-model capacity.
 - Run a separate-process smoke on actual decoded source frames, record
   throughput and memory, and estimate the cost of feature extraction before
   deciding how many shards to use.
-- Audit a source-disjoint freeform train/validation allocation and cross-shard
-  exact media identities before training.
+- Strengthen the provisional shard split with near-duplicate/scene-similarity
+  screening and decide whether the remaining source-group uncertainty is
+  acceptable before training.
 - Freeze the Path A scorer and validation selection rule before any probe
   evaluation.
 - Report task-level accuracy and uncertainty honestly; do not generalize a
