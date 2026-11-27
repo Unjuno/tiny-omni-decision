@@ -68,9 +68,42 @@ within- or cross-shard duplicate sequences. The provisional split assigns
 shard 00000 to train and shard 00001 to validation; the tested cross-shard
 auditor records zero exact row/RGB/mask overlaps. The source records do not
 expose explicit scene or procedural-generation IDs, so related or near-duplicate
-scenes may still cross the split. This is suitable for a bounded pilot only
-with that limitation stated; it is not evidence of independent scene-level
-generalization.
+scenes may still cross the split. A label-blind appearance screen found many
+nearby coarse scene signatures, so do not use this provisional split for
+checkpoint selection until group structure is better understood.
+
+## Label-blind scene-similarity screen
+
+The script `scripts/audit_physical_concepts_scene_similarity.py` revalidated
+both pinned files and row hashes, then formed a 524D descriptor per video from
+8x8 RGB block mean/std over time, 8x8 mask occupancy mean/std, and camera-pose
+mean/std. Each group and final vector was L2-normalized. Cosine similarity was
+computed across train and validation; no examples were removed or reassigned.
+
+| Statistic | Train to validation nearest | Validation to train nearest |
+| --- | ---: | ---: |
+| Median cosine | 0.9756 | 0.9751 |
+| 90th percentile | 0.9883 | 0.9884 |
+| 95th percentile | 0.9906 | 0.9906 |
+| 99th percentile | 0.9939 | 0.9935 |
+| Maximum | 0.9977 | 0.9977 |
+| Records with nearest cosine >= 0.99 | 186 | 186 |
+| Records with nearest cosine >= 0.995 | 15 | 14 |
+
+The top eight train/validation pairs were visually reviewed using first,
+middle, and last frames. They share procedural checkerboard-like layouts, but
+colors and object details vary. This does not prove duplicate scene identity;
+the descriptor is a coarse heuristic and the source exposes no scene ID. The
+screen is a warning that whole-shard assignment alone may not isolate
+procedural scene families. Preserve the pairs and investigate grouping before
+using this validation split for model selection. The initial v1 screen output
+was invalid because it omitted final-vector normalization; it is retained
+outside Git and superseded by the corrected v2 output.
+
+Corrected v2 report SHA-256:
+`785d4ba783c8c61a603ab6a495be6857d1fe12d61262176a73ca01dd9f359ac7`.
+Contact sheet SHA-256:
+`085c3d3ebba250c299fbd853c5ee997b3e908abe2dd52ca0ad51495ec542823a`.
 
 ## Task and split plan
 
@@ -115,9 +148,8 @@ the higher-priority move than increasing text-model capacity.
 - Run a separate-process smoke on actual decoded source frames, record
   throughput and memory, and estimate the cost of feature extraction before
   deciding how many shards to use.
-- Strengthen the provisional shard split with near-duplicate/scene-similarity
-  screening and decide whether the remaining source-group uncertainty is
-  acceptable before training.
+- Resolve or bound the high near-neighbor rates with a data-driven grouping
+  strategy before using validation for checkpoint selection.
 - Freeze the Path A scorer and validation selection rule before any probe
   evaluation.
 - Report task-level accuracy and uncertainty honestly; do not generalize a

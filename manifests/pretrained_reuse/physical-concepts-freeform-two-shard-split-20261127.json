@@ -44,6 +44,38 @@
     "path_outside_git": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\physical-concepts-patha-20261127-attempt-02\\two-shard-crosscheck-v2.json",
     "sha256": "81a5fb26c32494738666be0181db3ecd8591faf6f099b2928e6e3c15e0580478"
   },
+  "label_blind_scene_similarity_screen": {
+    "status": "heuristic_screen_only",
+    "descriptor": "unit-normalized 524D vector from 8x8 RGB block mean/std over time, 8x8 mask occupancy mean/std, and camera-pose mean/std; compared by cosine",
+    "train_to_validation_nearest_cosine": {
+      "p50": 0.9755982160568237,
+      "p90": 0.9883240759372711,
+      "p95": 0.9905800223350525,
+      "p99": 0.9939401686191559,
+      "max": 0.9977253079414368
+    },
+    "validation_to_train_nearest_cosine": {
+      "p50": 0.9750587940216064,
+      "p90": 0.9884080290794373,
+      "p95": 0.9905882120132447,
+      "p99": 0.9934882748126984,
+      "max": 0.9977253079414368
+    },
+    "nearest_cosine_at_least_0_99": {
+      "train_to_validation_records": 186,
+      "validation_to_train_records": 186
+    },
+    "nearest_cosine_at_least_0_995": {
+      "train_to_validation_records": 15,
+      "validation_to_train_records": 14
+    },
+    "examples_removed_or_reassigned": 0,
+    "report_path_outside_git": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\physical-concepts-patha-20261127-attempt-02\\scene-similarity-v2.json",
+    "report_sha256": "785d4ba783c8c61a603ab6a495be6857d1fe12d61262176a73ca01dd9f359ac7",
+    "top_pairs_contact_sheet_path_outside_git": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\physical-concepts-patha-20261127-attempt-02\\top-neighbor-pairs-contact-sheet.bmp",
+    "top_pairs_contact_sheet_sha256": "085c3d3ebba250c299fbd853c5ee997b3e908abe2dd52ca0ad51495ec542823a",
+    "interpretation": "High cosine is a prompt for scene/group review, not a duplicate label or proof of shared source identity; nearest samples visually share procedural checkerboard layouts but vary in color/object details."
+  },
   "probe_data_opened": false,
   "model_quality_evaluated": false,
   "limitations": [
