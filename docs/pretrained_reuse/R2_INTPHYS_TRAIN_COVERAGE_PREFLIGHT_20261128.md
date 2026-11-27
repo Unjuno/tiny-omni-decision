@@ -49,6 +49,15 @@ and receipt, then remove only that newly downloaded temporary archive before
 fetching the next. The pre-existing train.1 archive and all earlier experiment
 artifacts remain untouched. Feature caches and run receipts stay outside Git.
 
+Before full transfer, three bounded 64 MiB HTTP Range requests were measured
+against shards 2, 3, and 4. All returned HTTP 206 with the expected byte range,
+file length, and ETag; the temporary fragments were SHA-256 hashed and then
+removed. Measured rates were 3.246, 3.260, and 1.222 MB/s (mean 2.576 MB/s,
+range 1.222–3.260 MB/s). This projects 111.6 GB at the observed mean to about
+12.04 hours of transfer. The receipt is outside Git at
+`C:/CodexArtifacts/pretrained-reuse-r2-local/intphys-full-train-coverage-20261128-attempt-01/bandwidth-samples/speed-test-receipt.json`.
+These short samples do not establish sustained throughput or reliability.
+
 ## Data-scaling comparison frozen before acquisition
 
 Use all four shards and the same VideoPrism-B revision, checkpoint, 8-frame
@@ -64,11 +73,13 @@ will remain fixed here.
    deterministic 80/20 split. Never trust shard-local splits to detect a
    cross-shard duplicate. Require zero cross-split overlap for sample IDs,
    status hashes, full ordered RGB hashes, sampled-input hashes, and groups.
-3. Use the same global validation set for both comparisons. Candidate `D-small`
-   uses exactly 3,004 training groups selected by the predeclared SHA-256 rank
-   from the global training split; `D-full` uses every remaining training
-   group. This compares a one-shard-sized unique sample against the full
-   training coverage without selecting examples by label or model score.
+3. From each global train/validation identity group, choose one representative
+   video by lexicographically smallest qualified sample ID. Report how many
+   duplicate rows were excluded. Use that same unique-group validation set for
+   both comparisons. Candidate `D-small` uses exactly 3,004 unique training
+   groups selected by the predeclared SHA-256 rank; `D-full` uses every unique
+   training group. This compares a one-shard-sized unique sample against the
+   full training coverage without selecting examples by label or model score.
 4. Hold the predictor, seed, AdamW settings (`lr=1e-3`, `weight_decay=1e-4`),
    batch size 64, and optimizer budget at 3,901 updates for both candidates.
    This matches the update count of the existing corrected 8-frame fit while
@@ -78,6 +89,14 @@ will remain fixed here.
    the already-observed IntPhys dev set, the Physical Concepts probe, or any
    hidden/sealed test. Treat next-feature cosine loss as a representation
    objective, not decision accuracy or a calibrated probability.
+
+The fixed-update comparison runner is
+`scripts/run_intphys_data_coverage_comparison.py`; it saves best and terminal
+checkpoints, all fixed validation points, train-stream and fixed-train-monitor
+losses, validation per-example errors, unique-example consumption, and hashes.
+It checks that repeated media identities stay in one global group, then uses
+one deterministic representative per group for training and validation. Its
+CPU smoke tests do not load the large VideoPrism checkpoint.
 
 ## Resource gate
 
@@ -102,5 +121,6 @@ Feature extraction starts only with at least 6.5 GiB of available host RAM
 - Both dev results remain exposed development evidence. Neither can serve as a
   blind estimate for this expanded-data experiment.
 
-No new shard has been acquired, no new model has been trained, and no existing
-artifact has been changed by this preflight.
+At this preflight stage, no full shard has been acquired and no data-coverage
+model has been trained. Existing source archives, features, checkpoints,
+predictions, and other branches are unchanged.
