@@ -14,6 +14,27 @@ BERT-base comparison if the full-model parameter budget can accommodate it.
 This is a read-only audit of pinned local artifacts and committed execution
 code. No test or sealed-audit records were opened, and no new model was trained.
 
+### Follow-up: CLINC150 near-duplicate split weakness
+
+A later lexical audit changed how the existing CLINC150 MiniLM result should be
+interpreted. The exact-normalized-content split has zero exact cross-split
+overlap, but token-set Jaccard screening at `>= 0.80` found **785** train/validation
+near-duplicate pairs among 244,175 screened candidates: 773 same-intent and 12
+cross-intent. The candidate rule required a shared sorted adjacent token bigram
+whose training document frequency was at most 80. Several pairs are reorderings
+with identical token sets. The audit used no labels to choose model settings and
+did not access the publisher test.
+
+Therefore the earlier MiniLM-L6/L12 95.72% validation Accuracy is retained as a
+historical result on the exact-content-grouped split, but it is **not evidence of
+independent lexical generalization**. It should not guide a BERT-vs-MiniLM
+capacity decision. A new development split must keep near-duplicate clusters
+together, report cross-label conflicts and class coverage, and be frozen before
+any new encoder comparison. The complete IDs-only audit receipt is stored
+outside Git at
+`C:\CodexArtifacts\pretrained-reuse-r2-local\clinc150-plus-data-quality-audit-20261128-attempt-01\audit.json`
+(SHA-256 `a8a92da0d36114ca19aa389580cb0c0ea00c648d3fc046df907f92ac5ccd7385`).
+
 ## Pinned BERT-Mini audit and CommonsenseQA experiments
 
 The Google BERT-Mini checkpoint is pinned at revision
