@@ -153,6 +153,11 @@ def test_bsd10k_audio_readout_checks_splits_calibrates_and_reloads(tmp_path):
         "validation_examples": 2,
         "validation_uploader_groups": 2,
     }
+    assert report["config"]["duration_strata_seconds"] == {
+        "under_0_5s": [0.0, 0.5],
+        "0_5_to_2s": [0.5, 2.0],
+        "at_least_2s": [2.0, None],
+    }
     assert sum(row["count"] for row in report["train_duration_support"].values()) == len(
         split_ids["train"]
     )

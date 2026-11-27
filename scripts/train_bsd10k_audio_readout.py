@@ -60,7 +60,12 @@ LEARNING_RATE = 1e-3
 WEIGHT_DECAY = 1e-4
 EARLY_STOPPING_PATIENCE = 12
 MIN_DELTA = 1e-4
-DURATION_BUCKETS = ("under_0_5s", "0_5_to_2s", "at_least_2s")
+DURATION_STRATA_SECONDS = {
+    "under_0_5s": (0.0, 0.5),
+    "0_5_to_2s": (0.5, 2.0),
+    "at_least_2s": (2.0, None),
+}
+DURATION_BUCKETS = tuple(DURATION_STRATA_SECONDS)
 
 
 def sha256_file(path: Path) -> str:
@@ -158,11 +163,10 @@ def _macro(metrics_by_class: dict[str, dict]) -> dict[str, float]:
 
 
 def _duration_bucket(seconds: float) -> str:
-    if seconds < 0.5:
-        return "under_0_5s"
-    if seconds < 2.0:
-        return "0_5_to_2s"
-    return "at_least_2s"
+    for bucket, (lower, upper) in DURATION_STRATA_SECONDS.items():
+        if seconds >= lower and (upper is None or seconds < upper):
+            return bucket
+    raise ValueError(f"duration is outside the fixed strata: {seconds}")
 
 
 def _group_bootstrap_macro_accuracy(
@@ -506,6 +510,9 @@ def run(
             "min_delta": MIN_DELTA,
         },
         "labels_and_confidence_used_for": "readout targets and stratified reporting only",
+        "duration_strata_seconds": {
+            name: [bounds[0], bounds[1]] for name, bounds in DURATION_STRATA_SECONDS.items()
+        },
     }
     class_top = {
         label: next(
