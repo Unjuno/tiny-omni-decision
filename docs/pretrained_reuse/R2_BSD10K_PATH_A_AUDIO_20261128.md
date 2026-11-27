@@ -44,6 +44,11 @@ The following stages are committed/pushed and CI checked:
 - Metadata/license preflight and deterministic seed-17 uploader-group split.
 - Range-only archive inventory and 25-file WAV smoke.
 - Bounded-memory selective downloader and exact split/content audit.
+- Pinned CPU-only feature smoke on eight already-downloaded train WAVs: the
+  extractor produced an 8x384 finite feature matrix in 0.54 seconds; labels
+  and metrics were not loaded/computed, and the EfficientAT state SHA-256 was
+  identical before and after extraction. The receipt is stored outside Git
+  under `C:\CodexArtifacts\pretrained-reuse-r2-local\bsd10k-v1.2-source-audit-20261128-attempt-01\feature-smoke-cpu-attempt-01`.
 - Unit tests for allowlist behavior, uploader separation, duplicate PCM
   rejection, fixed audio windows, frozen feature receipts, calibration, and
   save/reload.
@@ -52,6 +57,13 @@ The full train download is running to an external `C:\CodexArtifacts` directory
 with SHA-256 and CRC receipts. Validation download, full feature extraction,
 readout fitting, measured task metrics, and the one-shot custom test remain
 unfinished. No sealed audit or DCASE evaluation data has been used.
+
+The downloader retries bounded HTTP 429/5xx failures while retaining exact
+range, ZIP CRC, per-file hash, and 2 GiB free-space checks. A CI failure on the
+optional ML test was traced to PyTorch not being installed in the repository's
+standard `.[dev]` CI environment; that test now skips when the optional PyTorch
+dependency is absent. Local full tests pass, and CI is green on commit
+`f0819013`.
 
 When the held-out metrics are available, they will be reported with per-class
 counts and grouped uncertainty. Confidence or uploader imbalance will be
