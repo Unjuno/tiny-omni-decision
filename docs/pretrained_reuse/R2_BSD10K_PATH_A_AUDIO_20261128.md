@@ -45,10 +45,12 @@ The following stages are committed/pushed and CI checked:
 - Range-only archive inventory and 25-file WAV smoke.
 - Bounded-memory selective downloader and exact split/content audit.
 - Pinned CPU-only feature smoke on eight already-downloaded train WAVs: the
-  extractor produced an 8x384 finite feature matrix in 0.54 seconds; labels
+  extractor produced an 8x384 finite feature matrix in 0.51 seconds; labels
   and metrics were not loaded/computed, and the EfficientAT state SHA-256 was
-  identical before and after extraction. The receipt is stored outside Git
-  under `C:\CodexArtifacts\pretrained-reuse-r2-local\bsd10k-v1.2-source-audit-20261128-attempt-01\feature-smoke-cpu-attempt-01`.
+  identical before and after extraction. A separate 75-file run extracted
+  609 windows in 8.27 seconds (about 9 records/second, excluding model load).
+  Receipts are stored outside Git under
+  `C:\CodexArtifacts\pretrained-reuse-r2-local\bsd10k-v1.2-source-audit-20261128-attempt-01`.
 - Unit tests for allowlist behavior, uploader separation, duplicate PCM
   rejection, fixed audio windows, frozen feature receipts, calibration, and
   save/reload.
@@ -58,7 +60,9 @@ with SHA-256 and CRC receipts. Validation download, full feature extraction,
 readout fitting, measured task metrics, and the one-shot custom test remain
 unfinished. No sealed audit or DCASE evaluation data has been used.
 
-The downloader retries bounded HTTP 429/5xx failures while retaining exact
+The extractor suppresses the pinned upstream model's architecture dump while
+loading it; upstream deprecation warnings remain visible. The downloader
+retries bounded HTTP 429/5xx failures while retaining exact
 range, ZIP CRC, per-file hash, and 2 GiB free-space checks. A CI failure on the
 optional ML test was traced to PyTorch not being installed in the repository's
 standard `.[dev]` CI environment; that test now skips when the optional PyTorch

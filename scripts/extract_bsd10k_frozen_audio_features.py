@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import contextlib
 import hashlib
+import io
 import json
 import os
 import subprocess
@@ -44,7 +46,8 @@ def _load_encoder(device: str, weights: Path, source: Path):
     if device == "cuda":
         if not os.environ.get("TINY_OMNI_GPU_GATE_RESERVED_MIB"):
             raise RuntimeError("CUDA feature extraction requires the HotGPU guard")
-        torch, model, mel, parameters, source_commit = _load_model(weights, source)
+        with contextlib.redirect_stdout(io.StringIO()):
+            torch, model, mel, parameters, source_commit = _load_model(weights, source)
         return torch, model, mel, parameters, source_commit
 
     if sha256_file(weights) != WEIGHTS_SHA256:
@@ -59,9 +62,6 @@ def _load_encoder(device: str, weights: Path, source: Path):
     if source_commit != SOURCE_COMMIT or dirty:
         raise ValueError("EfficientAT source differs from pinned pristine revision")
 
-    import contextlib
-    import io
-
     import torch
 
     sys.path.insert(0, str(source))
@@ -71,7 +71,8 @@ def _load_encoder(device: str, weights: Path, source: Path):
 
     torch.set_num_threads(4)
     torch.set_num_interop_threads(1)
-    model = get_model(width_mult=0.4, pretrained_name=None, T_max=1.0)
+    with contextlib.redirect_stdout(io.StringIO()):
+        model = get_model(width_mult=0.4, pretrained_name=None, T_max=1.0)
     state = torch.load(weights, map_location="cpu", weights_only=True)
     model.load_state_dict(state, strict=True)
     parameter_count = sum(parameter.numel() for parameter in model.parameters())
