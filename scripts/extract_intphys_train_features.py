@@ -31,8 +31,28 @@ from scripts.extract_frozen_videoprism_features import (
     SOURCE_COMMIT as VIDEOPRISM_SOURCE_COMMIT,
 )
 
-EXPECTED_ARCHIVE_BYTES = 37_016_506_106
-EXPECTED_ARCHIVE_MD5 = "3428bcf398441a489111528634530212"
+TRAIN_ARCHIVE_PINS = {
+    1: {
+        "bytes": 37_016_506_106,
+        "md5": "3428bcf398441a489111528634530212",
+        "url": "https://download-intphys.cognitive-ml.fr/train.1.tar.gz",
+    },
+    2: {
+        "bytes": 37_111_037_048,
+        "md5": "47dc1c3578e079584f4e3b5b8ab8304b",
+        "url": "https://download-intphys.cognitive-ml.fr/train.2.tar.gz",
+    },
+    3: {
+        "bytes": 37_146_175_637,
+        "md5": "389782958ad058f7a7e1db2b07748259",
+        "url": "https://download-intphys.cognitive-ml.fr/train.3.tar.gz",
+    },
+    4: {
+        "bytes": 37_379_611_745,
+        "md5": "7d345eaa3a33d2abc4a75442eefb277a",
+        "url": "https://download-intphys.cognitive-ml.fr/train.4.tar.gz",
+    },
+}
 EXPECTED_FRAMES = 100
 _FRAME = re.compile(r"^(scene|depth|masks)_(\d{3})\.png$")
 
@@ -263,6 +283,7 @@ def module_version(module: Any, distribution_name: str) -> str:
 def _args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--archive", type=Path, required=True)
+    parser.add_argument("--shard-number", type=int, choices=TRAIN_ARCHIVE_PINS, default=1)
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--source-root", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
@@ -283,19 +304,20 @@ def main() -> None:
         raise ValueError("both reference train and validation feature paths are required together")
     selected_frame_numbers = uniform_frame_numbers(EXPECTED_FRAMES, args.frame_count)
     archive_path = args.archive.resolve(strict=True)
+    archive_pin = TRAIN_ARCHIVE_PINS[args.shard_number]
     checkpoint = args.checkpoint.resolve(strict=True)
     source_root = args.source_root.resolve(strict=True)
     output_dir = args.output_dir.resolve()
     if output_dir.exists():
         raise FileExistsError(f"refusing to overwrite existing feature directory: {output_dir}")
     archive_hash_started = time.perf_counter()
-    if archive_path.stat().st_size != EXPECTED_ARCHIVE_BYTES:
+    if archive_path.stat().st_size != archive_pin["bytes"]:
         raise ValueError("train shard byte size differs from the official published size")
     archive_md5, archive_sha256, archive_bytes = file_digests(archive_path)
     archive_hash_seconds = time.perf_counter() - archive_hash_started
-    if archive_md5 != EXPECTED_ARCHIVE_MD5:
+    if archive_md5 != archive_pin["md5"]:
         raise ValueError(f"train shard MD5 mismatch: {archive_md5}")
-    if archive_bytes != EXPECTED_ARCHIVE_BYTES:
+    if archive_bytes != archive_pin["bytes"]:
         raise ValueError("train shard changed while hashes were being computed")
     checkpoint_sha256 = sha256_file(checkpoint)
     if checkpoint_sha256 != CHECKPOINT_SHA256:
@@ -531,7 +553,8 @@ def main() -> None:
         "archive_bytes": archive_bytes,
         "archive_md5": archive_md5,
         "archive_sha256": archive_sha256,
-        "archive_source": "https://download-intphys.cognitive-ml.fr/train.1.tar.gz",
+        "archive_shard_number": args.shard_number,
+        "archive_source": archive_pin["url"],
         "archive_license": "CC BY 4.0",
         "archive_videos": len(sample_ids),
         "all_train_labels_possible": True,

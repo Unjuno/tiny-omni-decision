@@ -1,6 +1,7 @@
 import pytest
 
 from scripts.extract_intphys_train_features import (
+    TRAIN_ARCHIVE_PINS,
     apply_reference_split,
     canonical_status_hash,
     deterministic_group_split,
@@ -8,6 +9,26 @@ from scripts.extract_intphys_train_features import (
     parse_train_member,
     rgb_sequence_sha256,
 )
+
+
+def test_official_train_shard_pins_cover_all_four_published_archives():
+    assert set(TRAIN_ARCHIVE_PINS) == {1, 2, 3, 4}
+    assert [pin["bytes"] for pin in TRAIN_ARCHIVE_PINS.values()] == [
+        37_016_506_106,
+        37_111_037_048,
+        37_146_175_637,
+        37_379_611_745,
+    ]
+    assert [pin["md5"] for pin in TRAIN_ARCHIVE_PINS.values()] == [
+        "3428bcf398441a489111528634530212",
+        "47dc1c3578e079584f4e3b5b8ab8304b",
+        "389782958ad058f7a7e1db2b07748259",
+        "7d345eaa3a33d2abc4a75442eefb277a",
+    ]
+    assert all(
+        pin["url"] == f"https://download-intphys.cognitive-ml.fr/train.{number}.tar.gz"
+        for number, pin in TRAIN_ARCHIVE_PINS.items()
+    )
 
 
 @pytest.mark.parametrize(
