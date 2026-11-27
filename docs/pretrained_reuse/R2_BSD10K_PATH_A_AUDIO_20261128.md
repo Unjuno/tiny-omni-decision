@@ -60,8 +60,9 @@ The following stages are committed/pushed and CI checked:
   609 windows in 8.27 seconds (about 9 records/second, excluding model load).
   Receipts are stored outside Git under
   `C:\CodexArtifacts\pretrained-reuse-r2-local\bsd10k-v1.2-source-audit-20261128-attempt-01`.
-- The 2026-11-28 local measurement used Windows 10, Intel Core i7-12700H
-  (14 cores / 20 logical CPUs; PyTorch intra-op threads set to 4), Python
+- The 2026-11-28 local measurement used Windows 11 Home (build 26300), Intel
+  Core i7-12700H (14 cores / 20 logical CPUs; PyTorch intra-op threads set to
+  4), Python
   3.11.9, PyTorch/torchaudio 2.6.0+cu124, NumPy 2.4.6, FP32 and CPU inference.
   The RTX 3080 Laptop GPU was 8,270 MiB / 16,384 MiB allocated at 81% utilization
   by another process during inspection; this experiment did not use the GPU.
