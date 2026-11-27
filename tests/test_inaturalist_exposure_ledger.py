@@ -5,7 +5,11 @@ import json
 
 import pytest
 
-from scripts.audit_inaturalist_exposure_ledger import audit_cohorts, identity_digest
+from scripts.audit_inaturalist_exposure_ledger import (
+    audit_cohorts,
+    audit_local_inventory,
+    identity_digest,
+)
 
 
 def _row(observation: str, photo: str, observer: str, split: str) -> dict[str, str]:
@@ -88,3 +92,43 @@ def test_audit_rejects_retained_rows_missing_from_frozen_source() -> None:
             [_row("other", "other-photo", "group-b", "train")],
             [],
         )
+
+
+def test_local_inventory_counts_unledgered_groups_without_emitting_ids(tmp_path) -> None:
+    ledger_group = "known-group"
+    missing_group = "unledgered-group"
+    ledger = {
+        "source_id": "inaturalist.org",
+        "history_status": "INCOMPLETE",
+        "usage": [
+            {
+                "identity_hashes_by_kind": {
+                    "observer_group_sha256": [
+                        identity_digest(
+                            "inaturalist.org", "observer_group_sha256", ledger_group
+                        )
+                    ]
+                }
+            }
+        ],
+    }
+    cohort = tmp_path / "inat-example"
+    cohort.mkdir()
+    rows = [
+        _row("raw-observation-1", "raw-photo-1", ledger_group, "train"),
+        _row("raw-observation-2", "raw-photo-2", missing_group, "validation"),
+    ]
+    (cohort / "train.jsonl").write_text(
+        "\n".join(json.dumps(row) for row in rows) + "\n", encoding="utf-8"
+    )
+
+    result = audit_local_inventory(ledger, tmp_path)
+
+    assert result["directories_scanned"] == 1
+    assert result["jsonl_files_scanned"] == 1
+    assert result["rows_with_observer_group_hash"] == 2
+    assert result["unique_observer_groups"] == 2
+    assert result["unique_groups_matching_ledger"] == 1
+    assert result["unique_groups_missing_from_ledger"] == 1
+    assert result["raw_ids_written"] is False
+    assert missing_group not in json.dumps(result)

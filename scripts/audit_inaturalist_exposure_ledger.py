@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -185,14 +186,109 @@ def audit_paths(ledger_path: Path, cohort_root: Path) -> dict[str, Any]:
     return summary
 
 
+def audit_local_inventory(ledger: dict[str, Any], inventory_root: Path) -> dict[str, Any]:
+    """Scan first-level iNaturalist artifact directories without following links."""
+    source_id = str(ledger.get("source_id", ""))
+    prior_observer_digests = {
+        digest
+        for item in ledger.get("usage", [])
+        for digest in item.get("identity_hashes_by_kind", {}).get(
+            "observer_group_sha256", []
+        )
+    }
+    raw_observer_groups: set[str] = set()
+    file_hashes: list[dict[str, str]] = []
+    row_count = 0
+    skipped_unreadable_files = 0
+    directories_scanned = 0
+
+    for artifact_dir in sorted(inventory_root.iterdir(), key=lambda item: item.name):
+        try:
+            if (
+                not artifact_dir.name.casefold().startswith("inat-")
+                or artifact_dir.is_symlink()
+                or not artifact_dir.is_dir()
+            ):
+                continue
+        except OSError:
+            continue
+        directories_scanned += 1
+        pending = [(artifact_dir, 0)]
+        while pending:
+            current_dir, depth = pending.pop()
+            try:
+                entries = list(os.scandir(current_dir))
+            except OSError:
+                skipped_unreadable_files += 1
+                continue
+            for entry in entries:
+                try:
+                    if entry.is_symlink():
+                        continue
+                    if entry.is_dir(follow_symlinks=False) and depth < 2:
+                        pending.append((Path(entry.path), depth + 1))
+                        continue
+                    if not entry.is_file(follow_symlinks=False) or not entry.name.endswith(
+                        ".jsonl"
+                    ):
+                        continue
+                    path = Path(entry.path)
+                    payload = path.read_bytes()
+                    digest = hashlib.sha256(payload).hexdigest()
+                    file_hashes.append(
+                        {"path": path.relative_to(inventory_root).as_posix(), "sha256": digest}
+                    )
+                    for line_number, line in enumerate(payload.splitlines(), 1):
+                        if not line.strip():
+                            continue
+                        row = json.loads(line)
+                        if not isinstance(row, dict):
+                            raise ValueError(f"{path}:{line_number}: expected a JSON object")
+                        group = row.get("observer_group_sha256")
+                        if group is not None:
+                            raw_observer_groups.add(str(group))
+                            row_count += 1
+                except (OSError, json.JSONDecodeError):
+                    skipped_unreadable_files += 1
+
+    ledger_matches = {
+        group
+        for group in raw_observer_groups
+        if identity_digest(source_id, "observer_group_sha256", group)
+        in prior_observer_digests
+    }
+    file_hashes.sort(key=lambda item: item["path"])
+    canonical_inventory = json.dumps(
+        file_hashes, sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
+    return {
+        "schema": "tiny-omni-decision/inaturalist-local-inventory-v1",
+        "root": str(inventory_root),
+        "directories_scanned": directories_scanned,
+        "jsonl_files_scanned": len(file_hashes),
+        "jsonl_file_manifest_sha256": hashlib.sha256(canonical_inventory).hexdigest(),
+        "rows_with_observer_group_hash": row_count,
+        "unique_observer_groups": len(raw_observer_groups),
+        "unique_groups_matching_ledger": len(ledger_matches),
+        "unique_groups_missing_from_ledger": len(raw_observer_groups - ledger_matches),
+        "unreadable_files_or_directories": skipped_unreadable_files,
+        "raw_ids_written": False,
+        "ledger_history_status": ledger.get("history_status", "UNKNOWN"),
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--ledger", type=Path, required=True)
     parser.add_argument("--cohort-root", type=Path, required=True)
+    parser.add_argument("--inventory-root", type=Path)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
 
     result = audit_paths(args.ledger, args.cohort_root)
+    if args.inventory_root:
+        ledger = json.loads(args.ledger.read_text(encoding="utf-8"))
+        result["local_inventory"] = audit_local_inventory(ledger, args.inventory_root)
     rendered = json.dumps(result, indent=2, sort_keys=True) + "\n"
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)

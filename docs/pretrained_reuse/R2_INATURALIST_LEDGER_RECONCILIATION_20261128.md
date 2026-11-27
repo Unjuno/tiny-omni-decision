@@ -23,6 +23,11 @@ The audit read the existing ledger and frozen source/filter manifests from
 | Filtered validation | `88ec51a0a0d57c0bc1b1a7ced28524c57f4ee441c9ab1a011239008108558e4d` |
 | Filter metadata | `2c9b7cc98f65e5aed8c5e8346b684e6ebc074521ea79cb92708ef0056606b197` |
 
+The follow-up inventory pass scanned 60 JSONL files across 35 direct
+`inat-*` artifact directories under `C:\CodexArtifacts` without following
+links or writing raw IDs. The canonical file-manifest SHA-256 is
+`91bda6749cbb1a6e60821f6a6beeba786a58da7c606ee0cc6d26982599dfc11b`.
+
 The source cohort was frozen on 2026-10-30 from a live API response. It has
 1,813 rows: 1,276 train and 537 validation. The frozen filter retained 20 and
 records 1,793 exclusions because those observers were present in previous
@@ -40,6 +45,15 @@ excluded source rows against the ledger's canonical observer digests found:
   absent from the ledger**;
 - all 20 retained rows have no observer digest match in the ledger;
 - retained train/validation observer overlap is zero.
+
+Across the broader local inventory, 40,990 JSONL row occurrences contained
+2,816 unique hashed observer groups. The old ledger covered 2,588 and lacked
+228 of these. This is a lower-bound artifact inventory: rows repeat between
+source manifests, feature receipts, and predictions, and the scan does not
+prove which unlisted groups reached a model. It also cannot certify unscanned
+worktrees or artifacts outside the `inat-*` directories. The 228 groups must
+not be labeled model-exposed without provenance; they do show that the old
+ledger is not a complete inventory of locally retained iNaturalist identities.
 
 The 122 count difference is an aggregate discrepancy, not a claim that exactly
 122 identities are missing. The confirmed 51-group mismatch shows that the
@@ -62,15 +76,29 @@ Added `scripts/audit_inaturalist_exposure_ledger.py`. It is an offline,
 read-only reconciler; it emits file hashes and aggregate counts, never raw
 observation, photo, or observer IDs. It exits nonzero while history is
 unreconciled. The machine result is stored outside Git at
-`C:\CodexArtifacts\pretrained-reuse-r2-local\inat-ledger-reconciliation-20261128\summary.json`.
+`C:\CodexArtifacts\pretrained-reuse-r2-local\inat-ledger-reconciliation-20261128-attempt-02\summary.json`
+(SHA-256 `dcf152c2a693c85e5eef8b7cd21a6d24f598975e96c062b0b0809e803afb2d2b`).
+The CLI compares the fixed cohort alone or accepts `--inventory-root` to
+compare hashed observers from local iNaturalist JSONL artifacts with the
+ledger.
 
 Focused tests:
 
 ```text
 py -3 -m pytest tests/test_inaturalist_exposure_ledger.py -q
-4 passed
+5 passed
 py -3 -m ruff check scripts/audit_inaturalist_exposure_ledger.py tests/test_inaturalist_exposure_ledger.py
 All checks passed
+py -3 -m pytest -q
+2,949 passed, 11 skipped
+py -3 -m ruff check .
+All checks passed
+```
+
+The inventory run was:
+
+```text
+py -3 scripts/audit_inaturalist_exposure_ledger.py --ledger C:\CodexArtifacts\D-CodexArtifacts\r2-inaturalist-source-global-ledger-20261111.json --cohort-root C:\CodexArtifacts\inat-birds-cc0-ascending-attempt-01 --inventory-root C:\CodexArtifacts --output C:\CodexArtifacts\pretrained-reuse-r2-local\inat-ledger-reconciliation-20261128-attempt-02\summary.json
 ```
 
 The real-artifact audit produced exit code 2 as designed because history is
