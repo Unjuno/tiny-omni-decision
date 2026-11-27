@@ -57,6 +57,13 @@ read as equally precise. The split hash is recorded in the machine-readable
 manifest. Exact media-content duplication is still pending payload-level
 hash checks across partitions.
 
+The class-level counts make this limitation concrete: `is-w` has 106
+validation examples but only 3 uploader groups, and just 64 train examples;
+`ss-s` has 16 validation examples from 5 groups. These are metadata-only
+counts, not model metrics. The split remains frozen for this attempt; macro
+metrics and uploader-group intervals will expose the weak independent support
+instead of hiding it with the larger classes.
+
 This is a custom public-development split. The metadata and labels are public,
 and BSD10k has already appeared in published DCASE work. It is not a new sealed
 audit and cannot support a blind generalization claim. A separate custom test
