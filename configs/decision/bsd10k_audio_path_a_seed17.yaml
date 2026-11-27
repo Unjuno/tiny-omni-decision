@@ -5,7 +5,7 @@ seed: 17
 source:
   record_id: "19868804"
   metadata_sha256: c090b97e5cdac221f867d5a970b0a8326833e57cfe586c5886494170b25413f1
-  split_manifest_sha256: 2d34ca98f099f615d28f94e036380ed2372aa9a2202c37510af2f2e31c05a87f
+  split_manifest_sha256: e1ae3d4088b792619a08a87023e4aeb2b1b5215091ba9772c0dc47fe88842c33
   split_key: normalized_freesound_uploader
   licenses_allowlist: [CC0-1.0, CC-BY-4.0]
   input_metadata: [class, confidence]
