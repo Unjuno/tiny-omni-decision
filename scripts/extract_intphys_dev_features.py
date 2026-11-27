@@ -29,6 +29,7 @@ from scripts.extract_frozen_videoprism_features import (
 from scripts.extract_frozen_videoprism_features import (
     SOURCE_COMMIT as VIDEOPRISM_SOURCE_COMMIT,
 )
+from scripts.extract_intphys_train_features import module_version
 
 EXPECTED_ARCHIVE_BYTES = 3_203_229_667
 EXPECTED_ARCHIVE_MD5 = "6a72715007f2f3b0e9546bfa8d8fc39b"
@@ -135,6 +136,36 @@ def sampled_media_label_collision_audit(
     }
 
 
+def new_dev_video_record() -> dict[str, Any]:
+    return {
+        "frames": {channel: set() for channel in ("scene", "depth", "masks")},
+        "selected_png": {},
+        "label": None,
+    }
+
+
+def get_or_create_dev_video_record(
+    records: dict[tuple[str, str, str], dict[str, Any]],
+    record_order: list[tuple[str, str, str]],
+    key: tuple[str, str, str],
+) -> dict[str, Any]:
+    if key not in records:
+        records[key] = new_dev_video_record()
+        record_order.append(key)
+    return records[key]
+
+
+def validate_dev_video_record(key: tuple[str, str, str], row: dict[str, Any]) -> None:
+    expected = set(range(1, EXPECTED_FRAMES + 1))
+    for channel in ("scene", "depth", "masks"):
+        if row["frames"][channel] != expected:
+            raise ValueError(f"{key} has {len(row['frames'][channel])}/100 {channel} frames")
+    if row["label"] not in {0, 1}:
+        raise ValueError(f"{key} lacks a binary physical-plausibility label")
+    if set(row["selected_png"]) != set(SELECTED_FRAME_NUMBERS):
+        raise ValueError(f"{key} lacks a selected RGB frame")
+
+
 def _args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--archive", type=Path, required=True)
@@ -218,20 +249,19 @@ def main() -> None:
     channel_counts: Counter[str] = Counter()
     forward_seconds: list[float] = []
     seen_ids: set[str] = set()
-    active_key: tuple[str, str, str] | None = None
-    active: dict[str, Any] | None = None
+    records: dict[tuple[str, str, str], dict[str, Any]] = {}
+    record_order: list[tuple[str, str, str]] = []
     extraction_started = time.perf_counter()
 
     def finish_video(key: tuple[str, str, str], row: dict[str, Any]) -> None:
         block, scene, rendition = key
-        expected = set(range(1, EXPECTED_FRAMES + 1))
-        if row["scene_frames"] != expected:
-            raise ValueError(f"{key} has {len(row['scene_frames'])}/100 scene frames")
-        if row["label"] not in {0, 1}:
-            raise ValueError(f"{key} lacks a binary physical-plausibility label")
-        if set(row["selected"]) != set(SELECTED_FRAME_NUMBERS):
-            raise ValueError(f"{key} lacks a selected RGB frame")
-        frame_array = np.stack([row["selected"][number] for number in SELECTED_FRAME_NUMBERS])
+        validate_dev_video_record(key, row)
+        frame_array = np.stack(
+            [
+                np.asarray(tf.io.decode_png(row["selected_png"][number], channels=3))
+                for number in SELECTED_FRAME_NUMBERS
+            ]
+        )
         normalized = _preprocess(frame_array, tf)
         video = jnp.asarray(normalized[None, ...])
         forward_started = time.perf_counter()
@@ -276,16 +306,7 @@ def main() -> None:
             else:
                 rendition = PurePosixPath(member.name).parts[3]
                 key = (block, scene, rendition)
-            if active_key != key:
-                if active_key is not None and active is not None:
-                    finish_video(active_key, active)
-                sample_id = f"{key[0]}/{key[1]}/{key[2]}"
-                if sample_id in seen_ids:
-                    raise ValueError(f"noncontiguous IntPhys dev members: {key}")
-                active_key = key
-                active = {"scene_frames": set(), "selected": {}, "label": None}
-            if active is None:
-                raise RuntimeError("archive parser failed to initialize a video")
+            active = get_or_create_dev_video_record(records, record_order, key)
             if channel == "status":
                 if active["label"] is not None:
                     raise ValueError(f"duplicate status.json: {member.name}")
@@ -303,19 +324,17 @@ def main() -> None:
             if frame_number not in range(1, EXPECTED_FRAMES + 1):
                 raise ValueError(f"frame number outside 1..100: {member.name}")
             channel_counts[channel] += 1
+            if frame_number in active["frames"][channel]:
+                raise ValueError(f"duplicate {channel} frame: {member.name}")
+            active["frames"][channel].add(frame_number)
             if channel == "scene":
-                if frame_number in active["scene_frames"]:
-                    raise ValueError(f"duplicate scene frame: {member.name}")
-                active["scene_frames"].add(frame_number)
                 if frame_number in SELECTED_FRAME_NUMBERS:
                     extracted = archive.extractfile(member)
                     if extracted is None:
                         raise ValueError(f"cannot read selected frame: {member.name}")
-                    active["selected"][frame_number] = np.asarray(
-                        tf.io.decode_png(extracted.read(), channels=3)
-                    )
-    if active_key is not None and active is not None:
-        finish_video(active_key, active)
+                    active["selected_png"][frame_number] = extracted.read()
+    for key in record_order:
+        finish_video(key, records[key])
 
     feature_matrix = np.stack(features)
     group_rows: dict[str, list[int]] = defaultdict(list)
@@ -354,7 +373,7 @@ def main() -> None:
         "python_version": platform.python_version(),
         "numpy_version": np.__version__,
         "jax_version": importlib.metadata.version("jax"),
-        "tensorflow_version": importlib.metadata.version("tensorflow"),
+        "tensorflow_version": module_version(tf, "tensorflow"),
         "cpu_model": platform.processor(),
         "logical_cpu_count": os.cpu_count(),
         "host_ram_total_bytes": host_memory_before.total,

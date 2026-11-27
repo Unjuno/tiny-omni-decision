@@ -62,6 +62,18 @@ def validate_group_disjointness(
         raise ValueError("underlying group IDs overlap between training and validation")
 
 
+def is_best_validation_checkpoint(validation_loss: float, best_loss: float) -> bool:
+    """Keep the raw minimum-loss checkpoint, independent of early-stop tolerance."""
+    return validation_loss < best_loss
+
+
+def is_significant_validation_improvement(
+    validation_loss: float, patience_reference: float, min_delta: float
+) -> bool:
+    """Apply min_delta only to the early-stopping patience counter."""
+    return validation_loss < patience_reference - min_delta
+
+
 def _mean_loss(
     model: Any,
     features: Any,
@@ -125,6 +137,7 @@ def fit_predictor(
     generator = torch.Generator().manual_seed(seed)
     history: list[dict[str, float]] = []
     best_loss = float("inf")
+    patience_reference = float("inf")
     best_epoch = 0
     best_state: dict[str, torch.Tensor] | None = None
     stale_epochs = 0
@@ -159,10 +172,13 @@ def fit_predictor(
             "validation_cosine_loss": validation_loss,
         }
         history.append(row)
-        if validation_loss < best_loss - min_delta:
+        if is_best_validation_checkpoint(validation_loss, best_loss):
             best_loss = validation_loss
             best_epoch = epoch
             best_state = {key: value.detach().clone() for key, value in model.state_dict().items()}
+
+        if is_significant_validation_improvement(validation_loss, patience_reference, min_delta):
+            patience_reference = validation_loss
             stale_epochs = 0
         else:
             stale_epochs += 1
@@ -254,6 +270,8 @@ def main() -> None:
             else "max_epochs_reached"
         ),
         "selection": "minimum internal train-source validation cosine prediction loss",
+        "checkpoint_min_delta": 0.0,
+        "patience_min_delta": args.min_delta,
         "optimizer": "AdamW",
         "learning_rate": 1e-3,
         "weight_decay": 1e-4,

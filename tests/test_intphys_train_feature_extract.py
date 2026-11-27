@@ -3,6 +3,7 @@ import pytest
 from scripts.extract_intphys_train_features import (
     canonical_status_hash,
     deterministic_group_split,
+    module_version,
     parse_train_member,
     rgb_sequence_sha256,
 )
@@ -106,3 +107,19 @@ def test_rgb_sequence_hash_requires_and_orders_all_one_hundred_frames():
         rgb_sequence_sha256(
             {frame: digest for frame, digest in frame_hashes.items() if frame != 50}
         )
+
+
+def test_module_version_prefers_imported_version_for_renamed_windows_wheel():
+    from types import SimpleNamespace
+
+    assert module_version(SimpleNamespace(__version__="2.18.1"), "tensorflow") == "2.18.1"
+
+
+def test_module_version_falls_back_to_distribution_metadata(monkeypatch):
+    from types import SimpleNamespace
+
+    monkeypatch.setattr(
+        "scripts.extract_intphys_train_features.importlib.metadata.version",
+        lambda name: f"metadata-{name}",
+    )
+    assert module_version(SimpleNamespace(), "tensorflow") == "metadata-tensorflow"

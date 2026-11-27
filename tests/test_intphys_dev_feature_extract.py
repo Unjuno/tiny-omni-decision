@@ -1,9 +1,11 @@
 import pytest
 
 from scripts.extract_intphys_dev_features import (
+    get_or_create_dev_video_record,
     parse_dev_member,
     sampled_media_label_collision_audit,
     validate_audit_summary,
+    validate_dev_video_record,
 )
 
 
@@ -68,3 +70,35 @@ def test_sampled_media_collision_audit_reports_opposite_label_duplicates():
 def test_sampled_media_collision_audit_rejects_mismatched_arrays():
     with pytest.raises(ValueError, match="equal nonzero length"):
         sampled_media_label_collision_audit(["g1"], [0, 1], ["m1"])
+
+
+def test_dev_records_remain_grouped_when_archive_members_interleave_videos():
+    records = {}
+    order = []
+    first = ("O1", "01", "1")
+    second = ("O2", "02", "2")
+
+    first_record = get_or_create_dev_video_record(records, order, first)
+    second_record = get_or_create_dev_video_record(records, order, second)
+    first_again = get_or_create_dev_video_record(records, order, first)
+
+    first_again["label"] = 1
+    assert first_record is first_again
+    assert order == [first, second]
+    assert second_record["label"] is None
+
+
+def test_dev_record_requires_complete_frames_for_every_modality():
+    key = ("O1", "01", "1")
+    row = {
+        "frames": {
+            channel: set(range(1, 101)) for channel in ("scene", "depth", "masks")
+        },
+        "selected_png": {frame: b"png" for frame in (1, 15, 29, 43, 57, 71, 85, 100)},
+        "label": 1,
+    }
+    validate_dev_video_record(key, row)
+
+    row["frames"]["masks"].remove(100)
+    with pytest.raises(ValueError, match="masks frames"):
+        validate_dev_video_record(key, row)

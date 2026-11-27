@@ -2,6 +2,8 @@ import numpy as np
 import pytest
 
 from scripts.train_intphys_next_feature_predictor import (
+    is_best_validation_checkpoint,
+    is_significant_validation_improvement,
     load_feature_split,
     validate_group_disjointness,
 )
@@ -52,3 +54,16 @@ def test_group_disjointness_rejects_shared_sample_or_underlying_scene():
         validate_group_disjointness(["a"], ["scene-a"], ["a"], ["scene-b"])
     with pytest.raises(ValueError, match="group IDs overlap"):
         validate_group_disjointness(["a"], ["scene-a"], ["b"], ["scene-a"])
+
+
+def test_best_checkpoint_tracks_raw_validation_minimum_below_min_delta():
+    prior = 0.0026519975834713386
+    later = 0.002565638199648333
+
+    assert is_best_validation_checkpoint(later, prior)
+    assert not is_significant_validation_improvement(later, prior, 1e-4)
+
+
+def test_patience_reference_requires_min_delta_improvement():
+    assert is_significant_validation_improvement(0.9, 1.0, 1e-4)
+    assert not is_significant_validation_improvement(0.99995, 1.0, 1e-4)

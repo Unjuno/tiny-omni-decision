@@ -179,6 +179,14 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def module_version(module: Any, distribution_name: str) -> str:
+    """Prefer the imported runtime version; Windows wheels may use another dist name."""
+    version = getattr(module, "__version__", None)
+    if isinstance(version, str) and version:
+        return version
+    return importlib.metadata.version(distribution_name)
+
+
 def _args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--archive", type=Path, required=True)
@@ -421,7 +429,7 @@ def main() -> None:
         "python_version": platform.python_version(),
         "numpy_version": np.__version__,
         "jax_version": importlib.metadata.version("jax"),
-        "tensorflow_version": importlib.metadata.version("tensorflow"),
+        "tensorflow_version": module_version(tf, "tensorflow"),
         "cpu_model": platform.processor(),
         "logical_cpu_count": os.cpu_count(),
         "host_ram_total_bytes": host_memory_before.total,
