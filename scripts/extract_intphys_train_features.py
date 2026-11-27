@@ -53,6 +53,10 @@ TRAIN_ARCHIVE_PINS = {
         "url": "https://download-intphys.cognitive-ml.fr/train.4.tar.gz",
     },
 }
+# Backward-compatible pins for the original single-shard evaluator. New
+# multi-shard code must resolve its pin through TRAIN_ARCHIVE_PINS instead.
+EXPECTED_ARCHIVE_BYTES = TRAIN_ARCHIVE_PINS[1]["bytes"]
+EXPECTED_ARCHIVE_MD5 = TRAIN_ARCHIVE_PINS[1]["md5"]
 EXPECTED_FRAMES = 100
 _FRAME = re.compile(r"^(scene|depth|masks)_(\d{3})\.png$")
 

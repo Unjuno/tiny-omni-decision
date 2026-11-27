@@ -3,6 +3,8 @@ from __future__ import annotations
 import numpy as np
 import pytest
 
+pytest.importorskip("torch")
+
 from scripts.train_physical_concepts_next_feature_predictor import (
     evaluate_validation_loss,
     persistence_cosine_loss,
