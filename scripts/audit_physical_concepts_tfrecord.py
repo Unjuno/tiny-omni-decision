@@ -144,8 +144,12 @@ def _read_exact(stream: BinaryIO, size: int) -> bytes:
     return data
 
 
-def iter_tfrecord_examples(path: Path) -> Iterator[bytes]:
+def iter_tfrecord_examples(
+    path: Path, *, max_record_bytes: int = _IMAGE_BYTES + _MASK_BYTES + 64_000
+) -> Iterator[bytes]:
     """Read GZIP-compressed TFRecord examples and validate TensorFlow CRC32C framing."""
+    if max_record_bytes < 1:
+        raise ValueError("max_record_bytes must be positive")
     with gzip.open(path, "rb") as stream:
         while True:
             length_bytes = stream.read(8)
@@ -157,7 +161,7 @@ def iter_tfrecord_examples(path: Path) -> Iterator[bytes]:
             if expected_length_crc != masked_crc32c(length_bytes):
                 raise ValueError("TFRecord length CRC32C mismatch")
             length = struct.unpack("<Q", length_bytes)[0]
-            if length > _IMAGE_BYTES + _MASK_BYTES + 64_000:
+            if length > max_record_bytes:
                 raise ValueError(f"implausibly large TFRecord Example: {length} bytes")
             example = _read_exact(stream, length)
             expected_data_crc = struct.unpack("<I", _read_exact(stream, 4))[0]

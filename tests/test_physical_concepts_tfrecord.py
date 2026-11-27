@@ -84,6 +84,16 @@ def test_iter_tfrecord_examples_rejects_bad_crc(tmp_path) -> None:
         list(iter_tfrecord_examples(path))
 
 
+def test_probe_sized_record_requires_explicit_larger_limit(tmp_path) -> None:
+    path = tmp_path / "probe-sized.tfrecord.gz"
+    example = b"x" * 500_000
+    _write_tfrecord(path, [example])
+
+    with pytest.raises(ValueError, match="implausibly large"):
+        list(iter_tfrecord_examples(path))
+    assert list(iter_tfrecord_examples(path, max_record_bytes=600_000)) == [example]
+
+
 def test_audit_shard_checks_gcs_receipt_and_dataset_schema(tmp_path) -> None:
     path = tmp_path / "sample.tfrecord.gz"
     example = _example()

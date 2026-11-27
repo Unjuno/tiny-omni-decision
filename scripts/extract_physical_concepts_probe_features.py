@@ -38,6 +38,7 @@ EXPECTED_CATEGORIES = (
 SAMPLE_PREFIX = "PhysicalConceptsProbe-2026-11-27-v1|seed=17|"
 ROW_BYTES = 15 * 64 * 64 * 3
 MASK_BYTES = 2 * 15 * 64 * 64
+MAX_PROBE_RECORD_BYTES = 4 * ROW_BYTES + 4 * MASK_BYTES + 64_000
 
 
 def sample_rank(category: str, serialized_record: bytes) -> tuple[str, str]:
@@ -64,6 +65,7 @@ def _args() -> argparse.Namespace:
     parser.add_argument("--encoder-source-root", type=Path, required=True)
     parser.add_argument("--pre-probe-validation-threshold", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--reuse-pinned-payload-from", type=Path)
     parser.add_argument("--minimum-available-memory-mib", type=int, default=768)
     parser.add_argument("--progress-every", type=int, default=50)
     return parser.parse_args()
@@ -99,6 +101,27 @@ def _download_pinned_object(item: dict[str, Any], destination: Path) -> dict[str
         "size": size,
         "md5_base64": base64.b64encode(md5.digest()).decode(),
         "sha256": sha256.hexdigest(),
+    }
+
+
+def _verify_existing_pinned_object(item: dict[str, Any], path: Path) -> dict[str, Any]:
+    md5 = hashlib.md5()
+    sha256 = hashlib.sha256()
+    size = 0
+    with path.open("rb") as source:
+        while chunk := source.read(8 * 1024 * 1024):
+            md5.update(chunk)
+            sha256.update(chunk)
+            size += len(chunk)
+    if size != item["size"] or md5.digest() != base64.b64decode(item["md5Hash"], validate=True):
+        raise ValueError(
+            f"existing pinned probe object fails size/MD5 verification: {item['name']}"
+        )
+    return {
+        "size": size,
+        "md5_base64": base64.b64encode(md5.digest()).decode(),
+        "sha256": sha256.hexdigest(),
+        "reused_from_existing_attempt": True,
     }
 
 
@@ -261,14 +284,24 @@ def main() -> None:
     output_dir.mkdir(parents=True, exist_ok=False)
     output_threshold_receipt = output_dir / "pre-probe-validation-threshold.json"
     shutil.copy2(threshold_receipt_path, output_threshold_receipt)
+    reuse_root = (
+        args.reuse_pinned_payload_from.resolve(strict=True) / "payload"
+        if args.reuse_pinned_payload_from is not None
+        else None
+    )
     payload_root = output_dir / "payload"
-    payload_root.mkdir()
+    if reuse_root is None:
+        payload_root.mkdir()
     object_receipts: dict[str, dict[str, Any]] = {}
     object_paths: dict[str, Path] = {}
     for item in objects:
-        destination = payload_root / item["category"] / Path(item["name"]).name
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        object_receipts[item["name"]] = _download_pinned_object(item, destination)
+        source_root = reuse_root if reuse_root is not None else payload_root
+        destination = source_root / item["category"] / Path(item["name"]).name
+        if reuse_root is None:
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            object_receipts[item["name"]] = _download_pinned_object(item, destination)
+        else:
+            object_receipts[item["name"]] = _verify_existing_pinned_object(item, destination)
         object_paths[item["name"]] = destination
         if len(object_receipts) % 10 == 0:
             print(f"downloaded and verified {len(object_receipts)}/100 probe shards", flush=True)
@@ -289,7 +322,9 @@ def main() -> None:
         ):
             shard_path = object_paths[item["name"]]
             count = 0
-            for index, serialized in enumerate(iter_tfrecord_examples(shard_path)):
+            for index, serialized in enumerate(
+                iter_tfrecord_examples(shard_path, max_record_bytes=MAX_PROBE_RECORD_BYTES)
+            ):
                 rank, row_sha = sample_rank(category, serialized)
                 ranked[category].append((rank, row_sha, item["name"], index))
                 cross_category_row_hashes[category].add(row_sha)
@@ -379,7 +414,9 @@ def main() -> None:
         if not row_indices:
             continue
         shard_path = object_paths[item["name"]]
-        for index, serialized in enumerate(iter_tfrecord_examples(shard_path)):
+        for index, serialized in enumerate(
+            iter_tfrecord_examples(shard_path, max_record_bytes=MAX_PROBE_RECORD_BYTES)
+        ):
             selection = row_indices.get(index)
             if selection is None:
                 continue
@@ -457,6 +494,11 @@ def main() -> None:
         "freeform_audit_sha256": freeform_audit_hashes,
         "sample_selection_sha256": sha256_file(selection_path),
         "source_object_receipts": object_receipts,
+        "reused_pinned_payload_from": (
+            str(args.reuse_pinned_payload_from.resolve(strict=True))
+            if args.reuse_pinned_payload_from is not None
+            else None
+        ),
         "model_id": "google/videoprism-base-f16r288",
         "model_revision": MODEL_REVISION,
         "encoder_checkpoint_sha256": CHECKPOINT_SHA256,
