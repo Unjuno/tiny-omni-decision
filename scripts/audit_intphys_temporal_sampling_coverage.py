@@ -8,7 +8,9 @@ import itertools
 import json
 import re
 import tarfile
+import time
 from collections import defaultdict
+from datetime import UTC, datetime
 from pathlib import Path, PurePosixPath
 from typing import Any
 
@@ -79,6 +81,8 @@ def hash_file(path: Path) -> tuple[str, str, int]:
 
 def audit_frame_sampling(path: Path) -> dict[str, Any]:
     """Hash complete ordered RGB source frames, then join labels for collision counts."""
+    started_at_utc = datetime.now(UTC).isoformat()
+    started = time.perf_counter()
     md5, sha256, size = hash_file(path)
     if (md5, sha256, size) != (EXPECTED_MD5, EXPECTED_SHA256, EXPECTED_BYTES):
         raise ValueError("IntPhys dev archive does not match the pinned, previously audited bytes")
@@ -164,6 +168,9 @@ def audit_frame_sampling(path: Path) -> dict[str, Any]:
         })
     return {
         "status": "complete_label-blind-frame-identity-first_temporal-coverage-audit",
+        "started_at_utc": started_at_utc,
+        "ended_at_utc": datetime.now(UTC).isoformat(),
+        "elapsed_seconds": time.perf_counter() - started,
         "source": (
             "previously audited official IntPhys dev archive; labels are not blind"
         ),
