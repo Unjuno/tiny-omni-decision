@@ -53,6 +53,7 @@ def test_unique_group_representatives_are_stable_and_choose_one_per_group():
 
 
 def test_fixed_update_fit_uses_exact_budget_and_finite_fixed_validation():
+    pytest.importorskip("torch")
     generator = np.random.default_rng(17)
     train = generator.normal(size=(13, 4, 3)).astype(np.float32)
     validation = generator.normal(size=(7, 4, 3)).astype(np.float32)
@@ -80,6 +81,7 @@ def test_fixed_update_fit_uses_exact_budget_and_finite_fixed_validation():
 
 
 def test_end_to_end_comparison_binds_shared_split_and_reload_receipts(tmp_path):
+    pytest.importorskip("torch")
     train_path = tmp_path / "train-features.npz"
     validation_path = tmp_path / "validation-features.npz"
     generator = np.random.default_rng(19)
