@@ -1,0 +1,54 @@
+experiment_id: bsd10k-v1.2-audio-path-a-seed17
+task: heterogeneous_audio_taxonomy
+seed: 17
+
+source:
+  record_id: "19868804"
+  metadata_sha256: c090b97e5cdac221f867d5a970b0a8326833e57cfe586c5886494170b25413f1
+  split_manifest_sha256: 2d34ca98f099f615d28f94e036380ed2372aa9a2202c37510af2f2e31c05a87f
+  split_key: normalized_freesound_uploader
+  licenses_allowlist: [CC0-1.0, CC-BY-4.0]
+  input_metadata: [class, confidence]
+  ignored_metadata: [title, tags, description, precomputed_clap_embeddings]
+  test_policy: one_shot_after_readout_and_calibration_are_frozen
+
+encoder:
+  name: EfficientAT-DyMN-0.4-AudioSet
+  source_commit: a425fdce92572e602a1d5634799bd9f1f2efa806
+  checkpoint_sha256: 49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e
+  parameters: 1961239
+  trainable: false
+  sample_rate_hz: 32000
+  window_seconds: 2
+  hop_seconds: 1
+  tail_policy: right_pad_to_full_window
+  pooling: mean_then_l2_normalize
+
+readout:
+  architecture: linear
+  input_features: 384
+  classes: 23
+  trainable_parameters: 8855
+  options_contract: supplied_BST_class_ids
+
+optimization:
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  batch_size: 128
+  max_epochs: 100
+  early_stopping:
+    patience_epochs: 12
+    min_delta: 0.0001
+    selector: validation_macro_nll
+  calibration:
+    method: positive_scalar_temperature
+    source: 20_percent_seed17_hash_selected_training_uploader_groups
+    validation_used_for_calibration: false
+
+metrics:
+  primary_selector: validation_macro_nll
+  report: [accuracy, macro_accuracy, nll, brier, ece_15_bins, mean_confidence]
+  strata: [class, annotation_confidence]
+  uncertainty: 2000_replicate_validation_uploader_cluster_bootstrap
+
