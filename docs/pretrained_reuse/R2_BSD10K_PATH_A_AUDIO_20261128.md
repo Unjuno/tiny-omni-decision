@@ -77,10 +77,29 @@ The following stages are committed/pushed and CI checked:
   rejection, fixed audio windows, frozen feature receipts, calibration, and
   save/reload.
 
-The full train download is running to an external `C:\CodexArtifacts` directory
-with SHA-256 and CRC receipts. Validation download, full feature extraction,
-readout fitting, measured task metrics, and the one-shot custom test remain
-unfinished. No sealed audit or DCASE evaluation data has been used.
+The full train download completed with 4,214 unique IDs and 4,595,945,044 PCM
+bytes. The external `download-train-result.json` SHA-256 is
+`4ae6f01c988ffd2013e848e7938bbc4e2080ad745501553ecbf08449a387b03e`; the
+train media audit SHA-256 is
+`8a32cb9dd4153657bcfc967f7efceee18c65fe0ccb47ce66acb544d4e085eb51`. The
+audit passed all train file-size, SHA-256, CRC-32 and WAV-format checks. It
+found zero duplicate file hashes and zero duplicate normalized PCM hashes
+within train. The split manifest independently assigns each uploader group
+to one split; cross-split media-hash checks remain pending validation
+acquisition. The complete split manifest remains pinned by SHA-256
+`e1ae3d4088b792619a08a87023e4aeb2b1b5215091ba9772c0dc47fe88842c33`.
+The full train content/duration audit external artifact SHA-256 is
+`b62cf2011aa15363c9b277fdeb5c6d6eed4f19545c47b2120fdf757e89ab55ef`.
+The 23 classes range from 64 `is-w` examples across 14 uploader groups to 453
+`fx-h` examples. Among train clips, 929 (22.1%) are shorter than two seconds,
+including 215 (5.1%) shorter than 0.5 seconds; none were filtered. Annotation
+confidence counts are 1: 38, 2: 302, 3: 1,326, 4: 2,293, and 5: 255. The
+license counts are 2,226 CC-BY-4.0 and 1,988 CC0-1.0. These are explicit data
+limitations/strata, not model-quality results.
+Validation-only media acquisition is now running in a separate directory.
+Validation features, readout fitting, model metrics, and the one-shot custom
+test remain unfinished. Test media/labels, sealed audit, and DCASE evaluation
+data have not been opened.
 
 The extractor suppresses the pinned upstream model's architecture dump while
 loading it; upstream deprecation warnings remain visible. The downloader
