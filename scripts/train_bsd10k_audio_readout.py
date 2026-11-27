@@ -60,6 +60,7 @@ LEARNING_RATE = 1e-3
 WEIGHT_DECAY = 1e-4
 EARLY_STOPPING_PATIENCE = 12
 MIN_DELTA = 1e-4
+DURATION_BUCKETS = ("under_0_5s", "0_5_to_2s", "at_least_2s")
 
 
 def sha256_file(path: Path) -> str:
@@ -156,6 +157,14 @@ def _macro(metrics_by_class: dict[str, dict]) -> dict[str, float]:
     }
 
 
+def _duration_bucket(seconds: float) -> str:
+    if seconds < 0.5:
+        return "under_0_5s"
+    if seconds < 2.0:
+        return "0_5_to_2s"
+    return "at_least_2s"
+
+
 def _group_bootstrap_macro_accuracy(
     targets: torch.Tensor,
     predictions: torch.Tensor,
@@ -236,21 +245,32 @@ def run(
         ):
             raise ValueError(f"invalid frozen feature receipt for {split}")
         ids = [str(item) for item in index["sound_ids"]]
+        durations = np.asarray(index.get("durations_seconds", []), dtype=np.float64)
         if len(ids) != len(set(ids)) or set(ids) != set(labels):
             raise ValueError(f"feature IDs do not match the full {split} labels")
+        if (
+            durations.shape != (len(ids),)
+            or not np.isfinite(durations).all()
+            or np.any(durations <= 0)
+        ):
+            raise ValueError(f"invalid per-example durations for {split} features")
         values = np.load(feature_path, allow_pickle=False)
         if values.shape != (len(ids), 384) or not np.isfinite(values).all():
             raise ValueError(f"invalid {split} feature matrix")
         features = torch.from_numpy(values.copy()).float()
         targets = torch.tensor([LABELS.index(labels[sound_id]["class_id"]) for sound_id in ids])
-        return ids, features, targets, report
+        return ids, features, targets, durations, report
 
-    train_ids, x_train_all, y_train_all, train_feature_receipt = load_features(
+    train_ids, x_train_all, y_train_all, train_durations, train_feature_receipt = load_features(
         train_feature_dir, "train", train_labels
     )
-    validation_ids, x_validation, y_validation, validation_feature_receipt = load_features(
-        validation_feature_dir, "validation", validation_labels
-    )
+    (
+        validation_ids,
+        x_validation,
+        y_validation,
+        validation_durations,
+        validation_feature_receipt,
+    ) = load_features(validation_feature_dir, "validation", validation_labels)
     train_groups = [train_labels[sound_id]["uploader_group_sha256"] for sound_id in train_ids]
     fit_indices, calibration_indices = speaker_group_split(
         train_groups, seed=SEED, calibration_fraction=0.2
@@ -353,12 +373,13 @@ def run(
     prediction_path = output_dir / "validation-predictions.jsonl"
     with prediction_path.open("w", encoding="utf-8", newline="\n") as stream:
         all_options = [{"option_id": f"bsd10k:{label}", "class_id": label} for label in LABELS]
-        for index, (sound_id, target, logits, calibrated) in enumerate(
+        for index, (sound_id, target, logits, calibrated, duration) in enumerate(
             zip(
                 validation_ids,
                 y_validation.tolist(),
                 validation_logits,
                 calibrated_logits,
+                validation_durations.tolist(),
                 strict=True,
             )
         ):
@@ -368,6 +389,8 @@ def run(
                 json.dumps(
                     {
                         "sound_id": sound_id,
+                        "duration_seconds": duration,
+                        "duration_bucket": _duration_bucket(duration),
                         "target_class_id": LABELS[target],
                         "prediction_class_id": LABELS[int(logits.argmax())],
                         "probabilities_uncalibrated": torch.softmax(
@@ -395,6 +418,37 @@ def run(
             selected = torch.tensor(indices)
             confidence_metrics[str(score)] = {
                 "count": len(indices),
+                "uncalibrated": _metrics(validation_logits[selected], y_validation[selected]),
+                "temperature_scaled": _metrics(calibrated_logits[selected], y_validation[selected]),
+            }
+
+    train_duration_support = {}
+    validation_duration_metrics = {}
+    for bucket in DURATION_BUCKETS:
+        train_indices = [
+            index
+            for index, seconds in enumerate(train_durations)
+            if _duration_bucket(float(seconds)) == bucket
+        ]
+        validation_indices = [
+            index
+            for index, seconds in enumerate(validation_durations)
+            if _duration_bucket(float(seconds)) == bucket
+        ]
+        train_duration_support[bucket] = {
+            "count": len(train_indices),
+            "uploader_groups": len({train_groups[index] for index in train_indices}),
+        }
+        if validation_indices:
+            selected = torch.tensor(validation_indices)
+            validation_duration_metrics[bucket] = {
+                "count": len(validation_indices),
+                "uploader_groups": len(
+                    {
+                        validation_labels[validation_ids[index]]["uploader_group_sha256"]
+                        for index in validation_indices
+                    }
+                ),
                 "uncalibrated": _metrics(validation_logits[selected], y_validation[selected]),
                 "temperature_scaled": _metrics(calibrated_logits[selected], y_validation[selected]),
             }
@@ -475,6 +529,8 @@ def run(
         "validation_macro_metrics_uncalibrated": _macro(validation_class_metrics),
         "validation_macro_metrics_temperature_scaled": _macro(calibrated_class_metrics),
         "validation_confidence_strata": confidence_metrics,
+        "train_duration_support": train_duration_support,
+        "validation_duration_strata": validation_duration_metrics,
         "validation_uploader_cluster_bootstrap": _group_bootstrap_macro_accuracy(
             y_validation,
             predictions,

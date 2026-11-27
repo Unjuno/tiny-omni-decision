@@ -157,6 +157,7 @@ def extract_split(
         raise ValueError("EfficientAT source or parameter count differs from pinned audit")
     before_state = _state_sha(model)
     features = np.empty((len(expected_ids), FEATURE_WIDTH), dtype=np.float32)
+    durations_seconds = np.empty(len(expected_ids), dtype=np.float32)
     ordered_ids = sorted(expected_ids, key=int)
     started = time.perf_counter()
     window_count = 0
@@ -168,6 +169,7 @@ def extract_split(
             waveform, start_us = decode_resampled_mono_wav(path, sample_rate_hz=SAMPLE_RATE_HZ)
             if start_us != 0:
                 raise ValueError(f"BSD10k WAV unexpectedly has a nonzero start time: {sound_id}")
+            durations_seconds[record_index - 1] = len(waveform) / SAMPLE_RATE_HZ
             windows = fixed_audio_windows(waveform)
             embeddings = []
             for start in range(0, len(windows), batch_size):
@@ -214,7 +216,12 @@ def extract_split(
     np.save(feature_path, features, allow_pickle=False)
     index_path.write_text(
         json.dumps(
-            {"split": split, "sound_ids": ordered_ids, "window_count": window_count},
+            {
+                "split": split,
+                "sound_ids": ordered_ids,
+                "durations_seconds": durations_seconds.tolist(),
+                "window_count": window_count,
+            },
             indent=2,
         )
         + "\n",
@@ -232,6 +239,15 @@ def extract_split(
         "model_state_sha256_before": before_state,
         "model_state_sha256_after": after_state,
         "records": len(ordered_ids),
+        "duration_seconds": {
+            "min": float(np.min(durations_seconds)),
+            "median": float(np.median(durations_seconds)),
+            "p90": float(np.percentile(durations_seconds, 90)),
+            "max": float(np.max(durations_seconds)),
+            "under_0_5s": int(np.count_nonzero(durations_seconds < 0.5)),
+            "under_1s": int(np.count_nonzero(durations_seconds < 1.0)),
+            "under_2s": int(np.count_nonzero(durations_seconds < 2.0)),
+        },
         "window_seconds": 2,
         "hop_seconds": 1,
         "window_count": window_count,

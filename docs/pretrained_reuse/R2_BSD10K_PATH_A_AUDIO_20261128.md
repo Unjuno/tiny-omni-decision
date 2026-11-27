@@ -24,6 +24,10 @@ hashes are recorded in [the source audit](R2_BSD10K_SOURCE_AUDIT_20261128.md).
 - Confidence scores are retained as reporting strata; they do not weight the
   loss or filter examples. Titles, tags, descriptions, and bundled CLAP
   embeddings are excluded.
+- The feature receipt records original clip duration. Validation reports
+  Accuracy, NLL, Brier, and ECE by fixed duration bands (`<0.5s`, `0.5–2s`,
+  `>=2s`) with example and uploader-group counts. These are diagnostic only;
+  duration does not change training, calibration, or checkpoint selection.
 
 ## Data integrity safeguards
 

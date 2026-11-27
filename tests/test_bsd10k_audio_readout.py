@@ -27,6 +27,7 @@ def test_bsd10k_audio_readout_checks_splits_calibrates_and_reloads(tmp_path):
     next_id = 1
     feature_values = {"train": [], "validation": []}
     split_ids = {"train": [], "validation": []}
+    split_durations = {"train": [], "validation": []}
     for split, count_per_class in (("train", 6), ("validation", 2), ("test", 1)):
         for class_index, class_id in enumerate(LABELS):
             for offset in range(count_per_class):
@@ -63,6 +64,9 @@ def test_bsd10k_audio_readout_checks_splits_calibrates_and_reloads(tmp_path):
                     vector[23 + class_index] = 0.1
                     feature_values[split].append(vector)
                     split_ids[split].append(sound_id)
+                    split_durations[split].append(
+                        (0.25, 1.0, 3.0)[(offset + class_index) % 3]
+                    )
 
     buffer = io.StringIO(newline="")
     writer = csv.DictWriter(buffer, fieldnames=list(rows[0]))
@@ -93,7 +97,13 @@ def test_bsd10k_audio_readout_checks_splits_calibrates_and_reloads(tmp_path):
         feature_path = directory / "features.npy"
         np.save(feature_path, np.stack(feature_values[split]), allow_pickle=False)
         (directory / "sample-index.json").write_text(
-            json.dumps({"split": split, "sound_ids": split_ids[split]}),
+            json.dumps(
+                {
+                    "split": split,
+                    "sound_ids": split_ids[split],
+                    "durations_seconds": split_durations[split],
+                }
+            ),
             encoding="utf-8",
         )
         (directory / "run.json").write_text(
@@ -132,3 +142,11 @@ def test_bsd10k_audio_readout_checks_splits_calibrates_and_reloads(tmp_path):
     assert len(
         (tmp_path / "readout-run" / "validation-predictions.jsonl").read_text().splitlines()
     ) == len(split_ids["validation"])
+    assert set(report["validation_duration_strata"]) == {
+        "under_0_5s",
+        "0_5_to_2s",
+        "at_least_2s",
+    }
+    assert sum(row["count"] for row in report["train_duration_support"].values()) == len(
+        split_ids["train"]
+    )
