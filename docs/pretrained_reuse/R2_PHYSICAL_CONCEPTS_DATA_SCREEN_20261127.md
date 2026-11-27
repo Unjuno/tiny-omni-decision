@@ -190,10 +190,31 @@ The report will compare that selected loss with the no-training persistence
 baseline on the exact same validation features. No probe data or labels have
 been opened.
 
+Train feature extraction has completed on all 3,046 rows. The cache has shape
+`[3046,8,768]`, all values are finite, and all 3,046 sample and group IDs are
+unique. The compressed file is 69,929,470 bytes (SHA-256
+`c9445a1a5f3f236ec768200006024d88cdf8e935be1b90c0a35ec3c429c0a816`); the
+feature-value SHA-256 is
+`e1c947fe747064162e1653d0707e0904c15c3a6aa883cf118134096e2ae5abc2`. Actual
+mean forward time was 1.2000 sec/video, or 3,655.2 seconds summed across the
+train shard. The process started at 11:23:11 JST and completed by 12:26:24
+JST (about 3,793 seconds wall time, including load, decode, and archive save).
+Peak working set was 4,131,540,992 bytes. The saved artifacts are under
+`C:/CodexArtifacts/pretrained-reuse-r2-local/physical-concepts-videoprism-features-20261127-attempt-01/train/`;
+the receipt SHA-256 is
+`396dcc4c5a8d0a7ac8221e2c9bb435fd44b2d3198a7720d674e01aad481d6dd0`.
+
+The first extractor implementation wrote its `started_at_utc` field after
+feature creation. That train receipt is preserved as written; elapsed time
+above is derived from the Windows process creation time and that completion
+timestamp. The script now records start and end times at the correct points.
+Validation extraction was already running when that correction landed, so its
+duration will be derived the same way from its process creation record.
+
 ## Outstanding gates
 
-- Full train/validation feature extraction and a validation-selected Path A
-  predictor result remain pending. The separate R1-pinned environment uses
+- Validation feature extraction and a validation-selected Path A predictor
+  result remain pending. The separate R1-pinned environment uses
   JAX 0.6.2 CPU; no packages were upgraded and no GPU work was started.
 - Keep validation use in-domain: select against the shard-held-out freeform
   prediction loss only, and report that it does not test new scene families.

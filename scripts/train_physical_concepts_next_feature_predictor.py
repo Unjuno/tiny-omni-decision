@@ -19,6 +19,10 @@ from scripts.train_intphys_next_feature_predictor import (
     load_feature_split,
     validate_group_disjointness,
 )
+from tiny_omni_decision.temporal_prediction import (
+    NextFrameFeaturePredictor,
+    cosine_prediction_loss,
+)
 
 
 def sha256_file(path: Path) -> str:
@@ -45,6 +49,28 @@ def persistence_cosine_loss(features: np.ndarray) -> float:
         previous_norm[..., 0] * following_norm[..., 0]
     )
     return float(np.mean(1.0 - np.clip(similarities, -1.0, 1.0)))
+
+
+def evaluate_validation_loss(
+    model: Any, features: np.ndarray, batch_size: int = 64
+) -> float:
+    import torch
+
+    if batch_size < 1:
+        raise ValueError("batch size must be positive")
+    values = torch.from_numpy(np.ascontiguousarray(features))
+    total = 0.0
+    count = 0
+    model.eval()
+    with torch.inference_mode():
+        for start in range(0, len(values), batch_size):
+            batch = values[start : start + batch_size]
+            loss = cosine_prediction_loss(model(batch), batch)
+            total += float(loss) * len(batch)
+            count += len(batch)
+    if count != len(features):
+        raise ValueError("validation evaluation did not consume every sequence")
+    return total / count
 
 
 def _args() -> argparse.Namespace:
@@ -106,6 +132,12 @@ def main() -> None:
         },
         checkpoint_path,
     )
+    saved_checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
+    reloaded = NextFrameFeaturePredictor(feature_width=int(train.shape[-1]), hidden_width=64)
+    reloaded.load_state_dict(saved_checkpoint["state_dict"], strict=True)
+    reload_validation_loss = evaluate_validation_loss(reloaded, validation, args.batch_size)
+    if abs(reload_validation_loss - model_loss) > 1e-7:
+        raise RuntimeError("reloaded best checkpoint does not match its selected validation loss")
     history_path = output_dir / "training-history.jsonl"
     history_path.write_text(
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in history),
@@ -149,6 +181,7 @@ def main() -> None:
         "trainable_parameter_count": sum(parameter.numel() for parameter in model.parameters()),
         "selected_train_cosine_loss": float(selected["train_cosine_loss"]),
         "selected_validation_cosine_loss": model_loss,
+        "reloaded_validation_cosine_loss": reload_validation_loss,
         "validation_persistence_cosine_loss": persistence_loss,
         "validation_loss_minus_persistence": model_loss - persistence_loss,
         "best_checkpoint_sha256": sha256_file(checkpoint_path),

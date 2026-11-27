@@ -88,6 +88,8 @@ def _args() -> argparse.Namespace:
 
 def main() -> None:
     args = _args()
+    run_started_at = datetime.now(UTC)
+    run_started = time.perf_counter()
     if (args.max_videos is not None and args.max_videos < 1) or (
         args.minimum_available_memory_mib < 256
     ):
@@ -207,8 +209,10 @@ def main() -> None:
     )
     mean_forward = float(np.mean(forward_times))
     report = {
-        "status": "complete_actual_data_videoprism_feature_smoke",
-        "started_at_utc": datetime.now(UTC).isoformat(),
+        "status": "complete_actual_data_videoprism_feature_extraction",
+        "started_at_utc": run_started_at.isoformat(),
+        "ended_at_utc": datetime.now(UTC).isoformat(),
+        "elapsed_seconds": time.perf_counter() - run_started,
         "source_manifest_sha256": sha256_file(manifest_path),
         "train_audit_sha256": sha256_file(audit_path),
         "source_split": args.split,
