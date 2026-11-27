@@ -132,6 +132,9 @@ def test_bsd10k_audio_readout_checks_splits_calibrates_and_reloads(tmp_path):
     )
 
     assert report["test_split_loaded"] is False
+    assert report["python"]
+    assert report["cpu_model"] is not None
+    assert report["cpu_logical_count"] >= 1
     assert report["selected_epoch"] >= 1
     assert report["train_validation_group_overlap"] == 0
     assert report["save_reload_exact_logits"] is True

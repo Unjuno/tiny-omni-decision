@@ -8,6 +8,7 @@ import hashlib
 import io
 import json
 import math
+import os
 import platform
 import random
 import sys
@@ -584,6 +585,9 @@ def run(
         "readout_sha256": sha256_file(weights_path),
         "validation_predictions_sha256": sha256_file(prediction_path),
         "python": platform.python_version(),
+        "platform": platform.platform(),
+        "cpu_model": platform.processor(),
+        "cpu_logical_count": os.cpu_count(),
         "torch": torch.__version__,
         "test_split_loaded": False,
         "dcase_evaluation_loaded": False,

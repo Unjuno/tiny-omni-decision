@@ -8,9 +8,11 @@ import hashlib
 import io
 import json
 import os
+import platform
 import subprocess
 import sys
 import time
+from importlib.metadata import version as package_version
 from pathlib import Path
 
 import numpy as np
@@ -256,6 +258,15 @@ def extract_split(
         "sample_index_sha256": sha256_file(index_path),
         "dtype": str(next(model.parameters()).dtype),
         "device": torch.cuda.get_device_name(0) if device == "cuda" else "cpu",
+        "environment": {
+            "python": platform.python_version(),
+            "platform": platform.platform(),
+            "cpu_model": platform.processor(),
+            "cpu_logical_count": os.cpu_count(),
+            "numpy": np.__version__,
+            "torch": torch.__version__,
+            "torchaudio": package_version("torchaudio"),
+        },
         "gpu_gate": {
             key: value for key, value in os.environ.items() if key.startswith("TINY_OMNI_GPU_GATE_")
         }
