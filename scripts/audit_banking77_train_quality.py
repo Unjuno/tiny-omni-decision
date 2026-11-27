@@ -94,6 +94,7 @@ def audit_rows(rows: list[dict[str, str]]) -> dict[str, Any]:
                 pair["left_category"] != pair["right_category"] for pair in near_pairs
             ),
             "candidate_pairs_by_row_id_and_label": near_pairs,
+            "connected_component_summary": summarize_candidate_components(near_pairs),
             "limitations": [
                 "candidate generation is heuristic and not exhaustive",
                 "high lexical overlap does not by itself prove duplicate meaning or wrong labels",
@@ -158,6 +159,50 @@ def near_duplicate_candidates(
                 }
             )
     return results
+
+
+def summarize_candidate_components(pairs: list[dict[str, Any]]) -> dict[str, Any]:
+    """Summarize heuristic candidate clusters for leakage-aware split planning."""
+    parent: dict[int, int] = {}
+    row_labels: dict[int, set[str]] = defaultdict(set)
+
+    def find(row_id: int) -> int:
+        parent.setdefault(row_id, row_id)
+        if parent[row_id] != row_id:
+            parent[row_id] = find(parent[row_id])
+        return parent[row_id]
+
+    for pair in pairs:
+        left, right = int(pair["left_row_id"]), int(pair["right_row_id"])
+        left_root, right_root = find(left), find(right)
+        if left_root != right_root:
+            parent[right_root] = left_root
+        row_labels[left].add(pair["left_category"])
+        row_labels[right].add(pair["right_category"])
+
+    component_sizes: Counter[int] = Counter(find(row_id) for row_id in parent)
+    component_labels: dict[int, set[str]] = defaultdict(set)
+    for row_id, labels in row_labels.items():
+        component_labels[find(row_id)].update(labels)
+    label_counts = Counter(len(labels) for labels in component_labels.values())
+    mixed_roots = {root for root, labels in component_labels.items() if len(labels) > 1}
+    mixed_sizes = Counter(component_sizes[root] for root in mixed_roots)
+    return {
+        "candidate_row_count": len(parent),
+        "connected_component_count": len(component_sizes),
+        "largest_component_sizes": sorted(component_sizes.values(), reverse=True)[:12],
+        "components_by_distinct_label_count": {
+            str(count): amount for count, amount in sorted(label_counts.items())
+        },
+        "multi_label_component_count": len(mixed_roots),
+        "multi_label_component_sizes": {
+            str(size): amount for size, amount in sorted(mixed_sizes.items())
+        },
+        "interpretation": (
+            "Heuristic connected components are split-grouping warnings only; "
+            "they do not establish duplicate meaning or label error."
+        ),
+    }
 
 
 def audit_file(path: Path, expected_sha256: str = EXPECTED_SHA256) -> dict[str, Any]:

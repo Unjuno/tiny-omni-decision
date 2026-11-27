@@ -9,6 +9,7 @@ from scripts.audit_banking77_train_quality import (
     audit_rows,
     near_duplicate_candidates,
     normalize_text,
+    summarize_candidate_components,
 )
 
 
@@ -64,6 +65,20 @@ def test_near_duplicate_screen_reports_cross_intent_pairs_without_text() -> None
         }
     ]
     assert all("text" not in candidate for candidate in candidates)
+
+
+def test_candidate_components_group_transitive_matches_and_report_label_mix() -> None:
+    pairs = [
+        {"left_row_id": 1, "left_category": "a", "right_row_id": 2, "right_category": "b"},
+        {"left_row_id": 2, "left_category": "b", "right_row_id": 3, "right_category": "a"},
+        {"left_row_id": 9, "left_category": "c", "right_row_id": 10, "right_category": "c"},
+    ]
+    summary = summarize_candidate_components(pairs)
+    assert summary["candidate_row_count"] == 5
+    assert summary["connected_component_count"] == 2
+    assert summary["largest_component_sizes"] == [3, 2]
+    assert summary["multi_label_component_count"] == 1
+    assert summary["components_by_distinct_label_count"] == {"1": 1, "2": 1}
 
 
 def test_audit_file_fails_closed_on_wrong_hash(tmp_path) -> None:

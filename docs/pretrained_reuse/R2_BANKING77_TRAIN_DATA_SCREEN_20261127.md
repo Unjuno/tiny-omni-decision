@@ -54,6 +54,16 @@ text. It inspected 10,003 rows, all 77 expected categories, and the exact
 | Lexical near-duplicate candidate pairs / cross-intent pairs | 786 / 57 |
 | Rows flagged by basic email, IBAN, long-digit, sort-code, or phone patterns | 0 |
 
+Grouping the 786 candidate edges by connected components yields 1,192 flagged
+rows in 487 components. Forty-two components contain more than one intent
+(36 with two labels and 6 with three); the largest components contain 9 rows.
+This single-link grouping is deliberately conservative for split planning:
+transitive links can join examples that are not direct near-duplicates. It is
+not evidence that all rows in a component have the same meaning or that their
+labels are wrong. Any future validation split should keep each candidate
+component intact and report how many examples this removes from stratified
+allocation, while retaining all rows and labels.
+
 Duplicate normalization uses NFKC, case folding, punctuation removal and
 whitespace collapse. The conflicting group is row IDs 2002 and 3160: after
 normalization, both ask “Has my top up gone through?” but one is labeled
@@ -68,10 +78,13 @@ The lexical near-duplicate screen uses token-set Jaccard >= 0.80 after
 NFKC/casefold/punctuation normalization. Candidate generation requires a
 shared word bigram occurring in at most 80 rows; it is intentionally a review
 screen, not an exhaustive clustering algorithm. Of 786 flagged pairs, 57 cross
-intent labels. These pairs may represent hard distinctions, source ambiguity,
-or ordinary lexical similarity; none was silently removed or relabeled. They
-need review before any split or model fit. The saved receipt records row IDs,
-labels and similarity only, not utterance text.
+intent labels. Connected components expose 42 multi-label groups. These pairs
+may represent hard distinctions, source ambiguity, or ordinary lexical
+similarity; none was silently removed or relabeled. They need source/task
+review before any model fit. The saved receipt records row IDs, labels and
+similarity only, not utterance text. A component-aware split can reduce direct
+lexical leakage but cannot establish user/session-disjoint generalization,
+because the source has no stable user/session identifiers.
 
 The zero PII-pattern count is only a narrow heuristic scan, not proof that no
 personal or sensitive information is present. The dataset card leaves source
@@ -107,10 +120,10 @@ The command rejects any file whose SHA-256 or row count differs from the
 declared source. The authoritative train-only CSV and JSON receipt remain
 outside Git at
 `C:\CodexArtifacts\pretrained-reuse-r2-local\banking77-train-audit-20261127-attempt-01\`.
-The JSON receipt is 188,053 bytes with SHA-256
-`cf6581df05562d62f344ff7c5350c4a67806786cbf605ed8087d760bb80699b4`; the
+The JSON receipt is 188,883 bytes with SHA-256
+`05b335d4a83e7fddfbbda8f6c5c3829f6895fb7856e1d1ff0fc8e1eb99ce878`; the
 audit script SHA-256 is
-`0482d3d3aaea8c570b60b9339c29c5eace8ffd191630b0b87761065248178472`.
+`0c565c04a952384d2a6aa42c40b1b50f9c6cbfc027269d725d4c8e3102f07f5f`.
 No model, feature, checkpoint, publisher test row, or sealed-audit item was
 loaded; no GPU or cloud compute was used.
 
