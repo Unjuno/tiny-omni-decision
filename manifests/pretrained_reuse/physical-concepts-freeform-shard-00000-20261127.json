@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "candidate_id": "google-deepmind-physical-concepts-freeform",
+  "status": "TRAINING_SOURCE_SCREEN_PASSED_SINGLE_SHARD",
+  "source": {
+    "publisher": "Google DeepMind",
+    "repository": "https://github.com/google-deepmind/physical_concepts",
+    "revision": "baa2776017ea3cc8c873ce682bb6646860e12cae",
+    "license": "CC-BY-4.0",
+    "license_scope": "Dataset materials; source repository software is Apache-2.0",
+    "gcs_bucket": "gs://physical_concepts/",
+    "source_documentation": "https://github.com/google-deepmind/physical_concepts/blob/baa2776017ea3cc8c873ce682bb6646860e12cae/README.md"
+  },
+  "component": {
+    "split": "freeform/train",
+    "object_name": "freeform/train/data.tfrecord-00000-of-00100",
+    "generation": "1600878343269200",
+    "expected_compressed_bytes": 171007593,
+    "expected_md5_base64": "LRni2RcBPHxV7wjo7fToRA==",
+    "observed_sha256": "49d17f80766659c1d6e5ca760c34609e6f09f4746045740a0e669a39c123826b",
+    "rows": 3046,
+    "unique_rows": 3046,
+    "duplicate_rows": 0,
+    "unique_rgb_sequences": 3046,
+    "duplicate_rgb_sequences": 0,
+    "unique_mask_sequences": 3046,
+    "schema": {
+      "image": "15x64x64x3 uint8 RGB",
+      "mask": "15x64x64 uint8",
+      "camera_pose": "15x6 finite float32"
+    },
+    "local_payload_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\physical-concepts-patha-20261127-attempt-01\\data.tfrecord-00000-of-00100.gz",
+    "local_audit_path": "C:\\CodexArtifacts\\pretrained-reuse-r2-local\\physical-concepts-patha-20261127-attempt-01\\train-shard-00000-audit.json",
+    "local_audit_sha256": "9b2bc4dc6138ab9839780f16570f621a87955dec611a28b6eb274b3f9a6635af",
+    "payload_in_git": false
+  },
+  "source_scale_from_pinned_documentation": {
+    "freeform_train_shards": 100,
+    "freeform_train_compressed_bytes": 16919537742,
+    "stated_video_count": 300000,
+    "frames_per_video": 15,
+    "height": 64,
+    "width": 64
+  },
+  "task_screen": {
+    "proposed_path_a": "Train a small temporal predictor on freeform train videos using pinned frozen VideoPrism features; score publisher probe quadruplets by temporal physical-consistency ordering.",
+    "probe_sets_are_training_data": false,
+    "probe_sets_downloaded_or_opened": false,
+    "evaluation_protocol": "Select all preprocessing and predictor choices using source-disjoint freeform train/validation shards before opening any probe set.",
+    "quality_claim": "none; one-shard structural audit only",
+    "limitations": [
+      "The audit covers one of 100 training shards, not the complete source.",
+      "No semantic labels or task correctness targets are present in the audited freeform records.",
+      "Exact sequence uniqueness does not establish meaningful temporal diversity, source independence, or task learnability.",
+      "The source documentation describes paired probe sets as evaluation-oriented; they remain untouched.",
+      "A Path A model experiment and task-specific quality evaluation have not yet been run on this source."
+    ]
+  },
+  "audit": {
+    "script": "scripts/audit_physical_concepts_tfrecord.py",
+    "record_crc32c_checked": true,
+    "feature_schema_checked": true,
+    "pinned_generation_and_gcs_md5_checked": true,
+    "audit_timestamp_utc": "2026-11-27T01:30:54.498510+00:00"
+  }
+}
