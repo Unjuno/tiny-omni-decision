@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "status": "complete_actual_train_input_smoke_no_quality_claim",
+  "source_manifest": "physical-concepts-freeform-two-shard-split-20261127.json",
+  "source_manifest_sha256": "03e7348c2144d5e2037d53692b8961a5f6376425dba23832b6f32122cd26e679",
+  "split": "train",
+  "sample_count": 16,
+  "sample_ids_order_sha256": "8aa51b7870bb28b417e07db229e33671055d9ef203e732175ee294f08dbe1e2d",
+  "model": "google/videoprism-base-f16r288",
+  "model_revision": "be719a406d563b66f0ac969e7c94bab8e997c81a",
+  "checkpoint_sha256": "61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29",
+  "upstream_source_commit": "c6eba0ece3dd49a24ffc44582966997a4a59f1d8",
+  "runtime": {
+    "python": "3.11",
+    "jax": "0.6.2",
+    "tensorflow_cpu": "2.18.1",
+    "numpy": "1.26.4",
+    "backend": "cpu"
+  },
+  "preprocessing": {
+    "input_frames": 8,
+    "source_frames": 15,
+    "sampled_indices_zero_based": [0, 2, 4, 6, 8, 10, 12, 14],
+    "frame_shape": [288, 288, 3],
+    "feature_layout": "mean-pooled spatial tokens per frame; temporal order retained",
+    "feature_shape": [16, 8, 768],
+    "feature_values_sha256": "adcf0aaecb78d0e62bc199660fb6578c0ee3521e55317d65c49d4ae53aad1754"
+  },
+  "measurement": {
+    "model_load_seconds": 0.3414403999922797,
+    "first_forward_seconds_including_jit_compile": 6.7828501999611035,
+    "steady_forward_seconds_per_video_min": 1.1424814000492916,
+    "steady_forward_seconds_per_video_max": 1.229442400042899,
+    "mean_forward_seconds_per_video_including_compile": 1.5321157687576488,
+    "peak_working_set_bytes": 4136873984,
+    "available_ram_before_model_bytes": 4757110784,
+    "available_ram_after_model_bytes": 4311769088,
+    "available_ram_after_forward_bytes": 3290968064,
+    "projected_seconds_for_current_6145_rows": 9414.851399015752
+  },
+  "outside_git_artifacts": {
+    "directory": "C:/CodexArtifacts/pretrained-reuse-r2-local/physical-concepts-videoprism-smoke-20261127-attempt-02",
+    "report": "smoke-report.json",
+    "report_sha256": "d53718630b57cc265976d3e889ac5691b15f12b8673fee130e491f5a08898332",
+    "features": "features.npz",
+    "features_sha256": "f7db711b3b21ba5f083f0e9c174270ac74c848a8468035084c8e9eff6dcb5451"
+  },
+  "probe_data_opened": false,
+  "quality_metrics": null
+}

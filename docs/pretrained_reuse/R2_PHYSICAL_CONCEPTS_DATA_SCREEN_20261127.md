@@ -157,18 +157,41 @@ newly admitted, source-disjoint text Decision dataset with explicit correctness
 labels. For the current temporal question, improving the data/task match is
 the higher-priority move than increasing text-model capacity.
 
+## Temporal signal and pinned encoder input smoke
+
+A label-free screen covered all 6,145 rows. Every video has measurable RGB
+motion, a mask change, and camera-pose change; each has 15 distinct RGB frames,
+and no adjacent RGB transition is byte-identical. Median per-video adjacent RGB
+MAE is 0.0221 (train) / 0.0223 (validation), median changed-mask pixel fraction
+is 0.0168 / 0.0168, and mean camera-pose delta L2 is 0.5050 / 0.5052. These
+statistics are similar across the two shards. They establish temporal signal in
+the records, not predictability or physical-reasoning quality. The result is
+saved outside Git in
+`C:/CodexArtifacts/pretrained-reuse-r2-local/physical-concepts-patha-20261127-attempt-02/temporal-signal-v1.json`
+(SHA-256 `6110acbb122e6f42a0dbd7218da7328f482b374aa4203de9baeea1fa3b456d85`).
+
+The R1-pinned VideoPrism-B checkpoint and CPU environment were run on 16 actual
+train videos. The first compiled forward took 6.78 seconds; the next 15 took
+1.14–1.23 seconds each (mean including compilation: 1.53 seconds). Output
+shape is `[16,8,768]`, with temporal order retained. Peak working set was
+4,136,878,984 bytes (3.85 GiB); available RAM was 4.43 GiB before load,
+4.02 GiB after load, and 3.07 GiB after forward. The measured steady-state rate projects to
+about 2.1 hours for both current shards, before decompression and archive I/O.
+This is runtime evidence only. Feature output and receipt are outside Git at
+`C:/CodexArtifacts/pretrained-reuse-r2-local/physical-concepts-videoprism-smoke-20261127-attempt-02/`;
+the receipt SHA-256 is
+`d53718630b57cc265976d3e889ac5691b15f12b8673fee130e491f5a08898332`.
+
+Full extraction for train and validation is a separate CPU-only run in a new
+attempt directory. The frozen features feed the existing small next-feature
+predictor; its model and validation rule remain fixed. No probe data or labels
+have been opened.
+
 ## Outstanding gates
 
-- An existing R1-pinned VideoPrism environment is present at
-  `C:/CodexArtifacts/pretrained-reuse-r1/videoprism-base-r1/venv`; it imports
-  JAX 0.6.2 and selects CPU. The global/worktree environments lack these ML
-  packages and were left unchanged. No forward pass on Physical Concepts data
-  has been run yet. At audit time system free RAM was 5.04 GiB while the
-  existing Orbitune process held about 9.2 GiB; defer model loading until there
-  is enough memory headroom.
-- Run a separate-process smoke on actual decoded source frames, record
-  throughput and memory, and estimate the cost of feature extraction before
-  deciding how many shards to use.
+- Full train/validation feature extraction and a validation-selected Path A
+  predictor result remain pending. The separate R1-pinned environment uses
+  JAX 0.6.2 CPU; no packages were upgraded and no GPU work was started.
 - Keep validation use in-domain: select against the shard-held-out freeform
   prediction loss only, and report that it does not test new scene families.
 - Freeze the Path A scorer and validation selection rule before any probe
