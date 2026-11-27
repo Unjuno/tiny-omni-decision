@@ -60,6 +60,13 @@ The following stages are committed/pushed and CI checked:
   609 windows in 8.27 seconds (about 9 records/second, excluding model load).
   Receipts are stored outside Git under
   `C:\CodexArtifacts\pretrained-reuse-r2-local\bsd10k-v1.2-source-audit-20261128-attempt-01`.
+- The shortest clip in the partial train acquisition was 0.0156 seconds. It
+  passed the actual CPU preprocessing/model path as one right-padded 2-second
+  window and produced finite 384-dimensional features; the pooled norm was
+  1.8375 and the model-state hash did not change. No label or metric was read.
+  This checks runtime handling only; the clip remains in the corpus and the
+  eventual duration-stratified validation will determine whether such short
+  examples are a task-quality limitation.
 - The 2026-11-28 local measurement used Windows 11 Home (build 26300), Intel
   Core i7-12700H (14 cores / 20 logical CPUs; PyTorch intra-op threads set to
   4), Python
