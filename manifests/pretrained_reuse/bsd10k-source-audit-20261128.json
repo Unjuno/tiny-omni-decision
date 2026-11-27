@@ -1,0 +1,75 @@
+{
+  "schema": "tiny-omni-decision/bsd10k-source-audit-v1",
+  "source": {
+    "dataset": "BSD10k-v1.2",
+    "zenodo_record_id": "19868804",
+    "doi": "10.5281/zenodo.19868804",
+    "audio_archive_bytes": 8576285410,
+    "archive_entries": 10956,
+    "metadata_archive_bytes": 2726927,
+    "metadata_archive_sha256": "c090b97e5cdac221f867d5a970b0a8326833e57cfe586c5886494170b25413f1",
+    "metadata_fields_used_for_admission": ["sound_id", "class", "confidence", "uploader", "license"],
+    "precomputed_clap_embeddings_used": false,
+    "dcase_2026_evaluation_data_accessed": false
+  },
+  "license_screen": {
+    "allowed": {
+      "CC-BY-4.0": 3814,
+      "CC0-1.0": 3334
+    },
+    "excluded": {
+      "CC-BY-3.0": 2156,
+      "CC-BY-NC-3.0": 419,
+      "CC-BY-NC-4.0": 821,
+      "CC-Sampling+-1.0": 412
+    },
+    "eligible_count": 7148,
+    "rule": "exact per-file allowlist; all other/missing rights fail closed"
+  },
+  "metadata_quality": {
+    "unique_sound_ids": 10956,
+    "classes": 23,
+    "confidence_1_to_5_counts": {"1": 59, "2": 498, "3": 2210, "4": 3961, "5": 420},
+    "largest_eligible_uploader_group_examples": 426,
+    "independent_multi_rater_consensus_established": false
+  },
+  "split": {
+    "algorithm": "deterministic greedy class/example/group balance with indivisible normalized uploader groups",
+    "seed": 17,
+    "group_targets": {"train": 0.7, "validation": 0.15, "test": 0.15},
+    "examples": {"train": 4214, "validation": 1436, "test": 1498},
+    "uploader_groups": {"train": 1185, "validation": 254, "test": 255},
+    "uploader_group_overlap": 0,
+    "metadata_zip_sha256": "c090b97e5cdac221f867d5a970b0a8326833e57cfe586c5886494170b25413f1",
+    "split_manifest_sha256": "2d34ca98f099f615d28f94e036380ed2372aa9a2202c37510af2f2e31c05a87f",
+    "exact_audio_identity_overlap_check": "pending media acquisition"
+  },
+  "archive_preflight": {
+    "zip_metadata_range_bytes_read": 1090920,
+    "eligible_archive_entries": 7148,
+    "eligible_compressed_bytes": 5865317268,
+    "eligible_uncompressed_bytes": 7688893788,
+    "disallowed_media_payload_read": false
+  },
+  "media_smoke": {
+    "train_files": 25,
+    "uncompressed_bytes": 11097420,
+    "zip_crc_size_verified": true,
+    "wav_parsing_verified": true,
+    "format": "mono, 44100 Hz, signed 16-bit PCM",
+    "duration_seconds_observed": {"min": 0.2220408163, "median": 2.2755555556, "max": 30.0},
+    "payload_hashes_retained_outside_git": true
+  },
+  "acquisition": {
+    "train_full": "running in external local artifact directory after bounded-memory downloader fix; first attempt stopped before writes",
+    "validation": "not started",
+    "test": "not downloaded or used"
+  },
+  "model_exposure": {
+    "candidate": "EfficientAT DyMN-0.4 AudioSet",
+    "parameters": 1961239,
+    "checkpoint_sha256": "49b0e63577021994257b3de2ac5f1686d71554b93c8149f9d2568ad5760b904e",
+    "pretraining_overlap_with_freesound_assets": "unknown"
+  },
+  "evaluation_scope": "public development source; not blind; no product quality claim"
+}
