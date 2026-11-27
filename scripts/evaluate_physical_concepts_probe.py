@@ -49,6 +49,41 @@ def fixed_validation_threshold(scores: np.ndarray) -> tuple[float, float]:
     return threshold, scale
 
 
+def probe_receipts_match_frozen_protocol(
+    extraction_report: dict[str, Any],
+    selection_receipt: dict[str, Any],
+    *,
+    manifest_sha256: str,
+    selection_sha256: str,
+    feature_sha256: str,
+    threshold_sha256: str,
+) -> bool:
+    """Verify cross-linked receipts before loading any probe feature or label."""
+    categories = (
+        "continuity",
+        "solidity",
+        "object_persistence",
+        "unchangeableness",
+        "directional_inertia",
+    )
+    report_threshold_sha = extraction_report.get("pre_probe_validation_threshold_sha256")
+    return (
+        extraction_report.get("status")
+        == "complete_frozen_physical_concepts_probe_feature_extraction"
+        and extraction_report.get("sample_selection_sha256") == selection_sha256
+        and extraction_report.get("source_manifest_sha256") == manifest_sha256
+        and extraction_report.get("feature_file_sha256") == feature_sha256
+        and (report_threshold_sha is None or report_threshold_sha == threshold_sha256)
+        and selection_receipt.get("source_manifest_sha256") == manifest_sha256
+        and selection_receipt.get("pre_probe_validation_threshold_sha256")
+        == threshold_sha256
+        and selection_receipt.get("sample_quota_per_category")
+        == {category: 512 for category in categories}
+        and len(selection_receipt.get("sample_rows", [])) == 2560
+        and selection_receipt.get("probe_data_opened_after_model_selection") is True
+    )
+
+
 def anomaly_probability(scores: np.ndarray, threshold: float, scale: float) -> np.ndarray:
     if not math.isfinite(threshold) or not math.isfinite(scale) or scale <= 0:
         raise ValueError("threshold must be finite and scale positive")
@@ -268,19 +303,13 @@ def main() -> None:
     extraction_report_path = args.feature_extraction_report.resolve(strict=True)
     selection_receipt = json.loads(selection_path.read_text(encoding="utf-8"))
     extraction_report = json.loads(extraction_report_path.read_text(encoding="utf-8"))
-    if (
-        extraction_report.get("status")
-        != "complete_frozen_physical_concepts_probe_feature_extraction"
-        or extraction_report.get("sample_selection_sha256") != sha256_file(selection_path)
-        or extraction_report.get("source_manifest_sha256") != sha256_file(manifest_path)
-        or extraction_report.get("feature_file_sha256") != sha256_file(probe_path)
-        or extraction_report.get("pre_probe_validation_threshold_sha256")
-        != sha256_file(threshold_receipt_path)
-        or selection_receipt.get("source_manifest_sha256") != sha256_file(manifest_path)
-        or selection_receipt.get("sample_quota_per_category")
-        != {category: 512 for category in EXPECTED_CATEGORIES}
-        or len(selection_receipt.get("sample_rows", [])) != 2560
-        or selection_receipt.get("probe_data_opened_after_model_selection") is not True
+    if not probe_receipts_match_frozen_protocol(
+        extraction_report,
+        selection_receipt,
+        manifest_sha256=sha256_file(manifest_path),
+        selection_sha256=sha256_file(selection_path),
+        feature_sha256=sha256_file(probe_path),
+        threshold_sha256=sha256_file(threshold_receipt_path),
     ):
         raise ValueError("probe feature/selection receipts do not match the frozen protocol")
     expected_ids = [row["sample_id"] for row in selection_receipt["sample_rows"]]

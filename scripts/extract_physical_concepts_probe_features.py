@@ -551,6 +551,7 @@ def main() -> None:
         "freeform_split_manifest_sha256": sha256_file(split_manifest_path),
         "freeform_audit_sha256": freeform_audit_hashes,
         "sample_selection_sha256": sha256_file(selection_path),
+        "pre_probe_validation_threshold_sha256": sha256_file(output_threshold_receipt),
         "source_object_receipts": object_receipts,
         "reused_pinned_payload_from": (
             str(args.reuse_pinned_payload_from.resolve(strict=True))

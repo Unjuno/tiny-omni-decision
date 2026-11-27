@@ -10,6 +10,7 @@ from scripts.evaluate_physical_concepts_probe import (
     expected_calibration_error,
     fixed_validation_threshold,
     group_ranking_accuracy,
+    probe_receipts_match_frozen_protocol,
 )
 
 
@@ -76,3 +77,47 @@ def test_threshold_and_metrics_reject_invalid_values() -> None:
         anomaly_probability(np.asarray([1.0]), 0.0, 0.0)
     with pytest.raises(ValueError, match="both binary classes"):
         binary_metrics(np.asarray([1, 1]), np.asarray([0.1, 0.2]), np.asarray([0.8, 0.9]))
+
+
+def test_probe_receipts_bind_threshold_through_selection_receipt() -> None:
+    manifest_sha = "manifest"
+    selection_sha = "selection"
+    feature_sha = "features"
+    threshold_sha = "threshold"
+    report = {
+        "status": "complete_frozen_physical_concepts_probe_feature_extraction",
+        "sample_selection_sha256": selection_sha,
+        "source_manifest_sha256": manifest_sha,
+        "feature_file_sha256": feature_sha,
+    }
+    selection = {
+        "source_manifest_sha256": manifest_sha,
+        "pre_probe_validation_threshold_sha256": threshold_sha,
+        "sample_quota_per_category": {
+            category: 512
+            for category in (
+                "continuity",
+                "solidity",
+                "object_persistence",
+                "unchangeableness",
+                "directional_inertia",
+            )
+        },
+        "sample_rows": [{}] * 2560,
+        "probe_data_opened_after_model_selection": True,
+    }
+    kwargs = {
+        "manifest_sha256": manifest_sha,
+        "selection_sha256": selection_sha,
+        "feature_sha256": feature_sha,
+        "threshold_sha256": threshold_sha,
+    }
+    assert probe_receipts_match_frozen_protocol(report, selection, **kwargs)
+    assert not probe_receipts_match_frozen_protocol(
+        report,
+        {**selection, "pre_probe_validation_threshold_sha256": "wrong"},
+        **kwargs,
+    )
+    assert not probe_receipts_match_frozen_protocol(
+        {**report, "pre_probe_validation_threshold_sha256": "wrong"}, selection, **kwargs
+    )

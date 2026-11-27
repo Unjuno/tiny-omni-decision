@@ -14,6 +14,19 @@ videos, per-frame segmentation masks and camera pose, plus separate
 possible/impossible probe families. It does not yet prove that a compact
 frozen representation can learn the target task.
 
+## Current result (supersedes planning/status text below)
+
+The two-shard freeform Path A predictor was selected on held-out shard
+validation and achieved cosine loss 0.0026964 versus 0.0080918 for persistence.
+The protocol-frozen, one-time evaluation on 2,560 Physical Concepts
+possible/impossible groups then reached only 0.3875 macro group-ranking
+accuracy (95% group-bootstrap interval 0.3770–0.3980). This rejects the
+current anomaly-score transfer as a useful general physical-reasoning
+Decision. It does not show that temporal models or the source are unusable.
+Full metrics, hashes, limitations, and attempt history are in
+[`R2_PHYSICAL_CONCEPTS_PROBE_RESULTS_20261127.md`](R2_PHYSICAL_CONCEPTS_PROBE_RESULTS_20261127.md).
+The probe is now observed; it must not be used for further tuning.
+
 ## Provenance and license
 
 - Publisher: Google DeepMind.
@@ -137,9 +150,9 @@ evaluation on the official possible/impossible probe families.
 
 The publisher describes five probe families (Continuity, Solidity, Object
 Persistence, Unchangeableness, and Directional Inertia) with related video
-quadruplets. Probe sets are evaluation-only in this plan. None of their files or
-labels were downloaded or opened. This preserves a clean next evaluation and
-avoids using a public probe repeatedly for tuning.
+quadruplets. These remain evaluation-only. A fixed 512-group/category sample
+was opened once after model/scoring selection; integrity gates passed. The
+results are observed and must not be reused for tuning or resampling.
 
 ## Relation to the current evidence and BERT
 
@@ -182,13 +195,15 @@ This is runtime evidence only. Feature output and receipt are outside Git at
 the receipt SHA-256 is
 `d53718630b57cc265976d3e889ac5691b15f12b8673fee130e491f5a08898332`.
 
-Full extraction for train and validation is a separate CPU-only run in a new
-attempt directory. The frozen features feed the existing small next-feature
-predictor (seed 17, hidden width 64, AdamW at 1e-3, maximum 100 epochs, batch
-64, patience 8, min-delta 1e-4); selection is minimum validation cosine loss.
-The report will compare that selected loss with the no-training persistence
-baseline on the exact same validation features. No probe data or labels have
-been opened.
+Full extraction for train and validation used separate CPU-only runs. The
+frozen features fed the small next-feature predictor (seed 17, hidden width
+64, AdamW at 1e-3, maximum 100 epochs, batch 64, patience 8, min-delta 1e-4);
+selection was minimum validation cosine loss. The selected checkpoint reached
+0.002696 validation cosine loss versus 0.008092 for feature persistence. This
+did not transfer well to the frozen possible/impossible probe: macro
+quadruplet ranking accuracy was 0.3875 (95% group-bootstrap interval
+0.3770–0.3980). The result is task/domain-specific and does not establish an
+architecture ceiling.
 
 Train feature extraction has completed on all 3,046 rows. The cache has shape
 `[3046,8,768]`, all values are finite, and all 3,046 sample and group IDs are
@@ -208,17 +223,20 @@ The first extractor implementation wrote its `started_at_utc` field after
 feature creation. That train receipt is preserved as written; elapsed time
 above is derived from the Windows process creation time and that completion
 timestamp. The script now records start and end times at the correct points.
-Validation extraction was already running when that correction landed, so its
-duration will be derived the same way from its process creation record.
+Validation extraction was already running when that timing correction landed;
+its duration was therefore derived from its process creation record. Probe
+feature extraction subsequently completed for all 2,560 quadruplets / 10,240
+clips on CPU only. All 100 pinned source objects passed size/hash receipts;
+selected clips had zero exact RGB overlap with freeform train or validation.
+Full probe metrics and artifact hashes are recorded in the results report.
 
 ## Outstanding gates
 
-- Validation feature extraction and a validation-selected Path A predictor
-  result remain pending. The separate R1-pinned environment uses
-  JAX 0.6.2 CPU; no packages were upgraded and no GPU work was started.
-- Keep validation use in-domain: select against the shard-held-out freeform
-  prediction loss only, and report that it does not test new scene families.
-- Freeze the Path A scorer and validation selection rule before any probe
-  evaluation.
-- Report task-level accuracy and uncertainty honestly; do not generalize a
-  probe result to four-modality product quality.
+- Freeform validation and the one-time selected probe evaluation are complete.
+  Validation is shard-held-out/in-domain because the source exposes no scene
+  family IDs. The probe is a fixed public diagnostic, not a blind product test.
+- Do not repeat or tune against the observed probe. A future video Decision
+  experiment needs a newly admitted, task-matched training source with explicit
+  decision labels and scene-family grouping.
+- This result does not demonstrate the project's four-modality quality target;
+  do not generalize it to broad video or multimodal Decision quality.
