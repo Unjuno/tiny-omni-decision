@@ -3,8 +3,8 @@
 ## Disposition
 
 **License gate: candidate ALLOW under the repository's CC-BY-4.0 policy, with
-attribution. Quality/task admission: `REVIEW_NOT_ADMITTED` for model fitting or
-quality claims pending duplicate-cluster and label-provenance review.**
+attribution. Quality/task admission: limited to a train-derived, grouped
+development probe; it is not admitted as general or product-quality evidence.**
 BANKING77 is a useful task-shaped candidate for a later text Decision
 comparison: it has 77 supplied intent labels for natural customer-service
 queries. It is a single banking domain and cannot establish general text or
@@ -94,17 +94,20 @@ annotator or source-event identifier. Exact normalized duplicates can be kept
 together, but this metadata cannot establish user/session-disjoint
 generalization.
 
-## Decision and next gate
+## Follow-up and next gate
 
-Do not start a BERT run on this source yet. First run a train-only near-duplicate
-and label-consistency audit, preserving every row and the known conflict. If
-that supports a usable protocol, freeze a stratified train/validation split by
-duplicate cluster, retain a row-level provenance/hash receipt, and compare one
-compact BERT-family candidate against the current text path on the same
-validation examples. Report macro metrics across intents and calibration, not
-only sample-weighted accuracy. Keep the official public test and sealed audit
-closed. Even a passing result would be a banking-intent text result, not
-general Decision quality or product promotion.
+A human text review of the 57 cross-intent candidate pairs did not find grounds
+to silently correct or remove examples. It confirmed both sensible
+modifier-based distinctions and unresolved generic-versus-specific boundary
+cases; the exact normalized conflicting pair remains unchanged. A deterministic
+whole-component train/validation split was frozen, and one CPU-only frozen
+MiniLM readout probe was run. See the [probe report](R2_BANKING77_FROZEN_MINILM_PROBE_20261127.md).
+The internal validation reached 92.23% macro Accuracy but was used for
+checkpoint selection and is now exposed. Do not retune on it or treat it as a
+blind test. The source's missing user/session provenance and known label
+ambiguity still prevent broad or product claims. Any next quality comparison
+needs new, independently reviewed source groups or an adjudicated label set;
+keep the publisher test and project sealed audit closed.
 
 ## Reproduction and boundary
 

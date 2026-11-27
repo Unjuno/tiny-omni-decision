@@ -11,6 +11,7 @@ from scripts.audit_banking77_train_quality import (
     normalize_text,
     summarize_candidate_components,
 )
+from scripts.freeze_banking77_group_split import _groups, _split_groups
 
 
 def _rows() -> list[dict[str, str]]:
@@ -79,6 +80,40 @@ def test_candidate_components_group_transitive_matches_and_report_label_mix() ->
     assert summary["largest_component_sizes"] == [3, 2]
     assert summary["multi_label_component_count"] == 1
     assert summary["components_by_distinct_label_count"] == {"1": 1, "2": 1}
+
+
+def test_group_split_is_deterministic_and_keeps_near_duplicates_together() -> None:
+    rows = [
+        {"text": "My card arrived today", "category": "card"},
+        {"text": "My card arrived today!", "category": "card"},
+        {"text": "I need a plastic payment card", "category": "card"},
+        {"text": "The bank card is missing", "category": "card"},
+        {"text": "Transfer is pending", "category": "transfer"},
+        {"text": "Transfer is pending now", "category": "transfer"},
+        {"text": "Send money to another account", "category": "transfer"},
+        {"text": "I sent a bank transfer yesterday", "category": "transfer"},
+        {"text": "Where is my balance", "category": "balance"},
+        {"text": "Where is my balance!", "category": "balance"},
+        {"text": "Check my account balance", "category": "balance"},
+        {"text": "My available funds look wrong", "category": "balance"},
+        {"text": "How to change my address", "category": "address"},
+        {"text": "How to change my address!", "category": "address"},
+        {"text": "I need to update my home location", "category": "address"},
+        {"text": "Can I update my residential details", "category": "address"},
+    ]
+    groups = _groups(rows)
+    selected_a = _split_groups(rows, groups, seed=17, validation_fraction=0.25)
+    selected_b = _split_groups(rows, groups, seed=17, validation_fraction=0.25)
+    assert selected_a == selected_b
+    for group in groups:
+        assert not (set(group) & selected_a) or set(group) <= selected_a
+    for label in {row["category"] for row in rows}:
+        assert any(rows[row_id]["category"] == label for row_id in selected_a)
+        assert any(
+            rows[row_id]["category"] == label
+            for row_id in range(len(rows))
+            if row_id not in selected_a
+        )
 
 
 def test_audit_file_fails_closed_on_wrong_hash(tmp_path) -> None:

@@ -1,3 +1,15 @@
+**2026-11-27 R2 BANKING77 grouped MiniLM probe:** After reading all 57
+cross-intent near-duplicate candidates without modifying labels, froze a
+deterministic whole-component split (7,903 train / 2,100 validation, all 77
+intents represented, zero candidate-component overlap). A frozen 17.39M
+MiniLM-L3 encoder plus 29,645-parameter readout reached 92.23% macro Accuracy,
+0.3172 macro NLL and 0.1179 macro Brier on this train-derived validation.
+Train macro Accuracy was 98.40%, showing a 6.17-point generalization gap.
+CPU-only; no publisher test or sealed audit was opened. This is a narrow
+English banking-intent result, below the 95–98% aspiration and not arbitrary
+option or multimodal evidence. Validation is selection-exposed; do not retune
+on it. See [grouped probe report](docs/pretrained_reuse/R2_BANKING77_FROZEN_MINILM_PROBE_20261127.md).
+
 **2026-11-27 R2 BANKING77 train-only data screen:** The pinned CC BY 4.0
 candidate has 10,003 train queries across 77 intents. A train-only audit found
 31 punctuation/case-normalized duplicate groups, one conflicting intent pair,
