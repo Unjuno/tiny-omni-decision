@@ -5,7 +5,9 @@ import pytest
 
 from scripts.extract_physical_concepts_probe_features import (
     ROW_BYTES,
+    _preprocess_probe_frames,
     _validate_probe_row,
+    media_identity_overlaps,
     sample_rank,
     select_probe_records,
 )
@@ -35,6 +37,14 @@ def test_probe_selection_rejects_duplicate_rows_and_short_population() -> None:
         select_probe_records([("a" * 64, "row", "shard", 0)], 2)
 
 
+def test_selected_rgb_media_identity_is_checked_against_both_splits() -> None:
+    overlaps = media_identity_overlaps(
+        ["a", "b", "c", "a"],
+        {"train": {"a", "z"}, "validation": {"c"}},
+    )
+    assert overlaps == {"train": {"a"}, "validation": {"c"}}
+
+
 def test_probe_schema_decodes_four_clips_with_ordered_binary_labels(monkeypatch) -> None:
     from scripts import audit_physical_concepts_tfrecord
 
@@ -45,10 +55,11 @@ def test_probe_schema_decodes_four_clips_with_ordered_binary_labels(monkeypatch)
         features[f"{name}_camera_pose"] = ("float", [0.0] * 180)
     monkeypatch.setattr(audit_physical_concepts_tfrecord, "_feature_map", lambda _: features)
 
-    videos, labels = _validate_probe_row(b"test", "continuity", np)
+    videos, labels, rgb_hashes = _validate_probe_row(b"test", "continuity", np)
 
     assert videos.shape == (4, 15, 64, 64, 3)
     assert labels == [0, 0, 1, 1]
+    assert len(rgb_hashes) == 4
 
 
 def test_probe_schema_rejects_missing_fields(monkeypatch) -> None:
@@ -57,3 +68,27 @@ def test_probe_schema_rejects_missing_fields(monkeypatch) -> None:
     monkeypatch.setattr(audit_physical_concepts_tfrecord, "_feature_map", lambda _: {})
     with pytest.raises(ValueError, match="unexpected continuity probe keys"):
         _validate_probe_row(b"test", "continuity", np)
+
+
+def test_probe_preprocessing_normalizes_read_only_tensor_array_out_of_place() -> None:
+    class ImageOps:
+        @staticmethod
+        def resize(frames, _size, *, method):
+            assert method == "bilinear"
+            return np.frombuffer(
+                np.ones((len(frames), 288, 288, 3), dtype=np.float32).tobytes(),
+                dtype=np.float32,
+            ).reshape(len(frames), 288, 288, 3)
+
+        @staticmethod
+        def resize_with_crop_or_pad(frames, _size, _width=None):
+            return frames
+
+    class FakeTensorFlow:
+        image = ImageOps()
+
+    frames = np.zeros((4, 8, 64, 64, 3), dtype=np.uint8)
+    result = _preprocess_probe_frames(frames, FakeTensorFlow(), np)
+
+    assert result.shape == (4, 8, 288, 288, 3)
+    assert np.all(result == np.float32(1 / 255))

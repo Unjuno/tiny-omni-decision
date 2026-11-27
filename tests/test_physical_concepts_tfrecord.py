@@ -11,6 +11,7 @@ from scripts.audit_physical_concepts_tfrecord import (
     audit_shard,
     crc32c,
     iter_tfrecord_examples,
+    iter_tfrecord_examples_tensorflow,
     masked_crc32c,
 )
 
@@ -92,6 +93,33 @@ def test_probe_sized_record_requires_explicit_larger_limit(tmp_path) -> None:
     with pytest.raises(ValueError, match="implausibly large"):
         list(iter_tfrecord_examples(path))
     assert list(iter_tfrecord_examples(path, max_record_bytes=600_000)) == [example]
+
+
+def test_tensorflow_cpp_reader_matches_python_order_and_preserves_nuls(tmp_path) -> None:
+    pytest.importorskip("tensorflow")
+    path = tmp_path / "parity.tfrecord.gz"
+    examples = [b"first\x00", b"second\x00\x00"]
+    _write_tfrecord(path, examples)
+
+    assert list(iter_tfrecord_examples_tensorflow(path)) == list(iter_tfrecord_examples(path))
+
+
+@pytest.mark.parametrize("crc_offset", (8, 12))
+def test_tensorflow_cpp_reader_rejects_corrupt_length_and_payload_crc(tmp_path, crc_offset) -> None:
+    tf = pytest.importorskip("tensorflow")
+    path = tmp_path / f"bad-crc-{crc_offset}.tfrecord.gz"
+    _write_tfrecord(path, [b"row-with-a-payload"])
+    body = bytearray(gzip.decompress(path.read_bytes()))
+    if crc_offset == 8:
+        body[8] ^= 1
+    else:
+        example_length = struct.unpack("<Q", body[:8])[0]
+        body[12 + example_length] ^= 1
+    with gzip.open(path, "wb") as stream:
+        stream.write(body)
+
+    with pytest.raises(tf.errors.OpError):
+        list(iter_tfrecord_examples_tensorflow(path))
 
 
 def test_audit_shard_checks_gcs_receipt_and_dataset_schema(tmp_path) -> None:

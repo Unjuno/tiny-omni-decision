@@ -44,6 +44,10 @@ change the candidate or sampling rule.
 
 - Use the already pinned VideoPrism-B encoder, eight uniformly sampled frames
   `[0,2,4,6,8,10,12,14]`, and the selected LSTM checkpoint.
+- The pinned VideoPrism temporal encoder uses non-causal attention: each
+  per-frame output may include information from the full clip. Thus this is a
+  feature-sequence consistency/anomaly diagnostic, not causal next-frame
+  forecasting. This limits interpretation even if probe ranking is positive.
 - For each clip, score the mean cosine prediction error over its seven next
   feature transitions.
 - For each quadruplet, compare the mean score of its two impossible clips with
@@ -68,9 +72,11 @@ change the candidate or sampling rule.
 - Save every sample ID, source generation, possible/impossible clip score,
   prediction, fixed-threshold probability, and group metric. Report each of the
   five categories separately and as an unweighted macro average.
-- Before any probe download, verify both freeform shard audit receipts and
-  row-level serialized hashes against all probe records; any overlap fails
-  closed. Probe sample IDs are category-qualified record hashes.
+- Before probe scoring, verify both freeform shard audit receipts and collect
+  their complete RGB identity inventories. After selection, compare every
+  selected full RGB-sequence hash with both freeform train and validation
+  inventories and fail before VideoPrism feature extraction on any overlap.
+  Probe sample IDs are category-qualified record hashes.
 
 The freeform training videos have moving cameras while the publisher says the
 probe videos use static cameras. Results therefore measure transfer across

@@ -58,6 +58,13 @@ def select_probe_records(
     return sorted(records)[:quota]
 
 
+def media_identity_overlaps(
+    selected_clip_hashes: list[str], freeform_rgb_hashes: dict[str, set[str]]
+) -> dict[str, set[str]]:
+    selected = set(selected_clip_hashes)
+    return {split_name: selected & hashes for split_name, hashes in freeform_rgb_hashes.items()}
+
+
 def _args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--manifest", type=Path, required=True)
@@ -125,7 +132,9 @@ def _verify_existing_pinned_object(item: dict[str, Any], path: Path) -> dict[str
     }
 
 
-def _validate_probe_row(serialized: bytes, category: str, np: Any) -> tuple[Any, list[int]]:
+def _validate_probe_row(
+    serialized: bytes, category: str, np: Any
+) -> tuple[Any, list[int], list[str]]:
     if str(SOURCE_PACKAGE_ROOT) not in sys.path:
         sys.path.insert(0, str(SOURCE_PACKAGE_ROOT))
     from scripts.audit_physical_concepts_tfrecord import _feature_map
@@ -143,6 +152,7 @@ def _validate_probe_row(serialized: bytes, category: str, np: Any) -> tuple[Any,
         raise ValueError(f"unexpected {category} probe keys: {sorted(features)}")
     videos: list[Any] = []
     labels: list[int] = []
+    rgb_sequence_hashes: list[str] = []
     for prefix, label in (("possible", 0), ("impossible", 1)):
         image_kind, images = features[f"{prefix}_image"]
         mask_kind, masks = features[f"{prefix}_mask"]
@@ -160,9 +170,12 @@ def _validate_probe_row(serialized: bytes, category: str, np: Any) -> tuple[Any,
         ):
             raise ValueError(f"invalid {prefix} data in {category} probe row")
         pair = np.frombuffer(images[0], dtype=np.uint8).reshape(2, 15, 64, 64, 3)
+        rgb_sequence_hashes.extend(
+            hashlib.sha256(np.ascontiguousarray(clip).tobytes()).hexdigest() for clip in pair
+        )
         videos.extend((pair[0], pair[1]))
         labels.extend((label, label))
-    return np.stack(videos), labels
+    return np.stack(videos), labels, rgb_sequence_hashes
 
 
 def _preprocess_probe_frames(frames: Any, tf: Any, np: Any) -> Any:
@@ -174,7 +187,7 @@ def _preprocess_probe_frames(frames: Any, tf: Any, np: Any) -> Any:
     output = np.asarray(cropped, dtype=np.float32).reshape(
         4, FRAME_COUNT, FRAME_SIZE, FRAME_SIZE, 3
     )
-    output /= 255.0
+    output = output / np.float32(255.0)
     if not np.isfinite(output).all():
         raise ValueError("preprocessed probe frames contain non-finite values")
     return output
@@ -185,7 +198,9 @@ def main() -> None:
 
     if str(SOURCE_PACKAGE_ROOT) not in sys.path:
         sys.path.insert(0, str(SOURCE_PACKAGE_ROOT))
-    from scripts.audit_physical_concepts_tfrecord import iter_tfrecord_examples
+    import tensorflow as tf
+
+    from scripts.audit_physical_concepts_tfrecord import iter_tfrecord_examples_tensorflow
     from scripts.smoke_physical_concepts_videoprism import (
         sha256_file,
         uniform_frame_indices,
@@ -242,6 +257,7 @@ def main() -> None:
     if split_manifest.get("status") != "PROVISIONAL_TRAIN_VALIDATION_SPLIT_EXACT_OVERLAP_CLEAR":
         raise ValueError("freeform train/validation split receipt is not clean")
     freeform_record_hashes: dict[str, set[str]] = {}
+    freeform_rgb_hashes: dict[str, set[str]] = {}
     freeform_audit_hashes: dict[str, str] = {}
     for split_name in ("train", "validation"):
         split = split_manifest[split_name]
@@ -256,9 +272,13 @@ def main() -> None:
         ):
             raise ValueError(f"freeform {split_name} audit does not match frozen split manifest")
         row_hashes = audit.get("record_sha256")
+        rgb_hashes = audit.get("rgb_sequence_sha256")
         if not isinstance(row_hashes, list) or len(row_hashes) != split["records"]:
             raise ValueError(f"freeform {split_name} row hash inventory is incomplete")
+        if not isinstance(rgb_hashes, list) or len(rgb_hashes) != split["records"]:
+            raise ValueError(f"freeform {split_name} RGB identity inventory is incomplete")
         freeform_record_hashes[split_name] = set(row_hashes)
+        freeform_rgb_hashes[split_name] = set(rgb_hashes)
         freeform_audit_hashes[split_name] = sha256_file(audit_path)
     if freeform_record_hashes["train"] & freeform_record_hashes["validation"]:
         raise ValueError("freeform train/validation source rows overlap")
@@ -304,7 +324,10 @@ def main() -> None:
             object_receipts[item["name"]] = _verify_existing_pinned_object(item, destination)
         object_paths[item["name"]] = destination
         if len(object_receipts) % 10 == 0:
-            print(f"downloaded and verified {len(object_receipts)}/100 probe shards", flush=True)
+            action = (
+                "reused and reverified" if reuse_root is not None else "downloaded and verified"
+            )
+            print(f"{action} {len(object_receipts)}/100 probe shards", flush=True)
 
     quotas: dict[str, int] = {
         category: int(manifest["sample"]["selected_per_category"])
@@ -323,7 +346,9 @@ def main() -> None:
             shard_path = object_paths[item["name"]]
             count = 0
             for index, serialized in enumerate(
-                iter_tfrecord_examples(shard_path, max_record_bytes=MAX_PROBE_RECORD_BYTES)
+                iter_tfrecord_examples_tensorflow(
+                    shard_path, max_record_bytes=MAX_PROBE_RECORD_BYTES
+                )
             ):
                 rank, row_sha = sample_rank(category, serialized)
                 ranked[category].append((rank, row_sha, item["name"], index))
@@ -377,11 +402,65 @@ def main() -> None:
                 }
             )
 
+    frame_indices = uniform_frame_indices()
+    frame_cache_path = output_dir / "selected-sampled-rgb.npy"
+    frame_cache = np.lib.format.open_memmap(
+        frame_cache_path,
+        mode="w+",
+        dtype=np.uint8,
+        shape=(len(ordered_ids), 4, FRAME_COUNT, 64, 64, 3),
+    )
+    selected_clip_hashes: list[list[str] | None] = [None] * len(ordered_ids)
+    media_rows_processed = 0
+    for item in objects:
+        category = item["category"]
+        row_indices = selected_lookup.get(item["name"], {})
+        if not row_indices:
+            continue
+        shard_path = object_paths[item["name"]]
+        for index, serialized in enumerate(
+            iter_tfrecord_examples_tensorflow(shard_path, max_record_bytes=MAX_PROBE_RECORD_BYTES)
+        ):
+            selection = row_indices.get(index)
+            if selection is None:
+                continue
+            output_index, expected_row_sha = selection
+            if hashlib.sha256(serialized).hexdigest() != expected_row_sha:
+                raise ValueError("selected probe row content hash differs from frozen selection")
+            videos, _labels, clip_hashes = _validate_probe_row(serialized, category, np)
+            frame_cache[output_index] = videos[:, frame_indices]
+            selected_clip_hashes[output_index] = clip_hashes
+            media_rows_processed += 1
+            if media_rows_processed % args.progress_every == 0:
+                print(
+                    f"verified selected media identities {media_rows_processed}/{len(ordered_ids)}",
+                    flush=True,
+                )
+    frame_cache.flush()
+    del frame_cache
+    if media_rows_processed != len(ordered_ids) or any(
+        hashes is None for hashes in selected_clip_hashes
+    ):
+        raise ValueError(
+            f"selected media preflight incomplete: {media_rows_processed}/{len(ordered_ids)}"
+        )
+    all_selected_clip_hashes = [
+        clip_hash for group in selected_clip_hashes if group is not None for clip_hash in group
+    ]
+    media_overlap_by_split = media_identity_overlaps(all_selected_clip_hashes, freeform_rgb_hashes)
+    if any(media_overlap_by_split.values()):
+        raise ValueError(
+            "selected Physical Concepts RGB sequence overlaps freeform train/validation: "
+            + json.dumps({name: len(values) for name, values in media_overlap_by_split.items()})
+        )
+    for sample_index, clip_hashes in enumerate(selected_clip_hashes):
+        selection_rows[sample_index]["clip_rgb_sequence_sha256"] = clip_hashes
+    unique_selected_clip_hashes = set(all_selected_clip_hashes)
+
     os.environ["JAX_PLATFORM_NAME"] = "cpu"
     import jax
     import jax.numpy as jnp
     import psutil
-    import tensorflow as tf
     from videoprism import models as vp
 
     from tiny_omni_decision.temporal_tokens import pool_spatial_tokens_per_frame
@@ -405,58 +484,33 @@ def main() -> None:
         raise MemoryError("available RAM below floor after VideoPrism model load")
 
     feature_array = np.empty((len(ordered_ids), 4, FRAME_COUNT, 768), dtype=np.float32)
-    frame_indices = uniform_frame_indices()
+    sampled_rgb = np.load(frame_cache_path, mmap_mode="r", allow_pickle=False)
     forward_seconds: list[float] = []
     processed = 0
-    for item in objects:
-        category = item["category"]
-        row_indices = selected_lookup.get(item["name"], {})
-        if not row_indices:
-            continue
-        shard_path = object_paths[item["name"]]
-        for index, serialized in enumerate(
-            iter_tfrecord_examples(shard_path, max_record_bytes=MAX_PROBE_RECORD_BYTES)
-        ):
-            selection = row_indices.get(index)
-            if selection is None:
-                continue
-            output_index, expected_row_sha = selection
-            if hashlib.sha256(serialized).hexdigest() != expected_row_sha:
-                raise ValueError("selected probe row content hash differs from frozen selection")
-            features, _labels = _validate_probe_row(serialized, category, np)
-            frames = features[:, frame_indices]
-            video = jnp.asarray(_preprocess_probe_frames(frames, tf, np))
-            if psutil.virtual_memory().available < memory_floor:
-                raise MemoryError("available RAM fell below floor before probe encoder forward")
-            started = time.perf_counter()
-            result = encode(video)
-            jax.tree_util.tree_map(
-                lambda value: (
-                    value.block_until_ready() if hasattr(value, "block_until_ready") else value
-                ),
-                result,
-            )
-            forward_seconds.append(time.perf_counter() - started)
-            tokens = result[0] if isinstance(result, tuple) else result
-            per_frame = pool_spatial_tokens_per_frame(np.asarray(tokens), FRAME_COUNT)
-            if per_frame.shape != (4, FRAME_COUNT, 768) or not np.isfinite(per_frame).all():
-                raise ValueError(f"invalid pooled probe feature output: {per_frame.shape}")
-            feature_array[output_index] = per_frame.astype(np.float32)
-            processed += 1
-            if processed % args.progress_every == 0:
-                print(f"extracted {processed}/{len(ordered_ids)} probe quadruplets", flush=True)
+    for output_index in range(len(ordered_ids)):
+        video = jnp.asarray(_preprocess_probe_frames(sampled_rgb[output_index], tf, np))
+        if psutil.virtual_memory().available < memory_floor:
+            raise MemoryError("available RAM fell below floor before probe encoder forward")
+        started = time.perf_counter()
+        result = encode(video)
+        jax.tree_util.tree_map(
+            lambda value: (
+                value.block_until_ready() if hasattr(value, "block_until_ready") else value
+            ),
+            result,
+        )
+        forward_seconds.append(time.perf_counter() - started)
+        tokens = result[0] if isinstance(result, tuple) else result
+        per_frame = pool_spatial_tokens_per_frame(np.asarray(tokens), FRAME_COUNT)
+        if per_frame.shape != (4, FRAME_COUNT, 768) or not np.isfinite(per_frame).all():
+            raise ValueError(f"invalid pooled probe feature output: {per_frame.shape}")
+        feature_array[output_index] = per_frame.astype(np.float32)
+        processed += 1
+        if processed % args.progress_every == 0:
+            print(f"extracted {processed}/{len(ordered_ids)} probe quadruplets", flush=True)
 
     if processed != len(ordered_ids) or not np.isfinite(feature_array).all():
         raise ValueError(f"probe feature extraction incomplete: {processed}/{len(ordered_ids)}")
-    cross_split_overlaps: dict[str, set[str]] = {name: set() for name in freeform_record_hashes}
-    for category in EXPECTED_CATEGORIES:
-        for split_name, row_hashes in freeform_record_hashes.items():
-            cross_split_overlaps[split_name].update(
-                row_hashes & cross_category_row_hashes[category]
-            )
-    if any(cross_split_overlaps.values()):
-        raise ValueError("Physical Concepts probe records overlap freeform train/validation")
-
     feature_path = output_dir / "probe-features.npz"
     np.savez_compressed(
         feature_path,
@@ -476,9 +530,13 @@ def main() -> None:
         "category_row_counts_per_shard": category_counts,
         "sample_ids_order_sha256": hashlib.sha256("\n".join(ordered_ids).encode()).hexdigest(),
         "sample_rows": selection_rows,
-        "exact_overlap_with_freeform_rows": {
-            split_name: len(row_hashes) for split_name, row_hashes in cross_split_overlaps.items()
+        "exact_rgb_media_overlap_with_freeform": {
+            split_name: len(hashes) for split_name, hashes in media_overlap_by_split.items()
         },
+        "selected_clip_count": len(all_selected_clip_hashes),
+        "unique_selected_rgb_clips": len(unique_selected_clip_hashes),
+        "duplicate_selected_rgb_clip_references": len(all_selected_clip_hashes)
+        - len(unique_selected_clip_hashes),
         "probe_data_opened_after_model_selection": True,
     }
     selection_path.write_text(
@@ -530,7 +588,7 @@ def main() -> None:
         "available_ram_after_model_bytes": memory_after_model,
         "available_ram_after_forward_bytes": psutil.virtual_memory().available,
         "freeform_exact_row_overlap": {
-            split_name: len(row_hashes) for split_name, row_hashes in cross_split_overlaps.items()
+            split_name: len(hashes) for split_name, hashes in media_overlap_by_split.items()
         },
         "quality_claim": "none; features only, probe metrics are computed separately once",
     }

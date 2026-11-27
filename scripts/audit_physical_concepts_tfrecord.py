@@ -170,6 +170,28 @@ def iter_tfrecord_examples(
             yield example
 
 
+def iter_tfrecord_examples_tensorflow(
+    path: Path, *, max_record_bytes: int = _IMAGE_BYTES + _MASK_BYTES + 64_000
+) -> Iterator[bytes]:
+    """Read gzip TFRecords with TensorFlow's CRC-checked C++ reader."""
+    if max_record_bytes < 1:
+        raise ValueError("max_record_bytes must be positive")
+    import tensorflow as tf
+
+    options = tf.data.Options()
+    options.experimental_deterministic = True
+    options.threading.private_threadpool_size = 1
+    options.threading.max_intra_op_parallelism = 1
+    dataset = tf.data.TFRecordDataset(
+        str(path.resolve(strict=True)), compression_type="GZIP", num_parallel_reads=1
+    ).with_options(options)
+    for record in dataset:
+        example = record.numpy()
+        if len(example) > max_record_bytes:
+            raise ValueError(f"implausibly large TFRecord Example: {len(example)} bytes")
+        yield example
+
+
 def audit_shard(
     path: Path,
     *,
