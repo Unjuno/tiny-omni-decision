@@ -1,0 +1,69 @@
+{
+  "experiment_id": "clinc150-near-duplicate-minilm-l6-frozen-readout-v1",
+  "source": {
+    "dataset_id": "clinc/clinc_oos",
+    "revision": "155b9c710419136e17307b80d0a13e68cd46b4ec",
+    "config": "plus",
+    "license": "CC-BY-3.0",
+    "source_rows": 18350,
+    "official_test_loaded": false,
+    "sealed_audit_loaded": false
+  },
+  "development_split": {
+    "protocol_id": "clinc150-near-duplicate-grouped-development-v1",
+    "manifest_sha256": "2ffb8579ebb3923775238b560f9cdfde50b5ad1f633e41e0b6ed9043d13d99fc",
+    "train_sha256": "61bb3beea1648128dfebbfc462eb51bec50d513656d15156fce867d14980f9ce",
+    "validation_sha256": "09ff5b99a566c17938223af0930cdcef52396d9bc945857a7af1a94b72ef4321",
+    "train_rows": 14689,
+    "validation_rows": 3661,
+    "class_count": 151,
+    "cross_split_group_overlap": 0
+  },
+  "model": {
+    "id": "sentence-transformers/all-MiniLM-L6-v2",
+    "revision": "1110a243fdf4706b3f48f1d95db1a4f5529b4d41",
+    "license": "Apache-2.0",
+    "parameters": 22713216,
+    "weight_bytes": 90868376,
+    "files_sha256": {
+      "config.json": "953f9c0d463486b10a6871cc2fd59f223b2c70184f49815e7efbcab5d8908b41",
+      "model.safetensors": "53aa51172d142c89d9012cce15ae4d6cc0ca6895895114379cacb4fab128d9db",
+      "modules.json": "84e40c8e006c9b1d6c122e02cba9b02458120b5fb0c87b746c41e0207cf642cf",
+      "sentence_bert_config.json": "fc1993fde0a95c24ec6c022539d41cf6e2f7c9721e5415d6fb6897472a9cd4b7",
+      "special_tokens_map.json": "303df45a03609e4ead04bc3dc1536d0ab19b5358db685b6f3da123d05ec200e3",
+      "tokenizer_config.json": "acb92769e8195aabd29b7b2137a9e6d6e25c476a4f15aa4355c233426c61576b",
+      "tokenizer.json": "be50c3628f2bf5bb5e3a7f17b1f74611b2561a3a27eeab05e5aa30f411572037",
+      "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3",
+      "1_Pooling/config.json": "4be450dde3b0273bb9787637cfbd28fe04a7ba6ab9d36ac48e92b11e350ffc23"
+    }
+  },
+  "readout": {
+    "type": "linear",
+    "input_features": 384,
+    "output_classes": 151,
+    "trainable_parameters": 58135,
+    "input_standardization": "per-dimension mean/std fitted on train only"
+  },
+  "training": {
+    "seed": 17,
+    "device": "cpu",
+    "precision": "float32",
+    "optimizer": "AdamW",
+    "learning_rate": 0.01,
+    "weight_decay": 0.01,
+    "batch_size": 256,
+    "max_epochs": 60,
+    "early_stopping_patience": 6,
+    "early_stopping_min_delta": 0.00001,
+    "checkpoint_selector": "minimum validation multiclass NLL",
+    "max_length": 128,
+    "calibration": "none; raw softmax probabilities"
+  },
+  "evaluation": {
+    "metrics": ["accuracy", "macro_recall", "macro_f1", "nll", "brier", "ece_15"],
+    "save_each_validation_prediction": true,
+    "official_test_loaded": false,
+    "sealed_audit_loaded": false
+  },
+  "output_policy": "separate external artifact path; refuse overwrite; no model/data artifacts in Git"
+}

@@ -1,0 +1,64 @@
+{
+  "experiment_id": "clinc150-near-duplicate-bert-mini-frozen-readout-v1",
+  "source": {
+    "dataset_id": "clinc/clinc_oos",
+    "revision": "155b9c710419136e17307b80d0a13e68cd46b4ec",
+    "config": "plus",
+    "license": "CC-BY-3.0",
+    "source_rows": 18350,
+    "official_test_loaded": false,
+    "sealed_audit_loaded": false
+  },
+  "development_split": {
+    "protocol_id": "clinc150-near-duplicate-grouped-development-v1",
+    "manifest_sha256": "2ffb8579ebb3923775238b560f9cdfde50b5ad1f633e41e0b6ed9043d13d99fc",
+    "train_sha256": "61bb3beea1648128dfebbfc462eb51bec50d513656d15156fce867d14980f9ce",
+    "validation_sha256": "09ff5b99a566c17938223af0930cdcef52396d9bc945857a7af1a94b72ef4321",
+    "train_rows": 14689,
+    "validation_rows": 3661,
+    "class_count": 151,
+    "cross_split_group_overlap": 0
+  },
+  "model": {
+    "id": "google/bert_uncased_L-4_H-256_A-4",
+    "revision": "387825ce42dbb39b87911cdf8e383ee3b25184f8",
+    "license": "Apache-2.0",
+    "parameters": 11170560,
+    "weight_bytes": 45088961,
+    "files_sha256": {
+      "README.md": "d13a54d652a2a54fbbc50e063b465fb273295870867821e1b06baba1d49d68a9",
+      "config.json": "61716a972c73e9cc1d6f1165e27e577c1f4012a3cc480e431f427a78d5071ece",
+      "pytorch_model.bin": "01671831dfec6818302153919efbfd6ee4ad91dd9fba7f3649bdd6cb7b0f16e4",
+      "vocab.txt": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3"
+    }
+  },
+  "readout": {
+    "type": "linear",
+    "input_features": 256,
+    "output_classes": 151,
+    "trainable_parameters": 38807,
+    "input_standardization": "per-dimension mean/std fitted on train only"
+  },
+  "training": {
+    "seed": 17,
+    "device": "cpu",
+    "precision": "float32",
+    "optimizer": "AdamW",
+    "learning_rate": 0.01,
+    "weight_decay": 0.01,
+    "batch_size": 256,
+    "max_epochs": 60,
+    "early_stopping_patience": 6,
+    "early_stopping_min_delta": 0.00001,
+    "checkpoint_selector": "minimum validation multiclass NLL",
+    "max_length": 128,
+    "calibration": "none; raw softmax probabilities"
+  },
+  "evaluation": {
+    "metrics": ["accuracy", "macro_recall", "macro_f1", "nll", "brier", "ece_15"],
+    "save_each_validation_prediction": true,
+    "official_test_loaded": false,
+    "sealed_audit_loaded": false
+  },
+  "output_policy": "separate external artifact path; refuse overwrite; no model/data artifacts in Git"
+}
