@@ -51,8 +51,10 @@ change the candidate or sampling rule.
   when impossible has the larger surprise score; ties count as 0.5.
 - Also report clip-level threshold results using the 95th percentile of
   per-sequence errors on the already frozen freeform validation split. Compute
-  that threshold before opening probe payloads. This is an anomaly threshold,
-  not a learned probability calibration.
+  that threshold in a separate CPU-only command and save its receipt before the
+  extractor starts downloading probe payloads. The evaluator replays validation
+  from the pinned feature archive and requires an exact threshold/scale match.
+  This is an anomaly threshold, not a learned probability calibration.
 - For diagnostic per-clip probabilities, let `q95` be that validation
   threshold and `s = 1.4826 * median(abs(validation_error - median_error))`.
   If `s` is zero, use validation-error standard deviation; fail if that is also
@@ -66,6 +68,9 @@ change the candidate or sampling rule.
 - Save every sample ID, source generation, possible/impossible clip score,
   prediction, fixed-threshold probability, and group metric. Report each of the
   five categories separately and as an unweighted macro average.
+- Before any probe download, verify both freeform shard audit receipts and
+  row-level serialized hashes against all probe records; any overlap fails
+  closed. Probe sample IDs are category-qualified record hashes.
 
 The freeform training videos have moving cameras while the publisher says the
 probe videos use static cameras. Results therefore measure transfer across

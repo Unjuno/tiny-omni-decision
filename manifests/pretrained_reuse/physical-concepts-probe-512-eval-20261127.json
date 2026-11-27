@@ -6,7 +6,9 @@
     "feature_encoder": "google/videoprism-base-f16r288",
     "predictor_checkpoint_sha256": "40e9fd86aeb384f30459c346e3a5288cc6a7281ccf1e68854b9001bf44af8e49",
     "predictor_id": "physical-concepts-patha-next-feature-seed17-epoch66",
+    "predictor_run_metadata_sha256": "331a10ebd021553b54f08378eb66c234013882252ffe793d7f4f7b7214ed8ede",
     "validation_cosine_loss": 0.0026964058729309964,
+    "validation_feature_archive_sha256": "083933193536c187b1fd10012174bf16cb96ca709d2c67cc173e35eecb715aa6",
     "validation_persistence_cosine_loss": 0.008091838099062443,
     "validation_selected_epoch": 66
   },
@@ -772,5 +774,6 @@
     "repository": "https://github.com/google-deepmind/physical_concepts",
     "revision": "baa2776017ea3cc8c873ce682bb6646860e12cae"
   },
+  "freeform_train_audit_path": "C:/CodexArtifacts/pretrained-reuse-r2-local/physical-concepts-patha-20261127-attempt-01/train-shard-00000-audit.json",
   "status": "FROZEN_BEFORE_PROBE_PAYLOAD_READ"
 }
