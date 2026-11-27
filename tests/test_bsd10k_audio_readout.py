@@ -7,6 +7,9 @@ import json
 import zipfile
 
 import numpy as np
+import pytest
+
+pytest.importorskip("torch")
 
 from scripts.train_bsd10k_audio_readout import (
     ENCODER_COMMIT,
