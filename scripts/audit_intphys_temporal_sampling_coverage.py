@@ -6,7 +6,6 @@ import argparse
 import hashlib
 import itertools
 import json
-import math
 import re
 import tarfile
 from collections import defaultdict
@@ -26,8 +25,10 @@ def uniform_frame_numbers(total: int, requested: int) -> tuple[int, ...]:
         raise ValueError("requested frames must be between one and total frames")
     if requested == 1:
         return (1,)
-    step = (total - 1) / (requested - 1)
-    numbers = tuple(math.floor(index * step) + 1 for index in range(requested))
+    numbers = tuple(
+        (index * (total - 1)) // (requested - 1) + 1
+        for index in range(requested)
+    )
     if len(set(numbers)) != requested or numbers[0] != 1 or numbers[-1] != total:
         raise ValueError("uniform sampling did not produce unique endpoint-inclusive frames")
     return numbers

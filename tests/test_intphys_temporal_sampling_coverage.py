@@ -14,6 +14,15 @@ def test_uniform_frame_numbers_preserves_endpoints_and_expected_eight_frame_poli
     assert uniform_frame_numbers(5, 1) == (1,)
 
 
+@pytest.mark.parametrize("count", [8, 16, 25, 32, 50, 100])
+def test_predeclared_frame_counts_are_unique_and_endpoint_inclusive(count: int) -> None:
+    positions = uniform_frame_numbers(100, count)
+    assert len(positions) == count
+    assert len(set(positions)) == count
+    assert positions[0] == 1
+    assert positions[-1] == 100
+
+
 @pytest.mark.parametrize(
     ("total", "requested"),
     [(0, 1), (5, 0), (5, 6)],
