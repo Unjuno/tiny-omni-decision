@@ -7,6 +7,7 @@ import csv
 import hashlib
 import io
 import json
+import math
 import sys
 import zipfile
 from collections import Counter
@@ -115,17 +116,17 @@ def prepare_extension(
             raise ValueError("base split leaks an uploader group across partitions")
     heldout_groups = {group for group, split in group_splits.items() if split != "train"}
     base_train_groups = {group for group, split in group_splits.items() if split == "train"}
-    from tiny_omni_decision.textfree_audio import speaker_group_split
-
     base_train_group_order = [
         row["uploader_group_sha256"] for row in base_rows if row["split"] == "train"
     ]
-    _, base_calibration_indices = speaker_group_split(
-        base_train_group_order, seed=17, calibration_fraction=0.2
+    base_train_unique_groups = set(base_train_group_order)
+    if len(base_train_unique_groups) < 2:
+        raise ValueError("base training split must contain at least two uploader groups")
+    ranked_groups = sorted(
+        base_train_unique_groups,
+        key=lambda group: hashlib.sha256(f"17:calibration:{group}".encode()).hexdigest(),
     )
-    frozen_calibration_groups = sorted(
-        {base_train_group_order[index] for index in base_calibration_indices}
-    )
+    frozen_calibration_groups = sorted(ranked_groups[: math.ceil(len(ranked_groups) * 0.2)])
 
     additions: list[dict] = []
     attributions: list[dict[str, str]] = []

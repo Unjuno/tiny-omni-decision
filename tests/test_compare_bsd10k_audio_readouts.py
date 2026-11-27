@@ -4,6 +4,8 @@ import json
 
 import pytest
 
+pytest.importorskip("torch")
+
 from scripts.compare_bsd10k_audio_readouts import compare
 from scripts.train_bsd10k_audio_readout import LABELS
 
