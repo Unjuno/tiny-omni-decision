@@ -418,9 +418,41 @@ def run(
             selected = torch.tensor(indices)
             confidence_metrics[str(score)] = {
                 "count": len(indices),
+                "uploader_groups": len(
+                    {
+                        validation_labels[validation_ids[index]]["uploader_group_sha256"]
+                        for index in indices
+                    }
+                ),
                 "uncalibrated": _metrics(validation_logits[selected], y_validation[selected]),
                 "temperature_scaled": _metrics(calibrated_logits[selected], y_validation[selected]),
             }
+
+    class_data_support = {}
+    for label in LABELS:
+        class_train_ids = [
+            sound_id
+            for sound_id in train_ids
+            if train_labels[sound_id]["class_id"] == label
+        ]
+        class_validation_ids = [
+            sound_id
+            for sound_id in validation_ids
+            if validation_labels[sound_id]["class_id"] == label
+        ]
+        class_data_support[label] = {
+            "train_examples": len(class_train_ids),
+            "train_uploader_groups": len(
+                {train_labels[sound_id]["uploader_group_sha256"] for sound_id in class_train_ids}
+            ),
+            "validation_examples": len(class_validation_ids),
+            "validation_uploader_groups": len(
+                {
+                    validation_labels[sound_id]["uploader_group_sha256"]
+                    for sound_id in class_validation_ids
+                }
+            ),
+        }
 
     train_duration_support = {}
     validation_duration_metrics = {}
@@ -508,6 +540,7 @@ def run(
         "calibration_unique_uploader_groups": len(calibration_groups),
         "validation_examples": len(validation_ids),
         "validation_unique_uploader_groups": len(validation_groups),
+        "data_support_by_class": class_data_support,
         "fit_calibration_group_overlap": 0,
         "train_validation_group_overlap": 0,
         "class_count": len(LABELS),

@@ -28,6 +28,9 @@ hashes are recorded in [the source audit](R2_BSD10K_SOURCE_AUDIT_20261128.md).
   Accuracy, NLL, Brier, and ECE by fixed duration bands (`<0.5s`, `0.5–2s`,
   `>=2s`) with example and uploader-group counts. These are diagnostic only;
   duration does not change training, calibration, or checkpoint selection.
+- The readout run report also records train/validation examples and distinct
+  uploader groups per class, plus validation confidence-stratum group counts,
+  so low independent support is visible beside every class-level result.
 
 ## Data integrity safeguards
 
