@@ -1,0 +1,103 @@
+{
+  "schema": "tiny-omni-decision/soundactions-source-preflight-v1",
+  "source": {
+    "title": "365 Sound Actions",
+    "doi": "10.5281/zenodo.23971067",
+    "zenodo_record_id": "23971067",
+    "version": 2,
+    "published_date": "2026-11-05",
+    "license": "CC BY 4.0",
+    "license_url": "https://creativecommons.org/licenses/by/4.0/",
+    "source_url": "https://zenodo.org/records/23971067",
+    "data_size_approx_bytes": 2288000000,
+    "recording_count": 365,
+    "recordists": 1,
+    "modalities": ["audio", "video", "still_image"]
+  },
+  "downloaded_metadata_only": {
+    "media_payload_downloaded": false,
+    "files": {
+      "overview.csv": {
+        "bytes": 126126,
+        "md5": "fed6e4f1812670e5fdc9210134203742",
+        "sha256": "6e1307f24b696ef8079374db1f4102dbf1b1028a1024d0b714316dbc919a2de5"
+      },
+      "statistics.json": {
+        "bytes": 857,
+        "md5": "d4cc8259c3de50c074c91282a1fcd95d",
+        "sha256": "1e01d6285f449b8306735379d3ec7eeb51262b6cbbddc110eca87542139b06d0"
+      },
+      "sound-actions-labels.zip": {
+        "bytes": 58315,
+        "md5": "b60d7f2e82e3791dc23880841ba3dfef",
+        "sha256": "c08d18a856c3ef10879e7a7c4b6b95d5ddc05f1f878670ee309013440e4ad601"
+      },
+      "README.md": {
+        "bytes": 8194,
+        "md5": "6886ef72a0aab72fa3d8ce5bd6bcbf7c",
+        "sha256": "9aa763e114d398f87bf16e5c3df0738f3fdbc6c53f863b710ee22be1496b1c94"
+      },
+      "LICENSE.txt": {
+        "bytes": 345,
+        "md5": "106cd200a98097687f0bb834bf3ad1d0",
+        "sha256": "c517ddfa462d4ee86c5f5ddc13ebfd3476c8e881f83558e7b1d4bf19ea99ae63"
+      },
+      "SHA256SUMS.txt": {
+        "bytes": 118025,
+        "md5": "e2b91979b1bdcbdba9dbf8a06a53d1ca",
+        "sha256": "9648b000cff5e9295ec59ae39346486e68362733d9fe89cfbd68e1d94bffec0"
+      }
+    },
+    "local_audit_result": {
+      "path": "C:/CodexArtifacts/pretrained-reuse-r2-local/soundactions-v2-preflight-20261128-attempt-02/metadata-audit.json",
+      "sha256": "af7b3facaf6402fd8e730473370f098a8f9eafcff48fd4ac2793ffc786bc033e"
+    }
+  },
+  "audit": {
+    "metadata_rows": 365,
+    "unique_record_ids": 365,
+    "unique_wav_references": 365,
+    "unique_mp4_references": 365,
+    "unique_jpg_references": 365,
+    "official_train_validation_test_split": false,
+    "annotation_raters": 3,
+    "perception_type_counts": {
+      "impulsive": 126,
+      "iterative": 125,
+      "sustained": 83,
+      "unknown": 31
+    },
+    "perception_type_majority_items": 334,
+    "perception_type_unanimous_items": 158,
+    "perception_type_kappa_free": 0.46,
+    "action_rater_field_distinct_values": 944,
+    "action_rater_field_singletons": 848,
+    "object_rater_field_distinct_values": 940,
+    "object_rater_field_singletons": 808,
+    "corrected_label_cells": 39,
+    "corrected_label_records": 35,
+    "raw_titles_urls_and_ids_emitted": false
+  },
+  "prior_publication": {
+    "paper_doi": "10.5334/tismir.223",
+    "paper_publication_date": "2026-03-11",
+    "evaluation_protocol": "five-fold validation on all 365 records",
+    "perception_type_accuracy": {
+      "audio_only": 0.66,
+      "audio_video": 0.60,
+      "video_only": 0.48
+    },
+    "metrics_apply_to": "DG-SCT paper experiments, not the repository Path A model"
+  },
+  "pretrained_video_overlap": "UNKNOWN: VideoPrism pretraining includes public-video corpora and the exact SoundActions overlap is not established",
+  "disposition": {
+    "exploratory_development_use": "candidate after a project split and task contract are frozen",
+    "blind_final_quality_gate": "not eligible",
+    "reason": "single recordist, small/source-specific corpus, labels already published in five-fold validation, and unknown VideoPrism pretraining overlap"
+  },
+  "compute": {
+    "gpu_used": false,
+    "cloud_used": false,
+    "paid_compute_used": false
+  }
+}
