@@ -131,4 +131,13 @@ def test_local_inventory_counts_unledgered_groups_without_emitting_ids(tmp_path)
     assert result["unique_groups_matching_ledger"] == 1
     assert result["unique_groups_missing_from_ledger"] == 1
     assert result["raw_ids_written"] is False
+    assert result["per_file_provenance_counts"] == [
+        {
+            "path": "inat-example/train.jsonl",
+            "rows_with_observer_group_hash": 2,
+            "unique_observer_groups": 2,
+            "unique_groups_matching_ledger": 1,
+            "unique_groups_missing_from_ledger": 1,
+        }
+    ]
     assert missing_group not in json.dumps(result)

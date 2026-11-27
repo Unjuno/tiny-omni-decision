@@ -64,6 +64,36 @@ Until their provenance is reconciled, the global history cannot be certified
 complete and no later mutable API query can be called fresh from count data
 alone.
 
+## Artifact-level provenance follow-up
+
+The inventory tool now emits per-JSONL aggregates (row count, unique observer
+groups, and groups absent from the ledger), without emitting observer or media
+IDs. This narrows where the discrepancy appears while preserving the privacy
+boundary. The follow-up output is stored outside Git at
+`C:\CodexArtifacts\pretrained-reuse-r2-local\inat-ledger-reconciliation-20261128-attempt-03\summary.json`
+(SHA-256 `d3c75fdf8219f337e853252eaca97d4c522af14957700ebad50f2a7605289f23`).
+
+- All 20 rows in the retained candidate split (15 train / 5 validation) have
+  observer groups absent from the old ledger. This independently confirms that
+  the retained set cannot be certified as fresh against the incomplete ledger.
+- The currently recorded `freshval-v2-merged-features` training input contains
+  1,134 unique observer groups, all present in the ledger. The older base
+  VideoPrism train/validation feature caches also have no groups absent from
+  that ledger. Thus this inventory did not find a missing-ledger group in those
+  identified model feature inputs.
+- An intermediate incremental feature cache contains four groups absent from
+  the ledger, but the selected readout's recorded `feature_dir` points to the
+  merged-v2 cache above. We therefore do not infer that those four groups were
+  consumed by the selected readout.
+- Other unledgered groups occur in frozen source and validation manifests,
+  including cohorts that are not the selected readout's recorded feature
+  input. The broad count of 228 still cannot be equated with model exposure.
+
+This follow-up resolves one narrow ambiguity about the recorded readout's
+feature cache; it does not repair the source-global ledger, certify all other
+historical exposure, or make the 20-row remainder useful training data. No
+additional model, validation, media, or sealed-audit evaluation was run.
+
 This is a data-provenance limitation, not evidence about model capacity. It
 also explains why the live multi-taxon paired count screen (4,426 Aves,
 484 Mammalia, 228 Amphibia before historical filtering) cannot be promoted to
@@ -101,7 +131,11 @@ The inventory run was:
 py -3 scripts/audit_inaturalist_exposure_ledger.py --ledger C:\CodexArtifacts\D-CodexArtifacts\r2-inaturalist-source-global-ledger-20261111.json --cohort-root C:\CodexArtifacts\inat-birds-cc0-ascending-attempt-01 --inventory-root C:\CodexArtifacts --output C:\CodexArtifacts\pretrained-reuse-r2-local\inat-ledger-reconciliation-20261128-attempt-02\summary.json
 ```
 
-The real-artifact audit produced exit code 2 as designed because history is
+The per-file follow-up used the same read-only command with a new output path,
+`...\inat-ledger-reconciliation-20261128-attempt-03\summary.json`; its focused
+tests remained 5/5 passing. Both outputs are preserved separately.
+
+Both real-artifact audits produced exit code 2 as designed because history is
 not reconciled. No iNaturalist source/media, legacy artifact, pre-existing
 worktree, or running process was changed. No GPU or cloud compute was used.
 

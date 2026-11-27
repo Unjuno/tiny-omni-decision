@@ -198,6 +198,7 @@ def audit_local_inventory(ledger: dict[str, Any], inventory_root: Path) -> dict[
     }
     raw_observer_groups: set[str] = set()
     file_hashes: list[dict[str, str]] = []
+    file_summaries: list[dict[str, Any]] = []
     row_count = 0
     skipped_unreadable_files = 0
     directories_scanned = 0
@@ -238,6 +239,8 @@ def audit_local_inventory(ledger: dict[str, Any], inventory_root: Path) -> dict[
                     file_hashes.append(
                         {"path": path.relative_to(inventory_root).as_posix(), "sha256": digest}
                     )
+                    file_groups: set[str] = set()
+                    file_rows = 0
                     for line_number, line in enumerate(payload.splitlines(), 1):
                         if not line.strip():
                             continue
@@ -246,8 +249,28 @@ def audit_local_inventory(ledger: dict[str, Any], inventory_root: Path) -> dict[
                             raise ValueError(f"{path}:{line_number}: expected a JSON object")
                         group = row.get("observer_group_sha256")
                         if group is not None:
-                            raw_observer_groups.add(str(group))
+                            normalized_group = str(group)
+                            raw_observer_groups.add(normalized_group)
+                            file_groups.add(normalized_group)
                             row_count += 1
+                            file_rows += 1
+                    matched_file_groups = {
+                        group
+                        for group in file_groups
+                        if identity_digest(source_id, "observer_group_sha256", group)
+                        in prior_observer_digests
+                    }
+                    file_summaries.append(
+                        {
+                            "path": path.relative_to(inventory_root).as_posix(),
+                            "rows_with_observer_group_hash": file_rows,
+                            "unique_observer_groups": len(file_groups),
+                            "unique_groups_matching_ledger": len(matched_file_groups),
+                            "unique_groups_missing_from_ledger": len(
+                                file_groups - matched_file_groups
+                            ),
+                        }
+                    )
                 except (OSError, json.JSONDecodeError):
                     skipped_unreadable_files += 1
 
@@ -258,6 +281,7 @@ def audit_local_inventory(ledger: dict[str, Any], inventory_root: Path) -> dict[
         in prior_observer_digests
     }
     file_hashes.sort(key=lambda item: item["path"])
+    file_summaries.sort(key=lambda item: item["path"])
     canonical_inventory = json.dumps(
         file_hashes, sort_keys=True, separators=(",", ":")
     ).encode("utf-8")
@@ -272,6 +296,7 @@ def audit_local_inventory(ledger: dict[str, Any], inventory_root: Path) -> dict[
         "unique_groups_matching_ledger": len(ledger_matches),
         "unique_groups_missing_from_ledger": len(raw_observer_groups - ledger_matches),
         "unreadable_files_or_directories": skipped_unreadable_files,
+        "per_file_provenance_counts": file_summaries,
         "raw_ids_written": False,
         "ledger_history_status": ledger.get("history_status", "UNKNOWN"),
     }
