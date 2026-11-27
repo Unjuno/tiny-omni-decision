@@ -40,6 +40,16 @@ def canonical_license(value: str) -> str:
     return ALLOWED_LICENSE_PATHS.get(path, f"OTHER:{path or 'missing'}")
 
 
+def canonical_license_with_explicit_extras(value: str, extra_allowed: set[str]) -> str:
+    """Recognize an explicitly opted-in license without changing the default allowlist."""
+    path = "/".join(part for part in urlparse(value.strip()).path.casefold().split("/") if part)
+    known_extras = {"licenses/by/3.0": "CC-BY-3.0"}
+    name = known_extras.get(path)
+    if name is not None and name in extra_allowed:
+        return name
+    return canonical_license(value)
+
+
 def _group_split(rows: list[dict[str, str]], seed: int = 17) -> dict[str, str]:
     """Greedily balance class counts while keeping every uploader in one split."""
     group_counts: dict[str, Counter[str]] = defaultdict(Counter)

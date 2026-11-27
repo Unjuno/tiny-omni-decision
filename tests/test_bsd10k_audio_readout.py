@@ -19,6 +19,7 @@ from scripts.train_bsd10k_audio_readout import (
     run,
     sha256_file,
 )
+from tiny_omni_decision.textfree_audio import speaker_group_split
 
 
 def test_bsd10k_audio_readout_checks_splits_calibrates_and_reloads(tmp_path):
@@ -64,9 +65,7 @@ def test_bsd10k_audio_readout_checks_splits_calibrates_and_reloads(tmp_path):
                     vector[23 + class_index] = 0.1
                     feature_values[split].append(vector)
                     split_ids[split].append(sound_id)
-                    split_durations[split].append(
-                        (0.25, 1.0, 3.0)[(offset + class_index) % 3]
-                    )
+                    split_durations[split].append((0.25, 1.0, 3.0)[(offset + class_index) % 3])
 
     buffer = io.StringIO(newline="")
     writer = csv.DictWriter(buffer, fieldnames=list(rows[0]))
@@ -164,3 +163,31 @@ def test_bsd10k_audio_readout_checks_splits_calibrates_and_reloads(tmp_path):
     assert sum(row["count"] for row in report["train_duration_support"].values()) == len(
         split_ids["train"]
     )
+
+    train_groups = [row["uploader_group_sha256"] for row in examples if row["split"] == "train"]
+    _, calibration_indices = speaker_group_split(train_groups, seed=17, calibration_fraction=0.2)
+    calibration_roles = tmp_path / "calibration-roles.json"
+    calibration_roles.write_text(
+        json.dumps(
+            {
+                "schema": "tiny-omni-decision/bsd10k-frozen-calibration-groups-v1",
+                "seed": 17,
+                "calibration_fraction": 0.2,
+                "calibration_uploader_group_sha256": sorted(
+                    {train_groups[index] for index in calibration_indices}
+                ),
+            }
+        ),
+        encoding="utf-8",
+    )
+    capped = run(
+        metadata_zip,
+        manifest_path,
+        feature_dirs["train"],
+        feature_dirs["validation"],
+        tmp_path / "readout-step-capped",
+        calibration_group_roles_path=calibration_roles,
+        max_optimizer_steps=1,
+    )
+    assert capped["optimizer_steps"] == 1
+    assert capped["config"]["calibration_group_roles_sha256"] == sha256_file(calibration_roles)

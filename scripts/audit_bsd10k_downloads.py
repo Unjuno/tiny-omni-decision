@@ -11,6 +11,8 @@ from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
+import numpy as np
+
 try:
     from scripts.audit_bsd10k_metadata import ALLOWED_LICENSE_PATHS
 except ModuleNotFoundError:  # direct `python scripts/...` execution
@@ -33,18 +35,30 @@ def _media_identity(path: Path) -> tuple[str, tuple[int, int, int, int]]:
         frames_count = source.getnframes()
         if (
             source.getcomptype() != "NONE"
-            or channels != 1
-            or rate != 44_100
-            or width != 2
+            or channels < 1
+            or rate < 1
+            or width not in {1, 2, 3, 4}
             or frames_count < 1
         ):
             raise ValueError(f"unexpected BSD10k PCM format: {path.name}")
         frames = source.readframes(frames_count)
     if len(frames) != frames_count * channels * width:
         raise ValueError(f"truncated WAV frames: {path.name}")
+    if width == 1:
+        samples = (np.frombuffer(frames, dtype=np.uint8).astype(np.float32) - 128.0) / 128.0
+    elif width == 2:
+        samples = np.frombuffer(frames, dtype="<i2").astype(np.float32) / 32768.0
+    elif width == 3:
+        packed = np.frombuffer(frames, dtype=np.uint8).reshape(-1, 3).astype(np.int32)
+        values = packed[:, 0] | (packed[:, 1] << 8) | (packed[:, 2] << 16)
+        samples = ((values ^ 0x800000) - 0x800000).astype(np.float32) / 8388608.0
+    else:
+        samples = np.frombuffer(frames, dtype="<i4").astype(np.float32) / 2147483648.0
+    mono = samples.reshape(-1, channels).mean(axis=1, dtype=np.float64)
+    normalized = np.rint(np.clip(mono, -1.0, 1.0) * 32767).astype("<i2")
     digest = hashlib.sha256()
-    digest.update(f"pcm-s16le-mono-{rate}:".encode("ascii"))
-    digest.update(frames)
+    digest.update(f"normalized-pcm-s16le-mono-{rate}:".encode("ascii"))
+    digest.update(normalized.tobytes())
     return digest.hexdigest(), (rate, channels, width, frames_count)
 
 
@@ -52,6 +66,8 @@ def audit_downloaded_splits(
     split_manifest_path: Path,
     result_paths: list[Path],
     media_root: Path,
+    extra_allowed_licenses: set[str] | None = None,
+    additional_media_roots: list[Path] | None = None,
 ) -> dict[str, Any]:
     manifest = json.loads(split_manifest_path.read_text(encoding="utf-8"))
     if manifest.get("schema") != "tiny-omni-decision/bsd10k-group-split-v1":
@@ -67,7 +83,9 @@ def audit_downloaded_splits(
         split = str(row.get("split", ""))
         if not sound_id or sound_id in by_id or split not in {"train", "validation", "test"}:
             raise ValueError("malformed or duplicate split manifest row")
-        if row.get("license") not in ALLOWED_LICENSE_PATHS.values():
+        if row.get("license") not in set(ALLOWED_LICENSE_PATHS.values()) | (
+            extra_allowed_licenses or set()
+        ):
             raise ValueError("split manifest includes a non-allowlisted license")
         if len(group) != 64:
             raise ValueError("split manifest contains an invalid uploader group hash")
@@ -117,7 +135,17 @@ def audit_downloaded_splits(
                 raise ValueError(
                     f"download record metadata differs from the split manifest: {split}"
                 )
-            path = media_root / split / f"{sound_id}.wav"
+            candidates = [media_root, *(additional_media_roots or [])]
+            path = next(
+                (
+                    root / split / f"{sound_id}.wav"
+                    for root in candidates
+                    if (root / split / f"{sound_id}.wav").is_file()
+                ),
+                None,
+            )
+            if path is None:
+                raise FileNotFoundError(f"downloaded WAV is missing: {split}/{sound_id}.wav")
             if path.stat().st_size != int(record["bytes"]):
                 raise ValueError(f"WAV byte count mismatch: {split}")
             digest = sha256_file(path)
@@ -175,10 +203,18 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--split-manifest", type=Path, required=True)
     parser.add_argument("--media-root", type=Path, required=True)
+    parser.add_argument("--allow-license", action="append", default=[])
+    parser.add_argument("--additional-media-root", type=Path, action="append", default=[])
     parser.add_argument("--result", type=Path, action="append", required=True)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    report = audit_downloaded_splits(args.split_manifest, args.result, args.media_root)
+    report = audit_downloaded_splits(
+        args.split_manifest,
+        args.result,
+        args.media_root,
+        extra_allowed_licenses=set(args.allow_license),
+        additional_media_roots=args.additional_media_root,
+    )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps({key: report[key] for key in report if key != "completed_splits"}, indent=2))

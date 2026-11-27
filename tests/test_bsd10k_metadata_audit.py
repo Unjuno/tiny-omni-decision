@@ -11,6 +11,7 @@ from scripts.audit_bsd10k_metadata import (
     audit_metadata,
     build_split_manifest,
     canonical_license,
+    canonical_license_with_explicit_extras,
 )
 
 
@@ -47,6 +48,18 @@ def test_license_allowlist_requires_exact_versioned_media_license() -> None:
     assert (
         canonical_license("https://creativecommons.org/licenses/by-nc/4.0/")
         == "OTHER:licenses/by-nc/4.0"
+    )
+    assert (
+        canonical_license_with_explicit_extras(
+            "https://creativecommons.org/licenses/by/3.0/", set()
+        )
+        == "OTHER:licenses/by/3.0"
+    )
+    assert (
+        canonical_license_with_explicit_extras(
+            "https://creativecommons.org/licenses/by/3.0/", {"CC-BY-3.0"}
+        )
+        == "CC-BY-3.0"
     )
 
 

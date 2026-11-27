@@ -77,8 +77,16 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _load_labels(metadata_zip: Path, split_manifest_path: Path, split: str) -> dict[str, dict]:
-    from scripts.audit_bsd10k_metadata import ALLOWED_LICENSE_PATHS, canonical_license
+def _load_labels(
+    metadata_zip: Path,
+    split_manifest_path: Path,
+    split: str,
+    extra_allowed_licenses: set[str] | None = None,
+) -> dict[str, dict]:
+    from scripts.audit_bsd10k_metadata import (
+        ALLOWED_LICENSE_PATHS,
+        canonical_license_with_explicit_extras,
+    )
 
     manifest = json.loads(split_manifest_path.read_text(encoding="utf-8"))
     expected = {str(row["sound_id"]): row for row in manifest["examples"] if row["split"] == split}
@@ -99,12 +107,15 @@ def _load_labels(metadata_zip: Path, split_manifest_path: Path, split: str) -> d
                 label = row["class"].strip()
                 group_hash = hashlib.sha256(row["uploader"].strip().casefold().encode()).hexdigest()
                 confidence = int(row["confidence"])
-                license_name = canonical_license(row["license"])
+                license_name = canonical_license_with_explicit_extras(
+                    row["license"], extra_allowed_licenses or set()
+                )
                 if (
                     label != frozen["class"]
                     or group_hash != frozen["uploader_group_sha256"]
                     or license_name != frozen["license"]
-                    or license_name not in ALLOWED_LICENSE_PATHS.values()
+                    or license_name
+                    not in set(ALLOWED_LICENSE_PATHS.values()) | (extra_allowed_licenses or set())
                     or label not in LABELS
                     or confidence not in range(1, 6)
                 ):
@@ -215,6 +226,9 @@ def run(
     train_feature_dir: Path,
     validation_feature_dir: Path,
     output_dir: Path,
+    extra_allowed_licenses: set[str] | None = None,
+    calibration_group_roles_path: Path | None = None,
+    max_optimizer_steps: int | None = None,
 ) -> dict[str, Any]:
     from tiny_omni_decision.textfree_audio import (
         TextFreeAudioReadout,
@@ -224,12 +238,16 @@ def run(
 
     if output_dir.exists():
         raise FileExistsError(f"refusing to overwrite readout output: {output_dir}")
+    if max_optimizer_steps is not None and max_optimizer_steps < 1:
+        raise ValueError("max_optimizer_steps must be positive")
     split_manifest = json.loads(split_manifest_path.read_text(encoding="utf-8"))
     metadata_sha = sha256_file(metadata_zip)
     if split_manifest.get("metadata_zip_sha256") != metadata_sha:
         raise ValueError("split manifest is not pinned to the supplied metadata archive")
-    train_labels = _load_labels(metadata_zip, split_manifest_path, "train")
-    validation_labels = _load_labels(metadata_zip, split_manifest_path, "validation")
+    train_labels = _load_labels(metadata_zip, split_manifest_path, "train", extra_allowed_licenses)
+    validation_labels = _load_labels(
+        metadata_zip, split_manifest_path, "validation", extra_allowed_licenses
+    )
 
     def load_features(directory: Path, split: str, labels: dict[str, dict]):
         report_path = directory / "run.json"
@@ -277,9 +295,38 @@ def run(
         validation_feature_receipt,
     ) = load_features(validation_feature_dir, "validation", validation_labels)
     train_groups = [train_labels[sound_id]["uploader_group_sha256"] for sound_id in train_ids]
-    fit_indices, calibration_indices = speaker_group_split(
-        train_groups, seed=SEED, calibration_fraction=0.2
-    )
+    if calibration_group_roles_path is None:
+        fit_indices, calibration_indices = speaker_group_split(
+            train_groups, seed=SEED, calibration_fraction=0.2
+        )
+        calibration_group_manifest = None
+    else:
+        calibration_group_manifest = json.loads(
+            calibration_group_roles_path.read_text(encoding="utf-8")
+        )
+        if (
+            calibration_group_manifest.get("schema")
+            != "tiny-omni-decision/bsd10k-frozen-calibration-groups-v1"
+            or calibration_group_manifest.get("seed") != SEED
+            or calibration_group_manifest.get("calibration_fraction") != 0.2
+        ):
+            raise ValueError("invalid frozen calibration group-role manifest")
+        calibration_group_ids = set(
+            calibration_group_manifest.get("calibration_uploader_group_sha256", [])
+        )
+        train_group_ids = set(train_groups)
+        if (
+            not calibration_group_ids
+            or not calibration_group_ids <= train_group_ids
+            or any(len(group) != 64 for group in calibration_group_ids)
+        ):
+            raise ValueError("frozen calibration groups are missing or outside training data")
+        calibration_indices = [
+            index for index, group in enumerate(train_groups) if group in calibration_group_ids
+        ]
+        fit_indices = [
+            index for index, group in enumerate(train_groups) if group not in calibration_group_ids
+        ]
     fit_x = x_train_all[fit_indices]
     fit_y = y_train_all[fit_indices]
     calibration_x = x_train_all[calibration_indices]
@@ -312,6 +359,8 @@ def run(
     best_epoch = 0
     stale_epochs = 0
     history = []
+    optimizer_steps = 0
+    training_examples_seen = 0
     started = time.perf_counter()
     for epoch in range(1, MAX_EPOCHS + 1):
         order = list(range(len(fit_indices)))
@@ -324,7 +373,11 @@ def run(
             optimizer.zero_grad(set_to_none=True)
             loss.backward()
             optimizer.step()
+            optimizer_steps += 1
+            training_examples_seen += len(indexes)
             train_losses.append(float(loss.detach()))
+            if max_optimizer_steps is not None and optimizer_steps >= max_optimizer_steps:
+                break
         model.eval()
         with torch.inference_mode():
             validation_logits = model(x_validation)
@@ -338,6 +391,8 @@ def run(
                 "validation_macro_accuracy": macro_metrics["accuracy"],
                 "validation_macro_brier": macro_metrics["brier"],
                 "validation_macro_ece_15_bins": macro_metrics["ece_15_bins"],
+                "optimizer_steps": optimizer_steps,
+                "training_examples_seen": training_examples_seen,
             }
         )
         if macro_metrics["nll"] < best_macro_nll - MIN_DELTA:
@@ -349,6 +404,8 @@ def run(
             stale_epochs += 1
             if stale_epochs >= EARLY_STOPPING_PATIENCE:
                 break
+        if max_optimizer_steps is not None and optimizer_steps >= max_optimizer_steps:
+            break
     training_seconds = time.perf_counter() - started
     if best_state is None:
         raise RuntimeError("validation did not select a checkpoint")
@@ -436,9 +493,7 @@ def run(
     class_data_support = {}
     for label in LABELS:
         class_train_ids = [
-            sound_id
-            for sound_id in train_ids
-            if train_labels[sound_id]["class_id"] == label
+            sound_id for sound_id in train_ids if train_labels[sound_id]["class_id"] == label
         ]
         class_validation_ids = [
             sound_id
@@ -500,17 +555,29 @@ def run(
         "readout": "linear 384-to-23 TextFreeAudioReadout",
         "calibration_fraction_of_train_uploader_groups": 0.2,
         "calibration": "single positive scalar temperature fitted on held-out train groups",
+        "calibration_group_roles_sha256": (
+            sha256_file(calibration_group_roles_path)
+            if calibration_group_roles_path is not None
+            else None
+        ),
+        "calibration_group_role_policy": (
+            "frozen from original 4214-row training split; newly added groups assigned to fit"
+            if calibration_group_roles_path is not None
+            else "deterministic hash split over current training groups"
+        ),
         "optimizer": "AdamW",
         "learning_rate": LEARNING_RATE,
         "weight_decay": WEIGHT_DECAY,
         "batch_size": BATCH_SIZE,
         "max_epochs": MAX_EPOCHS,
+        "max_optimizer_steps": max_optimizer_steps,
         "early_stopping": {
             "selector": "minimum validation macro NLL",
             "patience_epochs": EARLY_STOPPING_PATIENCE,
             "min_delta": MIN_DELTA,
         },
         "labels_and_confidence_used_for": "readout targets and stratified reporting only",
+        "explicit_extra_allowed_licenses": sorted(extra_allowed_licenses or set()),
         "duration_strata_seconds": {
             name: [bounds[0], bounds[1]] for name, bounds in DURATION_STRATA_SECONDS.items()
         },
@@ -555,6 +622,8 @@ def run(
         "class_top_mapping": class_top,
         "selected_epoch": best_epoch,
         "epochs_run": len(history),
+        "optimizer_steps": optimizer_steps,
+        "training_examples_seen": training_examples_seen,
         "training_seconds_cpu": training_seconds,
         "training_history": history,
         "calibration_temperature": temperature,
@@ -615,6 +684,9 @@ def main() -> None:
     parser.add_argument("--train-features", type=Path, required=True)
     parser.add_argument("--validation-features", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--allow-license", action="append", default=[])
+    parser.add_argument("--calibration-group-roles", type=Path)
+    parser.add_argument("--max-optimizer-steps", type=int)
     args = parser.parse_args()
     result = run(
         args.metadata_zip.resolve(strict=True),
@@ -622,6 +694,13 @@ def main() -> None:
         args.train_features.resolve(strict=True),
         args.validation_features.resolve(strict=True),
         args.output.resolve(),
+        extra_allowed_licenses=set(args.allow_license),
+        calibration_group_roles_path=(
+            args.calibration_group_roles.resolve(strict=True)
+            if args.calibration_group_roles
+            else None
+        ),
+        max_optimizer_steps=args.max_optimizer_steps,
     )
     print(json.dumps(result, indent=2))
 

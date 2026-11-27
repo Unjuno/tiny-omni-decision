@@ -19,9 +19,15 @@ from pathlib import Path
 import requests
 
 try:
-    from scripts.audit_bsd10k_metadata import ALLOWED_LICENSE_PATHS, canonical_license
+    from scripts.audit_bsd10k_metadata import (
+        ALLOWED_LICENSE_PATHS,
+        canonical_license_with_explicit_extras,
+    )
 except ModuleNotFoundError:  # direct `python scripts/...` execution
-    from audit_bsd10k_metadata import ALLOWED_LICENSE_PATHS, canonical_license
+    from audit_bsd10k_metadata import (
+        ALLOWED_LICENSE_PATHS,
+        canonical_license_with_explicit_extras,
+    )
 
 EXPECTED_RECORD_ID = "19868804"
 EXPECTED_ARCHIVE_BYTES = 8_576_285_410
@@ -283,7 +289,11 @@ def _read_ranges_preserving(
     return result
 
 
-def _allowed_ids(split_manifest: Path | None, split: str | None) -> set[str] | None:
+def _allowed_ids(
+    split_manifest: Path | None,
+    split: str | None,
+    extra_allowed_licenses: set[str] | None = None,
+) -> set[str] | None:
     if split_manifest is None:
         if split is not None:
             raise ValueError("--split requires --split-manifest")
@@ -304,7 +314,9 @@ def _allowed_ids(split_manifest: Path | None, split: str | None) -> set[str] | N
     seen_ids: set[str] = set()
     group_split: dict[str, str] = {}
     for row in rows:
-        if row.get("license") not in ALLOWED_LICENSE_PATHS.values():
+        if row.get("license") not in set(ALLOWED_LICENSE_PATHS.values()) | (
+            extra_allowed_licenses or set()
+        ):
             raise ValueError("split manifest contains a non-allowlisted media license")
         if row.get("split") not in SPLIT_NAMES:
             raise ValueError("split manifest contains an invalid split label")
@@ -330,6 +342,7 @@ def inspect_archive(
     *,
     archive_url: str = DEFAULT_ARCHIVE_URL,
     archive_size: int = EXPECTED_ARCHIVE_BYTES,
+    extra_allowed_licenses: set[str] | None = None,
 ) -> dict[str, object]:
     import csv
     import io
@@ -345,7 +358,8 @@ def inspect_archive(
     allowed = {
         row["sound_id"].strip()
         for row in rows
-        if canonical_license(row["license"]) in ALLOWED_LICENSE_PATHS.values()
+        if canonical_license_with_explicit_extras(row["license"], extra_allowed_licenses or set())
+        in set(ALLOWED_LICENSE_PATHS.values()) | (extra_allowed_licenses or set())
     }
     if not allowed:
         raise ValueError("metadata has no media with an allowlisted per-file license")
@@ -392,8 +406,10 @@ def download_split(
     archive_url: str = DEFAULT_ARCHIVE_URL,
     archive_size: int = EXPECTED_ARCHIVE_BYTES,
     limit: int | None = None,
+    extra_allowed_licenses: set[str] | None = None,
 ) -> dict[str, object]:
-    selected_ids = _allowed_ids(split_manifest, split)
+    accepted = set(ALLOWED_LICENSE_PATHS.values()) | (extra_allowed_licenses or set())
+    selected_ids = _allowed_ids(split_manifest, split, extra_allowed_licenses)
     assert selected_ids is not None
     import csv
     import io
@@ -406,11 +422,13 @@ def download_split(
         )
         with metadata_archive.open(csv_name) as source:
             rows = list(csv.DictReader(io.TextIOWrapper(source, encoding="utf-8-sig", newline="")))
-    license_by_id = {row["sound_id"].strip(): canonical_license(row["license"]) for row in rows}
-    if any(
-        license_by_id.get(sound_id) not in ALLOWED_LICENSE_PATHS.values()
-        for sound_id in selected_ids
-    ):
+    license_by_id = {
+        row["sound_id"].strip(): canonical_license_with_explicit_extras(
+            row["license"], extra_allowed_licenses or set()
+        )
+        for row in rows
+    }
+    if any(license_by_id.get(sound_id) not in accepted for sound_id in selected_ids):
         raise ValueError("split manifest IDs do not match allowlisted metadata licenses")
     split_document = json.loads(split_manifest.read_text(encoding="utf-8"))
     if split_document["metadata_zip_sha256"] != sha256_file(metadata_zip):
@@ -591,6 +609,7 @@ def main() -> int:
     parser.add_argument("--output-dir", type=Path)
     parser.add_argument("--limit", type=int)
     parser.add_argument("--result", type=Path)
+    parser.add_argument("--allow-license", action="append", default=[])
     args = parser.parse_args()
     if args.split_manifest or args.split:
         if not args.split_manifest or not args.split or not args.output_dir:
@@ -603,12 +622,14 @@ def main() -> int:
             archive_url=args.archive_url,
             archive_size=args.archive_size,
             limit=args.limit,
+            extra_allowed_licenses=set(args.allow_license),
         )
     else:
         result = inspect_archive(
             args.metadata_zip,
             archive_url=args.archive_url,
             archive_size=args.archive_size,
+            extra_allowed_licenses=set(args.allow_license),
         )
     rendered = json.dumps(result, indent=2, sort_keys=True) + "\n"
     if args.result:
