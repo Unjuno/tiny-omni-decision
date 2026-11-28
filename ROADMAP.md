@@ -12,6 +12,14 @@ sensor-only. Do not repeat DROID work without a publisher-backed scene map, a
 fresh-exposure crosswalk, and a video-dependent task protocol. No media or
 trajectory was fetched in this pass. See [preflight](docs/pretrained_reuse/R2_DROID_METADATA_PREFLIGHT_20261128.md).
 
+**2026-11-28 R2 IntPhys shard-2 transfer integrity follow-up:** The already
+completed 37,111,037,048-byte shard-2 transfer was locally verified against
+the publisher's pinned MD5 and recorded with SHA-256; no redownload, tar
+inspection, extraction, feature generation, or GPU work occurred. Shards 3–4
+remain absent, and the full data-scaling comparison remains blocked: current
+C: free space is below one additional shard plus the predeclared 20 GiB
+reserve. See [transfer verification and resource gate](docs/pretrained_reuse/R2_INTPHYS_TRAIN_COVERAGE_PREFLIGHT_20261128.md#2026-11-28-shard-2-transfer-verification-follow-up).
+
 **2026-11-28 R2 Physion++ review usability:** Added a label-blind utility to
 split the frozen 75-pair contact sheets into individually viewable cards in a
 new attempt-03 output. It verifies all input-sheet hashes, preserves the blank

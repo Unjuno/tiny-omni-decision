@@ -121,6 +121,36 @@ Feature extraction starts only with at least 6.5 GiB of available host RAM
 - Both dev results remain exposed development evidence. Neither can serve as a
   blind estimate for this expanded-data experiment.
 
-At this preflight stage, no full shard has been acquired and no data-coverage
-model has been trained. Existing source archives, features, checkpoints,
-predictions, and other branches are unchanged.
+## 2026-11-28 shard-2 transfer verification follow-up
+
+The pre-existing `train.2.tar.gz.partial` was found at the exact pinned size
+(37,111,037,048 bytes) after the recorded curl process had exited. The
+monitor receipt marked the transfer complete but explicitly had
+`hash_verified=false`; no extraction or fitting was started. Rather than
+discarding or redownloading it, the existing fail-closed downloader was run
+against the pinned publisher ETag (`"5d9bc78d-8a3fd7c78"`). Because the file
+already matched the pinned size, it made zero HTTP requests and verified the
+entire local archive:
+
+- Publisher-pinned MD5: `47dc1c3578e079584f4e3b5b8ab8304b` (pass).
+- Computed SHA-256: `0085060c9e2cb8143c7ee5f5c7866d8d2e5b70a0cb208e265ae1f1812210a257`.
+- Result: 37,111,037,048 bytes, 0 network responses; local full-file hashing
+  completed successfully.
+
+The verified archive remains at the same `.partial` path to preserve the
+existing artifact layout; the suffix is historical and does not indicate
+unverified bytes after this receipt. No tar members have been inspected or
+extracted, no features/model were produced, and no GPU was used. This closes
+only the transfer-integrity gate for shard 2. It does not make the planned
+four-shard comparison complete: shards 3 and 4 remain absent, and the global
+four-shard identity split and coverage fit have not run. The RTX 3080 remains
+owned by the unrelated Orbitune process; C: has approximately 24.6 GiB free
+after hashing.
+
+The broad-coverage plan also needs its resource decision updated before model
+work: the initial preflight assumed all four compressed shards could be
+processed one at a time with the 20 GiB disk reserve, but the current free
+space cannot hold even one additional ~37 GiB shard under that reserve. Do not
+start shards 3 or 4 until an authorized storage plan or a lower-footprint
+streaming design is reviewed. Existing source archives, features, checkpoints,
+predictions, validation/dev artifacts, and other branches remain unchanged.
