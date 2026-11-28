@@ -61,13 +61,14 @@ def load_feature_split(
         raise ValueError("feature receipt records evaluation partition access")
     records = report["records"]
     grouped: dict[str, list[int]] = defaultdict(list)
-    point_ids: dict[str, list[str]] = defaultdict(list)
     for index, row in enumerate(records):
         if row["partition"] == partition:
             grouped[row["object_id"]].append(index)
-            point_ids[row["object_id"]].append(row["point_id"])
-    if not grouped or any(len(indices) != 2 for indices in grouped.values()):
-        raise ValueError(f"{partition} requires exactly two feature points per object")
+    point_counts = {len(indices) for indices in grouped.values()}
+    if not grouped or len(point_counts) != 1 or next(iter(point_counts)) < 2:
+        raise ValueError(f"{partition} requires an equal count of at least two points per object")
+    for object_id, indices in grouped.items():
+        grouped[object_id] = sorted(indices, key=lambda index: records[index]["point_id"])
     object_ids = sorted(grouped)
     arrays = {}
     for modality, expected_dim in MODALITY_DIMS.items():
@@ -84,7 +85,11 @@ def load_feature_split(
                 np.float32, copy=False
             )
         )
-    return arrays, object_ids, [point_ids[object_id] for object_id in object_ids]
+    ordered_point_ids = [
+        [records[index]["point_id"] for index in grouped[object_id]]
+        for object_id in object_ids
+    ]
+    return arrays, object_ids, ordered_point_ids
 
 
 def _pair_logits(
@@ -98,27 +103,31 @@ def _pair_logits(
     predictions = []
     n_objects = query.shape[0]
     option_ids = list(range(n_objects))
-    for query_point, gallery_point in ((0, 1), (1, 0)):
-        logits = model.pair_logits(
-            query_modality,
-            query[:, query_point],
-            gallery_modality,
-            gallery[:, gallery_point],
-        )
-        logits_by_direction.append(logits)
-        probabilities = logits.softmax(dim=-1)
-        preds = probabilities.argmax(dim=-1)
-        for index in range(n_objects):
-            predictions.append(
-                {
-                    "direction": f"point{query_point}_to_point{gallery_point}",
-                    "target_index": index,
-                    "prediction_index": int(preds[index]),
-                    "confidence": float(probabilities[index, preds[index]]),
-                    "probabilities": [float(value) for value in probabilities[index]],
-                    "option_indices": option_ids,
-                }
+    point_count = query.shape[1]
+    for query_point in range(point_count):
+        for gallery_point in range(point_count):
+            if query_point == gallery_point:
+                continue
+            logits = model.pair_logits(
+                query_modality,
+                query[:, query_point],
+                gallery_modality,
+                gallery[:, gallery_point],
             )
+            logits_by_direction.append(logits)
+            probabilities = logits.softmax(dim=-1)
+            preds = probabilities.argmax(dim=-1)
+            for index in range(n_objects):
+                predictions.append(
+                    {
+                        "direction": f"point{query_point}_to_point{gallery_point}",
+                        "target_index": index,
+                        "prediction_index": int(preds[index]),
+                        "confidence": float(probabilities[index, preds[index]]),
+                        "probabilities": [float(value) for value in probabilities[index]],
+                        "option_indices": option_ids,
+                    }
+                )
     combined = torch.cat(logits_by_direction, dim=0)
     return combined, predictions
 
@@ -136,29 +145,30 @@ def _fused_query_logits(
     fused = F.normalize(sum(encoded.values()), dim=-1)
     candidate_vectors = model.encode(candidate_modality, candidates)
     scale = model.logit_scale.clamp(min=0.0, max=math.log(100.0)).exp()
-    logits = torch.cat(
-        (
-            fused[:, 0] @ candidate_vectors[:, 1].T * scale,
-            fused[:, 1] @ candidate_vectors[:, 0].T * scale,
-        ),
-        dim=0,
-    )
-    probabilities = logits.softmax(dim=-1)
     predictions = []
     count = candidates.shape[0]
-    for index in range(logits.shape[0]):
-        pred = int(probabilities[index].argmax())
-        predictions.append(
-            {
-                "direction": "point0_to_point1" if index < count else "point1_to_point0",
-                "target_index": index % count,
-                "prediction_index": pred,
-                "confidence": float(probabilities[index, pred]),
-                "probabilities": [float(value) for value in probabilities[index]],
-                "option_indices": list(range(count)),
-            }
-        )
-    return logits, predictions
+    logits_by_direction = []
+    point_count = candidates.shape[1]
+    for query_point in range(point_count):
+        for gallery_point in range(point_count):
+            if query_point == gallery_point:
+                continue
+            logits = fused[:, query_point] @ candidate_vectors[:, gallery_point].T * scale
+            logits_by_direction.append(logits)
+            probabilities = logits.softmax(dim=-1)
+            for index in range(count):
+                pred = int(probabilities[index].argmax())
+                predictions.append(
+                    {
+                        "direction": f"point{query_point}_to_point{gallery_point}",
+                        "target_index": index,
+                        "prediction_index": pred,
+                        "confidence": float(probabilities[index, pred]),
+                        "probabilities": [float(value) for value in probabilities[index]],
+                        "option_indices": list(range(count)),
+                    }
+                )
+    return torch.cat(logits_by_direction, dim=0), predictions
 
 
 def evaluate_suite(
@@ -181,9 +191,18 @@ def evaluate_suite(
                 features[query_modality],
                 features[gallery_modality],
             )
-            targets = torch.arange(len(object_ids)).repeat(2)
+            direction_count = features[query_modality].shape[1] * (
+                features[query_modality].shape[1] - 1
+            )
+            targets = torch.arange(len(object_ids)).repeat(direction_count)
             metrics = multiclass_metrics(logits, targets=targets)
-            arm = {**metrics, "query_count": int(logits.shape[0]), "gallery_size": len(object_ids)}
+            arm = {
+                **metrics,
+                "query_count": int(logits.shape[0]),
+                "independent_object_groups": len(object_ids),
+                "queries_per_object_group": direction_count,
+                "gallery_size": len(object_ids),
+            }
             if include_predictions:
                 arm["predictions"] = [
                     {
@@ -210,10 +229,19 @@ def evaluate_suite(
             candidate_modality,
             features[candidate_modality],
         )
-        targets = torch.arange(len(object_ids)).repeat(2)
+        direction_count = features[query_modalities[0]].shape[1] * (
+            features[query_modalities[0]].shape[1] - 1
+        )
+        targets = torch.arange(len(object_ids)).repeat(direction_count)
         metrics = multiclass_metrics(logits, targets=targets)
         arm_name = f"{'_plus_'.join(query_modalities)}_to_{candidate_modality}"
-        arm = {**metrics, "query_count": int(logits.shape[0]), "gallery_size": len(object_ids)}
+        arm = {
+            **metrics,
+            "query_count": int(logits.shape[0]),
+            "independent_object_groups": len(object_ids),
+            "queries_per_object_group": direction_count,
+            "gallery_size": len(object_ids),
+        }
         if include_predictions:
             arm["predictions"] = [
                 {
@@ -263,6 +291,7 @@ def run_training(features_dir: Path, output_dir: Path) -> dict[str, Any]:
         raise ValueError("train/validation object identity overlap")
     model = FrozenFeatureDecision()
     parameter_count = projection_parameter_count(model)
+    points_per_object = train_features["image"].shape[1]
     optimizer = torch.optim.AdamW(
         model.parameters(), lr=LEARNING_RATE, weight_decay=WEIGHT_DECAY
     )
@@ -305,6 +334,18 @@ def run_training(features_dir: Path, output_dir: Path) -> dict[str, Any]:
                     for name, metrics in validation_result["fused_query"].items()
                 },
                 "learning_rate": optimizer.param_groups[0]["lr"],
+                "cumulative_unique_train_points": (
+                    len(train_ids) * points_per_object if step > 0 else 0
+                ),
+                "cumulative_unique_train_feature_rows_per_modality": (
+                    len(train_ids) * points_per_object if step > 0 else 0
+                ),
+                "cumulative_train_feature_row_presentations_per_modality": (
+                    step * len(train_ids) * points_per_object
+                ),
+                "ordered_cross_point_pairs_per_object_per_update": (
+                    points_per_object * (points_per_object - 1)
+                ),
                 "elapsed_seconds": time.perf_counter() - start,
             }
         )
@@ -362,9 +403,19 @@ def run_training(features_dir: Path, output_dir: Path) -> dict[str, Any]:
 
     # Fixed-seed controls use the selected validation checkpoint and the same gallery.
     controls = {}
+    validation_direction_count = validation_features["image"].shape[1] * (
+        validation_features["image"].shape[1] - 1
+    )
     for modality in MODALITY_DIMS:
-        zero_logits = torch.zeros((2 * len(validation_ids), len(validation_ids)))
-        uniform_targets = torch.arange(len(validation_ids)).repeat(2)
+        zero_logits = torch.zeros(
+            (
+                validation_direction_count * len(validation_ids),
+                len(validation_ids),
+            )
+        )
+        uniform_targets = torch.arange(len(validation_ids)).repeat(
+            validation_direction_count
+        )
         controls[f"uniform_{modality}"] = multiclass_metrics(
             zero_logits, targets=uniform_targets
         )
@@ -409,7 +460,8 @@ def run_training(features_dir: Path, output_dir: Path) -> dict[str, Any]:
             "earliest tie wins"
         ),
         "embedding_dim": model.projections["image"].out_features,
-        "points_per_object": 2,
+        "points_per_object": points_per_object,
+        "trainable_parameter_count_includes_frozen_encoders": False,
         "lora": False,
         "frozen_encoders": True,
         "trainable_parameter_count": parameter_count,
@@ -430,9 +482,13 @@ def run_training(features_dir: Path, output_dir: Path) -> dict[str, Any]:
         "feature_receipt_sha256": sha256_file(features_dir / "feature-smoke.json"),
         "sample_counts": {
             "train_objects": len(train_ids),
-            "train_points": len(train_ids) * 2,
+            "train_points": len(train_ids) * points_per_object,
             "validation_objects": len(validation_ids),
-            "validation_points": len(validation_ids) * 2,
+            "validation_points": len(validation_ids) * points_per_object,
+            "train_unique_capture_points": len(train_ids) * points_per_object,
+            "validation_unique_capture_points": len(validation_ids) * points_per_object,
+            "train_unique_points_reused_each_update": len(train_ids) * points_per_object,
+            "validation_feature_rows_per_modality": len(validation_ids) * points_per_object,
             "evaluation_media_accessed": False,
             "evaluation_objects_loaded": 0,
         },

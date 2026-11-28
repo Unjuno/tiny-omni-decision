@@ -32,7 +32,7 @@ def test_rank_cross_points_requires_two_points_per_object():
         for object_id in ("a", "a", "b")
     ]
 
-    with pytest.raises(ValueError, match="exactly two points"):
+    with pytest.raises(ValueError, match="at least two points"):
         rank_cross_points(features, records, "train")
 
 
@@ -86,3 +86,18 @@ def test_rank_cross_points_rejects_zero_features():
 
     with pytest.raises(ValueError, match="zero feature"):
         rank_cross_points(features, records, "train")
+
+
+def test_rank_cross_points_evaluates_every_distinct_pair_for_four_points():
+    features = np.eye(3, dtype=np.float32).repeat(4, axis=0)
+    records = [
+        {"partition": "validation", "object_id": object_id}
+        for object_id in ("a",) * 4 + ("b",) * 4 + ("c",) * 4
+    ]
+
+    result = rank_cross_points(features, records, "validation")
+
+    assert result["capture_points_per_object"] == 4
+    assert result["query_count"] == 3 * 4 * 3
+    assert result["accuracy_top1"] == 1.0
+    assert len({row["direction"] for row in result["predictions"]}) == 12

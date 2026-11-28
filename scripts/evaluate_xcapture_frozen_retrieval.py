@@ -45,20 +45,24 @@ def rank_cross_modal(
     for index, row in enumerate(records):
         if row["partition"] == partition:
             grouped[row["object_id"]].append(index)
-    if len(grouped) < 2 or any(len(indices) != 2 for indices in grouped.values()):
-        raise ValueError(f"{partition} needs exactly two points per object and at least 2 objects")
+    point_counts = {len(indices) for indices in grouped.values()}
+    if len(grouped) < 2 or len(point_counts) != 1 or next(iter(point_counts)) < 2:
+        raise ValueError(
+            f"{partition} needs an equal count of at least two points per object "
+            "and at least 2 objects"
+        )
 
     object_ids = sorted(grouped)
     query_points = np.stack(
-        [query_features[grouped[object_id][0]] for object_id in object_ids]
+        [query_features[grouped[object_id]] for object_id in object_ids]
     )
     gallery_points = np.stack(
-        [gallery_features[grouped[object_id][1]] for object_id in object_ids]
+        [gallery_features[grouped[object_id]] for object_id in object_ids]
     )
     if not np.isfinite(query_points).all() or not np.isfinite(gallery_points).all():
         raise ValueError("features contain NaN or Inf")
-    query_norm = np.linalg.norm(query_points, axis=1, keepdims=True)
-    gallery_norm = np.linalg.norm(gallery_points, axis=1, keepdims=True)
+    query_norm = np.linalg.norm(query_points, axis=-1, keepdims=True)
+    gallery_norm = np.linalg.norm(gallery_points, axis=-1, keepdims=True)
     if (query_norm <= 1e-12).any() or (gallery_norm <= 1e-12).any():
         raise ValueError("zero feature vector cannot support cosine retrieval")
     query_points = query_points / query_norm
@@ -66,28 +70,32 @@ def rank_cross_modal(
 
     predictions = []
     ranks = []
-    for query_point, gallery_point in ((0, 1), (1, 0)):
-        queries = query_points if query_point == 0 else gallery_points
-        gallery = gallery_points if gallery_point == 1 else query_points
-        similarities = queries @ gallery.T
-        order = np.argsort(-similarities, axis=1, kind="stable")
-        target_positions = np.arange(len(object_ids))
-        target_ranks = np.argmax(order == target_positions[:, None], axis=1) + 1
-        top_predictions = order[:, 0]
-        for query_index, object_id in enumerate(object_ids):
-            predictions.append(
-                {
-                    "partition": partition,
-                    "direction": f"point{query_point}_to_point{gallery_point}",
-                    "query_modality": query_modality,
-                    "gallery_modality": gallery_modality,
-                    "query_object_id": object_id,
-                    "target_gallery_object_id": object_ids[query_index],
-                    "predicted_gallery_object_id": object_ids[int(top_predictions[query_index])],
-                    "target_rank": int(target_ranks[query_index]),
-                }
-            )
-        ranks.extend(target_ranks.tolist())
+    point_count = query_points.shape[1]
+    for query_point in range(point_count):
+        for gallery_point in range(point_count):
+            if query_point == gallery_point:
+                continue
+            similarities = query_points[:, query_point] @ gallery_points[:, gallery_point].T
+            order = np.argsort(-similarities, axis=1, kind="stable")
+            target_positions = np.arange(len(object_ids))
+            target_ranks = np.argmax(order == target_positions[:, None], axis=1) + 1
+            top_predictions = order[:, 0]
+            for query_index, object_id in enumerate(object_ids):
+                predictions.append(
+                    {
+                        "partition": partition,
+                        "direction": f"point{query_point}_to_point{gallery_point}",
+                        "query_modality": query_modality,
+                        "gallery_modality": gallery_modality,
+                        "query_object_id": object_id,
+                        "target_gallery_object_id": object_ids[query_index],
+                        "predicted_gallery_object_id": object_ids[
+                            int(top_predictions[query_index])
+                        ],
+                        "target_rank": int(target_ranks[query_index]),
+                    }
+                )
+            ranks.extend(target_ranks.tolist())
 
     ranks_array = np.asarray(ranks, dtype=np.int64)
     n_objects = len(object_ids)
@@ -98,6 +106,8 @@ def rank_cross_modal(
         "gallery_size": n_objects,
         "query_count": len(ranks_array),
         "cross_point_only": True,
+        "capture_points_per_object": point_count,
+        "ordered_cross_point_pairs_per_object": point_count * (point_count - 1),
         "accuracy_top1": float(np.mean(ranks_array == 1)),
         "accuracy_top5": float(np.mean(ranks_array <= min(5, n_objects))),
         "mean_reciprocal_rank": float(np.mean(1.0 / ranks_array)),

@@ -12,6 +12,7 @@ decision_json = decision_module.decision_json
 multiclass_metrics = decision_module.multiclass_metrics
 paired_cross_modal_loss = decision_module.paired_cross_modal_loss
 projection_parameter_count = decision_module.projection_parameter_count
+fit_module = pytest.importorskip("scripts.fit_xcapture_path_a")
 
 
 def test_decision_head_produces_probabilities_and_option_order_is_preserved():
@@ -76,3 +77,51 @@ def test_multimodal_contrastive_loss_reaches_each_projection():
     assert torch.isfinite(loss)
     assert all(model.projections[name].weight.grad is not None for name in features)
     assert projection_parameter_count(model) == 180_225
+
+
+def test_contrastive_loss_uses_all_distinct_pairs_for_four_points():
+    model = FrozenFeatureDecision()
+    features = {
+        "image": torch.randn(3, 4, 512),
+        "audio": torch.randn(3, 4, 384),
+        "tactile": torch.randn(3, 4, 512),
+    }
+
+    loss = paired_cross_modal_loss(model, features)
+    loss.backward()
+
+    assert torch.isfinite(loss)
+    assert all(model.projections[name].weight.grad is not None for name in features)
+
+
+def test_evaluation_scores_every_cross_point_direction():
+    model = FrozenFeatureDecision().eval()
+    query = torch.randn(3, 4, 512)
+    gallery = torch.randn(3, 4, 384)
+
+    logits, rows = fit_module._pair_logits(
+        model, "image", "audio", query, gallery
+    )
+
+    assert logits.shape == (3 * 4 * 3, 3)
+    assert len(rows) == 3 * 4 * 3
+    assert len({row["direction"] for row in rows}) == 12
+    assert multiclass_metrics(logits, targets=torch.arange(3).repeat(12))["accuracy"] >= 0
+
+
+def test_validation_suite_supports_four_points_per_object():
+    model = FrozenFeatureDecision().eval()
+    features = {
+        "image": torch.randn(3, 4, 512),
+        "audio": torch.randn(3, 4, 384),
+        "tactile": torch.randn(3, 4, 512),
+    }
+
+    result, selector = fit_module.evaluate_suite(
+        model, features, ["a", "b", "c"], include_predictions=True
+    )
+
+    assert np.isfinite(selector)
+    assert result["cross_modal"]["image_to_audio"]["query_count"] == 36
+    assert result["fused_query"]["image_plus_tactile_to_audio"]["query_count"] == 36
+    assert len(result["cross_modal"]["image_to_audio"]["predictions"]) == 36

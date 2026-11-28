@@ -62,30 +62,41 @@ def paired_cross_modal_loss(
     features: dict[str, torch.Tensor],
 ) -> torch.Tensor:
     """Symmetric cross-point InfoNCE over all ordered modality pairs."""
-    batch_size = next(iter(features.values())).shape[0]
-    labels = torch.arange(batch_size, device=next(iter(features.values())).device)
+    first_features = next(iter(features.values()))
+    if first_features.ndim != 3 or first_features.shape[1] < 2:
+        raise ValueError("features must have shape [objects, points>=2, dimensions]")
+    batch_size, point_count = first_features.shape[:2]
+    labels = torch.arange(batch_size, device=first_features.device)
+    if any(
+        tensor.ndim != 3 or tensor.shape[:2] != (batch_size, point_count)
+        for tensor in features.values()
+    ):
+        raise ValueError("modalities must share object and capture-point dimensions")
     losses = []
     for first, second in combinations(MODALITY_DIMS, 2):
         encoded_first = model.encode(first, features[first])
         encoded_second = model.encode(second, features[second])
         scale = model.logit_scale.clamp(min=0.0, max=float(np.log(100.0))).exp()
-        for query_point, candidate_point in ((0, 1), (1, 0)):
-            logits = (
-                encoded_first[:, query_point]
-                @ encoded_second[:, candidate_point].transpose(0, 1)
-                * scale
-            )
-            reverse_logits = (
-                encoded_second[:, candidate_point]
-                @ encoded_first[:, query_point].transpose(0, 1)
-                * scale
-            )
-            losses.extend(
-                (
-                    F.cross_entropy(logits, labels),
-                    F.cross_entropy(reverse_logits, labels),
+        for query_point in range(point_count):
+            for candidate_point in range(point_count):
+                if query_point == candidate_point:
+                    continue
+                logits = (
+                    encoded_first[:, query_point]
+                    @ encoded_second[:, candidate_point].transpose(0, 1)
+                    * scale
                 )
-            )
+                reverse_logits = (
+                    encoded_second[:, candidate_point]
+                    @ encoded_first[:, query_point].transpose(0, 1)
+                    * scale
+                )
+                losses.extend(
+                    (
+                        F.cross_entropy(logits, labels),
+                        F.cross_entropy(reverse_logits, labels),
+                    )
+                )
     return torch.stack(losses).mean()
 
 
