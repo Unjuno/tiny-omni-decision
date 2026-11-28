@@ -1,0 +1,106 @@
+{
+  "status": "PASS_TRAIN_ONLY_LABEL_GROUP_SUPPORT",
+  "source_commit": "f4130e200ef390bb38a3bf16667e465896751329",
+  "partition_sha256": "6c9ac8eb8e12bd5dc0af77c8d162a40c753d5a215d07eb85dc3a69c3973d9f98",
+  "train_partition_ids_sha256": "232d37d77ccd010482173a219d9b29769601b29f6a22cc60afd7d0c7cc73141b",
+  "train_parent_count": 308,
+  "validation_or_quarantine_labels_loaded": false,
+  "sealed_audit_loaded": false,
+  "tasks": {
+    "material": {
+      "train_rows": 13327,
+      "labeled_rows": 7928,
+      "missing_rows": 5399,
+      "missing_fraction": 0.4051174307796203,
+      "class_counts": {
+        "carpet": 105,
+        "ceramic": 213,
+        "cloth": 925,
+        "dirt": 58,
+        "drywall": 381,
+        "glass": 171,
+        "grass": 89,
+        "gravel": 49,
+        "leaf": 160,
+        "metal": 1734,
+        "paper": 734,
+        "plastic": 933,
+        "plastic-bag": 157,
+        "rock": 592,
+        "tile": 87,
+        "water": 109,
+        "wood": 1431
+      },
+      "distinct_train_parent_support": {
+        "carpet": 12,
+        "ceramic": 19,
+        "cloth": 58,
+        "dirt": 7,
+        "drywall": 36,
+        "glass": 14,
+        "grass": 4,
+        "gravel": 3,
+        "leaf": 13,
+        "metal": 109,
+        "paper": 45,
+        "plastic": 80,
+        "plastic-bag": 14,
+        "rock": 40,
+        "tile": 9,
+        "water": 2,
+        "wood": 97
+      },
+      "classes_with_fewer_than_10_train_parents": [
+        "dirt",
+        "grass",
+        "gravel",
+        "tile",
+        "water"
+      ]
+    },
+    "action": {
+      "train_rows": 13327,
+      "labeled_rows": 7946,
+      "missing_rows": 5381,
+      "missing_fraction": 0.4037667892248818,
+      "class_counts": {
+        "hit": 5389,
+        "scratch": 2557
+      },
+      "distinct_train_parent_support": {
+        "hit": 307,
+        "scratch": 293
+      },
+      "classes_with_fewer_than_10_train_parents": []
+    },
+    "reaction": {
+      "train_rows": 13327,
+      "labeled_rows": 7833,
+      "missing_rows": 5494,
+      "missing_fraction": 0.4122458167629624,
+      "class_counts": {
+        "deform": 821,
+        "rigid-motion": 853,
+        "scatter": 272,
+        "splash": 112,
+        "static": 5775
+      },
+      "distinct_train_parent_support": {
+        "deform": 110,
+        "rigid-motion": 189,
+        "scatter": 57,
+        "splash": 8,
+        "static": 289
+      },
+      "classes_with_fewer_than_10_train_parents": [
+        "splash"
+      ]
+    }
+  },
+  "interpretation_limit": "Group support is descriptive TRAIN coverage; it does not establish label correctness, visual observability, or generalization quality.",
+  "input_sha256": {
+    "inventory": "3dab5814a6a5e87599f5d67ad435d7f8a81042e426969c004b9eed6e3d74a19d",
+    "partition": "6c9ac8eb8e12bd5dc0af77c8d162a40c753d5a215d07eb85dc3a69c3973d9f98",
+    "result_receipt": "409a23c86426a38ddca4456f8d8d3704a1b8d250e516eb926fd53d70c3ae1ab6"
+  }
+}
