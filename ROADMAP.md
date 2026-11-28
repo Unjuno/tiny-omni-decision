@@ -20,6 +20,15 @@ remain absent, and the full data-scaling comparison remains blocked: current
 C: free space is below one additional shard plus the predeclared 20 GiB
 reserve. See [transfer verification and resource gate](docs/pretrained_reuse/R2_INTPHYS_TRAIN_COVERAGE_PREFLIGHT_20261128.md#2026-11-28-shard-2-transfer-verification-follow-up).
 
+**2026-11-28 R2 IntPhys shard-2 structure audit:** A reusable CPU-only audit
+reverified the archive pin and streamed all 1,143,750 tar members. All 3,750
+positive-only train videos have valid `is_possible=true` status metadata and
+exactly 100 scene, depth, and mask frames (375,000 frames/channel); 3,750
+canonical status records are unique. This does not establish visual label
+observability or cross-shard independence. Shards 3–4 and the frozen four-shard
+global split remain required before the data-coverage comparison. See [audit
+protocol and receipt](docs/pretrained_reuse/R2_INTPHYS_TRAIN_COVERAGE_PREFLIGHT_20261128.md#2026-11-28-shard-2-content-structure-audit).
+
 **2026-11-28 R2 Physion++ review usability:** Added a label-blind utility to
 split the frozen 75-pair contact sheets into individually viewable cards in a
 new attempt-03 output. It verifies all input-sheet hashes, preserves the blank

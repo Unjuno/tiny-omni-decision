@@ -154,3 +154,44 @@ space cannot hold even one additional ~37 GiB shard under that reserve. Do not
 start shards 3 or 4 until an authorized storage plan or a lower-footprint
 streaming design is reviewed. Existing source archives, features, checkpoints,
 predictions, validation/dev artifacts, and other branches remain unchanged.
+
+## 2026-11-28 shard-2 content-structure audit
+
+Because data validity is the main open question, the pinned shard was streamed
+through Python's gzip-tar reader without GPU/model loading or extracting media
+to a second directory. The new reusable command
+`python -m scripts.audit_intphys_train_archive_structure --archive <path> --shard-number 2 --output <new-path>`
+first recomputes the complete archive MD5/SHA-256, then rejects unsafe paths,
+duplicate or non-contiguous video records, malformed/non-possible status
+metadata, duplicate frames, missing frames, and unexpected tar entries.
+It records only aggregate counts and a sorted sample-ID hash.
+
+Observed for train shard 2:
+
+| Check | Result |
+|---|---:|
+| Publisher-pinned size / MD5 | 37,111,037,048 bytes / `47dc1c3578e079584f4e3b5b8ab8304b` — pass |
+| SHA-256 | `0085060c9e2cb8143c7ee5f5c7866d8d2e5b70a0cb208e265ae1f1812210a257` |
+| Tar members | 1,143,750 |
+| Videos and status records | 3,750 / 3,750 |
+| Scene / depth / mask frames | 375,000 / 375,000 / 375,000 |
+| Videos with exactly frames 1–100 in every channel | 3,750 / 3,750 |
+| Unique canonical status records | 3,750 |
+| Train status labels | All `is_possible=true`, as expected for this positive-only shard |
+
+The audit took 78.81 seconds for archive hashing and 171.35 seconds for the
+tar structure scan (250.16 seconds total). No validation or sealed data was
+opened. It verifies archive and record completeness, not RGB semantic
+observability, label correctness, scene independence, or cross-shard
+duplication. The raw archive remains unchanged. The aggregate receipt is
+outside Git at
+`C:\CodexArtifacts\pretrained-reuse-r2-local\intphys-full-train-coverage-20261128-attempt-01\shard2-structure-audit-repro-02\structure-audit.json`
+with SHA-256
+`65dad18432892c5845648a09a20619f60c0b9562b83c0cc181f867dff34770b3`.
+The script SHA-256 for this run was
+`0d5ebe16c63336d75ee29550e3e6e68ef66d6a236e932035fa83575964740aee`.
+
+The R2 comparison is still not ready to fit: shard 1 has an existing verified
+feature cache, shard 2 now has verified source bytes and structure, but shards
+3–4 and a four-shard global identity split are missing. Do not substitute a
+two-shard or shard-local model comparison for the frozen four-shard protocol.
