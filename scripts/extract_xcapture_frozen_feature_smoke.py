@@ -226,6 +226,7 @@ def run(output: Path) -> dict:
         source_sample_rate = sample_rate
         if sample_rate != 32000:
             waveform = torchaudio.functional.resample(waveform, sample_rate, 32000)
+            sample_rate = 32000
         tick = time.perf_counter()
         with torch.inference_mode():
             spectrogram = mel(waveform)

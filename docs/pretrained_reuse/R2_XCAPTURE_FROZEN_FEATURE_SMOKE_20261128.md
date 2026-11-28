@@ -12,7 +12,7 @@ selection, retrieval evaluation, or evidence of task quality.
 |---|---|---:|---:|
 | Masked RGB object crops | TinyCLIP ViT-39M vision tower | 20 × 512 | 1.574 s |
 | 10N tactile images | Same TinyCLIP visual tower | 20 × 512 | 1.491 s |
-| Normalized impact audio | EfficientAT DyMN-0.4 | 20 × 384 | 0.980 s |
+| Normalized impact audio, 48 kHz → 32 kHz | EfficientAT DyMN-0.4 | 20 × 384 | 0.980 s |
 
 Total measured process time was 4.892 seconds on CPU, including encoder load,
 preprocessing, I/O, array writes, and reload checks. GPU use and training were
@@ -28,7 +28,8 @@ no evaluation ID or media was opened.
 
 ## Pinned inputs and outputs
 
-- Source commit: `a8006f9acfa303d08933c46dade866fe076738bb`
+- Source commit and output-attempt receipt are recorded in the final run
+  section below after a fresh execution of the committed script.
 - X-Capture revision: `b4468bf999aac250f34ef1b02459d902492a068f`
 - Sample receipt SHA-256: `17bacf80527a1aa0e1496eb330637d7f81b039ca68ffa28ccfabf9b33b240c0f`
 - Masked-crop receipt SHA-256: `6c37406b3e8011bab5fd564470b5b8d312d4016966906a1f2683f723d4453c84`
@@ -39,15 +40,15 @@ no evaluation ID or media was opened.
 - Runtime: Python 3.11.9, PyTorch/torchaudio 2.6.0+cu124, Transformers 5.6.2;
   execution device CPU.
 - Output directory:
-  `C:\CodexArtifacts\pretrained-reuse-r2-local\xcapture-frozen-feature-smoke-20261128-attempt-01`
+  `C:\CodexArtifacts\pretrained-reuse-r2-local\xcapture-frozen-feature-smoke-20261128-attempt-04`
 - `image-features.npy` SHA-256:
   `b04fd158d8c2bc75e9278e953bc77d006aaa3fca69d88b6e75408c40f7618a21`
 - `audio-features.npy` SHA-256:
   `10716382fff49f2a667d5fabbf9a40fc3ab9d82aaebea53a2995fa7bf4defff1`
 - `tactile-features.npy` SHA-256:
   `a3c037f68395b281cd8f79050219b91903808e4f08fd4bb18c46a30230e9b388`
-- Feature receipt `feature-smoke.json` SHA-256:
-  `1d4a74633250a54a8e4c7eea58fcca0394513d5ede98f3830e7161cc268ea52d`
+- Feature receipt `feature-smoke.json` SHA-256: recorded after the committed
+  script's final execution below.
 
 ## Data and implementation notes
 
