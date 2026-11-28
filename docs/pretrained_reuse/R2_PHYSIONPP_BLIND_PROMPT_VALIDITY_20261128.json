@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-28",
+  "kind": "ai_assisted_blind_prompt_validity_check",
+  "packet": "physionpp-blind-observability-review-20261128-attempt-01",
+  "packet_readme_sha256": "4453e835b50edc9f7a6f928a7440c4e6266d3aba5381992719e544d5f0268448",
+  "packet_manifest_sha256": "a5943bf677151729b1be8cded68d8171fb6a6fac93628d37e908203d7283535f",
+  "response_csv_sha256_after_check": "882432f4397fcae5b2176e7b31a096e354d7342acae4c5b643e55e1e9d8b4981",
+  "cards_viewed": [
+    {"id": "item-011-165c277e", "sha256": "42f42a212ca22e9e62ff5a4758bb1a19029353e7cf7a5bbc3e17a68f3d4ac97c"},
+    {"id": "item-012-bace39aa", "sha256": "ce2c043c32a29c52efae9399788993674cd832ea13bb128a99ced53c5323dd99"},
+    {"id": "item-013-fddc4575", "sha256": "ea353088f99db680bbfca516eada9855266d032e54b97e2b0b01332c4c0ded94"},
+    {"id": "item-014-f78b8d46", "sha256": "bff8e365a14341092ff67785457e9590a30f3123c51e5dc8e0d15c60318da5cc"},
+    {"id": "item-015-b9dceba7", "sha256": "490aff4e675fbd205da5d4b6358f328b91749a40a7169f2cf04816fd02d3a506"},
+    {"id": "item-016-584d0e3f", "sha256": "00a01f4286c3e1f603f5a0bac53e2c9599d04f3d4eb4e416839bc784294b7013"},
+    {"id": "item-017-2f44a4f8", "sha256": "62042bd9d38080be646b448ce42fd7265c3ee242ef242ce6a7403c1793ba1e6e"},
+    {"id": "item-018-c8d74d2a", "sha256": "7ffae8e1050663213a5f6ffc848a6b9d9027313d67aaea14993662c027b5c669"},
+    {"id": "item-019-97c6f5b0", "sha256": "fda58bb1fca6547b3f7cd7e793dc3b240095e302744519630ca1bec4c43d1a22"},
+    {"id": "item-020-89a42fe9", "sha256": "933cf61b9e3d3738397a8942cf50e849eef92ac5c07b65fbbfd4c4425ed5e03e"}
+  ],
+  "result": {
+    "instruction_anchor": "red object / yellow-marked target",
+    "universal_anchor_valid": false,
+    "outcome_predictions_recorded": false,
+    "confidence_scores_recorded": false,
+    "private_answer_key_opened": false,
+    "official_labels_opened": false,
+    "human_review_completed": false,
+    "interpretation": "The fixed color wording does not match all displayed cards; this is an instruction validity issue, not evidence of label error or unobservable events."
+  },
+  "actions": {
+    "response_csv_changed": false,
+    "labels_changed": false,
+    "model_or_checkpoint_changed": false,
+    "validation_or_sealed_data_accessed": false
+  }
+}
