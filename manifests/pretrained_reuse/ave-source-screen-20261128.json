@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "status": "REVIEW_NOT_ADMITTED",
+  "candidate": "Audio-Visual Event (AVE) dataset",
+  "observed_date": "2026-11-28",
+  "source": {
+    "project_page": "https://sites.google.com/view/audiovisualresearch",
+    "paper": "https://arxiv.org/abs/1803.08842",
+    "repository": "https://github.com/YapengTian/AVE-ECCV18",
+    "repository_revision": "93f843fed72fb17394df76330df958b0c2dbde76",
+    "readme_sha256": "5c848c1026583d14727e95a6f116f1c3dac4ee0f7129397a7c1f7e1a100ac777",
+    "readme_bytes": 4486
+  },
+  "task_evidence": {
+    "video_count": 4143,
+    "duration_seconds": 10,
+    "event_categories": 28,
+    "temporal_boundaries": true,
+    "authors_define_event_as_both_visible_and_audible": true,
+    "both_modalities_necessary_for_each_example": "UNKNOWN"
+  },
+  "data_rights": {
+    "underlying_media_origin": "YouTube; subset of AudioSet per authors' paper",
+    "dataset_license_in_pinned_official_materials": "NOT_STATED",
+    "pinned_repository_root_license_file_present": false,
+    "pinned_readme_mentions_license": false,
+    "product_training_permission": "UNKNOWN"
+  },
+  "split_integrity": {
+    "official_hashable_split_manifest_found": false,
+    "train_validation_test_ids": "UNKNOWN",
+    "source_group_split_rules": "UNKNOWN",
+    "cross_split_media_identity": "UNKNOWN",
+    "normalized_content_overlap": "UNKNOWN"
+  },
+  "payload_access": {
+    "annotations_downloaded_or_opened": false,
+    "media_downloaded_or_opened": false,
+    "checkpoint_loaded": false,
+    "gpu_used": false,
+    "cloud_compute_used": false
+  },
+  "decision": "Do not download, reconstruct, train, or select on this source until explicit underlying-media rights and an auditable official split/identity manifest are available.",
+  "limitations": [
+    "Metadata screen only; no dataset payload was inspected.",
+    "The authors' task definition does not prove both modalities are necessary for every example.",
+    "No model or quality result was produced."
+  ]
+}
