@@ -56,6 +56,43 @@ def test_masked_object_crop_rejects_empty_and_unreasonable_coverage(tmp_path: Pa
         masked_object_crop(image_path, mask_path)
 
 
+def test_masked_object_crop_allows_dataset_reviewed_large_object_mask(tmp_path: Path) -> None:
+    image_path, mask_path = _write_fixture(tmp_path)
+    mask = Image.new("L", (20, 12), 255)
+    ImageDraw.Draw(mask).rectangle((0, 0, 9, 0), fill=0)
+    mask.save(mask_path)
+
+    with pytest.raises(ValueError, match="coverage"):
+        masked_object_crop(image_path, mask_path)
+
+    _crop, audit = masked_object_crop(
+        image_path, mask_path, maximum_mask_coverage=0.98
+    )
+
+    assert audit["mask_coverage"] == pytest.approx(230 / 240)
+
+
+def test_masked_object_crop_allows_reviewed_small_contact_region(tmp_path: Path) -> None:
+    image = Image.new("RGB", (100, 100), (40, 80, 120))
+    mask = Image.new("L", (100, 100), 0)
+    ImageDraw.Draw(mask).rectangle((1, 1, 8, 10), fill=255)
+    image_path, mask_path = tmp_path / "small-rgb.png", tmp_path / "small-mask.png"
+    image.save(image_path)
+    mask.save(mask_path)
+
+    with pytest.raises(ValueError, match="coverage"):
+        masked_object_crop(image_path, mask_path)
+
+    _crop, audit = masked_object_crop(
+        image_path,
+        mask_path,
+        minimum_mask_coverage=0.003,
+        maximum_mask_coverage=0.98,
+    )
+
+    assert audit["mask_coverage"] == pytest.approx(0.008)
+
+
 def test_masked_object_crop_requires_valid_padding(tmp_path: Path) -> None:
     image_path, mask_path = _write_fixture(tmp_path)
 

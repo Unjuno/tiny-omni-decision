@@ -93,14 +93,24 @@ def read_float_wav(path: Path) -> tuple[np.ndarray, int]:
     return mono, sample_rate
 
 
-def run(output: Path) -> dict:
+def run(
+    output: Path,
+    *,
+    sample_root: Path = SAMPLE_ROOT,
+    crop_root: Path = CROP_ROOT,
+    expected_sample_sha256: str = EXPECTED["sample_manifest"],
+    expected_crop_sha256: str = EXPECTED["crop_manifest"],
+    points_per_object: int = 1,
+) -> dict:
     if output.exists():
         raise FileExistsError(f"refusing to overwrite feature output: {output}")
+    if points_per_object < 1:
+        raise ValueError("points_per_object must be positive")
 
-    sample_manifest_path = SAMPLE_ROOT / "sample-audit.json"
-    crop_manifest_path = CROP_ROOT / "masked-crops.json"
-    verify_hash(sample_manifest_path, EXPECTED["sample_manifest"])
-    verify_hash(crop_manifest_path, EXPECTED["crop_manifest"])
+    sample_manifest_path = sample_root / "sample-audit.json"
+    crop_manifest_path = crop_root / "masked-crops.json"
+    verify_hash(sample_manifest_path, expected_sample_sha256)
+    verify_hash(crop_manifest_path, expected_crop_sha256)
     sample_manifest = json.loads(sample_manifest_path.read_text(encoding="utf-8"))
     crop_manifest = json.loads(crop_manifest_path.read_text(encoding="utf-8"))
     if sample_manifest["dataset_revision"] != "b4468bf999aac250f34ef1b02459d902492a068f":
@@ -128,12 +138,26 @@ def run(output: Path) -> dict:
         (row["partition"], row["object_id"], row["point_id"]): row
         for row in crop_manifest["rows"]
     }
-    if len(sample_rows) != 20 or len(crop_rows) != 20 or sample_rows.keys() != crop_rows.keys():
-        raise ValueError("expected the same 20 frozen train/validation points in both manifests")
+    if (
+        not sample_rows
+        or len(sample_rows) != len(crop_rows)
+        or sample_rows.keys() != crop_rows.keys()
+    ):
+        raise ValueError("sample and crop manifests must contain the same nonempty point set")
     if {key[0] for key in sample_rows} != {"train", "validation"}:
         raise ValueError("unexpected split in sample manifest")
-    if len({key[1] for key in sample_rows}) != 20:
-        raise ValueError("sample must contain 20 distinct object identities")
+    objects_by_partition = {
+        partition: {key[1] for key in sample_rows if key[0] == partition}
+        for partition in ("train", "validation")
+    }
+    if objects_by_partition["train"] & objects_by_partition["validation"]:
+        raise ValueError("object identity overlaps train and validation")
+    points_by_object: dict[tuple[str, str], int] = {}
+    for partition, object_id, _point_id in sample_rows:
+        group = (partition, object_id)
+        points_by_object[group] = points_by_object.get(group, 0) + 1
+    if any(count != points_per_object for count in points_by_object.values()):
+        raise ValueError("sample does not have the declared number of points per object")
 
     sys.path.insert(0, str(Path("C:/CodexArtifacts/pretrained-reuse-r1/python-deps")))
     sys.path.insert(0, str(EFFICIENTAT_ROOT / "source"))
@@ -189,7 +213,7 @@ def run(output: Path) -> dict:
         point = sample_rows[key]
         crop = crop_rows[key]
         sid = image_sample_ids[key]
-        image_path = CROP_ROOT / crop["output_path"]
+        image_path = crop_root / crop["output_path"]
         if sha256_file(image_path) != crop["output_sha256"]:
             raise ValueError(f"masked-crop hash mismatch for sample {sid}")
         audio_row = next(
@@ -200,8 +224,8 @@ def run(output: Path) -> dict:
             row for row in sample_manifest["files"]
             if row["sample_id"] == sid and row["modality"] == "tactile"
         )
-        audio_path = SAMPLE_ROOT / audio_row["output_path"]
-        tactile_path = SAMPLE_ROOT / tactile_row["output_path"]
+        audio_path = sample_root / audio_row["output_path"]
+        tactile_path = sample_root / tactile_row["output_path"]
         verify_hash(audio_path, audio_row["sha256"])
         verify_hash(tactile_path, tactile_row["sha256"])
 
@@ -306,6 +330,7 @@ def run(output: Path) -> dict:
             for partition in ("train", "validation")
         },
         "unique_object_count": len({row["object_id"] for row in records}),
+        "points_per_object": points_per_object,
         "feature_shapes": {key: list(value.shape) for key, value in arrays.items()},
         "feature_array_sha256": array_hashes,
         "elapsed_seconds": elapsed,
@@ -319,7 +344,8 @@ def run(output: Path) -> dict:
         "training": False,
         "evaluation_partition_accessed": False,
         "limitations": [
-            "Only 20 preselected train/validation objects were processed.",
+            f"Only {len(records)} preselected train/validation points were processed; "
+            "this is not full-archive coverage.",
             "Image and tactile use TinyCLIP's frozen visual tower, not a tactile-pretrained model.",
             "Features establish runtime compatibility, not task usefulness or retrieval quality.",
         ],
@@ -341,8 +367,20 @@ def main() -> None:
             "xcapture-frozen-feature-smoke-20261128-attempt-01"
         ),
     )
+    parser.add_argument("--sample-dir", type=Path, default=SAMPLE_ROOT)
+    parser.add_argument("--crop-dir", type=Path, default=CROP_ROOT)
+    parser.add_argument("--expected-sample-sha256", default=EXPECTED["sample_manifest"])
+    parser.add_argument("--expected-crop-sha256", default=EXPECTED["crop_manifest"])
+    parser.add_argument("--points-per-object", type=int, default=1)
     args = parser.parse_args()
-    run(args.output)
+    run(
+        args.output,
+        sample_root=args.sample_dir,
+        crop_root=args.crop_dir,
+        expected_sample_sha256=args.expected_sample_sha256,
+        expected_crop_sha256=args.expected_crop_sha256,
+        points_per_object=args.points_per_object,
+    )
 
 
 if __name__ == "__main__":

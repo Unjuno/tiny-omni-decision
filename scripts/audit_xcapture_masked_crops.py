@@ -24,7 +24,13 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--sample-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--minimum-mask-coverage", type=float, default=0.01)
+    parser.add_argument("--maximum-mask-coverage", type=float, default=0.95)
     args = parser.parse_args()
+    if not 0.001 <= args.minimum_mask_coverage < args.maximum_mask_coverage:
+        raise SystemExit("minimum mask coverage must be >=0.001 and below the maximum")
+    if not 0.95 <= args.maximum_mask_coverage <= 0.995:
+        raise SystemExit("maximum mask coverage must be between 0.95 and 0.995")
 
     manifest_path = args.sample_dir / "sample-audit.json"
     manifest: dict[str, Any] = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -55,7 +61,12 @@ def main() -> None:
             if sha256_file(path) != item["sha256"]:
                 raise SystemExit(f"sample file SHA-256 mismatch: {path}")
 
-        crop, measurements = masked_object_crop(image_path, mask_path)
+        crop, measurements = masked_object_crop(
+            image_path,
+            mask_path,
+            minimum_mask_coverage=args.minimum_mask_coverage,
+            maximum_mask_coverage=args.maximum_mask_coverage,
+        )
         output_path = args.output_dir / f"sample-{sample_id:02d}-image-objectcrop.png"
         crop.save(output_path, format="PNG", optimize=False)
         rows.append(
@@ -84,6 +95,8 @@ def main() -> None:
                 "binary point-cloud mask; zero outside foreground; "
                 "crop bbox with 8% padding"
             ),
+            "minimum_mask_coverage": args.minimum_mask_coverage,
+            "maximum_mask_coverage": args.maximum_mask_coverage,
             "evaluation_media_opened": False,
         },
         "rows": rows,

@@ -1,8 +1,20 @@
+**2026-11-28 R2 X-Capture Path A result:** On 400 train / 100 validation
+object groups (two capture points each), a 180,225-parameter frozen-feature
+cross-sensory lens completed 1,000 CPU updates. Best validation macro NLL was
+selected at step 20: 2.33% accuracy on 100-way retrieval (1% chance); training
+accuracy reached 98.83% while validation NLL worsened from 4.61 to 6.28 by the
+final step. This indicates severe overfitting and weak transfer for this
+object-identity retrieval formulation, not a ceiling for multimodal Decision
+models. Evaluation media remained unopened. Define an observable, useful task
+and improve the data/label design before another fit; BERT is text-only and is
+not relevant to this image/audio/tactile experiment. See
+[`R2_XCAPTURE_PATH_A_RESULT_20261128.md`](docs/pretrained_reuse/R2_XCAPTURE_PATH_A_RESULT_20261128.md).
+
 **2026-11-28 R2 X-Capture frozen-feature runtime smoke:** On the frozen
 20-object train/validation sample, CPU TinyCLIP visual features were produced
 for masked RGB crops and 10N tactile images (512-D each), and EfficientAT audio
 features were produced (384-D). All vectors were finite and saved arrays
-reloaded exactly; total process time was 4.892 s. No training, quality metric,
+reloaded exactly; total process time was 4.719 s. No training, quality metric,
 GPU, or evaluation media was used. This confirms only data-to-encoder runtime
 compatibility. Package text remains visible in some crops, and this sample is
 too small for fitting. See [runtime smoke](docs/pretrained_reuse/R2_XCAPTURE_FROZEN_FEATURE_SMOKE_20261128.md).
