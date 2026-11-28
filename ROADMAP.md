@@ -1,3 +1,13 @@
+**2026-11-28 16:23 JST R0 live recheck:** PR #15 remains open/Draft at
+`583853d6` on `docs/pretrained-reuse-roadmap-20261010`, with both test checks
+green; `main` is `09246d7b`. The PR worktree is 36 commits behind and has two
+untracked PhysicalAI manifests, which were preserved. The RTX 3080 is occupied
+by existing Orbitune-related work (8,270/16,384 MiB reported), and C: has
+23.67 GiB free. No process or experiment was touched. BERT results remain
+task-specific; the next gate is an admitted source-disjoint dataset, not another
+sweep on exposed cohorts. See [the live recheck](docs/pretrained_reuse/R0_LIVE_RECHECK_20261128_1623JST.md)
+and [machine-readable snapshot](docs/pretrained_reuse/R0_LIVE_RECHECK_20261128_1623JST.json).
+
 **2026-11-28 R2 KilometerAudio source screen:** Official metadata describes a
 human-verified, five-choice task requiring both audio and video over long
 walking-tour recordings. There is no train split; validation reuses 2024/2025

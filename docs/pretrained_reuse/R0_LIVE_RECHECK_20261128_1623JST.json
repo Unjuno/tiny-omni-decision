@@ -1,0 +1,61 @@
+{
+  "timestamp_local": "2026-11-28T16:23:56+09:00",
+  "scope": "read_only_remote_worktree_ci_resource_recheck",
+  "repository": "Unjuno/tiny-omni-decision",
+  "remote": {
+    "main": "09246d7b1821662a6b1eba47fc08c43f9dc3863c",
+    "pr": 15,
+    "pr_state": "open",
+    "pr_draft": true,
+    "pr_base": "main",
+    "pr_head_branch": "docs/pretrained-reuse-roadmap-20261010",
+    "pr_head_sha": "583853d6bea34f3da424c8b8e7adfcd8e8e84af6",
+    "pr_check_runs": [
+      {"name": "test", "status": "completed", "conclusion": "success", "completed_at": "2026-11-26T00:20:12Z"},
+      {"name": "test", "status": "completed", "conclusion": "success", "completed_at": "2026-11-26T00:20:06Z"}
+    ],
+    "review_comments_rechecked": false,
+    "review_comments_reason": "GitHub CLI authentication unavailable; public pull/check APIs used"
+  },
+  "worktrees": {
+    "r2_data_audit": {
+      "branch": "codex/pretrained-reuse-r2-data-audit-20261128",
+      "head": "0d3d79c0c1d1c41edff554ab176cd5a6f3f112a0",
+      "matches_remote": true,
+      "clean": true
+    },
+    "pr_head": {
+      "path": "C:\\CodexWorktrees\\r2-perception-control-freezer-20261031",
+      "branch": "docs/pretrained-reuse-roadmap-20261010",
+      "local_head": "ea014431b163f69176c52f5df8944f2dc7f7583f",
+      "remote_head": "583853d6bea34f3da424c8b8e7adfcd8e8e84af6",
+      "behind_commits": 36,
+      "untracked_user_files": 2,
+      "untracked_file_family": "PhysicalAI split manifests",
+      "changed": false
+    },
+    "onedrive_user_checkout": {
+      "branch": "codex/teacher-quality-clean-dev-v1",
+      "preexisting_changes": true,
+      "changed": false
+    }
+  },
+  "local_resources": {
+    "gpu": "NVIDIA GeForce RTX 3080 Laptop GPU",
+    "gpu_memory_total_mib": 16384,
+    "gpu_memory_used_mib": 8270,
+    "gpu_utilization_percent": 16,
+    "separate_existing_compute_process": true,
+    "process_intervened": false,
+    "c_free_bytes": 25415192576,
+    "c_free_gib": 23.67
+  },
+  "actions": {
+    "training_started": false,
+    "evaluation_started": false,
+    "process_stopped": false,
+    "user_worktree_modified": false,
+    "data_or_checkpoint_modified": false
+  },
+  "next_gate": "admit a source-disjoint, rights-cleared task/data cohort before new quality selection; do not retune exposed BERT cohorts"
+}
