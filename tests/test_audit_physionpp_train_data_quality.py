@@ -66,6 +66,17 @@ def test_train_audit_rejects_media_hash_mismatch(tmp_path):
         audit_train_rows([row], tmp_path)
 
 
+def test_train_audit_reports_recorded_factor_label_counts(tmp_path):
+    row = _row(tmp_path, "collision", 0, "Yes")
+    row["source_record_id"] = (
+        "readout_data_v1/collision/collision-target=cube-zdloc=3#0000"
+    )
+
+    report = audit_train_rows([row], tmp_path)
+
+    assert report["recorded_factor_class_counts"] == {"zdloc": {"3": {"Yes": 1}}}
+
+
 def test_visual_selection_is_deterministic_and_stratified_by_scenario_object_and_label(tmp_path):
     rows = [
         _row(tmp_path, "collision", i, target)

@@ -27,10 +27,11 @@ and `tests/test_audit_physionpp_train_data_quality.py`.
 | Sampled frame count matching metadata | 100 / 100 |
 
 The fixed review selection is at
-`C:\CodexArtifacts\pretrained-reuse-r2-local\physionpp-train-data-audit-20261128-attempt-02`.
+`C:\CodexArtifacts\pretrained-reuse-r2-local\physionpp-train-data-audit-20261128-attempt-03`.
 Its selection JSONL SHA-256 is
 `38ebffeb76064cb0d52b705bcb3648af7a2854f6b392c6a2065e159b12ab1dd9`.
-The earlier attempt-01 output remains untouched.
+The earlier attempt-01 and attempt-02 outputs remain untouched. Attempt-03
+also records source-factor/label cross-tabs from the train IDs.
 
 ## Data-quality findings and limits
 
@@ -41,6 +42,13 @@ scenario, object, or rendering correlations instead of the physical outcome.
 The matched 100-clip review set reduces object-identity confounding for a
 manual check; it does not prove that labels are visually inferable or that
 other simulation parameters are balanced.
+
+Recorded source factors are also associated with labels in this small train
+corpus: `zdloc=3` has 28 No / 6 Yes; `use_blocker_with_hole=0` has 27 No / 7
+Yes; `zld=0` has 7 No / 34 Yes while `zld=2` has 36 No / 12 Yes; and
+`remove_middle=1` has 15 No / 0 Yes. These are descriptive counts, not proof
+of leakage or causal effects, but they show that overall class balance and
+target-object matching alone are inadequate data checks.
 
 The source archive mapping audit reports 832 metadata rows, 800 mapped rows,
 one duplicate, and 31 unmatched rows. It maps 634 rows through named

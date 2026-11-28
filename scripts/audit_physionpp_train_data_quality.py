@@ -14,6 +14,7 @@ VISUAL_FRAMES = 32
 THUMBNAIL_SIZE = (128, 72)
 GRID_COLUMNS = 8
 _TARGET_OBJECT = re.compile(r"(?:^|[-_])target=([^/#-]+)")
+_RECORD_FACTOR = re.compile(r"([A-Za-z_]+)=([^/#-]+)")
 
 
 def sha256_file(path: Path) -> str:
@@ -59,6 +60,9 @@ def audit_train_rows(rows: list[dict[str, Any]], corpus_root: Path) -> dict[str,
     asset_labels: dict[str, set[str]] = defaultdict(set)
     scenario_counts: dict[str, Counter[str]] = defaultdict(Counter)
     target_object_counts: dict[str, Counter[str]] = defaultdict(Counter)
+    record_factor_counts: dict[str, dict[str, Counter[str]]] = defaultdict(
+        lambda: defaultdict(Counter)
+    )
     group_scenarios: dict[str, set[str]] = defaultdict(set)
     frame_counts: list[int] = []
     media_bytes = 0
@@ -118,6 +122,9 @@ def audit_train_rows(rows: list[dict[str, Any]], corpus_root: Path) -> dict[str,
         group_scenarios[asset_group].add(scenario)
         scenario_counts[scenario][target] += 1
         target_object_counts[f"{scenario}/{target_object}"][target] += 1
+        for factor, value in _RECORD_FACTOR.findall(source_record_id):
+            if factor != "target":
+                record_factor_counts[factor][value][target] += 1
 
     if label_mismatches:
         raise ValueError(f"{label_mismatches} targets disagree with source_target")
@@ -150,6 +157,13 @@ def audit_train_rows(rows: list[dict[str, Any]], corpus_root: Path) -> dict[str,
         "scenario_target_object_class_counts": {
             stratum: dict(sorted(counts.items()))
             for stratum, counts in sorted(target_object_counts.items())
+        },
+        "recorded_factor_class_counts": {
+            factor: {
+                value: dict(sorted(counts.items()))
+                for value, counts in sorted(values.items())
+            }
+            for factor, values in sorted(record_factor_counts.items())
         },
         "matched_scenario_target_object_strata": sum(
             {"No", "Yes"}.issubset(counts) for counts in target_object_counts.values()
