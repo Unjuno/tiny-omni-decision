@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "status": "ALLOW_TASK_SCOPED_CROSS_SENSORY_RETRIEVAL",
+  "candidate": "X-Capture multisensory object dataset",
+  "observed_date": "2026-11-28",
+  "source": {
+    "repository": "https://huggingface.co/datasets/swistreich/XCapture",
+    "revision": "b4468bf999aac250f34ef1b02459d902492a068f",
+    "readme_bytes": 2667,
+    "readme_git_blob_oid": "42202b1c3bf359802c65f80289152cb523f19338",
+    "declared_license": "MIT",
+    "official_project_page": "https://xcapture.github.io/",
+    "paper": "https://openaccess.thecvf.com/content/ICCV2025/papers/Clarke_X-Capture_An_Open-Source_Portable_Device_for_Multi-Sensory_Learning_ICCV_2025_paper.pdf"
+  },
+  "archive": {
+    "path": "XCapture_data.zip",
+    "bytes": 17924194875,
+    "lfs_sha256": "71855c2d9cdfb6d54ed379ff4059b6c370e6f7ef040830b0ac19063159c477c2",
+    "central_directory_bytes": 11527647,
+    "central_directory_sha256": "3d8e546f1ca55e52a2b8e6c72aab99d14815e9da631589cb4d144f1179790f17",
+    "records": 94973
+  },
+  "task_evidence": {
+    "objects": 600,
+    "object_id_range": [0, 599],
+    "object_ids_are_contiguous": true,
+    "expected_points": 3600,
+    "indexed_points": 3599,
+    "missing_point": "object 00132 point 004",
+    "modalities": ["RGB-D", "impact audio", "tactile", "3D"],
+    "paper_task": "cross-sensory retrieval among 100 objects",
+    "machine_readable_label_table": false,
+    "official_split_manifest": false,
+    "rgb_audio_points": 3599,
+    "rgb_audio_10n_tactile_points": 3592,
+    "rgb_audio_20n_tactile_points": 2352,
+    "rgb_audio_20n_tactile_objects": 399
+  },
+  "data_rights": {
+    "hub_card_license": "MIT",
+    "hub_owner_is_paper_coauthor": true,
+    "official_project_links_to_hub_card": true,
+    "separate_dataset_license_file": "NOT_IDENTIFIED",
+    "official_project_page_license_statement": "NOT_IDENTIFIED",
+    "license_scope": "DATASET_LEVEL_MIT_ON_PINNED_AUTHOR_LINKED_CARD",
+    "commercial_use": true,
+    "derivative_model_training_allowed": true,
+    "redistribution_allowed": true,
+    "media_redistribution_allowed": true,
+    "repository_policy": "ALLOW"
+  },
+  "payload_access": {
+    "central_directory_range_only": true,
+    "media_downloaded_or_opened": true,
+    "bounded_sample_points": 20,
+    "bounded_sample_train_points": 10,
+    "bounded_sample_validation_points": 10,
+    "bounded_sample_files": 80,
+    "bounded_sample_manifest_sha256": "17bacf80527a1aa0e1496eb330637d7f81b039ca68ffa28ccfabf9b33b240c0f",
+    "bounded_masked_crop_report_sha256": "6c37406b3e8011bab5fd564470b5b8d312d4016966906a1f2683f723d4453c84",
+    "evaluation_media_downloaded_or_opened": false,
+    "labels_opened": true,
+    "checkpoint_loaded": false,
+    "gpu_used": false,
+    "paid_compute_used": false
+  },
+  "decision": "The pinned author-linked MIT dataset card clears the repository's data-license policy for a task-scoped cross-sensory object-retrieval fit. An object-disjoint 400/100/100 split is frozen by seed 17. A deterministic 20-point train/validation sample is complete and hash-verified; masked RGB crops retain some printed object/package text and some detached mask fragments. Treat this as a data-control requirement, not a reason to infer benchmark leakage. Keep evaluation media unopened. Before fitting, freeze the task/gallery protocol and text/background controls. Do not claim semantic object/material reasoning or broad Omni quality.",
+  "limitations": [
+    "The official project page links to the Hub card but does not repeat the license in its own text; the license grant is recorded from the pinned author-linked card.",
+    "The archive index has no root-level machine-readable description or split table; the paper's object descriptions are not needed for identity retrieval but are required for semantic object/material decisions.",
+    "The reported paper baseline uses a different protocol and is not this project's result.",
+    "The 20-point visual screen is a small manual sample and does not estimate corpus-wide text or mask-artifact prevalence.",
+    "Some target objects are composite or labeled packages; printed text is present on the target itself, so image crops do not remove all lexical cues.",
+    "Current free disk space is below the full archive size and far below the official uncompressed size."
+  ]
+}

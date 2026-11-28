@@ -1,3 +1,11 @@
+**2026-11-28 R2 X-Capture bounded media screen:** A seed-17 deterministic sample
+of 10 train and 10 validation objects was fetched from the pinned MIT archive;
+all 80 RGB/audio/tactile/mask files passed ZIP integrity checks, and evaluation
+media remains unopened. Masked crops reduce scene background but still contain
+readable object/package text in at least 5/20 cases and some detached mask
+fragments. The result strengthens the data-control gate; no feature extraction
+or fit occurred. See [media audit](docs/pretrained_reuse/R2_XCAPTURE_MEDIA_SAMPLE_AUDIT_20261128.md).
+
 **2026-11-28 16:23 JST R0 live recheck:** PR #15 remains open/Draft at
 `583853d6` on `docs/pretrained-reuse-roadmap-20261010`, with both test checks
 green; `main` is `09246d7b`. The PR worktree is 36 commits behind and has two

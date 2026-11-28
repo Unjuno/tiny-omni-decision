@@ -1,0 +1,37 @@
+schema_version: 1
+dataset_id: swistreich/XCapture
+revision: b4468bf999aac250f34ef1b02459d902492a068f
+subset: XCapture_data.zip
+split: object-id-seed17-frozen
+modalities: [image, audio, sensor]
+upstream_url: https://huggingface.co/datasets/swistreich/XCapture/tree/b4468bf999aac250f34ef1b02459d902492a068f
+license: MIT
+commercial_use: true
+derivative_model_training_allowed: true
+redistribution_allowed: true
+media_redistribution_allowed: true
+attribution: "X-Capture, Samuel Clarke, Suzannah Wistreich, Yanjie Ze, and Jiajun Wu; ICCV 2025."
+source_citation: https://openaccess.thecvf.com/content/ICCV2025/papers/Clarke_X-Capture_An_Open-Source_Portable_Device_for_Multi-Sensory_Learning_ICCV_2025_paper.pdf
+usage: training
+trust_status: trusted
+schema:
+  state: synchronized object capture point represented by RGB, impact audio, and optional tactile reading
+  question: identify the candidate object associated with the query modality reading
+  options: fixed gallery of object IDs, each represented by the target modality feature
+  target: source object ID shared across the paired capture point
+  media: selected RGB/audio/tactile files from the pinned archive; tactile is a sensor observation
+notes:
+  task_scope: cross-sensory object-identity retrieval only; no material/property labels are inferred
+  source_license_evidence: "Pinned dataset card declares MIT; the official project page links to this author-owned Hub dataset."
+  archive_sha256: 71855c2d9cdfb6d54ed379ff4059b6c370e6f7ef040830b0ac19063159c477c2
+  archive_central_directory_sha256: 3d8e546f1ca55e52a2b8e6c72aab99d14815e9da631589cb4d144f1179790f17
+  object_grouped_split_required: true
+  split_manifest: manifests/pretrained_reuse/xcapture-object-split-seed17.json
+  split_sizes: [400, 100, 100]
+  evaluation_partition_media_loaded: false
+  split_seed: 17
+  published_task_definition: "Cross-sensory retrieval among 100 objects; see ICCV 2025 paper section 5.2."
+  image_type: still RGB-D capture; not video
+  media_downloaded: true
+  bounded_media_sample: manifests/pretrained_reuse/xcapture-source-screen-20261128.json
+  audit_data_loaded: false
