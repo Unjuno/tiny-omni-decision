@@ -42,5 +42,6 @@ No archive was downloaded or hashed by the helper in this increment.
 CPU-only tests simulate a stream interruption and verify that the retry starts
 at the exact saved byte offset. They also prove that an unexpected status,
 ETag, or range leaves the partial unchanged. Focused IntPhys downloader,
-feature-extraction, and shard-merge tests passed (26 tests); Ruff and
+feature-extraction, and shard-merge tests passed (26 tests); the full CPU suite
+passed (3,080 passed, 14 skipped). Repository-wide Ruff and
 `git diff --check` passed. No GPU or network test was run.
