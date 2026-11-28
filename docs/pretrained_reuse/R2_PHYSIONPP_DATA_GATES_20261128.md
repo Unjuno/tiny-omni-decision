@@ -82,4 +82,3 @@ ambiguity, input coverage, feature limitations, or readout generalization.
 - Blinded responses: `C:\CodexArtifacts\pretrained-reuse-r2-local\physionpp-blind-observability-review-20261128-attempt-01\responses.csv`
 - No model training, evaluation-set access, checkpoint change, or GPU work was
   performed for this follow-up.
-
