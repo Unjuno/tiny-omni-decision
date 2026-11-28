@@ -80,19 +80,43 @@ The summary contains hashes and aggregate counts, not raw task text or object
 IDs. The audit implementation is `scripts/audit_droid_gcs_metadata.py` with
 three focused tests in `tests/test_audit_droid_gcs_metadata.py`.
 
+## Task-semantic sample review
+
+The same immutable 520-record sample was re-fetched by object generation and
+MD5 and reviewed without retaining record IDs. The 24 cross-status task groups
+include repeated task families such as putting/removing objects in containers
+(58 success / 53 failure examples across 47 / 39 sampled scene groups), moving
+objects to new positions/orientations (33 / 35 across 28 / 30 groups), hinged
+objects (20 / 19 across 15 / 14), and folding/spreading or clumping objects
+(13 / 12 across 13 / 12). Other recurring groups include slidable objects,
+hanging/unhanging, buttons, lids, and pouring. This gives a concrete reason to
+continue task-level split and label checks: multiple sampled scene groups have
+both outcome labels for many instruction families. These are stratified
+sample counts, not population estimates or independently verified episodes.
+
+The short-list artifact is outside Git at
+`C:\CodexArtifacts\pretrained-reuse-r2\droid-metadata-screen-20261128\task-semantics-shortlist.txt`,
+4,186 bytes, SHA-256
+`55731791f935213d8d9cbd0bf652c1413d5e43ef36e153e4c6c0c65bfc423794`.
+It contains task descriptions and sample counts only, with no source IDs or
+media. The descriptions often express broad task families rather than exact
+actions, so exact task-hash overlap does not prove equivalent difficulty or
+label comparability.
+
 ## Data gates before any model run
 
 1. Expand metadata-only inspection for task families with success and failure
-   support. Manually inspect task semantics without using path strings as
-   features; verify that `success` represents the intended outcome and exclude
-   aborted/incomplete or operator-ambiguous records.
+   support. Verify that `success` represents the intended outcome and exclude
+   aborted/incomplete or operator-ambiguous records. Never use path strings as
+   model features.
 2. Build source-disjoint groups using lab, building, scene, user, task, and
    robot/session identity where available. Report missing grouping fields and
    reject any candidate split with group or normalized-content overlap.
-3. Define a video-dependent question such as predicting a future outcome from
-   pre-outcome video plus permitted action/task context. Compare video+context
-   with context-only and video-only controls. Exclude success/failure path,
-   filenames, post-outcome frames, and any metadata that reveals the target.
+3. Define a future-outcome Decision using pre-outcome video, action/state, and
+   task context. Compare video+context with context-only, state-only, and
+   video-only controls on the same source-disjoint IDs. Reject the task if the
+   permitted context predicts outcomes without video or if post-outcome cues
+   reveal the target. Exclude path, filenames, and target-leaking metadata.
 4. Verify the exact media license/provenance and perform a small rights-cleared
    train-only media/runtime check in a new output location. Do not download the
    full DROID corpus (the official docs describe terabyte-scale bundles).

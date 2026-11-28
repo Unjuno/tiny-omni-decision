@@ -1,11 +1,14 @@
 **2026-11-28 R2 DROID metadata-only preflight:** The official raw index has
 74,896 episode-metadata objects across 13 labs; a fixed 520-record sample had
 explicit success booleans matching success/failure paths, positive trajectory
-lengths, and 24 task hashes present in both path statuses. This supports a
-bounded task/grouping audit only: no videos or trajectories were fetched, and
-DROID is not admitted for model training. Next gates are verifying target
-semantics, scene/lab/user-disjoint splits, video necessity against context-only
-controls, and per-record media rights. See [preflight](docs/pretrained_reuse/R2_DROID_METADATA_PREFLIGHT_20261128.md).
+lengths, and 24 task hashes present in both path statuses. Repeated families
+include object-container tasks, repositioning, hinged/slidable objects,
+folding, hanging, buttons, lids and pouring; many span multiple sampled scene
+groups on both labels. This makes DROID worth a bounded task/split audit, but
+does not establish independent episodes or video necessity. No video or
+trajectory was fetched, and DROID is not admitted for model training. Next
+gates are source-disjoint groups, target semantics, context-only controls, and
+per-record media rights. See [preflight](docs/pretrained_reuse/R2_DROID_METADATA_PREFLIGHT_20261128.md).
 
 **2026-11-28 R2 Physion++ review usability:** Added a label-blind utility to
 split the frozen 75-pair contact sheets into individually viewable cards in a
