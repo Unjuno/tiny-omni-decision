@@ -1,3 +1,11 @@
+**2026-11-28 R2 Physion++ review usability:** Added a label-blind utility to
+split the frozen 75-pair contact sheets into individually viewable cards in a
+new attempt-03 output. It verifies all input-sheet hashes, preserves the blank
+response schema, emits no source mapping, and never reads the answer key. Five
+focused tests and Ruff pass; all 75 generated card hashes/dimensions verify.
+This enables but does not replace independent human review or establish label
+observability. See [card artifact and limits](docs/pretrained_reuse/R2_PHYSIONPP_BLINDED_REVIEW_CARDS_20261128.md).
+
 **2026-11-28 R2 Physion++ review-packet blindness recheck:** A read-only
 integrity check confirms all 10 PNG contact sheets match their pinned hashes,
 contain no PNG text metadata, and the accompanying report contains no labels or
