@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "status": "REVIEW_NOT_ADMITTED",
+  "candidate": "PACS: Physical Audiovisual CommonSense Reasoning",
+  "observed_date": "2026-11-28",
+  "source": {
+    "repository": "https://github.com/samuelyu2002/PACS",
+    "repository_revision": "cca89114f8121f69130c71b2926225a3e9f6d36b",
+    "readme_sha256": "bff63b7651f85d2bc05ca877bb1da6a19cd66fcdec20805866074409ad8c1f6a",
+    "readme_bytes": 3677,
+    "license_sha256": "151002c4275673b8f4b7ab35b31424d43d852b516d1ed3fb3298e7aca369ae54",
+    "license_bytes": 1066,
+    "paper": "https://arxiv.org/abs/2203.11130",
+    "official_paper": "https://www.ecva.net/papers/eccv_2022/papers_ECCV/html/5310_ECCV_2022_paper.php"
+  },
+  "task_evidence": {
+    "question_answer_pairs": 13400,
+    "object_videos": 1526,
+    "unique_questions": 1377,
+    "human_accuracy_with_audio": 0.963,
+    "human_accuracy_without_audio": 0.905,
+    "question_format": "two-object physical commonsense decision"
+  },
+  "data_rights": {
+    "repository_code_license": "MIT",
+    "underlying_media_origin": "YouTube videos; copyright remains with upload channels per author data statement",
+    "author_data_statement_url": "https://www.researchgate.net/publication/359390161_PACS_A_Dataset_for_Physical_Audiovisual_CommonSense_Reasoning",
+    "separate_dataset_or_annotation_license": "NOT_IDENTIFIED",
+    "author_data_statement": "research benchmark only; do not train systems intended for real-world deployment",
+    "product_training_permission": "NOT_GRANTED_IN_INSPECTED_MATERIALS"
+  },
+  "split_integrity": {
+    "paper_split_description": "random 70/30 sample split",
+    "official_group_aware_split_manifest": false,
+    "video_group_isolation": "UNKNOWN",
+    "question_group_isolation": "UNKNOWN",
+    "source_channel_isolation": "UNKNOWN"
+  },
+  "payload_access": {
+    "annotations_or_labels_read": false,
+    "media_downloaded_or_opened": false,
+    "checkpoint_loaded": false,
+    "gpu_used": false,
+    "cloud_or_paid_compute_used": false
+  },
+  "decision": "Do not acquire, train, or select on PACS for product-directed model development unless the rights holder supplies explicit product-development permission and the split can be audited by underlying video/source groups.",
+  "limitations": [
+    "Published human performance is benchmark-specific and does not imply this model's quality.",
+    "No annotation/media payload was inspected; source-group overlap is unknown.",
+    "The research-only data statement conflicts with product-directed model training."
+  ]
+}
