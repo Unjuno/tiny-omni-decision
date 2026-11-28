@@ -1,3 +1,13 @@
+**2026-11-28 R2 Physion++ augmented-corpus coverage audit:** The local
+98,840-row E-long corpus has the exact frozen Physion++ train-manifest hash
+and the same 652 Physion++ train records; 8,455 video decision rows reduce to
+811 unique video groups (319 CLEVRER, 492 Physion++). The larger row count is
+not new Physion++ data coverage. The train-only preflight reports zero
+train/evaluation identity/content overlaps and its planned 8,192 consumed
+examples have zero repeats, but evaluation remains selection data and is not
+reused here. No sealed data, media, training, or checkpoints were accessed.
+See [`R2_PHYSIONPP_AUGMENTED_CORPUS_COVERAGE_20261128.md`](docs/pretrained_reuse/R2_PHYSIONPP_AUGMENTED_CORPUS_COVERAGE_20261128.md).
+
 **2026-11-28 R2 AVQA source screen:** Official AVQA describes manually labeled
 four-choice audio-video questions with a `Both` modality-relation tag, making
 it a strong task-design match. It is **not admitted**: annotation terms limit
