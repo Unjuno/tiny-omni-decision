@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "status": "REVIEW_NOT_ADMITTED",
+  "candidate": "X-Capture multisensory object dataset",
+  "observed_date": "2026-11-28",
+  "source": {
+    "repository": "https://huggingface.co/datasets/swistreich/XCapture",
+    "revision": "b4468bf999aac250f34ef1b02459d902492a068f",
+    "readme_bytes": 2667,
+    "readme_git_blob_oid": "42202b1c3bf359802c65f80289152cb523f19338",
+    "declared_license": "MIT",
+    "official_project_page": "https://xcapture.github.io/",
+    "paper": "https://openaccess.thecvf.com/content/ICCV2025/papers/Clarke_X-Capture_An_Open-Source_Portable_Device_for_Multi-Sensory_Learning_ICCV_2025_paper.pdf"
+  },
+  "archive": {
+    "path": "XCapture_data.zip",
+    "bytes": 17924194875,
+    "lfs_sha256": "71855c2d9cdfb6d54ed379ff4059b6c370e6f7ef040830b0ac19063159c477c2",
+    "central_directory_bytes": 11527647,
+    "central_directory_sha256": "3d8e546f1ca55e52a2b8e6c72aab99d14815e9da631589cb4d144f1179790f17",
+    "records": 94973
+  },
+  "task_evidence": {
+    "objects": 600,
+    "expected_points": 3600,
+    "indexed_points": 3599,
+    "missing_point": "object 00132 point 004",
+    "modalities": ["RGB-D", "impact audio", "tactile", "3D"],
+    "paper_task": "cross-sensory retrieval among 100 objects",
+    "machine_readable_label_table": false,
+    "official_split_manifest": false,
+    "rgb_audio_points": 3599,
+    "rgb_audio_10n_tactile_points": 3592,
+    "rgb_audio_20n_tactile_points": 2352,
+    "rgb_audio_20n_tactile_objects": 399
+  },
+  "data_rights": {
+    "hub_card_license": "MIT",
+    "separate_dataset_license_file": "NOT_IDENTIFIED",
+    "official_project_page_license_statement": "NOT_IDENTIFIED",
+    "license_scope": "REQUIRES_AUTHORITATIVE_CONFIRMATION"
+  },
+  "payload_access": {
+    "central_directory_range_only": true,
+    "media_downloaded_or_opened": false,
+    "labels_opened": false,
+    "checkpoint_loaded": false,
+    "gpu_used": false,
+    "paid_compute_used": false
+  },
+  "decision": "Do not fit or select a Decision model on X-Capture until the data-license scope and availability of target descriptions are verified. If admitted, treat it as a task-specific cross-sensory object-retrieval experiment with object-disjoint splits and matched unimodal/joint controls; do not claim broad Omni quality.",
+  "limitations": [
+    "The Hub card declares MIT, but the official project page does not display a dataset license and no separate dataset license file was identified.",
+    "The archive index has no root-level machine-readable description or split table; the paper's brief object descriptions have not been located in the archive.",
+    "The reported paper baseline uses a different protocol and is not this project's result.",
+    "Current free disk space is below the full archive size and far below the official uncompressed size."
+  ]
+}

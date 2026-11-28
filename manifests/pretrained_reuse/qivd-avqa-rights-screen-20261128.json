@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "status": "REVIEW_NOT_ADMITTED",
+  "candidate": [
+    "Qualcomm Interactive Video Dataset (QIVD)",
+    "Tsinghua AVQA"
+  ],
+  "observed_date": "2026-11-28",
+  "sources": [
+    {
+      "name": "Qualcomm Interactive Video Dataset (QIVD)",
+      "official_page": "https://www.qualcomm.com/developer/software/qualcomm-interactive-video-dataset-qivd",
+      "page_bytes": 17524,
+      "page_sha256": "73d8a494d5edcd53ef14cbc207ac8116235f297dd5ca92bf5eac2c23242e3f0e",
+      "license_url": "https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/documents/qvid-dataset-research-license-mar-27-2025.pdf",
+      "license_bytes": 166211,
+      "license_sha256": "3759feaceba7b5c73336388b342622d8cb5c46283d5e8f41d0662a50be200128",
+      "task_evidence": {
+        "videos": 2900,
+        "categories": 13,
+        "audio_visual_category_items": 22,
+        "includes_question_answer_timestamp": true
+      },
+      "data_rights": {
+        "agreement": "Data License Agreement – Research Use",
+        "commercial_use_of_data_or_results": "PROHIBITED",
+        "third_party_data_combination": "PROHIBITED",
+        "download_constitutes_acceptance": true,
+        "agreement_accepted": false
+      },
+      "split_integrity": {
+        "public_train_validation_manifest": "NOT_IDENTIFIED",
+        "video_or_subject_group_isolation": "UNKNOWN"
+      },
+      "payload_access": {
+        "agreement_accepted": false,
+        "annotations_opened": false,
+        "media_downloaded_or_opened": false,
+        "checkpoint_loaded": false,
+        "gpu_used": false
+      }
+    },
+    {
+      "name": "Tsinghua AVQA",
+      "official_page": "https://mn.cs.tsinghua.edu.cn/avqa/",
+      "page_bytes": 20446,
+      "page_sha256": "ba761adbdef59e4c644c053e531dc9d5ebf7ec615216b8e6e56561cb6e2dd8b9",
+      "task_evidence": {
+        "multiple_choice": true,
+        "modality_relation_labels": [
+          "View",
+          "Sound",
+          "Both"
+        ],
+        "source_media": "VGGSound / YouTube"
+      },
+      "data_rights": {
+        "official_page_permission": "personal or classroom copies; prior permission required for other copying or redistribution",
+        "product_training_permission": "NOT_ESTABLISHED",
+        "underlying_media_rights": "separate original-video rights apply"
+      },
+      "split_integrity": {
+        "source_video_group_isolation": "UNKNOWN",
+        "auditable_public_split_manifest": "NOT_ESTABLISHED_IN_INSPECTED_MATERIALS"
+      },
+      "payload_access": {
+        "annotations_opened": false,
+        "media_downloaded_or_opened": false,
+        "checkpoint_loaded": false,
+        "gpu_used": false
+      }
+    }
+  ],
+  "decision": "Do not acquire, train, or select on these sources for product-directed development unless explicit rights and auditable source-group splits are obtained. QIVD's AV-required subset is too small for a broad fusion-quality claim.",
+  "limitations": [
+    "Metadata and license screen only; no dataset payload was inspected.",
+    "QIVD group split and AV-category per-example requirements remain unknown.",
+    "AVQA cross-split video identity and original-media rights remain unverified."
+  ]
+}
