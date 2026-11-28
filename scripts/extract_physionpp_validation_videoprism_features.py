@@ -20,7 +20,6 @@ for import_root in (REPOSITORY_ROOT, REPOSITORY_ROOT / "src"):
         sys.path.insert(0, str(import_root))
 
 if __package__:
-    from .audit_physionpp_split_integrity import audit_train_validation_splits
     from .smoke_physionpp_videoprism_runtime import (
         CHECKPOINT_SHA256,
         FRAME_COUNT,
@@ -32,7 +31,6 @@ if __package__:
         uniform_indices,
     )
 else:
-    from audit_physionpp_split_integrity import audit_train_validation_splits
     from smoke_physionpp_videoprism_runtime import (
         CHECKPOINT_SHA256,
         FRAME_COUNT,
@@ -79,6 +77,50 @@ def _read_validation_rows(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def validate_split_report(
+    report_path: Path,
+    train_path: Path,
+    validation_path: Path,
+    train_rows: list[dict[str, Any]],
+    validation_rows: list[dict[str, Any]],
+) -> dict[str, Any]:
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    if (
+        report.get("status") != "disjoint"
+        or report.get("train_manifest_sha256") != sha256_file(train_path)
+        or report.get("validation_manifest_sha256") != sha256_file(validation_path)
+        or report.get("train_records") != len(train_rows)
+        or report.get("validation_records") != len(validation_rows)
+    ):
+        raise ValueError("split-integrity receipt does not match the frozen manifests")
+    if (
+        report.get("model_loaded") is not False
+        or report.get("media_decoded") is not False
+        or report.get("model_metrics_computed") is not False
+    ):
+        raise ValueError("split-integrity receipt must be the metadata-only audit")
+    if report.get("source_revision") != "0c53b983ca138962ba636c0936e735490ad4c326":
+        raise ValueError("split-integrity receipt source revision mismatch")
+    overlaps = report.get("overlaps", {})
+    for key in (
+        "record_id",
+        "source_record_id",
+        "source_asset_group_id",
+        "media_sha256",
+        "media_path",
+    ):
+        if overlaps.get(key, {}).get("shared") != 0:
+            raise ValueError(f"split-integrity receipt reports {key} overlap")
+    normalized = overlaps.get("normalized_content_and_source_id", {})
+    if (
+        normalized.get("status") != "disjoint"
+        or normalized.get("shared_content_fingerprints") != 0
+        or normalized.get("shared_source_ids") != 0
+    ):
+        raise ValueError("split-integrity receipt reports normalized-content overlap")
+    return report
+
+
 def _decode(path: Path, expected_frames: int) -> list[np.ndarray]:
     import av
 
@@ -105,6 +147,7 @@ def extract_validation(
     corpus_root: Path,
     train_feature_cache: Path,
     train_feature_report: Path,
+    split_audit_report: Path,
     checkpoint: Path,
     source_root: Path,
     output: Path,
@@ -134,9 +177,9 @@ def extract_validation(
     train_ids = {row["id"] for row in train}
     train_media = {row["media"][0]["sha256"] for row in train}
     validation = select_validation_rows(validation, train_ids, train_media)
-    split_report = audit_train_validation_splits(train_path, validation_path)
-    if split_report.get("status") != "disjoint":
-        raise ValueError("train/development validation split integrity gate failed")
+    split_report = validate_split_report(
+        split_audit_report, train_path, validation_path, train, validation
+    )
     if limit is not None and (limit < 1 or limit > len(validation)):
         raise ValueError("limit must be between 1 and the validation row count")
     all_validation_count = len(validation)
@@ -286,6 +329,7 @@ def extract_validation(
             "split_integrity": split_report,
             "train_feature_cache_sha256": sha256_file(train_feature_cache),
             "train_feature_report_sha256": sha256_file(train_feature_report),
+            "split_audit_report_sha256": sha256_file(split_audit_report),
             "validation_rows": len(validation),
             "validation_rows_total": all_validation_count,
             "validation_ids_in_manifest_order": expected_ids,
@@ -334,6 +378,7 @@ def main() -> None:
     parser.add_argument("--corpus-root", type=Path, required=True)
     parser.add_argument("--train-feature-cache", type=Path, required=True)
     parser.add_argument("--train-feature-report", type=Path, required=True)
+    parser.add_argument("--split-audit-report", type=Path, required=True)
     parser.add_argument("--checkpoint", type=Path, required=True)
     parser.add_argument("--source-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
@@ -345,6 +390,7 @@ def main() -> None:
         corpus_root=args.corpus_root.resolve(strict=True),
         train_feature_cache=args.train_feature_cache.resolve(strict=True),
         train_feature_report=args.train_feature_report.resolve(strict=True),
+        split_audit_report=args.split_audit_report.resolve(strict=True),
         checkpoint=args.checkpoint.resolve(strict=True),
         source_root=args.source_root.resolve(strict=True),
         output=args.output.resolve(),
