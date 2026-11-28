@@ -63,6 +63,9 @@ def audit_train_rows(rows: list[dict[str, Any]], corpus_root: Path) -> dict[str,
     record_factor_counts: dict[str, dict[str, Counter[str]]] = defaultdict(
         lambda: defaultdict(Counter)
     )
+    exact_factor_labels: dict[tuple[str, tuple[tuple[str, str], ...]], Counter[str]] = defaultdict(
+        Counter
+    )
     group_scenarios: dict[str, set[str]] = defaultdict(set)
     frame_counts: list[int] = []
     media_bytes = 0
@@ -80,6 +83,7 @@ def audit_train_rows(rows: list[dict[str, Any]], corpus_root: Path) -> dict[str,
         if not isinstance(source_record_id, str):
             raise ValueError(f"missing Physion++ source record identity: {row_id}")
         scenario, target_object = _scenario_and_target_object(source_record_id)
+        exact_factors = tuple(sorted(_RECORD_FACTOR.findall(source_record_id)))
         target = row.get("target")
         if target not in {"Yes", "No"}:
             raise ValueError(f"unexpected contact target: {row_id}")
@@ -120,6 +124,7 @@ def audit_train_rows(rows: list[dict[str, Any]], corpus_root: Path) -> dict[str,
             raise ValueError(f"missing source asset group: {row_id}")
         asset_labels[asset_group].add(target)
         group_scenarios[asset_group].add(scenario)
+        exact_factor_labels[(scenario, exact_factors)][target] += 1
         scenario_counts[scenario][target] += 1
         target_object_counts[f"{scenario}/{target_object}"][target] += 1
         for factor, value in _RECORD_FACTOR.findall(source_record_id):
@@ -168,6 +173,14 @@ def audit_train_rows(rows: list[dict[str, Any]], corpus_root: Path) -> dict[str,
         "matched_scenario_target_object_strata": sum(
             {"No", "Yes"}.issubset(counts) for counts in target_object_counts.values()
         ),
+        "matched_exact_source_factor_strata": sum(
+            {"No", "Yes"}.issubset(counts) for counts in exact_factor_labels.values()
+        ),
+        "exact_source_factor_matched_pairs": sum(
+            min(counts["No"], counts["Yes"])
+            for counts in exact_factor_labels.values()
+            if {"No", "Yes"}.issubset(counts)
+        ),
         "scenario_count": len(scenario_counts),
         "frame_count_min": min(frame_counts),
         "frame_count_median": median_frames,
@@ -177,39 +190,42 @@ def audit_train_rows(rows: list[dict[str, Any]], corpus_root: Path) -> dict[str,
 
 
 def select_visual_review_rows(
-    rows: list[dict[str, Any]], *, per_class_per_scenario: int = 1
+    rows: list[dict[str, Any]], *, per_class_per_stratum: int = 1
 ) -> list[dict[str, Any]]:
-    if per_class_per_scenario < 1:
-        raise ValueError("per_class_per_scenario must be positive")
+    if per_class_per_stratum < 1:
+        raise ValueError("per_class_per_stratum must be positive")
     if not rows or any(row.get("split") != "train" for row in rows):
         raise ValueError("visual selection accepts only train rows")
 
-    buckets: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    buckets: dict[
+        tuple[str, tuple[tuple[str, str], ...], str], list[dict[str, Any]]
+    ] = defaultdict(list)
     for row in rows:
         source_record_id = row.get("source_record_id")
         target = row.get("target")
         if not isinstance(source_record_id, str) or target not in {"Yes", "No"}:
             raise ValueError("visual sample rows need source IDs and binary targets")
-        scenario, target_object = _scenario_and_target_object(source_record_id)
-        buckets[(scenario, target_object, target)].append(row)
+        scenario, _ = _scenario_and_target_object(source_record_id)
+        factors = tuple(sorted(_RECORD_FACTOR.findall(source_record_id)))
+        buckets[(scenario, factors, target)].append(row)
 
     selected: list[dict[str, Any]] = []
-    strata = sorted({(scenario, obj) for scenario, obj, _target in buckets})
-    for scenario, target_object in strata:
+    strata = sorted({(scenario, factors) for scenario, factors, _target in buckets})
+    for scenario, factors in strata:
         labels = {
             target
             for target in ("No", "Yes")
-            if buckets.get((scenario, target_object, target))
+            if buckets.get((scenario, factors, target))
         }
         if labels != {"No", "Yes"}:
             continue
         for target in ("No", "Yes"):
-            candidates = buckets[(scenario, target_object, target)]
+            candidates = buckets[(scenario, factors, target)]
             ranked = sorted(
                 candidates,
                 key=lambda row: hashlib.sha256(row["source_record_id"].encode()).hexdigest(),
             )
-            selected.extend(ranked[:per_class_per_scenario])
+            selected.extend(ranked[:per_class_per_stratum])
     return selected
 
 
@@ -318,12 +334,20 @@ def main() -> None:
     frame_report = create_contact_sheets(
         selected, args.corpus_root, output / "contact-sheets"
     )
+    selected_strata = {
+        (
+            row["source_record_id"].split("/")[1],
+            tuple(sorted(_RECORD_FACTOR.findall(row["source_record_id"]))),
+        )
+        for row in selected
+    }
     report = {
         "status": "complete_train_only_physionpp_data_quality_audit",
         "train_manifest_sha256": sha256_file(args.train_jsonl),
         "summary": summary,
         "visual_selection_count": len(selected),
-        "visual_selection_unit": "one Yes/No pair per scenario-target-object stratum",
+        "visual_selection_matched_strata": len(selected_strata),
+        "visual_selection_unit": "one Yes/No pair per exact scenario-source-factor stratum",
         "visual_selection_sha256": sha256_file(selection_path),
         "visual_review": frame_report,
         "validation_or_sealed_data_opened": False,

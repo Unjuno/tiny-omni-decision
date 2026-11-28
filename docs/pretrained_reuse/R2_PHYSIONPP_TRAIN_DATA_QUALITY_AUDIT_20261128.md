@@ -22,16 +22,18 @@ and `tests/test_audit_physionpp_train_data_quality.py`.
 | Source asset groups with both labels | 67 |
 | Labels | 339 No / 313 Yes |
 | Scenarios | 10 |
-| Scenario × target-object strata containing both labels | 50 |
-| Contact-sheet sample | 100 clips: one No and one Yes per matched stratum |
-| Sampled frame count matching metadata | 100 / 100 |
+| Scenario × exact recorded source-factor strata containing both labels | 75 |
+| Possible matched No/Yes pairs across those strata | 159 |
+| Contact-sheet sample | 150 clips: one No and one Yes per matched stratum |
+| Sampled frame count matching metadata | 150 / 150 |
 
-The fixed review selection is at
-`C:\CodexArtifacts\pretrained-reuse-r2-local\physionpp-train-data-audit-20261128-attempt-03`.
+The fixed exact-factor review selection is at
+`C:\CodexArtifacts\pretrained-reuse-r2-local\physionpp-train-data-audit-20261128-attempt-04`.
 Its selection JSONL SHA-256 is
-`38ebffeb76064cb0d52b705bcb3648af7a2854f6b392c6a2065e159b12ab1dd9`.
-The earlier attempt-01 and attempt-02 outputs remain untouched. Attempt-03
-also records source-factor/label cross-tabs from the train IDs.
+`38766b31a0b0af9048479236d556724ca47c374f9cedbb905780cebfe2be1333`.
+The earlier attempt-01 through attempt-03 outputs remain untouched. Attempt-04
+records source-factor/label cross-tabs and exact-factor-matched clips from the
+train IDs.
 
 ## Data-quality findings and limits
 
@@ -39,9 +41,9 @@ The class ratio is close to balanced overall, but this hides sparse and
 single-class scenario/object strata. For example, some friction scenario ×
 object combinations have only No examples. A model could therefore learn
 scenario, object, or rendering correlations instead of the physical outcome.
-The matched 100-clip review set reduces object-identity confounding for a
-manual check; it does not prove that labels are visually inferable or that
-other simulation parameters are balanced.
+The matched 150-clip review set matches every recorded scenario factor,
+including target object, for a manual check; it does not prove that labels are
+visually inferable or that unrecorded simulation parameters are balanced.
 
 Recorded source factors are also associated with labels in this small train
 corpus: `zdloc=3` has 28 No / 6 Yes; `use_blocker_with_hole=0` has 27 No / 7

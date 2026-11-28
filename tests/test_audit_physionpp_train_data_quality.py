@@ -77,7 +77,7 @@ def test_train_audit_reports_recorded_factor_label_counts(tmp_path):
     assert report["recorded_factor_class_counts"] == {"zdloc": {"3": {"Yes": 1}}}
 
 
-def test_visual_selection_is_deterministic_and_stratified_by_scenario_object_and_label(tmp_path):
+def test_visual_selection_is_deterministic_within_exact_source_factors(tmp_path):
     rows = [
         _row(tmp_path, "collision", i, target)
         for i, target in enumerate(["No", "No", "Yes", "Yes"])
@@ -98,20 +98,20 @@ def test_visual_selection_is_deterministic_and_stratified_by_scenario_object_and
     }
 
 
-def test_visual_selection_matches_target_object_and_skips_unmatched_strata(tmp_path):
+def test_visual_selection_matches_all_source_factors_and_skips_unmatched_strata(tmp_path):
     rows = []
-    for number, (target_object, target) in enumerate(
+    for number, (target_object, location, target) in enumerate(
         [
-            ("cube", "No"),
-            ("cube", "Yes"),
-            ("sphere", "No"),
-            ("sphere", "Yes"),
-            ("cone", "No"),
+            ("cube", "1", "No"),
+            ("cube", "2", "Yes"),
+            ("sphere", "1", "No"),
+            ("sphere", "1", "Yes"),
+            ("cone", "1", "No"),
         ]
     ):
         row = _row(tmp_path, "collision", number, target)
         row["source_record_id"] = (
-            f"readout_data_v1/collision/collision-target={target_object}#"
+            f"readout_data_v1/collision/collision-target={target_object}-zdloc={location}#"
             f"{number:04d}"
         )
         rows.append(row)
@@ -119,9 +119,12 @@ def test_visual_selection_matches_target_object_and_skips_unmatched_strata(tmp_p
     selected = select_visual_review_rows(rows)
 
     assert {
-        (_row["source_record_id"].split("target=")[1].split("#")[0], _row["target"])
+        (
+            _row["source_record_id"].split("target=")[1].split("-zdloc=")[0],
+            _row["target"],
+        )
         for _row in selected
-    } == {("cube", "No"), ("cube", "Yes"), ("sphere", "No"), ("sphere", "Yes")}
+    } == {("sphere", "No"), ("sphere", "Yes")}
 
 
 def test_visual_selection_rejects_validation_rows():
