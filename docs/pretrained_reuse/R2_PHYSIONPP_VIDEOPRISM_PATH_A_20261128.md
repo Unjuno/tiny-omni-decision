@@ -95,7 +95,8 @@ Source commit: `2c8bb8fad88358df6a77ea950e0f964dd7da9f49`.
 - Config: `configs/pretrained_reuse/path_a_video_videoprism_physionpp_contact_seed17.yaml`
 - Trainer: `scripts/train_physionpp_videoprism_path_a.py`
 - Validation extractor: `scripts/extract_physionpp_validation_videoprism_features.py`
-- Focused validation extractor tests: 4 passed; Ruff passed.
+- Focused validation extractor tests: 4 passed; Path A trainer tests: 6 passed.
+- Full local CPU test suite: 3,023 passed, 11 skipped; full-repository Ruff and manifest/catalog validation passed. The Path A test module skips when optional PyTorch ML dependencies are absent from CI's `dev` extra.
 - Train feature cache SHA-256: `32846b085df7642d9190df8f553a58496d275f8580efe6c6a8adfa3a83217360`
 - Development feature cache SHA-256: `065592b9d1e01647f88b93f7da811afd07e1d40a55cd9518877ce1e1724865a4`
 - Development feature report SHA-256: `c8788195a528ba18211ffb2c3da2881fc2aebb87029dfefdbf945ac7bdd5eaa6`

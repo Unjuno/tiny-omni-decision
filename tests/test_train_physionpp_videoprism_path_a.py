@@ -1,3 +1,5 @@
+# ruff: noqa: E402
+
 from __future__ import annotations
 
 import hashlib
@@ -5,7 +7,8 @@ import json
 
 import numpy as np
 import pytest
-import torch
+
+torch = pytest.importorskip("torch")
 
 from scripts.train_physionpp_videoprism_path_a import (
     candidate_features,
