@@ -105,4 +105,3 @@ def test_resume_results_must_match_train_id_path_and_labels(tmp_path) -> None:
         load_resume_results(resume_path, [row], sha256_file(resume_path))
     with pytest.raises(ValueError, match="SHA-256 mismatch"):
         load_resume_results(resume_path, [row], digest)
-
