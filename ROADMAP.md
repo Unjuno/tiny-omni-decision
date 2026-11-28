@@ -1,3 +1,12 @@
+**2026-11-28 R2 X-Capture frozen-feature runtime smoke:** On the frozen
+20-object train/validation sample, CPU TinyCLIP visual features were produced
+for masked RGB crops and 10N tactile images (512-D each), and EfficientAT audio
+features were produced (384-D). All vectors were finite and saved arrays
+reloaded exactly; total process time was 4.892 s. No training, quality metric,
+GPU, or evaluation media was used. This confirms only data-to-encoder runtime
+compatibility. Package text remains visible in some crops, and this sample is
+too small for fitting. See [runtime smoke](docs/pretrained_reuse/R2_XCAPTURE_FROZEN_FEATURE_SMOKE_20261128.md).
+
 **2026-11-28 R2 X-Capture bounded media screen:** A seed-17 deterministic sample
 of 10 train and 10 validation objects was fetched from the pinned MIT archive;
 all 80 RGB/audio/tactile/mask files passed ZIP integrity checks, and evaluation
