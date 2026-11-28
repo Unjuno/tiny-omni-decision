@@ -1,3 +1,13 @@
+**2026-11-28 R2 AVQA source screen:** Official AVQA describes manually labeled
+four-choice audio-video questions with a `Both` modality-relation tag, making
+it a strong task-design match. It is **not admitted**: annotation terms limit
+ordinary reuse to personal/classroom use and require prior permission for
+other copying/redistribution; underlying VGG-Sound/YouTube video copyrights
+remain with original owners, and source-video-disjoint splits are not
+established by the inspected page. No payload was accessed. Do not fetch or
+reconstruct media unless rights are clarified. See
+[`R2_AVQA_SOURCE_SCREEN_20261128.md`](docs/pretrained_reuse/R2_AVQA_SOURCE_SCREEN_20261128.md).
+
 **2026-11-28 R2 Physion++ frozen VideoPrism train features:** Extracted the full existing 652-row TRAIN partition with pinned VideoPrism-B (8 frames, 288 px, frozen, CPU only): 652 unique media, finite 652×768 features, 1.90 MB compressed, 827.65 s. Cache IDs/order match the train manifest and contain no labels. Validation/test/sealed data were not read; no readout was fitted. This advances feature preparation only; human label-observability review and all quality gates remain open. See [run record](docs/pretrained_reuse/R2_PHYSIONPP_TRAIN_VIDEOPRISM_FEATURE_CACHE_20261128.md).
 
 **2026-11-28 R1 Physion++ VideoPrism CPU smoke:** The pinned VideoPrism-B checkpoint/source loaded in the dedicated JAX environment with `JAX_PLATFORMS=cpu`; one deterministic TRAIN clip produced a finite 768-D frozen feature (9.06 s including model load/JIT, 1.13 GB RSS). This verifies one CPU input path only, not steady-state throughput, a fitted Decision, or quality. No GPU or validation/test data was used. See [smoke record](docs/pretrained_reuse/R1_PHYSIONPP_VIDEOPRISM_CPU_SMOKE_20261128.md).
