@@ -1,0 +1,67 @@
+schema_version: 1
+experiment_id: path-a-video-videoprism-physionpp-contact-v0-seed17
+claim_scope: one task-specific simulated physical-contact Decision; development validation only
+source:
+  dataset_id: physionpp/readout
+  revision: 0c53b983ca138962ba636c0936e735490ad4c326
+  train_split: train
+  validation_split: validation
+  train_manifest_sha256: 0de1bbbb1cc54000936c1771ea54e375c214fedda36734536f31a44c4f64932b
+  validation_manifest_sha256: 1254f01256197f1c2e23f8fa13dc03f87789c328f32bf768300134dd6b70d8dc
+  train_rows: 652
+  validation_rows: 148
+  train_source_asset_groups: 492
+  validation_source_asset_groups: 123
+  split_group: scenario_plus_scene_seed
+  sealed_audit_loaded: false
+task:
+  question: Did the red object contact the yellow-marked target at any point in the clip?
+  task_type: temporal_descriptive
+  options: ["No", "Yes"]
+  target_format: single_option_label
+  candidate_identity_encoding: fixed_semantic_one_hot_No_Yes
+encoder:
+  repo_id: google/videoprism-base-f16r288
+  revision: be719a406d563b66f0ac969e7c94bab8e997c81a
+  source_commit: c6eba0ece3dd49a24ffc44582966997a4a59f1d8
+  checkpoint_sha256: 61fa62eedbe4f8d4ba76a99a8b79abd0137426a4931c48204ab70446b6411f29
+  parameters: 114365184
+  frozen: true
+  frames: 8
+  resolution: 288
+  preprocessing: uniform_endpoint_inclusive_resize_short_side_center_crop_rgb_0_1
+  pooling: mean_spatiotemporal_tokens
+  feature_dimension: 768
+  feature_cache_device: cpu
+readout:
+  architecture: shared_FrozenFeatureCandidateScorer
+  input_features: video_768_plus_candidate_one_hot_2
+  input_dimension: 770
+  hidden_size: 128
+  trainable_parameters_expected: 98817
+  total_dense_parameters: 114464001
+  optimizer: AdamW
+  learning_rate: 0.001
+  weight_decay: 0.001
+  loss: cross_entropy
+  seed: 17
+  epochs: 200
+  early_stopping: false
+  batch_questions: 32
+  candidate_order_randomization: per_question_per_epoch
+  checkpoint_selection: minimum_development_validation_nll
+  preserve_best_and_final_checkpoint_separately: true
+evaluation:
+  metrics: [accuracy, nll, brier, ece_15]
+  evaluation_units: all_development_validation_records
+  required_controls:
+    - training_label_prior
+    - selected_model_zero_video_features
+    - exact_candidate_order_permutation
+  repeated_seed_search: false
+  sealed_test_or_audit: false
+data_quality_limits:
+  human_blinded_observability_review_complete: false
+  train_only_uniform_8_frame_exact_contact_frame_coverage: 0.636
+  report_as_independent_or_blind_quality_result: false
+  report_as_general_video_or_multimodal_quality: false
