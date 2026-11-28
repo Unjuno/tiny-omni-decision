@@ -62,14 +62,16 @@ Yes; `zld=0` has 7 No / 34 Yes while `zld=2` has 36 No / 12 Yes; and
 of leakage or causal effects, but they show that overall class balance and
 target-object matching alone are inadequate data checks.
 
-The source archive mapping audit reports 832 metadata rows, 800 mapped rows,
+The source archive mapping audit reported 832 metadata rows, 800 mapped rows,
 one duplicate, and 31 unmatched rows. It maps 634 rows through named
-directories and 166 rows through 52 placeholder directories. The placeholder
-check confirms contiguous RGB/segmentation/PKL index structure and expected
-row counts, but does not independently verify semantic metadata-to-video label
-alignment. Train `source_target` values agree with the corpus `target`; that
-checks serialization consistency, not the correctness of the upstream video
-association.
+directories and 166 rows through 52 placeholder directories. A subsequent
+exact-path check against the publisher's pinned readout archive verifies all
+652 corpus train rows against their official `.pkl` metadata, including the
+official stimulus name, trial label, and frame-level contact timeline; see
+[the follow-up audit](R2_PHYSIONPP_OFFICIAL_LABEL_MAPPING_AUDIT_20261128.md).
+This resolves the mapping question for these 652 train rows. It does not
+resolve unmatched rows outside this corpus or independently establish visual
+label observability.
 
 The review sheets show exact-factor-matched No/Yes clips side by side with
 sampled trajectories at 128×128 aspect-preserving thumbnails. This is a triage
@@ -81,11 +83,13 @@ rows for a fresh sealed-audit claim.
 ## Decision
 
 This audit supports a data-first next step: independently review the fixed
-matched clips and upstream metadata-to-video mapping before any further model
-capacity or BERT-family experiment. A BERT encoder can only be a text-path
-candidate; it cannot resolve video label alignment, visual observability, or
-simulation shortcuts. Existing BERT-family experiments are task-specific and
-do not justify a broad sweep or multimodal-quality claim.
+matched clips for label observability and simulator/rendering shortcuts before
+any further model capacity or BERT-family experiment. Official metadata
+alignment is now verified for the train corpus, but this is not an independent
+human relabeling. A BERT encoder can only be a text-path candidate; it cannot
+resolve video visual observability or simulator shortcuts. Existing
+BERT-family experiments are task-specific and do not justify a broad sweep or
+multimodal-quality claim.
 
 No quality gate, model-selection gate, or R2 completion gate is closed by this
 audit.
