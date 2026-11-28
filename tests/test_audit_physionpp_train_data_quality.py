@@ -3,6 +3,7 @@ import hashlib
 import pytest
 
 from scripts.audit_physionpp_train_data_quality import (
+    _aspect_preserving_tile,
     audit_train_rows,
     select_visual_review_rows,
 )
@@ -75,6 +76,18 @@ def test_train_audit_reports_recorded_factor_label_counts(tmp_path):
     report = audit_train_rows([row], tmp_path)
 
     assert report["recorded_factor_class_counts"] == {"zdloc": {"3": {"Yes": 1}}}
+
+
+def test_contact_sheet_tile_preserves_aspect_ratio():
+    image_module = pytest.importorskip("PIL.Image")
+    image_chops = pytest.importorskip("PIL.ImageChops")
+    wide_image = image_module.new("RGB", (256, 128), "red")
+
+    tile = _aspect_preserving_tile(wide_image, (128, 128))
+    difference = image_chops.difference(tile, image_module.new("RGB", tile.size, "white"))
+
+    assert tile.size == (128, 128)
+    assert difference.getbbox() == (0, 32, 128, 96)
 
 
 def test_visual_selection_is_deterministic_within_exact_source_factors(tmp_path):

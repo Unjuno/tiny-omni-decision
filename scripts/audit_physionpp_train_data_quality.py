@@ -11,7 +11,7 @@ from pathlib import Path, PurePosixPath
 from typing import Any
 
 VISUAL_FRAMES = 32
-THUMBNAIL_SIZE = (128, 72)
+THUMBNAIL_SIZE = (128, 128)
 GRID_COLUMNS = 8
 _TARGET_OBJECT = re.compile(r"(?:^|[-_])target=([^/#-]+)")
 _RECORD_FACTOR = re.compile(r"([A-Za-z_]+)=([^/#-]+)")
@@ -39,6 +39,17 @@ def _scenario_and_target_object(source_record_id: str) -> tuple[str, str]:
     match = _TARGET_OBJECT.search(source_record_id)
     target_object = match.group(1) if match else "UNSPECIFIED"
     return parts[1], target_object
+
+
+def _aspect_preserving_tile(image: Any, size: tuple[int, int]) -> Any:
+    from PIL import Image
+
+    thumbnail = image.convert("RGB")
+    thumbnail.thumbnail(size, Image.Resampling.LANCZOS)
+    tile = Image.new("RGB", size, "white")
+    offset = ((size[0] - thumbnail.width) // 2, (size[1] - thumbnail.height) // 2)
+    tile.paste(thumbnail, offset)
+    return tile
 
 
 def load_train_rows(train_jsonl: Path) -> list[dict[str, Any]]:
@@ -260,12 +271,16 @@ def create_contact_sheets(
             }
             selected_frames: list[Any] = []
             decoded_count = 0
+            frame_size: tuple[int, int] | None = None
             with av.open(str(media_path)) as container:
                 stream = container.streams.video[0]
+                frame_size = (stream.width, stream.height)
                 for frame_index, frame in enumerate(container.decode(stream)):
                     decoded_count = frame_index + 1
                     if frame_index in indices:
-                        thumbnail = frame.to_image().convert("RGB").resize(THUMBNAIL_SIZE)
+                        thumbnail = _aspect_preserving_tile(
+                            frame.to_image(), THUMBNAIL_SIZE
+                        )
                         selected_frames.append((frame_index, thumbnail))
             panels.append((target, row, selected_frames, decoded_count))
             frame_audit.append(
@@ -274,6 +289,7 @@ def create_contact_sheets(
                     "target": target,
                     "scenario": scenario,
                     "target_object": row["_visual_target_object"],
+                    "source_frame_size": list(frame_size) if frame_size else None,
                     "declared_frames": expected_frames,
                     "decoded_frames": decoded_count,
                     "sampled_frame_indices": [index for index, _image in selected_frames],
@@ -281,13 +297,14 @@ def create_contact_sheets(
                 }
             )
 
-        sheet_height = 8 + len(panels) * 330
+        panel_height = 20 + (VISUAL_FRAMES // GRID_COLUMNS) * THUMBNAIL_SIZE[1]
+        sheet_height = 8 + len(panels) * panel_height
         sheet = Image.new(
             "RGB", (GRID_COLUMNS * THUMBNAIL_SIZE[0], sheet_height), "white"
         )
         draw = ImageDraw.Draw(sheet)
         for panel_index, (target, row, selected_frames, decoded_count) in enumerate(panels):
-            y_base = 8 + panel_index * 330
+            y_base = 8 + panel_index * panel_height
             draw.text(
                 (4, y_base),
                 (
