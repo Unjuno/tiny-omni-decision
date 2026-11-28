@@ -1,3 +1,12 @@
+**2026-11-28 R2 KilometerAudio source screen:** Official metadata describes a
+human-verified, five-choice task requiring both audio and video over long
+walking-tour recordings. There is no train split; validation reuses 2024/2025
+questions, while the 500-question/218-video 2026 test is mostly new. Preserve
+it only as a possible one-time joint-AV audit after candidate freeze and rights
+review. The package contents, answer exposure, annotation/video rights, and
+official evaluation conditions remain unknown; nothing was downloaded or
+opened. See [`R2_KILOMETER_AUDIO_SOURCE_SCREEN_20261128.md`](docs/pretrained_reuse/R2_KILOMETER_AUDIO_SOURCE_SCREEN_20261128.md).
+
 **2026-11-28 R2 Physion++ augmented-corpus coverage audit:** The local
 98,840-row E-long corpus has the exact frozen Physion++ train-manifest hash
 and the same 652 Physion++ train records; 8,455 video decision rows reduce to
