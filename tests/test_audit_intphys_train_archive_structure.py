@@ -59,6 +59,13 @@ def test_archive_audit_verifies_pin_and_complete_train_structure(
     assert result["publisher_pin_verified"] is True
     assert result["videos"] == 2
     assert result["scene_frames"] == result["depth_frames"] == result["mask_frames"] == 200
+    assert result["unique_rgb_sequence_hashes"] == 1
+    identities = result["identity_records"]
+    assert [row["sample_id"] for row in identities] == [
+        "train.2/video-a",
+        "train.2/video-b",
+    ]
+    assert all(len(row["rgb_sequence_sha256"]) == 64 for row in identities)
     assert result["validation_or_sealed_data_accessed"] is False
     assert result["model_or_gpu_used"] is False
 

@@ -29,6 +29,17 @@ observability or cross-shard independence. Shards 3–4 and the frozen four-shar
 global split remain required before the data-coverage comparison. See [audit
 protocol and receipt](docs/pretrained_reuse/R2_INTPHYS_TRAIN_COVERAGE_PREFLIGHT_20261128.md#2026-11-28-shard-2-content-structure-audit).
 
+**2026-11-28 R2 IntPhys cross-shard identity check:** Across shards 1 and 2,
+exact unqualified source-ID, canonical status, and full ordered RGB sequence
+overlap are all zero across 7,500 records; unioning these three identities
+removes no records. The normalized 8-frame model-input identity is still
+unchecked for shard 2, so this is not yet the complete split gate. A live
+recheck found D: is an external Buffalo USB disk with 333.81 GB free, enough
+for shards 3–4 (74.53 GB) while retaining the stated reserve, but no data has
+been written there pending approval. Host free RAM is below the frozen
+6.5-GiB extraction gate and the unrelated RTX 3080 process remains active.
+See [cross-shard identity and resource evidence](docs/pretrained_reuse/R2_INTPHYS_TRAIN_COVERAGE_PREFLIGHT_20261128.md#2026-11-28-cross-shard-identity-check-and-storage-recheck).
+
 **2026-11-28 R2 Physion++ review usability:** Added a label-blind utility to
 split the frozen 75-pair contact sheets into individually viewable cards in a
 new attempt-03 output. It verifies all input-sheet hashes, preserves the blank

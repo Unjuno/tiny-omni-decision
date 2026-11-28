@@ -195,3 +195,44 @@ The R2 comparison is still not ready to fit: shard 1 has an existing verified
 feature cache, shard 2 now has verified source bytes and structure, but shards
 3–4 and a four-shard global identity split are missing. Do not substitute a
 two-shard or shard-local model comparison for the frozen four-shard protocol.
+
+## 2026-11-28 cross-shard identity check and storage recheck
+
+The new shard-2 identity manifest hashes each status record and the ordered
+SHA-256 digests of all 100 original RGB frame payloads per video. Comparing it
+with the existing shard-1 frozen-feature identity columns found:
+
+| Identity check, shard 1 vs. shard 2 | Overlap |
+|---|---:|
+| Unqualified source IDs | 0 |
+| Canonical status hashes | 0 |
+| Full ordered RGB sequence hashes | 0 |
+| Records removed by unioning those identities | 0 of 7,500 |
+
+This supports no exact duplicate across these two shards under those three
+identities. The exact normalized 8-frame VideoPrism input hash was not computed
+for shard 2, so that identity class remains unchecked; this is not yet a full
+global split proof and says nothing about shards 3–4. No evaluation data,
+model, or GPU was used. Identity manifest SHA-256 is
+`3c055f26ab854ec671ee64fcbe256d873e39e8d419c18f2b7bf78f3d93fc06bf`; the
+cross-shard comparison receipt SHA-256 is
+`c4662392bece306e650742fb22ec0bd2f80e5fb511ef64494cf46d4cfc80ee1c`.
+Both artifacts are outside Git under
+`C:\CodexArtifacts\pretrained-reuse-r2-local\intphys-full-train-coverage-20261128-attempt-01\shard2-cross-shard-identity-attempt-01\`.
+The identity-extraction script SHA-256 is
+`7ae1fe249e7e0f92a744328bf698d50a6268254e5d1cfc25e63ce68d6642eae3`; the
+reusable cross-shard comparison script SHA-256 is
+`69b1ee82dcd958769ca3031100af5b779f7589f0ebd436bca387bc1709b7704d`.
+
+Live storage/runtime recheck: C: has 26.43 GB free; D: is a healthy,
+USB-connected Buffalo NTFS disk with 333.81 GB free; host memory is 33.29 GiB
+total / 3.91 GiB free, below the predeclared 6.5 GiB feature-extraction gate.
+The RTX 3080 Laptop reports 8,270 MiB used and 99% utilization by the existing
+Orbitune process. It was not stopped or modified. Shards 3–4 total
+74,525,787,382 bytes (69.42 GiB); D: has enough free space to retain both and
+the 20 GiB reserve while keeping derived feature caches on C:. Because D: is
+an external USB volume and the user's preference is to keep artifacts on C:
+where possible, no data was written to D: in this recheck. Await explicit
+approval before storing the new source archives there. The three earlier
+64-MiB transfer samples imply an approximately 8.0-hour mean estimate (6.4–
+16.9 hours over the observed rate range); sustained throughput is unknown.

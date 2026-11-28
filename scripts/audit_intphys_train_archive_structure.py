@@ -80,7 +80,13 @@ def audit_train_archive(
                 active_video_id = video_id
             row = rows.setdefault(
                 video_id,
-                {"status_hash": None, "scene": 0, "depth": 0, "masks": 0},
+                {
+                    "status_hash": None,
+                    "scene": 0,
+                    "depth": 0,
+                    "masks": 0,
+                    "rgb_frame_hashes": [None] * EXPECTED_FRAMES,
+                },
             )
             if channel == "status":
                 if row["status_hash"] is not None:
@@ -97,6 +103,13 @@ def audit_train_archive(
                 if row[channel] & frame_bit:
                     raise ValueError(f"duplicate frame: {member.name}")
                 row[channel] |= frame_bit
+                if channel == "scene":
+                    payload = archive.extractfile(member)
+                    if payload is None:
+                        raise ValueError(f"missing RGB frame payload: {member.name}")
+                    row["rgb_frame_hashes"][frame_number - 1] = hashlib.sha256(
+                        payload.read()
+                    ).hexdigest()
             else:
                 raise ValueError(f"unexpected data member: {member.name}")
             if progress is not None and member_count % 100_000 == 0:
@@ -116,6 +129,24 @@ def audit_train_archive(
         )
 
     sample_ids = sorted(f"train.{shard_number}/{video_id}" for video_id in rows)
+    identity_records = []
+    for sample_id in sample_ids:
+        video_id = sample_id.split("/", 1)[1]
+        row = rows[video_id]
+        frame_hashes = row["rgb_frame_hashes"]
+        if any(value is None for value in frame_hashes):
+            raise ValueError(f"RGB identity is incomplete for {sample_id}")
+        rgb_digest = hashlib.sha256()
+        for value in frame_hashes:
+            rgb_digest.update(bytes.fromhex(value))
+        row["rgb_sequence_sha256"] = rgb_digest.hexdigest()
+        identity_records.append(
+            {
+                "sample_id": sample_id,
+                "status_identity_sha256": row["status_hash"],
+                "rgb_sequence_sha256": row["rgb_sequence_sha256"],
+            }
+        )
     return {
         "status": "pass_train_shard_structure_audit",
         "shard_number": shard_number,
@@ -130,6 +161,9 @@ def audit_train_archive(
         "status_records": len(rows),
         "all_train_labels_possible": True,
         "unique_status_hashes": len({row["status_hash"] for row in rows.values()}),
+        "unique_rgb_sequence_hashes": len(
+            {row["rgb_sequence_sha256"] for row in identity_records}
+        ),
         "scene_frames": sum(row["scene"].bit_count() for row in rows.values()),
         "depth_frames": sum(row["depth"].bit_count() for row in rows.values()),
         "mask_frames": sum(row["masks"].bit_count() for row in rows.values()),
@@ -138,6 +172,7 @@ def audit_train_archive(
         "model_or_gpu_used": False,
         "structure_scan_seconds": round(time.perf_counter() - started, 3),
         "total_elapsed_seconds": round(time.perf_counter() - total_started, 3),
+        "identity_records": identity_records,
     }
 
 
@@ -146,6 +181,7 @@ def main() -> None:
     parser.add_argument("--archive", type=Path, required=True)
     parser.add_argument("--shard-number", type=int, choices=TRAIN_ARCHIVE_PINS, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--identity-output", type=Path, required=True)
     args = parser.parse_args()
     result = audit_train_archive(
         args.archive,
@@ -154,7 +190,16 @@ def main() -> None:
             f"members={members} videos={videos}", file=sys.stderr, flush=True
         ),
     )
+    identities = result.pop("identity_records")
     args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.identity_output.parent.mkdir(parents=True, exist_ok=True)
+    with args.identity_output.open("x", encoding="utf-8", newline="\n") as destination:
+        for identity in identities:
+            destination.write(json.dumps(identity, sort_keys=True) + "\n")
+    result["identity_manifest_path"] = str(args.identity_output.resolve())
+    result["identity_manifest_sha256"] = hashlib.sha256(
+        args.identity_output.read_bytes()
+    ).hexdigest()
     with args.output.open("x", encoding="utf-8", newline="\n") as destination:
         destination.write(json.dumps(result, indent=2, sort_keys=True) + "\n")
     result["receipt_sha256"] = hashlib.sha256(args.output.read_bytes()).hexdigest()
