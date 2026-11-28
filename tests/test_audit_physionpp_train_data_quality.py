@@ -5,6 +5,7 @@ import pytest
 from scripts.audit_physionpp_train_data_quality import (
     _aspect_preserving_tile,
     audit_train_rows,
+    pair_visual_review_rows,
     select_visual_review_rows,
 )
 
@@ -143,3 +144,22 @@ def test_visual_selection_matches_all_source_factors_and_skips_unmatched_strata(
 def test_visual_selection_rejects_validation_rows():
     with pytest.raises(ValueError, match="only train rows"):
         select_visual_review_rows([{"split": "validation"}])
+
+
+def test_visual_review_pair_manifest_keeps_exact_factor_pairs(tmp_path):
+    rows = []
+    for number, target in enumerate(("No", "Yes", "No")):
+        row = _row(tmp_path, "collision", number, target)
+        location = "1" if number < 2 else "2"
+        row["source_record_id"] = (
+            f"readout_data_v1/collision/collision-target=cube-zdloc={location}#"
+            f"{number:04d}"
+        )
+        rows.append(row)
+
+    pairs = pair_visual_review_rows(select_visual_review_rows(rows))
+
+    assert len(pairs) == 1
+    assert pairs[0]["No"]["target"] == "No"
+    assert pairs[0]["Yes"]["target"] == "Yes"
+    assert pairs[0]["factors"] == [("target", "cube"), ("zdloc", "1")]

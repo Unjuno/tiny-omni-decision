@@ -240,8 +240,48 @@ def select_visual_review_rows(
     return selected
 
 
+def pair_visual_review_rows(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    buckets: dict[
+        tuple[str, tuple[tuple[str, str], ...], str], list[dict[str, Any]]
+    ] = defaultdict(list)
+    for row in rows:
+        source_record_id = row.get("source_record_id")
+        target = row.get("target")
+        if not isinstance(source_record_id, str) or target not in {"No", "Yes"}:
+            raise ValueError("visual pairs need source IDs and binary targets")
+        scenario, _ = _scenario_and_target_object(source_record_id)
+        factors = tuple(sorted(_RECORD_FACTOR.findall(source_record_id)))
+        buckets[(scenario, factors, target)].append(row)
+
+    pairs: list[dict[str, Any]] = []
+    strata = sorted({(scenario, factors) for scenario, factors, _target in buckets})
+    for scenario, factors in strata:
+        negatives = sorted(
+            buckets.get((scenario, factors, "No"), []), key=lambda row: row["id"]
+        )
+        positives = sorted(
+            buckets.get((scenario, factors, "Yes"), []), key=lambda row: row["id"]
+        )
+        for pair_index, (negative, positive) in enumerate(
+            zip(negatives, positives, strict=False)
+        ):
+            identity = json.dumps(
+                [scenario, factors, pair_index], separators=(",", ":")
+            )
+            pairs.append(
+                {
+                    "pair_id": hashlib.sha256(identity.encode()).hexdigest(),
+                    "scenario": scenario,
+                    "factors": list(factors),
+                    "No": negative,
+                    "Yes": positive,
+                }
+            )
+    return pairs
+
+
 def create_contact_sheets(
-    rows: list[dict[str, Any]], corpus_root: Path, output_dir: Path
+    pairs: list[dict[str, Any]], corpus_root: Path, output_dir: Path
 ) -> dict[str, Any]:
     try:
         import av
@@ -252,78 +292,100 @@ def create_contact_sheets(
     output_dir.mkdir(parents=True, exist_ok=True)
     by_scenario: dict[str, list[dict[str, Any]]] = defaultdict(list)
     frame_audit: list[dict[str, Any]] = []
-    for row in rows:
-        scenario, target_object = _scenario_and_target_object(row["source_record_id"])
-        row = dict(row)
-        row["_visual_target_object"] = target_object
-        by_scenario[scenario].append(row)
+    for pair in pairs:
+        by_scenario[pair["scenario"]].append(pair)
 
-    for scenario, class_rows in sorted(by_scenario.items()):
-        panels: list[tuple[str, dict[str, Any], list[Any], int]] = []
-        for row in sorted(class_rows, key=lambda item: (item["target"], item["id"])):
-            target = row["target"]
-            media = row["media"][0]
-            media_path = corpus_root.joinpath(*_relative_media_path(media["path"]).parts)
-            expected_frames = media["num_frames"]
-            indices = {
-                round(i * (expected_frames - 1) / (VISUAL_FRAMES - 1))
-                for i in range(VISUAL_FRAMES)
-            }
-            selected_frames: list[Any] = []
-            decoded_count = 0
-            frame_size: tuple[int, int] | None = None
-            with av.open(str(media_path)) as container:
-                stream = container.streams.video[0]
-                frame_size = (stream.width, stream.height)
-                for frame_index, frame in enumerate(container.decode(stream)):
-                    decoded_count = frame_index + 1
-                    if frame_index in indices:
-                        thumbnail = _aspect_preserving_tile(
-                            frame.to_image(), THUMBNAIL_SIZE
-                        )
-                        selected_frames.append((frame_index, thumbnail))
-            panels.append((target, row, selected_frames, decoded_count))
-            frame_audit.append(
-                {
-                    "sample_id": row["id"],
-                    "target": target,
-                    "scenario": scenario,
-                    "target_object": row["_visual_target_object"],
-                    "source_frame_size": list(frame_size) if frame_size else None,
-                    "declared_frames": expected_frames,
-                    "decoded_frames": decoded_count,
-                    "sampled_frame_indices": [index for index, _image in selected_frames],
-                    "frame_count_matches_manifest": decoded_count == expected_frames,
+    for scenario, scenario_pairs in sorted(by_scenario.items()):
+        pair_panels: list[dict[str, Any]] = []
+        for pair in scenario_pairs:
+            side_panels: dict[str, dict[str, Any]] = {}
+            for target in ("No", "Yes"):
+                row = pair[target]
+                media = row["media"][0]
+                media_path = corpus_root.joinpath(
+                    *_relative_media_path(media["path"]).parts
+                )
+                expected_frames = media["num_frames"]
+                indices = {
+                    round(i * (expected_frames - 1) / (VISUAL_FRAMES - 1))
+                    for i in range(VISUAL_FRAMES)
                 }
-            )
+                selected_frames: list[Any] = []
+                decoded_count = 0
+                frame_size: tuple[int, int] | None = None
+                with av.open(str(media_path)) as container:
+                    stream = container.streams.video[0]
+                    frame_size = (stream.width, stream.height)
+                    for frame_index, frame in enumerate(container.decode(stream)):
+                        decoded_count = frame_index + 1
+                        if frame_index in indices:
+                            thumbnail = _aspect_preserving_tile(
+                                frame.to_image(), THUMBNAIL_SIZE
+                            )
+                            selected_frames.append((frame_index, thumbnail))
+                side_panels[target] = {
+                    "row": row,
+                    "frames": selected_frames,
+                    "decoded_count": decoded_count,
+                }
+                frame_audit.append(
+                    {
+                        "pair_id": pair["pair_id"],
+                        "sample_id": row["id"],
+                        "target": target,
+                        "scenario": scenario,
+                        "source_frame_size": list(frame_size) if frame_size else None,
+                        "declared_frames": expected_frames,
+                        "decoded_frames": decoded_count,
+                        "sampled_frame_indices": [
+                            index for index, _image in selected_frames
+                        ],
+                        "frame_count_matches_manifest": decoded_count
+                        == expected_frames,
+                    }
+                )
+            pair_panels.append({**pair, "side_panels": side_panels})
 
-        panel_height = 20 + (VISUAL_FRAMES // GRID_COLUMNS) * THUMBNAIL_SIZE[1]
-        sheet_height = 8 + len(panels) * panel_height
-        sheet = Image.new(
-            "RGB", (GRID_COLUMNS * THUMBNAIL_SIZE[0], sheet_height), "white"
-        )
+        grid_width = GRID_COLUMNS * THUMBNAIL_SIZE[0]
+        grid_rows = (VISUAL_FRAMES + GRID_COLUMNS - 1) // GRID_COLUMNS
+        panel_height = 28 + grid_rows * THUMBNAIL_SIZE[1]
+        sheet_height = 8 + len(pair_panels) * panel_height
+        sheet = Image.new("RGB", (2 * grid_width, sheet_height), "white")
         draw = ImageDraw.Draw(sheet)
-        for panel_index, (target, row, selected_frames, decoded_count) in enumerate(panels):
-            y_base = 8 + panel_index * panel_height
+        for pair_index, pair in enumerate(pair_panels):
+            y_base = 8 + pair_index * panel_height
+            factor_text = ",".join(f"{key}={value}" for key, value in pair["factors"])
             draw.text(
                 (4, y_base),
-                (
-                    f"{target} | {row['id']} | "
-                    f"declared={row['media'][0]['num_frames']} decoded={decoded_count}"
-                ),
+                f"pair={pair['pair_id'][:10]} | {factor_text}",
                 fill="black",
                 font=ImageFont.load_default(),
             )
-            for position, (_frame_index, thumbnail) in enumerate(selected_frames):
-                column, line = position % GRID_COLUMNS, position // GRID_COLUMNS
-                sheet.paste(
-                    thumbnail,
-                    (column * THUMBNAIL_SIZE[0], y_base + 20 + line * THUMBNAIL_SIZE[1]),
+            for side_index, target in enumerate(("No", "Yes")):
+                panel = pair["side_panels"][target]
+                row = panel["row"]
+                selected_frames = panel["frames"]
+                draw.text(
+                    (side_index * grid_width + 4, y_base + 12),
+                    f"{target} | {row['id']}",
+                    fill="black",
+                    font=ImageFont.load_default(),
                 )
+                for position, (_frame_index, thumbnail) in enumerate(selected_frames):
+                    column, line = position % GRID_COLUMNS, position // GRID_COLUMNS
+                    sheet.paste(
+                        thumbnail,
+                        (
+                            side_index * grid_width + column * THUMBNAIL_SIZE[0],
+                            y_base + 28 + line * THUMBNAIL_SIZE[1],
+                        ),
+                    )
         sheet.save(output_dir / f"{scenario}.png")
 
     return {
         "frames_per_clip": VISUAL_FRAMES,
+        "paired_layout": "No on left, Yes on right; same recorded source factors",
+        "pair_count": len(pairs),
         "frame_audit": frame_audit,
         "contact_sheet_paths": [f"{scenario}.png" for scenario in sorted(by_scenario)],
     }
@@ -348,8 +410,24 @@ def main() -> None:
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in selected),
         encoding="utf-8",
     )
+    pairs = pair_visual_review_rows(selected)
+    pair_manifest_path = output / "visual-review-pairs.jsonl"
+    pair_manifest = [
+        {
+            "pair_id": pair["pair_id"],
+            "scenario": pair["scenario"],
+            "factors": pair["factors"],
+            "no_sample_id": pair["No"]["id"],
+            "yes_sample_id": pair["Yes"]["id"],
+        }
+        for pair in pairs
+    ]
+    pair_manifest_path.write_text(
+        "".join(json.dumps(pair, sort_keys=True) + "\n" for pair in pair_manifest),
+        encoding="utf-8",
+    )
     frame_report = create_contact_sheets(
-        selected, args.corpus_root, output / "contact-sheets"
+        pairs, args.corpus_root, output / "contact-sheets"
     )
     selected_strata = {
         (
@@ -366,6 +444,8 @@ def main() -> None:
         "visual_selection_matched_strata": len(selected_strata),
         "visual_selection_unit": "one Yes/No pair per exact scenario-source-factor stratum",
         "visual_selection_sha256": sha256_file(selection_path),
+        "paired_review_pair_count": len(pairs),
+        "paired_review_manifest_sha256": sha256_file(pair_manifest_path),
         "visual_review": frame_report,
         "validation_or_sealed_data_opened": False,
         "model_loaded_or_trained": False,

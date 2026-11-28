@@ -27,21 +27,23 @@ and `tests/test_audit_physionpp_train_data_quality.py`.
 | Contact-sheet sample | 150 clips: one No and one Yes per matched stratum |
 | Sampled frame count matching metadata | 150 / 150 |
 
-The fixed exact-factor review selection is at
-`C:\CodexArtifacts\pretrained-reuse-r2-local\physionpp-train-data-audit-20261128-attempt-05`.
+The fixed exact-factor review selection and paired contact sheets are at
+`C:\CodexArtifacts\pretrained-reuse-r2-local\physionpp-train-data-audit-20261128-attempt-06`.
 Its selection JSONL SHA-256 is
 `38766b31a0b0af9048479236d556724ca47c374f9cedbb905780cebfe2be1333`.
-The earlier attempt-01 through attempt-04 outputs remain untouched. Attempt-05
-records source-factor/label cross-tabs and exact-factor-matched clips from the
-train IDs.
+The paired review manifest has 75 rows and SHA-256
+`a22fa791b05559dea1e2dcdd91dac687db07e48b9965b6a8fc82d955feb17293`.
+The earlier attempt-01 through attempt-05 outputs remain untouched. Attempt-06
+records source-factor/label cross-tabs, exact-factor-matched clips, and
+side-by-side No/Yes sheets from the train IDs.
 
 The first contact-sheet versions resized square 256×256 source frames to
-128×72, distorting shape and motion cues. Attempt-05 corrects the reviewer
-artifact: it uses 128×128 letterboxed tiles that preserve each source frame's
-aspect ratio. All 150 clips decode to 256×256 and their decoded frame counts
-match the manifest. Do not use attempt-01 through attempt-04 contact sheets to
-judge label visibility. This rendering correction does not change sample IDs,
-labels, media, or corpus content.
+128×72, distorting shape and motion cues. Attempt-05 corrected aspect ratio
+with 128×128 letterboxed tiles. Attempt-06 additionally places each exact
+factor-matched No clip on the left and Yes clip on the right. All 150 clips
+decode to 256×256 and their decoded frame counts match the manifest. Do not use
+attempt-01 through attempt-04 contact sheets to judge label visibility. These
+display corrections do not change sample IDs, labels, media, or corpus content.
 
 ## Data-quality findings and limits
 
@@ -69,11 +71,12 @@ alignment. Train `source_target` values agree with the corpus `target`; that
 checks serialization consistency, not the correctness of the upstream video
 association.
 
-The review sheets show matched clips and sampled trajectories at 128×128
-aspect-preserving thumbnails. This is a triage artifact, not an expert
-annotation. Human review of label observability, mapping correctness, and
-likely nuisance cues remains open. The dataset's previously inspected labels and splits are already
-observed; do not use these rows for a fresh sealed-audit claim.
+The review sheets show exact-factor-matched No/Yes clips side by side with
+sampled trajectories at 128×128 aspect-preserving thumbnails. This is a triage
+artifact, not an expert annotation. Human review of label observability,
+mapping correctness, and likely nuisance cues remains open. The dataset's
+previously inspected labels and splits are already observed; do not use these
+rows for a fresh sealed-audit claim.
 
 ## Decision
 
