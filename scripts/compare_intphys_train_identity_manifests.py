@@ -73,6 +73,7 @@ def load_identity_manifest(path: Path, *, shard_number: int) -> list[dict[str, s
                     for key in (
                         "sampled_rgb_payload_sha256",
                         "sampled_decoded_rgb_pixels_sha256",
+                        "normalized_input_sha256",
                     )
                     if key in raw
                 },
@@ -96,7 +97,9 @@ def compare_identity_records(
     rgb_by_shard: dict[int, set[str]] = {}
     sampled_payload_by_shard: dict[int, set[str]] = {}
     sampled_pixels_by_shard: dict[int, set[str]] = {}
+    normalized_inputs_by_shard: dict[int, set[str]] = {}
     all_have_sampled_identities = True
+    all_have_normalized_identities = True
     for shard in ordered_shards:
         rows = shard_records[shard]
         sample_ids = [row["sample_id"] for row in rows]
@@ -134,6 +137,18 @@ def compare_identity_records(
                         bytes.fromhex(value)
                     except ValueError as error:
                         raise ValueError(f"shard {shard} has malformed {key}") from error
+            if "normalized_input_sha256" not in row:
+                all_have_normalized_identities = False
+            else:
+                value = row["normalized_input_sha256"]
+                if len(value) != 64:
+                    raise ValueError(f"shard {shard} has malformed normalized_input_sha256")
+                try:
+                    bytes.fromhex(value)
+                except ValueError as error:
+                    raise ValueError(
+                        f"shard {shard} has malformed normalized_input_sha256"
+                    ) from error
         all_records.extend(rows)
         source_ids_by_shard[shard] = {row["source_id"] for row in rows}
         statuses_by_shard[shard] = {row["status_identity_sha256"] for row in rows}
@@ -147,6 +162,11 @@ def compare_identity_records(
             row["sampled_decoded_rgb_pixels_sha256"]
             for row in rows
             if "sampled_decoded_rgb_pixels_sha256" in row
+        }
+        normalized_inputs_by_shard[shard] = {
+            row["normalized_input_sha256"]
+            for row in rows
+            if "normalized_input_sha256" in row
         }
 
     parent = list(range(len(all_records)))
@@ -170,6 +190,8 @@ def compare_identity_records(
             kinds.extend(
                 ["sampled_rgb_payload_sha256", "sampled_decoded_rgb_pixels_sha256"]
             )
+        if all_have_normalized_identities:
+            kinds.append("normalized_input_sha256")
         for kind in kinds:
             key = (kind, row[kind])
             previous = owners.setdefault(key, index)
@@ -210,6 +232,14 @@ def compare_identity_records(
         }
         if all_have_sampled_identities
         else None,
+        "exact_normalized_input_overlap_by_shard_pair": {
+            f"{left}-{right}": len(
+                normalized_inputs_by_shard[left] & normalized_inputs_by_shard[right]
+            )
+            for left, right in cross_pairs
+        }
+        if all_have_normalized_identities
+        else None,
         "global_unique_groups_after_identity_union": len(
             {find(index) for index in range(len(all_records))}
         ),
@@ -227,8 +257,13 @@ def compare_identity_records(
             ]
             if all_have_sampled_identities
             else []
+        )
+        + (
+            ["normalized VideoPrism input tensor"]
+            if all_have_normalized_identities
+            else []
         ),
-        "normalized_sampled_input_identity_compared": False,
+        "normalized_sampled_input_identity_compared": all_have_normalized_identities,
         "sampled_decoded_pixel_identity_compared": all_have_sampled_identities,
         "validation_or_sealed_data_accessed": False,
         "model_or_gpu_used": False,

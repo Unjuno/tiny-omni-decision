@@ -80,3 +80,19 @@ def test_comparison_includes_sampled_decoded_pixels_when_present_in_every_shard(
     assert result["exact_sampled_rgb_payload_overlap_by_shard_pair"] == {"1-2": 1}
     assert result["exact_sampled_decoded_rgb_pixel_overlap_by_shard_pair"] == {"1-2": 0}
     assert result["sampled_decoded_pixel_identity_compared"] is True
+
+
+def test_comparison_unions_exact_normalized_model_inputs_when_available() -> None:
+    shard1 = _record(1, "a", "a", "1")
+    shard2 = _record(2, "b", "b", "2")
+    for row in (shard1, shard2):
+        row["sampled_rgb_payload_sha256"] = "a" * 64
+        row["sampled_decoded_rgb_pixels_sha256"] = "b" * 64
+        row["normalized_input_sha256"] = "c" * 64
+
+    result = compare_identity_records({1: [shard1], 2: [shard2]})
+
+    assert result["exact_normalized_input_overlap_by_shard_pair"] == {"1-2": 1}
+    assert result["normalized_sampled_input_identity_compared"] is True
+    assert "normalized VideoPrism input tensor" in result["identity_kinds_unioned"]
+    assert result["global_unique_groups_after_identity_union"] == 1

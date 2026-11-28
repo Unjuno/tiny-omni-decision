@@ -299,3 +299,77 @@ sampled PNGs. This installed only the locked CPU development dependencies in
 the isolated worktree environment, not TensorFlow or model/GPU dependencies.
 Free RAM after both scans was 3.99 GiB; C: had 24.34 GiB free. No changes were
 made to existing source archives, feature caches, checkpoints, or runs.
+
+## 2026-11-28 exact normalized-input identity follow-up
+
+The recorded feature-extraction environment was recovered from the shard-1
+receipt: CPython 3.11.16, TensorFlow 2.18.1 (`tensorflow_cpu` distribution),
+and NumPy 1.26.4. A new isolated CPU-only environment was created under
+`C:\CodexArtifacts\pretrained-reuse-r2-local\tensorflow-preprocess-runtime-20261128-attempt-01\.venv`;
+the installed package freeze is preserved beside it. The audit calls the same
+`_preprocess` function from VideoPrism source commit
+`c6eba0ece3dd49a24ffc44582966997a4a59f1d8`, uses TensorFlow `decode_png`,
+the original frame positions 1, 15, 29, 43, 57, 71, 85, 100, and hashes the
+contiguous float32 tensor bytes. It verifies publisher pins, complete 100-frame
+channel structure, status identities, and full RGB sequence identities against
+the already saved manifests. No model weights were loaded and TensorFlow
+reported zero visible GPUs.
+
+| Exact normalized identity check, shard 1 vs. shard 2 | Result |
+|---|---:|
+| Videos / identity rows in each shard | 3,750 / 3,750 |
+| Exact normalized VideoPrism input hash overlap | 0 |
+| Source-ID, status, full RGB, sampled PNG, decoded-pixel overlaps | 0 each |
+| Global identity groups after union | 7,500 |
+| Records removed by deduplication | 0 |
+
+Both archives again matched their pinned MD5 and SHA-256 values; each yielded
+1,143,750 tar members. The exact normalized-input identity class is now checked
+for these two shards. The four-shard global identity split is still incomplete
+because shards 3–4 have not been acquired or audited; no conclusion is made
+about those absent records.
+
+Runtime/outputs (all outside Git):
+
+| Artifact | SHA-256 |
+|---|---|
+| Shard 1 normalized identity manifest | `f72427e4377ef16cac9b8fd2eee3ee53cad35a83ea85dd0230fdf030beb861a5` |
+| Shard 1 receipt | `3907d590d0d340db67736ca7630dd38dcc64e927fc16cf695180ffb416794013` |
+| Shard 2 normalized identity manifest | `3437d500e34ad14d8ce83c9fcd7ea50c9bf0775c550480584ae99f16cc257b94` |
+| Shard 2 receipt | `b786cf9330108e01d2e06c1f7741c8e1c978be4ebb444b6943c5a9433b657bd9` |
+| Final cross-shard comparison | `18e4900c2bb661ebc65790862e7c0fd128fcd6946738367983defd5c05fee6c8` |
+| 38-line runtime package freeze | `e7ce77d47cda7b450f0a8b1e403feb0e5294efa41cc544b36edfe9450c6c9c1f` |
+
+Normalized manifests/receipts are in
+`C:\CodexArtifacts\pretrained-reuse-r2-local\tensorflow-preprocess-runtime-20261128-attempt-01\`;
+the final comparison is in
+`C:\CodexArtifacts\pretrained-reuse-r2-local\tensorflow-preprocess-runtime-20261128-attempt-03\`.
+The audit script SHA-256 is
+`7702fc320f1fdc5c16cdf0806ac5edcfa36dbd983d3e0512b60b05dfd41e9f91`; the
+comparison script SHA-256 is
+`c23a0677bde4e94c8752116b7d968d305790576cb3f838cabc10acb32c9a971e`.
+The comparison recorded `normalized_sampled_input_identity_compared=true` and
+`validation_or_sealed_data_accessed=false`.
+
+Invocation (the two shards used the matching `--shard-number`, archive, base
+manifest and output filenames):
+
+```powershell
+$env:CUDA_VISIBLE_DEVICES = '-1'
+$env:TF_CPP_MIN_LOG_LEVEL = '2'
+& 'C:\CodexArtifacts\pretrained-reuse-r2-local\tensorflow-preprocess-runtime-20261128-attempt-01\.venv\Scripts\python.exe' `
+  -m scripts.audit_intphys_normalized_input_identity `
+  --archive <pinned-train-shard-archive> `
+  --base-identity-manifest <verified-sampled-pixel-identity-jsonl> `
+  --shard-number <1-or-2> `
+  --identity-output <new-normalized-identity-jsonl> `
+  --receipt-output <new-receipt-json>
+```
+
+Storage changed during this work: C: went from about 24.1 GiB free before the
+TensorFlow audit to 12.12 GiB at the last check. The audit created only its
+small manifests/receipts and a CPU runtime; the cause of the additional free
+space drop is unknown. No cleanup or further large data operation was done.
+The predeclared 20-GiB reserve is not currently met, so shard 3–4 acquisition
+and full-corpus extraction remain paused pending storage recovery. No data was
+written to D:.

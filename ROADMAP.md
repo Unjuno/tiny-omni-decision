@@ -57,6 +57,19 @@ locked CPU `dev` dependencies (Pillow 11.3.0); the earlier statement that no
 dependency was installed applies to the previous preprocessing attempt. See
 [receipts, hashes and limits](docs/pretrained_reuse/R2_INTPHYS_TRAIN_COVERAGE_PREFLIGHT_20261128.md#2026-11-28-sampled-decoded-pixel-identity-follow-up).
 
+**2026-11-28 R2 IntPhys exact normalized-input identity:** Recreated the
+recorded CPython 3.11.16 / TensorFlow 2.18.1 / NumPy 1.26.4 CPU preprocessing
+environment and used the same VideoPrism `_preprocess` function and eight
+frame indices as feature extraction. The 3,750 normalized input hashes in each
+of train shards 1 and 2 had zero exact overlap; source IDs, labels and full
+RGB identities also matched the saved manifests, leaving 7,500 groups after
+identity union. The normalized-input identity gate is now closed for these two
+shards only. The four-shard global split and data-coverage experiment remain
+incomplete: shards 3–4 were not acquired, and last observed C: free space fell
+to 12.12 GiB, below the predeclared 20-GiB reserve. Cause of that storage drop
+is unknown; no cleanup or D: write was performed. No model weights, GPU,
+validation or sealed data were used. See [runtime, receipts and limits](docs/pretrained_reuse/R2_INTPHYS_TRAIN_COVERAGE_PREFLIGHT_20261128.md#2026-11-28-exact-normalized-input-identity-follow-up).
+
 **2026-11-28 R2 Physion++ review usability:** Added a label-blind utility to
 split the frozen 75-pair contact sheets into individually viewable cards in a
 new attempt-03 output. It verifies all input-sheet hashes, preserves the blank
