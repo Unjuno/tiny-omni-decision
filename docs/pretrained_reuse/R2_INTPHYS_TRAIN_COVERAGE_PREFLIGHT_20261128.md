@@ -247,3 +247,55 @@ located in this session. Do not substitute another resize implementation or
 claim normalized-input identity equivalence. Resume this check only with the
 same pinned TensorFlow preprocessing path, or mark the missing identity gate
 explicitly if that environment cannot be recovered.
+
+## 2026-11-28 sampled decoded-pixel identity follow-up
+
+Because the pinned TensorFlow preprocessing runtime was still unavailable, a
+strictly weaker intermediate check was added without substituting another
+resize/preprocessing implementation. The CPU-only archive audit hashes the
+raw PNG payloads and Pillow-decoded RGB pixels at the same eight uniformly
+sampled frame numbers (1, 15, 29, 43, 57, 71, 85, 100) for each video. It also
+reverified both publisher MD5 pins and complete archive structure while
+streaming all tar members. No archive was modified or extracted; no validation
+or sealed data, model, or GPU was used.
+
+| Identity check, shard 1 vs. shard 2 | Overlap |
+|---|---:|
+| Unqualified source IDs | 0 |
+| Canonical status hashes | 0 |
+| Full ordered RGB sequence hashes (100 frames) | 0 |
+| Ordered sampled raw PNG payload hashes (8 frames) | 0 |
+| Ordered sampled decoded RGB pixel hashes (8 frames) | 0 |
+| Records removed by unioning all available identities | 0 of 7,500 |
+
+Both shards contained 3,750 videos, 375,000 frames per channel, and 3,750
+unique values in each within-shard identity column. The exact normalized
+VideoPrism input identity is still uncomputed: equal decoded source pixels
+would prove equality after deterministic preprocessing, but zero sampled-pixel
+matches cannot rule out distinct source pixels collapsing to the same resized
+tensor. Thus the normalized-input identity gate remains open, and this result
+does not establish independence for shards 3–4 or a complete global split.
+
+Audit receipts and hashes (all outputs outside Git):
+
+| Artifact | SHA-256 |
+|---|---|
+| Shard 1 identity manifest | `c97ac7fc94e29e529fbc6583c08e4d359cbbd035cd247a44d2d879cc15aeae4a` |
+| Shard 1 receipt | `8a2931771233a8a8da9dc6fd361174e9bee6a986c74120491caab6daaea16b41` |
+| Shard 2 identity manifest | `2940ef869b990941d93640f0b97cd332d22d4c5972e9aef0287b337e1b141b0f` |
+| Shard 2 receipt | `1cf806f418cec9fbb80e1c13a17c41c8dad5c05306f28fe1fdec82702ca72361` |
+| Cross-shard comparison | `ce5f8a614223c13dc1187ed391d799603d82bf94120032b0ebe85695cbb41483` |
+
+Output directory:
+`C:\CodexArtifacts\pretrained-reuse-r2-local\sampled-pixel-audit-20261128-attempt-01\`.
+The comparison was replayed with the final validator in
+`C:\CodexArtifacts\pretrained-reuse-r2-local\sampled-pixel-audit-20261128-attempt-02\`; its receipt hash is unchanged.
+The reusable audit script SHA-256 is
+`47deedf0fc1645bf100a79d83df60543a2e79aacd579aefb0a300630b6a814dd`; the
+comparison script SHA-256 is
+`bab01656375651bcbdfd5e7733eaecd144621906a690a14e5c5ed122205f8b41`.
+Focused tests pass with the project `dev` extra; Pillow 11.3.0 decoded the
+sampled PNGs. This installed only the locked CPU development dependencies in
+the isolated worktree environment, not TensorFlow or model/GPU dependencies.
+Free RAM after both scans was 3.99 GiB; C: had 24.34 GiB free. No changes were
+made to existing source archives, feature caches, checkpoints, or runs.

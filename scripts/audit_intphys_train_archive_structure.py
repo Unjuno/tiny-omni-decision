@@ -9,9 +9,13 @@ import sys
 import tarfile
 import time
 from collections.abc import Callable
+from io import BytesIO
 from pathlib import Path
 from typing import Any
 
+from PIL import Image
+
+from scripts.audit_intphys_temporal_sampling_coverage import uniform_frame_numbers
 from scripts.extract_intphys_train_features import (
     EXPECTED_FRAMES,
     canonical_status_hash,
@@ -20,6 +24,8 @@ from scripts.extract_intphys_train_features import (
 from scripts.intphys_train_archive_pins import TRAIN_ARCHIVE_PINS
 
 _EXPECTED_FRAME_MASK = (1 << EXPECTED_FRAMES) - 1
+_SAMPLED_FRAME_NUMBERS = uniform_frame_numbers(EXPECTED_FRAMES, 8)
+_SAMPLED_FRAME_INDEX = {number: index for index, number in enumerate(_SAMPLED_FRAME_NUMBERS)}
 
 
 def _digest_file(path: Path) -> tuple[int, str, str]:
@@ -86,6 +92,8 @@ def audit_train_archive(
                     "depth": 0,
                     "masks": 0,
                     "rgb_frame_hashes": [None] * EXPECTED_FRAMES,
+                    "sampled_rgb_payload_hashes": [None] * len(_SAMPLED_FRAME_NUMBERS),
+                    "sampled_rgb_pixel_hashes": [None] * len(_SAMPLED_FRAME_NUMBERS),
                 },
             )
             if channel == "status":
@@ -108,8 +116,23 @@ def audit_train_archive(
                     if payload is None:
                         raise ValueError(f"missing RGB frame payload: {member.name}")
                     row["rgb_frame_hashes"][frame_number - 1] = hashlib.sha256(
-                        payload.read()
+                        frame_bytes := payload.read()
                     ).hexdigest()
+                    if frame_number in _SAMPLED_FRAME_INDEX:
+                        sampled_index = _SAMPLED_FRAME_INDEX[frame_number]
+                        row["sampled_rgb_payload_hashes"][sampled_index] = hashlib.sha256(
+                            frame_bytes
+                        ).hexdigest()
+                        with Image.open(BytesIO(frame_bytes)) as image:
+                            decoded = image.convert("RGB")
+                            width, height = decoded.size
+                            pixel_digest = hashlib.sha256()
+                            pixel_digest.update(width.to_bytes(4, "little"))
+                            pixel_digest.update(height.to_bytes(4, "little"))
+                            pixel_digest.update(decoded.tobytes())
+                            row["sampled_rgb_pixel_hashes"][sampled_index] = (
+                                pixel_digest.hexdigest()
+                            )
             else:
                 raise ValueError(f"unexpected data member: {member.name}")
             if progress is not None and member_count % 100_000 == 0:
@@ -136,15 +159,27 @@ def audit_train_archive(
         frame_hashes = row["rgb_frame_hashes"]
         if any(value is None for value in frame_hashes):
             raise ValueError(f"RGB identity is incomplete for {sample_id}")
+        sampled_payload_hashes = row["sampled_rgb_payload_hashes"]
+        sampled_pixel_hashes = row["sampled_rgb_pixel_hashes"]
+        if any(value is None for value in (*sampled_payload_hashes, *sampled_pixel_hashes)):
+            raise ValueError(f"sampled RGB identity is incomplete for {sample_id}")
         rgb_digest = hashlib.sha256()
         for value in frame_hashes:
             rgb_digest.update(bytes.fromhex(value))
         row["rgb_sequence_sha256"] = rgb_digest.hexdigest()
+        sampled_payload_digest = hashlib.sha256()
+        sampled_pixel_digest = hashlib.sha256()
+        for value in sampled_payload_hashes:
+            sampled_payload_digest.update(bytes.fromhex(value))
+        for value in sampled_pixel_hashes:
+            sampled_pixel_digest.update(bytes.fromhex(value))
         identity_records.append(
             {
                 "sample_id": sample_id,
                 "status_identity_sha256": row["status_hash"],
                 "rgb_sequence_sha256": row["rgb_sequence_sha256"],
+                "sampled_rgb_payload_sha256": sampled_payload_digest.hexdigest(),
+                "sampled_decoded_rgb_pixels_sha256": sampled_pixel_digest.hexdigest(),
             }
         )
     return {
@@ -163,6 +198,12 @@ def audit_train_archive(
         "unique_status_hashes": len({row["status_hash"] for row in rows.values()}),
         "unique_rgb_sequence_hashes": len(
             {row["rgb_sequence_sha256"] for row in identity_records}
+        ),
+        "unique_sampled_rgb_payload_hashes": len(
+            {row["sampled_rgb_payload_sha256"] for row in identity_records}
+        ),
+        "unique_sampled_decoded_rgb_pixel_hashes": len(
+            {row["sampled_decoded_rgb_pixels_sha256"] for row in identity_records}
         ),
         "scene_frames": sum(row["scene"].bit_count() for row in rows.values()),
         "depth_frames": sum(row["depth"].bit_count() for row in rows.values()),

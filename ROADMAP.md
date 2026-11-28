@@ -44,6 +44,19 @@ Python 3.11.9 lacks TensorFlow, and the prior exact preprocessing runtime
 (Python 3.11.16 / TensorFlow 2.18.1) has not yet been located. No dependency
 was installed and no alternate resize path was substituted.
 
+**2026-11-28 R2 IntPhys sampled-pixel identity follow-up:** Re-scanned the
+existing pinned train shards 1 and 2 and compared all 100-frame RGB identities
+plus the same eight uniformly sampled source PNG payloads and Pillow-decoded
+RGB pixel sequences. Source-ID, status, full RGB, sampled-PNG and sampled-pixel
+overlaps are each zero across 7,500 videos; identity union removes no records.
+This strengthens the cross-shard duplicate check, but is not the exact
+TensorFlow-normalized VideoPrism input hash: distinct source pixels may map to
+the same resized tensor, so that gate remains open. No archive was changed or
+extracted; no validation/sealed data, model or GPU used. The audit needed the
+locked CPU `dev` dependencies (Pillow 11.3.0); the earlier statement that no
+dependency was installed applies to the previous preprocessing attempt. See
+[receipts, hashes and limits](docs/pretrained_reuse/R2_INTPHYS_TRAIN_COVERAGE_PREFLIGHT_20261128.md#2026-11-28-sampled-decoded-pixel-identity-follow-up).
+
 **2026-11-28 R2 Physion++ review usability:** Added a label-blind utility to
 split the frozen 75-pair contact sheets into individually viewable cards in a
 new attempt-03 output. It verifies all input-sheet hashes, preserves the blank

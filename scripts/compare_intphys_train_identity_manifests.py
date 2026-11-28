@@ -1,4 +1,4 @@
-"""Compare train-shard source IDs, canonical statuses, and full RGB identities."""
+"""Compare train-shard source IDs, labels, full RGB, and sampled pixel identities."""
 
 from __future__ import annotations
 
@@ -68,6 +68,14 @@ def load_identity_manifest(path: Path, *, shard_number: int) -> list[dict[str, s
                 "source_id": sample_id.removeprefix(prefix),
                 "status_identity_sha256": str(raw.get("status_identity_sha256", "")),
                 "rgb_sequence_sha256": str(raw.get("rgb_sequence_sha256", "")),
+                **{
+                    key: str(raw[key])
+                    for key in (
+                        "sampled_rgb_payload_sha256",
+                        "sampled_decoded_rgb_pixels_sha256",
+                    )
+                    if key in raw
+                },
             }
         )
     return records
@@ -86,6 +94,9 @@ def compare_identity_records(
     source_ids_by_shard: dict[int, set[str]] = {}
     statuses_by_shard: dict[int, set[str]] = {}
     rgb_by_shard: dict[int, set[str]] = {}
+    sampled_payload_by_shard: dict[int, set[str]] = {}
+    sampled_pixels_by_shard: dict[int, set[str]] = {}
+    all_have_sampled_identities = True
     for shard in ordered_shards:
         rows = shard_records[shard]
         sample_ids = [row["sample_id"] for row in rows]
@@ -105,10 +116,38 @@ def compare_identity_records(
                     bytes.fromhex(value)
                 except ValueError as error:
                     raise ValueError(f"shard {shard} has malformed {key}") from error
+            optional_keys = (
+                "sampled_rgb_payload_sha256",
+                "sampled_decoded_rgb_pixels_sha256",
+            )
+            optional_presence = [key in row for key in optional_keys]
+            if any(optional_presence) and not all(optional_presence):
+                raise ValueError(f"shard {shard} has incomplete sampled RGB identities")
+            if not all(optional_presence):
+                all_have_sampled_identities = False
+            else:
+                for key in optional_keys:
+                    value = row[key]
+                    if len(value) != 64:
+                        raise ValueError(f"shard {shard} has malformed {key}")
+                    try:
+                        bytes.fromhex(value)
+                    except ValueError as error:
+                        raise ValueError(f"shard {shard} has malformed {key}") from error
         all_records.extend(rows)
         source_ids_by_shard[shard] = {row["source_id"] for row in rows}
         statuses_by_shard[shard] = {row["status_identity_sha256"] for row in rows}
         rgb_by_shard[shard] = {row["rgb_sequence_sha256"] for row in rows}
+        sampled_payload_by_shard[shard] = {
+            row["sampled_rgb_payload_sha256"]
+            for row in rows
+            if "sampled_rgb_payload_sha256" in row
+        }
+        sampled_pixels_by_shard[shard] = {
+            row["sampled_decoded_rgb_pixels_sha256"]
+            for row in rows
+            if "sampled_decoded_rgb_pixels_sha256" in row
+        }
 
     parent = list(range(len(all_records)))
 
@@ -126,7 +165,12 @@ def compare_identity_records(
 
     owners: dict[tuple[str, str], int] = {}
     for index, row in enumerate(all_records):
-        for kind in ("source_id", "status_identity_sha256", "rgb_sequence_sha256"):
+        kinds = ["source_id", "status_identity_sha256", "rgb_sequence_sha256"]
+        if all_have_sampled_identities:
+            kinds.extend(
+                ["sampled_rgb_payload_sha256", "sampled_decoded_rgb_pixels_sha256"]
+            )
+        for kind in kinds:
             key = (kind, row[kind])
             previous = owners.setdefault(key, index)
             union(index, previous)
@@ -154,6 +198,18 @@ def compare_identity_records(
             f"{left}-{right}": len(rgb_by_shard[left] & rgb_by_shard[right])
             for left, right in cross_pairs
         },
+        "exact_sampled_rgb_payload_overlap_by_shard_pair": {
+            f"{left}-{right}": len(sampled_payload_by_shard[left] & sampled_payload_by_shard[right])
+            for left, right in cross_pairs
+        }
+        if all_have_sampled_identities
+        else None,
+        "exact_sampled_decoded_rgb_pixel_overlap_by_shard_pair": {
+            f"{left}-{right}": len(sampled_pixels_by_shard[left] & sampled_pixels_by_shard[right])
+            for left, right in cross_pairs
+        }
+        if all_have_sampled_identities
+        else None,
         "global_unique_groups_after_identity_union": len(
             {find(index) for index in range(len(all_records))}
         ),
@@ -163,8 +219,17 @@ def compare_identity_records(
             "unqualified source ID",
             "canonical status",
             "full ordered RGB sequence",
-        ],
+        ]
+        + (
+            [
+                "uniformly sampled raw RGB PNG payload sequence",
+                "uniformly sampled Pillow-decoded RGB pixel sequence",
+            ]
+            if all_have_sampled_identities
+            else []
+        ),
         "normalized_sampled_input_identity_compared": False,
+        "sampled_decoded_pixel_identity_compared": all_have_sampled_identities,
         "validation_or_sealed_data_accessed": False,
         "model_or_gpu_used": False,
     }
@@ -172,25 +237,39 @@ def compare_identity_records(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--shard1-train", type=Path, required=True)
-    parser.add_argument("--shard1-validation", type=Path, required=True)
+    parser.add_argument("--shard1-train", type=Path)
+    parser.add_argument("--shard1-validation", type=Path)
     parser.add_argument("--shard2-identity-manifest", type=Path, required=True)
+    parser.add_argument("--shard1-identity-manifest", type=Path)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
-    shard1_paths = [
-        args.shard1_train.resolve(strict=True),
-        args.shard1_validation.resolve(strict=True),
-    ]
     shard2_path = args.shard2_identity_manifest.resolve(strict=True)
+    if args.shard1_identity_manifest is not None:
+        shard1_path = args.shard1_identity_manifest.resolve(strict=True)
+        shard1_records = load_identity_manifest(shard1_path, shard_number=1)
+        shard1_input_hash = sha256_file(shard1_path)
+    else:
+        if args.shard1_train is None or args.shard1_validation is None:
+            parser.error(
+                "provide --shard1-identity-manifest or both --shard1-train and --shard1-validation"
+            )
+        shard1_paths = [
+            args.shard1_train.resolve(strict=True),
+            args.shard1_validation.resolve(strict=True),
+        ]
+        shard1_records = load_feature_identities(1, shard1_paths)
+        shard1_input_hash = {
+            "train": sha256_file(shard1_paths[0]),
+            "validation": sha256_file(shard1_paths[1]),
+        }
     result = compare_identity_records(
         {
-            1: load_feature_identities(1, shard1_paths),
+            1: shard1_records,
             2: load_identity_manifest(shard2_path, shard_number=2),
         }
     )
     result["input_sha256"] = {
-        "shard1_train_features": sha256_file(shard1_paths[0]),
-        "shard1_validation_features": sha256_file(shard1_paths[1]),
+        "shard1": shard1_input_hash,
         "shard2_identity_manifest": sha256_file(shard2_path),
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)

@@ -51,3 +51,32 @@ def test_comparison_rejects_malformed_digest() -> None:
     invalid["rgb_sequence_sha256"] = "not-a-sha256"
     with pytest.raises(ValueError, match="malformed rgb_sequence_sha256"):
         compare_identity_records({1: [_record(1, "a", "a", "1")], 2: [invalid]})
+
+
+def test_comparison_rejects_non_hex_identity_digest() -> None:
+    invalid = _record(2, "b", "b", "2")
+    invalid["rgb_sequence_sha256"] = "z" * 64
+    with pytest.raises(ValueError, match="malformed rgb_sequence_sha256"):
+        compare_identity_records({1: [_record(1, "a", "a", "1")], 2: [invalid]})
+
+
+def test_comparison_rejects_partial_sampled_identity() -> None:
+    invalid = _record(2, "b", "b", "2")
+    invalid["sampled_rgb_payload_sha256"] = "a" * 64
+    with pytest.raises(ValueError, match="incomplete sampled RGB identities"):
+        compare_identity_records({1: [_record(1, "a", "a", "1")], 2: [invalid]})
+
+
+def test_comparison_includes_sampled_decoded_pixels_when_present_in_every_shard() -> None:
+    shard1 = _record(1, "a", "a", "1")
+    shard2 = _record(2, "b", "b", "2")
+    shard1["sampled_rgb_payload_sha256"] = "a" * 64
+    shard2["sampled_rgb_payload_sha256"] = "a" * 64
+    shard1["sampled_decoded_rgb_pixels_sha256"] = "b" * 64
+    shard2["sampled_decoded_rgb_pixels_sha256"] = "c" * 64
+
+    result = compare_identity_records({1: [shard1], 2: [shard2]})
+
+    assert result["exact_sampled_rgb_payload_overlap_by_shard_pair"] == {"1-2": 1}
+    assert result["exact_sampled_decoded_rgb_pixel_overlap_by_shard_pair"] == {"1-2": 0}
+    assert result["sampled_decoded_pixel_identity_compared"] is True
