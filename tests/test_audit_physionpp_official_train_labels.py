@@ -12,6 +12,7 @@ from scripts.audit_physionpp_official_train_labels import (
     RestrictedUnpickler,
     ZipMember,
     archive_member_for_row,
+    audit_record,
     decode_member,
     load_resume_results,
     parse_central_directory,
@@ -82,6 +83,40 @@ def test_restricted_unpickler_allows_only_explicit_builtin_string_global() -> No
     assert RestrictedUnpickler(io.BytesIO(pickle.dumps(str))).load() is str
 
 
+def test_audit_record_preserves_all_positive_contact_frame_indices(monkeypatch) -> None:
+    member_name = "readout_data_v1/scenario/scene/0003.pkl"
+    metadata = {
+        "static": {
+            "does_target_contact_zone": True,
+            "first_target_contact_zone_frame": 2,
+            "target_id": 6,
+            "zone_id": 1,
+            "stimulus_name": "scene_0003",
+        },
+        "frames": {
+            str(index): {
+                "labels": {"target_contacting_zone": index in {2, 4}}
+            }
+            for index in range(6)
+        },
+    }
+    monkeypatch.setattr(
+        "scripts.audit_physionpp_official_train_labels.fetch_member",
+        lambda _member, _etag: pickle.dumps(metadata),
+    )
+    row = {
+        "id": "sample-1",
+        "target": "Yes",
+        "source_target": True,
+    }
+
+    result = audit_record(row, ZipMember(member_name, 0, 0, 0, 0, 0), "etag")
+
+    assert result["positive_contact_frame_count"] == 2
+    assert result["positive_contact_frames"] == [2, 4]
+    assert result["first_contact_frame"] == 2
+
+
 def test_resume_results_must_match_train_id_path_and_labels(tmp_path) -> None:
     row = _row()
     row.update({"id": "sample-1", "target": "No", "source_target": False})
@@ -91,6 +126,9 @@ def test_resume_results_must_match_train_id_path_and_labels(tmp_path) -> None:
         "manifest_target": "No",
         "source_target": False,
         "official_target": "No",
+        "frame_count": 10,
+        "positive_contact_frame_count": 0,
+        "positive_contact_frames": [],
         "label_match": True,
         "frame_timeline_match": True,
         "stimulus_identity_match": True,

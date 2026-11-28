@@ -218,6 +218,17 @@ def load_resume_results(
             or result.get("label_match") is not True
             or result.get("frame_timeline_match") is not True
             or result.get("stimulus_identity_match") is not True
+            or not isinstance(result.get("positive_contact_frames"), list)
+            or len(result["positive_contact_frames"])
+            != result.get("positive_contact_frame_count")
+            or result["positive_contact_frames"]
+            != sorted(set(result["positive_contact_frames"]))
+            or any(
+                type(frame_index) is not int
+                or frame_index < 0
+                or frame_index >= result.get("frame_count", 0)
+                for frame_index in result["positive_contact_frames"]
+            )
         ):
             raise ValueError(f"resume result does not verify its train row: {sample_id}")
         resumed[sample_id] = result
@@ -293,11 +304,11 @@ def audit_record(row: dict[str, Any], member: ZipMember, etag: str) -> dict[str,
     target_match = official == (manifest_target == "Yes")
     if not (source_match and target_match):
         raise ValueError(f"official label mismatch for {row.get('id')}")
-    frame_positive = [
+    frame_positive = sorted(
         int(key)
         for key, frame in frames.items()
         if bool(frame.get("labels", {}).get("target_contacting_zone", False))
-    ]
+    )
     if bool(frame_positive) != official:
         raise ValueError(f"frame-level contact labels disagree with metadata: {row.get('id')}")
     first_contact = static.get("first_target_contact_zone_frame")
@@ -324,6 +335,7 @@ def audit_record(row: dict[str, Any], member: ZipMember, etag: str) -> dict[str,
         "official_zone_id": zone_id,
         "frame_count": len(frames),
         "positive_contact_frame_count": len(frame_positive),
+        "positive_contact_frames": frame_positive,
         "first_contact_frame": int(first_contact) if first_contact is not None else None,
         "label_match": True,
         "frame_timeline_match": True,
