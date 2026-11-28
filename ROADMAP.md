@@ -4,11 +4,13 @@ explicit success booleans matching success/failure paths, positive trajectory
 lengths, and 24 task hashes present in both path statuses. Repeated families
 include object-container tasks, repositioning, hinged/slidable objects,
 folding, hanging, buttons, lids and pouring; many span multiple sampled scene
-groups on both labels. This makes DROID worth a bounded task/split audit, but
-does not establish independent episodes or video necessity. No video or
-trajectory was fetched, and DROID is not admitted for model training. Next
-gates are source-disjoint groups, target semantics, context-only controls, and
-per-record media rights. See [preflight](docs/pretrained_reuse/R2_DROID_METADATA_PREFLIGHT_20261128.md).
+groups on both labels. Cross-branch review found this does not change the
+existing `REVIEW_NOT_ADMITTED` decision: the 2026-11-13 10,000-record metadata
+cohort still cannot verify independent physical scenes, is not cross-walked to
+the exposed 1.0.0 cohort, and prior video+sensor performance trailed
+sensor-only. Do not repeat DROID work without a publisher-backed scene map, a
+fresh-exposure crosswalk, and a video-dependent task protocol. No media or
+trajectory was fetched in this pass. See [preflight](docs/pretrained_reuse/R2_DROID_METADATA_PREFLIGHT_20261128.md).
 
 **2026-11-28 R2 Physion++ review usability:** Added a label-blind utility to
 split the frozen 75-pair contact sheets into individually viewable cards in a

@@ -2,15 +2,18 @@
 
 ## Decision
 
-DROID is a **screened candidate, not an admitted training or evaluation source**.
-The official metadata index contains both success- and failure-path records in
-all 13 labs. A fixed stratified sample of 520 episode metadata files had
-explicit `success` values matching their directory status, usable task text,
-and positive trajectory lengths. Twenty-four sampled task hashes occurred in
-both path statuses. This is enough to justify a bounded label/task and split
-feasibility review; it is not evidence that task-matched episodes are
-independent, that the labels are visually observable, or that video improves
-over task/state metadata.
+DROID remains **`REVIEW_NOT_ADMITTED`; do not fit or evaluate another model on
+this source under the current evidence**. The official metadata index contains
+both success- and failure-path records in all 13 labs. A fixed stratified
+sample of 520 episode metadata files had explicit `success` values matching
+their directory status, usable task text, and positive trajectory lengths.
+Twenty-four sampled task hashes occurred in both path statuses. This adds
+task/label-description evidence, but does not resolve the stronger existing
+gates: raw building/scene tuples are not verified physical scenes, this
+1.0.1 sample is not cross-walked against already exposed 1.0.0 episodes/sites,
+and the prior video+sensor result did not beat sensor-only. The source remains
+unsuitable for a fresh quality claim until an independent physical-scene map,
+exposure crosswalk, and prospectively specified video-dependent task exist.
 
 No trajectory HDF5, video, SVO, checkpoint, GPU, validation/test partition, or
 sealed data was accessed. No model was trained. Do not start a dataset-scale
@@ -103,24 +106,29 @@ media. The descriptions often express broad task families rather than exact
 actions, so exact task-hash overlap does not prove equivalent difficulty or
 label comparability.
 
-## Data gates before any model run
+## Existing blockers and stop rule
 
-1. Expand metadata-only inspection for task families with success and failure
-   support. Verify that `success` represents the intended outcome and exclude
-   aborted/incomplete or operator-ambiguous records. Never use path strings as
-   model features.
-2. Build source-disjoint groups using lab, building, scene, user, task, and
-   robot/session identity where available. Report missing grouping fields and
-   reject any candidate split with group or normalized-content overlap.
-3. Define a future-outcome Decision using pre-outcome video, action/state, and
-   task context. Compare video+context with context-only, state-only, and
-   video-only controls on the same source-disjoint IDs. Reject the task if the
-   permitted context predicts outcomes without video or if post-outcome cues
-   reveal the target. Exclude path, filenames, and target-leaking metadata.
-4. Verify the exact media license/provenance and perform a small rights-cleared
-   train-only media/runtime check in a new output location. Do not download the
-   full DROID corpus (the official docs describe terabyte-scale bundles).
-5. Freeze a fresh validation set by scene/lab/user before fitting a readout.
-   Only after the above checks pass can DROID advance to an R2 frozen-feature
-   Decision experiment.
+The branch-level DROID audit dated 2026-11-13 inspected a fixed 10,000-record
+metadata sample and found 1,586 raw `building + scene_id` tuples, but the
+official paper states that raw scene IDs require manual consolidation to
+physical scenes. The true physical-scene group count is UNKNOWN. That audit
+also records earlier 1.0.0 video+sensor results below sensor-only on a later
+shard and explicitly keeps DROID `REVIEW_NOT_ADMITTED`. The source-level
+reconciliation on 2026-10-28 independently reached the same no-video-benefit
+finding. This 2026-11-28 pass did not inspect media or reconcile source
+exposure, so it does not overturn those decisions.
+
+Prior evidence is preserved at exact revisions:
+
+- [10,000-record 1.0.1 cohort audit](https://github.com/Unjuno/tiny-omni-decision/blob/0cdd3ae88b312de3505ea83c109f37b7c40e3f37/docs/pretrained_reuse/R2_DROID_METADATA_COHORT_20261113.md)
+- [1.0.0 later-shard frozen transfer](https://github.com/Unjuno/tiny-omni-decision/blob/a8db60d262b9655cb00897f26cdec9ee6a177070/docs/pretrained_reuse/R2_DROID_LATER_SHARD_FROZEN_TRANSFER_RESULTS_20261028.md)
+- [cross-branch decision record](https://github.com/Unjuno/tiny-omni-decision/blob/583853d6bea34f3da424c8b8e7adfcd8e8e84af6/docs/pretrained_reuse/R1_R2_CROSS_BRANCH_RECONCILIATION_20261028.md)
+
+Do not repeat DROID metadata sampling, acquire the terabyte-scale release, or
+run another DROID model experiment unless all three missing items arrive:
+(1) a publisher-backed physical-scene equivalence map or independently
+validated replacement; (2) a crosswalk proving a fresh, unexposed cohort; and
+(3) a preregistered target/control protocol where video is necessary beyond
+state/task context. The sampled task families alone do not satisfy any of
+these gates.
 
