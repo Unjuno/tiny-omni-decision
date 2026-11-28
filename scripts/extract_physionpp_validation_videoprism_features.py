@@ -15,8 +15,9 @@ from typing import Any
 import numpy as np
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
-if str(REPOSITORY_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPOSITORY_ROOT))
+for import_root in (REPOSITORY_ROOT, REPOSITORY_ROOT / "src"):
+    if str(import_root) not in sys.path:
+        sys.path.insert(0, str(import_root))
 
 if __package__:
     from .audit_physionpp_split_integrity import audit_train_validation_splits
