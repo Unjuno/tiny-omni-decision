@@ -4,15 +4,14 @@ import json
 
 import numpy as np
 import pytest
-import torch
 
-from tiny_omni_decision.xcapture_decision import (
-    FrozenFeatureDecision,
-    decision_json,
-    multiclass_metrics,
-    paired_cross_modal_loss,
-    projection_parameter_count,
-)
+torch = pytest.importorskip("torch")
+decision_module = pytest.importorskip("tiny_omni_decision.xcapture_decision")
+FrozenFeatureDecision = decision_module.FrozenFeatureDecision
+decision_json = decision_module.decision_json
+multiclass_metrics = decision_module.multiclass_metrics
+paired_cross_modal_loss = decision_module.paired_cross_modal_loss
+projection_parameter_count = decision_module.projection_parameter_count
 
 
 def test_decision_head_produces_probabilities_and_option_order_is_preserved():
