@@ -59,6 +59,15 @@ uses video information on this development cohort: removing video returns
 performance to the label-prior level, and permuting videos worsens NLL and
 Brier.
 
+A fresh CPU reload of the saved best checkpoint reproduced the saved
+148-row validation predictions: argmax matched 148/148, maximum absolute
+probability delta was `5.96e-8`, and reversing candidate order changed logits
+by `0.0`. The reloaded readout has 98,817 trainable parameters and the dense
+resident estimate remains 114,464,001. Loading took 6.04 ms and one batched
+148-row CPU inference took 1.68 ms in this local parity smoke; these are not
+service latency measurements. Verification receipt SHA-256:
+`44520dc97c11407f32b99486a04776dfb30367fe317f59089a66394f20db60c2`.
+
 A paired bootstrap resampled the 123 validation source-asset groups 10,000
 times with replacement (PCG64 seed `20261128`) and retained all rows in each
 sampled group. Selected-minus-zero-video differences were +14.86 percentage
