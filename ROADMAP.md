@@ -39,6 +39,10 @@ for shards 3–4 (74.53 GB) while retaining the stated reserve, but no data has
 been written there pending approval. Host free RAM is below the frozen
 6.5-GiB extraction gate and the unrelated RTX 3080 process remains active.
 See [cross-shard identity and resource evidence](docs/pretrained_reuse/R2_INTPHYS_TRAIN_COVERAGE_PREFLIGHT_20261128.md#2026-11-28-cross-shard-identity-check-and-storage-recheck).
+The exact normalized 8-frame hash for shard 2 remains unchecked: current
+Python 3.11.9 lacks TensorFlow, and the prior exact preprocessing runtime
+(Python 3.11.16 / TensorFlow 2.18.1) has not yet been located. No dependency
+was installed and no alternate resize path was substituted.
 
 **2026-11-28 R2 Physion++ review usability:** Added a label-blind utility to
 split the frozen 75-pair contact sheets into individually viewable cards in a

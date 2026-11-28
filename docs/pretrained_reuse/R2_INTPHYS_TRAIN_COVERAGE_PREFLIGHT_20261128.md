@@ -236,3 +236,14 @@ where possible, no data was written to D: in this recheck. Await explicit
 approval before storing the new source archives there. The three earlier
 64-MiB transfer samples imply an approximately 8.0-hour mean estimate (6.4–
 16.9 hours over the observed rate range); sustained throughput is unknown.
+
+The exact normalized-input identity remains open because the current Python
+3.11.9 environment does not have TensorFlow. A separate CPU-only preprocessing
+smoke failed immediately with `ModuleNotFoundError: No module named
+'tensorflow'`; CUDA was disabled, no packages were installed, and no model was
+loaded. The previously recorded shard-1 feature run used Python 3.11.16 and
+TensorFlow 2.18.1, but that exact interpreter/environment has not yet been
+located in this session. Do not substitute another resize implementation or
+claim normalized-input identity equivalence. Resume this check only with the
+same pinned TensorFlow preprocessing path, or mark the missing identity gate
+explicitly if that environment cannot be recovered.
